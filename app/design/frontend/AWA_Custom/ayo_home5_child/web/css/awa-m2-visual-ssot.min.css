@@ -1158,3 +1158,58 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   white-space: normal !important;
   font-size: inherit !important;
 }
+
+
+/* SEÇÃO 51.41 — PLP Super Ofertas: selo NOVO recortado na borda esquerda do card
+   Evidence (curl /super-ofertas.html 2026-09-02): li.item-product > .product-thumb
+   > .hot-onsale > .onsale.new-lable ("Novo"). 4 of 6 cards badged.
+   Clip: §canonical 12× .item-product AND .product-thumb { overflow:hidden }
+   + themes .hot-onsale { max-width:50px; position:absolute; top/left:10px }
+   + AWA .onsale.new-lable { position:absolute; top/left:8px } (double offset).
+   Same "ov"/left-edge sliver as home §50 — that fix is cms_index_index only.
+   Unlayered 18×#html-body EOF. Catalog/search grids only (Guidões share markup).
+   Zero :has(). Isolation r4 (no awa-scroll-carousel.js). Home + 51.40 lancamentos untouched.
+   Token v=20260902-secao51-41-novo-badge */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.wrapper.grid.products-grid,.product-grid,.products-grid) .item-product {
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.wrapper.grid.products-grid,.product-grid,.products-grid) .item-product .product-thumb {
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.wrapper.grid.products-grid,.product-grid,.products-grid) .item-product .product-thumb :is(.product-thumb-link,.first-thumb,.product-image-container,.product-image-wrapper) {
+  overflow: hidden !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.wrapper.grid.products-grid,.product-grid,.products-grid) .item-product .hot-onsale {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 4 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.wrapper.grid.products-grid,.product-grid,.products-grid) .item-product :is(.onsale.new-lable,.hot-onsale .onsale,.product-label,.product-label-new,.label-new) {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  inset: auto !important;
+  overflow: visible !important;
+  max-width: none !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+}
