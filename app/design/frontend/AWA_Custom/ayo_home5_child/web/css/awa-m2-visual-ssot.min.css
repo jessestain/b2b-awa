@@ -1,11 +1,527 @@
-html body#html-body .page-wrapper :is(.product-item,.item-product,.awa-product-card,.product-item-info) .rating-summary .rating-result{position:relative!important;display:inline-block!important;vertical-align:middle;width:85px!important;max-width:85px!important;height:18px!important;line-height:18px!important;overflow:hidden!important;white-space:nowrap!important;font-size:14px;letter-spacing:2px}html body#html-body .page-wrapper :is(.product-item,.item-product,.awa-product-card,.product-item-info) .rating-summary .rating-result::before{content:'\2605\2605\2605\2605\2605';color:var(--awa-border);display:block;position:absolute;inset:0;z-index:0;letter-spacing:2px}html body#html-body .page-wrapper :is(.product-item,.item-product,.awa-product-card,.product-item-info) .rating-summary .rating-result>span{position:absolute!important;top:0!important;left:0!important;bottom:0!important;display:block!important;overflow:hidden!important;white-space:nowrap!important;z-index:1}html body#html-body .page-wrapper :is(.product-item,.item-product,.awa-product-card,.product-item-info) .rating-summary .rating-result>span::before{content:'\2605\2605\2605\2605\2605';color:var(--awa-warning);display:block;letter-spacing:2px}html body#html-body .page-wrapper :is(.product-item,.item-product,.awa-product-card,.product-item-info) .rating-summary .rating-result>span>span{border:0;clip:rect(0,0,0,0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header,.awa-shelf__header){display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;gap:.75rem}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-section-header__left{flex:1 1 auto!important;min-width:0!important;max-width:calc(100% - 8rem)!important;width:auto!important}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(
-.awa-section-header__link,.awa-shelf__view-all,.awa-shelf-view-all,.awa-category-carousel__cta-link
-){flex:0 0 auto!important;align-self:center!important;white-space:nowrap!important;margin-inline-start:0!important}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-carousel-section .awa-carousel__viewport:not(.awa-carousel-ready){max-block-size:clamp(26rem,48vw,40rem)!important;max-height:clamp(26rem,48vw,40rem)!important;overflow:hidden!important}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-carousel-section .awa-carousel__viewport.awa-carousel-ready{max-block-size:none!important;max-height:none!important;overflow-x:auto!important;overflow-y:hidden!important}html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel :is(.item-product,.awa-carousel-card-slot,.content-item-product,.awa-product-card){block-size:auto!important;height:auto!important;max-block-size:none!important;max-height:none!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section,.rokan-bestseller,.rokan-newproduct,.products-grid) :is(a.product-item-link,.product-item-name a,.product-name a,.product-item-link){display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:normal!important;min-height:calc(1.35em * 2)!important;height:auto!important;max-height:calc(1.35em * 2)!important;align-items:unset!important;line-height:1.35!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section) :is(.content-item-product,.awa-product-card,.product-item-info){display:flex!important;flex-direction:column!important;height:100%!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section) :is(.content-item-product,.awa-product-card) :is(.product-info,.product-item-details){display:flex!important;flex-direction:column!important;flex:1 1 auto!important;gap:.5rem}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section) .awa-card-view-product{margin-top:auto!important;flex:0 0 auto!important;align-self:stretch!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section) :is(.rating-summary,.product-reviews-summary){min-height:18px!important;flex:0 0 auto!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .onsale.new-lable{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:1.375rem!important;padding:.125rem .375rem!important;line-height:1!important;box-sizing:border-box!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .onsale.new-lable :is(.sale-text,.sale-text label,label){display:inline-flex!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;line-height:1!important;position:static!important;transform:none!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .hot-onsale{background:0 0!important;box-shadow:none!important;border:0!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__viewport{overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x proximity!important;scroll-padding-inline:8px!important;-webkit-overflow-scrolling:touch}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__track{overflow-x:visible!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__item{scroll-snap-align:start!important;flex-shrink:0!important}html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__count{display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;line-height:1.25!important}html body#html-body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__viewport{overflow:auto hidden!important;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}html body#html-body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-carousel-section,.awa-grid-section) :is(a.product-item-link,.product-item-name a,.product-name a){display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;line-clamp:2!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:normal!important;min-height:calc(1.35em * 2)!important;max-height:calc(1.35em * 2)!important;height:auto!important;line-height:1.35!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body{--awa-bg:var(--awa-white, #fff);--awa-bg-surface:var(--awa-white, #fff);--awa-bg-soft:var(--awa-bg-subtle, #f7f7f7);--awa-oklch-surface:var(--awa-white, #fff);--awa-oklch-soft:var(--awa-bg-subtle, #f7f7f7);--awa-header-nav-bg:var(--awa-white, #fff)}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper{background:var(--awa-bg)!important;background-color:var(--awa-bg)!important}html body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(
-.item-product.awa-carousel-card-slot,.awa-product-card,.content-item-product,.product-thumb,.product-item-photo,.product-image-wrapper,.awa-card-view-product,.label-new,.new-label,.product-label.new,.product-labels .new,span.new
-){background:var(--awa-bg)!important;background-color:var(--awa-bg)!important;background-image:none!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode=default] .header-control.awa-nav-bar :is(> .container,.awa-nav-bar__inner),html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode=default] :is(.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar){background:var(--awa-header-nav-bg)!important;background-color:var(--awa-header-nav-bg)!important;background-image:none!important}html body#html-body .page-wrapper :is(
-.mst-searchautocomplete__autocomplete,.searchsuite-autocomplete,#search_autocomplete
-) :is(.rating-summary,.product-reviews-summary,.reviews-actions,.product-rating,.rating-result),html body#html-body:not(.customer-logged-in) .page-wrapper :is(
-.rating-summary,.product-reviews-summary,.reviews-actions,.product-rating
-){display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important}html body#html-body .page-wrapper .awa-site-header :is(
-.navigation.custommenu a,.navigation .level0 > a,.awa-nav-bar a
-){font-family:var(--awa-font-body, 'Source Sans 3', sans-serif)}html body#html-body .page-wrapper :is(h1,h2,h3,h4,h5,h6){font-family:var(--awa-font-heading, 'Rubik', Arial, sans-serif)}html body#html-body .page-wrapper :is(.item-product,.awa-carousel-card-slot,.product-item-info){padding:var(--awa-space-2,8px)}@layer awa-visual-priority{html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel :is(.item-product,.content-item-product,.awa-carousel-card-slot){padding:var(--awa-space-2,8px)!important;gap:var(--awa-space-2,8px)!important}}html body#html-body .page-wrapper .awa-carousel__viewport{padding-top:var(--awa-space-1,4px);padding-bottom:var(--awa-space-1,4px)}@layer awa-visual-priority{html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-carousel__viewport{padding-top:var(--awa-space-1,4px)!important;padding-bottom:var(--awa-space-1,4px)!important}}
+/**
+ * AWA Motos — SSOT visual (Magento 2 best practice)
+ * -------------------------------------------------
+ * Fonte de verdade para correções visuais confirmadas em runtime (sessão 202c1e).
+ * Carregado via Magento_Theme/layout/default_head_blocks.xml (<css src=...>).
+ *
+ * Escopo:
+ *  1) Estrelas Magento_Review (overlay nativo .rating-result > span)
+ *  2) Header de prateleira home — "Ver todos" na mesma linha
+ *  3) Viewport do carrossel home — sem clip vertical do CTA/card
+ *
+ * Regras:
+ *  - Tema filho apenas (não altera vendor/)
+ *  - Seletores nativos Magento + contratos AWA existentes
+ *  - Tokens via var(--awa-*), sem hex hardcoded
+ *  - !important só onde a cascata AWA legada força (documentado)
+ */
+
+/* -------------------------------------------------------------------------- */
+/* 1) Magento_Review — rating overlay (padrão Luma / module-review)           */
+/* Markup: .rating-summary .rating-result > span[style=width:%] > span        */
+/* -------------------------------------------------------------------------- */
+
+html body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card, .product-item-info)
+  .rating-summary
+  .rating-result {
+  position: relative !important; /* vence regras legadas overflow:visible */
+  display: inline-block !important;
+  vertical-align: middle;
+  width: 85px !important;
+  max-width: 85px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+html body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card, .product-item-info)
+  .rating-summary
+  .rating-result::before {
+  content: '\2605\2605\2605\2605\2605';
+  color: var(--awa-border);
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  letter-spacing: 2px;
+}
+
+html body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card, .product-item-info)
+  .rating-summary
+  .rating-result
+  > span {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  z-index: 1;
+}
+
+html body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card, .product-item-info)
+  .rating-summary
+  .rating-result
+  > span::before {
+  content: '\2605\2605\2605\2605\2605';
+  color: var(--awa-warning);
+  display: block;
+  letter-spacing: 2px;
+}
+
+html body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card, .product-item-info)
+  .rating-summary
+  .rating-result
+  > span
+  > span {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2) Home shelf header — título + "Ver todos" na mesma linha                 */
+/* -------------------------------------------------------------------------- */
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  :is(.awa-section-header, .awa-shelf__header) {
+  display: flex !important; /* vence flex-wrap:wrap legado */
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem;
+}
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-section-header__left {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 8rem) !important;
+  width: auto !important;
+}
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  :is(
+    .awa-section-header__link,
+    .awa-shelf__view-all,
+    .awa-shelf-view-all,
+    .awa-category-carousel__cta-link
+  ) {
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  white-space: nowrap !important;
+  margin-inline-start: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3) Home carousel viewport — sem clip do CTA quando ready                   */
+/* -------------------------------------------------------------------------- */
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section
+  .awa-carousel__viewport:not(.awa-carousel-ready) {
+  max-block-size: clamp(26rem, 48vw, 40rem) !important;
+  max-height: clamp(26rem, 48vw, 40rem) !important;
+  overflow: hidden !important;
+}
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section
+  .awa-carousel__viewport.awa-carousel-ready {
+  max-block-size: none !important; /* vence clamp crítico LCP legado */
+  max-height: none !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  :is(.item-product, .awa-carousel-card-slot, .content-item-product, .awa-product-card) {
+  block-size: auto !important;
+  height: auto !important;
+  max-block-size: none !important;
+  max-height: none !important;
+}
+
+/* ==== AWA M2 SSOT r2 (2026-08-01) — final cascade lock (5x html-body) ==== */
+
+/* Title: 2-line clamp, NOT 44px touch-target on product name links */
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section,.rokan-bestseller,.rokan-newproduct,.products-grid)
+  :is(a.product-item-link,.product-item-name a,.product-name a,.product-item-link) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  min-height: calc(1.35em * 2) !important;
+  height: auto !important;
+  max-height: calc(1.35em * 2) !important;
+  align-items: unset !important;
+  line-height: 1.35 !important;
+}
+
+/* Card column + CTA pin */
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section)
+  :is(.content-item-product,.awa-product-card,.product-item-info) {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section)
+  :is(.content-item-product,.awa-product-card) :is(.product-info,.product-item-details) {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  gap: 0.5rem;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section)
+  .awa-card-view-product {
+  margin-top: auto !important;
+  flex: 0 0 auto !important;
+  align-self: stretch !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-grid-section,.awa-carousel-section)
+  :is(.rating-summary,.product-reviews-summary) {
+  min-height: 18px !important;
+  flex: 0 0 auto !important;
+}
+
+/* Badge Novo centered pill */
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home .onsale.new-lable {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 1.375rem !important;
+  padding: 0.125rem 0.375rem !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home .onsale.new-lable :is(.sale-text,.sale-text label,label) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  position: static !important;
+  transform: none !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home .hot-onsale {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* Category carousel: scrollable viewport (after refine) */
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .top-home-content--category-carousel .awa-category-carousel__viewport {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x proximity !important;
+  scroll-padding-inline: 8px !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .top-home-content--category-carousel .awa-category-carousel__track {
+  overflow-x: visible !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .top-home-content--category-carousel .awa-category-carousel__item {
+  scroll-snap-align: start !important;
+  flex-shrink: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .top-home-content--category-carousel .awa-category-carousel__count {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  line-height: 1.25 !important;
+}
+
+/* ==== AWA M2 SSOT r2e (2026-08-01) — origin fixes ==== */
+/* Category: force scrollable viewport above impeccable-v1 clip + refine hidden */
+html body#html-body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .top-home-content--category-carousel .awa-category-carousel__viewport {
+  overflow: auto hidden !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body:not(#__awa-no-match):is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home
+  :is(.awa-shelf--carousel,.awa-carousel-section,.awa-grid-section)
+  :is(a.product-item-link,.product-item-name a,.product-name a) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  min-height: calc(1.35em * 2) !important;
+  max-height: calc(1.35em * 2) !important;
+  height: auto !important;
+  line-height: 1.35 !important;
+}
+
+/* ==== AWA M2 SSOT r3 (2026-08-06) — superfícies e estado B2B ==== */
+/* Terminal visual carregado após align-grid; tokens canônicos permanecem no LESS. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body {
+  --awa-bg: var(--awa-white, #fff);
+  --awa-bg-surface: var(--awa-white, #fff);
+  --awa-bg-soft: var(--awa-bg-subtle, #f7f7f7);
+  --awa-oklch-surface: var(--awa-white, #fff);
+  --awa-oklch-soft: var(--awa-bg-subtle, #f7f7f7);
+  --awa-header-nav-bg: var(--awa-white, #fff);
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper {
+  background: var(--awa-bg) !important;
+  background-color: var(--awa-bg) !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home :is(
+    .item-product.awa-carousel-card-slot,
+    .awa-product-card,
+    .content-item-product,
+    .product-thumb,
+    .product-item-photo,
+    .product-image-wrapper,
+    .awa-card-view-product,
+    .label-new,
+    .new-label,
+    .product-label.new,
+    .product-labels .new,
+    span.new
+  ) {
+  background: var(--awa-bg) !important;
+  background-color: var(--awa-bg) !important;
+  background-image: none !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+  :is(.header-control.awa-nav-bar, .header-control.header-nav.awa-nav-bar),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+  .header-control.awa-nav-bar :is(> .container, .awa-nav-bar__inner) {
+  background: var(--awa-header-nav-bg) !important;
+  background-color: var(--awa-header-nav-bg) !important;
+  background-image: none !important;
+}
+
+/* Nav desktop em páginas internas: manter o trilho no mesmo eixo 1280 do main/footer. */
+@media (min-width: 992px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
+    .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+    :is(
+      .header-wrapper-sticky > .header-control.awa-nav-bar,
+      .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,
+      .header-control.awa-nav-bar,
+      .header-control.header-nav.awa-nav-bar
+    ) {
+    width: min(100%, 1280px) !important;
+    max-width: 1280px !important;
+    margin-inline: auto !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
+    .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+    :is(
+      .header-control.awa-nav-bar > .container,
+      .header-control.header-nav.awa-nav-bar > .container,
+      .header-control.awa-nav-bar .awa-nav-bar__inner,
+      .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner
+    ) {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Reviews não integram o fluxo B2B guest; autocomplete nunca expõe rating. */
+html body#html-body:not(.customer-logged-in) .page-wrapper :is(
+    .rating-summary,
+    .product-reviews-summary,
+    .reviews-actions,
+    .product-rating
+  ),
+html body#html-body .page-wrapper :is(
+    .mst-searchautocomplete__autocomplete,
+    .searchsuite-autocomplete,
+    #search_autocomplete
+  ) :is(.rating-summary, .product-reviews-summary, .reviews-actions, .product-rating, .rating-result) {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4) Padronização design system — audit de layout 2026-08-10                  */
+/* Par tipográfico canônico: display/headings = Rubik (--awa-font-heading),    */
+/* UI/body = Source Sans 3 (--awa-font-body) — self-hosted em web/fonts/.      */
+/* Escala de espaçamento: 4/8/12/16/24 (--awa-space-*). Evidências: probe      */
+/* computed styles 1920/768/375 (sessão 2026-08-10).                           */
+/* -------------------------------------------------------------------------- */
+
+/* 4a) Nav principal — o tema pai (themes.min.css) declara 'Poppins' direto em
+   links de navegação e a família não é carregada (renderiza fallback). UI
+   chrome usa a família body canônica. */
+html body#html-body .page-wrapper .awa-site-header :is(
+  .navigation.custommenu a,
+  .navigation .level0 > a,
+  .awa-nav-bar a
+) {
+  font-family: var(--awa-font-body, 'Source Sans 3', sans-serif);
+}
+
+/* 4b) Headings genéricos — themes.min.css declara 'Poppins' direto em h1-h6;
+   headings seguem a família display canônica. */
+html body#html-body .page-wrapper :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--awa-font-heading, 'Rubik', Arial, sans-serif);
+}
+
+/* 4c) Cards de prateleira — padding interno era 6px e gap 9px (ambos fora da
+   escala 4/8/12/16) → 8px. As regras genéricas abaixo cobrem PLP/busca.
+   O bloco home-scoped seguinte precisa de DOIS reforços contra o lock H22c do
+   align-grid terminal (padding 6px/gap 4-9px !important, ~linha 20532):
+   (1) está DENTRO de @layer awa-visual-priority — para !important a cascata
+       INVERTE e !important layered vence unlayered, então entramos na MESMA
+       layer do lock (mesma técnica da Seção 14a do design-system.css);
+   (2) 6×#html-body vs 5×#html-body do lock — dentro da mesma layer, vence por
+       especificidade independente da ordem de carga (SSOT carrega ANTES do
+       terminal no <head>).
+   O arquivo do terminal está congelado (trabalho não commitado de outro
+   agente) — REVISAR e fundir lá quando for commitado. */
+html body#html-body .page-wrapper :is(.item-product, .awa-carousel-card-slot, .product-item-info) {
+  padding: var(--awa-space-2, 8px);
+}
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    :is(.item-product, .content-item-product, .awa-carousel-card-slot) {
+    /* !important: vence o lock !important layered do align-grid terminal —
+       justificativa no cabeçalho da 4c acima. */
+    padding: var(--awa-space-2, 8px) !important;
+    gap: var(--awa-space-2, 8px) !important;
+  }
+}
+
+/* 4d) CTA do card ("VER PRODUTO"/add-to-cart) — REVISADO 2026-08-10:
+   o audit inicial sinalizou Rubik/12px/margin fracionária como inconsistência,
+   mas a investigação mostrou que são ESCOLHAS DELIBERADAS do guia oficial:
+   - font Rubik: design-system.css §29.2 define `font-family: var(--awa-font-display)
+     !important` em TODOS os .action (hierarquia tipográfica de botões);
+   - font-size 12px no mobile: awa-home-launches-toggle-fix + terminal usam
+     12px + nowrap para caber "VER PRODUTO" em cards de 375px;
+   - margin-top fracionária (11.8px): valor computado de `margin-top: auto`
+     (técnica que fixa o CTA na base do card em trilhos de altura igual).
+   NENHUMA correção aplicada aqui — o CTA já está conforme o guia. O bloco
+   fica como registro para futuros audits não reabrirem o falso positivo. */
+
+/* 4e) Viewport do carrossel — padding vertical divergia (4px desktop/tablet
+   vs 6px mobile) → 4px unificado na escala. Bloco home-scoped boosted na
+   mesma layer do terminal — ver 4c. */
+html body#html-body .page-wrapper .awa-carousel__viewport {
+  padding-top: var(--awa-space-1, 4px);
+  padding-bottom: var(--awa-space-1, 4px);
+}
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    .awa-carousel__viewport {
+    /* !important: vence locks !important layered do align-grid terminal — 4c. */
+    padding-top: var(--awa-space-1, 4px) !important;
+    padding-bottom: var(--awa-space-1, 4px) !important;
+  }
+}
+
+/* SECAO 51.20 — Category tiles+labels on the media=all preload copy.
+   Token v=20260902-secao51-20-preload-all. Design-system is print-deferred + layered;
+   this file has a media=all duplicate on cms_index_index. Zero :has(). Isolation r4. */
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel a.awa-category-carousel__item {
+  box-sizing: border-box !important;
+  flex: 0 0 112px !important;
+  width: 112px !important;
+  min-width: 0 !important;
+  max-width: 112px !important;
+}
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__label,
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__count {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  line-height: 1.25 !important;
+  -webkit-line-clamp: none !important;
+  line-clamp: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}

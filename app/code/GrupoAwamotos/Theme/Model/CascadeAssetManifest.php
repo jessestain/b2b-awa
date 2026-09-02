@@ -320,7 +320,7 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260902-secao51-19-cat-wrap-none',
+            'query' => '?v=20260902-secao51-20-preload-all',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',

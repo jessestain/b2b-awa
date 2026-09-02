@@ -919,7 +919,7 @@ body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrap
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) #awa-cat-carousel.awa-category-carousel__track,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--category-carousel .awa-category-carousel__track{display:flex!important;flex-flow:row nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;gap:12px!important;max-height:280px!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) #awa-cat-carousel>.awa-category-carousel__item,
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .awa-category-carousel__track>.awa-category-carousel__item{flex:0 0 auto!important;width:auto!important;min-width:120px!important;max-width:200px!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .awa-category-carousel__track>.awa-category-carousel__item{flex:0 0 112px!important;width:112px!important;min-width:0!important;max-width:112px!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .awa-category-carousel__icon :is(img,picture){opacity:1!important;visibility:visible!important;object-fit:contain!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .awa-category-carousel__count{display:block!important;color:var(--head-preload-footer-muted,var(--awa-text-secondary))!important;font-size:12px!important;font-weight:500!important;line-height:1.35!important;margin-block-start:2px!important}
 @media (max-width:767px){
@@ -1309,4 +1309,32 @@ html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page
     justify-content: center !important;
     text-align: center !important;
   }
+}
+
+/* SECAO 51.20 — Category tiles+labels on the media=all preload copy.
+   Token v=20260902-secao51-20-preload-all. Design-system is print-deferred + layered;
+   this file has a media=all duplicate on cms_index_index. Zero :has(). Isolation r4. */
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel a.awa-category-carousel__item {
+  box-sizing: border-box !important;
+  flex: 0 0 112px !important;
+  width: 112px !important;
+  min-width: 0 !important;
+  max-width: 112px !important;
+}
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__label,
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__count {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  line-height: 1.25 !important;
+  -webkit-line-clamp: none !important;
+  line-clamp: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }

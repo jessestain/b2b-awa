@@ -358,6 +358,39 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
   background-image: none !important;
 }
 
+/* Nav desktop em páginas internas: manter o trilho no mesmo eixo 1280 do main/footer. */
+@media (min-width: 992px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
+    .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+    :is(
+      .header-wrapper-sticky > .header-control.awa-nav-bar,
+      .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,
+      .header-control.awa-nav-bar,
+      .header-control.header-nav.awa-nav-bar
+    ) {
+    width: min(100%, 1280px) !important;
+    max-width: 1280px !important;
+    margin-inline: auto !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
+    .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+    :is(
+      .header-control.awa-nav-bar > .container,
+      .header-control.header-nav.awa-nav-bar > .container,
+      .header-control.awa-nav-bar .awa-nav-bar__inner,
+      .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner
+    ) {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
 /* Reviews não integram o fluxo B2B guest; autocomplete nunca expõe rating. */
 html body#html-body:not(.customer-logged-in) .page-wrapper :is(
     .rating-summary,
@@ -463,4 +496,32 @@ html body#html-body .page-wrapper .awa-carousel__viewport {
     padding-top: var(--awa-space-1, 4px) !important;
     padding-bottom: var(--awa-space-1, 4px) !important;
   }
+}
+
+/* SECAO 51.20 — Category tiles+labels on the media=all preload copy.
+   Token v=20260902-secao51-20-preload-all. Design-system is print-deferred + layered;
+   this file has a media=all duplicate on cms_index_index. Zero :has(). Isolation r4. */
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel a.awa-category-carousel__item {
+  box-sizing: border-box !important;
+  flex: 0 0 112px !important;
+  width: 112px !important;
+  min-width: 0 !important;
+  max-width: 112px !important;
+}
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__label,
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__count {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  line-height: 1.25 !important;
+  -webkit-line-clamp: none !important;
+  line-clamp: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
 }
