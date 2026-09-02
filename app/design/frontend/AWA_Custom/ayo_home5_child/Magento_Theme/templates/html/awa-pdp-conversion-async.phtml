@@ -31,6 +31,7 @@ $faqUrl        = $block->getViewFileUrl('css/awa-pdp-faq-2026-06-27.css');
 html body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price a:not(.b2b-register-cta) {
     color: #fff !important;
     -webkit-text-fill-color: #fff !important;
+    background: #b73337 !important;
 }
 html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .item-product.awa-carousel-card-slot {
     border-radius: 8px !important;
@@ -309,6 +310,11 @@ html body#html-body.catalog-product-view .page-wrapper .product-info-main > .pro
     min-height: 0 !important;
     padding: 6px 0 0 !important;
 }
+/* P1-VISUAL-20260818: Imprimir/Compartilhar depois do buy-box.
+   Causa: cluster order 1–4; .product-social-links ficava em order 0 e subia acima do H1. */
+html body#html-body.catalog-product-view .page-wrapper .product-info-main > .product-social-links {
+    order: 5 !important;
+}
 html body#html-body.catalog-product-view .page-wrapper .product-info-main .product-add-form,
 html body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart {
     height: auto !important;
@@ -411,7 +417,8 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related.awa-shel
 
     forcePdpLightMode();
 
-    function localizeFotoramaLabels() {
+    function localizeFotoramaLabels(root) {
+        var scope = root && root.querySelectorAll ? root : d;
         var labels = {
             'Previous': 'Imagem anterior',
             'Next': 'Próxima imagem',
@@ -420,7 +427,7 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related.awa-shel
             'Zoom out': 'Reduzir imagem'
         };
         Object.keys(labels).forEach(function (source) {
-            d.querySelectorAll('[aria-label="' + source + '"], [title="' + source + '"]').forEach(function (el) {
+            scope.querySelectorAll('[aria-label="' + source + '"], [title="' + source + '"]').forEach(function (el) {
                 if (el.getAttribute('aria-label') === source) {
                     el.setAttribute('aria-label', labels[source]);
                 }
@@ -431,16 +438,56 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related.awa-shel
         });
     }
 
-    localizeFotoramaLabels();
-    d.addEventListener('DOMContentLoaded', localizeFotoramaLabels, { once: true });
-    d.addEventListener('fotorama:ready', localizeFotoramaLabels);
-    d.addEventListener('fotorama:show', localizeFotoramaLabels);
     var galleryRoot = d.querySelector('.product.media, .gallery-placeholder');
+    var localizeTimer = null;
+
+    function scheduleFotoramaLabelLocalization(root) {
+        if (localizeTimer !== null) {
+            return;
+        }
+
+        localizeTimer = w.setTimeout(function () {
+            localizeTimer = null;
+            localizeFotoramaLabels(root || d);
+        }, 80);
+    }
+
+    localizeFotoramaLabels(galleryRoot || d);
+    d.addEventListener('DOMContentLoaded', function () {
+        scheduleFotoramaLabelLocalization(galleryRoot || d);
+    }, { once: true });
+    d.addEventListener('fotorama:ready', function () {
+        scheduleFotoramaLabelLocalization(galleryRoot || d);
+    });
+    d.addEventListener('fotorama:show', function () {
+        scheduleFotoramaLabelLocalization(galleryRoot || d);
+    });
+
     if (w.MutationObserver && galleryRoot) {
-        new MutationObserver(localizeFotoramaLabels).observe(galleryRoot, {
+        var observer = new MutationObserver(function (mutations) {
+            var shouldLocalize = false;
+
+            for (var i = 0; i < mutations.length; i++) {
+                if (mutations[i].type === 'childList') {
+                    shouldLocalize = true;
+                    break;
+                }
+            }
+
+            if (shouldLocalize) {
+                scheduleFotoramaLabelLocalization(galleryRoot);
+            }
+        });
+
+        observer.observe(galleryRoot, {
             subtree: true,
             childList: true
         });
+
+        // Evita observer permanente na PDP apos a galeria estabilizar.
+        w.setTimeout(function () {
+            observer.disconnect();
+        }, 15000);
     }
 
 })(window, document);
