@@ -52,3 +52,40 @@ html body.b2b-auth-shell :is(#b2b-register-page-shell, .b2b-login-page, .b2b-reg
   box-sizing: border-box !important;
 }
 
+
+
+/* SEÇÃO 51.34 — auth cookie: wrap the sentence, no clip; hide coach while cookie is up */
+html body.b2b-auth-shell #awa-cookie-banner,
+html body.b2b-auth-shell #awa-cookie-banner.awa-cookie-banner--visible {
+  width: min(420px, calc(100vw - 128px)) !important;
+  max-width: min(420px, calc(100vw - 128px)) !important;
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+html body.b2b-auth-shell #awa-cookie-banner .awa-cookie-banner__inner {
+  overflow: visible !important;
+  max-width: 100% !important;
+}
+html body.b2b-auth-shell #awa-cookie-banner :is(p#awa-cookie-desc, .awa-cookie-banner__text) {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  max-height: none !important;
+  height: auto !important;
+  min-width: 0 !important;
+}
+html body.b2b-auth-shell #awa-cookie-banner .awa-cookie-banner__policy,
+html body.b2b-auth-shell #awa-cookie-banner .awa-cookie-banner__link {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+html body.b2b-auth-shell.awa-cookie-banner-active .awa-ai-coach,
+html body.b2b-auth-shell.awa-cookie-banner-active .awa-ai-coach--visible {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
