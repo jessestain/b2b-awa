@@ -21,15 +21,18 @@ $image = $block->getImage();
 $output = $block->getOutput();
 $_imgUrl = $image->getUrl($_category);
 
-// awa-lote10-20260827: hero PLP Bauletos usa banner 1295x280 ja no media (thumb 300x300 fica no atributo Magento / menu).
+// awa-lote10 / 51.27 / 51.28: only real 1295x280 banners in the PLP hero.
+// Magento category thumbs (cat-*.png 1:1) are merch icons — cover-crop turns them into a zoomed strip.
 $_heroUrlKey = strtolower((string) $_category->getUrlKey());
-if ($_heroUrlKey === 'bauletos') {
+$_wideBanners = [
+    'bauletos' => '/media/catalog/category/Banner_Categoria_Bauleto.jpg',
+    'guidoes' => '/media/catalog/category/Banner_Categoria_Guidao.jpg?v=20260902-5127',
+];
+if (isset($_wideBanners[$_heroUrlKey])) {
     $storeBase = rtrim((string) $block->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), '/');
-    $_imgUrl = $storeBase . '/media/catalog/category/Banner_Categoria_Bauleto.jpg';
-}
-if ($_heroUrlKey === 'guidoes') {
-    $storeBase = rtrim((string) $block->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), '/');
-    $_imgUrl = $storeBase . '/media/catalog/category/Banner_Categoria_Guidao.jpg?v=20260902-5127';
+    $_imgUrl = $storeBase . $_wideBanners[$_heroUrlKey];
+} else {
+    $_imgUrl = null;
 }
 
 
