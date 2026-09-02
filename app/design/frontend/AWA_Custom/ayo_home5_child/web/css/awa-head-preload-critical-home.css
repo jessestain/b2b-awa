@@ -177,7 +177,7 @@ body .page-wrapper .page_footer .footer-container,body .page-wrapper .page_foote
 .wrapper_slider .awa-hero-swiper:not(.awa-hero-swiper-ready):not(.swiper-initialized) .swiper-wrapper{display:block!important;overflow:hidden!important}
 .wrapper_slider.hidden-xs .banner_item_bg,.wrapper_slider:not(.visible-xs) .banner_item_bg{aspect-ratio:1920/470;min-height:clamp(160px,24.5vw,470px);margin-top:0}
 .wrapper_slider.visible-xs .banner_item_bg,.wrapper_slider.visible-xs .banner_item{flex:1 1 auto;height:100%;min-height:100%;aspect-ratio:unset;display:flex;flex-direction:column}
-.wrapper_slider.visible-xs .swiper-slide{display:flex;flex-direction:column;align-items:stretch}
+.wrapper_slider.visible-xs .awa-hero-swiper.swiper-initialized .swiper-slide,.wrapper_slider.visible-xs .awa-hero-swiper.awa-hero-swiper-ready .swiper-slide,.wrapper_slider.visible-xs .swiper-slide:first-child{display:flex;flex-direction:column;align-items:stretch}
 .wrapper_slider.visible-xs .banner_item_bg{position:relative;overflow:hidden}
 .wrapper_slider.visible-xs .banner_item_bg>a{position:absolute;inset:0;width:100%;height:100%;display:block}
 .wrapper_slider.visible-xs .banner_item_bg picture,.wrapper_slider.visible-xs .banner_item_bg img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:var(--awa-surface)}
@@ -215,7 +215,7 @@ html body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homep
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5){margin:0!important;--awa-home-rail-max:1280px;--awa-home-shell-max:1280px;--awa-home-shell-gutter:16px;--awa-home-pad-featured:16px;--awa-home-pad-standard:12px;--awa-home-pad-compact:8px;--awa-home-pad-category:12px}
 @media(min-width:992px){:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .content-top-home{padding-inline:0!important;max-width:none!important;width:100%!important}}
 @media(max-width:767px){:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5){--awa-home-pad-featured:12px;--awa-home-pad-standard:8px;--awa-home-pad-compact:8px;--awa-home-pad-category:12px}}
-@media(min-width:992px){:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header{width:100%!important;max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header>:is(.header-container,.header-wrapper-sticky){width:100%!important;max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar>.container,:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-main.container{width:100%!important;max-width:var(--awa-home-shell-max)!important;margin-inline:auto!important;padding-inline:var(--awa-home-shell-gutter)!important;box-sizing:border-box!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .content-top-home{max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .content-top-home>:is(.ayo-home5-wrapper,.ayo-home5-wrapper--template-driven){width:100%!important;max-width:var(--awa-home-shell-max)!important;margin-inline:auto!important;padding-inline:0!important;box-sizing:border-box!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar>.container>.row{width:100%!important;margin-inline:0!important}}
+@media(min-width:992px){:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header{width:100%!important;max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header>:is(.header-container,.header-wrapper-sticky){width:100%!important;max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar>.container{width:100%!important;max-width:var(--awa-home-shell-max)!important;margin-inline:auto!important;padding-inline:var(--awa-home-shell-gutter)!important;box-sizing:border-box!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-main.container{width:100%!important;max-width:none!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .content-top-home{max-width:none!important;margin-inline:0!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .content-top-home>:is(.ayo-home5-wrapper,.ayo-home5-wrapper--template-driven){width:100%!important;max-width:var(--awa-home-shell-max)!important;margin-inline:auto!important;padding-inline:0!important;box-sizing:border-box!important}:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar>.container>.row{width:100%!important;margin-inline:0!important}}
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold{box-sizing:border-box;overflow:visible;width:100%;max-width:none;margin:0;padding:0}
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold>.banner-slider.banner-slider2{width:100%;max-width:none;margin:0;padding:0;border-radius:0;overflow:hidden}
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .top-home-content--above-fold .banner-slider.banner-slider2 :is(.wrapper_slider.hidden-xs,.wrapper_slider.visible-xs){width:100%;max-width:100%;margin:0;padding:0}
@@ -813,16 +813,13 @@ body.cms-index-index .page-wrapper .column.main .awa-security-section,body.cms-h
   content-visibility: visible !important;
   contain-intrinsic-size: unset !important;
 }
-/* Below-fold: renderização diferida — 4+ vitrines fora da viewport inicial */
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-home-section--below-fold {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 480px;
-}
-@media (prefers-reduced-motion: reduce) {
-  #html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-home-section--below-fold {
-    content-visibility: visible;
-    contain-intrinsic-size: unset;
-  }
+/* Below-fold: visible no 1o paint. content-visibility:auto + unlock tardio
+   no deferred-stack gerava CLS ~0.94 (PSI desktop 1.48, lab throttled 1.45). */
+#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-home-section--below-fold,
+#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-grid-section--featured {
+  content-visibility: visible !important;
+  contain-intrinsic-size: unset !important;
+  contain: none !important;
 }
 /* Home mobile first paint: benefits + B2B CTA cabem antes dos bundles deferidos */
 @media(max-width:767px){
@@ -1151,4 +1148,165 @@ html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page
 html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"] .awa-vmenu-trigger-icon{align-items:center!important;box-sizing:border-box!important;display:inline-flex!important;flex:0 0 24px!important;height:24px!important;justify-content:center!important;margin:0!important;max-width:24px!important;min-width:24px!important;padding:0!important;width:24px!important}
 html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"] .awa-vmenu-trigger-icon::before,html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"] .awa-vmenu-trigger-icon::after{content:none!important;display:none!important}
 html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"] .awa-vmenu-trigger-icon svg{display:block!important;flex:0 0 24px!important;height:24px!important;margin:0!important;width:24px!important}
+}
+
+/* AWA visual-audit 2026-08-27 lote-hero-plp-cat */
+@media (max-width: 767px) {
+  /* Bug 1 FOUC: só o 1º slide do hero mobile até o Swiper iniciar.
+     Selector inclui .wrapper_slider.visible-xs .awa-hero-swiper (o lock antigo
+     não amarrava o slider mobile e o 2º slide pintava como fundo). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper:not(.swiper-initialized):not(.awa-hero-swiper-ready)
+    .swiper-slide:not(:first-child) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    position: absolute !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper:not(.swiper-initialized):not(.awa-hero-swiper-ready)
+    .swiper-slide:first-child {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    position: relative !important;
+  }
+
+  /* Bug 1 overlay: slider_005 (desktop+mobile) já traz QUALIDADE/INOVAÇÃO/TECNOLOGIA.
+     Esconde título+desc injetados; mantém o CTA vermelho. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    :is(.slide-title, .slide-desc, h2.slide-title, p.slide-desc) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    .text-banner {
+    background: transparent !important;
+    background-image: none !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    :is(.awa-hero-slide__cta, a.action.primary) {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    font-size: inherit !important;
+  }
+
+  /* Bug 3: carrossel de categorias — largura fluida + 2 linhas no mobile */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    :is(#awa-cat-carousel .awa-category-carousel__item, #awa-cat-carousel > .awa-category-carousel__item, .top-home-content--category-carousel .awa-category-carousel__item) {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    flex-basis: max(42vw, 10.5rem) !important;
+    width: max(42vw, 10.5rem) !important;
+    min-width: 42vw !important;
+    max-width: min(56vw, 12.5rem) !important;
+    box-sizing: border-box !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    :is(.awa-category-carousel__label, .awa-category-carousel__count) {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: block !important;
+    -webkit-box-orient: unset !important;
+    -webkit-line-clamp: none !important;
+    line-clamp: none !important;
+    overflow-wrap: anywhere !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Bug 2: banner B2B da PLP — CTAs em coluna, sem clip */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__actions {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action--primary,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action--secondary {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+    white-space: normal !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
 }

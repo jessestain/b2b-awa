@@ -5,9 +5,9 @@
  *
  * Substitui:
  *   - awa-header-mobile-grid-critical.min.css
- *   - awa-impeccable-critical-home.min.css
+ *   - awa-impeccable-critical-home (deprecado — arquivo removido)
  *   - awa-header-home-light-lock-v1.min.css
- *   - awa-home-first-paint-critical.min.css
+ *   - awa-home-first-paint-critical (deprecado — arquivo removido)
  *   - awa-bundle-async-distill-lock.min.css
  *   - GrupoAwamotos_Theme/css/awa-menu-v2-dept-open-fix.css
  *
@@ -21,10 +21,9 @@ $stackUrl = $block->getViewFileUrl(
 ) . \GrupoAwamotos\Theme\Model\HeaderImpeccableCascadeLockCss::HOME_CRITICAL_STACK_QUERY;
 $stackEsc = $block->escapeUrl($stackUrl);
 ?>
-<link rel="preload" href="<?= $stackEsc ?>" as="style" fetchpriority="high"/>
-<?php /* PERF 2026-07-23: media=print onload — ~144KB fora do critical path.
-       Inline anti-FOUC + header condensed fragment cobrem 1º paint; print→all
-       (sem interaction gate) evita o CLS de gate ~5s. */ ?>
+<?php /* PERF 2026-08-13: sem rel=preload. Preload as=style + fetchpriority=high
+       punha ~150KB na mesma fila do LCP (hero). print/onload já inicia o download
+       em baixa prioridade; inline anti-FOUC + header condensed cobrem o 1º paint. */ ?>
 <link rel="stylesheet" href="<?= $stackEsc ?>" media="print" onload="window.__awaCssQ?__awaCssQ(this):(/themes\.min|third-party-bundle|visual-bugfix|deferred-stack/.test(this.href||'')?(window.__awaCssPend=window.__awaCssPend||[]).push(this):(this.media='all'))" id="awa-home-critical-stack" data-awa-bundle="home-critical-stack" data-awa-first-paint-critical="stack"/>
 <noscript><link rel="stylesheet" href="<?= $stackEsc ?>"/></noscript>
 <?php
@@ -33,20 +32,28 @@ $__corpGridUrl = $block->escapeUrl(
     $block->getViewFileUrl('css/awa-home-corporate-density-grid-2026-06.min.css') . '?v=20260629-product-design-audit-polish'
 );
 ?>
-<link rel="preload" href="<?= $__corpGridUrl ?>" as="style"/>
 <link rel="stylesheet" href="<?= $__corpGridUrl ?>" media="print" onload="window.__awaCssQ?__awaCssQ(this):(/themes\.min|third-party-bundle|visual-bugfix|deferred-stack/.test(this.href||'')?(window.__awaCssPend=window.__awaCssPend||[]).push(this):(this.media='all'))" data-awa-bundle="corp-grid" data-awa-first-paint-critical="corp-grid"/>
 <noscript><link rel="stylesheet" href="<?= $__corpGridUrl ?>"/></noscript>
+<?php
+/** Home LCP: XML-removed on cms_index_index; print->all after LCP image (hero.preload.links). */
+$__dsRaw = $block->getViewFileUrl('css/awa-design-system.min.css');
+$__dsUrl = $block->escapeUrl($__dsRaw . (str_contains($__dsRaw, '?') ? '&' : '?') . 'v=20260902-secao51-19-cat-wrap-none');
+?>
+<link rel="stylesheet" href="<?= $__dsUrl ?>" media="print" onload="window.__awaCssQ?__awaCssQ(this):(this.media='all')" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+<noscript><link rel="stylesheet" href="<?= $__dsUrl ?>"/></noscript>
 <?php
 /**
  * Home remove awa.header.impeccable.critical.global (PSI), então o fragmento
  * §CONDENSED precisa ser injetado aqui — senão sticky fica em 68/72px.
  */
 ?>
+<?php if ((string) $block->getRequest()->getFullActionName() !== 'cms_index_index') : /* AWA_HOME_INLINE_CSS_CUT_20260902 */ ?>
 <style id="awa-header-condensed-critical-home">
 <?= $block->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)
     ->setTemplate('Magento_Theme::html/awa-header-condensed-critical-fragment.phtml')
     ->toHtml() ?>
 </style>
+<?php endif; ?>
 <?= $block->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)
     ->setTemplate('Magento_Theme::html/awa-header-early-sticky-sync.phtml')
     ->toHtml() ?>

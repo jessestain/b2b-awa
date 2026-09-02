@@ -320,12 +320,17 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '',
+            'query' => '?v=20260902-secao51-19-cat-wrap-none',
+        ],
+        'plp-shell' => [
+            'file' => 'awa-plp-shell-final.min.css',
+            'fragment' => 'awa-plp-shell-final',
+            'query' => '?v=20260827-visual-lote5',
         ],
         'ai-assistant' => [
             'file' => 'GrupoAwamotos_AiAssistant/css/ai-assistant.min.css',
             'fragment' => 'AiAssistant/css/ai-assistant',
-            'query' => '',
+            'query' => '?v=20260821-ai-chat-chips-r24',
         ],
         'visual-qa-fixes' => [
             'file' => 'awa-visual-qa-fixes-2026-06-17.min.css',
@@ -379,7 +384,27 @@ final class CascadeAssetManifest
         ],
         'social-proof' => [
             'file' => 'social-proof.css',
-            'fragment' => 'social-proof.css',
+            'fragment' => 'social-proof',
+            'query' => '',
+        ],
+        'round9-post-themeoption' => [
+            'file' => 'awa-round9-post-themeoption-overrides.min.css',
+            'fragment' => 'awa-round9-post-themeoption-overrides',
+            'query' => '',
+        ],
+        'b2b-foundation' => [
+            'file' => 'awa-components-b2b-foundation.min.css',
+            'fragment' => 'awa-components-b2b-foundation',
+            'query' => '',
+        ],
+        'compat-b2b-nav-plp-cart-checkout' => [
+            'file' => 'awa-compat-b2b-nav-plp-cart-checkout.min.css',
+            'fragment' => 'awa-compat-b2b-nav-plp-cart-checkout',
+            'query' => '',
+        ],
+        'page-home-category-premium' => [
+            'file' => 'awa-page-home-category-premium.min.css',
+            'fragment' => 'awa-page-home-category-premium',
             'query' => '',
         ],
         'gallery' => [
@@ -524,6 +549,10 @@ final class CascadeAssetManifest
             'social-proof',
             'gallery',
             'pdp-shell-final',
+            'round9-post-themeoption',
+            'b2b-foundation',
+            'compat-b2b-nav-plp-cart-checkout',
+            'page-home-category-premium',
         ],
         'homeDefer' => [
             'visual-fixes',
@@ -536,6 +565,8 @@ final class CascadeAssetManifest
             'shelf-carousel',
             'carousel-contract',
             'home-corporate-density-grid',
+            // Home LCP: convert leftover blocking XML <link> if layout remove misses (FPC stale).
+            'design-system',
         ],
         'homeDeferredStack' => [
             'bugfix-terminal',
@@ -621,8 +652,6 @@ final class CascadeAssetManifest
             'home-standardize-terminal-wins',
             'footer-terminal-lock',
             'align-grid-terminal',
-            'refine',
-            'custom-default',
             'login-to-cart',
             'status-panel',
             'b2b-status-panel',
@@ -643,6 +672,9 @@ final class CascadeAssetManifest
             'third-party-bundle',
             'themes-min',
             'themes-css',
+            'refine',
+            // Must print->all immediately -- never idle-gate (FOUC + LCP).
+            'design-system',
         ],
         'heavyLegacyScripts' => ['master-fix-js', 'master-fix-js-min'],
         'checkoutAuthStripScripts' => ['b2b-panel-hydrate-js-min', 'b2b-panel-hydrate-js'],
@@ -677,6 +709,18 @@ final class CascadeAssetManifest
         'awa-css-gate.min.js?v=20260601-home-opt17',
         'awa-css-gate.min.js?v=20260531-optimize',
         'awa-css-gate.min.js?v=20260805-hygiene-r71',
+        'awa-css-gate.min.js?v=20260820-nav-gutter-r10',
+        'awa-css-gate.min.js?v=20260827-footer-axis-bp',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js2',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js3',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js4',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js5',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js6',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js7dbg',
+        'awa-css-gate.min.js?v=20260827-footer-axis-js8',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js9',
+        'awa-css-gate.min.js?v=20260902-gate-idle-1s',
     ];
 
     /**
