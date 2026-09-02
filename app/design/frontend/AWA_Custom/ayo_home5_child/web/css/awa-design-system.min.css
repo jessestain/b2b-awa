@@ -9576,3 +9576,76 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   overflow: hidden !important;
 }
 
+
+
+/* SEÇÃO 51.40 — CMS /lancamentos: unclip CatalogWidget photos + wishlist/compare labels
+   Evidence (curl /lancamentos 2026-09-02): first cards have real media/catalog/product
+   JPEG src (11973_1.jpg 8KB / 11990_1.jpg 18KB, HTTP 200). Not Magento placeholder.
+   styles-l: .product-item .product-image-container { aspect-ratio:1/1; background:#f7f7f7 }
+   + .product-image-photo { position:absolute; inset:0; height:100% }.
+   Fluid LESS: wrapper height:100%; padding-bottom:0. §canonical (2295) padding:8px
+   shorthand kills Magento padding-bottom spacer; img height:100%. Cyclic % height on
+   wrapper + out-of-flow img → wrapper used height 0 → overflow:hidden clips photo;
+   pale-grey square is the container background. Same trap as 51.30 PDP related.
+   Buttons: card overflow:hidden + two nowrap labels in ~220px row → “…a Lista …” /
+   “Adicionar para Comp…”. ATC already hidden (§30D). Guest B2B CTAs OK — do not touch.
+   Unlayered 18×#html-body EOF. Zero :has(). Isolation r4. Home untouched.
+   Token v=20260902-secao51-40-lancamentos */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-lancamentos.cms-page-view .page-wrapper .awa-cms-lancamentos :is(.product-item-photo, .product-image-container, .product-image-wrapper) {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding-bottom: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-lancamentos.cms-page-view .page-wrapper .awa-cms-lancamentos img.product-image-photo {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  object-fit: contain !important;
+  content-visibility: visible !important;
+  contain: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-lancamentos.cms-page-view .page-wrapper .awa-cms-lancamentos .product-item :is(.product-item-inner, .product-item-actions, .actions-secondary) {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  overflow: visible !important;
+  white-space: normal !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-lancamentos.cms-page-view .page-wrapper .awa-cms-lancamentos .product-item :is(.action.towishlist, .action.tocompare) {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-lancamentos.cms-page-view .page-wrapper .awa-cms-lancamentos .product-item :is(.action.towishlist, .action.tocompare) span {
+  position: static !important;
+  display: inline !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  clip: auto !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  font-size: inherit !important;
+}
