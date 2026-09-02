@@ -717,3 +717,26 @@ html body#html-body.cms-index-index .top-home-content--category-carousel #awa-ca
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
 }
+
+/* SECAO 51.22 — Desktop hero: stop cover-cropping the left thumbs in the banner JPEG.
+   Token v=20260902-secao51-22-hero-thumbs. Box used 24.5vw height (viewport) + object-fit:cover,
+   which cropped ~5% each side of slider_guidao_cb_300 (1200x294). Match intrinsic AR.
+   Isolation r4. Zero :has(). Do not hide .hidden-xs (that's desktop-visible). */
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-wrapper,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-slide,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 1200 / 294 !important;
+}
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg :is(a, picture, img) {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
