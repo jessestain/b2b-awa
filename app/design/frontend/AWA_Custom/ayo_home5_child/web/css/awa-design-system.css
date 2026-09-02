@@ -9326,3 +9326,33 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   background: #fff !important;
 }
 
+
+/* SEÇÃO 51.30 — PDP related: Magento wrapper height:0 + content-visibility skipped paint */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper :is(.rokan-mostviewed, .awa-pdp-related, .awa-carousel) .product-image-container,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper :is(.rokan-mostviewed, .awa-pdp-related, .awa-carousel) .product-image-wrapper,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper :is(.rokan-mostviewed, .awa-pdp-related, .awa-carousel) .first-thumb,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper :is(.rokan-mostviewed, .awa-pdp-related, .awa-carousel) .product-thumb {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding-bottom: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper :is(.rokan-mostviewed, .awa-pdp-related, .awa-carousel) img.product-image-photo {
+  position: static !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  object-fit: contain !important;
+  content-visibility: visible !important;
+  contain: none !important;
+  background: #fff !important;
+}
+
