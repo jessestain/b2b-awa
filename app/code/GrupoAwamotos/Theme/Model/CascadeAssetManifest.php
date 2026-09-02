@@ -102,7 +102,7 @@ final class CascadeAssetManifest
         'header-contract-grid' => [
             'file' => 'awa-header-contract-grid-20260626.min.css',
             'fragment' => 'awa-header-contract-grid-20260626',
-            'query' => '?v=20260902-secao51-25-hero-paint',
+            'query' => '?v=20260902-secao51-26-chip-hover-banner-ink',
         ],
         'home-density-grid' => [
             'file' => 'awa-home-density-grid-20260611.min.css',
@@ -320,7 +320,7 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260902-secao51-25-hero-paint',
+            'query' => '?v=20260902-secao51-26-chip-hover-banner-ink',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',

@@ -9131,3 +9131,46 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   line-clamp: none !important;
   -webkit-box-orient: unset !important;
 }
+
+/* ==========================================================================
+   SECAO 51.26 — Footer Categorias chip hover ink + promo banner fitment ink
+   2026-09-02. Token v=20260902-secao51-26-chip-hover-banner-ink.
+   Bug 1 (P0): ul.awa-footer-categories-list chips stay white on hover while
+   a:hover paints color: var(--awa-white,Canvas) / var(--awa-on-brand,#fff)
+   (footer-lock EOF + design-system pill hover). 51.12 forced rest-state
+   #1a1a1a on velaFooterLinks including :hover; chips were not in that list.
+   Keep rest-state 51.12 ink. Hover stays #1a1a1a on the white chip (do not
+   split white text onto a white fill). Unlayered. Zero :has(). Isolation r4.
+   Bug 2 (P1): .awa-product-promo-banners cards 1-3 fitment lines read dark
+   red on the red field; card 4 (Manopla) is white. Same class, no nth-child
+   color — inherited a color / currentColor plus raster. Force #fff like
+   banner 4. Do not restore carousel JS, JPEG, content-visibility, mixins.
+   ========================================================================== */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:link,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:visited,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:hover,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:focus,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:focus-visible,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) ul.awa-footer-categories-list a:active {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item[data-promo-slot="1"],
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item[data-promo-slot="2"],
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item[data-promo-slot="3"],
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item[data-promo-slot="4"],
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item :is(span:not(.visually-hidden),strong,small,p,em,b) {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-product-promo-banners a.awa-product-promo-banners__item :is(img,picture) {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
