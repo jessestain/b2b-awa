@@ -9466,3 +9466,23 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   }
 }
 
+
+
+/* SEÇÃO 51.37 — mobile footer: open Quem somos + Suporte panels (same as Atendimento 51.36) */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer, .page_footer, .page-footer)
+    :is(#awa-footer-quem-somos-panel,
+        #awa-footer-suporte-panel,
+        .velaContent#awa-footer-quem-somos-panel,
+        .velaContent#awa-footer-suporte-panel,
+        #awa-footer-quem-somos-panel[hidden],
+        #awa-footer-suporte-panel[hidden]) {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
