@@ -477,3 +477,59 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   }
 }
 
+
+
+/* SEÇÃO 51.39 — catalogo 2columns-left: contain main; wrap CTAs (Varnish served stale 51.32 HTML) */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .page-wrapper,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .page-main,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .columns {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .columns {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index :is(.sidebar, .sidebar-main) {
+  flex: 0 0 220px !important;
+  width: 220px !important;
+  max-width: 220px !important;
+  min-width: 0 !important;
+  float: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .column.main {
+  flex: 1 1 0% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  float: none !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .awa-catalogo-page__hero {
+  grid-template-columns: minmax(0, min(320px, 36%)) minmax(0, 1fr) !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .awa-catalogo-page__actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  max-width: 100% !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .awa-catalogo-page__cta {
+  flex: 0 1 auto !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogo-index-index .awa-catalogo-page__viewer {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
