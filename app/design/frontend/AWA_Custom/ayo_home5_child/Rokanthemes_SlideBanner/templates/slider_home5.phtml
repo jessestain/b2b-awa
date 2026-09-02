@@ -122,8 +122,12 @@ if ($banners = $block->getBannerCollection()):
 <div class="wrapper_slider hidden-xs slider_<?php echo (int) $sliderId; ?>" data-awa-hero-variant="desktop">
     <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais')) ?>">
         <div class="swiper-wrapper awa-hero__track">
-        <?php $__deskIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirst = ($__deskIdx === 0); $__deskIdx++; ?>
-            <div class="banner_item swiper-slide awa-hero__slide">
+        <?php $__deskIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirst = ($__deskIdx === 0); $__deskIdx++;
+            $link = $resolveSlideLink($banner->getSlideLink());
+            $__isCb300 = (stripos((string) $banner->getSlideImage(), 'slider_guidao_cb_300') !== false)
+                || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
+        ?>
+            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300 ? ' awa-hero__slide--cb300' : '' ?>">
                 <div class="banner_item_bg">
                     <?php
                     $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
@@ -145,7 +149,6 @@ if ($banners = $block->getBannerCollection()):
                                 . '</picture>';
                         }
                     }
-                    $link = $resolveSlideLink($banner->getSlideLink());
                     if ($link !== '') {
                         $slideLinkLabel = trim(strip_tags((string) $slideAlt)) ?: (string) __('Destaque AWA Motos');
                         $html = '<a href="' . $block->escapeUrl($link) . '" aria-label="'
@@ -153,6 +156,9 @@ if ($banners = $block->getBannerCollection()):
                             . '">' . $html . '</a>';
                     }
                     echo $html;
+                    if (!empty($__isCb300)) {
+                        echo '<span class="awa-hero-sliver-mask" aria-hidden="true"></span>';
+                    }
                     ?>
                 </div>
                 <?php if ($text = $banner->getSlideText()): ?>
@@ -303,7 +309,16 @@ if ($banners = $block->getBannerCollection()):
             return;
         }
 
-        if (typeof w.require !== 'function' || (w.require && w.require._awaStub)) {
+        function hasMagentoHeroMap() {
+            try {
+                var map = w.require.s.contexts._.config.map['*'];
+                return !!(map && map.awaHeroSlider);
+            } catch (e) {
+                return false;
+            }
+        }
+
+        if (typeof w.require !== 'function' || (w.require && w.require._awaStub) || !hasMagentoHeroMap()) {
             if (attempt < maxAttempts) {
                 w.setTimeout(function () {
                     tryInit(attempt + 1);
