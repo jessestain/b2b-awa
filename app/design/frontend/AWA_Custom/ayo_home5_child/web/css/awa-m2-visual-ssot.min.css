@@ -525,3 +525,35 @@ html body#html-body.cms-index-index .top-home-content--category-carousel #awa-ca
   overflow-wrap: anywhere !important;
   word-break: break-word !important;
 }
+
+/* SECAO 51.21 — Category names on a new inner class (old __label nowrap cannot match).
+   Token v=20260902-secao51-21-name-node. 51.20 fitted 8 tiles. Zero :has(). Isolation r4. */
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-category-carousel__label {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+html body#html-body.cms-index-index .top-home-content--category-carousel #awa-cat-carousel span.awa-cat-tile__name {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  line-height: 1.25 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  -webkit-line-clamp: none !important;
+  line-clamp: none !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}

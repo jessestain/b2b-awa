@@ -387,7 +387,7 @@ $renderNicheShelves = static function (
 					<div class="awa-category-carousel__icon">
 						<?php echo /* @noEscape */ $cat['icon']; ?>
 					</div>
-					<span class="awa-category-carousel__label"><?php echo $block->escapeHtml($cat['name']); ?></span>
+					<span class="awa-category-carousel__label"><span class="awa-cat-tile__name"><?php echo $block->escapeHtml($cat['name']); ?></span></span>
 					<?php if ($countText !== ''): ?>
 	                <span class="awa-category-carousel__count"><?php echo $block->escapeHtml($countText); ?></span>
 					<?php endif; ?>
