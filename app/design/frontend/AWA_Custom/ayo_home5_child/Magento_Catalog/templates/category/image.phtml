@@ -21,6 +21,19 @@ $image = $block->getImage();
 $output = $block->getOutput();
 $_imgUrl = $image->getUrl($_category);
 
+// awa-lote10-20260827: hero PLP Bauletos usa banner 1295x280 ja no media (thumb 300x300 fica no atributo Magento / menu).
+$_heroUrlKey = strtolower((string) $_category->getUrlKey());
+if ($_heroUrlKey === 'bauletos') {
+    $storeBase = rtrim((string) $block->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), '/');
+    $_imgUrl = $storeBase . '/media/catalog/category/Banner_Categoria_Bauleto.jpg';
+}
+if ($_heroUrlKey === 'guidoes') {
+    $storeBase = rtrim((string) $block->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB), '/');
+    $_imgUrl = $storeBase . '/media/catalog/category/Banner_Categoria_Guidao.jpg';
+}
+
+
+
 // WebP: tenta extensão alternativa (cat.jpg → cat.webp) se o arquivo existir no disco
 $_webpUrl = null;
 if ($_imgUrl) {
@@ -70,7 +83,14 @@ $_parentName = ($_parentCategory && (int) $_parentCategory->getLevel() >= 2)
     <?php endif; ?>
 
     <div class="awa-category-hero__content">
-        <?php if ($_parentName): ?>
+        <?php
+        $crumbHtml = trim($block->getChildHtml('breadcrumbs'));
+        ?>
+        <?php if ($crumbHtml !== ''): ?>
+            <div class="awa-category-hero__crumbs">
+                <?= /* @noEscape */ $crumbHtml ?>
+            </div>
+        <?php elseif ($_parentName): ?>
             <span class="awa-category-hero__eyebrow">
                 <?= $block->escapeHtml($_parentName) ?>
             </span>

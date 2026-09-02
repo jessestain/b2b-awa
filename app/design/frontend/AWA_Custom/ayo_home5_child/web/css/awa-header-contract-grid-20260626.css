@@ -843,3 +843,53 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   mix-blend-mode: normal !important;
   opacity: 1 !important;
 }
+
+/* SEÇÃO 51.27 — PLP category hero: full-bleed 1216×220, no cover-crop of square thumbs */
+html body#html-body.catalog-category-view .page-wrapper .category-view-move .awa-category-hero.awa-category-hero--has-image {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 200px !important;
+  height: 220px !important;
+  max-height: 240px !important;
+  margin: 0 0 12px !important;
+  background: #fff !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+html body#html-body.catalog-category-view .page-wrapper .awa-category-hero__bg-image {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+html body#html-body.catalog-category-view .page-wrapper .awa-category-hero__overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  background: linear-gradient(to right, rgba(255,255,255,.92) 0%, rgba(255,255,255,.78) 38%, rgba(255,255,255,0) 68%) !important;
+}
+html body#html-body.catalog-category-view .page-wrapper .awa-category-hero--has-image .awa-category-hero__content {
+  position: relative !important;
+  z-index: 2 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  max-width: 52% !important;
+  padding: 20px 24px !important;
+}
+html body#html-body.catalog-category-view .page-wrapper .awa-category-hero--has-image :is(h1.awa-category-hero__title, .awa-category-hero__title) {
+  color: #1a1a1a !important;
+  text-shadow: none !important;
+}
+html body#html-body.catalog-category-view .page-wrapper .awa-category-hero--has-image .awa-category-hero__count {
+  color: #555 !important;
+}
+
