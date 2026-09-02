@@ -9356,3 +9356,46 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   background: #fff !important;
 }
 
+
+
+/* SEÇÃO 51.31 — cookie: unclip policy line; sit left of ASSISTENTE FAB */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner.awa-cookie-banner--visible {
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  left: auto !important;
+  right: 88px !important;
+  bottom: 16px !important;
+  inset: auto 88px 16px auto !important;
+  width: min(420px, calc(100vw - 112px)) !important;
+  max-width: min(420px, calc(100vw - 112px)) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  :is(p#awa-cookie-desc, .awa-cookie-banner__text) {
+  max-height: none !important;
+  overflow: visible !important;
+  height: auto !important;
+  white-space: normal !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  .awa-cookie-banner__policy {
+  white-space: nowrap !important;
+}
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    #awa-cookie-banner,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    #awa-cookie-banner.awa-cookie-banner--visible {
+    left: 12px !important;
+    right: 12px !important;
+    inset: auto 12px calc(var(--awa-mobile-bottom-nav-h, 64px) + 72px + env(safe-area-inset-bottom, 0px)) 12px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+}
+

@@ -18,11 +18,11 @@
     <div class="awa-cookie-banner__inner">
         <p class="awa-cookie-banner__text" id="awa-cookie-desc">
             <?= $block->escapeHtml(__('Usamos cookies para personalizar conteúdo e melhorar sua experiência. Ao continuar, você concorda com nossa')) ?>
-            <a class="awa-cookie-banner__link"
+            <span class="awa-cookie-banner__policy"><a class="awa-cookie-banner__link"
                href="<?= $block->escapeUrl($block->getPolicyUrl()) ?>"
                target="_blank" rel="noopener">
                 <?= $block->escapeHtml(__('Política de Privacidade')) ?>
-            </a>.
+            </a>.</span>
         </p>
         <div class="awa-cookie-banner__actions"
              role="group"
