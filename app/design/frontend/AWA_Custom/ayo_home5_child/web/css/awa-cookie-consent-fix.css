@@ -363,3 +363,25 @@ html body.b2b-auth-shell :is(#b2b-register-page-shell, .b2b-login-page, .b2b-reg
   box-sizing: border-box !important;
 }
 
+
+
+/* SEÇÃO 51.35 — auth cookie bottom-left so ASSISTENTE (bottom-right) cannot cover it */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.b2b-auth-shell #awa-cookie-banner,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.b2b-auth-shell #awa-cookie-banner.awa-cookie-banner--visible {
+  left: 16px !important;
+  right: auto !important;
+  bottom: 16px !important;
+  inset: auto auto 16px 16px !important;
+  width: min(420px, calc(100vw - 40px)) !important;
+  max-width: min(420px, calc(100vw - 40px)) !important;
+  overflow: visible !important;
+  max-height: none !important;
+  z-index: 850 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.b2b-auth-shell #awa-ai-chat-root {
+  right: 24px !important;
+  left: auto !important;
+  bottom: 24px !important;
+  z-index: 9999 !important;
+}
+
