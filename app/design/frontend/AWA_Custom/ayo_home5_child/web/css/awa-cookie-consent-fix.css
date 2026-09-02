@@ -342,3 +342,24 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   white-space: nowrap !important;
 }
 
+
+
+/* SEÇÃO 51.33 — B2B auth: cookie left of ASSISTENTE; pad form so Continuar is not covered */
+html body.b2b-auth-shell #awa-cookie-banner,
+html body.b2b-auth-shell #awa-cookie-banner.awa-cookie-banner--visible {
+  left: auto !important;
+  right: 96px !important;
+  bottom: 16px !important;
+  inset: auto 96px 16px auto !important;
+  width: min(360px, calc(100vw - 128px)) !important;
+  max-width: min(360px, calc(100vw - 128px)) !important;
+  z-index: 850 !important;
+}
+html body.b2b-auth-shell #awa-ai-chat-root {
+  z-index: 9999 !important;
+}
+html body.b2b-auth-shell :is(#b2b-register-page-shell, .b2b-login-page, .b2b-register-page-shell) {
+  padding-bottom: 200px !important;
+  box-sizing: border-box !important;
+}
+

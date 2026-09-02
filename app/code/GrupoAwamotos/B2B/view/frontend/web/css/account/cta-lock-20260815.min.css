@@ -1,0 +1,54 @@
+/**
+ * Auth CTA lock — filename novo para vencer cache immutable do login.min.css.
+ * Tokens de marca: SSOT em awa-b2b-auth-shell-final (body.b2b-auth-shell).
+ * Este arquivo só pinta CTAs. Não voltar a definir a cor da marca aqui:
+ * o empty layout já trava no shell; login.css :root mantém literais hex
+ * por causa do Chromium (var() com fallback hex dentro de color-mix).
+ */
+html body#html-body.b2b-auth-shell :is(
+    .b2b-btn-entrar,
+    .b2b-btn-claim-submit,
+    .create-b2b-account,
+    .b2b-register-step-next
+) {
+    background: var(--awa-primary) !important;
+    color: var(--awa-text-inverse) !important;
+    border-color: var(--awa-primary) !important;
+}
+
+html body#html-body.b2b-auth-shell :is(
+    .b2b-btn-entrar,
+    .b2b-btn-claim-submit,
+    .create-b2b-account,
+    .b2b-register-step-next
+):is(:hover, :focus-visible) {
+    background: var(--awa-primary-hover) !important;
+    color: var(--awa-text-inverse) !important;
+}
+
+html body#html-body.b2b-auth-shell .b2b-btn-register {
+    background: transparent !important;
+    border: 1px solid var(--awa-primary) !important;
+    color: var(--awa-primary) !important;
+}
+
+
+/* SEÇÃO 51.33 — B2B auth: cookie left of ASSISTENTE; pad form so Continuar is not covered */
+html body.b2b-auth-shell #awa-cookie-banner,
+html body.b2b-auth-shell #awa-cookie-banner.awa-cookie-banner--visible {
+  left: auto !important;
+  right: 96px !important;
+  bottom: 16px !important;
+  inset: auto 96px 16px auto !important;
+  width: min(360px, calc(100vw - 128px)) !important;
+  max-width: min(360px, calc(100vw - 128px)) !important;
+  z-index: 850 !important;
+}
+html body.b2b-auth-shell #awa-ai-chat-root {
+  z-index: 9999 !important;
+}
+html body.b2b-auth-shell :is(#b2b-register-page-shell, .b2b-login-page, .b2b-register-page-shell) {
+  padding-bottom: 200px !important;
+  box-sizing: border-box !important;
+}
+
