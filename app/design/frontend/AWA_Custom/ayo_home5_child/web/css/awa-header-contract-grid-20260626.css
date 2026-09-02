@@ -1068,3 +1068,29 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   }
 }
 
+
+
+/* SEÇÃO 51.32 — cookie policy+period inline; p was flex column so "." was its own row */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  :is(p#awa-cookie-desc, .awa-cookie-banner__text) {
+  display: block !important;
+  flex-direction: unset !important;
+  gap: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  .awa-cookie-banner__policy {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  .awa-cookie-banner__link {
+  display: inline !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  align-self: auto !important;
+  white-space: nowrap !important;
+}
+

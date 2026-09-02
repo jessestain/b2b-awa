@@ -36,24 +36,27 @@ body .page-wrapper .cookie-status {
   clip: rect(0, 0, 0, 0) !important;
 }
 
-#awa-cookie-banner {
+/* Override hard-locks do design-system (full-width strip) com especificidade maior.
+   Mantém o cookie como card flutuante para não bloquear cliques em PLP/PDP. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-cookie-banner,
+html body#html-body#html-body#html-body#html-body #awa-cookie-banner {
   position: fixed !important;
-  inset: auto clamp(12px, 3vw, 24px) calc(clamp(12px, 2vw, 20px) + env(safe-area-inset-bottom, 0px)) clamp(12px, 3vw, 24px) !important;
+  inset: auto clamp(12px, 3vw, 24px) calc(clamp(12px, 2vw, 20px) + env(safe-area-inset-bottom, 0px)) auto !important;
   top: auto !important;
-  left: clamp(12px, 3vw, 24px) !important;
+  left: auto !important;
   right: clamp(12px, 3vw, 24px) !important;
   bottom: calc(clamp(12px, 2vw, 20px) + env(safe-area-inset-bottom, 0px)) !important;
   width: auto !important;
-  max-width: min(calc(100% - 24px), 720px) !important;
+  max-width: min(calc(100% - 24px), 520px) !important;
   margin-inline: auto !important;
   z-index: var(--awa-layer-cookie, 850) !important;
   max-height: min(40vh, 280px) !important;
   overflow: auto !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   border: 1px solid var(--awa-border, var(--awa-border)) !important;
   background: var(--awa-bg, var(--awa-bg)) !important;
   color: var(--awa-text, var(--awa-text)) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--awa-text-primary) 8%, transparent) !important;
   transform: translateY(calc(100% + 24px)) !important;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease !important;
   opacity: 0;
@@ -61,7 +64,8 @@ body .page-wrapper .cookie-status {
   will-change: transform;
 }
 
-#awa-cookie-banner.awa-cookie-banner--visible {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-cookie-banner.awa-cookie-banner--visible,
+html body#html-body#html-body#html-body#html-body #awa-cookie-banner.awa-cookie-banner--visible {
   transform: translateY(0) !important;
   opacity: 1;
   pointer-events: auto;
@@ -120,7 +124,7 @@ p#awa-cookie-desc,
 .awa-cookie-banner__btn {
   min-height: 44px !important;
   padding: 10px 16px !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   cursor: pointer !important;
@@ -312,3 +316,29 @@ html body#html-body .page-wrapper .page-footer {
     overflow-x: unset !important;
   }
 }
+
+
+/* SEÇÃO 51.32 — cookie policy+period inline; p was flex column so "." was its own row */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  :is(p#awa-cookie-desc, .awa-cookie-banner__text) {
+  display: block !important;
+  flex-direction: unset !important;
+  gap: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  .awa-cookie-banner__policy {
+  display: inline !important;
+  white-space: nowrap !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  #awa-cookie-banner
+  .awa-cookie-banner__link {
+  display: inline !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  align-self: auto !important;
+  white-space: nowrap !important;
+}
+
