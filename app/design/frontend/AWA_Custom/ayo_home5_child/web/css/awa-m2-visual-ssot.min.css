@@ -618,3 +618,25 @@ html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slide
   z-index: 5 !important;
   pointer-events: none !important;
 }
+
+/* SECAO 51.25 — CB 300 sliver: pixels painted white in the JPEG; CSS fallback 80px box.
+   Token v=20260902-secao51-25-hero-paint. Isolation r4. Zero :has(). */
+html body#html-body .awa-hero__slide--cb300 .banner_item_bg,
+html body#html-body .awa-hero__slide--cb300 .banner_item_bg a {
+  position: relative !important;
+}
+html body#html-body .awa-hero-sliver-mask {
+  display: block !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 80px !important;
+  height: 100px !important;
+  background: #fff !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+}
+html body#html-body .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg :is(a, picture, img) {
+  object-fit: contain !important;
+  object-position: left center !important;
+}

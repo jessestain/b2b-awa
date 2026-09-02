@@ -149,6 +149,9 @@ if ($banners = $block->getBannerCollection()):
                                 . '</picture>';
                         }
                     }
+                    if (!empty($__isCb300)) {
+                        $html .= '<span class="awa-hero-sliver-mask" aria-hidden="true"></span>';
+                    }
                     if ($link !== '') {
                         $slideLinkLabel = trim(strip_tags((string) $slideAlt)) ?: (string) __('Destaque AWA Motos');
                         $html = '<a href="' . $block->escapeUrl($link) . '" aria-label="'
@@ -156,9 +159,6 @@ if ($banners = $block->getBannerCollection()):
                             . '">' . $html . '</a>';
                     }
                     echo $html;
-                    if (!empty($__isCb300)) {
-                        echo '<span class="awa-hero-sliver-mask" aria-hidden="true"></span>';
-                    }
                     ?>
                 </div>
                 <?php if ($text = $banner->getSlideText()): ?>
