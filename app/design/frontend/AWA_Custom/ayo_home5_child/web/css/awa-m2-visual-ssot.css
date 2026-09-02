@@ -580,3 +580,24 @@ html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slide
   object-fit: contain !important;
   object-position: center !important;
 }
+
+/* SECAO 51.23 — Hide baked-in left thumb sliver on desktop CB 300 hero JPEG.
+   Token v=20260902-secao51-23-hero-sliver. Source slider_guidao_cb_300.jpg 1920x472
+   already clips the first thumb. First desktop slide only. White patch ~5% x ~26%
+   bottom-left. Isolation r4. Zero :has(). */
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-slide:first-child .banner_item_bg,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item:first-child .banner_item_bg {
+  position: relative !important;
+}
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-slide:first-child .banner_item_bg::after,
+html body#html-body.cms-index-index .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item:first-child .banner_item_bg::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 5.2% !important;
+  height: 26% !important;
+  background: #fff !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
