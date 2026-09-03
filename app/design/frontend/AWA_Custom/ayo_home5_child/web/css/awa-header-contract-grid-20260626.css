@@ -1598,3 +1598,52 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   max-height: 56px !important;
   height: auto !important;
 }
+
+/* SEÇÃO 51.48 — checkout header full height vs r40c unlayered 44px clip
+   Evidence (Chrome SOCKS 1280, 2026-09-03) after 51.47: header visible but
+   red ~45px band clips logo + "Editar carrinho". Cause: §b2b-promo-shell-r40c
+   ships layered+UNLAYERED copies forcing #header.header-container to 44px.
+   Root selectors patched with :not(.awa-checkout-header-shell); EOF locks geometry.
+   Scope: checkout OPC. Zero :has(). Isolation r4.
+   Token v=20260903-secao51-48-checkout-header-height */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .awa-site-header #header.header-container.awa-checkout-header-shell,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .awa-site-header #header.header-container.awa-checkout-header-shell > .header-content.awa-checkout-header-content {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 76px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  background: #fff !important;
+  background-color: #fff !important;
+  background-image: none !important;
+  padding-block: 0 !important;
+  border-bottom: 1px solid var(--awa-cc-border, #e5e7eb) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .awa-checkout-header-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 76px !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-block: 12px !important;
+  background: transparent !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .awa-checkout-header-brand .logo img {
+  display: block !important;
+  max-height: 56px !important;
+  height: auto !important;
+  width: auto !important;
+  max-width: min(170px, 100%) !important;
+  object-fit: contain !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .awa-checkout-back-cart {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 44px !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+}

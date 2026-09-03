@@ -58,7 +58,7 @@ final class HeaderImpeccableCascadeLockCss
      * 2026-07-20: alinha o shell externo do footer-bottom ao container de 1280px.
      * O padding interno preserva a largura útil de 1248px sem recuo duplo.
      */
-    public const GATE_SCRIPT_QUERY = '20260814-footer-axis-r3';
+    public const GATE_SCRIPT_QUERY = '20260902-home-norefine';
 
     /**
      * Cache-busting para awa-visual-fixes-2026-06-29-final.min.css, aplicado
@@ -84,7 +84,7 @@ final class HeaderImpeccableCascadeLockCss
     // 2026-08-02 H-pager-rwd: bust — pager padronizado mobile/tablet/desktop.
     // 2026-08-02 H-badge-clip: bust — hot-onsale max-width 50px → texto legível.
     // 2026-08-02 H-badge-clip2: bust + cascade-lock inline (vence CSS imutável em cache).
-    public const VISUAL_FIXES_CSS_QUERY = '20260818-home-shelf-opt-r1';
+    public const VISUAL_FIXES_CSS_QUERY = '20260820-plp-crumb-hero-r10';
 
     /**
      * Cache-busting para awa-master-fix.js após tornar o init não bloqueante
@@ -691,8 +691,10 @@ final class HeaderImpeccableCascadeLockCss
             . 'html body#html-body #awa-cookie-banner,'
             . 'html body#html-body #awa-cookie-banner.awa-cookie-banner--visible{'
             . 'border:0!important;box-shadow:0 -4px 12px rgb(15 23 42/10%)!important}'
-            . 'html body#html-body .b2b-login-modal{'
-            . 'border:0!important;box-shadow:0 8px 24px rgb(15 23 42/14%)!important;overflow:visible!important}'
+            . 'html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal{'
+            . 'padding:0!important;border:1px solid var(--awa-border,#e5e5e5)!important;'
+            . 'box-shadow:inset 0 3px 0 0 var(--awa-primary),0 20px 32px rgb(15 23 42/12%)!important;'
+            . 'overflow:auto!important}'
             . 'html body#html-body .page-wrapper :is(#header .header-content,.header-container .header-content,.header-content){'
             . 'border:0!important;box-shadow:none!important;background:var(--awa-bg,oklch(99% .002 20))!important}'
             . 'html body#html-body .page-wrapper .awa-header-categories.menu_left_home1,'
@@ -890,7 +892,7 @@ final class HeaderImpeccableCascadeLockCss
             . '--vm-font:"Source Sans 3",system-ui,sans-serif!important}'
             . 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is('
             . '.awa-search-helper-copy,.awa-category-carousel__subtitle,.awa-section-header__subtitle,'
-            . '.awa-hero-b2b-cta__lead,#b2b-login-desc,.product-thumb .hot-onsale .onsale .sale-text){'
+            . '.awa-hero-b2b-cta__lead,.product-thumb .hot-onsale .onsale .sale-text){'
             . 'font-size:max(12px,.75rem)!important;line-height:1.45!important}'
             . 'html body#html-body .page-wrapper :is(.page-footer,.page_footer) :is('
             . '.velaFooterTitle,h4.velaFooterTitle,[id^="awa-footer-title-"]){'
@@ -921,8 +923,10 @@ final class HeaderImpeccableCascadeLockCss
             . 'html body#html-body .page-wrapper .awa-site-header form#search_mini_form .field.search{'
             . 'padding:4px 8px!important;box-sizing:border-box!important}'
             /* §109 shelf-carousel.css owns tier rhythm (featured/standard/compact); padding-block-start here caused 36/48 asymmetry on desktop */
-            . 'html body#html-body .page-wrapper :is(.b2b-login-modal,#b2b-login-modal,.b2b-login-modal-overlay){'
-            . 'padding:20px 24px!important;box-sizing:border-box!important}'
+            . 'html body#html-body .page-wrapper #b2b-login-modal.b2b-login-modal-overlay{'
+            . 'padding:16px!important;box-sizing:border-box!important}'
+            . 'html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal{'
+            . 'padding:0!important;box-sizing:border-box!important}'
             . 'html body#html-body .page-wrapper .navigation.verticalmenu ul.togge-menu.list-category-dropdown'
             . ':is(.vmm-open,.menu-open,[aria-hidden="false"]){overflow:visible!important}'
             . 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper{'
@@ -1413,7 +1417,33 @@ final class HeaderImpeccableCascadeLockCss
             . 'bottom:calc(var(--awa-mobile-bottom-nav-h,64px) + 16px + env(safe-area-inset-bottom,0px))!important;'
             . 'right:12px!important;z-index:40!important}'
             . '}'
-            /* #23: breadcrumb PLP — altura vem dos <a>/<li> 44px, não só do container */
+            /* #23: desktop 24px/14px — 36px/lh36 deixava 8px vazios no ul (CDP). */
+            . '@layer awa-visual-priority{'
+            . '@media(min-width:768px){'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs,'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs,'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs .items{'
+            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
+            . 'padding-block:0!important;margin-block:0!important;line-height:24px!important;'
+            . 'font-size:14px!important;background:transparent!important;border:0!important;'
+            . 'box-shadow:none!important;overflow:hidden!important}'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs{'
+            . 'padding-inline:var(--awa-shell-pad,clamp(16px,3vw,24px))!important;'
+            . 'margin-block:0!important;margin-inline:auto!important;width:100%!important;'
+            . 'max-width:min(100%,1280px)!important}'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs .items{'
+            . 'display:inline-flex!important;flex-wrap:nowrap!important;gap:0 8px!important;align-items:center!important;'
+            . 'width:max-content!important;max-width:100%!important;flex:0 0 auto!important}'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs '
+            . ':is(.item,.item:last-child){'
+            . 'flex:0 1 auto!important;width:auto!important;max-width:none!important;min-width:0!important}'
+            . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs '
+            . ':is(.item,a,strong,span){'
+            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
+            . 'padding:0!important;margin:0!important;font-size:14px!important;line-height:24px!important;'
+            . 'display:inline-flex!important;align-items:center!important}'
+            . '}'
+            . '@media(max-width:767px){'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs,'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs,'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs .items{'
@@ -1427,6 +1457,8 @@ final class HeaderImpeccableCascadeLockCss
             . 'min-height:0!important;height:auto!important;max-height:none!important;'
             . 'padding:0!important;margin:0!important;font-size:12px!important;line-height:1.25!important;'
             . 'display:inline!important}'
+            . '}'
+            . '}'
             /* #24: tokens dark + header com cores literais (vence visual-fixes sticky branco) */
             . 'html body#html-body#html-body.awa-dark-mode{'
             . '--awa-bg-page:#0f172a!important;--awa-bg-surface:#1e293b!important;'
@@ -1768,10 +1800,10 @@ final class HeaderImpeccableCascadeLockCss
             . 'html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index) '
             . '.page-wrapper .header-control.awa-nav-bar .awa-nav-bar__inner{'
             . 'display:flex!important;align-items:center!important;justify-content:flex-start!important;'
-            . 'gap:clamp(16px,1.5vw,24px)!important;width:100%!important;max-width:100%!important;'
+            . 'gap:16px!important;width:min(100%,1280px)!important;max-width:1280px!important;'
             . 'min-height:var(--awa-nav-bar-h,48px)!important;height:var(--awa-nav-bar-h,48px)!important;'
-            . 'max-height:var(--awa-nav-bar-h,48px)!important;margin:0!important;padding:0!important;'
-            . 'box-sizing:border-box!important;overflow:visible!important}'
+            . 'max-height:var(--awa-nav-bar-h,48px)!important;margin-inline:auto!important;'
+            . 'padding-inline:24px!important;box-sizing:border-box!important;overflow:visible!important}'
             /* Quick links ao lado do menu vertical (Departamentos) — não à extrema direita. */
             . 'html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index) '
             . '.page-wrapper .header-control.awa-nav-bar .awa-nav-quick-links{'
@@ -1798,16 +1830,13 @@ final class HeaderImpeccableCascadeLockCss
             . 'overflow:visible!important;max-width:none!important}'
             . 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):not(.checkout-index-index) '
             . '.page-wrapper .awa-site-header :is(.header-control.header-nav.awa-nav-bar,.header-control.awa-nav-bar){'
-            . 'width:100vw!important;max-width:100vw!important;'
-            . 'margin-inline:calc(50% - 50vw)!important;'
-            . 'margin-block:0!important;padding:0!important;'
-            . 'border:0!important;box-shadow:none!important;overflow:visible!important;'
-            . 'background:var(--awa-primary,oklch(48% .14 20))!important;'
-            . 'background-color:var(--awa-primary,oklch(48% .14 20))!important}'
+            . 'width:100%!important;max-width:none!important;'
+            . 'margin-inline:0!important;margin-block:0!important;padding:0!important;'
+            . 'border:0!important;box-shadow:none!important;overflow:visible!important}'
             . 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):not(.checkout-index-index) '
             . '.page-wrapper .awa-site-header .header-control.awa-nav-bar > .container{'
-            . 'width:100%!important;max-width:var(--awa-container-catalog,var(--awa-container-max,1280px))!important;'
-            . 'margin-inline:auto!important;padding-inline:clamp(16px,3vw,24px)!important;'
+            . 'width:100%!important;max-width:none!important;'
+            . 'margin-inline:0!important;padding-inline:0!important;'
             . 'background:transparent!important;border:0!important;overflow:visible!important}'
             . 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):not(.checkout-index-index) '
             . '.page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner{'
@@ -2463,12 +2492,133 @@ final class HeaderImpeccableCascadeLockCss
             . 'background:' . $surface . '!important;background-color:' . $surface . '!important;'
             . 'backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'
             // Importante em awa-fixes: o contrato legado dessa camada vence regras unlayered.
-            . '@layer awa-fixes{@media(min-width:768px){'
+            . '@layer awa-fixes{'
+            /* ThemeOption custom_default.css pinta `button` de vermelho sólido
+               (CDP: rgb(183,51,55), pad 8px 50px). Toggles da sidebar de conta
+               devem ser rótulos, não CTA. !important layered vence `button`. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .account-nav-section__toggle{'
+            . 'appearance:none!important;-webkit-appearance:none!important;'
+            . 'display:flex!important;align-items:center!important;justify-content:space-between!important;'
+            . 'width:100%!important;max-width:100%!important;box-sizing:border-box!important;'
+            . 'min-height:44px!important;margin:4px 0 0!important;padding:8px 12px!important;'
+            . 'border:0!important;border-radius:4px!important;box-shadow:none!important;'
+            . 'background:color-mix(in srgb,var(--awa-primary) 8%,var(--awa-bg))!important;'
+            . 'background-color:color-mix(in srgb,var(--awa-primary) 8%,var(--awa-bg))!important;'
+            . 'background-image:none!important;'
+            . 'color:var(--awa-text)!important;font-size:13px!important;font-weight:600!important;'
+            . 'text-align:left!important;cursor:pointer!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .account-nav-section__toggle:is(:hover,:focus-visible){'
+            . 'background:color-mix(in srgb,var(--awa-primary) 12%,var(--awa-bg))!important;'
+            . 'background-color:color-mix(in srgb,var(--awa-primary) 12%,var(--awa-bg))!important;'
+            . 'color:var(--awa-text)!important;border-color:transparent!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .account-nav-section__toggle::after{'
+            . 'content:""!important;display:block!important;width:0.45rem!important;height:0.45rem!important;'
+            . 'border:0!important;border-right:2px solid currentColor!important;'
+            . 'border-bottom:2px solid currentColor!important;background:transparent!important;'
+            . 'transform:rotate(45deg)!important;flex-shrink:0!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .account-nav-section--accordion.is-open .account-nav-section__toggle::after{'
+            . 'transform:rotate(-135deg)!important}'
+            /* ThemeOption `a { color:#b73337 !important }` (unlayered). Links de
+               texto no main da conta não são CTA. Hover volta ao primary. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.column.main,.col-main,.b2b-dashboard) a:not(.action):not(.button){'
+            . 'color:var(--awa-text)!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.column.main,.col-main,.b2b-dashboard) a:not(.action):not(.button):is(:hover,:focus-visible){'
+            . 'color:var(--awa-primary)!important}'
+            . '@media(min-width:768px){'
             . $sticky . '{box-sizing:border-box!important;height:116px!important;'
-            . 'min-height:116px!important;max-height:116px!important}}'
+            . 'min-height:116px!important;max-height:116px!important}'
+            /* Conta B2B: nav display:none; 116 layered deixava vão 48px (header 68 vs sticky 116). */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header'
+            . ' :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){'
+            . 'height:68px!important;min-height:68px!important;max-height:68px!important;'
+            . 'padding-block:0!important;padding-top:0!important;padding-bottom:0!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header'
+            . ' :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row]){'
+            . 'padding-inline:24px!important;padding-left:24px!important;padding-right:24px!important;'
+            . 'box-sizing:border-box!important}'
+            . '}'
             . '@media(max-width:767px){'
             . $sticky . '{box-sizing:border-box!important;height:96px!important;'
-            . 'min-height:96px!important;max-height:96px!important}}}';
+            . 'min-height:96px!important;max-height:96px!important}'
+            /* Conta: shell-final trava .awa-account-header e .awa-main-header em 68px
+               em todas as viewports. Sticky layered já é 96 (2 linhas), mas o pai
+               permanece 68 no fluxo — breadcrumbs y=84 sob a busca (overlap 14px). */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header{'
+            . 'height:96px!important;min-height:96px!important;max-height:96px!important;'
+            . '--awa-header-sticky-h:96px!important;--awa-header-site-h:96px!important;'
+            . '--awa-header-main-row-h:96px!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header'
+            . ' :is(.header.awa-main-header,.header_main.awa-main-header-inner-wrap){'
+            . 'height:96px!important;min-height:96px!important;max-height:96px!important}'
+            /* Conta B2B mobile: .b2b-status-panel ("Olá, Nome") fica visível na célula
+               cart de 44px (audit-fixes não injeta nesta rota). CDP 375: col=112,
+               logoR=254, panelL=247, overlap=7. Bottom-nav Conta + saudação do painel
+               cobrem identidade — ocultar o trigger no header. !important: vence
+               headerB2bPanelCoexistence + first-paint 4×ID unlayered. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header .header-wrapper-sticky .b2b-status-panel{'
+            . 'display:none!important;visibility:hidden!important;pointer-events:none!important;'
+            . 'width:0!important;min-width:0!important;max-width:0!important;'
+            . 'height:0!important;min-height:0!important;max-height:0!important;'
+            . 'overflow:hidden!important;margin:0!important;padding:0!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header .header-wrapper-sticky .awa-header-right-col{'
+            . 'width:44px!important;min-width:44px!important;max-width:44px!important;'
+            . 'gap:0!important;overflow:visible!important;justify-self:end!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper .awa-site-header.awa-account-header'
+            . ' :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row]){'
+            . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important}'
+            /* CDP 375: .columns pad 12px + page-main 16 → col-main x=28. Search x=16. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.page-main,#maincontent) > .columns{'
+            . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important;'
+            . 'box-sizing:border-box!important}'
+            /* AH: themes.css `.layout-2-col .col-md-3{margin-bottom:50px}` (unlayered).
+               CDP 375 accordion fechado: wrapH=94, mb=50, gap=12 → dead=62, h1y=389.
+               Live inject @layer awa-fixes: mb=0, dead=12, h1y=339. Desktop mb já era 0. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.page-main,#maincontent) > .columns.layout-2-col'
+            . ' > :is(.col-md-3,[class*="col-sm-3"],.col-lg-2){'
+            . 'margin-bottom:0!important;margin-block-end:0!important}'
+            /* AE/AF: nav-mobile.min.js em cache imutável ainda faz expanded=true
+               por .current (navH=365, dashY=664 em 375). Conteúdo só com
+               .awa-nav--user-open (bind no PHTML, independente do .min). */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.block-collapsible-nav,#block-collapsible-nav) > .content{'
+            . 'display:none!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.block-collapsible-nav,#block-collapsible-nav).awa-nav--user-open > .content{'
+            . 'display:block!important}'
+            . '}}'
+            /* Unlayered: ThemeOption `a{color}` é unlayered !important e vence
+               a camada awa-fixes. 7×#html-body no main da conta. */
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.column.main,.col-main,.b2b-dashboard) a:not(.action):not(.button){'
+            . 'color:var(--awa-text)!important}'
+            . $root . ':is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard)'
+            . ' .page-wrapper :is(.column.main,.col-main,.b2b-dashboard) a:not(.action):not(.button):is(:hover,:focus-visible){'
+            . 'color:var(--awa-primary)!important}'
+            /* AR: carrinho sem footer-terminal-lock. Form 480px + margin auto
+               deixava leftover 159px (CDP 1286: right 1112 vs eixo 1247).
+               Live inject max-width:none → right 1247, padRight 0. Unlayered
+               para vencer Magento .form.subscribe (unlayered). */
+            . '@media(min-width:768px){'
+            . $root . ' .page-wrapper footer.page-footer :is(#newsletter-validate-detail,.form.subscribe){'
+            . 'max-width:none!important;width:100%!important;margin:0!important;'
+            . 'margin-inline:0!important;margin-left:0!important;margin-right:0!important}'
+            . $root . ' .page-wrapper footer.page-footer .awa-newsletter-form-container{'
+            . 'max-width:none!important}}';
     }
 
     /**
@@ -2536,7 +2686,8 @@ final class HeaderImpeccableCascadeLockCss
             . self::footerNewsletterWhiteR17Rules()
             . self::footerCopyrightFlatR20Rules()
             . self::footerAtendimentoStoreFlatR21Rules()
-            . self::footerImpeccablePolishR66Rules();
+            . self::footerImpeccablePolishR66Rules()
+            . self::footerContentAxisRules();
     }
 
     /**
@@ -2578,7 +2729,7 @@ final class HeaderImpeccableCascadeLockCss
             . 'line-height:1.4!important;max-height:none!important;overflow:visible!important;'
             . 'max-width:min(72ch,100%)!important}}'
             . $scope . ' #newsletter-validate-detail .field.newsletter{'
-            . 'padding-block:8px!important;padding-inline:0!important;box-sizing:border-box!important}'
+            . 'padding-block:0!important;padding-inline:0!important;box-sizing:border-box!important}'
             . $scope . ' .awa-footer-trust-copy strong{line-height:1.35!important}'
             . $scope . ' .awa-footer-trust-copy span{line-height:1.35!important}'
             . $hdr . ' .awa-account-dropdown__menu,'
@@ -2589,6 +2740,225 @@ final class HeaderImpeccableCascadeLockCss
             . ':is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) '
             . ':is(.awa-b2b-promo-bar__lead,.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__lead-short,'
             . '.awa-b2b-promo-bar__text){line-height:1.4!important}';
+    }
+
+    /**
+     * 2026-08-27 — eixo canónico do footer.
+     *
+     * Faixas (trust, newsletter, colunas, categorias, bottom) full-bleed;
+     * miolo no mesmo shell do header: 1280px + --awa-page-main-pad.
+     * !important terminal: vence r67–r72, align-shell, visual-bugfix e
+     * estilos inline legados. Sem hex de marca — só tokens var(--awa-*).
+     */
+    public static function footerContentAxisRules(): string
+    {
+        $any = 'html body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . '#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper :is(footer.page-footer,.page_footer,.page-footer)';
+        $root = 'html body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . '#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer';
+        $inner = $root . ' > .page_footer';
+        $pad = 'var(--awa-page-main-pad,clamp(16px,3vw,24px))';
+        $max = '1280px';
+        $bleed = 'box-sizing:border-box!important;max-width:none!important;width:100%!important;'
+            . 'margin-inline:0!important;margin-left:0!important;margin-right:0!important;'
+            . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important';
+        $shell = 'box-sizing:border-box!important;width:min(100%,' . $max . ')!important;'
+            . 'max-width:min(100%,' . $max . ')!important;margin-inline:auto!important;'
+            . 'margin-left:auto!important;margin-right:auto!important;'
+            . 'padding-inline:' . $pad . '!important;padding-left:' . $pad . '!important;'
+            . 'padding-right:' . $pad . '!important';
+        $bands = ':is(section.awa-footer-trust-bar,.awa-footer-trust-bar,.awa-footer-newsletter,'
+            . '#footer.footer-container,.footer-container,section.awa-footer-categories-expand,'
+            . '.footer-bottom,.awa-footer-devby)';
+        $containers = ':is(section.awa-footer-trust-bar>.container,.awa-footer-trust-bar>.container,'
+            . '.awa-footer-newsletter>.container,#footer.footer-container>.container,'
+            . '.footer-container>.container,section.awa-footer-categories-expand>.container,'
+            . '.footer-bottom>.container,.awa-footer-devby>.container)';
+
+        return '/*§footer-content-axis-bp-20260827*/'
+            . $root . ',' . $inner . '{' . $bleed . ';height:auto!important;min-height:0!important}'
+            . $any . ' ' . $bands . '{' . $bleed
+            . ';height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}'
+            . $any . ' ' . $containers . '{' . $shell . '}'
+            . $any . ' .footer-bottom .footer-bottom-inner{'
+            . 'box-sizing:border-box!important;width:100%!important;max-width:none!important;'
+            . 'margin:0!important;padding:0!important}'
+            . $any . ' :is(.footer-container .container>.row.rowFlexMargin>[class*="col-"],'
+            . '.footer-bottom .awa-footer-bottom__row>[class*="col-"]){'
+            . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important;'
+            . 'float:none!important;max-width:none!important}'
+            . $any . ' .footer-bottom .awa-footer-bottom__row{'
+            . 'justify-items:stretch!important}'
+            . $any . ' .footer-bottom .awa-footer-bottom__row>[class*="col-"]:first-child,'
+            . $any . ' .footer-bottom .awa-footer-bottom__logo-col{'
+            . 'justify-self:start!important;text-align:start!important}'
+            . $any . ' .footer-bottom .awa-footer-bottom__logo-img{'
+            . 'margin-inline:0!important}'
+            . $any . ' section.awa-footer-trust-bar,'
+            . $any . ' .awa-footer-trust-bar{'
+            . 'padding-block:clamp(12px,1.8vw,18px)!important;margin:0!important}'
+            . $any . ' .awa-footer-trust-grid{'
+            . 'padding-block:0!important;gap:clamp(12px,2vw,24px)!important}'
+            . $any . ' .awa-footer-trust-item{'
+            . 'min-height:0!important;padding:0!important;gap:12px!important;align-items:center!important}'
+            . $any . ' .awa-footer-trust-icon,'
+            . $any . ' .awa-footer-trust-icon svg{'
+            . 'width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important}'
+            . $any . ' .awa-footer-trust-copy strong{'
+            . 'font-size:14px!important;line-height:1.35!important}'
+            . $any . ' .awa-footer-trust-copy span{'
+            . 'font-size:13px!important;line-height:1.4!important}'
+            . $any . ' .awa-footer-newsletter{'
+            . 'padding-block:clamp(16px,2.2vw,24px)!important;margin:0!important;'
+            . 'background:color-mix(in srgb,var(--awa-primary) 7%,var(--awa-bg,Canvas))!important;'
+            . 'background-color:color-mix(in srgb,var(--awa-primary) 7%,var(--awa-bg,Canvas))!important;'
+            . 'background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}'
+            . $any . ' .awa-newsletter-wrapper{'
+            . 'display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;'
+            . 'align-items:center!important;justify-content:flex-start!important;'
+            . 'gap:clamp(16px,2vw,28px)!important;width:100%!important;max-width:none!important;'
+            . 'grid-template-columns:none!important}'
+            . $any . ' .awa-newsletter-info{'
+            . 'display:flex!important;flex-direction:column!important;align-items:flex-start!important;'
+            . 'gap:8px!important;grid-template-columns:none!important;min-width:0!important;'
+            . 'flex:0 1 28rem!important;max-width:28rem!important}'
+            . $any . ' .awa-newsletter-icon{'
+            . 'display:inline-flex!important;align-items:center!important;justify-content:center!important;'
+            . 'flex:0 0 24px!important;width:24px!important;height:24px!important;'
+            . 'min-width:24px!important;min-height:24px!important;max-width:24px!important;max-height:24px!important;'
+            . 'margin:0!important;padding:0!important;overflow:hidden!important;'
+            . 'background:transparent!important;border:0!important;box-shadow:none!important;'
+            . 'color:var(--awa-primary)!important;grid-template-columns:none!important}'
+            . $any . ' .awa-newsletter-icon :is(svg,img){'
+            . 'width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;'
+            . 'max-width:24px!important;max-height:24px!important;display:block!important;flex:0 0 24px!important;'
+            . 'color:var(--awa-primary)!important;stroke:currentColor!important;fill:none!important}'
+            . $any . ' .awa-newsletter-form-container{'
+            . 'flex:1 1 280px!important;width:auto!important;min-width:0!important;max-width:none!important;'
+            . 'border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important}'
+            . $any . ' .newsletter-footer{'
+            . 'border:0!important;background:transparent!important;box-shadow:none!important;'
+            . 'padding:0!important;margin:0!important}'
+            . $any . ' #newsletter-validate-detail{'
+            . 'display:block!important;width:100%!important;max-width:none!important;'
+            . 'margin:0!important;grid-template-columns:none!important;height:auto!important}'
+            . $any . ' #newsletter-validate-detail .field.newsletter{'
+            . 'display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;'
+            . 'grid-template-rows:44px auto!important;grid-auto-flow:row!important;'
+            . 'flex-direction:row!important;flex-wrap:nowrap!important;align-items:start!important;'
+            . 'column-gap:8px!important;row-gap:6px!important;width:100%!important;max-width:100%!important;'
+            . 'height:auto!important;min-height:44px!important;padding:0!important;padding-block:0!important;'
+            . 'border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;'
+            . 'box-sizing:border-box!important}'
+            . $any . ' #newsletter-validate-detail .control{'
+            . 'grid-column:1!important;grid-row:1!important;min-width:0!important;width:auto!important;'
+            . 'max-width:none!important;align-self:stretch!important;margin:0!important;padding:0!important;'
+            . 'height:44px!important}'
+            . $any . ' #newsletter-validate-detail .actions{'
+            . 'grid-column:2!important;grid-row:1!important;width:auto!important;max-width:none!important;'
+            . 'flex:0 0 auto!important;align-self:stretch!important;margin:0!important;padding:0!important;'
+            . 'height:44px!important}'
+            . $any . ' #newsletter-validate-detail .field.newsletter::after{'
+            . 'grid-column:1/-1!important;grid-row:2!important}'
+            . $any . ' :is(.awa-newsletter-title,.velaNewsletterTitle){'
+            . 'font-size:16px!important;line-height:1.3!important;margin:0!important;font-weight:700!important}'
+            . $any . ' .awa-newsletter-desc{'
+            . 'font-size:13px!important;line-height:1.4!important;margin:0!important}'
+            . $any . ' #newsletter-validate-detail :is(input[type=email],button.action.subscribe){'
+            . 'height:44px!important;min-height:44px!important;box-sizing:border-box!important}'
+            . $any . ' #newsletter-validate-detail input[type=email]{'
+            . 'width:100%!important;max-width:none!important;min-width:0!important}'
+            . $any . ' #newsletter-validate-detail input[type=email]:focus-visible,'
+            . $any . ' #newsletter-validate-detail button.action.subscribe:focus-visible{'
+            . 'outline:2px solid var(--awa-primary)!important;outline-offset:2px!important}'
+            . $any . ' ul.awa-footer-categories-list a{'
+            . 'transition:background-color .15s ease,border-color .15s ease,color .15s ease!important}'
+            . $any . ' #newsletter-validate-detail button.action.subscribe{'
+            . 'width:auto!important;max-width:none!important;white-space:nowrap!important;'
+            . 'padding-inline:16px!important}'
+            . $any . ' .awa-footer-trust-copy{'
+            . 'display:flex!important;flex-direction:column!important;align-items:flex-start!important;'
+            . 'gap:4px!important;min-width:0!important}'
+            . $any . ' .awa-footer-trust-copy strong,'
+            . $any . ' .awa-footer-trust-copy span{'
+            . 'display:block!important;position:static!important;width:auto!important;max-width:100%!important}'
+            . $any . ' .awa-footer-trust-copy strong{'
+            . 'font-size:14px!important;line-height:1.35!important}'
+            . $any . ' .awa-footer-trust-copy span{'
+            . 'font-size:13px!important;line-height:1.4!important}'
+            . $any . ' #footer.footer-container,'
+            . $any . ' .footer-container{'
+            . 'padding-block:clamp(12px,1.8vw,20px) clamp(8px,1vw,12px)!important}'
+            . $any . ' .footer-container .container>.row.rowFlexMargin{'
+            . 'padding-block:0!important;gap:clamp(16px,2vw,28px)!important}'
+            . $any . ' :is(.velaFooterTitle,.awa-footer-section__toggle){'
+            . 'margin:0 0 10px!important;padding-bottom:8px!important}'
+            . $any . ' ul.velaFooterLinks a,'
+            . $any . ' .awa-footer-atendimento__actions a{'
+            . 'min-height:44px!important;height:auto!important;padding-block:10px!important;line-height:1.35!important}'
+            . $any . ' .awa-footer-atendimento__store-address{'
+            . 'white-space:normal!important;overflow:visible!important;text-overflow:unset!important;line-height:1.4!important}'
+            . $any . ' :is(p.awa-footer-atendimento__label,p.awa-footer-atendimento__label--social){'
+            . 'position:static!important;width:auto!important;height:auto!important;clip:auto!important;'
+            . 'overflow:visible!important;margin:12px 0 6px!important;white-space:normal!important}'
+            . $any . ' section.awa-footer-categories-expand{'
+            . 'padding-block:clamp(12px,1.8vw,20px)!important;margin:0!important;'
+            . 'background:var(--awa-bg,Canvas)!important}'
+            . $any . ' ul.awa-footer-categories-list>li>a,'
+            . $any . ' ul.awa-footer-categories-list a{'
+            . 'border-radius:999px!important;min-height:32px!important;padding:6px 12px!important;'
+            . 'background:var(--awa-bg,Canvas)!important;border:1px solid var(--awa-border)!important;'
+            . 'color:var(--awa-text)!important}'
+            . $any . ' ul.awa-footer-categories-list a:hover,'
+            . $any . ' ul.awa-footer-categories-list a:focus-visible{'
+            . 'background:var(--awa-primary)!important;border-color:var(--awa-primary)!important;'
+            . 'color:var(--awa-white,Canvas)!important}'
+            . $any . ' .footer-bottom{'
+            . 'padding-block:clamp(16px,2vw,24px)!important;background:var(--awa-bg,Canvas)!important}'
+            . $any . ' .footer-bottom :is(.awa-footer-pay-sec__label,.awa-footer-muted-label){'
+            . 'display:block!important}'
+            . $any . ' .awa-footer-bottom__logo-img{'
+            . 'height:auto!important;max-height:48px!important;width:auto!important}'
+            . $any . ' .awa-footer-devby{'
+            . 'max-height:none!important;padding-block:10px!important}'
+            . $any . ' .awa-footer-devby__inner{'
+            . 'height:auto!important;min-height:0!important}'
+            . $any . ' .awa-footer-copyright__disclaimer{'
+            . 'font-size:12px!important;line-height:1.45!important;max-width:min(72ch,100%)!important}'
+            . '@media (min-width:768px){'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__inner{'
+            . 'display:grid!important;grid-template-columns:minmax(96px,max-content) minmax(0,1fr)!important;'
+            . 'align-items:center!important;column-gap:clamp(14px,2vw,28px)!important;row-gap:10px!important}'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__toggle{'
+            . 'display:none!important}'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__heading{'
+            . 'grid-column:1!important;grid-row:1!important}'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__panel,'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__panel[hidden]{'
+            . 'grid-column:2!important;grid-row:1!important;display:block!important;'
+            . 'visibility:visible!important;max-height:none!important}'
+            . '}'
+            . '@media (max-width:767px){'
+            . $any . ' .awa-newsletter-wrapper{'
+            . 'flex-direction:column!important;align-items:stretch!important;'
+            . 'grid-template-columns:minmax(0,1fr)!important}'
+            . $any . ' .awa-newsletter-info{'
+            . 'flex:1 1 auto!important;max-width:none!important}'
+            . $any . ' .awa-newsletter-form-container{'
+            . 'flex:1 1 auto!important;width:100%!important;max-width:none!important}'
+            . $any . ' .awa-newsletter-form-container .field.newsletter{'
+            . 'display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:8px!important}'
+            . $any . ' .awa-newsletter-form-container .field.newsletter :is(.control,.actions),'
+            . $any . ' .awa-newsletter-form-container .field.newsletter .action.subscribe{'
+            . 'grid-column:1!important;width:100%!important;max-width:100%!important}'
+            . $any . ' section.awa-footer-categories-expand .awa-footer-categories-expand__panel{'
+            . 'display:none!important}'
+            . $any . ' section.awa-footer-categories-expand:has([data-awa-categories-toggle][aria-expanded="true"]) '
+            . '.awa-footer-categories-expand__panel{'
+            . 'display:block!important}'
+            . '}';
     }
 
     /**
@@ -2667,7 +3037,7 @@ final class HeaderImpeccableCascadeLockCss
             . 'box-sizing:border-box!important;min-height:28px!important;height:auto!important;'
             . 'padding:4px 10px!important;margin:0!important;'
             . 'background:#fff!important;background-color:#fff!important;'
-            . 'border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:6px!important;'
+            . 'border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:999px!important;'
             . 'box-shadow:none!important;outline:0!important;line-height:1.25!important;font-size:12px!important}'
             . '@media (max-width:767px){'
             . $scope . ' section.awa-footer-categories-expand,'
@@ -2984,23 +3354,27 @@ final class HeaderImpeccableCascadeLockCss
             . '#html-body#html-body#html-body#html-body'
             . ' .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar)';
 
+        $inkDark = 'var(--awa-text-primary,#111827)';
+        $inkCta = 'var(--awa-primary,#b73337)';
+        $inkMuted = 'var(--awa-text-secondary,#475569)';
         $rules = '@media (max-width:767px){'
             . $bar . '{'
             . 'background:#fff!important;background-color:#fff!important;background-image:none!important;'
-            . 'color:var(--awa-text-primary,#111827)!important}'
+            . 'color:' . $inkDark . '!important;-webkit-text-fill-color:' . $inkDark . '!important}'
             . $bar . ' :is(.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__lead,'
             . '.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__lead-short,'
             . '.awa-b2b-promo-bar__tail,.awa-b2b-promo-bar__separator,'
             . '.awa-b2b-promo-bar__cta,.awa-b2b-promo-bar__cta-long,.awa-b2b-promo-bar__cta-short,'
             . '.awa-b2b-promo-bar__cta strong,span,p,a,strong){'
-            . 'color:var(--awa-text-primary,#111827)!important;opacity:1!important;'
-            . 'line-height:1.4!important}'
+            . 'color:' . $inkDark . '!important;-webkit-text-fill-color:' . $inkDark . '!important;'
+            . 'opacity:1!important;line-height:1.4!important}'
             . $bar . ' :is(.awa-b2b-promo-bar__cta,.awa-b2b-promo-bar__cta-short,.awa-b2b-promo-bar__cta-long,'
             . 'a.awa-b2b-promo-bar__cta){'
-            . 'color:var(--awa-primary,#b73337)!important;font-weight:700!important;'
+            . 'color:' . $inkCta . '!important;-webkit-text-fill-color:' . $inkCta . '!important;'
+            . 'font-weight:700!important;'
             . 'text-decoration:underline!important;text-underline-offset:2px!important}'
             . $bar . ' :is(.awa-b2b-promo-close,#awa-b2b-promo-close){'
-            . 'color:var(--awa-text-secondary,#475569)!important}'
+            . 'color:' . $inkMuted . '!important;-webkit-text-fill-color:' . $inkMuted . '!important}'
             . '}';
 
         return '/*§b2b-promo-contrast-r27-inline*/'
@@ -3025,14 +3399,18 @@ final class HeaderImpeccableCascadeLockCss
         $bar = $site . ' :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar,.top-header.awa-b2b-promo-bar)';
         $inner = $bar . ' :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout)';
         $text = $bar . ' :is(.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__lead,'
-            . '.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__tail,'
+            . '.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__lead-short,'
+            . '.awa-b2b-promo-bar__tail,'
             . '.awa-b2b-promo-bar__separator,span,p)';
         $ctaLink = $bar . ' :is(a.awa-b2b-promo-bar__cta,.awa-b2b-promo-bar__cta)';
         $ctaText = $bar . ' :is(.awa-b2b-promo-bar__cta strong,.awa-b2b-promo-bar__cta-long,'
             . '.awa-b2b-promo-bar__cta-short)';
         $close = $bar . ' :is(.awa-b2b-promo-close,#awa-b2b-promo-close)';
         $fill = 'var(--awa-primary,oklch(48% .14 20))';
-        $ink = 'var(--awa-text-inverse,oklch(99% .002 20))';
+        /* On-primary: --awa-text-inverse no super-global aponta a --awa-bg (ciclo/:root
+         * invalid) e o H16B do align-grid pinta -webkit-text-fill-color escuro depois
+         * do gate. Token --awa-white + fill-color travam contraste no fundo primary. */
+        $ink = 'var(--awa-white,#fff)';
 
         /* BUG-SHELL-PROMO-TOKEN-CLOSED-001: tokens 44/160 só com promo aberta.
          * Antes: forçava --awa-header-promo-h:44 e stack 160 mesmo com aria-hidden=true. */
@@ -3043,12 +3421,12 @@ final class HeaderImpeccableCascadeLockCss
             . $site . ':has(#awa-b2b-promo-bar:not([aria-hidden="true"])){'
             . '--awa-header-promo-h:44px!important;'
             . '--awa-header-stack-h:calc(44px + var(--awa-header-sticky-h,116px))!important}'
-            . $site . ':has(#awa-b2b-promo-bar:not([aria-hidden="true"])) ' . '#header.header-container{'
+            . $site . ':has(#awa-b2b-promo-bar:not([aria-hidden="true"])) ' . '#header.header-container:not(.awa-checkout-header-shell):not(.awa-auth-header-shell){'
             . 'height:44px!important;min-height:44px!important;max-height:44px!important;'
             . 'width:100%!important;max-width:none!important;margin:0!important;padding:0!important;'
             . 'overflow:hidden!important;background:' . $fill . '!important;background-color:' . $fill . '!important}'
             . $site . ':has(#awa-b2b-promo-bar:not([aria-hidden="true"])) '
-            . '#header.header-container .header-content{'
+            . '#header.header-container:not(.awa-checkout-header-shell):not(.awa-auth-header-shell) .header-content:not(.awa-checkout-header-content):not(.awa-auth-header-content){'
             . 'height:44px!important;min-height:44px!important;max-height:44px!important;'
             . 'width:100%!important;max-width:none!important;margin:0!important;'
             . 'padding:0!important;align-items:center!important;overflow:hidden!important;'
@@ -3064,12 +3442,12 @@ final class HeaderImpeccableCascadeLockCss
             . 'left:auto!important;right:auto!important;inset-inline:auto!important;'
             . 'padding:0!important;padding-inline:0!important;box-sizing:border-box!important;'
             . 'background:' . $fill . '!important;background-color:' . $fill . '!important;background-image:none!important;'
-            . 'color:' . $ink . '!important;'
+            . 'color:' . $ink . '!important;-webkit-text-fill-color:' . $ink . '!important;'
             . 'border:0!important;border-bottom:0!important;'
             . 'line-height:1.2!important;overflow:hidden!important}'
             . $site . ':has(#awa-b2b-promo-bar[aria-hidden="true"]) ' . '#header.header-container,'
             . $site . ':has(#awa-b2b-promo-bar[aria-hidden="true"]) '
-            . '#header.header-container .header-content{'
+            . '#header.header-container:not(.awa-checkout-header-shell):not(.awa-auth-header-shell) .header-content:not(.awa-checkout-header-content):not(.awa-auth-header-content){'
             . 'height:0!important;min-height:0!important;max-height:0!important;'
             . 'overflow:hidden!important;margin:0!important;padding:0!important;border:0!important}'
             . $inner . '{'
@@ -3080,15 +3458,18 @@ final class HeaderImpeccableCascadeLockCss
             . 'margin:0 auto!important;margin-inline:auto!important;'
             . 'display:flex!important;align-items:center!important;justify-content:center!important;'
             . 'padding:0 52px 0 24px!important;padding-inline:24px 52px!important;box-sizing:border-box!important;'
-            . 'background:transparent!important;color:inherit!important}'
+            . 'background:transparent!important;color:inherit!important;'
+            . '-webkit-text-fill-color:inherit!important}'
             . $text . '{'
-            . 'color:' . $ink . '!important;opacity:1!important;'
-            . 'line-height:1.2!important;font-size:13px!important;'
+            . 'color:' . $ink . '!important;-webkit-text-fill-color:' . $ink . '!important;opacity:1!important;'
+            . 'line-height:1.2!important;font-size:13px!important;font-weight:600!important;'
+            . 'letter-spacing:.01em!important;'
             . 'padding:0!important;max-width:none!important;width:100%!important}'
             . $ctaLink . '{'
             . 'display:inline-flex!important;align-items:center!important;justify-content:center!important;'
-            . 'color:' . $ink . '!important;font-weight:700!important;font-size:13px!important;'
-            . 'text-decoration:underline!important;text-underline-offset:2px!important;'
+            . 'color:' . $ink . '!important;-webkit-text-fill-color:' . $ink . '!important;'
+            . 'font-weight:700!important;font-size:13px!important;'
+            . 'text-decoration:underline!important;text-underline-offset:3px!important;'
             . 'height:44px!important;min-height:44px!important;max-height:44px!important;'
             . 'padding:0 12px!important;border:0!important;border-radius:0!important;'
             . 'background:transparent!important;background-color:transparent!important;background-image:none!important;'
@@ -3096,9 +3477,11 @@ final class HeaderImpeccableCascadeLockCss
             . 'box-sizing:border-box!important;white-space:nowrap!important;line-height:1.2!important}'
             . $ctaLink . ':hover,' . $ctaLink . ':focus-visible{'
             . 'background:transparent!important;background-color:transparent!important;'
-            . 'color:' . $ink . '!important;text-decoration:underline!important}'
+            . 'color:' . $ink . '!important;-webkit-text-fill-color:' . $ink . '!important;'
+            . 'text-decoration:underline!important}'
             . $ctaText . '{'
-            . 'color:inherit!important;text-decoration:inherit!important;'
+            . 'color:inherit!important;-webkit-text-fill-color:inherit!important;'
+            . 'text-decoration:inherit!important;'
             . 'background:transparent!important;border:0!important;padding:0!important;'
             . 'font-weight:700!important}'
             . $close . '{'
@@ -3111,7 +3494,8 @@ final class HeaderImpeccableCascadeLockCss
             . 'border:0!important;border-radius:0!important;'
             . 'border-inline-start:1px solid color-mix(in srgb,' . $ink . ' 28%,transparent)!important;'
             . 'background:transparent!important;background-color:transparent!important;'
-            . 'color:' . $ink . '!important;font-size:16px!important;'
+            . 'color:' . $ink . '!important;-webkit-text-fill-color:' . $ink . '!important;'
+            . 'font-size:22px!important;'
             . 'font-weight:600!important;line-height:1!important;padding:0!important;margin:0!important}'
             . '}'
             . '@media (max-width:767px){'
@@ -3124,17 +3508,20 @@ final class HeaderImpeccableCascadeLockCss
             . 'padding:0!important;margin:0!important;line-height:1.25!important;'
             . 'border:0!important;border-radius:0!important;box-shadow:none!important;'
             . 'background-color:transparent!important;background-image:none!important;'
-            . 'color:var(--awa-primary,#b73337)!important;font-weight:700!important;'
+            . 'color:var(--awa-primary,#b73337)!important;'
+            . '-webkit-text-fill-color:var(--awa-primary,#b73337)!important;'
+            . 'font-weight:700!important;'
             . 'text-decoration:underline!important;text-underline-offset:2px!important;'
             . 'white-space:nowrap!important}'
             . $ctaLink . ':hover,' . $ctaLink . ':focus-visible{'
             . 'background-color:transparent!important;background-image:none!important;'
             . 'border:0!important;border-radius:0!important;'
             . 'color:var(--awa-primary,#b73337)!important;'
+            . '-webkit-text-fill-color:var(--awa-primary,#b73337)!important;'
             . 'text-decoration:underline!important}'
             . $ctaText . '{'
             . 'background-color:transparent!important;border:0!important;border-radius:0!important;'
-            . 'padding:0!important;color:inherit!important}'
+            . 'padding:0!important;color:inherit!important;-webkit-text-fill-color:inherit!important}'
             . '}';
 
         return '/*§b2b-promo-shell-r40c-inline*/'
@@ -3223,7 +3610,7 @@ final class HeaderImpeccableCascadeLockCss
 
     /**
      * r30: stack back-to-top above chat FAB on mobile. WA slot is now #awa-ai-chat-root
-     * (56) + sound (44). Chat INTOCAVEL — BTT sits nav+12+56+12+44+12. z-index 998 < chat 9999.
+     * (56). Sound moved into the panel header — BTT sits nav+12+56+12. z-index 998 < chat 9999.
      * PDP/PLP load super-global @layer awa-fixes; layered !important beats unlayered
      * !important (CSS Cascade 5). Same-layer awa-fixes block at body-end wins 140px lock.
      */
@@ -3249,8 +3636,8 @@ final class HeaderImpeccableCascadeLockCss
             . 'z-index:10002!important}'
             . $top . '{'
             . 'position:fixed!important;right:16px!important;left:auto!important;'
-            . 'bottom:calc(' . $nav . ' + 12px + 56px + 12px + 44px + 12px + ' . $safe . ')!important;'
-            . 'inset-block-end:calc(' . $nav . ' + 12px + 56px + 12px + 44px + 12px + ' . $safe . ')!important;'
+            . 'bottom:calc(' . $nav . ' + 12px + 56px + 12px + ' . $safe . ')!important;'
+            . 'inset-block-end:calc(' . $nav . ' + 12px + 56px + 12px + ' . $safe . ')!important;'
             . 'width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;'
             . 'max-width:44px!important;max-height:44px!important;padding:0!important;'
             . 'box-sizing:border-box!important;z-index:998!important}'
@@ -3258,8 +3645,8 @@ final class HeaderImpeccableCascadeLockCss
             . 'bottom:calc(' . $nav . ' + 12px + ' . $cookie . ' + ' . $safe . ')!important;'
             . 'inset-block-end:calc(' . $nav . ' + 12px + ' . $cookie . ' + ' . $safe . ')!important}'
             . $cookieRoot . ' :is(#awa-back-to-top,.awa-back-to-top).is-visible:not([hidden]){'
-            . 'bottom:calc(' . $nav . ' + 12px + 56px + 12px + 44px + 12px + ' . $cookie . ' + ' . $safe . ')!important;'
-            . 'inset-block-end:calc(' . $nav . ' + 12px + 56px + 12px + 44px + 12px + ' . $cookie . ' + ' . $safe . ')!important}'
+            . 'bottom:calc(' . $nav . ' + 12px + 56px + 12px + ' . $cookie . ' + ' . $safe . ')!important;'
+            . 'inset-block-end:calc(' . $nav . ' + 12px + 56px + 12px + ' . $cookie . ' + ' . $safe . ')!important}'
             . '}';
 
         return '/*§mobile-fab-stack-r30-inline*/'
@@ -3312,6 +3699,16 @@ final class HeaderImpeccableCascadeLockCss
             . '#html-body#html-body#html-body#html-body.awa-cookie-banner-active';
         $safe = 'env(safe-area-inset-bottom,0px)';
         $cookie = 'var(--awa-cookie-banner-height,0px)';
+        $hide = 'html body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . '#html-body#html-body#html-body#html-body .page-wrapper'
+            . ' :is(#awa-back-to-top,.awa-back-to-top)[hidden],'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . '#html-body#html-body#html-body#html-body .page-wrapper'
+            . ' :is(#awa-back-to-top,.awa-back-to-top)[aria-hidden="true"]:not(.is-visible){'
+            . 'display:none!important;visibility:hidden!important;opacity:0!important;'
+            . 'pointer-events:none!important;width:0!important;height:0!important;'
+            . 'min-width:0!important;min-height:0!important;padding:0!important;'
+            . 'overflow:hidden!important;box-shadow:none!important}';
 
         $rules = '@media (min-width:992px){'
             . $wa . '{'
@@ -3335,8 +3732,8 @@ final class HeaderImpeccableCascadeLockCss
             . '}';
 
         return '/*§desktop-fab-stack-r33-inline*/'
-            . '@layer awa-visual-priority{' . $rules . '}'
-            . '/*§desktop-fab-stack-r33-unlayered*/' . $rules;
+            . '@layer awa-visual-priority{' . $hide . $rules . '}'
+            . '/*§desktop-fab-stack-r33-unlayered*/' . $hide . $rules;
     }
 
     /**
@@ -3774,7 +4171,8 @@ final class HeaderImpeccableCascadeLockCss
             . $scope . ' .awa-footer-devby__logo{'
             . 'display:block!important;width:57px!important;height:30px!important;'
             . 'min-width:57px!important;max-width:57px!important;max-height:30px!important;'
-            . 'object-fit:contain!important;opacity:1!important;visibility:visible!important}';
+            . 'object-fit:contain!important;opacity:1!important;visibility:visible!important}'
+            . self::footerContentAxisRules();
     }
 
     public static function footerCriticalStabilityRules(): string
@@ -3812,7 +4210,10 @@ final class HeaderImpeccableCascadeLockCss
             . 'overflow:visible!important;overflow-x:visible!important;overflow-y:visible!important}'
             . $scope . ' #footer.footer-container{'
             . 'display:block!important;margin-top:0!important;margin-bottom:0!important}'
-            . $scope . ' .footer-bottom>.container,'
+            . $scope . ' .footer-bottom>.container{'
+            . 'display:block!important;width:min(100%,1280px)!important;max-width:1280px!important;'
+            . 'margin-inline:auto!important;padding-inline:var(--awa-page-main-pad,clamp(16px,3vw,24px))!important;'
+            . 'box-sizing:border-box!important}'
             . $scope . ' .footer-bottom .footer-bottom-inner{'
             . 'display:block!important;width:100%!important;max-width:none!important;'
             . 'margin:0!important;padding:0!important;box-sizing:border-box!important}'
@@ -4171,7 +4572,8 @@ final class HeaderImpeccableCascadeLockCss
             . self::footerNewsletterWhiteR17Rules()
             . self::footerCopyrightFlatR20Rules()
             . self::footerAtendimentoStoreFlatR21Rules()
-            . self::footerImpeccablePolishR66Rules();
+            . self::footerImpeccablePolishR66Rules()
+            . self::footerContentAxisRules();
     }
 
     /**
@@ -4231,30 +4633,9 @@ final class HeaderImpeccableCascadeLockCss
         $js = <<<'JS'
 (function (w, d) {
     'use strict';
-    var INLINE_PROPS = [
-        'display', 'grid-template-columns', 'align-items', 'height', 'min-height',
-        'grid-column', 'grid-row', 'max-height', 'visibility', 'pointer-events',
-        'box-sizing', 'justify-content', 'width', 'max-width', 'gap', 'min-width'
-    ];
-
     function isFooterMobile() {
         return w.matchMedia && w.matchMedia('(max-width: 767px)').matches;
     }
-
-    function clearFooterDesktopInlineState() {
-        d.querySelectorAll(
-            '.awa-footer-categories-expand__inner, [data-awa-categories-toggle], '
-            + '.awa-footer-categories-expand__toggle, .awa-footer-categories-expand__heading, '
-            + '.awa-footer-categories-expand__panel, #awa-footer-categories-panel, '
-            + 'ul.awa-footer-categories-list, ul.awa-footer-categories-list > li, '
-            + 'ul.awa-footer-categories-list > li > a'
-        ).forEach(function (el) {
-            INLINE_PROPS.forEach(function (prop) {
-                el.style.removeProperty(prop);
-            });
-        });
-    }
-
     function syncFooterCategoriesShell() {
         var mobile = isFooterMobile();
         d.querySelectorAll('[data-awa-categories-toggle], .awa-footer-categories-expand__toggle').forEach(function (btn) {
@@ -4267,129 +4648,23 @@ final class HeaderImpeccableCascadeLockCss
                 if (btn.getAttribute('aria-expanded') !== 'true') {
                     btn.setAttribute('aria-expanded', 'false');
                     btn.classList.remove('is-expanded');
-                    panel.hidden = true;
                     panel.setAttribute('aria-hidden', 'true');
-                    panel.setAttribute('inert', '');
                 }
                 return;
             }
             btn.setAttribute('aria-expanded', 'true');
             btn.classList.add('is-expanded');
-            panel.hidden = false;
             panel.removeAttribute('hidden');
             panel.removeAttribute('inert');
             panel.setAttribute('aria-hidden', 'false');
         });
     }
-
-    function applyFooterCategoriesDesktopState() {
-        d.querySelectorAll('.awa-footer-categories-expand__inner').forEach(function (inner) {
-            inner.style.setProperty('display', 'grid', 'important');
-            inner.style.setProperty('grid-template-columns', 'minmax(96px,max-content) minmax(0,1fr)', 'important');
-            inner.style.setProperty('align-items', 'center', 'important');
-            inner.style.setProperty('height', 'auto', 'important');
-            inner.style.setProperty('min-height', '0', 'important');
-        });
-
-        d.querySelectorAll('[data-awa-categories-toggle], .awa-footer-categories-expand__toggle').forEach(function (btn) {
-            btn.style.setProperty('display', 'none', 'important');
-            btn.style.setProperty('visibility', 'hidden', 'important');
-            btn.style.setProperty('pointer-events', 'none', 'important');
-            btn.setAttribute('aria-expanded', 'true');
-            btn.classList.add('is-expanded');
-        });
-
-        d.querySelectorAll('.awa-footer-categories-expand__heading').forEach(function (heading) {
-            heading.style.setProperty('grid-column', '1', 'important');
-            heading.style.setProperty('grid-row', '1', 'important');
-        });
-
-        d.querySelectorAll('.awa-footer-categories-expand__panel, #awa-footer-categories-panel').forEach(function (panel) {
-            panel.style.setProperty('grid-column', '2', 'important');
-            panel.style.setProperty('grid-row', '1', 'important');
-            panel.style.setProperty('display', 'block', 'important');
-            panel.style.setProperty('max-height', 'none', 'important');
-            panel.style.setProperty('height', 'auto', 'important');
-            panel.style.setProperty('visibility', 'visible', 'important');
-            panel.hidden = false;
-            panel.removeAttribute('hidden');
-            panel.removeAttribute('inert');
-            panel.setAttribute('aria-hidden', 'false');
-        });
-
-        d.querySelectorAll('ul.awa-footer-categories-list').forEach(function (list) {
-            list.style.setProperty('display', 'flex', 'important');
-            list.style.setProperty('flex-wrap', 'wrap', 'important');
-            list.style.setProperty('grid-template-columns', 'none', 'important');
-            list.style.setProperty('gap', '6px 8px', 'important');
-            list.style.setProperty('width', 'auto', 'important');
-            list.style.setProperty('height', 'auto', 'important');
-        });
-
-        d.querySelectorAll('ul.awa-footer-categories-list > li').forEach(function (item) {
-            item.style.setProperty('display', 'block', 'important');
-            item.style.setProperty('width', 'auto', 'important');
-            item.style.setProperty('min-width', '0', 'important');
-            item.style.setProperty('flex', '0 0 auto', 'important');
-        });
-
-        d.querySelectorAll('ul.awa-footer-categories-list > li > a').forEach(function (link) {
-            link.style.setProperty('box-sizing', 'border-box', 'important');
-            link.style.setProperty('display', 'inline-flex', 'important');
-            link.style.setProperty('justify-content', 'center', 'important');
-            link.style.setProperty('align-items', 'center', 'important');
-            link.style.setProperty('width', 'auto', 'important');
-            link.style.setProperty('max-width', 'none', 'important');
-            link.style.setProperty('flex', '0 0 auto', 'important');
-            link.style.setProperty('background', '#fff', 'important');
-            link.style.setProperty('border', '1px solid #e5e5e5', 'important');
-            link.style.setProperty('border-radius', '6px', 'important');
-            /* r13: compact pills — no 4-col stretch cards */
-            link.style.setProperty('min-height', '28px', 'important');
-            link.style.setProperty('height', 'auto', 'important');
-            link.style.setProperty('padding', '4px 10px', 'important');
-        });
-    }
-
-    var scheduled = false;
-    var lastModeKey = '';
-    function schedule() {
-        if (scheduled) {
-            return;
-        }
-        scheduled = true;
-        var run = function () {
-            scheduled = false;
-            var mobile = isFooterMobile();
-            var modeKey = (mobile ? 'm' : 'd')
-                + '|'
-                + d.querySelectorAll('.awa-footer-categories-expand__inner').length;
-            if (modeKey === lastModeKey) {
-                return;
-            }
-            lastModeKey = modeKey;
-            if (mobile) {
-                clearFooterDesktopInlineState();
-                syncFooterCategoriesShell();
-                return;
-            }
-            applyFooterCategoriesDesktopState();
-        };
-        if (w.requestAnimationFrame) {
-            w.requestAnimationFrame(run);
-            return;
-        }
-        w.setTimeout(run, 0);
-    }
-
     if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', schedule, { once: true });
+        d.addEventListener('DOMContentLoaded', syncFooterCategoriesShell, { once: true });
     } else {
-        schedule();
+        syncFooterCategoriesShell();
     }
-
-    w.addEventListener('resize', schedule, { passive: true });
-    w.addEventListener('load', schedule, { once: true });
+    w.addEventListener('resize', syncFooterCategoriesShell, { passive: true });
 })(window, document);
 JS;
 
@@ -4826,7 +5101,7 @@ JS;
             . 'background:transparent!important;'
             . 'border:1px solid var(--awa-border,oklch(90% .008 20))!important;'
             . 'color:var(--awa-text-muted,oklch(45% .02 20))!important;'
-            . 'border-radius:6px!important;padding:6px 10px!important;'
+            . 'border-radius:999px!important;padding:6px 10px!important;'
             . 'min-height:36px!important;display:inline-flex!important;align-items:center!important;'
             . 'font-size:13px!important;line-height:1.35!important}'
             . $scope . ' ul.awa-footer-categories-list a:hover,'
@@ -5273,22 +5548,23 @@ JS;
             . 'padding:0 16px!important;margin:0!important;background:var(--awa-bg-surface,var(--awa-bg,Canvas))!important;'
             . 'border-block:1px solid var(--awa-border-subtle,var(--awa-border,color-mix(in srgb,CanvasText 10%,Canvas)))!important;'
             . 'border-inline:0!important}'
-            . $header . ' .header-control.awa-nav-bar>.container,'
-            . $header . ' .header-control.awa-nav-bar .awa-nav-bar__inner{height:46px!important;min-height:46px!important;'
-            . 'max-height:46px!important;max-width:1280px!important;margin-inline:auto!important;padding:0 16px!important;'
-            . 'box-sizing:border-box!important}'
-            . $header . ' .header-control.awa-nav-bar .awa-nav-bar__inner{display:flex!important;'
-            . 'align-items:center!important;justify-content:flex-start!important;gap:clamp(16px,1.5vw,24px)!important}'
+            . $header . ' .header-control.awa-nav-bar>.container{height:48px!important;min-height:48px!important;'
+            . 'max-height:48px!important;width:100%!important;max-width:none!important;margin-inline:0!important;'
+            . 'padding:0!important;box-sizing:border-box!important}'
+            . $header . ' .header-control.awa-nav-bar .awa-nav-bar__inner{height:48px!important;min-height:48px!important;'
+            . 'max-height:48px!important;width:min(100%,1280px)!important;max-width:1280px!important;'
+            . 'margin-inline:auto!important;padding-inline:24px!important;box-sizing:border-box!important;'
+            . 'display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:16px!important}'
             . $header . ' .awa-header-categories.menu_left_home1{flex:0 0 auto!important;width:206px!important;height:40px!important;'
             . 'min-height:40px!important;max-height:40px!important;padding:0!important;align-self:center!important}'
             . $header . ' .header-control.awa-nav-bar button.our_categories.title-category-dropdown[data-role="awa-vertical-menu-trigger"],'
             . $header . ' .header-control.awa-nav-bar .our_categories.title-category-dropdown{height:40px!important;min-height:40px!important;'
             . 'max-height:40px!important;border-radius:8px!important;box-shadow:none!important}'
             . $header . ' .awa-nav-quick-links{flex:0 0 auto!important;margin:0!important;margin-inline-start:0!important;'
-            . 'justify-self:start!important;justify-content:flex-start!important;height:40px!important;'
-            . 'min-height:40px!important;max-height:40px!important;align-items:center!important}'
-            . $header . ' .awa-nav-quick-links__list{height:40px!important;min-height:40px!important;max-height:40px!important;'
-            . 'align-items:center!important;justify-content:flex-start!important;gap:24px!important}'
+            . 'justify-self:start!important;justify-content:flex-start!important;height:48px!important;'
+            . 'min-height:48px!important;max-height:48px!important;align-items:center!important}'
+            . $header . ' .awa-nav-quick-links__list{height:48px!important;min-height:48px!important;max-height:48px!important;'
+            . 'align-items:center!important;justify-content:flex-start!important;gap:16px!important}'
             . $header . ' .awa-nav-quick-links__link{height:40px!important;min-height:40px!important;'
             . 'padding:0 6px!important;border-radius:8px!important;font-size:13px!important;'
             . 'font-weight:600!important;color:var(--awa-text,CanvasText)!important}'
@@ -5494,14 +5770,25 @@ JS;
 
         return '@media (min-width:768px) and (max-width:991px){'
             . $root . ' .header-control.header-nav.awa-nav-bar,'
-            . $root . ' .header-control.awa-nav-bar,'
-            . $root . ' .header-control.header-nav.awa-nav-bar>.container,'
+            . $root . ' .header-control.awa-nav-bar{'
+            . 'display:flex!important;' . $paint
+            . ';height:48px!important;min-height:48px!important;max-height:48px!important;'
+            . 'overflow:visible!important;align-items:center!important;'
+            . 'width:100%!important;max-width:none!important;max-inline-size:none!important;'
+            . 'margin-inline:0!important;box-sizing:border-box!important}'
+            . $root . ' :is(.header-control.header-nav.awa-nav-bar>.container,.header-control.awa-nav-bar>.container){'
+            . 'display:block!important;' . $paint
+            . ';height:48px!important;min-height:48px!important;max-height:48px!important;'
+            . 'overflow:visible!important;'
+            . 'width:100%!important;max-width:none!important;max-inline-size:none!important;'
+            . 'margin:0!important;padding:0!important;padding-inline:0!important;box-sizing:border-box!important}'
             . $root . ' .awa-nav-bar__inner{'
             . 'display:flex!important;' . $paint
             . ';height:48px!important;min-height:48px!important;max-height:48px!important;'
             . 'overflow:visible!important;align-items:center!important;'
-            . 'width:min(100%,1280px)!important;max-width:1280px!important;'
-            . 'margin-inline:auto!important;box-sizing:border-box!important}'
+            . 'width:100%!important;max-width:none!important;max-inline-size:none!important;'
+            . 'margin-inline:0!important;padding-inline:max(24px,calc((100% - 1280px)/2 + 24px))!important;'
+            . 'box-sizing:border-box!important}'
             . $root . ' .header-control.header-nav .menu_left_home1,'
             . $root . ' .awa-header-categories.menu_left_home1{'
             . 'display:flex!important;' . $paint
@@ -5532,7 +5819,7 @@ JS;
             . $root . ' .awa-header-categories.menu_left_home1 [data-role="awa-vertical-menu-panel"]'
             . ':is(.menu-open,.vmm-open,[aria-hidden="false"],[data-awa-menu-state="open"]){'
             . 'display:flex!important;flex-direction:column!important;' . $paint
-            . ';position:absolute!important;transform:none!important;top:44px!important;left:0!important;'
+            . ';position:absolute!important;transform:none!important;top:44px!important;left:8px!important;'
             . 'height:auto!important;max-height:min(70vh,560px)!important;overflow-y:auto!important}'
             . $root . ' button.our_categories.title-category-dropdown,'
             . $root . ' button.our_categories,'
@@ -6244,7 +6531,22 @@ JS;
             . 'border:0!important;border-radius:0!important;outline:0!important;'
             . 'background:transparent!important;background-image:none!important;box-shadow:none!important;'
             . 'padding:0!important;min-width:0!important;max-width:none!important;width:max-content!important;'
-            . 'height:44px!important;min-height:44px!important;max-height:44px!important;overflow:visible!important}'
+            . 'height:50px!important;min-height:50px!important;max-height:50px!important;overflow:hidden!important;'
+            . 'flex-wrap:nowrap!important;align-items:center!important}'
+            . $root . ' .awa-header-account-prompt__line2{'
+            . 'display:inline-flex!important;flex-wrap:nowrap!important;white-space:nowrap!important;'
+            . 'height:28px!important;min-height:28px!important;max-height:28px!important;overflow:hidden!important}'
+            . $root . ' .header-control.awa-nav-bar > .container{'
+            . 'box-sizing:border-box!important;width:100%!important;max-width:none!important;'
+            . 'max-inline-size:none!important;margin-inline:0!important;padding-inline:0!important;'
+            . 'padding-left:0!important;padding-right:0!important;display:block!important;gap:0!important}'
+            . $root . ' .header-control.awa-nav-bar > .container::before,'
+            . $root . ' .header-control.awa-nav-bar > .container::after{'
+            . 'content:none!important;display:none!important;width:0!important;height:0!important}'
+            . $root . ' .header-control.awa-nav-bar .awa-nav-bar__inner{'
+            . 'box-sizing:border-box!important;min-width:0!important;'
+            . 'width:100%!important;max-width:none!important;max-inline-size:none!important;'
+            . 'margin-inline:0!important;padding-inline:max(24px,calc((100% - 1280px)/2 + 24px))!important}'
             . $root . ' a.awa-header-account-prompt__link--register,'
             . $root . ' .awa-header-account-prompt a.awa-header-account-prompt__link--register{'
             . 'background:transparent!important;background-color:transparent!important;background-image:none!important;'
@@ -7373,6 +7675,10 @@ JS;
             . self::catalogMobileHeaderClampRules(self::checkoutImpeccableLockRoot())
             . $root . ','
             . $wrap . '{overflow-x:visible!important;overflow-y:visible!important}'
+            . '@media(min-width:992px){'
+            . $wrap . ' :is(#cart-summary,.cart-summary,.cart-summary._sticky){'
+            . 'max-height:none!important;height:auto!important;'
+            . 'overflow:visible!important;overflow-x:visible!important;overflow-y:visible!important}}'
             . $wrap . ' :is('
             . '#search_mini_form,.mst-searchautocomplete__autocomplete,'
             . '#awa-b2b-promo-bar,.awa-b2b-promo-bar,.awa-b2b-promo-bar__inner,'
@@ -7595,15 +7901,22 @@ JS;
             . $wrap . ' .page-main > .columns.layout-2-col.row{'
             . 'column-gap:var(--awa-plp-gap-md,12px)!important;row-gap:0!important;'
             . 'gap:0 var(--awa-plp-gap-md,12px)!important}'
-            . $wrap . ' .nav-breadcrumbs{margin:0!important;margin-block:0!important;padding:0!important}'
+            . $wrap . ' .nav-breadcrumbs{margin-block:0!important;margin-inline:auto!important;'
+            . 'width:100%!important;max-width:min(100%,1280px)!important;padding-block:0!important;'
+            . 'padding-inline:var(--awa-shell-pad,clamp(16px,3vw,24px))!important}'
             . $wrap . ' .nav-breadcrumbs .breadcrumbs{margin:0!important;margin-block:0!important;padding-block:0!important}'
-            . $wrap . ' #maincontent.page-main{padding-top:var(--awa-plp-stack-gap,12px)!important}'
+            . $wrap . ' #maincontent.page-main{padding-top:0!important}'
             . $wrap . ' .mst_categorySearch{margin:0 0 var(--awa-plp-stack-gap,12px)!important}'
             . $wrap . ' .awa-plp-b2b-gate-banner{margin:0 0 var(--awa-plp-stack-gap,12px)!important;'
             . 'padding:var(--awa-space-3,12px)!important}'
             . $wrap . ' .awa-category-hero{min-height:112px!important;max-height:140px!important;'
-            . 'padding-block:var(--awa-space-3,12px)!important;margin:0!important;'
+            . 'display:flex!important;align-items:flex-start!important;'
+            . 'padding-block:8px var(--awa-space-3,12px)!important;margin:0!important;'
             . 'margin-block:0!important;margin-block-end:0!important}'
+            . $wrap . ' .awa-category-hero.awa-category-hero--has-image{'
+            . 'position:relative!important;min-height:180px!important;height:220px!important;'
+            . 'max-height:220px!important;padding-block:16px 20px!important;align-items:flex-end!important}'
+            . $wrap . ' .awa-category-hero__content{align-self:flex-start!important;padding-block-start:0!important}'
             . $wrap . ' :is(#layered-ajax-filter-block,.block.filter){padding:8px!important;box-sizing:border-box!important}'
             . $wrap . ' .awa-header-categories.menu_left_home1{padding:8px!important;box-sizing:border-box!important}'
             . self::plpSkuDensityRules($wrap)
@@ -8021,20 +8334,87 @@ JS;
             . ' .page-wrapper :is(footer.page-footer,.page_footer,.page-footer) :is(section.awa-footer-trust-bar,.awa-footer-trust-bar){'
             . 'width:100%!important;max-width:none!important;margin-inline:0!important}'
             . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
-            . ' .page-wrapper footer.page-footer :is(#footer.footer-container,.awa-footer-newsletter>.container,'
-            . '.footer-bottom>.container,.awa-footer-trust-bar>.container){'
-            . 'box-sizing:border-box!important;width:100%!important;max-width:min(100%,1280px)!important;'
+            . ' .page-wrapper footer.page-footer :is(.awa-footer-newsletter>.container,'
+            . '.footer-bottom>.container,.awa-footer-trust-bar>.container,'
+            . '#footer.footer-container>.container,section.awa-footer-categories-expand>.container){'
+            . 'box-sizing:border-box!important;width:min(100%,1280px)!important;max-width:1280px!important;'
             . 'margin-inline:auto!important}'
             . '@media(max-width:767px){'
             . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
-            . ' .page-wrapper footer.page-footer :is(#footer.footer-container,.awa-footer-newsletter>.container,'
-            . '.footer-bottom>.container,.awa-footer-trust-bar>.container){'
-            . 'padding-inline:16px!important;padding-left:16px!important;padding-right:16px!important}}'
+            . ' .page-wrapper footer.page-footer :is(.awa-footer-newsletter>.container,'
+            . '.footer-bottom>.container,.awa-footer-trust-bar>.container,'
+            . '#footer.footer-container>.container,section.awa-footer-categories-expand>.container){'
+            . 'padding-inline:16px!important;padding-left:16px!important;padding-right:16px!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #footer .vela-content{'
+            . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-wrapper{'
+            . 'flex-direction:column!important;align-items:stretch!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-info{'
+            . 'flex:1 1 auto!important;max-width:none!important}}'
             . '@media(min-width:768px){'
             . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
-            . ' .page-wrapper footer.page-footer :is(#footer.footer-container,.awa-footer-newsletter>.container,'
-            . '.footer-bottom>.container,.awa-footer-trust-bar>.container){'
+            . ' .page-wrapper footer.page-footer :is(.awa-footer-newsletter>.container,'
+            . '.footer-bottom>.container,.awa-footer-trust-bar>.container,'
+            . '#footer.footer-container>.container,section.awa-footer-categories-expand>.container){'
             . 'padding-inline:24px!important;padding-left:24px!important;padding-right:24px!important}}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer ul.awa-footer-categories-list a{'
+            . 'border-radius:999px!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-wrapper{'
+            . 'display:flex!important;flex-wrap:nowrap!important;grid-template-columns:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-info{'
+            . 'display:flex!important;flex-direction:column!important;align-items:flex-start!important;'
+            . 'gap:8px!important;grid-template-columns:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-icon{'
+            . 'display:inline-flex!important;flex:0 0 24px!important;width:24px!important;height:24px!important;'
+            . 'min-width:24px!important;min-height:24px!important;max-width:24px!important;max-height:24px!important;'
+            . 'color:var(--awa-primary)!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-form-container,'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .newsletter-footer{'
+            . 'border:0!important;background:transparent!important;box-shadow:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail{'
+            . 'margin:0!important;max-width:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-footer-trust-copy{'
+            . 'display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important}'
+            . '@media(min-width:768px){'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-wrapper{'
+            . 'flex-direction:row!important;align-items:center!important;justify-content:flex-start!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-info{'
+            . 'flex:0 1 28rem!important;max-width:28rem!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer .awa-newsletter-form-container{'
+            . 'flex:1 1 280px!important;width:auto!important;max-width:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail{'
+            . 'display:block!important;width:100%!important;grid-template-columns:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail .field.newsletter{'
+            . 'display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;'
+            . 'grid-template-rows:44px auto!important;align-items:start!important;'
+            . 'column-gap:8px!important;row-gap:6px!important;width:100%!important;height:auto!important;'
+            . 'min-height:44px!important;padding:0!important;padding-block:0!important;'
+            . 'border:0!important;background:transparent!important;box-shadow:none!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail .control{'
+            . 'grid-column:1!important;grid-row:1!important;min-width:0!important;height:44px!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail .actions{'
+            . 'grid-column:2!important;grid-row:1!important}'
+            . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+            . ' .page-wrapper footer.page-footer #newsletter-validate-detail :is(.actions,button.action.subscribe){'
+            . 'width:auto!important;max-width:none!important;white-space:nowrap!important;height:44px!important}}'
             . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
             . ' .page-wrapper footer.page-footer :is(.page_footer,#footer,.footer-container,.footer-bottom,.footer-bottom-inner),'
             . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
@@ -8424,9 +8804,7 @@ JS;
             . "\n"
             . self::guardScriptTag()
             . "\n"
-            . self::catalogRootHeightScriptTag()
-            . "\n"
-            . self::headerNavAxisLockScriptTag();
+            . self::catalogRootHeightScriptTag();
     }
 
     private static function catalogRootHeightScriptTag(): string
@@ -8450,33 +8828,8 @@ JS;
 
     private static function headerNavAxisLockScriptTag(): string
     {
-        return '<script id="' . self::HEADER_NAV_AXIS_LOCK_SCRIPT_ID . '">(function(){'
-            . 'var d=document,b=d.body;'
-            . 'if(!b||!b.matches||!b.matches(".catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index")){return;}'
-            . 'function set(el,p,v){if(el&&el.style){el.style.setProperty(p,v,"important");}}'
-            . 'function apply(){'
-            . 'if(window.matchMedia&&!window.matchMedia("(min-width: 992px)").matches){return;}'
-            . 'd.querySelectorAll(".page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.awa-nav-bar,.page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,.page-wrapper .awa-site-header .header-control.awa-nav-bar,.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar").forEach(function(el){'
-            . 'set(el,"width","min(100%, 1280px)");set(el,"max-width","1280px");'
-            . 'set(el,"margin-left","auto");set(el,"margin-right","auto");set(el,"margin-inline","auto");'
-            . 'set(el,"padding-left","0");set(el,"padding-right","0");set(el,"padding-inline","0");set(el,"box-sizing","border-box");'
-            . '});'
-            . 'd.querySelectorAll(".page-wrapper .awa-site-header .header-control.awa-nav-bar > .container,.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar > .container").forEach(function(el){'
-            . 'set(el,"width","100%");set(el,"max-width","100%");'
-            . 'set(el,"margin-left","0");set(el,"margin-right","0");set(el,"margin-inline","0");'
-            . 'set(el,"padding-left","0");set(el,"padding-right","0");set(el,"padding-inline","0");set(el,"box-sizing","border-box");'
-            . '});'
-            . 'd.querySelectorAll(".page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner").forEach(function(el){'
-            . 'set(el,"width","100%");set(el,"max-width","100%");'
-            . 'set(el,"margin-left","0");set(el,"margin-right","0");set(el,"margin-inline","0");'
-            . 'set(el,"padding-left","24px");set(el,"padding-right","24px");set(el,"padding-inline","24px");set(el,"box-sizing","border-box");'
-            . '});'
-            . '}'
-            . 'apply();'
-            . 'if(d.readyState==="loading"){d.addEventListener("DOMContentLoaded",apply,{once:true});}'
-            . 'window.addEventListener("load",apply,{once:true,passive:true});'
-            . 'window.addEventListener("resize",apply,{passive:true});'
-            . '})();</script>';
+        /* Geometria da nav fica no CSS. Scripts duplicados são removidos em stripLegacyFromHtml. */
+        return '';
     }
 
     public static function footerOnlyStyleTag(): string
@@ -8504,6 +8857,7 @@ JS;
             . self::shelfCarouselMobileChromeHideR19Rules()
             . self::footerImpeccablePolishR66Rules()
             . self::headerGuestChromeKillCardRules()
+            . self::footerContentAxisRules()
             . '</style>';
     }
 
@@ -8863,6 +9217,43 @@ JS;
     }
 
     /**
+     * Catálogo/PDP/busca: omite cascade-lock (~221KB); guarda mobile + altura do root.
+     * A geometria do header no catálogo é a SSOT unify — não reinjetar catalog-parity-v1.
+     */
+    public static function injectCatalogLightBeforeBodyClose(string $html): string
+    {
+        $html = self::stripLegacyFromHtml($html);
+
+        $tag = '';
+        if (
+            !str_contains($html, self::HOME_GUARD_SCRIPT_ID)
+            && !str_contains($html, self::GUARD_SCRIPT_ID)
+            && !str_contains($html, self::DISTILL_MOBILE_GRID_SCRIPT_ID)
+        ) {
+            $tag .= self::homeGuardScriptTag() . "\n";
+        }
+
+        if (!str_contains($html, 'id="awa-catalog-root-height-lock"')) {
+            $tag .= self::catalogRootHeightScriptTag() . "\n";
+        }
+
+        if (!str_contains($html, self::AUDIT30_SURFACE_STYLE_ID)) {
+            $tag .= self::audit30SurfaceStyleTag() . "\n";
+        }
+
+        if ($tag === '') {
+            return $html;
+        }
+
+        $pos = stripos($html, '</body>');
+        if ($pos === false) {
+            return $html . "\n" . $tag;
+        }
+
+        return substr($html, 0, $pos) . $tag . substr($html, $pos);
+    }
+
+    /**
      * Catálogo/PDP/busca: lock final de paridade do header.
      * Injeta no fim do body para vencer bundles tardios com !important.
      */
@@ -8957,20 +9348,25 @@ JS;
             . 'width:44px!important;min-width:44px!important;max-width:44px!important;'
             . 'height:44px!important;min-height:44px!important;max-height:44px!important;'
             . 'margin:0!important;padding:0!important;justify-self:end!important;align-self:center!important}'
-            // Nav: full-bleed (fundo 100vw) igual à home + 6px de respiro acima do header.
+            // Nav: full-bleed (fundo 100vw). Inner = rail 1280 alinhado ao header.
             . $header . ' :is(.header-wrapper-sticky > .header-control.awa-nav-bar,.header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar){'
             . 'height:var(--awa-header-nav-h,48px)!important;'
             . 'min-height:var(--awa-header-nav-h,48px)!important;'
             . 'max-height:var(--awa-header-nav-h,48px)!important;'
-            . 'display:block!important;width:min(100%,1280px)!important;max-width:1280px!important;'
-            . 'margin-inline:auto!important;margin-block:6px 0!important;padding-inline:0!important;box-sizing:border-box!important}'
-            // Nav inner: contido em 1280 centralizado, alinhado ao rail do header.
-            . $header . ' :is(.header-control.awa-nav-bar > .container,.header-control.header-nav.awa-nav-bar > .container,.header-control.awa-nav-bar .awa-nav-bar__inner,.header-control.header-nav.awa-nav-bar .awa-nav-bar__inner){'
+            . 'display:block!important;width:100%!important;max-width:none!important;'
+            . 'margin-inline:0!important;margin-block:6px 0!important;padding-inline:0!important;box-sizing:border-box!important}'
+            . $header . ' :is(.header-control.awa-nav-bar > .container,.header-control.header-nav.awa-nav-bar > .container){'
             . 'height:var(--awa-header-nav-h,48px)!important;'
             . 'min-height:var(--awa-header-nav-h,48px)!important;'
             . 'max-height:var(--awa-header-nav-h,48px)!important;'
-            . 'width:100%!important;max-width:100%!important;'
+            . 'width:100%!important;max-width:none!important;'
             . 'margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}'
+            . $header . ' :is(.header-control.awa-nav-bar .awa-nav-bar__inner,.header-control.header-nav.awa-nav-bar .awa-nav-bar__inner){'
+            . 'height:var(--awa-header-nav-h,48px)!important;'
+            . 'min-height:var(--awa-header-nav-h,48px)!important;'
+            . 'max-height:var(--awa-header-nav-h,48px)!important;'
+            . 'width:min(100%,1280px)!important;max-width:1280px!important;'
+            . 'margin-inline:auto!important;padding-inline:24px!important;box-sizing:border-box!important}'
             // Busca: esconder label/lupa default do Magento (evita lupa duplicada à esquerda do placeholder).
             . $header . ' .awa-header-search-col :is(.block-search .label,.block-search .block-title,.nested,label.search,label[for="search"]){'
             . 'display:none!important;visibility:hidden!important;width:0!important;height:0!important;max-height:0!important;'
@@ -9075,7 +9471,14 @@ JS;
         }
 
         $pattern = '/<style\\s+id="' . preg_quote(self::STYLE_ID, '/') . '"[^>]*>.*?<\\/style>\\s*/is';
-        return preg_replace($pattern, '', $html) ?? $html;
+        $html = preg_replace($pattern, '', $html) ?? $html;
+        $html = preg_replace(
+            '/<script\\s+id="' . preg_quote(self::GUARD_SCRIPT_ID, '/') . '"[^>]*>.*?<\\/script>\\s*/is',
+            '',
+            $html
+        ) ?? $html;
+
+        return $html;
     }
 
     /**
