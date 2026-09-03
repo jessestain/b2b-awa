@@ -320,7 +320,7 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260903-secao51-59-shelf-ongrid-restore',
+            'query' => '?v=20260903-secao51-60-pdp-visual',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',

@@ -10568,3 +10568,148 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   margin-left: 0 !important;
   margin-inline-start: 0 !important;
 }
+
+/* ==== AWA 51.60 pdp visual (2026-09-03) ====
+   Guest PDP @1280/@390 audit (SKU 2220):
+   1) Title: .page-title-wrapper is flex-direction:column + align-items:flex-end
+      → H1 shrink-wrap sits at cross-axis end (titleLeft 804 vs info content 647).
+      Fix: align-items:flex-start (start edge of info column).
+   2) Crumbs: .nav-breadcrumbs uses align-grid
+      padding-inline:var(--awa-grid-container-pad) (=24) while DS page-main is
+      16 mobile / 24 desktop → mobile crumbText 24 vs media 17.
+      Fix: match page-main tokens on PDP crumbs.
+   3) Bootstrap residue: .view-product > .row ml/mr -15 + .col-md-12 pl/pr 15
+      → mediaLeft 25 vs page-main content edge 24 (+1). Zero gutters on PDP shell.
+   Host: design-system media=all. Preserve 51.52 hang / gallery-sync. No ERP/ATC. */
+@layer awa-visual-priority {
+  html body#html-body.catalog-product-view
+    .page-wrapper
+    .product-info-main
+    .page-title-wrapper {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+}
+
+/* Unlayered terminals (beat align-grid / themes !important). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .product-info-main
+  .page-title-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  text-align: start !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .product-info-main
+  .page-title-wrapper
+  .page-title {
+  align-self: flex-start !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  text-align: start !important;
+}
+
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+    .page-wrapper
+    .nav-breadcrumbs {
+    padding-inline: 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (min-width: 768px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+    .page-wrapper
+    .nav-breadcrumbs {
+    padding-inline: 24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Bootstrap ±15 gutters on PDP product shell → exact content-grid edge. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .view-product
+  > .row,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .product-view
+  .view-product
+  > .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-inline: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .view-product
+  > .row
+  > [class*="col-"],
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+  .page-wrapper
+  .view-product
+  .col-md-12 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-inline: 0 !important;
+}
+
+/* ==== AWA 51.60b pdp crumb token (2026-09-03) ====
+   Mobile crumbs stayed 24 after 51.60 pad rules: align-grid uses
+   padding-inline:var(--awa-grid-container-pad) on :is(.nav-breadcrumbs,#maincontent…)
+   and the custom property remained 24 on mobile. page-main already forced 16 via DS.
+   Fix: on PDP mobile set --awa-grid-container-pad/--awa-page-pad to 16 so crumbs
+   follow the same token as page-main without fighting :is(#maincontent) specificity. */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view {
+    --awa-grid-container-pad: 16px !important;
+    --awa-page-pad: 16px !important;
+    --awa-page-pad-catalog: 16px !important;
+    --awa-shell-gutter: 16px !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+    .page-wrapper
+    .nav-breadcrumbs,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+    .nav-breadcrumbs {
+    padding-inline: 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-inline-start: 16px !important;
+    padding-inline-end: 16px !important;
+  }
+}
+
+
+/* ==== AWA 51.60c pdp crumbs @layer awa-cta-green (2026-09-03) ====
+   Root cause (CDP CSSOM): awa-visual-fixes @layer awa-cta-green sets
+   .nav-breadcrumbs { padding-inline: 24px !important } on PDP.
+   Layered !important beats unlayered DS 51.60/51.60b (var already 16).
+   Same layer + 12×#html-body → mobile crumbs align to page-main 16px. */
+@layer awa-cta-green {
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
+      .page-wrapper
+      .nav-breadcrumbs {
+      padding-inline: 16px !important;
+      padding-inline-start: 16px !important;
+      padding-inline-end: 16px !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+      box-sizing: border-box !important;
+    }
+  }
+}
+
