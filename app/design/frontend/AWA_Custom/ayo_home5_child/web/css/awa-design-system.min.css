@@ -9979,3 +9979,75 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   overflow: visible !important;
   white-space: nowrap !important;
 }
+
+/* ==== AWA 51.53 P0 content gutter 24px + css delivery (2026-09-03) ====
+   FRONTEND_MAP P0 foundation (not abandoned carousel-only WIP).
+   Root causes:
+   1) Wrap shell ~16px vs header pad 24 (refine fallback var(--awa-home-shell-gutter,16px)
+      when token not delivered on screen).
+   2) 51.51 locks hosted only in align-grid often stuck media=print → never apply.
+   Host: design-system (proven media=all) unlayered terminal — wrap gutter SSOT only.
+   Hero full-bleed / above-fold remains P1. Do not re-enable home css-gate MutationObserver. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
+  --awa-home-shell-gutter: 24px !important;
+  --awa-home-shell-max: 1280px !important;
+  --awa-header-shell-pad: 24px !important;
+  --awa-grid-container-pad: 24px !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > :is(.ayo-home5-wrapper, .ayo-home5-wrapper--template-driven),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  :is(.ayo-home5-wrapper, .ayo-home5-wrapper--template-driven) {
+  box-sizing: border-box !important;
+  width: min(100%, var(--awa-home-shell-max, 1280px)) !important;
+  max-width: min(100%, var(--awa-home-shell-max, 1280px)) !important;
+  margin-inline: auto !important;
+  padding-inline: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+/* Viewport flush so category first-card inherits wrap 24 (= header content pad). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .top-home-content--category-carousel
+  .awa-category-carousel__viewport {
+  padding-inline: 0 !important;
+  scroll-padding-inline: 0 !important;
+  border-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .top-home-content--category-carousel
+  .awa-category-carousel__track {
+  padding-inline: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section
+  .awa-carousel__viewport {
+  padding-inline: 0 !important;
+  scroll-padding-inline: 0 !important;
+  border-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section
+  :is(.awa-carousel__track, ul.owl.awa-carousel__track) {
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
