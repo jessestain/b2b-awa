@@ -9775,3 +9775,27 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   color: #fff !important;
   fill: currentColor !important;
 }
+
+/* SEÇÃO 51.44 — /formas-pagamento .awa-cta red banner contrast
+   Evidence (Chrome SOCKS 1280, 2026-09-02): CMS content has WhatsApp/email
+   anchors; §29.1 forces h3→awa-ink and §29.4 forces .page-main a→awa-brand
+   on .awa-inst .awa-cta red background → dark title + invisible link text
+   ("WhatsApp:"/"E-mail:" labels only). Not blank-page collision.
+   Scope: body.cms-formas-pagamento .awa-cta only. Zero :has(). Isolation r4.
+   Token v=20260902-secao51-44-formas-cta */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-formas-pagamento.cms-page-view .page-wrapper .page-main .awa-inst .awa-cta {
+  color: #fff !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-formas-pagamento.cms-page-view .page-wrapper .page-main .awa-inst .awa-cta :is(h1, h2, h3, h4, p, strong, span, li) {
+  color: #fff !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-formas-pagamento.cms-page-view .page-wrapper .page-main .awa-inst .awa-cta a {
+  color: #fff !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-formas-pagamento.cms-page-view .page-wrapper .page-main .awa-inst .awa-cta a:is(:hover, :focus-visible) {
+  color: #fff !important;
+  text-decoration: underline !important;
+  opacity: 0.92 !important;
+}
