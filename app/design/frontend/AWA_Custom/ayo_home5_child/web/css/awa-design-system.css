@@ -7877,6 +7877,82 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
   }
 }
 
+
+
+  /* ==== AWA 51.54 LAYERED home shelf first-card grid align (2026-09-03) ====
+     Unlayered terminals lose to @layer awa-visual-priority !important
+     (P12 li padding-inline:12px; wrap padding via --awa-home-shell-gutter).
+     Host locks INSIDE awa-visual-priority so shelf first card / wrap = hdrPad 24.
+     Preserve 51.52 hang fix; no css-gate MO; hero full-bleed = 51.55. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
+    --awa-home-shell-gutter: 24px !important;
+    --awa-home-shell-max: 1280px !important;
+    --awa-header-shell-pad: 24px !important;
+    --awa-grid-container-pad: 24px !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    :is(.ayo-home5-wrapper, .ayo-home5-wrapper--template-driven) {
+    --awa-home-shell-gutter: 24px !important;
+    box-sizing: border-box !important;
+    width: min(100%, var(--awa-home-shell-max, 1280px)) !important;
+    max-width: min(100%, var(--awa-home-shell-max, 1280px)) !important;
+    margin-inline: auto !important;
+    padding-inline: 24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .top-home-content--category-carousel
+    .awa-category-carousel__viewport {
+    padding-inline: 0 !important;
+    scroll-padding-inline: 0 !important;
+    border-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .top-home-content--category-carousel
+    .awa-category-carousel__track {
+    padding-inline: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-carousel-section
+    .awa-carousel__viewport {
+    padding-inline: 0 !important;
+    scroll-padding-inline: 0 !important;
+    border-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-carousel-section
+    :is(.awa-carousel__track, ul.owl.awa-carousel__track) {
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+  /* Root cause of shelfLeft≈hdrPad+12: P12 padding-inline:12px on li.item (same layer). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-carousel-section
+    :is(.awa-shelf--carousel, .rokan-bestseller, .rokan-newproduct, .rokan-featuredproduct, .awa-shelf)
+    :is(ul.owl.awa-carousel__track, ul.owl, .awa-carousel__track)
+    > :is(li.item, li.awa-carousel__slide, .awa-carousel__slide):first-child {
+    padding-left: 0 !important;
+    padding-inline-start: 0 !important;
+    scroll-margin-inline-start: 0 !important;
+    margin-left: 0 !important;
+    margin-inline-start: 0 !important;
+  }
+
 }
 
 /* ==========================================================================

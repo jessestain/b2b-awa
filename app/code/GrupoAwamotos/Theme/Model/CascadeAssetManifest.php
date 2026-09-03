@@ -102,7 +102,7 @@ final class CascadeAssetManifest
         'header-contract-grid' => [
             'file' => 'awa-header-contract-grid-20260626.min.css',
             'fragment' => 'awa-header-contract-grid-20260626',
-            'query' => '?v=20260903-secao51-53-p0-gutter-delivery',
+            'query' => '?v=20260903-secao51-54-shelf-first-card',
         ],
         'home-density-grid' => [
             'file' => 'awa-home-density-grid-20260611.min.css',
@@ -320,7 +320,7 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260903-secao51-53-p0-gutter-delivery',
+            'query' => '?v=20260903-secao51-54-shelf-first-card',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',
