@@ -171,7 +171,7 @@ if ($_b2bActive) {
 	                            . $block->escapeUrl($productImage->getImageUrl()) . ' 1000w';
 	                    $sizes = '(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 25vw';
 	                    $imgOnError = "this.onerror=null;this.classList.add('awa-img-fallback','awa-loaded');this.removeAttribute('srcset');if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='"
-                        . $block->escapeJs($block->getViewFileUrl('images/product/placeholder/image.jpg'))
+                        . $block->escapeJs($block->getViewFileUrl('Magento_Catalog::images/product/placeholder/image.jpg'))
                         . "';}else{this.closest('li.item-product')?.remove();}";
 	                    // Image HTML Processing
 	                    $mainImgHtml = $productImage->toHtml();
@@ -297,7 +297,7 @@ if ($_b2bActive) {
 									$productImage = $block->getImage($_product, $image);
 									$productImageThumb = $block->getImage($_product, 'category_image_second_small');
 									$imgOnError = "this.onerror=null;this.classList.add('awa-img-fallback','awa-loaded');this.removeAttribute('srcset');if(!this.dataset.fallbackApplied){this.dataset.fallbackApplied='1';this.src='"
-                                        . $block->escapeJs($block->getViewFileUrl('images/product/placeholder/image.jpg'))
+                                        . $block->escapeJs($block->getViewFileUrl('Magento_Catalog::images/product/placeholder/image.jpg'))
                                         . "';}else{this.closest('li.item-product')?.remove();}";
 									$productImageHtml = $productImage->toHtml();
 									$productImageHtml = str_replace('<img ', '<img onerror="' . $block->escapeHtmlAttr($imgOnError) . '" ', $productImageHtml);
