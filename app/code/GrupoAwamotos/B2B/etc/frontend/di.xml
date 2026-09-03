@@ -113,6 +113,12 @@
                 sortOrder="10"/>
     </type>
 
+    <type name="GrupoAwamotos\SchemaOrg\Block\ProductSchema">
+        <plugin name="grupoawamotos_b2b_hide_schema_price"
+                type="GrupoAwamotos\B2B\Plugin\SchemaOrg\HideProductSchemaPricePlugin"
+                sortOrder="10"/>
+    </type>
+
     <type name="Rokanthemes\Themeoption\Helper\Data">
         <plugin name="grupoawamotos_b2b_hide_price_display_custom"
                 type="GrupoAwamotos\B2B\Plugin\Themeoption\HidePriceDisplayCustomPlugin"
@@ -275,6 +281,9 @@
         <plugin name="grupoawamotos_b2b_http_context"
                 type="GrupoAwamotos\B2B\Plugin\App\HttpContextPlugin"
                 sortOrder="15"/>
+        <plugin name="grupoawamotos_b2b_price_list_context_dispatch"
+                type="GrupoAwamotos\B2B\Plugin\CustomerPriceListContextPlugin"
+                sortOrder="16"/>
     </type>
 
     <type name="GrupoAwamotos\B2B\Plugin\CustomerPriceListContextPlugin">

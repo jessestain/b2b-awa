@@ -11,17 +11,16 @@ use GrupoAwamotos\ERPIntegration\Model\ResourceModel\SyncLog as SyncLogResource;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
  * Adds the customer's ERP price list code to the HTTP context.
  *
- * This makes Full Page Cache (FPC) vary by price list, ensuring that
- * customers with different ERP price lists see their own prices.
- *
- * Since there are only ~13 active price lists, this creates a manageable
- * number of cache variants (vs N customers which would be unscalable).
+ * Must run on beforeDispatch (not only getVaryString): cacheable PDP/PLP
+ * depersonalize the customer session before HTML render, so PriceVisibility
+ * can only see ERP state via HttpContext during toHtml().
  */
 class CustomerPriceListContextPlugin
 {
@@ -34,6 +33,7 @@ class CustomerPriceListContextPlugin
     private CustomerRepositoryInterface $customerRepository;
     private LoggerInterface $logger;
     private ?ErpCodeResolver $erpCodeResolver;
+    private HttpContext $httpContext;
 
     public function __construct(
         CustomerSession $customerSession,
@@ -41,6 +41,7 @@ class CustomerPriceListContextPlugin
         SyncLogResource $syncLogResource,
         CustomerPriceProvider $customerPriceProvider,
         CustomerRepositoryInterface $customerRepository,
+        HttpContext $httpContext,
         ?LoggerInterface $logger = null,
         ?ErpCodeResolver $erpCodeResolver = null
     ) {
@@ -49,29 +50,44 @@ class CustomerPriceListContextPlugin
         $this->syncLogResource = $syncLogResource;
         $this->customerPriceProvider = $customerPriceProvider;
         $this->customerRepository = $customerRepository;
+        $this->httpContext = $httpContext;
         $this->logger = $logger ?? new NullLogger();
         $this->erpCodeResolver = $erpCodeResolver;
     }
 
     /**
-     * Add ERP price list code to HTTP context for FPC cache variation.
+     * Populate ERP price-list context before action dispatch / HTML render.
      *
-     * CRITICAL: Always set a context value for logged-in B2B customers,
-     * even without ERP code. This ensures FPC creates separate cache
-     * entries for guests vs logged-in users, preventing the guest
-     * "Entrar para Comprar" buttons from appearing for logged-in users.
+     * @param object $subject
+     * @param RequestInterface $request
+     * @return array|null
+     */
+    public function beforeDispatch(object $subject, RequestInterface $request): ?array
+    {
+        $this->applyContext($request);
+        return null;
+    }
+
+    /**
+     * Keep FPC vary string in sync with the same ERP price-list token.
      */
     public function beforeGetVaryString(HttpContext $subject): void
+    {
+        $this->applyContext(null, $subject);
+    }
+
+    private function applyContext(?RequestInterface $request = null, ?HttpContext $context = null): void
     {
         if (!$this->config->isEnabled()) {
             return;
         }
 
-        // Guard: avoid session start for visitors without a session cookie.
-        // CustomerSession::isLoggedIn() triggers session_start() which creates a PHP session
-        // for every anonymous request, preventing PhpCookieDisabler from stripping PHPSESSID
-        // on FPC HIT responses, and adds Redis session overhead on every request.
-        if (($_COOKIE[session_name()] ?? null) === null) {
+        $context = $context ?? $this->httpContext;
+        $sessionCookie = $request
+            ? $request->getCookie(session_name())
+            : ($_COOKIE[session_name()] ?? null);
+
+        if ($sessionCookie === null) {
             return;
         }
 
@@ -84,27 +100,24 @@ class CustomerPriceListContextPlugin
             $erpCode = $this->resolveErpCode($customerId);
 
             if ($erpCode === null) {
-                // Logged in but no ERP code: still differentiate from guests
-                $subject->setValue(self::CONTEXT_PRICE_LIST, 'logged_in', '0');
+                $context->setValue(self::CONTEXT_PRICE_LIST, 'logged_in', '0');
                 return;
             }
 
             $contextToken = $this->customerPriceProvider->getContextTokenForCustomer($erpCode);
-
-            $subject->setValue(
+            $context->setValue(
                 self::CONTEXT_PRICE_LIST,
                 (string) ($contextToken ?? 'default:1'),
-                '0' // default for non-logged-in users
+                '0'
             );
         } catch (\Exception $e) {
-            // Still mark as logged-in to differentiate from guest cache
-            $subject->setValue(self::CONTEXT_PRICE_LIST, 'logged_in', '0');
+            $context->setValue(self::CONTEXT_PRICE_LIST, 'logged_in', '0');
+            $this->logger->warning('[B2B] Failed to set ERP price list HTTP context', [
+                'exception' => $e->getMessage(),
+            ]);
         }
     }
 
-    /**
-     * Resolve ERP code: erp_code attribute (primary) → entity_map (fallback)
-     */
     private function resolveErpCode(int $customerId): ?int
     {
         try {
@@ -114,11 +127,9 @@ class CustomerPriceListContextPlugin
                 return $this->erpCodeResolver->resolveForCustomerId($customerId, $customer);
             }
 
-            // Primary: erp_code attribute (definitive, single value)
             $attr = $customer->getCustomAttribute('erp_code');
             $erpCode = ($attr && $attr->getValue()) ? $attr->getValue() : null;
 
-            // Fallback: entity_map table
             if ($erpCode === null) {
                 $erpCode = $this->syncLogResource->getErpCodeByMagentoId('customer', $customerId);
             }
