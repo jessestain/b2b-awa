@@ -21,7 +21,7 @@ final class HomeCssGateParity
      * @var list<string>
      */
     public const ACTIVE_GATE_FRAGMENTS = [
-        'awa-align-grid-terminal-2026-06-11',
+        // 51.58: align-grid moved to homeNeverGate (media=all; home css-gate stripped).
         'awa-commerce-impeccable-refine',
         'custom_default.css',
         'product/login-to-cart',

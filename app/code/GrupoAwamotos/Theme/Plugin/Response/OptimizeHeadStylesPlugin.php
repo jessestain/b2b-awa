@@ -7222,13 +7222,14 @@ CSS;
             $tag = '';
             if (!$hasAlignGridBodyTerminal) {
                 if ($isHome) {
-                    /* Home: não usar onload swap — ~600KB; css-gate controla (interação / fallback). */
-                    $tag .= '<link rel="stylesheet" href="' . $href . '" media="print"'
-                        . ' data-awa-gate="1" data-awa-align-grid-body-terminal="1"'
-                        . ' data-awa-bundle="align-grid-terminal" data-awa-defer="1"/>';
+                    /* 51.58: css-gate stripped on home (51.52 hang). media=print+data-awa-gate
+                       left align-grid stuck print-only — screen never got grid locks.
+                       Serve media=all from the start (no MO / no body-class observer). */
+                    $tag .= '<link rel="stylesheet" href="' . $href . '" media="all"'
+                        . ' data-awa-align-grid-body-terminal="1"'
+                        . ' data-awa-bundle="align-grid-terminal"/>';
                 } else {
-                    /* PLP/busca: awa-css-gate NÃO é injetado nestas rotas. media=print sem
-                       onload deixa align-grid (P1-C etc.) inerte para screen — residual badge. */
+                    /* Cart (defer path): print→all via onload; no css-gate on these routes. */
                     $tag .= '<link rel="stylesheet" href="' . $href . '" media="print" onload="this.media=\'all\'"'
                         . ' data-awa-align-grid-body-terminal="1"'
                         . ' data-awa-bundle="align-grid-terminal" data-awa-defer="1"/>';

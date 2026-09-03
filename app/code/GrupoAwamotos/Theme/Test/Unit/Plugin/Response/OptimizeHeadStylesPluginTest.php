@@ -135,14 +135,15 @@ HTML;
         $this->assertContains('awa-commerce-impeccable-refine', $auth);
     }
 
-    public function testHomeNeverGateExcludesAlignGridAndFooterTerminal(): void
+    public function testHomeNeverGateIncludesAlignGridExcludesFooterTerminal(): void
     {
         $never = $this->manifest->homeNeverGateFragments();
         $gate = $this->manifest->homeGateFragments();
 
-        $this->assertNotContains('awa-align-grid-terminal-2026-06-11', $never);
+        // 51.58: align-grid is never-gated (media=all delivery; home css-gate gone).
+        $this->assertContains('awa-align-grid-terminal-2026-06-11', $never);
+        $this->assertNotContains('awa-align-grid-terminal-2026-06-11', $gate);
         $this->assertNotContains('awa-footer-terminal-lock-v1', $never);
-        $this->assertContains('awa-align-grid-terminal-2026-06-11', $gate);
         $this->assertContains('awa-footer-terminal-lock-v1', $gate);
     }
 

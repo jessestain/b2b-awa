@@ -651,7 +651,6 @@ final class CascadeAssetManifest
             'ui-simplify-terminal',
             'home-standardize-terminal-wins',
             'footer-terminal-lock',
-            'align-grid-terminal',
             'login-to-cart',
             'status-panel',
             'b2b-status-panel',
@@ -675,6 +674,8 @@ final class CascadeAssetManifest
             'refine',
             // Must print->all immediately -- never idle-gate (FOUC + LCP).
             'design-system',
+            // 51.58: home css-gate gone — never queue/strip align-grid (media=all delivery).
+            'align-grid-terminal',
         ],
         'heavyLegacyScripts' => ['master-fix-js', 'master-fix-js-min'],
         'checkoutAuthStripScripts' => ['b2b-panel-hydrate-js-min', 'b2b-panel-hydrate-js'],

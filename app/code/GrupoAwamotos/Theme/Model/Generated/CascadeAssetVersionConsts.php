@@ -13,7 +13,7 @@ namespace GrupoAwamotos\Theme\Model\Generated;
  */
 final class CascadeAssetVersionConsts
 {
-    public const ALIGN_GRID = '?v=20260903-secao51-57-promo-shelf-width';
+    public const ALIGN_GRID = '?v=20260903-secao51-58-align-grid-media-all';
     public const FOOTER = '?v=20260903-secao51-57-promo-shelf-width';
     public const HOME_CRITICAL_STACK = '?v=52e56a4b2ed3';
     public const HOME_DEFERRED_STACK = '?v=20260809-onda6b2-stack';
