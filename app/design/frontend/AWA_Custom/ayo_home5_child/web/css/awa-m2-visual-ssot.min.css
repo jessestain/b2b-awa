@@ -1267,3 +1267,20 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   max-height: none !important;
   overflow: visible !important;
 }
+
+/* SEÇÃO 51.43 — /trabalhe-conosco red hero text contrast
+   Evidence (Chrome SOCKS 1280, 2026-09-02): body.curriculo-index-index,
+   .curriculo-page-header red gradient paints, but h1 + subtitle read as
+   dark-on-dark. Module curriculo-progress.css sets color:#fff on the
+   header; SEÇÃO 29.1 (design-system) forces
+   .page-wrapper .page-main :is(h1…){color:var(--awa-ink)!important}
+   and wins. Not blank-page /returns-style. Scope: curriculo header only.
+   Unlayered 18×#html-body EOF trio. Zero :has(). Isolation r4.
+   Home + 51.40/41/42 untouched. Token v=20260902-secao51-43-curriculo-hero */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.curriculo-index-index,.ayo-curriculo-index-index,.curriculo-index-status,.ayo-curriculo-index-status) .page-wrapper .page-main .curriculo-page-header {
+  color: #fff !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.curriculo-index-index,.ayo-curriculo-index-index,.curriculo-index-status,.ayo-curriculo-index-status) .page-wrapper .page-main .curriculo-page-header :is(h1, p, .header-icon, svg) {
+  color: #fff !important;
+  fill: currentColor !important;
+}
