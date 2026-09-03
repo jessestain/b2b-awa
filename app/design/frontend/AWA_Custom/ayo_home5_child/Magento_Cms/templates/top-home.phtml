@@ -106,6 +106,7 @@ if ($newproductBlock) {
     $newproductBlock->setData('show_price', $showHomeProductPrices ? 1 : 0);
     $newproductBlock->setData('awa_shelf_viewport_key', 'home-new');
     $passHomeShelfDisplay($newproductBlock);
+    $passBestsellerCard($newproductBlock);
     $newproductBlock->setTemplate('Rokanthemes_Newproduct::newproduct.phtml');
     if ($newproductBlock->hasProducts()) {
         $newproductHtml = trim((string) $newproductBlock->toHtml());
@@ -176,7 +177,7 @@ $buildCarouselImage = function (string $asset, string $alt, int $idx = 0) use ($
 		. '" type="image/webp" />'
 		. '<img src="'
 		. $block->escapeUrl($block->getViewFileUrl('images/category-carousel/' . $asset))
-        . '" alt="' . $block->escapeHtmlAttr($altText) . '" loading="' . $loadingAttr . '" decoding="async" width="'
+        . '" alt="' . $block->escapeHtmlAttr($altText) . '" class="awa-loaded" loading="' . $loadingAttr . '" decoding="async" width="'
 		. $carouselIconSize
 		. '" height="'
 		. $carouselIconSize
@@ -222,7 +223,7 @@ $categoryCarouselCategories = array_values(array_filter(
 ));
 
 $newProductsUrl = $cmsPageUrl('lancamentos');
-$superOffersUrl = $directUrl('ofertas.html');
+$superOffersUrl = $directUrl('super-ofertas.html');
 $productPromoBannersHtml = $renderCmsBlock('home_product_promo_banners');
 $productPromoBannersHtml = preg_replace_callback(
         '/href=(["\'])([^"\']+)\1/i',
@@ -256,15 +257,14 @@ if ($productPromoBannersHtml === '' && $categoryCarouselCategories !== []) {
 }
 
 // URL para o CTA "Ver todas as categorias" da seção category-carousel
-$categoryCarouselUrl = $directUrl('catalogo');
+$categoryCarouselUrl = $cmsPageUrl('catalogo');
 // URL para o CTA "Ver todos" da shelf Mais Vendidos
-$bestsellersVerTodosUrl = $directUrl('catalogo');
+$bestsellersVerTodosUrl = $cmsPageUrl('catalogo');
 
 
 $renderRecentOrders = static function () use ($block, $homeRecentOrdersViewModel): string {
 	if (!$homeRecentOrdersViewModel instanceof \GrupoAwamotos\Theme\ViewModel\HomeRecentOrders
-		|| !$homeRecentOrdersViewModel->isHomeSectionEnabled()
-		|| !$homeRecentOrdersViewModel->isLoggedIn()) { // §BUG-H-017: ocultar para anônimos
+		|| !$homeRecentOrdersViewModel->isHomeSectionEnabled()) {
 		return '';
 	}
 
@@ -317,14 +317,14 @@ $renderNicheShelves = static function (
 	<?php echo /* @noEscape */ $schemaOrgHtml; ?>
 <?php endif; ?>
 
-<!-- ① Hero Slider (above-the-fold) -->
+<!-- ① Hero Slider (above-the-fold) — AWA 51.55 grid: inline !important on .banner-slider (head-preload/DS full-bleed defeats stylesheet pad/margin) -->
 <div class="top-home-content top-home-content--above-fold awa-section awa-hero" id="awa-main-content" tabindex="-1">
 	<?php if ($heroSliderHtml !== ''): ?>
-		<div class="banner-slider banner-slider2 slidebanner rokanthemes-slidebanner awa-hero__viewport">
+		<div class="banner-slider banner-slider2 slidebanner rokanthemes-slidebanner awa-hero__viewport" style="box-sizing:border-box!important;width:calc(100% - 48px)!important;max-width:calc(100% - 48px)!important;margin-inline:24px!important;margin-left:24px!important;margin-right:24px!important;border-radius:12px!important;overflow:hidden!important">
 			<?php echo /* @noEscape */ $heroSliderHtml; ?>
 		</div>
 	<?php elseif ($heroFallbackHtml !== ''): ?>
-		<div class="banner-slider banner-slider2 banner-slider2--fallback awa-hero__viewport">
+		<div class="banner-slider banner-slider2 banner-slider2--fallback awa-hero__viewport" style="box-sizing:border-box!important;width:calc(100% - 48px)!important;max-width:calc(100% - 48px)!important;margin-inline:24px!important;margin-left:24px!important;margin-right:24px!important;border-radius:12px!important;overflow:hidden!important">
 			<?php echo /* @noEscape */ $heroFallbackHtml; ?>
 		</div>
 	<?php endif; ?>

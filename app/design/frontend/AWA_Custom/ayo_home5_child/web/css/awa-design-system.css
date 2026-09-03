@@ -7953,6 +7953,44 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
     margin-inline-start: 0 !important;
   }
 
+
+
+  /* ==== AWA 51.55 LAYERED home hero banner grid align (2026-09-03) ====
+     Companion to unlayered 51.55 terminal. Unlayered pad0 still needs the
+     unlayered append; this keeps hero pad/radius in awa-visual-priority
+     alongside 51.54 wrap/shelf locks. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    > .top-home-content--above-fold {
+    box-sizing: border-box !important;
+    padding-inline: 24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    overflow: hidden !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    > .top-home-content--above-fold
+    > .banner-slider.banner-slider2 {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    > .top-home-content--above-fold
+    .awa-hero-sliver-mask {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
 }
 
 /* ==========================================================================
@@ -10126,4 +10164,126 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   :is(.awa-carousel__track, ul.owl.awa-carousel__track) {
   padding-inline: 0 !important;
   box-sizing: border-box !important;
+}
+
+/* ==== AWA 51.55 home hero banner grid align (2026-09-03) ====
+   After 51.53–51.54 wrap/cat/shelf OnGrid @24px, banner stayed left:0 (full-bleed)
+   while content grid = hdrPad 24 → off-grid / white-strip beside category.
+   Root: unlayered padding-inline:0 !important + margin 0 / width 100% on
+   .top-home-content--above-fold / .banner-slider (DS + critical-stack).
+   Layered 51.51 locks lose to those unlayered terminals.
+   Fix: host unlayered mega-spec pad 24 on above-fold (same host as 51.53:
+   design-system media=all). Banner width 100% inside padded shell → left=hdrPad.
+   Hide .awa-hero-sliver-mask (white absolute remnant). Radius for Magento-ish shell.
+   Preserve 51.52 hang fix; no css-gate MO; do not regress wrap/cat/shelf. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-inline: 24px !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  overflow: hidden !important;
+  background-color: transparent !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold
+  > .banner-slider.banner-slider2 {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold
+  .wrapper_slider,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold
+  .awa-hero-swiper,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold
+  .banner_item_bg {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  border-radius: inherit !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > .top-home-content--above-fold
+  .awa-hero-sliver-mask {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    > .top-home-content--above-fold {
+    padding-inline: 16px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    > .top-home-content--above-fold
+    > .banner-slider.banner-slider2 {
+    border-radius: 8px !important;
+  }
+}
+
+/* ==== AWA 51.55b #awa-main-content hero shell (id lives on above-fold) ====
+   top-home.phtml puts id="awa-main-content" on .top-home-content--above-fold.
+   Keep sliver hidden; radius backup if inline stripped. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  > #awa-main-content.top-home-content--above-fold
+  > .banner-slider.banner-slider2,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  #awa-main-content.top-home-content--above-fold
+  > .banner-slider.banner-slider2 {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  #awa-main-content.top-home-content--above-fold
+  .awa-hero-sliver-mask {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
