@@ -8024,6 +8024,35 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
+
+
+  /* ==== AWA 51.59 LAYERED home shelf on-grid restore (2026-09-03) ====
+     Companion to unlayered 51.59. Neutralize H22g 48px carousel shell
+     gutter inside awa-visual-priority (layered H22g at ≥768). */
+  @media (min-width: 768px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+      .page-wrapper
+      .content-top-home
+      .awa-shelf--carousel
+      .awa-carousel {
+      --awa-home-carousel-gutter: 0px !important;
+      padding-inline: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      padding-inline-start: 0 !important;
+      padding-inline-end: 0 !important;
+    }
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    .awa-carousel {
+    --awa-home-carousel-gutter: 0px !important;
+    padding-inline: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 /* ==========================================================================
@@ -10479,4 +10508,63 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   padding-inline: 0 !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+/* ==== AWA 51.59 home shelf on-grid restore (2026-09-03) ====
+   After 51.58 align-grid media=all, guest @1280 shelfLeft regressed 24→72.
+   Root: align-grid H22g-final UNLAYERED
+   `.awa-shelf--carousel .awa-carousel{padding-inline:48px!important}`
+   (was inert while media=print). 51.54 zeroed slide/viewport pad but not
+   the carousel shell gutter — chain shows DIV.awa-carousel pl=48.
+   Surgical: neutralize H22g carousel shell pad to 0 (12×#html-body beats
+   H22g 5×) so first card = wrap gutter / hdrPad 24. Keep 51.54 slide0 pad0.
+   Do NOT revert align-grid to print. Preserve 51.52 hang; wrap/cat/hero. */
+@media (min-width: 768px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    .awa-carousel,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-carousel-section
+    .awa-shelf--carousel
+    .awa-carousel {
+    --awa-home-carousel-gutter: 0px !important;
+    padding-inline: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-inline-start: 0 !important;
+    padding-inline-end: 0 !important;
+  }
+}
+
+/* Belt: also zero outside the media query (mobile already 0; desktop safety). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  .awa-carousel {
+  --awa-home-carousel-gutter: 0px !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-inline-start: 0 !important;
+  padding-inline-end: 0 !important;
+}
+
+/* Reaffirm 51.54 first-slide pad0 (same layer/order as this terminal). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section
+  :is(.awa-shelf--carousel, .rokan-bestseller, .rokan-newproduct, .rokan-featuredproduct, .awa-shelf)
+  :is(ul.owl.awa-carousel__track, ul.owl, .awa-carousel__track)
+  > :is(li.item, li.awa-carousel__slide, .awa-carousel__slide):first-child {
+  padding-left: 0 !important;
+  padding-inline-start: 0 !important;
+  scroll-margin-inline-start: 0 !important;
+  margin-left: 0 !important;
+  margin-inline-start: 0 !important;
 }
