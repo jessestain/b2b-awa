@@ -1373,3 +1373,57 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   justify-content: center !important;
   box-sizing: border-box !important;
 }
+
+
+/* SEÇÃO 51.42 — /returns Trocas e Devoluções blank white page
+   Evidence (curl /returns 2026-09-02): HTTP 200, 1147481B (~/faq 1154624B),
+   title "Trocas e Devoluções | AWA Motos", body.cms-returns.cms-page-view,
+   header.awa-site-header + h1.awa-institutional-h1 + .awa-inst (Prazos)
+   + footer.page-footer all present in HTML. Not empty CMS, not layout remove.
+   Magento_Rma child LESS is a stub (module not installed). No `.cms-returns`
+   hide rule in child source; Magento/Ayo themes.min.css still has
+   .magento-rma-guest-returns (Sales/RMA) and .page-wrapper{overflow:hidden}
+   then overflow-x:clip (overflow-y computes to auto → clips 0-height shell).
+   Body class cms-returns is the CMS identifier colliding with Magento returns.
+   First-paint CMS SSOT (awa-cms-shell-final) is media=none until JS.
+   Unlayered 18×#html-body EOF. Zero :has(). Isolation r4 (no carousel JS).
+   Home + 51.40/51.41 untouched. Token v=20260902-secao51-42-returns */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-returns {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-returns .page-wrapper {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-returns .page-wrapper .awa-site-header {
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-returns .page-wrapper :is(#maincontent.page-main, .page-main, .column.main, .awa-inst) {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-returns .page-wrapper :is(footer.page-footer, .page-footer) {
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
