@@ -7991,6 +7991,39 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
     pointer-events: none !important;
   }
 
+
+
+  /* ==== AWA 51.57 LAYERED home promo row shelf width parity (2026-09-03) ====
+     Companion to unlayered 51.57 terminal. Keeps promo + featured shelf
+     containers pad0 inside awa-visual-priority so layered carousel
+     padding-inline:24 cannot diverge promo vs shelf. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-product-promo-banners,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-product-promo-banners
+    > .container,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-product-promo-banners
+    .awa-product-promo-banners__grid,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-carousel-section--featured
+    > .container {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: min(100%, 1280px) !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 /* ==========================================================================
@@ -10373,4 +10406,77 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
     padding-inline: 0 !important;
     margin-inline: 0 !important;
   }
+}
+
+/* ==== AWA 51.57 home promo row shelf width parity (2026-09-03) ====
+   FRONTEND_MAP residual: promo CMS/banner row width vs featured shelf column.
+   Guest @1280 after 51.53–51.56: wrap/cat/shelf/hero OnGrid @24; measure already
+   shows promo grid left/right == shelf viewport (24 / 1246, w=1222) when
+   containers stay pad0 inside wrap. Residual risk: Bootstrap/.container /
+   --awa-container-padding or layered carousel container pad24 can diverge
+   promo vs shelf without an explicit promo lock.
+   Fix (design-system media=all host): lock .awa-product-promo-banners +
+   >.container + __grid to the same content box as featured shelf track
+   (width 100% of wrap content; padding-inline 0 — wrap gutter = 24 SSOT).
+   @layer awa-visual-priority companion fights layered !important.
+   Preserve 51.52 hang; no css-gate MO; do not regress wrap/cat/shelf/hero/PLP. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-product-promo-banners {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-product-promo-banners
+  > .container {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: min(100%, 1280px) !important;
+  margin-inline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-product-promo-banners
+  .awa-product-promo-banners__grid {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Keep featured shelf inner container pad0 (= promo) so layered pad24 cannot
+   reintroduce a 24px promo-vs-shelf delta while wrap already supplies gutter. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-carousel-section--featured
+  > .container {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: min(100%, 1280px) !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
