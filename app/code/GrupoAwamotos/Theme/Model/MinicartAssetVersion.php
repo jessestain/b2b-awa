@@ -18,7 +18,7 @@ final class MinicartAssetVersion
     /**
      * Bump when publishing minicart JS/PHTML that browsers may keep by query.
      */
-    public const RUNTIME = '20260817-mage-close-r3';
+    public const RUNTIME = '20260903-hang5152';
 
     public static function query(): string
     {

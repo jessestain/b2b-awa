@@ -14,8 +14,10 @@
     /* shell15 (2026-08-02): shell12 raised cap to 900 → stage=colW (615) and
        undid hopt (stage 440 / ph ~546). CDP wasteInfo ~211px + user "aproveita
        espacamentos". Restore compact caps; object-fit:contain handles letterbox. */
+    /* AWA visual-audit 2026-08-26: 360px + nav 88 fazia .product.media=444
+       ∩ FAB e empurrava o CTA sobre a tabbar (CDP 390). 300 + 88 = 388. */
     var MAX_STAGE_DESKTOP_PX = 528;
-    var MAX_STAGE_MOBILE_PX = 360;
+    var MAX_STAGE_MOBILE_PX = 300;
     var MAX_NAV_PX = 88;
 
     function getMediaColumn() {
@@ -706,9 +708,14 @@
         var wasFs = document.body.classList.contains('fotorama__fullscreen');
         new MutationObserver(function () {
             var isFs = document.body.classList.contains('fotorama__fullscreen');
+            /* 51.52: ignore unrelated body class churn (minicart-open etc.).
+             * Acting on every class mutation while fullscreen re-entered MO storms. */
+            if (isFs === wasFs) {
+                return;
+            }
             if (isFs) {
                 scheduleFullscreenSync();
-            } else if (wasFs && !isFs) {
+            } else if (wasFs) {
                 /* shell19: cancelFullScreen may skip fotorama:fullscreenexit */
                 exitFullscreenCleanup();
                 scheduleSync();

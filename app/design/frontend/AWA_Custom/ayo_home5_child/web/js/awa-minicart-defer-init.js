@@ -145,6 +145,12 @@
     let MINICART_TRIGGER_SELECTOR = MINICART_TRIGGER_SELECTORS.join(', ');
     let MINICART_DROPDOWN_SELECTOR = '.minicart-wrapper [data-role="dropdownDialog"]';
     const MINICART_TRIGGER_GUARD_FLAG = '__awaMinicartTriggerHandled';
+    const MINICART_UPDATE_MIN_INTERVAL_MS = 120;
+    let minicartUpdateQueued = false;
+    let minicartUpdateLastRunTs = 0;
+    let minicartDebugScheduleCount = 0;
+    let minicartDebugRunCount = 0;
+    let minicartDebugSlowRuns = 0;
 
     function getHeaderMinicartShell() {
         return document.querySelector(HEADER_MINICART_SHELL_SELECTOR);
@@ -244,6 +250,63 @@
         if (element && element.style.getPropertyValue(prop) !== value) {
             element.style.setProperty(prop, value, 'important');
         }
+    }
+
+    function queueUpdateExpandedState(delay) {
+        if (!isDeferOwnerActive()) {
+            return;
+        }
+
+        minicartDebugScheduleCount += 1;
+        if (minicartDebugScheduleCount === 1 || minicartDebugScheduleCount % 200 === 0) {
+            // #region agent log
+            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState',message:'queue schedule sample',data:{scheduleCount:minicartDebugScheduleCount,delay:delay||0,queued:minicartUpdateQueued},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
+        }
+
+        if (typeof delay === 'number' && delay > 0) {
+            window.setTimeout(function () {
+                queueUpdateExpandedState();
+            }, delay);
+            return;
+        }
+
+        if (minicartUpdateQueued) {
+            return;
+        }
+
+        let now = Date.now();
+        let wait = MINICART_UPDATE_MIN_INTERVAL_MS - (now - minicartUpdateLastRunTs);
+        minicartUpdateQueued = true;
+
+        if (wait > 0) {
+            window.setTimeout(function () {
+                window.requestAnimationFrame(function () {
+                    minicartUpdateQueued = false;
+                    minicartUpdateLastRunTs = Date.now();
+                    minicartDebugRunCount += 1;
+                    if (minicartDebugRunCount === 1 || minicartDebugRunCount % 100 === 0) {
+                        // #region agent log
+                        fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState:raf-waited',message:'queue run sample',data:{runCount:minicartDebugRunCount,wait:wait},timestamp:Date.now()})}).catch(()=>{});
+                        // #endregion
+                    }
+                    updateExpandedState();
+                });
+            }, wait);
+            return;
+        }
+
+        window.requestAnimationFrame(function () {
+            minicartUpdateQueued = false;
+            minicartUpdateLastRunTs = Date.now();
+            minicartDebugRunCount += 1;
+            if (minicartDebugRunCount === 1 || minicartDebugRunCount % 100 === 0) {
+                // #region agent log
+                fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState:raf-now',message:'queue run sample',data:{runCount:minicartDebugRunCount,wait:0},timestamp:Date.now()})}).catch(()=>{});
+                // #endregion
+            }
+            updateExpandedState();
+        });
     }
 
     /**
@@ -459,14 +522,14 @@
                 if ($dropdown.data('mageDropdownDialog')) {
                     $dropdown.dropdownDialog('close');
                     applyManualDropdownState(trigger, dropdown, false);
-                    window.requestAnimationFrame(updateExpandedState);
-                    window.setTimeout(updateExpandedState, 120);
+                    queueUpdateExpandedState();
+                    queueUpdateExpandedState(240);
                     return;
             }
         }
 
         applyManualDropdownState(trigger, dropdown, false);
-        window.requestAnimationFrame(updateExpandedState);
+        queueUpdateExpandedState();
     }
 
     function openDropdown(trigger, dropdown) {
@@ -486,14 +549,14 @@
                 if ($dropdown.length && $dropdown.data('mageDropdownDialog')) {
                     $dropdown.dropdownDialog('open');
                     applyManualDropdownState(trigger, dropdown, true);
-                    window.requestAnimationFrame(updateExpandedState);
-                    window.setTimeout(updateExpandedState, 120);
+                    queueUpdateExpandedState();
+                    queueUpdateExpandedState(240);
                     return;
                 }
             }
 
             applyManualDropdownState(trigger, dropdown, true);
-            window.requestAnimationFrame(updateExpandedState);
+            queueUpdateExpandedState();
         }
 
         if (!isHomeDeferBootstrapActive() && !window.__awaMinicartUiInit && !window.ko) {
@@ -503,7 +566,7 @@
                     openNow();
                     ensureCatalogMinicartUi(function () {
                         initDropdown();
-                        updateExpandedState();
+                        queueUpdateExpandedState();
                     });
                     return;
                 }
@@ -588,7 +651,7 @@
             bootstrapMinicartUi({ jsLayout: jsLayout, loaderUrl: loaderUrl }, {}).then(function () {
                 window.__awaMinicartCatalogUiBootstrapping = false;
                 initDropdown();
-                updateExpandedState();
+                queueUpdateExpandedState();
                 if (typeof onReady === 'function') {
                     onReady();
                 }
@@ -647,12 +710,12 @@
                 window.__awaMinicartDropdownSyncBound = true;
 
                 $(document).on('click keyup', MINICART_TRIGGER_SELECTOR + ', .block-minicart', function () {
-                    window.requestAnimationFrame(updateExpandedState);
-                    window.setTimeout(updateExpandedState, 120);
+                    queueUpdateExpandedState();
+                    queueUpdateExpandedState(240);
                 });
             }
 
-            updateExpandedState();
+            queueUpdateExpandedState();
 
             if (typeof onReady === 'function') {
                 onReady($, trigger || null, dropdown || null);
@@ -661,7 +724,7 @@
             if (typeof onReady === 'function') {
                 onReady(null, parts.trigger || null, parts.dropdown || null);
             }
-            updateExpandedState();
+            queueUpdateExpandedState();
         });
         }
 
@@ -680,8 +743,8 @@
                     openDropdown(trigger, dropdown);
                 }
 
-                window.requestAnimationFrame(updateExpandedState);
-                window.setTimeout(updateExpandedState, 120);
+                queueUpdateExpandedState();
+                queueUpdateExpandedState(240);
                 return;
             }
         }
@@ -698,8 +761,8 @@
                     openDropdown(resolvedTrigger, resolvedDropdown);
                 }
 
-                window.requestAnimationFrame(updateExpandedState);
-                window.setTimeout(updateExpandedState, 120);
+                queueUpdateExpandedState();
+                queueUpdateExpandedState(240);
                 return;
             }
 
@@ -710,24 +773,24 @@
                     if (!isHomeDeferBootstrapActive() && !window.__awaMinicartUiInit && !window.ko) {
                         if ($dropdown && $dropdown.length && $dropdown.data('mageDropdownDialog')) {
                             applyManualDropdownState(resolvedTrigger, resolvedDropdown, true);
-                            window.requestAnimationFrame(updateExpandedState);
+                            queueUpdateExpandedState();
                             ensureCatalogMinicartUi(function () {
                                 initDropdown();
-                                updateExpandedState();
+                                queueUpdateExpandedState();
                             });
                             return;
                         }
 
                         ensureCatalogMinicartUi(function () {
                             applyManualDropdownState(resolvedTrigger, resolvedDropdown, true);
-                            window.requestAnimationFrame(updateExpandedState);
+                            queueUpdateExpandedState();
                         });
                         return;
                     }
                     applyManualDropdownState(resolvedTrigger, resolvedDropdown, true);
                 }
 
-                window.requestAnimationFrame(updateExpandedState);
+                queueUpdateExpandedState();
                 return;
             }
 
@@ -939,8 +1002,8 @@
                         closeDropdown(parts.trigger || trigger, parts.dropdown);
                     } else {
                         applyManualDropdownState(parts.trigger || trigger, parts.dropdown, true);
-                        window.requestAnimationFrame(updateExpandedState);
-                        window.setTimeout(updateExpandedState, 120);
+                        queueUpdateExpandedState();
+                        queueUpdateExpandedState(240);
                     }
 
                     return;
@@ -1037,6 +1100,12 @@
         if (!isDeferOwnerActive()) {
             return;
         }
+        if (window.__awaMinicartStateSyncing) {
+            return;
+        }
+        window.__awaMinicartStateSyncing = true;
+        try {
+        let updateStartedAt = Date.now();
 
         let parts = getMinicartParts();
         let wrapper = parts.dropdown ? parts.dropdown.closest('[data-block="minicart"], .minicart-wrapper') : null;
@@ -1072,6 +1141,17 @@
         syncBodyScrollLock(expanded);
         syncFloatingCtas(expanded || panelVisible);
 
+        let updateDuration = Date.now() - updateStartedAt;
+        if (updateDuration >= 40 && minicartDebugSlowRuns < 6) {
+            minicartDebugSlowRuns += 1;
+            // #region agent log
+            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H11',location:'awa-minicart-defer-init.js:updateExpandedState',message:'slow updateExpandedState',data:{durationMs:updateDuration,expanded:expanded,panelVisible:panelVisible,hasRuntimeTrigger:hasRuntimeTrigger},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
+        }
+        } finally {
+            window.__awaMinicartStateSyncing = false;
+        }
+
     }
 
     function scheduleBootstrapPasses() {
@@ -1086,7 +1166,7 @@
                 if (!isDeferOwnerActive()) {
                     return;
                 }
-                updateExpandedState();
+                queueUpdateExpandedState();
                 if (!isHomeDeferBootstrapActive() || window.__awaMinicartUiInit) {
                     initDropdown();
                 }
@@ -1121,21 +1201,21 @@
                 return;
             }
 
-            window.requestAnimationFrame(updateExpandedState);
-            window.setTimeout(updateExpandedState, 120);
-            window.setTimeout(updateExpandedState, 420);
+            queueUpdateExpandedState();
+            queueUpdateExpandedState(240);
+            queueUpdateExpandedState(520);
         }, true);
 
         document.addEventListener('contentUpdated', function () {
             if (!isDeferOwnerActive()) {
                 return;
             }
-            window.requestAnimationFrame(updateExpandedState);
+            queueUpdateExpandedState();
         }, true);
 
         if (isHomeDeferBootstrapActive() && window.__awaMinicartUiReady && typeof window.__awaMinicartUiReady.then === 'function') {
             window.__awaMinicartUiReady.then(function () {
-                window.requestAnimationFrame(updateExpandedState);
+                queueUpdateExpandedState();
                 initDropdown();
             });
         }
@@ -1147,7 +1227,10 @@
         }
 
         let parts = getMinicartParts();
-        let target = parts.shell || document.querySelector('[data-block="minicart"]') || document.body;
+        /* 51.52: never fall back to document.body — updateExpandedState toggles
+         * body.awa-minicart-open and would re-enter this observer forever. */
+        let target = parts.shell || document.querySelector('[data-block="minicart"]') ||
+            document.querySelector('.minicart-wrapper');
 
         if (!target) {
             return;
@@ -1159,12 +1242,15 @@
             if (!isDeferOwnerActive()) {
                 return;
             }
-            window.requestAnimationFrame(updateExpandedState);
+            if (window.__awaMinicartStateSyncing) {
+                return;
+            }
+            queueUpdateExpandedState();
         }).observe(target, {
             attributes: true,
             childList: true,
             subtree: true,
-            attributeFilter: ['class', 'style', 'aria-hidden']
+            attributeFilter: ['class', 'aria-hidden']
         });
     }
 
@@ -1206,17 +1292,33 @@
 
     function boot() {
         bindCheckoutFallback();
+        closeMinicartOnCartPage();
+
+        if (isCheckoutCartPage()) {
+            if (window.__awaMinicartCartPageBooted) {
+                return;
+            }
+            window.__awaMinicartCartPageBooted = true;
+            // #region agent log
+            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H10',location:'awa-minicart-defer-init.js:boot',message:'cart page short-circuit active',data:{pathname:(window.location&&window.location.pathname)||'',guardsOnlyMode:guardsOnlyMode},timestamp:Date.now()})}).catch(()=>{});
+            // #endregion
+            bindTriggerGuard();
+            bindShellFallbackNavigation();
+            bindEscapeClose();
+            bindContinueClose();
+            return;
+        }
+
         bindTriggerGuard();
         bindShellFallbackNavigation();
         bindEscapeClose();
         bindContinueClose();
-        closeMinicartOnCartPage();
 
         if (guardsOnlyMode) {
             window.__awaMinicartDeferInit = true;
             bindInteractionSync();
             observeMinicartState();
-            updateExpandedState();
+            queueUpdateExpandedState();
             scheduleBootstrapPasses();
             if (!isHomeDeferBootstrapActive() || window.__awaMinicartUiInit) {
                 initDropdown();
@@ -1227,7 +1329,7 @@
                 if (window.__awaMinicartUiReady && typeof window.__awaMinicartUiReady.then === 'function') {
                     window.__awaMinicartUiReady.then(function () {
                         initDropdown();
-                        updateExpandedState();
+                        queueUpdateExpandedState();
                     });
                 }
             }
@@ -1243,7 +1345,7 @@
 
         bindInteractionSync();
         observeMinicartState();
-        updateExpandedState();
+        queueUpdateExpandedState();
         scheduleBootstrapPasses();
 
         if (!isHomeDeferBootstrapActive()) {
@@ -1252,7 +1354,7 @@
                 window.setTimeout(function () {
                     ensureCatalogMinicartUi(function () {
                         initDropdown();
-                        updateExpandedState();
+                        queueUpdateExpandedState();
                     });
                 }, delay);
             });
