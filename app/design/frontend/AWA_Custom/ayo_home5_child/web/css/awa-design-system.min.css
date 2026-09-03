@@ -10287,3 +10287,90 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* ==== AWA 51.56 PLP grid content pad align (2026-09-03) ====
+   Guest PLP @1280: legacy impeccable `.header-main` lock lives INSIDE
+   @layer awa-visual-priority (#html-body .page-wrapper .header-main →
+   width:calc(100%-32px)+margin 16). Cascade L5: layered !important BEATS
+   unlayered !important — so 51.56 unlayered terminal lost (hdrPad stayed 40
+   vs page-main 24). Home already flushes .header-main in-layer.
+   Fix: same @layer awa-visual-priority + catalog selectors → hdrPad=24;
+   lock page-main/breadcrumbs pad 24. First card offset = intentional 2-col
+   sidebar (~280+gap), filters preserved. No css-gate MO; keep 51.52 hang fix. */
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index) {
+    --awa-container-pad: 24px !important;
+    --awa-grid-container-pad: 24px !important;
+    --awa-header-shell-pad: 24px !important;
+    --awa-shell-pad: 24px !important;
+    --awa-plp-shell-pad: 24px !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-site-header
+    .header-wrapper-sticky
+    .header-main,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-site-header
+    .header-main,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .header-main {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-inline: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-site-header
+    .header-wrapper-sticky
+    :is(.header-main > .container, .header_main > .container) {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    margin-inline: 0 !important;
+    padding: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    :is(#maincontent.page-main, #maincontent.page-main.container, .page-main.container, .page-main) {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: min(100%, 1280px) !important;
+    margin-inline: auto !important;
+    padding-inline: 24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    :is(.nav-breadcrumbs, .nav-breadcrumbs .container) {
+    box-sizing: border-box !important;
+    max-width: min(100%, 1280px) !important;
+    margin-inline: auto !important;
+    padding-inline: 24px !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .page-main
+    > .columns.layout {
+    box-sizing: border-box !important;
+    padding-inline: 0 !important;
+    margin-inline: 0 !important;
+  }
+}
