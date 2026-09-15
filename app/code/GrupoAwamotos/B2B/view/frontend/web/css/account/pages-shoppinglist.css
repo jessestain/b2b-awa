@@ -5,7 +5,7 @@
 .b2b-quote-history .block-title {
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--awa-border, #e5e7eb);
+    border-bottom: 1px solid var(--awa-border);
 }
 
 .b2b-shoppinglist-index .block-title strong,
@@ -21,7 +21,7 @@
 .b2b-shoppinglist-index .shoppinglist-create-form {
     background: var(--awa-b2b-soft);
     border: 1px solid var(--awa-b2b-border);
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     padding: 20px;
     margin-bottom: 24px;
 }
@@ -34,17 +34,25 @@
     display: block;
     font-size: 13px;
     font-weight: 600;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     margin-bottom: 4px;
 }
 
 .b2b-shoppinglist-index .shoppinglist-create-form input[type="text"],
 .b2b-shoppinglist-index .shoppinglist-create-form textarea {
     width: 100%;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    border-radius: 8px;
+    min-height: 44px;
+    box-sizing: border-box;
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     padding: 10px 12px;
     font-size: 14px;
+}
+
+.b2b-shoppinglist-index .shoppinglist-create-form :is(input, textarea):focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+    border-color: var(--awa-primary);
 }
 
 .b2b-shoppinglist-index .shoppinglist-create-form .actions {
@@ -61,16 +69,16 @@
 }
 
 .b2b-shoppinglist-index .shoppinglist-card {
-    background: var(--awa-bg-surface, #fff);
+    background: var(--awa-bg-surface, var(--awa-bg));
     border: 1px solid var(--awa-b2b-border);
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     padding: 20px;
     transition: border-color 0.2s ease;
 }
 
 .b2b-shoppinglist-index .shoppinglist-card:hover {
     box-shadow: none;
-    border-color: var(--awa-border, #d1d5db);
+    border-color: var(--awa-border, var(--awa-line));
 }
 
 .b2b-shoppinglist-index .card-header {
@@ -87,7 +95,7 @@
 
 .b2b-shoppinglist-index .list-name a,
 .b2b-shoppinglist-view .col-name a {
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     text-decoration: none;
 }
 
@@ -98,11 +106,11 @@
 
 .b2b-shoppinglist-index .default-badge,
 .b2b-shoppinglist-view .default-badge {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 10%, #ffffff);
-    color: var(--awa-primary, #b73337);
+    background: color-mix(in srgb, var(--awa-primary) 10%, var(--awa-bg));
+    color: var(--awa-primary);
     font-size: max(12px, 0.75rem);
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     font-weight: 600;
     text-transform: none;
 }
@@ -118,8 +126,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-top: 1px solid var(--awa-bg-muted, #f3f4f6);
-    border-bottom: 1px solid var(--awa-bg-muted, #f3f4f6);
+    border-top: 1px solid var(--awa-bg-subtle);
+    border-bottom: 1px solid var(--awa-bg-subtle);
     margin-bottom: 12px;
 }
 
@@ -132,7 +140,7 @@
 .b2b-shoppinglist-view .total-value {
     font-size: 15px;
     font-weight: 700;
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
 }
 
 .b2b-shoppinglist-index .card-actions {
@@ -147,24 +155,24 @@
     justify-content: center;
     min-height: 44px;
     padding: 8px 14px;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     font-size: 13px;
     text-decoration: none;
     cursor: pointer;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    color: var(--awa-text-primary, #333);
-    background: var(--awa-bg-surface, #fff);
+    border: 1px solid var(--awa-border);
+    color: var(--awa-text-primary, var(--awa-text));
+    background: var(--awa-bg-surface, var(--awa-bg));
     transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
     box-shadow: none;
 }
 
 .b2b-shoppinglist-index .card-actions .action:hover {
-    background: var(--awa-bg-muted, #f3f4f6);
+    background: var(--awa-bg-subtle);
 }
 
 .b2b-shoppinglist-index .card-actions .action.primary {
     background: var(--awa-b2b-primary);
-    color: #fff;
+    color: var(--awa-bg);
     border-color: var(--awa-b2b-primary);
 }
 
@@ -173,13 +181,18 @@
     border-color: var(--awa-b2b-primary-dark);
 }
 
-.b2b-shoppinglist-index .card-actions .action.delete {
-    color: var(--awa-primary-hover, #8e2629);
-    border-color: color-mix(in srgb, var(--awa-primary, #b73337) 18%, #fff);
+.b2b-shoppinglist-index .card-actions .action--trigger-delete-dialog,
+.b2b-shoppinglist-index .card-actions .action.secondary {
+    color: var(--awa-b2b-ink);
+    border-color: var(--awa-b2b-border);
+    background: var(--awa-bg-surface, var(--awa-bg));
 }
 
-.b2b-shoppinglist-index .card-actions .action.delete:hover {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 6%, #fff);
+.b2b-shoppinglist-index .card-actions .action--trigger-delete-dialog:hover,
+.b2b-shoppinglist-index .card-actions .action.secondary:hover {
+    border-color: color-mix(in srgb, var(--awa-b2b-primary) 35%, var(--awa-b2b-border));
+    color: var(--awa-b2b-primary-dark);
+    background: var(--awa-bg-subtle);
 }
 
 /* Shopping List view */
@@ -208,7 +221,7 @@
 }
 
 .b2b-shoppinglist-view .shoppinglist-top-actions .action.back:hover {
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
 }
 
 .b2b-shoppinglist-view .shoppinglist-top-actions .action.back::before {
@@ -225,7 +238,7 @@
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table thead th {
-    background: var(--awa-b2b-bg-soft, #f8fafc);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
     padding: 10px 12px;
     font-size: 12px;
     font-weight: 600;
@@ -233,22 +246,22 @@
     text-transform: none;
     letter-spacing: normal;
     text-align: left;
-    border-bottom: 1px solid var(--awa-border, #e5e7eb);
+    border-bottom: 1px solid var(--awa-border);
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table tbody td {
     padding: 12px;
-    border-bottom: 1px solid var(--awa-bg-muted, #f3f4f6);
+    border-bottom: 1px solid var(--awa-bg-subtle);
     vertical-align: middle;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .col-image img {
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     object-fit: cover;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .col-sku {
-    color: var(--awa-gray-500, #999);
+    color: var(--awa-gray-500, var(--awa-text-muted));
     font-size: 13px;
 }
 
@@ -259,64 +272,68 @@
 
 .b2b-shoppinglist-view .shoppinglist-items-table .col-subtotal {
     font-weight: 600;
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
     white-space: nowrap;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .qty-input {
-    width: 60px;
-    padding: 6px 8px;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    border-radius: 8px;
+    width: 4.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     text-align: center;
     font-size: 14px;
 }
 
-.b2b-shoppinglist-view .shoppinglist-items-table .qty-input:focus {
-    border-color: var(--awa-b2b-primary);
-    outline: none;
-    box-shadow: 0 0 0 2px rgb(183 51 55 / 15%);
+.b2b-shoppinglist-view .shoppinglist-items-table .qty-input:focus-visible {
+    border-color: var(--awa-primary);
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .action.delete {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #fff);
-    color: var(--awa-primary-hover, #8e2629);
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+    background: color-mix(in srgb, var(--awa-primary) 8%, var(--awa-bg));
+    color: var(--awa-primary-dark);
     text-decoration: none;
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .action.delete:hover {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 18%, #fff);
+    background: color-mix(in srgb, var(--awa-primary) 18%, var(--awa-bg));
 }
 
 .b2b-shoppinglist-view .product-unavailable {
-    color: var(--awa-text-muted, #888);
+    color: var(--awa-text-muted);
     font-style: italic;
     font-size: 13px;
 }
 
 .b2b-shoppinglist-view .product-unavailable-img {
-    color: var(--awa-border, #e5e7eb);
+    color: var(--awa-border);
     font-size: 24px;
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table tfoot td {
     padding: 14px 12px;
-    border-top: 2px solid var(--awa-border, #e5e7eb);
+    border-top: 2px solid var(--awa-border);
 }
 
 .b2b-shoppinglist-view .shoppinglist-items-table .total-label {
     text-align: right;
     font-weight: 600;
     font-size: 15px;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
 }
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions {
@@ -324,7 +341,7 @@
     gap: 12px;
     margin-top: 24px;
     padding-top: 20px;
-    border-top: 1px solid var(--awa-border, #e5e7eb);
+    border-top: 1px solid var(--awa-border);
 }
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions .action {
@@ -333,7 +350,7 @@
     justify-content: center;
     min-height: 44px;
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -342,7 +359,7 @@
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions .action.primary {
     background: var(--awa-b2b-primary);
-    color: #fff;
+    color: var(--awa-bg);
 }
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions .action.primary:hover {
@@ -350,19 +367,19 @@
 }
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions .action.secondary {
-    background: var(--awa-bg-surface, #fff);
-    color: var(--awa-text-primary, #333);
-    border: 1px solid var(--awa-border, #e5e7eb);
+    background: var(--awa-bg-surface, var(--awa-bg));
+    color: var(--awa-text-primary, var(--awa-text));
+    border: 1px solid var(--awa-border);
 }
 
 .b2b-shoppinglist-view .shoppinglist-bottom-actions .action.secondary:hover {
-    background: var(--awa-bg-muted, #f3f4f6);
+    background: var(--awa-bg-subtle);
 }
 
 .b2b-shoppinglist-view .recurring-config-section {
     background: var(--awa-b2b-soft);
     border: 1px solid var(--awa-b2b-border);
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     padding: 16px 20px;
     margin-bottom: 20px;
 }
@@ -373,7 +390,7 @@
 
 .b2b-shoppinglist-view .recurring-header strong {
     font-size: 15px;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
 }
 
 .b2b-shoppinglist-view .recurring-form {
@@ -381,6 +398,108 @@
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
+}
+
+.b2b-shoppinglist-view .recurring-toggle {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 10px;
+}
+
+.b2b-shoppinglist-view .toggle-label {
+    font-size: 14px;
+    color: var(--awa-text-primary, var(--awa-text));
+}
+
+.b2b-shoppinglist-view .recurring-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.b2b-shoppinglist-view .recurring-options--collapsed {
+    display: none;
+}
+
+.b2b-shoppinglist-view .recurring-options label {
+    font-size: 14px;
+    color: var(--awa-b2b-muted);
+}
+
+.b2b-shoppinglist-view .recurring-select {
+    padding: 8px 12px;
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    font-size: 14px;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.b2b-shoppinglist-view .next-order-info {
+    font-size: 13px;
+    color: var(--awa-success, var(--awa-primary-dark));
+    font-weight: 600;
+}
+
+.b2b-shoppinglist-view .save-recurring-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    min-height: 44px;
+}
+
+.b2b-shoppinglist-view .recurring-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    min-width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.b2b-shoppinglist-view .recurring-switch input {
+    position: absolute;
+    inset: -10px 0;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.b2b-shoppinglist-view .recurring-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--awa-b2b-border, var(--awa-border));
+    border-radius: 999px;
+    pointer-events: none;
+    transition: background 0.2s ease;
+}
+
+.b2b-shoppinglist-view .recurring-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 3px;
+    border-radius: 999px;
+    background: var(--awa-bg-surface, var(--awa-bg));
+    transition: transform 0.2s ease;
+}
+
+.b2b-shoppinglist-view .recurring-switch input:checked + .recurring-slider {
+    background: var(--awa-b2b-success, var(--awa-success, var(--awa-primary-dark)));
+}
+
+.b2b-shoppinglist-view .recurring-switch input:checked + .recurring-slider::before {
+    transform: translateX(20px);
+}
+
+.b2b-shoppinglist-view .recurring-switch input:focus-visible + .recurring-slider {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
 }
 
 @media (max-width: 599px) {
@@ -418,67 +537,21 @@
     }
 }
 
-@media (max-width: 767px) {
-    .b2b-shoppinglist-view .shoppinglist-items-table thead {
-        display: none;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table tbody tr {
-        display: block;
-        margin-bottom: 16px;
-        padding: 12px;
-        border: 1px solid var(--awa-border, #e5e7eb);
-        border-radius: 8px;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 0;
-        border: none;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table tbody td::before {
-        content: attr(data-th);
-        font-weight: 600;
-        font-size: 12px;
-        color: var(--awa-b2b-muted);
-        text-transform: none;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table .col-image {
-        justify-content: center;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table .col-image::before {
-        display: none;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table tfoot tr {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .b2b-shoppinglist-view .shoppinglist-items-table tfoot td {
-        padding: 12px 0;
-    }
-
-}
+/* Stack mobile de tabelas centralizado no pages-core-v2.css (SSOT). */
 
 /* ── Delete confirmation dialog ──────────────────────────────────────── */
 #b2b-delete-list-dialog {
     padding: 0;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    box-shadow: none;
     max-width: min(420px, calc(100vw - 32px));
     width: 100%;
-    background: var(--awa-bg-surface, #ffffff);
+    background: var(--awa-bg-surface, var(--awa-bg));
 }
 
 #b2b-delete-list-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.45);
+    background: color-mix(in srgb, var(--awa-text) 45%, transparent);
     backdrop-filter: blur(2px);
 }
 
@@ -492,7 +565,7 @@
 }
 
 .b2b-confirm-dialog__icon {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary);
     width: 40px;
     height: 40px;
     flex-shrink: 0;
@@ -503,7 +576,7 @@
     font-size: 1.125rem;
     font-weight: 700;
     line-height: 1.3;
-    color: var(--awa-text-primary, #1a1a1a);
+    color: var(--awa-text-primary, var(--awa-text));
     text-wrap: balance;
 }
 
@@ -511,7 +584,7 @@
     margin: 0;
     font-size: 0.875rem;
     line-height: 1.55;
-    color: var(--awa-text-muted, #666666);
+    color: var(--awa-text-muted);
     max-width: 34ch;
 }
 
@@ -530,10 +603,10 @@
     min-height: 44px;
     width: 100%;
     padding: 0 20px;
-    background: var(--awa-primary, #b73337);
-    color: #ffffff !important;
-    border: none;
-    border-radius: 8px;
+    background: var(--awa-b2b-danger, var(--awa-primary));
+    color: var(--awa-b2b-on-primary, var(--awa-bg));
+    border: 1px solid var(--awa-b2b-danger, var(--awa-primary));
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     font-size: 0.9375rem;
     font-weight: 600;
     text-decoration: none;
@@ -542,10 +615,16 @@
 }
 
 .b2b-confirm-dialog__btn-confirm:hover,
-.b2b-confirm-dialog__btn-confirm:focus {
-    background: var(--awa-primary-hover, #8e2629);
-    color: #ffffff !important;
+.b2b-confirm-dialog__btn-confirm:focus-visible {
+    background: color-mix(in srgb, var(--awa-b2b-danger, var(--awa-primary)) 86%, var(--awa-text));
+    border-color: color-mix(in srgb, var(--awa-b2b-danger, var(--awa-primary)) 86%, var(--awa-text));
+    color: var(--awa-b2b-on-primary, var(--awa-bg));
     text-decoration: none;
+}
+
+.b2b-confirm-dialog__btn-confirm:focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
 }
 
 .b2b-confirm-dialog__btn-cancel {
@@ -556,9 +635,9 @@
     width: 100%;
     padding: 0 20px;
     background: transparent;
-    color: var(--awa-text-primary, #333333);
-    border: 1px solid var(--awa-border, #e5e7eb);
-    border-radius: 8px;
+    color: var(--awa-text-primary, var(--awa-text));
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     font-size: 0.9375rem;
     font-weight: 600;
     cursor: pointer;
@@ -566,28 +645,33 @@
 }
 
 .b2b-confirm-dialog__btn-cancel:hover,
-.b2b-confirm-dialog__btn-cancel:focus {
-    background: var(--awa-bg-soft, #f8fafc);
-    border-color: var(--awa-text-muted, #666666);
+.b2b-confirm-dialog__btn-cancel:focus-visible {
+    background: var(--awa-bg-soft, var(--awa-bg-subtle));
+    border-color: var(--awa-text-muted);
 }
 
-/* Botão "Excluir" no card — alinhado com outros action buttons */
+.b2b-confirm-dialog__btn-cancel:focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+}
+
+/* Botão "Excluir" no card — outline secundário; confirmação destrutiva fica no diálogo. */
 .shoppinglist-card .action--trigger-delete-dialog {
-    background: transparent;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    color: var(--awa-text-muted, #666666);
-    border-radius: 8px;
-    min-height: 36px;
-    padding: 0 12px;
-    font-size: 0.8125rem;
+    background: var(--awa-bg-surface, var(--awa-bg));
+    border: 1px solid var(--awa-b2b-border, var(--awa-border));
+    color: var(--awa-b2b-ink, var(--awa-text-primary));
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
     cursor: pointer;
     transition: border-color 150ms ease-out, color 150ms ease-out;
 }
 
 .shoppinglist-card .action--trigger-delete-dialog:hover,
 .shoppinglist-card .action--trigger-delete-dialog:focus-visible {
-    border-color: var(--awa-primary, #b73337);
-    color: var(--awa-primary, #b73337);
+    border-color: color-mix(in srgb, var(--awa-b2b-primary, var(--awa-primary)) 35%, var(--awa-border));
+    color: var(--awa-b2b-primary-dark, var(--awa-primary));
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -49,8 +49,23 @@ class HidePricePlugin
                 'exception' => $exception->getMessage(),
             ]);
 
-            // Fail-open para evitar esconder preço indevidamente por erro transitório.
-            return $result;
+            // Fail-closed: erro de visibilidade não pode vazar preço no HTML.
+            return $this->safeReplacementHtml();
+        }
+    }
+
+    private function safeReplacementHtml(): string
+    {
+        try {
+            return '<div class="b2b-login-to-see-price">'
+                . $this->priceVisibility->getPriceReplacementMessage()
+                . '</div>';
+        } catch (\Throwable $exception) {
+            $this->logger->error('[B2B HidePricePlugin] Falha ao montar mensagem de substituição.', [
+                'exception' => $exception->getMessage(),
+            ]);
+
+            return '<div class="b2b-login-to-see-price">Entre ou cadastre-se para ver os preços.</div>';
         }
     }
 }

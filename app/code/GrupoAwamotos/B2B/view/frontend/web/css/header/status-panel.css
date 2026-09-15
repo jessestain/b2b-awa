@@ -9,11 +9,11 @@
    =========================================================================== */
 /* stylelint-disable color-no-hex -- token definitions */
 .b2b-status-panel {
-    --b2b-primary: var(--awa-primary);
-    --b2b-primary-dark: var(--awa-primary-hover);
-    --b2b-primary-darker: #6d1d1f;
-    --b2b-primary-hover: #c53d42;
-    --b2b-primary-hover-dark: #9a2c2f;
+    --b2b-primary: var(--awa-primary, var(--awa-brand, #b73337));
+    --b2b-primary-dark: var(--awa-primary-hover, var(--awa-brand-dark, #8e2629));
+    --b2b-primary-darker: var(--awa-brand-dark, #8e2629);
+    --b2b-primary-hover: var(--awa-primary-hover, var(--awa-brand-dark, #8e2629));
+    --b2b-primary-hover-dark: var(--awa-brand-dark, #8e2629);
     --b2b-success: #059669;
     --b2b-success-dark: #047857;
     --b2b-warning: #d97706;

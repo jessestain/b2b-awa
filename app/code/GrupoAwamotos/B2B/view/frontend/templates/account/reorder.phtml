@@ -29,7 +29,7 @@ $widgetConfig = $block->getReorderWidgetConfig();
                 <div class="reorder-card__info">
                     <strong class="reorder-card__id"><?= $block->escapeHtml(__('Pedido #%1', $order->getIncrementId())) ?></strong>
                     <span class="reorder-card__count"><?= $block->escapeHtml(__('%1 itens', $itemCount)) ?></span>
-                    <span class="reorder-card__date"><?= $block->escapeHtml(date('d/m/Y', strtotime((string) $order->getCreatedAt()))) ?></span>
+                    <span class="reorder-card__date"><?= $block->escapeHtml($block->formatDate((string) $order->getCreatedAt())) ?></span>
                     <span class="reorder-card__status reorder-status--<?= $block->escapeHtmlAttr((string) $order->getStatus()) ?>">
                         <?= $block->escapeHtml($order->getStatusLabel()) ?>
                     </span>
@@ -47,7 +47,10 @@ $widgetConfig = $block->getReorderWidgetConfig();
                 <input type="hidden" name="order_id" value="<?= $orderId ?>" />
 
                 <div class="table-wrapper reorder-items-wrapper">
-                    <table class="reorder-items">
+                    <table class="reorder-items" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de itens para repetir o pedido %1', $order->getIncrementId())) ?>">
+                        <caption class="sr-only">
+                            <?= $block->escapeHtml(__('Itens do pedido %1 para repetir compra', $order->getIncrementId())) ?>
+                        </caption>
                         <thead>
                             <tr>
                                 <th class="col-select" scope="col">
@@ -116,7 +119,7 @@ $widgetConfig = $block->getReorderWidgetConfig();
         </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <div class="awa-empty-state awa-empty-state--reorder" role="status">
+        <div class="awa-empty-state awa-empty-state--reorder" role="status" aria-live="polite">
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>

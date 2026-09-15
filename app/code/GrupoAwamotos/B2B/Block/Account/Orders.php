@@ -97,5 +97,4 @@ class Orders extends Template
             return substr($date, 0, 16);
         }
     }
-
 }

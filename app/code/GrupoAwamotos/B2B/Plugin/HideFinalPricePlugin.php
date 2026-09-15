@@ -51,9 +51,24 @@ class HideFinalPricePlugin
                 'exception' => $exception->getMessage(),
             ]);
 
-            // Fail-open para não bloquear preço em caso de erro de sessão/contexto.
-            return $proceed();
+            // Fail-closed: erro de visibilidade não pode vazar o HTML do preço.
+            return $this->safeReplacementHtml();
         }
     }
 
+    private function safeReplacementHtml(): string
+    {
+        try {
+            $replacementMessage = $this->priceVisibility->getPriceReplacementMessage();
+        } catch (\Throwable $exception) {
+            $this->logger->error('[B2B HideFinalPricePlugin] Falha ao montar mensagem de substituição.', [
+                'exception' => $exception->getMessage(),
+            ]);
+            $replacementMessage = 'Entre ou cadastre-se para ver os preços.';
+        }
+
+        return '<div class="b2b-login-to-see-price price-box" data-awa-b2b-price-gate="1">'
+            . $replacementMessage
+            . '</div>';
+    }
 }

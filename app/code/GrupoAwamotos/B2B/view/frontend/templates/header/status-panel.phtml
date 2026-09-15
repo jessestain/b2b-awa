@@ -15,10 +15,12 @@
     $company = trim((string) ($data['company'] ?? ''));
     $firstName = (string) ($data['first_name'] ?? ''); // raw — escaped at output via escapeHtml()
     $fullName = trim((string) ($data['full_name'] ?? ''));
-    $badgeColor = $block->escapeHtmlAttr($data['group_badge']['color']);
-    $badgeIcon = $block->escapeHtmlAttr($data['group_badge']['icon']);
-    $groupName = $block->escapeHtml($data['group_name']);
-    $discount = (int) $data['discount'];
+    $badgeColor = $block->escapeHtmlAttr((string) ($data['group_badge']['color'] ?? ''));
+    $badgeIcon = $block->escapeHtmlAttr((string) ($data['group_badge']['icon'] ?? 'user'));
+    $groupName = $block->escapeHtml((string) ($data['group_name'] ?? ''));
+    $discount = (int) ($data['discount'] ?? 0);
+    $creditLimit = (float) ($data['credit_limit'] ?? 0);
+    $creditAvailable = (float) ($data['credit_available'] ?? 0);
     $logoutUrl = $block->getUrl('customer/account/logout');
     $normalizeIdentity = static function (string $value): string {
         return mb_strtolower(trim(preg_replace('/\s+/u', ' ', $value) ?? ''));
@@ -53,7 +55,9 @@
             aria-controls="b2b-status-dropdown"
             aria-haspopup="true"
             aria-label="<?= $block->escapeHtmlAttr($triggerAria) ?>">
-        <span class="status-badge" style="--badge-color: <?= $badgeColor ?>" aria-hidden="true">
+        <span class="status-badge"
+              data-badge-color="<?= $badgeColor ?>"
+              aria-hidden="true">
             <i class="fa fa-<?= /* @noEscape */ $badgeIcon ?>" aria-hidden="true"></i>
         </span>
         <span class="status-info" aria-hidden="true">
@@ -77,8 +81,8 @@
 
             <!-- User Info Section -->
             <div class="dropdown-section user-section">
-                <div class="user-avatar" style="--avatar-color: <?= $badgeColor ?>">
-                    <?= $block->escapeHtml(mb_strtoupper(mb_substr($data['first_name'], 0, 1))) ?>
+                <div class="user-avatar" data-avatar-color="<?= $badgeColor ?>">
+                    <?= $block->escapeHtml(mb_strtoupper(mb_substr($firstName, 0, 1))) ?>
                 </div>
                 <div class="user-details">
                     <span class="user-name"><?= $block->escapeHtml($displayName) ?></span>
@@ -88,7 +92,7 @@
                         <?= $block->escapeHtml($company) ?>
                     </span>
                     <?php endif; ?>
-                    <span class="user-tier" style="--tier-color: <?= $badgeColor ?>">
+                    <span class="user-tier" data-tier-color="<?= $badgeColor ?>">
                         <i class="fa fa-<?= /* @noEscape */ $badgeIcon ?>" aria-hidden="true"></i>
                         <?= $groupName ?>
                     </span>
@@ -96,7 +100,7 @@
             </div>
 
             <!-- Stats Section -->
-            <?php if ($discount > 0 || $data['credit_limit'] > 0): ?>
+            <?php if ($discount > 0 || $creditLimit > 0): ?>
             <div class="dropdown-section stats-section">
                 <?php if ($discount > 0): ?>
                 <div class="stat-item discount-stat">
@@ -108,16 +112,16 @@
                 </div>
                 <?php endif; ?>
 
-                <?php if ($data['credit_limit'] > 0): ?>
+                <?php if ($creditLimit > 0): ?>
                 <div class="stat-item credit-stat">
                     <span class="stat-icon"><i class="fa fa-credit-card" aria-hidden="true"></i></span>
                     <span class="stat-content">
-                        <span class="stat-value"><?= /* @noEscape */ $block->formatPrice($data['credit_available']) ?></span>
+                        <span class="stat-value"><?= /* @noEscape */ $block->formatPrice($creditAvailable) ?></span>
                         <span class="stat-label"><?= $block->escapeHtml(__('Crédito Disponível')) ?></span>
                     </span>
                     <div class="credit-bar">
-                        <?php $creditPercent = $data['credit_limit'] > 0 ? ($data['credit_available'] / $data['credit_limit']) * 100 : 0; ?>
-                        <div class="credit-bar-fill" style="--b2b-credit-width: <?= min(100, (int) $creditPercent) ?>%"></div>
+                        <?php $creditPercent = $creditLimit > 0 ? ($creditAvailable / $creditLimit) * 100 : 0; ?>
+                        <div class="credit-bar-fill" data-credit-width="<?= min(100, (int) $creditPercent) ?>"></div>
                     </div>
                 </div>
                 <?php endif; ?>
@@ -129,7 +133,9 @@
                 <span class="section-title"><?= $block->escapeHtml(__('Acesso Rápido')) ?></span>
                 <nav class="quick-actions" aria-label="<?= $block->escapeHtmlAttr(__('Ações rápidas B2B')) ?>">
                     <?php foreach ($block->getQuickActions() as $action): ?>
-                    <a href="<?= $block->escapeUrl($action['url']) ?>" class="quick-action-link">
+                    <a href="<?= $block->escapeUrl($action['url']) ?>"
+                       class="quick-action-link"
+                       aria-label="<?= $block->escapeHtmlAttr((string) $action['label']) ?>">
                         <i class="fa fa-<?= $block->escapeHtmlAttr($action['icon']) ?>" aria-hidden="true"></i>
                         <span><?= $block->escapeHtml($action['label']) ?></span>
                     </a>
@@ -145,10 +151,13 @@
                 </a>
                 <a href="<?= $block->escapeUrl($logoutUrl) ?>"
                    class="footer-link logout-link"
-                   data-post='<?= $block->escapeHtmlAttr(json_encode([
-                       'action' => $logoutUrl,
-                       'data' => ['uenc' => '']
-                   ])) ?>'>
+                   data-post='<?= $block->escapeHtmlAttr((string) json_encode(
+                       [
+                           'action' => $logoutUrl,
+                           'data' => ['uenc' => '']
+                       ],
+                       JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+                   )) ?>'>
                     <i class="fa fa-sign-out" aria-hidden="true"></i>
                     <?= $block->escapeHtml(__('Sair')) ?>
                 </a>

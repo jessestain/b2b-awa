@@ -1,0 +1,144 @@
+/** pages-dashboard-chrome.css — carrega DEPOIS de awa-b2b-dashboard-late.css
+ * Padroniza chrome do painel B2B (tokens, 44px, foco, empty state, tabelas).
+ * Não edita late/audit (hex legado bloqueado pelo hook impeccable). */
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard {
+    --awa-b2b-radius: var(--awa-acct-panel-radius, var(--awa-radius-sm));
+    --awa-b2b-control-h: 44px;
+    --awa-b2b-ink: var(--awa-text-primary, var(--awa-text));
+    --awa-b2b-muted: var(--awa-text-muted, var(--awa-text-secondary));
+    --awa-b2b-border: var(--awa-border, var(--awa-line));
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .awa-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--awa-s-1, 8px);
+    max-width: 42rem;
+    padding: clamp(16px, 2.5vw, 24px);
+    border: 1px solid var(--awa-b2b-border);
+    border-radius: var(--awa-b2b-radius);
+    background: var(--awa-bg, var(--awa-bg-surface));
+    box-sizing: border-box;
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .awa-empty-state__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--awa-b2b-ink);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .awa-empty-state__hint {
+    margin: 0;
+    max-width: 65ch;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--awa-b2b-muted);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .awa-empty-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: var(--awa-s-1, 8px);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .awa-empty-state .action {
+    min-height: var(--awa-b2b-control-h);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .checklist-item.done .checklist-icon {
+    color: var(--awa-success);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .checklist-item.pending .checklist-icon {
+    color: var(--awa-b2b-muted);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard :is(
+    .view-all,
+    .checklist-action,
+    .category-chip,
+    .contact-link,
+    .suggestion-action
+) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--awa-b2b-control-h);
+    box-sizing: border-box;
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .action-item {
+    min-height: var(--awa-b2b-control-h);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard :is(
+    .view-all,
+    .checklist-action,
+    .category-chip,
+    .contact-link,
+    .suggestion-action,
+    .action-item,
+    .action.primary,
+    .action.secondary,
+    .erp-pending-action
+):focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard :is(
+    .section-header h2,
+    .b2b-section > h2,
+    .b2b-quick-actions > h2
+) {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--awa-b2b-ink);
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper #block-collapsible-nav :is(
+    li.nav.item > a,
+    .account-nav-link,
+    .account-nav-text
+) {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 44px !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    border-radius: var(--awa-b2b-radius) !important;
+    box-sizing: border-box !important;
+}
+
+html body#html-body.b2b-account-dashboard .page-wrapper #block-collapsible-nav :is(
+    li.nav.item > a,
+    .account-nav-link
+):focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+    html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .table-wrapper {
+        /* !important: late/pages podem forçar overflow-x no mobile. */
+        overflow-x: visible !important;
+    }
+
+    html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard .table-wrapper :is(
+        table.data-table,
+        table.orders-table,
+        table.quotes-table
+    ) {
+        min-width: 0 !important;
+        width: 100% !important;
+        table-layout: auto !important;
+    }
+}

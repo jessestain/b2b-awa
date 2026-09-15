@@ -43,6 +43,34 @@ define([
 
             this._bindEvents();
             this._initAccessibility();
+            this._applyDynamicStyles();
+        },
+
+        /**
+         * Apply CSS custom properties from safe data attributes.
+         * Keeps presentation config out of inline style attributes.
+         *
+         * @private
+         */
+        _applyDynamicStyles: function () {
+            this.element.find('[data-badge-color]').each(function () {
+                this.style.setProperty('--badge-color', this.getAttribute('data-badge-color') || '');
+            });
+
+            this.element.find('[data-avatar-color]').each(function () {
+                this.style.setProperty('--avatar-color', this.getAttribute('data-avatar-color') || '');
+            });
+
+            this.element.find('[data-tier-color]').each(function () {
+                this.style.setProperty('--tier-color', this.getAttribute('data-tier-color') || '');
+            });
+
+            this.element.find('[data-credit-width]').each(function () {
+                var width = parseInt(this.getAttribute('data-credit-width'), 10);
+                var normalized = !isNaN(width) ? Math.max(0, Math.min(100, width)) : 0;
+
+                this.style.setProperty('--b2b-credit-width', normalized + '%');
+            });
         },
 
         /**

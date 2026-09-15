@@ -15,30 +15,36 @@
  * Extraído de template .phtml para asset estático.
  */
 
+/*
+ * THESIS: popup Magento (header/content/footer), não banner vermelho.
+ * OWN-WORLD: superfície branca AWA, acento de 3px, CTA .action.primary.
+ * STORY: cadastrar empresa (primário) ou fazer login (rodapé).
+ * FIRST VIEWPORT: título à esquerda, fechar à direita, CTA, link de login.
+ * FORM: gramática Magento_Ui sem classe .modal-popup (evita position:fixed).
+ */
 .b2b-login-modal-overlay {
-    /* Herdar tokens globais da Reforma Visual quando existirem */
-    --awa-primary: var(--aw-primary, #A33B3B);
-    --awa-primary-hover: var(--aw-primary-dark, var(--awa-primary-hover));
-    --awa-text: var(--aw-text, #333);
-    --awa-link: var(--aw-primary, #A33B3B);
-    --awa-link-hover: var(--aw-primary-dark, var(--awa-primary-hover));
-    --awa-btn-text: var(--b2b-l2c-white);
-    --awa-btn-bg: var(--aw-primary, var(--awa-primary));
-    --awa-btn-hover: var(--aw-primary-dark, var(--awa-primary-hover));
+    --awa-primary: var(--awa-brand, var(--awa-primary));
+    --awa-primary-hover: var(--awa-brand-dark, var(--awa-primary-hover));
+    --awa-text: var(--awa-text-primary, var(--awa-text));
+    --awa-link: var(--awa-brand, var(--awa-primary));
+    --awa-link-hover: var(--awa-brand-dark, var(--awa-primary-hover));
+    --awa-btn-text: var(--awa-text-inverse, var(--b2b-l2c-white));
+    --awa-btn-bg: var(--awa-brand, var(--awa-primary));
+    --awa-btn-hover: var(--awa-brand-dark, var(--awa-primary-hover));
     --awa-control-height: var(--aw-control-height, 48px);
-    --awa-control-radius: var(--aw-control-radius, 4px);
+    --awa-control-radius: var(--aw-control-radius, var(--awa-radius-sm, 6px));
 
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
-    padding: 16px;
+    padding: max(var(--awa-space-4, 16px), env(safe-area-inset-top, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-right, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-bottom, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-left, 0px));
     box-sizing: border-box;
-    background: rgb(15 23 42 / 68%);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--awa-bg-overlay, rgb(15 23 42 / 50%));
     z-index: var(--awa-z-modal, 10200);
     justify-content: center;
     align-items: center;
@@ -49,30 +55,30 @@
 }
 
 .b2b-login-modal {
-    background: rgb(255 255 255 / 98%);
-    border-radius: 20px;
-    max-width: 480px;
-    width: 92%;
-    max-height: calc(100vh - 32px);
+    background: var(--awa-bg);
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-lg, 12px);
+    max-width: 28rem;
+    width: min(100%, 28rem);
+    max-height: calc(100dvh - 32px);
     overflow: auto;
     overscroll-behavior: contain;
-    scroll-padding-block: 16px;
+    scroll-padding-block: var(--awa-space-4, 16px);
     padding: 0;
-    /* FIX 2026-07-06 (Impeccable "hairline border with wide shadow" div.b2b-login-modal).
-       Histórico: 1px border + 60px blur -> reduzido para 1px border + 24px blur, mas o
-       padrão "hairline border + shadow largo" continuou sinalizado (a combinação dos
-       dois indicadores de profundidade é redundante — o backdrop escuro já com 68%
-       opacidade + blur(10px) cria separação suficiente do fundo). Removida a borda
-       (redundante) e reduzido o blur para algo proporcional ao cartão de 480px,
-       mantendo só UM indicador de elevação. */
-    box-shadow: 0 4px 16px rgb(0 0 0 / 22%);
-    animation: modalSlideIn 0.3s ease;
+    box-shadow: inset 0 3px 0 0 var(--awa-primary), var(--awa-shadow-lg, 0 20px 32px rgb(15 23 42 / 12%));
+    animation: modalSlideIn 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.b2b-login-modal__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 @keyframes modalSlideIn {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-12px);
     }
 
     to {
@@ -82,133 +88,200 @@
 }
 
 .b2b-login-modal-header {
-    background: var(--awa-primary);
-    color: var(--b2b-l2c-white);
-    padding: 24px 28px;
-    border-radius: 20px 20px 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    column-gap: var(--awa-space-3, 12px);
+    row-gap: var(--awa-space-2, 8px);
+    align-items: start;
+    background: var(--awa-bg);
+    color: var(--awa-text);
+    padding: var(--awa-space-5, 20px) var(--awa-space-5, 20px) var(--awa-space-4, 16px);
+    border: 0;
+    border-bottom: 1px solid var(--awa-border);
+    border-radius: 0;
     position: relative;
-    text-align: center;
+    text-align: start;
 }
 
+.b2b-login-modal-header .modal-title,
 .b2b-login-modal-header h3 {
-    margin: 0 0 5px;
-    font-size: 1.375em;
-    font-weight: 700;
-    line-height: 1.25;
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 0;
+    font-size: var(--awa-font-xl, 1.125rem);
+    font-weight: var(--awa-weight-semibold, 600);
+    line-height: 1.3;
+    color: var(--awa-text);
 }
 
 .b2b-login-modal-header p {
+    grid-column: 1;
+    grid-row: 2;
     margin: 0;
-    opacity: 0.9;
-    font-size: 0.95em;
+    max-width: 36ch;
+    font-size: var(--awa-font-sm, 0.875rem);
     line-height: 1.45;
+    color: var(--awa-text-muted);
+    opacity: 1;
 }
 
 .b2b-login-modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: rgb(255 255 255 / 20%);
-    border: none;
-    color: var(--b2b-l2c-white);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    align-self: start;
+    position: relative;
+    top: auto;
+    right: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--awa-radius-sm, 6px);
+    background: transparent;
+    color: var(--awa-text-muted);
     cursor: pointer;
-    font-size: 20px;
+    font-size: 0;
     line-height: 1;
-    transition: all 0.2s;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.b2b-login-modal-close::before {
+    content: none;
+    display: none;
+}
+
+.b2b-login-modal-close svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
 }
 
 .b2b-login-modal-close:hover {
-    background: rgb(255 255 255 / 30%);
-    transform: rotate(90deg);
+    background: var(--awa-primary-subtle, rgb(183 51 55 / 8%));
+    color: var(--awa-primary);
+    transform: none;
 }
 
 .b2b-login-modal-close:focus-visible {
-    outline: 3px solid rgb(255 255 255 / 65%);
+    outline: 2px solid var(--awa-primary);
     outline-offset: 2px;
 }
 
 .b2b-login-modal-body {
-    padding: 24px;
+    padding: var(--awa-space-5, 20px);
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--awa-space-4, 16px);
 }
 
 .b2b-login-options {
     display: grid;
-    gap: 16px;
+    gap: var(--awa-space-3, 12px);
 }
 
 .b2b-login-option {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    padding: 20px;
-    border: 2px solid var(--b2b-l2c-c1);
-    border-radius: 16px;
-    background: var(--b2b-l2c-white);
+    min-height: 48px;
+    padding: 14px 16px;
+    border: 1px solid var(--awa-border, var(--b2b-l2c-c1));
+    border-radius: var(--awa-radius-sm, 6px);
+    background: var(--awa-bg);
     text-decoration: none;
     color: var(--awa-text);
-    transition: all 0.2s;
-    text-align: left;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    text-align: start;
+    box-sizing: border-box;
 }
 
 .b2b-login-option:hover {
-    border-color: var(--awa-primary);
-    background: var(--b2b-l2c-c2);
-    box-shadow: 0 8px 18px rgb(0 0 0 / 8%);
-    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--awa-primary) 35%, var(--awa-border));
+    background: var(--awa-primary-subtle, var(--b2b-l2c-c2));
+    box-shadow: none;
+    transform: none;
 }
 
 .b2b-login-option:focus-visible {
-    outline: 3px solid rgb(183 51 55 / 35%);
-    outline-offset: 3px;
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
 }
 
 .b2b-login-option-title {
     display: block;
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 4px;
-    color: var(--awa-text);
+    font-weight: var(--awa-weight-semibold, 600);
+    font-size: 0.9375rem;
+    margin-bottom: 2px;
+    color: inherit;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 .b2b-login-option-desc {
     display: block;
-    font-size: 0.85em;
+    font-size: 0.8125rem;
     color: var(--awa-text-muted);
     line-height: 1.4;
+    font-weight: 400;
 }
 
-.b2b-login-option.b2b-primary {
+.b2b-login-option.b2b-primary,
+.b2b-login-option.action.primary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
     background: var(--awa-primary);
     border-color: var(--awa-primary);
-    color: var(--awa-btn-text);
+    color: var(--awa-text-inverse, var(--awa-btn-text));
+    box-shadow: none;
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
-.b2b-login-option.b2b-primary:hover {
+.b2b-login-option.b2b-primary:hover,
+.b2b-login-option.action.primary:hover {
     background: var(--awa-primary-hover);
-    box-shadow: 0 10px 22px rgb(183 51 55 / 25%);
+    border-color: var(--awa-primary-hover);
+    box-shadow: none;
+    transform: none;
 }
 
 .b2b-login-option.b2b-primary .b2b-login-option-title,
-.b2b-login-option.b2b-primary .b2b-login-option-desc {
-    color: var(--awa-btn-text);
+.b2b-login-option.b2b-primary .b2b-login-option-desc,
+.b2b-login-option.action.primary .b2b-login-option-title,
+.b2b-login-option.action.primary .b2b-login-option-desc {
+    color: var(--awa-text-inverse, var(--awa-btn-text));
 }
 
-.b2b-login-option.b2b-primary .b2b-login-option-desc {
-    opacity: 0.9;
+.b2b-login-option.b2b-primary .b2b-login-option-desc,
+.b2b-login-option.action.primary .b2b-login-option-desc {
+    opacity: 0.92;
+}
+
+.b2b-login-modal-footer {
+    margin: 0;
+    padding: var(--awa-space-4, 16px) var(--awa-space-5, 20px);
+    border-top: 1px solid var(--awa-border);
+    background: var(--awa-bg-page, var(--awa-bg));
 }
 
 .b2b-login-already {
     text-align: center;
-    padding-top: 15px;
-    border-top: 1px solid var(--b2b-l2c-bg-faint);
-    margin-top: 20px;
-    font-size: 0.95em;
+    padding: 0;
+    border: 0;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--awa-text-muted);
 }
 
 .b2b-login-already a {
@@ -222,6 +295,12 @@
     text-decoration: underline;
 }
 
+.b2b-login-already a:focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+    border-radius: var(--awa-radius-sm, 4px);
+}
+
 /* Botão substituto do Add to Cart */
 .b2b-login-to-buy-btn {
     display: inline-flex;
@@ -232,7 +311,7 @@
     height: var(--awa-control-height, 44px);
     min-height: var(--awa-control-height, 44px);
     padding: 0 20px;
-    background: var(--awa-btn-bg, #A33B3B);
+    background: var(--awa-btn-bg, #b73337);
     color: var(--awa-btn-text, var(--b2b-l2c-white)) !important;
     border: none;
     border-radius: var(--awa-control-radius, 3px);
@@ -313,27 +392,26 @@ body.catalog-product-view.b2b-restricted-mode .product-add-form .box-tocart.b2b-
 
 @media (width <= 768px) {
     .b2b-login-modal {
-        width: 95%;
-        max-width: 420px;
+        width: 100%;
+        max-width: 28rem;
     }
 
+    .b2b-login-modal-header .modal-title,
     .b2b-login-modal-header h3 {
-        font-size: 1.15em;
+        font-size: 1.0625rem;
     }
 }
 
 @media (width <= 480px) {
     .b2b-login-modal {
         max-width: 100%;
-        border-radius: 10px;
+        border-radius: var(--awa-radius-md, 8px);
     }
 
-    .b2b-login-modal-header {
-        padding: 20px;
-    }
-
-    .b2b-login-modal-body {
-        padding: 20px;
+    .b2b-login-modal-header,
+    .b2b-login-modal-body,
+    .b2b-login-modal-footer {
+        padding-inline: var(--awa-space-4, 16px);
     }
 }
 
@@ -374,12 +452,12 @@ body.b2b-restricted-mode .opc-block-summary .grand.totals .price {
 /* Estilo para mensagem B2B que substitui preço no carrinho */
 .b2b-cart-price-hidden {
     font-size: 0.85em;
-    color: var(--awa-primary, #A33B3B);
+    color: var(--awa-primary, #b73337);
     font-weight: 600;
 }
 
 .b2b-cart-price-hidden a {
-    color: var(--awa-link, #A33B3B);
+    color: var(--awa-link, #b73337);
     text-decoration: underline;
 }
 
@@ -402,7 +480,7 @@ body.b2b-restricted-mode .block-minicart .subtotal .price-wrapper {
 /* Indicador de preço oculto no mini-cart */
 .b2b-price-hidden {
     font-size: 0.8em;
-    color: var(--awa-primary, #A33B3B);
+    color: var(--awa-primary, #b73337);
     font-weight: 600;
     font-style: italic;
 }
@@ -455,7 +533,7 @@ body.b2b-restricted-mode .block-minicart .subtotal .price-wrapper {
  * B2B: Banner de conta pendente
  * ========================================================= */
 .b2b-pending-banner {
-    --awa-primary: var(--aw-primary, #A33B3B);
+    --awa-primary: var(--awa-brand, #b73337);
 
     position: fixed;
     bottom: 0;

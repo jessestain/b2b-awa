@@ -5,28 +5,33 @@ declare(strict_types=1);
 /** @var \GrupoAwamotos\B2B\Block\Account\Cotacao\Index $block */
 $cotacoes = $block->getCotacoes();
 ?>
-<div class="b2b-account-block b2b-cotacao-page">
-    <div class="block-title">
-        <strong><span><?= $block->escapeHtml(__('Minhas Cotações')) ?></span></strong>
+<div class="b2b-account-block b2b-cotacao-page b2b-page-shell">
+    <div class="b2b-section-header">
+        <h1><?= $block->escapeHtml(__('Minhas Cotações')) ?></h1>
+        <p class="section-subtitle"><?= $block->escapeHtml(__('Acompanhe solicitações antigas e acesse o novo fluxo comercial.')) ?></p>
     </div>
 
     <?php if (empty($cotacoes)): ?>
-        <div class="b2b-cotacao-empty" role="status">
-            <p><?= $block->escapeHtml(__('Você ainda não possui cotações.')) ?></p>
-            <a href="<?= $block->escapeUrl($block->getNewQuoteUrl()) ?>" class="action primary">
-                <?= $block->escapeHtml(__('Ir para o carrinho e solicitar cotação')) ?>
-            </a>
+        <div class="awa-empty-state b2b-cotacao-empty" role="status" aria-live="polite">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Você ainda não possui cotações')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Monte o carrinho e peça um orçamento formal.')) ?></p>
+            <div class="awa-empty-state__actions">
+                <a href="<?= $block->escapeUrl($block->getNewQuoteUrl()) ?>" class="action primary">
+                    <span><?= $block->escapeHtml(__('Ir para o carrinho e solicitar cotação')) ?></span>
+                </a>
+            </div>
         </div>
     <?php else: ?>
         <div class="b2b-cotacao-table-wrap">
-            <table class="data table b2b-cotacao-table">
+            <table class="data table b2b-cotacao-table" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de cotações antigas')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Tabela de cotações antigas')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= $block->escapeHtml(__('#')) ?></th>
-                        <th><?= $block->escapeHtml(__('Data')) ?></th>
-                        <th><?= $block->escapeHtml(__('Status')) ?></th>
-                        <th><?= $block->escapeHtml(__('Observação')) ?></th>
-                        <th class="col-actions"></th>
+                        <th scope="col"><?= $block->escapeHtml(__('#')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Observação')) ?></th>
+                        <th scope="col" class="col-actions"><?= $block->escapeHtml(__('Ações')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,18 +47,19 @@ $cotacoes = $block->getCotacoes();
                         };
                         ?>
                         <tr>
-                            <td>#<?= (int) $cotacao->getId() ?></td>
-                            <td><?= $block->escapeHtml(substr((string) $cotacao->getData('created_at'), 0, 10)) ?></td>
-                            <td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('#')) ?>">#<?= (int) $cotacao->getId() ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml($block->formatDate((string) $cotacao->getData('created_at'))) ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>">
                                 <span class="b2b-cotacao-status <?= $block->escapeHtmlAttr($statusClass) ?>">
                                     <?= $block->escapeHtml($cotacao->getStatusLabel()) ?>
                                 </span>
                             </td>
-                            <td class="col-notes"><?= $block->escapeHtml($cotacao->getNotes() ?: '—') ?></td>
-                            <td class="col-actions">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Observação')) ?>" class="col-notes"><?= $block->escapeHtml($cotacao->getNotes() ?: '—') ?></td>
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Ações')) ?>" class="col-actions">
                                 <a href="<?= $block->escapeUrl($block->getViewUrl((int) $cotacao->getId())) ?>"
-                                   class="b2b-cotacao-link">
-                                    <?= $block->escapeHtml(__('Ver')) ?> →
+                                   class="action view b2b-cotacao-link"
+                                   aria-label="<?= $block->escapeHtmlAttr(__('Ver cotação %1', (int) $cotacao->getId())) ?>">
+                                    <?= $block->escapeHtml(__('Ver')) ?> <span aria-hidden="true">→</span>
                                 </a>
                             </td>
                         </tr>
@@ -64,8 +70,8 @@ $cotacoes = $block->getCotacoes();
     <?php endif; ?>
 
     <div class="b2b-cotacao-footer-link">
-        <a href="<?= $block->escapeUrl($block->getUrl('b2b/quote/history')) ?>" class="b2b-cotacao-link">
-            <?= $block->escapeHtml(__('Ver propostas comerciais (novo fluxo)')) ?> →
+        <a href="<?= $block->escapeUrl($block->getUrl('b2b/quote/history')) ?>" class="action view b2b-cotacao-link">
+            <?= $block->escapeHtml(__('Ver propostas comerciais (novo fluxo)')) ?> <span aria-hidden="true">→</span>
         </a>
     </div>
 </div>

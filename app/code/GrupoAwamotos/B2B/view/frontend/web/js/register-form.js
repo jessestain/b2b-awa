@@ -134,6 +134,56 @@ define([
             return;
         }
 
+        function applyAttributionFromQuery()
+        {
+            var keys = [
+                'utm_source',
+                'utm_medium',
+                'utm_campaign',
+                'utm_content',
+                'utm_term',
+                'cname',
+                'campaign',
+                'attendant',
+                'vendedor'
+            ];
+            var stored = {};
+            var params = new URLSearchParams(window.location.search);
+
+            try {
+                stored = JSON.parse(window.sessionStorage.getItem('awa_b2b_attr') || '{}') || {};
+            } catch (error) {
+                stored = {};
+            }
+
+            keys.forEach(function (name) {
+                var fromUrl = String(params.get(name) || '').trim();
+                if (fromUrl && !stored[name]) {
+                    stored[name] = fromUrl;
+                }
+            });
+
+            try {
+                window.sessionStorage.setItem('awa_b2b_attr', JSON.stringify(stored));
+            } catch (persistError) {
+                // Ignore quota / private-mode failures.
+            }
+
+            keys.forEach(function (name) {
+                var value = String(stored[name] || params.get(name) || '').trim();
+                var input;
+                if (!value) {
+                    return;
+                }
+                input = $form.find('input[name="' + name + '"]');
+                if (input.length && !String(input.val() || '').trim()) {
+                    input.val(value);
+                }
+            });
+        }
+
+        applyAttributionFromQuery();
+
         var $progressSteps = $form.find('.b2b-register-progress .progress-step');
         var $progressBar = $form.find('.b2b-register-progress');
         var $stepSections = $form.find('.form-section[data-step]');
@@ -890,6 +940,8 @@ define([
 
         function updateProgressCompletionState()
         {
+            let priorStepsComplete = true;
+
             if (!$progressSteps.length) {
                 return;
             }
@@ -899,8 +951,15 @@ define([
                 let stepIndex = parseInt($step.attr('data-step-number'), 10) || (index + 1);
                 let isActive = stepIndex === currentProgressStep;
                 let isComplete = isStepComplete(stepIndex);
+                let isReachable = stepIndex <= currentProgressStep || priorStepsComplete;
+                let isLocked = !isActive && !isReachable;
 
                 $step.toggleClass('is-complete', isComplete && !isActive);
+                $step.toggleClass('is-locked', isLocked);
+                $step.prop('disabled', isLocked);
+                $step.attr('aria-disabled', isLocked ? 'true' : 'false');
+
+                priorStepsComplete = priorStepsComplete && isComplete;
             });
         }
 
@@ -968,12 +1027,16 @@ define([
         function announceFormStatus(message)
         {
             var $region = $('#b2b-register-form-status');
+            let normalizedMessage = $.trim(String(message || ''));
 
             if (!$region.length) {
                 return;
             }
 
-            $region.text(message || '');
+            $region
+                .text(normalizedMessage)
+                .toggleClass('has-message', normalizedMessage !== '')
+                .attr('aria-hidden', normalizedMessage === '' ? 'true' : 'false');
         }
 
         function getFieldLabel($input)
@@ -994,28 +1057,76 @@ define([
         function clearInlineFieldError($input)
         {
             var $field = $input.closest('.field');
+            let errorId = getInlineFieldErrorId($input);
+            let describedBy = String($input.attr('aria-describedby') || '')
+                .split(/\s+/)
+                .filter(function (token) {
+                    return token && token !== errorId;
+                });
+
             $field.removeClass('_error');
             $input.removeClass('mage-error');
             $field.find('.awa-field-error').remove();
+
+            if (describedBy.length) {
+                $input.attr('aria-describedby', describedBy.join(' '));
+            } else {
+                $input.removeAttr('aria-describedby');
+            }
+        }
+
+        function getInlineFieldErrorId($input)
+        {
+            let baseId = String($input.attr('id') || $input.attr('name') || 'field')
+                .replace(/[^A-Za-z0-9_-]/g, '-');
+
+            return baseId + '-awa-error';
+        }
+
+        function linkInlineFieldError($input, $error)
+        {
+            let oldErrorId = String($error.attr('id') || '');
+            let errorId = getInlineFieldErrorId($input);
+            let describedBy = String($input.attr('aria-describedby') || '')
+                .split(/\s+/)
+                .filter(function (token) {
+                    return token && token !== oldErrorId && token !== errorId;
+                });
+
+            describedBy.push(errorId);
+            $error.attr({
+                id: errorId,
+                role: 'alert'
+            });
+            $input.attr('aria-describedby', describedBy.join(' '));
         }
 
         function ensureInlineFieldError($input, message)
         {
             var $field = $input.closest('.field');
             var $control = $field.find('.control').first();
-            var $error = $field.find('.awa-field-error');
+            var $error = $field.find('.awa-field-error').first();
+            var $magentoErrors;
 
             $field.addClass('_error');
             $input.removeClass('valid').addClass('mage-error').attr('aria-invalid', 'true');
 
             if (!$error.length) {
+                $error = $field.find('.mage-error').not($input).first();
+            }
+
+            if (!$error.length) {
                 $error = $('<div/>', {
-                    class: 'awa-field-error mage-error',
-                    role: 'alert'
+                    class: 'awa-field-error mage-error'
                 });
                 ($control.length ? $control : $field).append($error);
             }
 
+            $error.addClass('awa-field-error mage-error');
+            linkInlineFieldError($input, $error);
+
+            $magentoErrors = $field.find('.mage-error').not($input).not($error);
+            $magentoErrors.remove();
             $error.text(message).show();
         }
 
@@ -1209,6 +1320,58 @@ define([
                 .replace(/^-+|-+$/g, '') || 'indefinida';
         }
 
+        function appendCnpjRetryButton($message)
+        {
+            $message.append(' ').append($('<button/>', {
+                type: 'button',
+                class: 'cnpj-retry-btn',
+                id: 'cnpj-force-refresh',
+                text: 'Consultar novamente'
+            }));
+        }
+
+        function cnpjSourceLabel(source, cached)
+        {
+            var labels = {
+                api: 'Dados da Receita Federal',
+                brasilapi: 'Dados da BrasilAPI',
+                cnpjws: 'Cadastro público (CNPJ.ws)',
+                fallback: 'Validação local do CNPJ',
+                cache: 'Dados em cache'
+            };
+            var label = labels[source] || 'Dados cadastrais públicos';
+
+            if (cached) {
+                label += ' (cache)';
+            }
+
+            return label;
+        }
+
+        function setManualFillState(enabled)
+        {
+            var $alert = $field('#cnpj-manual-fill-alert');
+            var $razaoField = $field('#razao_social').closest('.field');
+            var $fantasiaField = $field('#nome_fantasia').closest('.field');
+
+            $razaoField.toggleClass('is-manual-fill', !!enabled);
+            $fantasiaField.toggleClass('is-manual-fill', !!enabled);
+
+            if (!$alert.length) {
+                return;
+            }
+
+            if (enabled) {
+                slideShow($alert, 180);
+                window.setTimeout(function () {
+                    $field('#razao_social').trigger('focus');
+                }, 80);
+                return;
+            }
+
+            hideBlock($alert);
+        }
+
         function setCnpjStatus(type, message, options)
         {
             var $status = $field('#cnpj-status');
@@ -1224,7 +1387,7 @@ define([
 
             if (type === 'loading') {
                 $field('#cnpj').removeClass('valid mage-error');
-                $status.html('<span class="cnpj-spinner"></span>');
+                $status.html('<span class="cnpj-spinner" aria-hidden="true"></span>');
                 $message = $('<span/>', {
                     class: 'feedback-loading',
                     text: 'Consultando Receita Federal...'
@@ -1240,11 +1403,14 @@ define([
                     .addClass('valid')
                     .attr('aria-invalid', 'false');
                 $field('#cnpj').closest('.field').removeClass('_error');
-                $status.html('<span class="cnpj-check">&#10003;</span>');
+                $status.html('<span class="cnpj-check" aria-hidden="true">&#10003;</span>');
                 $message = $('<span/>', {
                     class: 'feedback-success',
                     text: message || 'CNPJ validado.'
                 });
+                if (options.retry) {
+                    appendCnpjRetryButton($message);
+                }
                 showBlock($feedback.append($message));
                 refreshFieldAndSectionErrorStates();
                 return;
@@ -1256,7 +1422,7 @@ define([
                     .addClass('mage-error')
                     .attr('aria-invalid', 'true');
                 $field('#cnpj').closest('.field').addClass('_error');
-                $status.html('<span class="cnpj-x">&#10007;</span>');
+                $status.html('<span class="cnpj-x" aria-hidden="true">&#10007;</span>');
                 $message = $('<span/>', {
                     class: 'feedback-error',
                     text: message || 'Não foi possível validar este CNPJ.'
@@ -1271,12 +1437,7 @@ define([
                 }
 
                 if (options.retry) {
-                    $message.append(' ').append($('<button/>', {
-                        type: 'button',
-                        class: 'cnpj-retry-btn',
-                        id: 'cnpj-force-refresh',
-                        text: 'Consultar novamente'
-                    }));
+                    appendCnpjRetryButton($message);
                 }
 
                 showBlock($feedback.append($message));
@@ -1313,6 +1474,7 @@ define([
             hideBlock($field('#cnpj-feedback').html(''));
             slideHide($field('#cnpj-company-data'), 200);
             hideBlock($field('#erp-email-alert').empty());
+            setManualFillState(false);
 
             erpEmailFull = null;
             erpEmailMasked = null;
@@ -1475,6 +1637,7 @@ define([
                         {loginUrl: loginUrl}
                     );
                     slideHide($companyData, 200);
+                    setManualFillState(false);
                     cnpjValidated = false;
                     updateSubmitState();
                     return;
@@ -1482,8 +1645,13 @@ define([
 
                 if (response.success) {
                     if (response.api_unavailable) {
-                        setCnpjStatus('success', 'CNPJ válido (API indisponível, preencha manualmente).');
+                        setCnpjStatus(
+                            'success',
+                            response.message || 'CNPJ válido. Preencha os dados manualmente. A conta ficará pendente de aprovação.',
+                            {retry: true}
+                        );
                         slideHide($companyData, 200);
+                        setManualFillState(true);
                         cnpjValidated = true;
                         updateSubmitState();
                         updateProgressCompletionState();
@@ -1491,6 +1659,7 @@ define([
                     }
 
                     setCnpjStatus('success', 'CNPJ válido, empresa ativa.');
+                    setManualFillState(false);
                     cnpjValidated = true;
                     updateSubmitState();
                     updateProgressCompletionState();
@@ -1553,10 +1722,7 @@ define([
                         $field('#uf').val(response.uf).addClass('autofilled');
                     }
 
-                    sourceLabel = 'Dados da Receita Federal';
-                    if (response.source === 'cache') {
-                        sourceLabel = 'Dados da Receita Federal (cache)';
-                    }
+                    sourceLabel = cnpjSourceLabel(response.source, response.cached);
                     $field('#cnpj-source-badge').text(sourceLabel);
 
                     if (response.situacao) {
@@ -1604,9 +1770,10 @@ define([
 
                 errorMsg = response.message || 'CNPJ inválido';
                 setCnpjStatus('error', errorMsg, {
-                    retry: response.situacao && response.situacao.toUpperCase() !== 'ATIVA'
+                    retry: true
                 });
                 slideHide($companyData, 200);
+                setManualFillState(false);
                 cnpjValidated = false;
                 updateSubmitState();
                 updateProgressCompletionState();
@@ -1620,6 +1787,7 @@ define([
                 setCnpjStatus('error', 'Erro ao consultar. Verifique sua conexão e tente novamente.', {
                     retry: true
                 });
+                setManualFillState(false);
                 cnpjValidated = false;
                 updateSubmitState();
                 updateProgressCompletionState();
@@ -1725,6 +1893,10 @@ define([
             let targetStep = parseInt(stepNumber, 10) || 0;
 
             event.preventDefault();
+
+            if ($step.prop('disabled') || $step.attr('aria-disabled') === 'true') {
+                return;
+            }
 
             if (!$section.length || !targetStep) {
                 return;

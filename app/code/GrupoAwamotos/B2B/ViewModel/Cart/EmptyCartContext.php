@@ -17,6 +17,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+use Psr\Log\LoggerInterface;
 
 class EmptyCartContext implements ArgumentInterface
 {
@@ -24,7 +25,10 @@ class EmptyCartContext implements ArgumentInterface
 
     public const COOKIE_KEY_EXPRESS_REDIRECT = 'awa_express_checkout_redirect';
 
-    private const ORDER_SUCCESS_WINDOW_HOURS = 6;
+    public const SESSION_KEY_ORDER_SUCCESS_EMPTY = 'awa_order_success_empty_cart';
+
+    public const SESSION_KEY_ORDER_SUCCESS_ID = 'awa_order_success_empty_cart_order_id';
+
     private ?PriceCurrencyInterface $priceCurrency;
 
     /**
@@ -48,14 +52,17 @@ class EmptyCartContext implements ArgumentInterface
         private readonly TimezoneInterface $timezone,
         private readonly SuccessValidator $successValidator,
         private readonly OrderSuccessPresenter $orderSuccessPresenter,
+        private readonly LoggerInterface $logger,
         ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->priceCurrency = $priceCurrency;
+        // TimezoneInterface permanece no construtor para não quebrar factories compiladas
+        // (não é lido em outro ponto da classe); a tipagem do parâmetro já garante o contrato.
     }
 
     public function getCatalogUrl(): string
     {
-        return $this->urlBuilder->getUrl('', ['_direct' => 'catalogo']);
+        return $this->urlBuilder->getUrl('catalogo');
     }
 
     public function getAllCategoriesUrl(): string
@@ -144,8 +151,11 @@ class EmptyCartContext implements ArgumentInterface
             $metadata = $this->cookieMetadataFactory->createCookieMetadata();
             $metadata->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_KEY_EXPRESS_REDIRECT, $metadata);
-        } catch (\Exception) {
-            // Cookie ausente ou headers já enviados — segue sem bloquear render.
+        } catch (\Exception $e) {
+            $this->logger->debug(
+                '[EmptyCartContext::deleteExpressRedirectCookie] Cookie ausente ou headers já enviados: '
+                . $e->getMessage()
+            );
         }
     }
 
@@ -175,6 +185,24 @@ class EmptyCartContext implements ArgumentInterface
     }
 
     /**
+     * Liga a tela de confirmação no carrinho vazio após um pedido recém-colocado.
+     */
+    public function markOrderSuccessEmptyCart(int $orderId = 0): void
+    {
+        $this->checkoutSession->setData(self::SESSION_KEY_ORDER_SUCCESS_EMPTY, true);
+
+        if ($orderId > 0) {
+            $this->checkoutSession->setData(self::SESSION_KEY_ORDER_SUCCESS_ID, $orderId);
+        }
+    }
+
+    public function clearOrderSuccessEmptyCart(): void
+    {
+        $this->checkoutSession->unsetData(self::SESSION_KEY_ORDER_SUCCESS_EMPTY);
+        $this->checkoutSession->unsetData(self::SESSION_KEY_ORDER_SUCCESS_ID);
+    }
+
+    /**
      * Dados para a tela de confirmação pós-pedido no carrinho vazio.
      *
      * @return array{
@@ -192,6 +220,8 @@ class EmptyCartContext implements ArgumentInterface
     public function getOrderSuccessPresentation(): ?array
     {
         if ($this->quoteHasItems()) {
+            $this->clearOrderSuccessEmptyCart();
+
             return null;
         }
 
@@ -237,6 +267,10 @@ class EmptyCartContext implements ArgumentInterface
 
     private function resolveSuccessOrder(): ?Order
     {
+        if (!$this->checkoutSession->getData(self::SESSION_KEY_ORDER_SUCCESS_EMPTY)) {
+            return null;
+        }
+
         if ($this->successValidator->isValid()) {
             $sessionOrder = $this->checkoutSession->getLastRealOrder();
             if ($sessionOrder instanceof Order && $sessionOrder->getId()) {
@@ -244,19 +278,13 @@ class EmptyCartContext implements ArgumentInterface
             }
         }
 
-        $customerId = (int) $this->checkoutSession->getQuote()->getCustomerId();
-        if ($customerId <= 0) {
+        $orderId = (int) $this->checkoutSession->getData(self::SESSION_KEY_ORDER_SUCCESS_ID);
+        if ($orderId <= 0) {
             return null;
         }
 
-        $since = $this->timezone->date()->modify(
-            sprintf('-%d hours', self::ORDER_SUCCESS_WINDOW_HOURS)
-        )->format('Y-m-d H:i:s');
-
         $collection = $this->orderCollectionFactory->create();
-        $collection->addFieldToFilter('customer_id', $customerId)
-            ->addFieldToFilter('created_at', ['gteq' => $since])
-            ->setOrder('created_at', 'DESC')
+        $collection->addFieldToFilter('entity_id', $orderId)
             ->setPageSize(1);
 
         $order = $collection->getFirstItem();

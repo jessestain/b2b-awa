@@ -13,22 +13,41 @@ class CustomerApprovalLog extends AbstractDb
         $this->_init('grupoawamotos_b2b_customer_approval_log', 'log_id');
     }
 
+    /**
+     * Returns daily approval timeline for the last $days days.
+     *
+     * Uses the framework Select builder (which binds values automatically) and
+     * keeps the original aggregate columns so the public contract is unchanged.
+     *
+     * @param int $days Window size in days. Must be > 0.
+     * @return array<int, array<string, int|string>>
+     */
     public function getDailyTimeline(int $days): array
     {
         $connection = $this->getConnection();
         $table = $this->getMainTable();
 
-        $sql = "SELECT
-                    DATE(created_at) AS day,
-                    SUM(CASE WHEN action = 'registered' THEN 1 ELSE 0 END) AS registered,
-                    SUM(CASE WHEN action = 'approved' THEN 1 ELSE 0 END) AS approved,
-                    SUM(CASE WHEN action = 'rejected' THEN 1 ELSE 0 END) AS rejected
-                FROM {$table}
-                WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
-                GROUP BY DATE(created_at)
-                ORDER BY day ASC";
+        // Build aggregations as Zend_Db_Expr so the SQL stays identical to the previous
+        // hand-written string, while leveraging Varien_Db_Select parameter binding.
+        $registeredExpr = new \Zend_Db_Expr("SUM(CASE WHEN action = 'registered' THEN 1 ELSE 0 END)");
+        $approvedExpr   = new \Zend_Db_Expr("SUM(CASE WHEN action = 'approved' THEN 1 ELSE 0 END)");
+        $rejectedExpr   = new \Zend_Db_Expr("SUM(CASE WHEN action = 'rejected' THEN 1 ELSE 0 END)");
 
-        return $connection->fetchAll($sql, [$days]);
+        $select = $connection->select()
+            ->from(
+                $table,
+                [
+                    'day'        => new \Zend_Db_Expr('DATE(created_at)'),
+                    'registered' => $registeredExpr,
+                    'approved'   => $approvedExpr,
+                    'rejected'   => $rejectedExpr,
+                ]
+            )
+            ->where('created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)', (int) $days)
+            ->group(new \Zend_Db_Expr('DATE(created_at)'))
+            ->order('day ASC');
+
+        return $connection->fetchAll($select);
     }
 
     public function getRecentLogsWithJoin(?string $fromDate = null, int $limit = 25): array

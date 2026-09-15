@@ -24,7 +24,7 @@ class Success extends Action implements HttpGetActionInterface
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getConfig()->getTitle()->set(__('Cadastro Recebido - Grupo AWA'));
+        $resultPage->getConfig()->getTitle()->set(__('Cadastro B2B - Grupo AWA'));
         return $resultPage;
     }
 }

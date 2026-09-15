@@ -5,21 +5,17 @@
     max-width: 100%;
 }
 
-.b2b-cotacao-page .block-title {
-    margin-bottom: 16px;
-}
-
 .b2b-cotacao-empty {
     padding: 28px 24px;
     text-align: center;
-    border: 1px dashed var(--awa-border, #e5e5e5);
-    border-radius: 4px;
-    background: var(--awa-b2b-bg-soft, #f9fafb);
+    border: 1px dashed var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
 }
 
 .b2b-cotacao-empty p {
     margin: 0 0 14px;
-    color: var(--awa-text-secondary, #666);
+    color: var(--awa-text-secondary, var(--awa-text-muted));
 }
 
 .b2b-cotacao-table-wrap {
@@ -33,14 +29,14 @@
 }
 
 .b2b-cotacao-table thead tr {
-    background: var(--awa-b2b-bg-soft, #f5f5f5);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
 }
 
 .b2b-cotacao-table th,
 .b2b-cotacao-table td {
     padding: 10px 12px;
     font-size: 0.8125rem;
-    border-bottom: 1px solid var(--awa-border, #e5e5e5);
+    border-bottom: 1px solid var(--awa-border);
     text-align: left;
 }
 
@@ -64,13 +60,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--awa-text-secondary, #666);
+    color: var(--awa-text-secondary, var(--awa-text-muted));
 }
 
 .b2b-cotacao-link {
     font-size: 0.8125rem;
     font-weight: 600;
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary);
     text-decoration: none;
 }
 
@@ -91,65 +87,65 @@
 }
 
 .b2b-cotacao-status--pending {
-    background: rgb(245 124 0 / 12%);
-    color: #b45309;
+    background: color-mix(in srgb, var(--awa-warning-bg, var(--awa-bg-subtle)) 55%, var(--awa-bg));
+    color: var(--awa-warning-text, var(--awa-text-primary));
 }
 
 .b2b-cotacao-status--quoted {
-    background: rgb(183 51 55 / 12%);
-    color: var(--awa-primary, #b73337);
+    background: color-mix(in srgb, var(--awa-primary) 12%, var(--awa-bg));
+    color: var(--awa-primary);
 }
 
 .b2b-cotacao-status--accepted {
-    background: rgb(16 185 129 / 12%);
-    color: #047857;
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 12%, var(--awa-bg));
+    color: var(--awa-success-text, var(--awa-text-primary));
 }
 
 .b2b-cotacao-status--rejected {
-    background: rgb(183 51 55 / 15%);
-    color: #991b1b;
+    background: color-mix(in srgb, var(--awa-primary) 15%, var(--awa-bg));
+    color: var(--awa-primary-dark);
 }
 
 .b2b-cotacao-status--expired {
-    background: var(--awa-b2b-bg-soft, #f3f4f6);
-    color: var(--awa-text-secondary, #666);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
+    color: var(--awa-text-secondary, var(--awa-text-muted));
 }
 
 .b2b-cotacao-meta {
     font-size: 0.8125rem;
-    color: var(--awa-text-secondary, #666);
+    color: var(--awa-text-secondary, var(--awa-text-muted));
 }
 
 .b2b-cotacao-notice {
     margin-top: 20px;
     padding: 14px 16px;
-    border-radius: 4px;
+    border-radius: var(--awa-radius-sm);
     font-size: 0.8125rem;
-    border: 1px solid var(--awa-border, #e5e5e5);
-    background: var(--awa-b2b-bg-soft, #f9fafb);
+    border: 1px solid var(--awa-border);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
 }
 
 .b2b-cotacao-notice--info {
-    border-color: rgb(183 51 55 / 18%);
-    background: rgb(183 51 55 / 6%);
+    border-color: color-mix(in srgb, var(--awa-primary) 18%, var(--awa-border));
+    background: color-mix(in srgb, var(--awa-primary) 6%, var(--awa-bg));
 }
 
 .b2b-cotacao-notice--success {
-    border-color: rgb(16 185 129 / 25%);
-    background: rgb(16 185 129 / 8%);
+    border-color: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 25%, var(--awa-border));
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 8%, var(--awa-bg));
 }
 
 .b2b-cotacao-notice--warning {
-    border-color: rgb(245 124 0 / 25%);
-    background: rgb(245 124 0 / 8%);
+    border-color: color-mix(in srgb, var(--awa-warning-text, var(--awa-text-primary)) 25%, var(--awa-border));
+    background: color-mix(in srgb, var(--awa-warning-bg, var(--awa-bg-subtle)) 65%, var(--awa-bg));
 }
 
 .b2b-cotacao-actions {
     margin-top: 24px;
     padding: 16px;
-    border: 1px solid var(--awa-border, #e5e5e5);
-    border-radius: 4px;
-    background: var(--awa-b2b-bg-soft, #f9fafb);
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
 }
 
 .b2b-cotacao-actions__title {
@@ -165,12 +161,12 @@
 }
 
 .b2b-cotacao-price--quoted {
-    color: #047857;
+    color: var(--awa-success-text, var(--awa-text-primary));
     font-weight: 600;
 }
 
 .b2b-cotacao-price--waiting {
-    color: var(--awa-text-muted, #999);
+    color: var(--awa-text-muted);
 }
 
 .b2b-cotacao-back {
@@ -178,6 +174,15 @@
 }
 
 @media (max-width: 767px) {
+    .b2b-cotacao-page .b2b-cotacao-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .b2b-cotacao-page .b2b-cotacao-table {
+        min-width: 560px;
+    }
+
     .b2b-cotacao-actions__forms {
         flex-direction: column;
     }

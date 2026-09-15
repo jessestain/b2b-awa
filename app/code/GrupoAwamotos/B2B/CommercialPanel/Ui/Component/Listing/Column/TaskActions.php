@@ -49,7 +49,7 @@ class TaskActions extends Column
                 'contact' => [
                     'href' => $this->urlBuilder->getUrl(
                         'awa_commercial/commercialcustomer/view',
-                        ['customer_id' => $customerId, '_fragment' => 'tab-contatos']
+                        ['customer_id' => $customerId, '_query' => ['tab' => 'contatos']]
                     ),
                     'label' => __('Registrar contato'),
                 ],

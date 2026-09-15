@@ -47,10 +47,58 @@ declare(strict_types=1);
                 initNavMobile();
             }
 
+            bindCollapsedAccountNav();
+
             if (typeof w.CustomEvent === 'function') {
                 d.dispatchEvent(new w.CustomEvent('awa:customer-data-ready'));
             }
         });
+    }
+
+    /**
+     * CDP 375: nav-mobile.min.js em cache imutável abre "Minha Conta"
+     * (expanded=true por .current). CSS só mostra .content com
+     * .awa-nav--user-open; este bind não depende do .min.js.
+     */
+    function bindCollapsedAccountNav() {
+        if (!w.matchMedia('(max-width: 767px)').matches) {
+            return;
+        }
+
+        var nav = d.querySelector('.block-collapsible-nav, .block.account-nav');
+        if (!nav) {
+            return;
+        }
+
+        nav.classList.add('awa-nav--mobile-collapsible');
+        if (!nav.classList.contains('awa-nav--user-open')) {
+            nav.classList.remove('awa-nav--expanded');
+        }
+
+        var title = nav.querySelector(':scope > .title, :scope > .block-title');
+        if (title && !title.dataset.awaNavUserBind) {
+            title.dataset.awaNavUserBind = '1';
+            title.setAttribute('aria-expanded', 'false');
+            title.addEventListener('click', function (event) {
+                event.stopImmediatePropagation();
+                var open = !nav.classList.contains('awa-nav--user-open');
+                nav.classList.toggle('awa-nav--user-open', open);
+                nav.classList.toggle('awa-nav--expanded', open);
+                title.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }, true);
+            title.addEventListener('keydown', function (event) {
+                if (event.key !== 'Enter' && event.key !== ' ') {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                var open = !nav.classList.contains('awa-nav--user-open');
+                nav.classList.toggle('awa-nav--user-open', open);
+                nav.classList.toggle('awa-nav--expanded', open);
+                title.setAttribute('aria-expanded', open ? 'true' : 'false');
+            }, true);
+        }
+
     }
 
     if (d.readyState === 'loading') {
@@ -58,5 +106,13 @@ declare(strict_types=1);
     } else {
         boot();
     }
+
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', bindCollapsedAccountNav, { once: true });
+    } else {
+        bindCollapsedAccountNav();
+    }
+    w.setTimeout(bindCollapsedAccountNav, 400);
+    w.setTimeout(bindCollapsedAccountNav, 1200);
 }(window, document));
 </script>

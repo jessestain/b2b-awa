@@ -44,6 +44,9 @@ class ClearCnpjCacheCommand extends Command
     {
         try {
             $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Throwable $exception) {
             // Área já definida.
         }

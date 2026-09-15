@@ -125,7 +125,7 @@ class StatusPanel extends Template
                 }
             }
         } catch (\Exception $e) {
-            // silently fail
+            $this->_logger->warning('[StatusPanel::getCompanyName] Exceção ignorada: ' . $e->getMessage());
         }
         return '';
     }
@@ -148,7 +148,7 @@ class StatusPanel extends Template
         $pendingId = $this->b2bConfig->getPendingGroupId() ?: B2BHelper::GROUP_B2B_PENDENTE;
 
         if ($groupId === $wholesaleId) {
-            return ['color' => '#2563eb', 'icon' => 'building', 'label' => 'Atacado'];
+            return ['color' => '#b73337', 'icon' => 'building', 'label' => 'Atacado'];
         }
         if ($groupId === $vipId) {
             return ['color' => '#7c3aed', 'icon' => 'crown', 'label' => 'VIP'];
@@ -213,7 +213,7 @@ class StatusPanel extends Template
                 return (float) $row['credit_limit'] - (float) $row['used_credit'];
             }
         } catch (\Exception $e) {
-            // silently fail
+            $this->_logger->warning('[StatusPanel::getAvailableCredit] Exceção ignorada: ' . $e->getMessage());
         }
         return 0.0;
     }

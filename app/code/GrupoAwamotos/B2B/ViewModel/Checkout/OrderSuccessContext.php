@@ -34,7 +34,7 @@ class OrderSuccessContext implements ArgumentInterface
 
     public function getCatalogUrl(): string
     {
-        return $this->urlBuilder->getUrl('', ['_direct' => 'catalogo']);
+        return $this->urlBuilder->getUrl('catalogo');
     }
 
     public function getWhatsappUrl(): string

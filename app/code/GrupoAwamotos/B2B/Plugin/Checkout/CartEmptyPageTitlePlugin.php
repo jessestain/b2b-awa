@@ -30,6 +30,22 @@ class CartEmptyPageTitlePlugin
         $action = $this->request->getFullActionName();
 
         if ($action === 'checkout_onepage_success') {
+            $orderId = 0;
+            try {
+                $order = $this->checkoutSession->getLastRealOrder();
+                if ($order && $order->getId()) {
+                    $orderId = (int) $order->getId();
+                }
+            } catch (\Exception) {
+                $orderId = 0;
+            }
+            // Sessão direta: o Proxy gerado de EmptyCartContext (3 set) não
+            // encaminha markOrderSuccessEmptyCart(); chamar o método no Proxy
+            // acessa $checkoutSession não inicializado e derruba a success page.
+            $this->checkoutSession->setData(EmptyCartContext::SESSION_KEY_ORDER_SUCCESS_EMPTY, true);
+            if ($orderId > 0) {
+                $this->checkoutSession->setData(EmptyCartContext::SESSION_KEY_ORDER_SUCCESS_ID, $orderId);
+            }
             $result->getConfig()->getTitle()->set(__('Pedido confirmado'));
             return;
         }

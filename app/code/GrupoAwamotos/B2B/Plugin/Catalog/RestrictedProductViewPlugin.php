@@ -17,6 +17,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use GrupoAwamotos\B2B\Helper\Data as B2BHelper;
 use GrupoAwamotos\B2B\Helper\Config as B2BConfig;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Psr\Log\LoggerInterface;
 
 class RestrictedProductViewPlugin
 {
@@ -60,6 +62,16 @@ class RestrictedProductViewPlugin
      */
     private $urlBuilder;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var PhpCookieManager
+     */
+    private $cookieManager;
+
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CustomerSession $customerSession,
@@ -68,16 +80,20 @@ class RestrictedProductViewPlugin
         B2BHelper $b2bHelper,
         RequestInterface $request,
         B2BConfig $b2bConfig,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        LoggerInterface $logger,
+        PhpCookieManager $cookieManager
     ) {
         $this->productRepository = $productRepository;
         $this->customerSession = $customerSession;
         $this->redirectFactory = $redirectFactory;
         $this->messageManager = $messageManager;
         $this->b2bHelper = $b2bHelper;
+        $this->cookieManager = $cookieManager;
         $this->request = $request;
         $this->b2bConfig = $b2bConfig;
         $this->urlBuilder = $urlBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -93,7 +109,8 @@ class RestrictedProductViewPlugin
             return $proceed();
         }
 
-        $isLoggedIn = isset($_COOKIE[session_name()]) && $this->customerSession->isLoggedIn();
+        $isLoggedIn = $this->cookieManager->getCookie(session_name()) !== null
+            && $this->customerSession->isLoggedIn();
 
         // B2B SEO-friendly: permite que visitantes vejam specs/fotos do produto.
         // Preços ficam ocultos pelo HidePricePlugin, cart bloqueado pelo BlockCartAddPlugin,
@@ -116,7 +133,9 @@ class RestrictedProductViewPlugin
                         return $redirect->setPath('b2b/account/login', ['referer' => $referer]);
                     }
                 } catch (\Exception $e) {
-                    // Product not found — let proceed() handle
+                    $this->logger->debug(
+                        '[RestrictedProductViewPlugin::aroundExecute] Produto não encontrado: ' . $e->getMessage()
+                    );
                 }
             }
             return $proceed();

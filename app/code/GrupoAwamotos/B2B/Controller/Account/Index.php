@@ -46,5 +46,4 @@ class Index implements HttpGetActionInterface
 
         return $page;
     }
-
 }

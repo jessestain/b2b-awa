@@ -104,8 +104,22 @@ class PortfolioScopeTest extends TestCase
         $scope = $this->createScope();
 
         $this->assertTrue($scope->canViewAllPortfolios());
+        $this->assertTrue($scope->canBypassPortfolioScope());
+        $this->assertTrue($scope->canAccessCustomer(999));
         $this->assertSame([3, 7], $scope->getVisibleAttendantIds());
         $this->assertSame([101, 205], $scope->getVisibleCustomerIds());
+    }
+
+    public function testAdministratorWithAllAclsBypassesPortfolioScope(): void
+    {
+        $this->authorization->method('isAllowed')->willReturn(true);
+
+        $scope = $this->createScope();
+
+        $this->assertTrue($scope->canViewAllPortfolios());
+        $this->assertFalse($scope->isCockpitOnlyUser());
+        $this->assertTrue($scope->canBypassPortfolioScope());
+        $this->assertTrue($scope->canAccessCustomer(9107));
     }
 
     public function testCockpitOnlyUserDetection(): void

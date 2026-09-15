@@ -40,6 +40,18 @@ define([
             return;
         }
 
+        if (typeof ChartConstructor.getChart === 'function') {
+            const existing = ChartConstructor.getChart(canvas);
+            if (existing && typeof existing.destroy === 'function') {
+                existing.destroy();
+            }
+        }
+
+        if (canvas.dataset.awaChartBound === '1') {
+            return;
+        }
+        canvas.dataset.awaChartBound = '1';
+
         new ChartConstructor(ctx, {
             type: 'line',
             data: {
@@ -48,7 +60,7 @@ define([
                     {
                         label: $t('Volume de Compras (R$)'),
                         data: revenueData,
-                        borderColor: '#A33B3B',
+                        borderColor: '#b73337',
                         backgroundColor: 'rgba(183, 51, 55, 0.1)',
                         borderWidth: 3,
                         fill: true,
@@ -69,8 +81,9 @@ define([
                 ]
             },
             options: {
-                responsive: true,
+                responsive: false,
                 maintainAspectRatio: false,
+                animation: false,
                 interaction: {
                     mode: 'index',
                     intersect: false,

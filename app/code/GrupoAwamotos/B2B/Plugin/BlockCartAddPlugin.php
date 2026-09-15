@@ -58,7 +58,7 @@ class BlockCartAddPlugin
     private $customerSession;
 
     /**
-    * @var Http
+     * @var Http
      */
     private $request;
 

@@ -17,52 +17,63 @@ $statusClass = match ($status) {
     'expired' => 'b2b-cotacao-status--expired',
     default => 'b2b-cotacao-status--pending',
 };
+$cotacaoViewConfig = [
+    'messages' => [
+        'acceptConfirm' => (string) __('Confirma a aceitação desta cotação? Nossa equipe entrará em contato para finalizar o pedido.'),
+        'rejectConfirm' => (string) __('Recusar esta cotação?'),
+    ],
+];
 ?>
-<div class="b2b-account-block b2b-cotacao-page">
+<div class="b2b-account-block b2b-cotacao-page b2b-page-shell"
+     data-mage-init='<?= /* @noEscape */ json_encode(
+         ['GrupoAwamotos_B2B/js/cotacao/view' => $cotacaoViewConfig],
+         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+     ) ?>'>
     <div class="b2b-cotacao-back">
-        <a href="<?= $block->escapeUrl($block->getUrl('b2b/quote/history')) ?>" class="b2b-cotacao-link">
+        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="b2b-cotacao-link">
             ← <?= $block->escapeHtml(__('Minhas Cotações')) ?>
         </a>
     </div>
 
-    <div class="block-title">
-        <strong><span><?= $block->escapeHtml(__('Cotação #%1', $cotacao->getId())) ?></span></strong>
+    <div class="b2b-section-header">
+        <h1><?= $block->escapeHtml(__('Cotação #%1', $cotacao->getId())) ?></h1>
         <span class="b2b-cotacao-status <?= $block->escapeHtmlAttr($statusClass) ?>">
             <?= $block->escapeHtml($cotacao->getStatusLabel()) ?>
         </span>
     </div>
 
     <p class="b2b-cotacao-meta">
-        <?= $block->escapeHtml(__('Solicitado em: %1', substr((string) $cotacao->getData('created_at'), 0, 10))) ?>
+        <?= $block->escapeHtml(__('Solicitado em: %1', $block->formatDate((string) $cotacao->getData('created_at')))) ?>
         <?php if ($cotacao->getNotes()): ?>
             | <?= $block->escapeHtml(__('Observação:')) ?> <em><?= $block->escapeHtml($cotacao->getNotes()) ?></em>
         <?php endif; ?>
     </p>
 
     <div class="b2b-cotacao-table-wrap">
-        <table class="data table b2b-cotacao-table">
+        <table class="data table b2b-cotacao-table" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de itens da cotação')) ?>">
+            <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Itens da cotação')) ?></caption>
             <thead>
                 <tr>
-                    <th><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th><?= $block->escapeHtml(__('Produto')) ?></th>
-                    <th class="col-qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
-                    <th class="col-price"><?= $block->escapeHtml(__('Preço Catálogo')) ?></th>
-                    <th class="col-price"><?= $block->escapeHtml(__('Preço Cotado')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('Produto')) ?></th>
+                    <th scope="col" class="col-qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
+                    <th scope="col" class="col-price"><?= $block->escapeHtml(__('Preço Catálogo')) ?></th>
+                    <th scope="col" class="col-price"><?= $block->escapeHtml(__('Preço Cotado')) ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($items as $item): ?>
                     <tr>
-                        <td><?= $block->escapeHtml($item['sku']) ?></td>
-                        <td><?= $block->escapeHtml($item['name']) ?></td>
-                        <td class="col-qty"><?= (float) $item['qty'] ?></td>
-                        <td class="col-price">
-                            R$ <?= $block->escapeHtml(number_format((float) $item['price_catalog'], 2, ',', '.')) ?>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>"><?= $block->escapeHtml($item['sku']) ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Produto')) ?>"><?= $block->escapeHtml($item['name']) ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Qtd')) ?>" class="col-qty"><?= (float) $item['qty'] ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Preço Catálogo')) ?>" class="col-price">
+                            <?= /* @noEscape */ $block->formatPrice((float) $item['price_catalog']) ?>
                         </td>
-                        <td class="col-price">
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Preço Cotado')) ?>" class="col-price">
                             <?php if ($item['price_quoted'] !== null): ?>
                                 <span class="b2b-cotacao-price--quoted">
-                                    R$ <?= $block->escapeHtml(number_format((float) $item['price_quoted'], 2, ',', '.')) ?>
+                                    <?= /* @noEscape */ $block->formatPrice((float) $item['price_quoted']) ?>
                                 </span>
                             <?php else: ?>
                                 <span class="b2b-cotacao-price--waiting"><?= $block->escapeHtml(__('Aguardando')) ?></span>
@@ -92,7 +103,7 @@ $statusClass = match ($status) {
                     <input type="hidden" name="action" value="accept">
                     <?= $block->getBlockHtml('formkey') ?>
                     <button type="submit" class="action primary"
-                            onclick="return confirm('<?= $block->escapeJs(__('Confirma a aceitação desta cotação? Nossa equipe entrará em contato para finalizar o pedido.')) ?>')">
+                            data-confirm="<?= $block->escapeHtmlAttr(__('Confirma a aceitação desta cotação? Nossa equipe entrará em contato para finalizar o pedido.')) ?>">
                         <?= $block->escapeHtml(__('Aceitar Cotação')) ?>
                     </button>
                 </form>
@@ -101,7 +112,7 @@ $statusClass = match ($status) {
                     <input type="hidden" name="action" value="reject">
                     <?= $block->getBlockHtml('formkey') ?>
                     <button type="submit" class="action secondary"
-                            onclick="return confirm('<?= $block->escapeJs(__('Recusar esta cotação?')) ?>')">
+                            data-confirm="<?= $block->escapeHtmlAttr(__('Recusar esta cotação?')) ?>">
                         <?= $block->escapeHtml(__('Recusar')) ?>
                     </button>
                 </form>

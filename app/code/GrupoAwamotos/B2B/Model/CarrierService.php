@@ -16,6 +16,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use GrupoAwamotos\B2B\Helper\Data as B2BHelper;
+use Psr\Log\LoggerInterface;
 
 class CarrierService
 {
@@ -45,24 +46,32 @@ class CarrierService
     private $b2bHelper;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param CarrierCollectionFactory $carrierCollectionFactory
      * @param CarrierFactory $carrierFactory
      * @param CarrierResource $carrierResource
      * @param CustomerSession $customerSession
      * @param B2BHelper $b2bHelper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         CarrierCollectionFactory $carrierCollectionFactory,
         CarrierFactory $carrierFactory,
         CarrierResource $carrierResource,
         CustomerSession $customerSession,
-        B2BHelper $b2bHelper
+        B2BHelper $b2bHelper,
+        LoggerInterface $logger
     ) {
         $this->carrierCollectionFactory = $carrierCollectionFactory;
         $this->carrierFactory = $carrierFactory;
         $this->carrierResource = $carrierResource;
         $this->customerSession = $customerSession;
         $this->b2bHelper = $b2bHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -142,8 +151,10 @@ class CarrierService
         try {
             $this->getCarrierByCode($data['code']);
             throw new LocalizedException(__('Já existe uma transportadora com este código.'));
+        // Not finding the carrier is the expected/desired outcome here (means the code is
+        // free to use), not a failure — logging it would be noise on every successful create.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
-            // Code doesn't exist, we can proceed
         }
 
         $carrier = $this->carrierFactory->create();
@@ -309,7 +320,10 @@ class CarrierService
                 $carrier = $this->createCarrier($data);
                 $created[] = $carrier;
             } catch (\Exception $e) {
-                // Carrier already exists, skip
+                $this->logger->debug(
+                    '[CarrierService::seedDefaultCarriers] Transportadora já existe, pulando: '
+                    . $e->getMessage()
+                );
             }
         }
 

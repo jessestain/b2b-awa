@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace GrupoAwamotos\B2B\Helper;
 
 use GrupoAwamotos\B2B\Api\PriceVisibilityInterface;
+use GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ApprovalStatus;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -301,6 +302,14 @@ class Data extends AbstractHelper
         }
 
         return true;
+    }
+
+    /**
+     * Whether the logged-in customer is approved in EAV (not just session group).
+     */
+    public function isCurrentCustomerApproved(): bool
+    {
+        return $this->getApprovalStatus() === ApprovalStatus::STATUS_APPROVED;
     }
 
     /**

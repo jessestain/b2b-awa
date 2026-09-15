@@ -3,12 +3,9 @@
  *
  * On account pages the panel is server-rendered; this script handles all other pages.
  *
- * FAST PATH: reads `mage-cache-storage` localStorage directly (same source as
- * awa-header-account-prompt.js / Magento customer-data). This runs synchronously
- * at DOMContentLoaded, injecting the panel before the user can click the generic prompt.
- *
- * SLOW PATH: subscribes to Magento customer-data section updates via RequireJS so
- * the panel stays in sync after login / section invalidation.
+ * Uses Magento customer-data after initialization, never raw browser storage or
+ * private_content_version as proof of authentication. Subscriptions remain active
+ * after rendering so expiration/logout also removes the personalized panel.
  *
  * Loaded exclusively via <script defer> — NOT an AMD module.
  * Using define() here causes RequireJS "Mismatched anonymous define()" because
@@ -187,6 +184,18 @@
 
     /* ─── Panel injection ───────────────────────────────────────────────────── */
     var injected = false;
+    var disposePanel = null;
+    var panelSignature = '';
+
+    function removePanel()
+    {
+        if (disposePanel) {
+            disposePanel();
+            disposePanel = null;
+        }
+        injected = false;
+        panelSignature = '';
+    }
 
     function injectPanel(data)
     {
@@ -221,6 +230,25 @@
         var trigger = panel.querySelector('.b2b-status-trigger');
         var dropdown = panel.querySelector('.b2b-status-dropdown');
         var shadowOverlayState = null;
+        var widget = null;
+
+        disposePanel = function () {
+            closeNativeFallback();
+            if (trigger) {
+                trigger.removeEventListener('click', nativeFallbackToggle);
+            }
+            d.removeEventListener('click', nativeFallbackOutside);
+            w.removeEventListener('resize', nativeFallbackResize);
+            w.removeEventListener('scroll', nativeFallbackScroll);
+            if (widget) {
+                widget.headerStatusPanel('destroy');
+            }
+            panel.remove();
+            if (prompt) {
+                prompt.style.removeProperty('display');
+                prompt.removeAttribute('aria-hidden');
+            }
+        };
 
         function resolveDesktopTop(triggerRect, margin)
         {
@@ -446,6 +474,9 @@
 
         function runWidgetInit()
         {
+            if (!d.documentElement.contains(panel)) {
+                return;
+            }
             if (typeof w.require !== 'function' || w.require._awaStub) {
                 if (typeof w.awaRunWhenRequire === 'function') {
                     w.awaRunWhenRequire(runWidgetInit, { key: 'b2b-panel-widget' });
@@ -458,6 +489,9 @@
             w.require(
                 ['jquery', 'mage/translate', 'jquery-ui-modules/widget', 'GrupoAwamotos_B2B/js/header-status-panel'],
                 function ($) {
+                    if (!d.documentElement.contains(panel)) {
+                        return;
+                    }
                     if (trigger) {
                         trigger.removeEventListener('click', nativeFallbackToggle);
                         d.removeEventListener('click', nativeFallbackOutside);
@@ -466,7 +500,8 @@
                     }
                     resetDropdownPosition();
                     restoreLegacyShadowOverlay();
-                    $(panel).headerStatusPanel();
+                    widget = $(panel);
+                    widget.headerStatusPanel();
                 }
             );
         }
@@ -474,118 +509,176 @@
         runWidgetInit();
     }
 
-    /* ─── Fast-path: read b2b_panel directly from Magento localStorage cache ──
-     * Magento stores customer-data sections in `mage-cache-storage`.
-     * Reading it here is synchronous and ~0ms — no AJAX, no RequireJS needed.
-     * This matches the exact data that customer-data.js would return.
-     */
-    function readCachedSection(key)
+    /* One subscriber and at most one bootstrap refresh per page. Reuse fresh
+     * sections for five minutes instead of adding an AJAX request per navigation. */
+    var subscribed = false;
+    var bootAttempts = 0;
+    var homeRequested = false;
+
+    function loadHomeSections()
     {
+        // The home deliberately excludes AMD to avoid its legacy carousel freeze.
+        // Read the same Magento private sections once, without replaying that bundle
+        // or trusting browser storage as an authenticated customer response.
+        if (homeRequested || !d.body || !d.body.classList.contains('cms-index-index')) {
+            return;
+        }
+        var node = d.getElementById('awa-customer-sections-defer-json');
+        if (!node || !w.fetch) {
+            return;
+        }
         try {
-            var raw = localStorage.getItem('mage-cache-storage');
-            if (!raw) {
-                return null;
+            var config = JSON.parse(node.textContent).customer;
+            if (!config || (!hasPrivateContentHint() && String(config.isLoggedIn) !== '1')) {
+                return;
             }
-            var storage = JSON.parse(raw);
-            return (storage && storage[key]) ? storage[key] : null;
+            var url = new URL(config.sectionLoadUrl, w.location.href);
+            if (url.origin !== w.location.origin) {
+                return;
+            }
+            url.searchParams.set('sections', 'customer,b2b_panel');
+            url.searchParams.set('force_new_section_timestamp', 'false');
+            homeRequested = true;
+            var controller = new AbortController();
+            var timer = w.setTimeout(function () { controller.abort(); }, 10000);
+            w.fetch(url.href, {
+                credentials: 'same-origin', cache: 'no-store', signal: controller.signal,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(function (response) {
+                if (!response.ok) { throw new Error('Private sections unavailable'); }
+                return response.json();
+            }).then(function (sections) {
+                // If AMD has since initialized, its subscriptions own rendering.
+                if (subscribed) { return; }
+                var customer = sections.customer;
+                var panel = sections.b2b_panel;
+                removePanel();
+                if (customer && (customer.firstname || customer.id || customer.entity_id) &&
+                    panel && panel.is_b2b) {
+                    injectPanel(panel);
+                    panelSignature = injected ? JSON.stringify(panel) : '';
+                }
+            }).catch(function () {
+                if (!subscribed) { removePanel(); }
+                w.console.warn('[AWA B2B] Não foi possível verificar a conta na página inicial.');
+            }).finally(function () { w.clearTimeout(timer); });
         } catch (e) {
-            return null;
+            // Keep the existing generic account link usable if configuration fails.
         }
     }
 
-    function bootFast()
+    function hasPrivateContentHint()
     {
-        if (injected || d.querySelector('.b2b-status-panel')) {
-            injected = true;
-            return;
+        if (/(?:^|;\s*)private_content_version=/.test(d.cookie || '')) {
+            return true;
         }
-        /* Only run for customers with an active session */
-        if (d.cookie.indexOf('private_content_version') === -1) {
-            return;
-        }
-        var data = readCachedSection('b2b_panel');
-        if (data && data.is_b2b) {
-            injectPanel(data);
+        try {
+            // Recent Magento versions need not send private_content_version.
+            // Read only a loading hint; never render this unvalidated cache.
+            var cached = JSON.parse(w.localStorage.getItem('mage-cache-storage') || '{}');
+            return !!((cached.customer && cached.customer.firstname) ||
+                (cached.b2b_panel && cached.b2b_panel.is_b2b));
+        } catch (e) {
+            return false;
         }
     }
 
-    /* ─── Slow-path: RequireJS + Magento customer-data subscription ─────────── */
     function bootSlow()
     {
-        if (injected) {
+        if (subscribed) {
             return;
         }
         if (d.querySelector('.b2b-status-panel')) {
-            injected = true;
-            return;
-        }
-        if (d.cookie.indexOf('private_content_version') === -1) {
+            // Account pages own their server-rendered panel.
             return;
         }
 
         if (typeof w.require !== 'function' || w.require._awaStub) {
-            w.setTimeout(bootSlow, 150);
+            loadHomeSections();
+            if (typeof w.awaRunWhenRequire === 'function') {
+                w.awaRunWhenRequire(bootSlow, { key: 'b2b-panel-sections' });
+            } else if (bootAttempts++ < 200) {
+                w.setTimeout(bootSlow, 150);
+            }
             return;
         }
 
+        subscribed = true;
+        // Reuse the existing home initializer, whose old cookie-only gate can
+        // otherwise leave Magento's initialization promise pending indefinitely.
+        if (hasPrivateContentHint() && d.getElementById('awa-customer-sections-defer-json')) {
+            w.require(['js/awa-customer-sections-gate'], function (whenReady) {
+                whenReady(function () {});
+            }, function () {
+                w.console.warn('[AWA B2B] Inicialização dos dados da conta indisponível.');
+            });
+        }
         w.require(['Magento_Customer/js/customer-data'], function (customerData) {
             var b2bSection = customerData.get('b2b_panel');
             var customerSection = customerData.get('customer');
+            var ready = false;
 
-            function onB2bUpdate(sectionData)
+            function loggedIn()
             {
-                if (sectionData && sectionData.is_b2b) {
-                    injectPanel(sectionData);
-                }
+                var c = customerSection();
+                return !!(c && (c.firstname || c.id || c.entity_id));
             }
 
-            b2bSection.subscribe(onB2bUpdate);
-            onB2bUpdate(b2bSection());
-
-            /* When customer section shows a logged-in user, eagerly request b2b_panel
-             * if the section is not yet in the observable (may differ from localStorage). */
-            function onCustomerUpdate(cData)
+            function render()
             {
-                if (injected) {
+                if (!ready) {
                     return;
                 }
-                var isLoggedIn = cData && (cData.firstname || cData.id || cData.entity_id);
-                if (isLoggedIn) {
-                    var current = b2bSection();
-                    if (!current || Object.keys(current).length === 0) {
-                        customerData.reload(['b2b_panel'], false);
-                    }
+                var section = b2bSection();
+                if (!loggedIn() || !section || !section.is_b2b) {
+                    removePanel();
+                    return;
                 }
+                var signature = JSON.stringify(section);
+                if (signature === panelSignature) {
+                    return;
+                }
+                removePanel();
+                injectPanel(section);
+                panelSignature = injected ? signature : '';
             }
 
-            customerSection.subscribe(onCustomerUpdate);
-            onCustomerUpdate(customerSection());
+            b2bSection.subscribe(render);
+            customerSection.subscribe(render);
 
             customerData.getInitCustomerData().done(function () {
                 var current = b2bSection();
-                if (current && current.is_b2b) {
-                    injectPanel(current);
-                } else if (!current || Object.keys(current).length === 0) {
-                    w.setTimeout(function () {
-                        if (!injected) {
-                            customerData.reload(['b2b_panel'], false);
-                        }
-                    }, 400);
+                var age = Date.now() / 1000 - Number(current && current.data_id || 0);
+                var needsRefresh = (loggedIn() || (current && current.is_b2b)) &&
+                    (!current || !current.data_id || age < 0 || age > 300);
+                if (needsRefresh) {
+                    customerData.reload(['customer', 'b2b_panel'], false).done(function () {
+                        ready = true;
+                        render();
+                    }).fail(function () {
+                        // Keep the generic account entry on failure, not stale identity.
+                        removePanel();
+                        w.console.warn('[AWA B2B] Não foi possível atualizar o painel da conta.');
+                    });
+                    return;
                 }
+                ready = true;
+                render();
             });
+        }, function () {
+            w.console.warn('[AWA B2B] Dados da conta indisponíveis; acesso genérico preservado.');
         });
     }
 
     /* ─── Entry point ───────────────────────────────────────────────────────── */
     if (d.readyState === 'loading') {
         d.addEventListener('DOMContentLoaded', function () {
-            bootFast();   /* synchronous — runs before any click is possible */
-            bootSlow();   /* async subscription for updates */
+            bootSlow();
         }, { once: true });
     } else {
-        bootFast();
         w.setTimeout(bootSlow, 0);
     }
 
     d.addEventListener('awa:customer-data-ready', bootSlow, { once: true });
+    w.addEventListener('load', bootSlow, { once: true });
 }());

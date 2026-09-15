@@ -12,6 +12,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\UrlInterface;
 use GrupoAwamotos\B2B\Helper\Data as B2BHelper;
 use GrupoAwamotos\B2B\Helper\Config as B2BConfig;
+use GrupoAwamotos\B2B\Api\PriceVisibilityInterface;
+use GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ApprovalStatus;
+use Psr\Log\LoggerInterface;
 
 /**
  * Customer section: b2b_panel
@@ -30,6 +33,8 @@ class B2bPanel implements SectionSourceInterface
         private readonly UrlInterface $urlBuilder,
         private readonly B2BHelper $b2bHelper,
         private readonly B2BConfig $b2bConfig,
+        private readonly LoggerInterface $logger,
+        private readonly ?PriceVisibilityInterface $priceVisibility = null,
     ) {
     }
 
@@ -54,8 +59,10 @@ class B2bPanel implements SectionSourceInterface
             if ($customerId > 0) {
                 $customer = $this->customerRepository->getById($customerId);
             }
-        } catch (\Exception) {
-            // Proceed with null customer — graceful degradation
+        } catch (\Exception $e) {
+            $this->logger->debug(
+                '[B2bPanel::getSectionData] Falha ao carregar cliente, seguindo sem dados: ' . $e->getMessage()
+            );
         }
 
         $firstName = $customer ? (string) $customer->getFirstname() : '';
@@ -69,6 +76,8 @@ class B2bPanel implements SectionSourceInterface
         $discount = (int) $this->b2bHelper->getGroupDiscount($customerGroupId);
         $creditLimit = $this->fetchCreditLimit($customerId);
         $creditAvailable = $this->fetchAvailableCredit($customerId);
+        $approvalStatus = $this->resolveApprovalStatus($customer);
+        $canAddToCart = $this->priceVisibility?->canAddToCart();
 
         $quickActions = [
             [
@@ -96,7 +105,7 @@ class B2bPanel implements SectionSourceInterface
             ]]);
         }
 
-        return [
+        $section = [
             'is_b2b' => true,
             'first_name' => $firstName,
             'full_name' => $fullName,
@@ -113,7 +122,29 @@ class B2bPanel implements SectionSourceInterface
             'quick_actions' => $quickActions,
             'account_url' => $this->urlBuilder->getUrl('b2b/account/dashboard'),
             'logout_url' => $this->urlBuilder->getUrl('customer/account/logout'),
+            'approval_status' => $approvalStatus,
         ];
+        if ($this->priceVisibility !== null) {
+            $section['can_add_to_cart'] = $canAddToCart === true;
+        }
+
+        return $section;
+    }
+
+    /**
+     * @param \Magento\Customer\Api\Data\CustomerInterface|null $customer
+     */
+    private function resolveApprovalStatus(?object $customer): string
+    {
+        if ($customer === null) {
+            return '';
+        }
+        $attr = $customer->getCustomAttribute('b2b_approval_status');
+        if ($attr !== null && $attr->getValue() !== null && $attr->getValue() !== '') {
+            return (string) $attr->getValue();
+        }
+
+        return ApprovalStatus::STATUS_APPROVED;
     }
 
     /**
@@ -140,7 +171,7 @@ class B2bPanel implements SectionSourceInterface
         $pendingId = $this->b2bConfig->getPendingGroupId() ?: B2BHelper::GROUP_B2B_PENDENTE;
 
         return match ($groupId) {
-            $wholesaleId => ['color' => '#2563eb', 'icon' => 'building'],
+            $wholesaleId => ['color' => '#b73337', 'icon' => 'building'],
             $vipId => ['color' => '#7c3aed', 'icon' => 'crown'],
             $pendingId => ['color' => '#f59e0b', 'icon' => 'clock-o'],
             default => ['color' => '#059669', 'icon' => 'store'],
@@ -178,8 +209,10 @@ class B2bPanel implements SectionSourceInterface
             if ($row !== false) {
                 return max(0.0, (float) $row['credit_limit'] - (float) $row['used_credit']);
             }
-        } catch (\Exception) {
-            // Graceful degradation
+        } catch (\Exception $e) {
+            $this->logger->debug(
+                '[B2bPanel::fetchAvailableCredit] Falha ao consultar limite de crédito: ' . $e->getMessage()
+            );
         }
         return 0.0;
     }

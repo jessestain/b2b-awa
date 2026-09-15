@@ -5,8 +5,11 @@
     <update handle="customer_account"/>
     <head>
         <title>Financeiro</title>
+        <css src="GrupoAwamotos_B2B::css/account/pages-operations.css"/>
     </head>
     <body>
+        <!-- Evita H1 duplicado: título vem do template finance/list.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceContainer name="content">
             <block class="GrupoAwamotos\B2B\Block\Finance\BoletoList"
                    name="b2b.finance.boleto_list"

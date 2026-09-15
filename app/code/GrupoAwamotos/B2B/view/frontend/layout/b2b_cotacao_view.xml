@@ -7,6 +7,8 @@
         <css src="GrupoAwamotos_B2B::css/account/b2b-cotacao.css"/>
     </head>
     <body>
+        <!-- Evita H1 duplicado: título vem do template cotacao/view.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceContainer name="content">
             <block class="GrupoAwamotos\B2B\Block\Account\Cotacao\View"
                    name="b2b.cotacao.view"

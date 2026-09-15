@@ -49,6 +49,16 @@ interface CustomerApprovalInterface
     public function suspendCustomer(int $customerId, ?int $adminUserId = null, ?string $reason = null): bool;
 
     /**
+     * Solicita revisão / informações adicionais e move o cadastro para data_review.
+     *
+     * @param int $customerId
+     * @param int|null $adminUserId
+     * @param string|null $message
+     * @return bool
+     */
+    public function requestDataReview(int $customerId, ?int $adminUserId = null, ?string $message = null): bool;
+
+    /**
      * Get customer approval status
      *
      * @param int $customerId

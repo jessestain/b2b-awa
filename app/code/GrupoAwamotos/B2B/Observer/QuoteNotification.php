@@ -112,6 +112,7 @@ class QuoteNotification implements ObserverInterface
                     $company = $razaoAttr->getValue();
                 }
             } catch (\Exception $e) {
+                $this->logger->warning('[QuoteNotification::buildQuoteData] Exceção ignorada: ' . $e->getMessage());
                 // usa valores padrão
             }
         }

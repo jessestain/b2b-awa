@@ -53,6 +53,7 @@ class CustomerActions extends Column
                             'title' => __('Aprovar Cliente'),
                             'message' => __('Tem certeza que deseja aprovar este cliente?'),
                         ],
+                        'post' => true,
                     ];
                     $item[$name]['reject'] = [
                         'href' => $this->urlBuilder->getUrl(
@@ -64,13 +65,33 @@ class CustomerActions extends Column
                             'title' => __('Rejeitar Cliente'),
                             'message' => __('Tem certeza que deseja rejeitar este cliente?'),
                         ],
+                        'post' => true,
+                    ];
+                    $item[$name]['review'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            'grupoawamotos_b2b/customer/requestReview',
+                            ['customer_id' => $item['entity_id']]
+                        ),
+                        'label' => __('Pedir dados'),
+                        'confirm' => [
+                            'title' => __('Pedir dados ao cliente'),
+                            'message' => __('Enviar o cadastro para revisão e pedir informações adicionais?'),
+                        ],
+                        'post' => true,
                     ];
                     $item[$name]['view'] = [
                         'href' => $this->urlBuilder->getUrl(
                             'customer/index/edit',
                             ['id' => $item['entity_id']]
                         ),
-                        'label' => __('Ver Detalhes'),
+                        'label' => __('Ficha Magento'),
+                    ];
+                    $item[$name]['commercial'] = [
+                        'href' => $this->urlBuilder->getUrl(
+                            'awa_commercial/commercialcustomer/view',
+                            ['customer_id' => $item['entity_id']]
+                        ),
+                        'label' => __('Ficha comercial'),
                     ];
                 }
             }

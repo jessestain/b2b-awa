@@ -10,6 +10,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,14 +27,15 @@ class CustomerGroupRefresh implements ObserverInterface
         private readonly CustomerSession $customerSession,
         private readonly CustomerRepositoryInterface $customerRepository,
         private readonly CacheInterface $cache,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly PhpCookieManager $cookieManager
     ) {
     }
 
     public function execute(Observer $observer): void
     {
         // FPC: não chamar CustomerSession em visitantes sem cookie (evita session_start em PLP/home).
-        if (($_COOKIE[session_name()] ?? null) === null) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return;
         }
 

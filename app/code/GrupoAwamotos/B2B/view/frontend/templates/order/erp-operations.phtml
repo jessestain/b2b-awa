@@ -45,13 +45,14 @@ $timeline = $data['timeline'] ?? [];
                     <a class="action primary"
                        href="<?= $block->escapeUrl($block->getDownloadUrl('danfe')) ?>"
                        target="_blank"
-                       rel="noopener noreferrer">
+                       rel="noopener noreferrer"
+                       aria-label="<?= $block->escapeHtmlAttr(__('Consultar DANFE (abre em nova aba)')) ?>">
                         <?= $block->escapeHtml(__('Consultar DANFE')) ?>
                     </a>
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <p class="b2b-order-operations__empty">
+                <p class="b2b-order-operations__empty" role="status">
                     <?= $block->escapeHtml(__('NF-e em processamento. Assim que emitida, os downloads ficarão disponíveis aqui.')) ?>
                 </p>
             <?php endif; ?>
@@ -74,7 +75,8 @@ $timeline = $data['timeline'] ?? [];
                             <?php if (!empty($tracking['url'])): ?>
                                 <a href="<?= $block->escapeUrl((string) $tracking['url']) ?>"
                                    target="_blank"
-                                   rel="noopener noreferrer">
+                                   rel="noopener noreferrer"
+                                   aria-label="<?= $block->escapeHtmlAttr(__('Rastrear pedido %1 (abre em nova aba)', $tracking['code'])) ?>">
                                     <?= $block->escapeHtml($tracking['code']) ?>
                                 </a>
                             <?php else: ?>
@@ -91,7 +93,7 @@ $timeline = $data['timeline'] ?? [];
                     <?php endif; ?>
                 </dl>
             <?php else: ?>
-                <p class="b2b-order-operations__empty">
+                <p class="b2b-order-operations__empty" role="status">
                     <?= $block->escapeHtml(__('Informações de rastreio em atualização.')) ?>
                 </p>
             <?php endif; ?>

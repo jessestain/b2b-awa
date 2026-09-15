@@ -11,6 +11,7 @@ use GrupoAwamotos\B2B\Model\ResourceModel\CompanyUser as CompanyUserResource;
 use GrupoAwamotos\B2B\Model\ResourceModel\Company\CollectionFactory as CompanyCollectionFactory;
 use GrupoAwamotos\B2B\Model\ResourceModel\CompanyUser\CollectionFactory as UserCollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -64,6 +65,54 @@ class CompanyService
 
         $this->ensureUserInCompany((int)$company->getId(), $customerId, Company::ROLE_ADMIN);
         return $company;
+    }
+
+    /**
+     * Refresh names of existing companies owned by this customer only.
+     * Does not create companies, assign users or change access permissions.
+     */
+    public function syncExistingCompanyDetailsFromCustomer(CustomerInterface $customer): int
+    {
+        $customerId = (int) $customer->getId();
+        $cnpj = preg_replace('/\D/', '', (string) $this->getCustomerCnpj($customer));
+        $taxvat = preg_replace('/\D/', '', (string) $customer->getTaxvat());
+        if ($customerId <= 0 || strlen($cnpj) !== 14 || ($taxvat !== '' && $taxvat !== $cnpj)) {
+            return 0;
+        }
+
+        $values = [
+            'razao_social' => trim((string) $this->getCustomerAttribute($customer, 'b2b_razao_social')),
+            'nome_fantasia' => trim((string) $this->getCustomerAttribute($customer, 'b2b_nome_fantasia')),
+        ];
+        $updated = 0;
+        $page = 1;
+        do {
+            $collection = $this->companyCollectionFactory->create();
+            $collection->addFieldToFilter('admin_customer_id', $customerId);
+            $collection->setOrder('company_id', 'ASC');
+            $collection->setPageSize(50)->setCurPage($page);
+            foreach ($collection as $company) {
+                if ((int) $company->getData('admin_customer_id') !== $customerId
+                    || preg_replace('/\D/', '', (string) $company->getData('cnpj')) !== $cnpj
+                ) {
+                    continue;
+                }
+                $changed = false;
+                foreach ($values as $field => $value) {
+                    if ($value !== '' && (string) $company->getData($field) !== $value) {
+                        $company->setData($field, $value);
+                        $changed = true;
+                    }
+                }
+                if ($changed) {
+                    $this->companyResource->save($company);
+                    $updated++;
+                }
+            }
+            $page++;
+        } while ($page <= $collection->getLastPageNumber());
+
+        return $updated;
     }
 
     public function findByCnpj(string $cnpj): ?Company
@@ -246,7 +295,7 @@ class CompanyService
         $company->setData([
             'cnpj' => $cnpj,
             'razao_social' => $this->getCustomerAttribute($customer, 'b2b_razao_social') ?: $customer->getFirstname() . ' ' . $customer->getLastname(),
-            'nome_fantasia' => $this->getCustomerAttribute($customer, 'b2b_razao_social'),
+            'nome_fantasia' => $this->getCustomerAttribute($customer, 'b2b_nome_fantasia'),
             'inscricao_estadual' => $this->getCustomerAttribute($customer, 'b2b_inscricao_estadual'),
             'email' => $customer->getEmail(),
             'phone' => $this->getCustomerAttribute($customer, 'b2b_company_phone'),

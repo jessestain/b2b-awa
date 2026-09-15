@@ -43,7 +43,15 @@ class PortfolioScope implements PortfolioScopeInterface
 
     public function canBypassPortfolioScope(): bool
     {
-        return !$this->authorization->isAllowed(self::ACL_COCKPIT_ONLY);
+        if ($this->canViewAllPortfolios()
+            || $this->authorization->isAllowed(self::ACL_TECHNICAL_B2B)
+        ) {
+            return true;
+        }
+
+        // Magento Administrators têm todas as ACLs, inclusive cockpit_only.
+        // A restrição vale só para perfil cockpit-only real.
+        return !$this->isCockpitOnlyUser();
     }
 
     public function getVisibleAttendantIds(): array

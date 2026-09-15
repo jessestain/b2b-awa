@@ -43,6 +43,40 @@ class CurrentAttendant
     }
 
     /**
+     * Atendente da sessão, ou o da carteira do cliente quando o admin não é vendedora.
+     */
+    public function getIdForCustomer(int $customerId): ?int
+    {
+        $own = $this->getId();
+        if ($own !== null) {
+            return $own;
+        }
+
+        if ($customerId <= 0) {
+            return null;
+        }
+
+        $connection = $this->resource->getConnection();
+        $mappingTable = $this->resource->getTableName('grupoawamotos_b2b_customer_attendant');
+        $attendantTable = $this->resource->getTableName('grupoawamotos_b2b_attendants');
+
+        $attendantId = $connection->fetchOne(
+            $connection->select()
+                ->from(['ca' => $mappingTable], ['attendant_id'])
+                ->joinInner(
+                    ['att' => $attendantTable],
+                    'att.attendant_id = ca.attendant_id',
+                    []
+                )
+                ->where('ca.customer_id = ?', $customerId)
+                ->where('att.is_active = ?', 1)
+                ->limit(1)
+        );
+
+        return $attendantId ? (int) $attendantId : null;
+    }
+
+    /**
      * Retorna os dados completos do atendente logado, ou null se não for atendente.
      *
      * @return array<string, mixed>|null

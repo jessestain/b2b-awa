@@ -18,6 +18,15 @@ class ApprovalStatus extends AbstractSource
     public const STATUS_REJECTED = 'rejected';
     public const STATUS_SUSPENDED = 'suspended';
 
+    /** Alias estável para o vocabulário operacional (under_review). */
+    public const STATUS_UNDER_REVIEW = self::STATUS_DATA_REVIEW;
+
+    /** Alias estável para solicitação de informações adicionais. */
+    public const STATUS_NEEDS_INFORMATION = self::STATUS_DATA_REVIEW;
+
+    /** Alias estável para bloqueio comercial (blocked). */
+    public const STATUS_BLOCKED = self::STATUS_SUSPENDED;
+
     /**
      * Get all options
      *

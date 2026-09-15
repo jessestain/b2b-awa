@@ -46,6 +46,10 @@ define([
         let messages = config.messages || {};
         let addUrl = config.addUrl || '';
         let initialRows = parseInt(config.initialRows, 10) || 5;
+        var skuAriaLabel = messages.skuAriaLabel || $t('Código SKU');
+        var qtyAriaLabel = messages.qtyAriaLabel || $t('Quantidade');
+        var removeAriaLabel = messages.removeRow || $t('Remover');
+        var suggestionsAriaLabel = messages.suggestionsAriaLabel || $t('Sugestões de SKU');
 
         var $root = $(element);
         var $rowsContainer = $root.find('#quickorder-rows');
@@ -66,61 +70,170 @@ define([
         let rowIndex = 0;
         // M15: SKU Autocomplete configuration
         let searchUrl = config.searchUrl || '/catalogsearch/ajax/suggest';
-        let autocompleteDelay = null;
 
         function initSkuAutocomplete($input)
         {
             var $row = $input.closest('.quickorder-row');
             var $suggestions = $row.find('.sku-suggestions');
+            var highlightedIndex = -1;
+            var suggestionId = $suggestions.attr('id');
+            var autocompleteDelay = null;
+            var activeRequest = null;
+            var requestNonce = 0;
+
+            function hideSuggestions()
+            {
+                requestNonce += 1;
+                highlightedIndex = -1;
+                if (activeRequest && activeRequest.readyState !== 4) {
+                    activeRequest.abort();
+                }
+                activeRequest = null;
+                $suggestions.hide().empty().attr('aria-hidden', 'true');
+                $input.attr('aria-expanded', 'false');
+            }
+
+            function applySelection(skuValue)
+            {
+                $input.val(skuValue);
+                hideSuggestions();
+                $input.closest('.quickorder-row').find('.qty-input').focus();
+            }
+
+            function setHighlight(index)
+            {
+                var $items = $suggestions.find('.sku-suggestion');
+                if (!$items.length) {
+                    highlightedIndex = -1;
+                    return;
+                }
+
+                highlightedIndex = Math.max(0, Math.min(index, $items.length - 1));
+                $items.removeClass('is-highlighted').attr('aria-selected', 'false');
+                $items.eq(highlightedIndex).addClass('is-highlighted').attr('aria-selected', 'true');
+            }
+
+            if (suggestionId) {
+                $input.attr('aria-controls', suggestionId);
+            }
 
             $input.on('input', function () {
                 let query = $.trim($(this).val());
+                var currentNonce;
                 clearTimeout(autocompleteDelay);
+                highlightedIndex = -1;
+
+                requestNonce += 1;
+                currentNonce = requestNonce;
+
+                if (activeRequest && activeRequest.readyState !== 4) {
+                    activeRequest.abort();
+                }
 
                 if (query.length < 3) {
-                    $suggestions.hide().empty();
+                    hideSuggestions();
                     return;
                 }
 
                 autocompleteDelay = setTimeout(function () {
-                    $.ajax({
+                    activeRequest = $.ajax({
                         url: searchUrl,
                         data: { q: query },
                         type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            $suggestions.empty();
-                            let items = data || [];
-                            if (items.length === 0) {
-                                $suggestions.hide();
-                                return;
-                            }
-                            $.each(items.slice(0, 8), function (_, item) {
-                                let title = escapeHtml(item.title || item.name || '');
-                                let sku = escapeHtml(item.sku || item.title || '');
-                                $suggestions.append(
-                                    '<div class="sku-suggestion" data-sku="' + sku + '">' +
-                                    '<span class="sku-suggestion-sku">' + sku + '</span>' +
-                                    '<span class="sku-suggestion-name">' + title + '</span>' +
-                                    '</div>'
-                                );
-                            });
-                            $suggestions.show();
+                        dataType: 'json'
+                    }).done(function (data) {
+                        if (currentNonce !== requestNonce) {
+                            return;
                         }
+
+                        $suggestions.empty();
+                        let items = data || [];
+                        if (items.length === 0) {
+                            hideSuggestions();
+                            return;
+                        }
+
+                        $.each(items.slice(0, 8), function (_, item) {
+                            let title = escapeHtml(item.title || item.name || '');
+                            let sku = escapeHtml(item.sku || item.title || '');
+                            let optionId = suggestionId + '-option-' + _;
+                            $suggestions.append(
+                                '<button type="button" id="' + optionId + '" class="sku-suggestion" role="option" aria-selected="false" data-sku="' + sku + '">' +
+                                '<span class="sku-suggestion-sku">' + sku + '</span>' +
+                                '<span class="sku-suggestion-name">' + title + '</span>' +
+                                '</button>'
+                            );
+                        });
+                        $suggestions.show().attr('aria-hidden', 'false');
+                        $input.attr('aria-expanded', 'true');
+                    }).fail(function (_jqXHR, textStatus) {
+                        if (textStatus !== 'abort') {
+                            hideSuggestions();
+                        }
+                    }).always(function () {
+                        activeRequest = null;
                     });
                 }, 300);
             });
 
             $input.on('blur', function () {
                 setTimeout(function () {
-                    $suggestions.hide(); }, 200);
+                    var activeElement = document.activeElement;
+                    if (activeElement && $suggestions[0] && $suggestions[0].contains(activeElement)) {
+                        return;
+                    }
+                    hideSuggestions();
+                }, 200);
+            });
+
+            $suggestions.on('focusout', function () {
+                setTimeout(function () {
+                    var activeElement = document.activeElement;
+                    if (activeElement === $input[0]) {
+                        return;
+                    }
+
+                    if ($suggestions[0] && activeElement && $suggestions[0].contains(activeElement)) {
+                        return;
+                    }
+
+                    hideSuggestions();
+                }, 0);
+            });
+
+            $input.on('keydown', function (event) {
+                var $items = $suggestions.find('.sku-suggestion');
+
+                if (!$items.length || !$suggestions.is(':visible')) {
+                    return;
+                }
+
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    setHighlight(highlightedIndex + 1);
+                    return;
+                }
+
+                if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    setHighlight(highlightedIndex <= 0 ? $items.length - 1 : highlightedIndex - 1);
+                    return;
+                }
+
+                if (event.key === 'Enter' && highlightedIndex >= 0) {
+                    event.preventDefault();
+                    applySelection($items.eq(highlightedIndex).data('sku'));
+                    return;
+                }
+
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    hideSuggestions();
+                }
             });
 
             $suggestions.on('click', '.sku-suggestion', function () {
-                let selectedSku = $(this).data('sku');
-                $input.val(selectedSku);
-                $suggestions.hide().empty();
-                $input.closest('.quickorder-row').find('.qty-input').focus();
+                applySelection($(this).data('sku'));
             });
         }
 
@@ -141,10 +254,15 @@ define([
             return [
                 '<div class="quickorder-row" data-index="', rowIndex, '">',
                 '<input type="text" name="items[', rowIndex, '][sku]"',
-                ' placeholder="', escapeHtml(messages.skuPlaceholder || 'Ex: SKU-001'), '" class="sku-input" />',
-                '<input type="number" name="items[', rowIndex, '][qty]" value="1" min="1" class="qty-input" />',
-                '<button type="button" class="btn-remove" title="',
-                escapeHtml(messages.removeRow || $t('Remover')), '">&times;</button>',
+                ' placeholder="', escapeHtml(messages.skuPlaceholder || 'Ex: SKU-001'), '" class="sku-input"',
+                ' autocomplete="off" autocapitalize="off" spellcheck="false"',
+                ' aria-label="', escapeHtml(skuAriaLabel), '" aria-expanded="false" />',
+                '<div id="sku-suggestions-', rowIndex, '" class="sku-suggestions" role="listbox"',
+                ' aria-label="', escapeHtml(suggestionsAriaLabel), '" aria-hidden="true"></div>',
+                '<input type="number" name="items[', rowIndex, '][qty]" value="1" min="1" class="qty-input"',
+                ' aria-label="', escapeHtml(qtyAriaLabel), '" />',
+                '<button type="button" class="btn-remove" title="', escapeHtml(removeAriaLabel), '" aria-label="',
+                escapeHtml(removeAriaLabel), '">&times;</button>',
                 '</div>'
             ].join('');
         }
@@ -160,6 +278,14 @@ define([
         function clearStatuses()
         {
             $rowsContainer.find('.quickorder-row').removeClass('has-error');
+        }
+
+        function setResultsVisible(isVisible)
+        {
+            $results
+                .toggleClass('is-hidden', !isVisible)
+                .prop('hidden', !isVisible)
+                .attr('aria-hidden', isVisible ? 'false' : 'true');
         }
 
         /**
@@ -393,7 +519,7 @@ define([
             }
 
             clearStatuses();
-            $results.hide();
+            setResultsVisible(false);
             $success.empty();
             $errors.empty();
 
@@ -416,13 +542,18 @@ define([
                     form_key: getFormKey()
                 }
             }).done(function (response) {
-                $results.show();
-                renderSuccessList(response.added || [], response.message || '');
-                renderErrorList(response.errors || []);
-                markErrorRows(response.errors || [], payload.rowMap);
+                var added = Array.isArray(response && response.added) ? response.added : [];
+                var errors = Array.isArray(response && response.errors) ? response.errors : [];
+                var hasRenderableResults = added.length > 0 || errors.length > 0;
+                var hasSuccessFlag = !!(response && response.success);
 
-                if (!response.success && !response.errors.length) {
-                    showAlert(response.message || (messages.requestError || $t('Erro ao processar pedido. Tente novamente.')));
+                renderSuccessList(added, (response && response.message) || '');
+                renderErrorList(errors);
+                markErrorRows(errors, payload.rowMap);
+                setResultsVisible(hasRenderableResults);
+
+                if (!hasSuccessFlag && errors.length === 0) {
+                    showAlert((response && response.message) || (messages.requestError || $t('Erro ao processar pedido. Tente novamente.')));
                 }
             }).fail(function () {
                 showAlert(messages.requestError || $t('Erro ao processar pedido. Tente novamente.'));

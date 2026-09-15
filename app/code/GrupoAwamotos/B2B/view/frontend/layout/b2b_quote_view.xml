@@ -8,6 +8,8 @@
     </head>
     <update handle="customer_account"/>
     <body>
+        <!-- Evita H1 duplicado: título vem do template quote/view.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceContainer name="content">
             <block class="GrupoAwamotos\B2B\Block\Quote\View"
                    name="b2b.quote.view"

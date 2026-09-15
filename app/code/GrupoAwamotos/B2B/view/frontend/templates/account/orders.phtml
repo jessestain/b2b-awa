@@ -6,48 +6,46 @@
 $orders = $block->getOrders();
 ?>
 
-<div class="account b2b-orders-page">
+<div class="account b2b-orders-page b2b-page-shell">
 
-    <div class="b2b-dashboard-header">
-        <div>
-            <h1 class="dashboard-title page-title">
-                <span><?= $escaper->escapeHtml(__('Meus Pedidos B2B')) ?></span>
-            </h1>
-        </div>
-        <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account')) ?>"
-           class="view-all">
-            ← <?= $escaper->escapeHtml(__('Voltar para Conta B2B')) ?>
+    <div class="b2b-section-header">
+        <h1><?= $escaper->escapeHtml(__('Meus Pedidos B2B')) ?></h1>
+        <p class="section-subtitle"><?= $escaper->escapeHtml(__('Histórico da loja com status, total e sincronização ERP.')) ?></p>
+        <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account')) ?>" class="action secondary">
+            <span><?= $escaper->escapeHtml(__('Voltar para Conta B2B')) ?></span>
         </a>
     </div>
 
-    <div class="column main">
-
-        <?php if (empty($orders)): ?>
+    <?php if (empty($orders)): ?>
         <div class="b2b-section">
-            <div class="empty-state-message">
-                <p><?= $escaper->escapeHtml(__('Você ainda não realizou pedidos.')) ?></p>
-                <a href="<?= $escaper->escapeUrl($block->getUrl('catalog')) ?>"
-                   class="action primary">
-                    <?= $escaper->escapeHtml(__('Explorar catálogo')) ?>
-                </a>
+            <div class="awa-empty-state" role="status" aria-live="polite">
+                <p class="awa-empty-state__title"><?= $escaper->escapeHtml(__('Você ainda não realizou pedidos')) ?></p>
+                <p class="awa-empty-state__hint"><?= $escaper->escapeHtml(__('Assim que um pedido for finalizado, ele aparecerá neste histórico com status e total.')) ?></p>
+                <div class="awa-empty-state__actions">
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('catalog')) ?>"
+                       class="action primary">
+                        <span><?= $escaper->escapeHtml(__('Explorar catálogo')) ?></span>
+                    </a>
+                </div>
             </div>
         </div>
         <?php else: ?>
 
         <div class="b2b-section">
             <div class="section-header">
-                <h3><?= $escaper->escapeHtml(__('Histórico de Pedidos')) ?></h3>
+                <h2><?= $escaper->escapeHtml(__('Histórico de Pedidos')) ?></h2>
             </div>
-            <div class="b2b-table-scroll">
-            <table class="data-table">
+            <div class="table-wrapper b2b-table-scroll">
+            <table class="data-table" aria-label="<?= $escaper->escapeHtmlAttr(__('Histórico de pedidos B2B')) ?>">
+                <caption class="table-caption sr-only"><?= $escaper->escapeHtml(__('Histórico de pedidos B2B')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= $escaper->escapeHtml(__('Pedido')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Data')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Status')) ?></th>
-                        <th class="col-total"><?= $escaper->escapeHtml(__('Total')) ?></th>
-                        <th class="col-erp"><?= $escaper->escapeHtml(__('ERP Sectra')) ?></th>
-                        <th class="col-actions"></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Pedido')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Data')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                        <th scope="col" class="col-total"><?= $escaper->escapeHtml(__('Total')) ?></th>
+                        <th scope="col" class="col-erp"><?= $escaper->escapeHtml(__('ERP Sectra')) ?></th>
+                        <th scope="col" class="col-actions"><?= $escaper->escapeHtml(__('Ações')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,11 +56,11 @@ $orders = $block->getOrders();
                     $erpRef    = $erp['erp_reference'] ?? '';
                     $orderStatus = strtolower($order->getStatus());
                     $statusBadgeClass = match (true) {
-                        in_array($orderStatus, ['pending', 'pending_payment']) => 'pending',
-                        in_array($orderStatus, ['processing'])                 => 'processing',
-                        in_array($orderStatus, ['complete'])                   => 'approved',
-                        in_array($orderStatus, ['canceled', 'closed'])         => 'canceled',
-                        default                                                 => '',
+                        in_array($orderStatus, ['pending', 'pending_payment'], true) => 'status-pending',
+                        in_array($orderStatus, ['processing'], true)                 => 'status-processing',
+                        in_array($orderStatus, ['complete'], true)                   => 'status-success',
+                        in_array($orderStatus, ['canceled', 'closed'], true)         => 'status-failed',
+                        default                                                 => 'status-pending',
                     };
                 ?>
                     <tr>
@@ -70,7 +68,7 @@ $orders = $block->getOrders();
                             <strong>#<?= $escaper->escapeHtml($order->getIncrementId()) ?></strong>
                         </td>
                         <td data-th="<?= $escaper->escapeHtmlAttr(__('Data')) ?>"><?= $escaper->escapeHtml(
-                            date('d/m/Y H:i', strtotime($order->getCreatedAt()))
+                            $block->formatDateTime((string) $order->getCreatedAt())
                         ) ?></td>
                         <td data-th="<?= $escaper->escapeHtmlAttr(__('Status')) ?>">
                             <span class="status-badge <?= $escaper->escapeHtmlAttr($statusBadgeClass) ?>">
@@ -78,18 +76,16 @@ $orders = $block->getOrders();
                             </span>
                         </td>
                         <td class="col-total" data-th="<?= $escaper->escapeHtmlAttr(__('Total')) ?>">
-                            R$ <?= $escaper->escapeHtml(
-                                number_format((float) $order->getGrandTotal(), 2, ',', '.')
-                            ) ?>
+                            <?= /* @noEscape */ $block->formatPrice((float) $order->getGrandTotal()) ?>
                         </td>
                         <td class="col-erp" data-th="<?= $escaper->escapeHtmlAttr(__('ERP Sectra')) ?>">
                             <?php if ($erpStatus): ?>
                                 <span class="status-badge <?= $escaper->escapeHtmlAttr(
                                     match ($erpStatus) {
-                                        'synced'  => 'approved',
-                                        'pending' => 'pending',
-                                        'error'   => 'canceled',
-                                        default   => '',
+                                        'synced'  => 'status-success',
+                                        'pending' => 'status-pending',
+                                        'error'   => 'status-failed',
+                                        default   => 'status-pending',
                                     }
                                 ) ?>">
                                     <?= $escaper->escapeHtml($block->getErpStatusLabel($erpStatus)) ?>
@@ -105,18 +101,17 @@ $orders = $block->getOrders();
                         </td>
                         <td class="col-actions" data-th="<?= $escaper->escapeHtmlAttr(__('Ações')) ?>">
                             <a href="<?= $escaper->escapeUrl($block->getOrderUrl($order)) ?>"
-                               class="checklist-action">
-                                <?= $escaper->escapeHtml(__('Ver')) ?> →
+                               class="action view"
+                               aria-label="<?= $escaper->escapeHtmlAttr(__('Ver pedido %1', $order->getIncrementId())) ?>">
+                                <?= $escaper->escapeHtml(__('Ver')) ?> <span aria-hidden="true">→</span>
                             </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            </div><!-- .b2b-table-scroll -->
+            </div><!-- .table-wrapper.b2b-table-scroll -->
         </div>
 
-        <?php endif; ?>
-
-    </div>
+    <?php endif; ?>
 </div>

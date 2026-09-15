@@ -26,6 +26,8 @@ class CnpjReceitaLookup
 
     private const DEFAULT_API_URL = 'https://receitaws.com.br/v1/cnpj/';
     private const FALLBACK_API_URL = 'https://brasilapi.com.br/api/cnpj/v1/';
+    private const CNPJWS_API_URL = 'https://publica.cnpj.ws/cnpj/';
+    private const LOOKUP_USER_AGENT = 'AWA-Motos/1.0 (+https://awamotos.com)';
     private const DEFAULT_TIMEOUT = 10;
     private const DEFAULT_CACHE_TTL = 86400;
     private const NEGATIVE_CACHE_TTL = 3600;
@@ -41,6 +43,20 @@ class CnpjReceitaLookup
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly CnpjValidator $checksum
     ) {
+    }
+
+    /**
+     * Read a previously cached Receita payload without calling external APIs.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getCachedPayloadOnly(string $cnpj): ?array
+    {
+        if (!$this->checksum->isValid($cnpj)) {
+            return null;
+        }
+
+        return $this->loadFromCache($this->checksum->clean($cnpj));
     }
 
     /**
@@ -78,7 +94,8 @@ class CnpjReceitaLookup
             $this->curl->setOption(CURLOPT_TIMEOUT, $this->getLookupTimeout());
             $this->curl->setOption(CURLOPT_SSL_VERIFYPEER, true);
             $this->curl->setHeaders([
-                'Accept' => 'application/json'
+                'Accept' => 'application/json',
+                'User-Agent' => self::LOOKUP_USER_AGENT,
             ]);
 
             $endpoint = rtrim($this->getLookupApiUrl(), '/') . '/' . $cnpjClean;
@@ -90,19 +107,15 @@ class CnpjReceitaLookup
 
             if ($this->isRateLimitedResponse($httpStatus, is_array($data) ? $data : null)) {
                 $this->audit('api_rate_limited', $cnpjClean, ['http_status' => $httpStatus]);
-                $fallbackPayload = $this->fetchFromBrasilApi($cnpjClean);
-                if ($fallbackPayload !== null) {
-                    $this->saveToCache($cnpjClean, $fallbackPayload);
-                    $this->audit('api_rate_limited_fallback_ok', $cnpjClean);
-                    return $fallbackPayload;
-                }
-
-                return null;
+                return $this->resolveWithFallbacks($cnpjClean, 'api_rate_limited_fallback_ok');
             }
 
             if (!is_array($data) || (isset($data['status']) && strtoupper((string) $data['status']) === 'ERROR')) {
-                $this->audit('api_not_found_or_error', $cnpjClean);
-                return null;
+                $this->audit('api_not_found_or_error', $cnpjClean, [
+                    'http_status' => $httpStatus,
+                    'message' => is_array($data) ? (string) ($data['message'] ?? '') : 'invalid_json',
+                ]);
+                return $this->resolveWithFallbacks($cnpjClean, 'api_not_found_fallback_ok');
             }
 
             if (!$this->isCompleteCompanyPayload($data)) {
@@ -110,18 +123,10 @@ class CnpjReceitaLookup
                     'http_status' => $httpStatus,
                     'message' => (string) ($data['message'] ?? ''),
                 ]);
-                $fallbackPayload = $this->fetchFromBrasilApi($cnpjClean);
-                if ($fallbackPayload !== null) {
-                    $this->saveToCache($cnpjClean, $fallbackPayload);
-                    $this->audit('api_incomplete_fallback_ok', $cnpjClean);
-                    return $fallbackPayload;
-                }
-
-                return null;
+                return $this->resolveWithFallbacks($cnpjClean, 'api_incomplete_fallback_ok');
             }
 
-            if (
-                $this->isRequireActiveStatusEnabled()
+            if ($this->isRequireActiveStatusEnabled()
                 && isset($data['situacao'])
                 && strtoupper((string) $data['situacao']) !== 'ATIVA'
             ) {
@@ -252,14 +257,16 @@ class CnpjReceitaLookup
             return [
                 'success' => true,
                 'source' => $apiData['source'] ?? 'fallback',
+                'cached' => !empty($apiData['cached']),
                 'api_unavailable' => true,
-                'message' => 'API indisponível. CNPJ validado localmente.'
+                'message' => (string) ($apiData['message'] ?? 'API indisponível. CNPJ validado localmente.')
             ];
         }
 
         return [
             'success' => true,
             'source' => $apiData['source'] ?? 'api',
+            'cached' => !empty($apiData['cached']),
             'razao_social' => $apiData['razao_social'] ?? '',
             'nome_fantasia' => $apiData['nome_fantasia'] ?? '',
             'situacao' => $apiData['situacao'] ?? '',
@@ -373,7 +380,12 @@ class CnpjReceitaLookup
             return null;
         }
 
-        $decoded['source'] = 'cache';
+        $originalSource = trim((string) ($decoded['source'] ?? ''));
+        if ($originalSource === '' || $originalSource === 'cache') {
+            $originalSource = 'api';
+        }
+        $decoded['source'] = $originalSource;
+        $decoded['cached'] = true;
 
         if ($this->isPoisonedCachePayload($decoded)) {
             $this->cache->remove($this->getCacheId($cnpj));
@@ -451,19 +463,189 @@ class CnpjReceitaLookup
     }
 
     /**
+     * BrasilAPI, then CNPJ.ws. Local checksum fallback only when every public API misses.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function resolveWithFallbacks(string $cnpjClean, string $successAuditEvent): ?array
+    {
+        $payload = $this->fetchFromBrasilApi($cnpjClean);
+        if ($payload === null) {
+            $payload = $this->fetchFromCnpjWs($cnpjClean);
+        }
+
+        if ($payload !== null) {
+            $payload = $this->applyActiveStatusRequirement($cnpjClean, $payload);
+            if (($payload['valid'] ?? false) === true) {
+                $this->saveToCache($cnpjClean, $payload);
+                $this->audit($successAuditEvent, $cnpjClean, [
+                    'source' => (string) ($payload['source'] ?? ''),
+                ]);
+            }
+
+            return $payload;
+        }
+
+        if ($this->isLocalFallbackEnabled()) {
+            $this->audit('api_not_found_local_fallback', $cnpjClean);
+
+            return $this->buildLocalFallbackPayload(
+                (string) __('CNPJ válido, mas ainda não consta nas bases públicas da Receita. Preencha os dados manualmente. A conta ficará pendente de aprovação.')
+            );
+        }
+
+        $this->audit('api_not_found_no_fallback', $cnpjClean);
+
+        return null;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     * @return array<string, mixed>
+     */
+    private function applyActiveStatusRequirement(string $cnpjClean, array $payload): array
+    {
+        if (!$this->isRequireActiveStatusEnabled()) {
+            return $payload;
+        }
+
+        $situacao = strtoupper(trim((string) ($payload['situacao'] ?? '')));
+        if ($situacao === '' || $situacao === 'ATIVA') {
+            return $payload;
+        }
+
+        $invalidPayload = [
+            'valid' => false,
+            'message' => (string) __('CNPJ com situação: %1', $payload['situacao']),
+            'source' => $payload['source'] ?? 'api',
+            'data' => is_array($payload['data'] ?? null) ? $payload['data'] : [],
+        ];
+
+        $this->saveToCache($cnpjClean, $invalidPayload, self::NEGATIVE_CACHE_TTL);
+        $this->audit('api_invalid_status', $cnpjClean, [
+            'situacao' => (string) $payload['situacao'],
+            'source' => (string) ($payload['source'] ?? ''),
+        ]);
+
+        return $invalidPayload;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function fetchFromCnpjWs(string $cnpjClean): ?array
+    {
+        try {
+            $status = 0;
+            $body = $this->httpGetJson(self::CNPJWS_API_URL . $cnpjClean, $status);
+            $data = json_decode($body, true);
+
+            if ($status >= 400 || !is_array($data) || !$this->isCompleteCompanyPayload($data)) {
+                $this->audit('cnpjws_unavailable', $cnpjClean, ['http_status' => $status]);
+                return null;
+            }
+
+            $est = is_array($data['estabelecimento'] ?? null) ? $data['estabelecimento'] : [];
+            $atividade = is_array($est['atividade_principal'] ?? null) ? $est['atividade_principal'] : [];
+            $cnaeCode = trim((string) ($atividade['id'] ?? $atividade['subclasse'] ?? ''));
+            $cnaeText = trim((string) ($atividade['descricao'] ?? ''));
+            $situacao = strtoupper(trim((string) ($est['situacao_cadastral'] ?? '')));
+            $razao = trim((string) ($data['razao_social'] ?? $data['nome'] ?? ''));
+            $logradouro = trim(
+                (string) ($est['tipo_logradouro'] ?? '') . ' ' . (string) ($est['logradouro'] ?? '')
+            );
+            $ddd = preg_replace('/\D/', '', (string) ($est['ddd1'] ?? '')) ?? '';
+            $telefone = preg_replace('/\D/', '', (string) ($est['telefone1'] ?? '')) ?? '';
+            if ($ddd !== '' && $telefone !== '' && !str_starts_with($telefone, $ddd)) {
+                $telefone = $ddd . $telefone;
+            }
+
+            $normalized = $data;
+            $normalized['nome'] = $razao;
+            $normalized['situacao'] = $situacao;
+            $normalized['cnae_fiscal'] = preg_replace('/\D/', '', $cnaeCode) ?: $cnaeCode;
+            if ($cnaeText !== '' || $cnaeCode !== '') {
+                $normalized['atividade_principal'] = [[
+                    'code' => $cnaeCode !== '' ? $cnaeCode : $cnaeText,
+                    'text' => $cnaeText,
+                ]];
+            }
+
+            $porte = $data['porte'] ?? '';
+            $porteText = is_array($porte) ? (string) ($porte['descricao'] ?? '') : (string) $porte;
+            $natureza = $data['natureza_juridica'] ?? '';
+            $naturezaText = is_array($natureza) ? (string) ($natureza['descricao'] ?? '') : (string) $natureza;
+
+            return [
+                'valid' => true,
+                'source' => 'cnpjws',
+                'razao_social' => $razao,
+                'nome_fantasia' => trim((string) ($est['nome_fantasia'] ?? $data['nome_fantasia'] ?? '')),
+                'cnpj' => $cnpjClean,
+                'situacao' => $situacao,
+                'tipo' => trim((string) ($est['tipo'] ?? '')),
+                'porte' => trim($porteText),
+                'natureza_juridica' => trim($naturezaText),
+                'atividade_principal' => $cnaeText,
+                'logradouro' => $logradouro,
+                'numero' => trim((string) ($est['numero'] ?? '')),
+                'complemento' => trim((string) ($est['complemento'] ?? '')),
+                'bairro' => trim((string) ($est['bairro'] ?? '')),
+                'municipio' => $this->nestedNameOrSigla($est['cidade'] ?? null, 'nome'),
+                'uf' => $this->nestedNameOrSigla($est['estado'] ?? null, 'sigla'),
+                'cep' => preg_replace('/\D/', '', (string) ($est['cep'] ?? '')) ?: '',
+                'telefone' => $telefone,
+                'email' => trim((string) ($est['email'] ?? $data['email'] ?? '')),
+                'data' => $normalized,
+            ];
+        } catch (\Throwable $e) {
+            $this->logger->warning('CNPJ.ws lookup failed: ' . $e->getMessage());
+            $this->audit('cnpjws_exception', $cnpjClean, ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
+    private function httpGetJson(string $url, int &$status): string
+    {
+        $this->curl->setOption(CURLOPT_TIMEOUT, $this->getLookupTimeout());
+        $this->curl->setOption(CURLOPT_SSL_VERIFYPEER, true);
+        $this->curl->setHeaders([
+            'Accept' => 'application/json',
+            'User-Agent' => self::LOOKUP_USER_AGENT,
+        ]);
+        $this->curl->get($url);
+        $status = (int) $this->curl->getStatus();
+
+        return (string) $this->curl->getBody();
+    }
+
+    private function nestedNameOrSigla(mixed $node, string $preferredKey): string
+    {
+        if (is_array($node)) {
+            if (isset($node[$preferredKey]) && trim((string) $node[$preferredKey]) !== '') {
+                return trim((string) $node[$preferredKey]);
+            }
+            if (isset($node['nome'])) {
+                return trim((string) $node['nome']);
+            }
+            if (isset($node['sigla'])) {
+                return trim((string) $node['sigla']);
+            }
+
+            return '';
+        }
+
+        return trim((string) $node);
+    }
+
+    /**
      * @return array<string, mixed>|null
      */
     private function fetchFromBrasilApi(string $cnpjClean): ?array
     {
         try {
-            $fallbackCurl = clone $this->curl;
-            $fallbackCurl->setOption(CURLOPT_TIMEOUT, $this->getLookupTimeout());
-            $fallbackCurl->setOption(CURLOPT_SSL_VERIFYPEER, true);
-            $fallbackCurl->setHeaders(['Accept' => 'application/json']);
-            $fallbackCurl->get(self::FALLBACK_API_URL . $cnpjClean);
-
-            $status = (int) $fallbackCurl->getStatus();
-            $body = (string) $fallbackCurl->getBody();
+            $status = 0;
+            $body = $this->httpGetJson(self::FALLBACK_API_URL . $cnpjClean, $status);
             $fallbackData = json_decode($body, true);
 
             if ($status >= 400 || !is_array($fallbackData) || !$this->isCompleteCompanyPayload($fallbackData)) {

@@ -23,6 +23,8 @@
     <!-- Classificação CNAE + score de aprovação no save do cliente (admin + frontend).
          Ordem importa: CNAE grava b2b_cnae_* antes do scoring avaliar o perfil. -->
     <event name="customer_save_after_data_object">
+        <observer name="grupoawamotos_b2b_company_profile_sync"
+                  instance="GrupoAwamotos\B2B\Observer\CustomerApprovedObserver"/>
         <observer name="grupoawamotos_b2b_cnae_classification"
                   instance="GrupoAwamotos\B2B\Observer\CnaeClassificationObserver"/>
         <observer name="grupoawamotos_b2b_approval_scoring"
@@ -57,6 +59,16 @@
     <event name="sales_quote_product_add_after">
         <observer name="grupoawamotos_b2b_apply_erp_authorized_price_on_add"
                   instance="GrupoAwamotos\B2B\Observer\Quote\ApplyErpAuthorizedPriceOnAddObserver"/>
+    </event>
+
+    <!-- B2B-QA-001: alinhar options ERP no produto ANTES de representProduct() -->
+    <event name="catalog_product_type_prepare_full_options">
+        <observer name="grupoawamotos_b2b_align_erp_authorized_options_before_merge"
+                  instance="GrupoAwamotos\B2B\Observer\Quote\AlignErpAuthorizedOptionsBeforeMergeObserver"/>
+    </event>
+    <event name="catalog_product_type_prepare_lite_options">
+        <observer name="grupoawamotos_b2b_align_erp_authorized_options_before_merge_lite"
+                  instance="GrupoAwamotos\B2B\Observer\Quote\AlignErpAuthorizedOptionsBeforeMergeObserver"/>
     </event>
 
     <event name="sales_quote_collect_totals_before">

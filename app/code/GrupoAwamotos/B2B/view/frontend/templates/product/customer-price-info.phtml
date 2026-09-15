@@ -43,12 +43,13 @@ if (!$priceData && !$tierData) {
         </span>
         <span class="b2b-tier-title"><?= $block->escapeHtml(__('Descontos por Volume')) ?></span>
     </div>
-    <table class="b2b-tier-table">
+    <table class="b2b-tier-table" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de descontos por volume')) ?>">
+        <caption class="sr-only"><?= $block->escapeHtml(__('Tabela de desconto por volume')) ?></caption>
         <thead>
             <tr>
-                <th><?= $block->escapeHtml(__('Quantidade')) ?></th>
-                <th><?= $block->escapeHtml(__('Preço Unitário')) ?></th>
-                <th><?= $block->escapeHtml(__('Economia')) ?></th>
+                <th scope="col"><?= $block->escapeHtml(__('Quantidade')) ?></th>
+                <th scope="col"><?= $block->escapeHtml(__('Preço Unitário')) ?></th>
+                <th scope="col"><?= $block->escapeHtml(__('Economia')) ?></th>
             </tr>
         </thead>
         <tbody>

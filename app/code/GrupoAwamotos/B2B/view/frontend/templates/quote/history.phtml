@@ -9,21 +9,29 @@
     <div class="b2b-section-header">
         <h1><?= $block->escapeHtml(__('Minhas cotações')) ?></h1>
         <p class="section-subtitle"><?= $block->escapeHtml(__('Acompanhe orçamentos solicitados, status e validade.')) ?></p>
-    </div>
-
-    <?php if (!$block->hasQuoteRequests()): ?>
-        <div class="message info empty">
-            <span><?= $block->escapeHtml(__('Nenhuma cotação solicitada. Monte o carrinho e peça um orçamento formal.')) ?></span>
-        </div>
-        <div class="actions">
+        <?php if ($block->hasQuoteRequests()): ?>
             <a href="<?= $block->escapeUrl($block->getUrl('b2b/quote')) ?>" class="action primary">
                 <span><?= $block->escapeHtml(__('Solicitar cotação')) ?></span>
             </a>
+        <?php endif; ?>
+    </div>
+
+    <?php if (!$block->hasQuoteRequests()): ?>
+        <div class="awa-empty-state" role="status" aria-live="polite">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhuma cotação solicitada')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Monte o carrinho e peça um orçamento formal.')) ?></p>
+            <div class="awa-empty-state__actions">
+                <a href="<?= $block->escapeUrl($block->getUrl('b2b/quote')) ?>" class="action primary">
+                    <span><?= $block->escapeHtml(__('Solicitar cotação')) ?></span>
+                </a>
+            </div>
         </div>
     <?php else: ?>
         <div class="table-wrapper quote-history">
-            <table class="data table table-quote-history" id="quote-history-table">
-                <caption class="table-caption"><?= $block->escapeHtml(__('Minhas Cotações')) ?></caption>
+            <table class="data table table-quote-history"
+                   id="quote-history-table"
+                   aria-label="<?= $block->escapeHtmlAttr(__('Tabela de histórico de cotações')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Minhas Cotações')) ?></caption>
                 <thead>
                     <tr>
                         <th scope="col" class="col id"><?= $block->escapeHtml(__('Nº')) ?></th>
@@ -89,7 +97,8 @@
                             <td data-th="<?= $block->escapeHtmlAttr(__('Ações')) ?>" class="col actions">
                                 <a href="<?= $block->escapeUrl($block->getViewUrl($quote->getRequestId())) ?>"
                                    class="action view"
-                                   title="<?= $block->escapeHtmlAttr(__('Ver Detalhes')) ?>">
+                                   title="<?= $block->escapeHtmlAttr(__('Ver detalhes da cotação %1', (int) $quote->getRequestId())) ?>"
+                                   aria-label="<?= $block->escapeHtmlAttr(__('Ver detalhes da cotação %1', (int) $quote->getRequestId())) ?>">
                                     <span><?= $block->escapeHtml(__('Ver')) ?></span>
                                 </a>
                             </td>

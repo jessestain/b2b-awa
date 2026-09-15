@@ -145,24 +145,6 @@ define([
             '}'
         ].join('');
         (document.head || document.documentElement).appendChild(css);
-
-        // #region agent log
-        try {
-            fetch('http://localhost:7329/ingest/f08c29f5-3a67-48b4-95ff-14f35e3ece75', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'X-Debug-Session-Id': 'f365ee'},
-                body: JSON.stringify({
-                    sessionId: 'f365ee',
-                    runId: 'post-fix',
-                    hypothesisId: 'H-inject-css',
-                    location: 'login-to-cart.js:injectTerminalHideCss',
-                    message: 'terminal style injected',
-                    data: {styleId: styleId, inDom: !!document.getElementById(styleId)},
-                    timestamp: Date.now()
-                })
-            }).catch(function () {});
-        } catch (__awaDbgInj) {}
-        // #endregion
     }
 
     function removeTerminalHideCss()
@@ -236,6 +218,18 @@ define([
                 priceMarker.setAttribute('aria-label', label + '. ' + note);
                 priceMarker.innerHTML = '<span class="price-label">' + escapeHtml(label) + '</span>'
                     + '<span class="price-note">' + escapeHtml(note) + '</span>';
+            });
+        }
+
+        function ensurePriceGateVisible(root)
+        {
+            let scope = root && root.querySelectorAll ? root : document;
+
+            scope.querySelectorAll('.product-info-main .product-info-price .b2b-login-to-see-price, .product-info-main .product-info-price [data-awa-b2b-price-gate="1"]').forEach(function (priceMarker) {
+                priceMarker.style.setProperty('display', 'flex', 'important');
+                priceMarker.style.setProperty('flex-direction', 'column', 'important');
+                priceMarker.style.setProperty('visibility', 'visible', 'important');
+                priceMarker.style.setProperty('opacity', '1', 'important');
             });
         }
 
@@ -383,11 +377,21 @@ define([
             });
         }
 
+        function attachModalToBody()
+        {
+            // Magento_Ui modal appends to <body> so position:fixed is not clipped
+            // by .page-wrapper { overflow: clip }.
+            if (overlay && overlay.parentNode && overlay.parentNode !== document.body) {
+                document.body.appendChild(overlay);
+            }
+        }
+
         function openModal(triggerEl)
         {
             if (!overlay || activeMode !== 'guest' || isModalOpen()) {
                 return;
             }
+            attachModalToBody();
             lastActiveElement = document.activeElement;
             lastTriggerButton = triggerEl || lastActiveElement;
             if (lastTriggerButton && typeof lastTriggerButton.setAttribute === 'function') {
@@ -517,35 +521,9 @@ define([
             document.body.classList.add(bodyClass);
             document.body.classList.add('b2b-restricted-mode');
             syncPendingPriceMarkers();
+            ensurePriceGateVisible();
 
             let iconSvg = isGuestMode ? PDP_ICON_SVG : PENDING_ICON_SVG;
-
-            // #region agent log
-            try {
-                var __awaDbgPdp = !!document.body.classList.contains('catalog-product-view');
-                fetch('http://localhost:7329/ingest/f08c29f5-3a67-48b4-95ff-14f35e3ece75', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json', 'X-Debug-Session-Id': 'f365ee'},
-                    body: JSON.stringify({
-                        sessionId: 'f365ee',
-                        runId: 'post-fix',
-                        hypothesisId: 'H1',
-                        location: 'login-to-cart.js:replaceAddToCartButtons',
-                        message: 'B2B L2C replace running',
-                        data: {
-                            isPdp: __awaDbgPdp,
-                            activeMode: activeMode,
-                            hasProductForm: !!document.querySelector('.product-add-form'),
-                            tocartVisibleBefore: (function () {
-                                var b = document.querySelector('#product-addtocart-button');
-                                return b ? (window.getComputedStyle(b).display !== 'none') : null;
-                            })()
-                        },
-                        timestamp: Date.now()
-                    })
-                }).catch(function () {});
-            } catch (__awaDbgErr) {}
-            // #endregion
 
             // PDP (product detail page)
             let productAddForm = document.querySelector('.product-add-form');
@@ -587,31 +565,6 @@ define([
                     addToCartBtn.setAttribute('disabled', 'disabled');
                     addToCartBtn.setAttribute('tabindex', '-1');
                 }
-
-                // #region agent log
-                try {
-                    fetch('http://localhost:7329/ingest/f08c29f5-3a67-48b4-95ff-14f35e3ece75', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json', 'X-Debug-Session-Id': 'f365ee'},
-                        body: JSON.stringify({
-                            sessionId: 'f365ee',
-                            runId: 'post-fix',
-                            hypothesisId: 'H-qty-spec',
-                            location: 'login-to-cart.js:replaceAddToCartButtons',
-                            message: 'after PDP hide',
-                            data: {
-                                qtyDisplay: qtyField ? window.getComputedStyle(qtyField).display : null,
-                                qtyPri: qtyField ? qtyField.style.getPropertyPriority('display') : null,
-                                qtyH: qtyField ? Math.round(qtyField.getBoundingClientRect().height) : null,
-                                tocartDisplay: addToCartBtn ? window.getComputedStyle(addToCartBtn).display : null,
-                                tocartPri: addToCartBtn ? addToCartBtn.style.getPropertyPriority('display') : null,
-                                hasLoginBtn: !!productAddForm.querySelector('.b2b-login-to-buy-btn')
-                            },
-                            timestamp: Date.now()
-                        })
-                    }).catch(function () {});
-                } catch (__awaDbgErr2) {}
-                // #endregion
 
                 if (!ssrGuestBtn && addToCartBtn && !productAddForm.querySelector('.b2b-login-to-buy-btn')) {
                     let pdpBtn = createLoginButton({
@@ -663,41 +616,67 @@ define([
 
         /**
          * Check customer-data and update restriction state.
-         * If customer is logged in, restore original buttons.
+         * Guest FPC HTML served to a logged-in shopper, or pending HTML served
+         * to an approved B2B customer, must restore add-to-cart.
          */
+        function customerCanShop()
+        {
+            try {
+                var panel = customerData.get('b2b_panel')();
+                if (panel && panel.can_add_to_cart === true) {
+                    return true;
+                }
+                if (panel && panel.approval_status === 'approved' && panel.can_add_to_cart !== false) {
+                    return true;
+                }
+                if (
+                    panel
+                    && panel.is_b2b === true
+                    && panel.badge_icon
+                    && panel.badge_icon !== 'clock-o'
+                    && panel.can_add_to_cart !== false
+                ) {
+                    return true;
+                }
+            } catch (e) {
+                // ignore missing section
+            }
+
+            return serverMode === 'guest' && isCustomerLoggedIn();
+        }
+
+        function releaseIfCustomerCanShop()
+        {
+            if (!customerCanShop()) {
+                return false;
+            }
+            isRestricted = false;
+            restoreOriginalButtons();
+            syncPriceBlocksAfterLogin();
+            if (observerInstance) {
+                observerInstance.disconnect();
+                observerInstance = null;
+            }
+            return true;
+        }
+
         function checkAndUpdateState()
         {
-            if (serverMode === 'guest' && isCustomerLoggedIn()) {
-                // Customer is actually logged in - FPC served a stale guest page
-                isRestricted = false;
-                restoreOriginalButtons();
-                syncPriceBlocksAfterLogin();
-
-                // Disconnect the MutationObserver to stop replacing buttons
-                if (observerInstance) {
-                    observerInstance.disconnect();
-                    observerInstance = null;
-                }
-            }
+            releaseIfCustomerCanShop();
         }
 
         function bindCustomerDataSubscribe()
         {
-            if (serverMode !== 'guest') {
-                return;
-            }
-
             try {
-                customerData.get('customer').subscribe(function (customer) {
-                    if (isCustomerDataLoggedIn(customer)) {
-                        isRestricted = false;
-                        restoreOriginalButtons();
-                        syncPriceBlocksAfterLogin();
-                        if (observerInstance) {
-                            observerInstance.disconnect();
-                            observerInstance = null;
-                        }
-                    }
+                customerData.get('customer').subscribe(function () {
+                    releaseIfCustomerCanShop();
+                });
+            } catch (e) {
+                // ignore
+            }
+            try {
+                customerData.get('b2b_panel').subscribe(function () {
+                    releaseIfCustomerCanShop();
                 });
             } catch (e) {
                 // ignore
@@ -750,6 +729,7 @@ define([
                 }
                 replaceAddToCartButtons();
                 syncPendingPriceMarkers();
+                ensurePriceGateVisible();
                 // Reconectar para capturar conteúdo carregado via AJAX (abas de produto)
                 if (isRestricted && observerInstance) {
                     observerInstance.observe(document.body, {childList: true, subtree: true});

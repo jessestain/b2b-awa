@@ -82,6 +82,26 @@ class CockpitAccessGuardPluginTest extends TestCase
         $this->assertSame($redirect, $result);
     }
 
+    public function testAllowsOrderCreateForCockpitOnlyUser(): void
+    {
+        $this->portfolioScope->method('isCockpitOnlyUser')->willReturn(true);
+        $request = $this->createRequest('sales', 'order_create', 'index');
+        $action = $this->createMock(AbstractAction::class);
+
+        $proceedCalled = false;
+        $result = $this->plugin->aroundDispatch(
+            $action,
+            static function () use (&$proceedCalled) {
+                $proceedCalled = true;
+                return 'ok';
+            },
+            $request
+        );
+
+        $this->assertTrue($proceedCalled);
+        $this->assertSame('ok', $result);
+    }
+
     public function testTiUserIsNotBlocked(): void
     {
         $this->portfolioScope->method('isCockpitOnlyUser')->willReturn(false);

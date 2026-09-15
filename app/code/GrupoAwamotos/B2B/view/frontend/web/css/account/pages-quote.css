@@ -1,157 +1,17 @@
-/** pages-quote.css — SSOT quote surfaces (§142 2026-06-09) */
-
-/* Quote form — table scroll */
-.b2b-quote-form-container .b2b-quote-items-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.b2b-shoppinglist-view .recurring-form {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.b2b-shoppinglist-view .recurring-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.b2b-shoppinglist-view .toggle-label {
-    font-size: 14px;
-    color: var(--awa-text-primary, #333333);
-}
-
-.b2b-shoppinglist-view .recurring-options {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.b2b-shoppinglist-view .recurring-options--collapsed {
-    display: none;
-}
-
-.b2b-shoppinglist-view .recurring-options label {
-    font-size: 14px;
-    color: var(--awa-b2b-muted);
-}
-
-.b2b-shoppinglist-view .recurring-select {
-    padding: 8px 12px;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    border-radius: 4px;
-    font-size: 14px;
-    min-height: 44px;
-    box-sizing: border-box;
-}
-
-.b2b-shoppinglist-view .next-order-info {
-    font-size: 13px;
-    color: var(--awa-success, #16a34a);
-    font-weight: 600;
-}
-
-.b2b-shoppinglist-view .save-recurring-btn {
-    padding: 8px 16px !important;
-    font-size: 13px !important;
-    min-height: 44px !important;
-}
-
-.b2b-shoppinglist-view .recurring-switch {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 24px;
-}
-
-.b2b-shoppinglist-view .recurring-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.b2b-shoppinglist-view .recurring-slider {
-    position: absolute;
-    cursor: pointer;
-    inset: 0;
-    background: var(--awa-border, #e5e7eb);
-    border-radius: 24px;
-    transition: background 0.2s ease;
-}
-
-.b2b-shoppinglist-view .recurring-slider::before {
-    content: '';
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background: var(--awa-bg-surface, #ffffff);
-    border-radius: 50%;
-    transition: transform 0.2s ease;
-}
-
-.b2b-shoppinglist-view .recurring-switch input:checked + .recurring-slider {
-    background: var(--awa-success, #16a34a);
-}
-
-.b2b-shoppinglist-view .recurring-switch input:checked + .recurring-slider::before {
-    transform: translateX(20px);
-}
-
-/* Quote history/form/view — status badges */
-.b2b-quote-history .quote-status,
-.b2b-quote-view .quote-status {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: none;
-    letter-spacing: normal;
-}
-
-.b2b-quote-history .quote-status.status-success,
-.b2b-quote-view .quote-status.status-success {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 10%, #ffffff);
-    color: color-mix(in srgb, var(--awa-success, #16a34a) 85%, #000000);
-}
-
-.b2b-quote-history .quote-status.status-pending,
-.b2b-quote-view .quote-status.status-pending {
-    background: var(--awa-warning-bg, #fef3c7);
-    color: #92400e;
-}
-
-.b2b-quote-history .quote-status.status-failed,
-.b2b-quote-view .quote-status.status-failed {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #ffffff);
-    color: var(--awa-primary-hover, #8e2629);
-}
-
-.b2b-quote-history .quote-status.status-complete,
-.b2b-quote-view .quote-status.status-complete {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #ffffff);
-    color: var(--awa-primary-hover, #8e2629);
-}
+/** pages-quote.css — layout de cotação. Badges/botões/tabelas herdam pages-core-v2.css. */
 
 .b2b-quote-history .no-value {
-    color: var(--awa-text-muted, #888888);
+    color: var(--awa-text-muted);
     font-style: italic;
 }
 
 .b2b-quote-history .expired {
-    color: var(--awa-primary-hover, #8e2629);
+    color: var(--awa-primary-dark);
     font-weight: 600;
 }
 
 .b2b-quote-history .table-quote-history .col.actions .action {
-    margin-right: 10px;
+    margin-inline-end: 10px;
 }
 
 /* Quote form layout */
@@ -164,9 +24,9 @@
 
 .b2b-quote-form-container .b2b-quote-items,
 .b2b-quote-form-container .b2b-quote-form {
-    background: var(--awa-bg-surface, var(--awa-b2b-bg-soft, #f8fafc));
-    border: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
-    border-radius: 4px;
+    background: var(--awa-bg-surface, var(--awa-b2b-bg-soft, var(--awa-bg-subtle)));
+    border: 1px solid var(--awa-border-subtle, var(--awa-border));
+    border-radius: var(--awa-radius-sm);
     padding: clamp(12px, 1.5vw, 16px);
     box-shadow: none;
 }
@@ -177,7 +37,7 @@
     font-weight: 700;
     margin: 0 0 clamp(10px, 1.2vw, 14px);
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
+    border-bottom: 1px solid var(--awa-border-subtle, var(--awa-border));
     text-transform: none;
     letter-spacing: normal;
 }
@@ -189,17 +49,17 @@
 }
 
 .b2b-quote-form-container .b2b-quote-info {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 10%, color-mix(in srgb, var(--awa-primary, #b73337) 4%, #ffffff));
+    background: color-mix(in srgb, var(--awa-primary) 10%, color-mix(in srgb, var(--awa-primary) 4%, var(--awa-bg)));
     padding: 12px 14px;
-    border-radius: 4px;
+    border-radius: var(--awa-radius-sm);
     margin: clamp(12px, 1.5vw, 16px) 0;
-    border: 1px solid color-mix(in srgb, var(--awa-primary, #b73337) 25%, var(--awa-border, #e5e7eb));
+    border: 1px solid color-mix(in srgb, var(--awa-primary) 25%, var(--awa-border));
     box-shadow: none;
 }
 
 .b2b-quote-form-container .b2b-quote-info p {
     margin: 0;
-    color: var(--awa-primary-hover, #8e2629);
+    color: var(--awa-primary-dark);
     font-size: 13px;
     line-height: 1.45;
 }
@@ -208,9 +68,30 @@
     margin-bottom: 14px;
 }
 
+.b2b-quote-form-container .b2b-quote-form :is(.input-text, .input-file, textarea) {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.b2b-quote-form-container .b2b-quote-form textarea {
+    min-height: 6.5rem;
+    resize: vertical;
+}
+
+.b2b-quote-form-container .b2b-quote-form :is(.input-text, .input-file, textarea):focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+    border-color: var(--awa-primary);
+}
+
 .b2b-quote-form-container .b2b-quote-form .field.required .label::after {
     content: '*';
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary);
     margin-left: 3px;
 }
 
@@ -222,38 +103,7 @@
     flex-wrap: wrap;
     margin-top: clamp(12px, 1.5vw, 16px);
     padding-top: clamp(12px, 1.5vw, 16px);
-    border-top: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
-}
-
-.b2b-quote-form-container .action.primary.submit {
-    background: var(--awa-b2b-primary);
-    border-color: var(--awa-b2b-primary);
-    padding: 10px 20px;
-    min-height: 44px;
-    border-radius: 4px;
-    font-weight: 600;
-    text-transform: none;
-    box-shadow: none;
-}
-
-.b2b-quote-form-container .action.primary.submit:hover {
-    background: var(--awa-b2b-primary-dark);
-    border-color: var(--awa-b2b-primary-dark);
-    box-shadow: none;
-    transform: none;
-}
-
-.b2b-quote-form-container .data.table :is(th, td) {
-    padding: 10px 12px;
-    font-size: 13px;
-    vertical-align: middle;
-}
-
-.b2b-quote-form-container .data.table th {
-    text-transform: none;
-    letter-spacing: normal;
-    font-weight: 600;
-    background: var(--awa-bg-muted, #f8fafc);
+    border-top: 1px solid var(--awa-border-subtle, var(--awa-border));
 }
 
 /* Quote view */
@@ -284,9 +134,9 @@
 }
 
 .b2b-quote-view .quote-view-info {
-    background: var(--awa-bg-surface, var(--awa-b2b-bg-soft, #f8fafc));
-    border: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
-    border-radius: 4px;
+    background: var(--awa-bg-surface, var(--awa-b2b-bg-soft, var(--awa-bg-subtle)));
+    border: 1px solid var(--awa-border-subtle, var(--awa-border));
+    border-radius: var(--awa-radius-sm);
     padding: clamp(12px, 1.5vw, 16px);
     margin-bottom: clamp(12px, 1.5vw, 16px);
     box-shadow: none;
@@ -310,70 +160,70 @@
 
 .b2b-quote-view .info-item .info-value {
     font-size: 14px;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     font-weight: 500;
 }
 
 .b2b-quote-view .info-item .info-value.price {
     font-size: 18px;
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
     font-weight: 700;
 }
 
 .b2b-quote-view .info-item .info-value.expired {
-    color: var(--awa-primary-hover, #8e2629);
+    color: var(--awa-primary-dark);
 }
 
 .b2b-quote-view .info-item.highlighted {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 8%, #ffffff);
-    border: 1px solid color-mix(in srgb, var(--awa-success, #16a34a) 22%, #ffffff);
-    border-radius: 4px;
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 8%, var(--awa-bg));
+    border: 1px solid color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 22%, var(--awa-bg));
+    border-radius: var(--awa-radius-sm);
     padding: 10px 12px;
 }
 
 .b2b-quote-view .expired-badge {
     display: inline-block;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #ffffff);
-    color: var(--awa-primary-hover, #8e2629);
+    background: color-mix(in srgb, var(--awa-primary) 8%, var(--awa-bg));
+    color: var(--awa-primary-dark);
     font-size: 11px;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: var(--awa-radius-sm);
     margin-left: 6px;
 }
 
 .b2b-quote-view .quote-view-section {
-    background: var(--awa-bg-surface, var(--awa-bg-surface, #ffffff));
-    border: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
-    border-radius: 4px;
+    background: var(--awa-bg-surface, var(--awa-bg-surface, var(--awa-bg)));
+    border: 1px solid var(--awa-border-subtle, var(--awa-border));
+    border-radius: var(--awa-radius-sm);
     padding: clamp(12px, 1.5vw, 16px);
     margin-bottom: clamp(12px, 1.5vw, 16px);
     box-shadow: none;
 }
 
-.b2b-quote-view .quote-view-section h3 {
+.b2b-quote-view .quote-view-section h2 {
     margin: 0 0 10px;
     font-size: 16px;
     font-weight: 700;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     text-transform: none;
     letter-spacing: normal;
 }
 
 .b2b-quote-view .quote-message,
 .b2b-quote-view .quote-admin-notes {
-    background: var(--awa-b2b-bg-soft, #f8fafc);
+    background: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
     padding: 12px 14px;
-    border-radius: 4px;
+    border-radius: var(--awa-radius-sm);
     font-size: 13px;
     line-height: 1.5;
-    color: var(--awa-text-primary, #333333);
+    color: var(--awa-text-primary, var(--awa-text));
     white-space: pre-wrap;
     box-shadow: none;
 }
 
 .b2b-quote-view .quote-admin-notes {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, var(--awa-bg-muted, #f8fafc));
-    border: 1px solid color-mix(in srgb, var(--awa-primary, #b73337) 22%, var(--awa-border, #e5e7eb));
+    background: color-mix(in srgb, var(--awa-primary) 8%, var(--awa-bg-subtle));
+    border: 1px solid color-mix(in srgb, var(--awa-primary) 22%, var(--awa-border));
 }
 
 .b2b-quote-view .table-quote-items {
@@ -385,12 +235,12 @@
 .b2b-quote-view .table-quote-items td {
     padding: 10px 12px;
     text-align: left;
-    border-bottom: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
+    border-bottom: 1px solid var(--awa-border-subtle, var(--awa-border));
     font-size: 13px;
 }
 
 .b2b-quote-view .table-quote-items th {
-    background: var(--awa-bg-muted, var(--awa-b2b-bg-soft, #f8fafc));
+    background: var(--awa-bg-muted, var(--awa-b2b-bg-soft, var(--awa-bg-subtle)));
     font-size: 13px;
     text-transform: none;
     letter-spacing: normal;
@@ -399,22 +249,22 @@
 }
 
 .b2b-quote-view .table-quote-items tfoot td {
-    border-top: 1px solid var(--awa-border-subtle, var(--awa-border, #e5e7eb));
+    border-top: 1px solid var(--awa-border-subtle, var(--awa-border));
 }
 
 .b2b-quote-view .table-quote-items .quoted-total td {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 8%, #ffffff);
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 8%, var(--awa-bg));
 }
 
 .b2b-quote-view .table-quote-items .quoted-total .price,
 .b2b-quote-view .quoted-price {
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
     font-weight: 700;
 }
 
 .b2b-quote-view .original-price {
     text-decoration: line-through;
-    color: var(--awa-text-muted, #888888);
+    color: var(--awa-text-muted);
     font-size: 12px;
     display: block;
 }
@@ -432,28 +282,28 @@
     justify-content: center;
     min-height: 44px;
     padding: 10px 16px;
-    border: 1px solid var(--awa-border, #e5e7eb);
-    border-radius: 4px;
-    color: var(--awa-text-primary, #333333);
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-radius-sm);
+    color: var(--awa-text-primary, var(--awa-text));
     text-decoration: none;
     box-shadow: none;
 }
 
 .b2b-quote-view .quote-view-actions .action.back:hover {
-    background: var(--awa-bg-muted, #f3f4f6);
+    background: var(--awa-bg-subtle);
     box-shadow: none;
     transform: none;
 }
 
 .b2b-quote-view .quote-decision-section {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 8%, #ffffff);
-    border: 1px solid color-mix(in srgb, var(--awa-success, #16a34a) 22%, #ffffff);
-    border-radius: 4px;
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 8%, var(--awa-bg));
+    border: 1px solid color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 22%, var(--awa-bg));
+    border-radius: var(--awa-radius-sm);
 }
 
 .b2b-quote-view .decision-info {
     font-size: 13px;
-    color: var(--awa-text-primary, #333333);
+    color: var(--awa-text-primary, var(--awa-text));
     margin-bottom: 12px;
     line-height: 1.45;
 }
@@ -466,38 +316,44 @@
 
 .b2b-quote-view .accept-quote-btn,
 .b2b-quote-view .reject-quote-btn {
-    padding: 10px 20px !important;
-    min-height: 44px !important;
-    border-radius: 4px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-transform: none !important;
+    padding: 10px 20px;
+    min-height: 44px;
+    border-radius: var(--awa-radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: none;
     cursor: pointer;
-    box-shadow: none !important;
+    box-shadow: none;
 }
 
 .b2b-quote-view .accept-quote-btn {
-    background: var(--awa-success, #16a34a) !important;
-    color: var(--awa-bg-surface, #ffffff) !important;
-    border: none !important;
+    background: var(--awa-success, var(--awa-primary-dark));
+    color: var(--awa-bg-surface, var(--awa-bg));
+    border: none;
 }
 
 .b2b-quote-view .accept-quote-btn:hover {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 85%, #000000) !important;
-    box-shadow: none !important;
-    transform: none !important;
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 85%, var(--awa-text));
+    box-shadow: none;
+    transform: none;
+}
+
+.b2b-quote-view .accept-quote-btn.is-loading,
+.b2b-quote-view .reject-quote-btn.is-loading {
+    opacity: 0.72;
+    cursor: wait;
 }
 
 .b2b-quote-view .reject-quote-btn {
-    background: var(--awa-bg-surface, #ffffff) !important;
-    color: var(--awa-primary-hover, #8e2629) !important;
-    border: 1px solid color-mix(in srgb, var(--awa-primary, #b73337) 28%, #ffffff) !important;
+    background: var(--awa-bg-surface, var(--awa-bg));
+    color: var(--awa-primary-dark);
+    border: 1px solid color-mix(in srgb, var(--awa-primary) 28%, var(--awa-bg));
 }
 
 .b2b-quote-view .reject-quote-btn:hover {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 6%, #ffffff) !important;
-    box-shadow: none !important;
-    transform: none !important;
+    background: color-mix(in srgb, var(--awa-primary) 6%, var(--awa-bg));
+    box-shadow: none;
+    transform: none;
 }
 
 @media (width <= 900px) {
@@ -517,6 +373,43 @@
     .b2b-quote-view .table-quote-items {
         display: block;
         overflow-x: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .b2b-quote-form-container .b2b-quote-items-table-wrapper {
+        overflow-x: visible;
+    }
+
+    .b2b-quote-view .table-quote-items {
+        min-width: 0;
+    }
+
+    .b2b-quote-form-container .data.table tfoot tr,
+    .b2b-quote-view .table-quote-items tfoot tr {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--awa-border);
+        border-radius: var(--awa-radius-sm);
+    }
+
+    .b2b-quote-form-container .data.table tfoot td,
+    .b2b-quote-view .table-quote-items tfoot td {
+        padding: 0;
+        border: 0;
+    }
+
+    .b2b-quote-form-container .actions-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .b2b-quote-form-container .actions-toolbar :is(.primary, .secondary, .action) {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -544,9 +437,6 @@
     box-shadow: none;
 }
 
-.b2b-quote-form-container .action.primary,
 .b2b-quote-view :is(.accept-quote-btn, .reject-quote-btn, .action.back) {
-    min-height: 44px;
-    border-radius: 4px;
     box-shadow: none;
 }

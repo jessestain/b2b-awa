@@ -65,16 +65,15 @@ class LayoutProcessorPlugin
 
         // IMPORTANTE: validar a existência de CADA nó sem usar referência (=&),
         // que provocaria auto-vivification de nós-fantasma e quebraria o render do KO.
-        if (
-            !isset(
-                $jsLayout['components']['checkout']['children']['steps']['children']
+        if (!isset(
+            $jsLayout['components']['checkout']['children']['steps']['children']
                 ['shipping-step']['children']['shippingAddress']['children']
                 ['before-shipping-method-form']['children']
-            ) || !is_array(
-                $jsLayout['components']['checkout']['children']['steps']['children']
+        ) || !is_array(
+            $jsLayout['components']['checkout']['children']['steps']['children']
                 ['shipping-step']['children']['shippingAddress']['children']
                 ['before-shipping-method-form']['children']
-            )
+        )
         ) {
             return $jsLayout;
         }

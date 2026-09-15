@@ -12,13 +12,14 @@
     </div>
 
     <?php if (!$block->hasItems()): ?>
-        <div class="message info empty">
-            <span><?= $block->escapeHtml(__('O carrinho está vazio. Adicione produtos antes de solicitar a cotação.')) ?></span>
-        </div>
-        <div class="actions">
-            <a href="<?= $block->escapeUrl($block->getUrl('')) ?>" class="action primary">
-                <span><?= $block->escapeHtml(__('Ir ao catálogo')) ?></span>
-            </a>
+        <div class="awa-empty-state" role="status" aria-live="polite">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('O carrinho está vazio')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Adicione produtos antes de solicitar a cotação.')) ?></p>
+            <div class="awa-empty-state__actions">
+                <a href="<?= $block->escapeUrl($block->getUrl('')) ?>" class="action primary">
+                    <span><?= $block->escapeHtml(__('Ir ao catálogo')) ?></span>
+                </a>
+            </div>
         </div>
     <?php else: ?>
         <div class="b2b-quote-wrapper">
@@ -26,13 +27,16 @@
             <div class="b2b-quote-items">
                 <h2><?= $block->escapeHtml(__('Itens para Cotação')) ?></h2>
                 <div class="table-wrapper b2b-quote-items-table-wrapper">
-                <table class="data table" id="quote-items-table">
+                <table class="data table"
+                       id="quote-items-table"
+                       aria-label="<?= $block->escapeHtmlAttr(__('Tabela de itens para cotação')) ?>">
+                    <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Itens para cotação')) ?></caption>
                     <thead>
                         <tr>
-                            <th class="col item"><?= $block->escapeHtml(__('Produto')) ?></th>
-                            <th class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
-                            <th class="col price"><?= $block->escapeHtml(__('Preço Unit.')) ?></th>
-                            <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                            <th scope="col" class="col item"><?= $block->escapeHtml(__('Produto')) ?></th>
+                            <th scope="col" class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
+                            <th scope="col" class="col price"><?= $block->escapeHtml(__('Preço Unit.')) ?></th>
+                            <th scope="col" class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,16 +44,16 @@
                             <tr>
                                 <td class="col item" data-th="<?= $block->escapeHtmlAttr(__('Produto')) ?>">
                                     <strong><?= $block->escapeHtml($item->getName()) ?></strong>
-                                    <br><small>SKU: <?= $block->escapeHtml($item->getSku()) ?></small>
+                                    <br><small><?= $block->escapeHtml(__('SKU: %1', $item->getSku())) ?></small>
                                 </td>
                                 <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qtd')) ?>">
                                     <?= (int) $item->getQty() ?>
                                 </td>
                                 <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Preço Unit.')) ?>">
-                                    R$ <?= number_format($item->getPrice(), 2, ',', '.') ?>
+                                    <?= /* @noEscape */ $block->formatPrice((float) $item->getPrice()) ?>
                                 </td>
                                 <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
-                                    R$ <?= number_format($item->getRowTotal(), 2, ',', '.') ?>
+                                    <?= /* @noEscape */ $block->formatPrice((float) $item->getRowTotal()) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -60,7 +64,7 @@
                                 <strong><?= $block->escapeHtml(__('Total Estimado')) ?></strong>
                             </td>
                             <td class="amount">
-                                <strong>R$ <?= number_format($block->getCartTotal(), 2, ',', '.') ?></strong>
+                                <strong><?= /* @noEscape */ $block->formatPrice($block->getCartTotal()) ?></strong>
                             </td>
                         </tr>
                     </tfoot>
@@ -94,7 +98,10 @@
                                        id="name"
                                        value="<?= $block->escapeHtmlAttr($block->getCustomerName()) ?>"
                                        class="input-text"
+                                       autocomplete="name"
                                        data-validate="{required:true}"
+                                       required
+                                       aria-required="true"
                                        <?= $block->isLoggedIn() ? 'readonly' : '' ?>>
                             </div>
                         </div>
@@ -109,7 +116,11 @@
                                        id="email"
                                        value="<?= $block->escapeHtmlAttr($block->getCustomerEmail()) ?>"
                                        class="input-text"
+                                       autocomplete="email"
+                                       inputmode="email"
                                        data-validate="{required:true, 'validate-email':true}"
+                                       required
+                                       aria-required="true"
                                        <?= $block->isLoggedIn() ? 'readonly' : '' ?>>
                             </div>
                         </div>
@@ -123,6 +134,7 @@
                                        name="company_name"
                                        id="company_name"
                                        value="<?= $block->escapeHtmlAttr($block->getCompanyName()) ?>"
+                                       autocomplete="organization"
                                        class="input-text">
                             </div>
                         </div>
@@ -137,7 +149,9 @@
                                        id="cnpj"
                                        value="<?= $block->escapeHtmlAttr($block->getCnpj()) ?>"
                                        class="input-text"
-                                       placeholder="00.000.000/0000-00">
+                                       inputmode="numeric"
+                                       autocomplete="off"
+                                       placeholder="<?= $block->escapeHtmlAttr(__('00.000.000/0000-00')) ?>">
                             </div>
                         </div>
 
@@ -151,7 +165,9 @@
                                        id="phone"
                                        value="<?= $block->escapeHtmlAttr($block->getPhone()) ?>"
                                        class="input-text"
-                                       placeholder="(00) 00000-0000">
+                                       inputmode="tel"
+                                       autocomplete="tel"
+                                       placeholder="<?= $block->escapeHtmlAttr(__('(00) 00000-0000')) ?>">
                             </div>
                         </div>
 
@@ -188,7 +204,6 @@
 
                     <div class="b2b-quote-info">
                         <p>
-                            <i class="fa fa-info-circle"></i>
                             <?= $block->escapeHtml(__('Sua cotação terá validade de %1 dias após o envio.', $block->getExpiryDays())) ?>
                         </p>
                     </div>

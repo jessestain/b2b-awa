@@ -1,12 +1,35 @@
 define([
     'jquery',
+    'mage/translate',
     'Magento_Customer/js/customer-data'
-], function ($, customerData) {
+], function ($, $t, customerData) {
     'use strict';
 
-    function formatCurrency(amount)
+    function normalizeLocale(locale)
+    {
+        var normalized = String(locale || '').replace('_', '-').trim();
+
+        return normalized || 'pt-BR';
+    }
+
+    function formatCurrency(amount, currencyCode, locale)
     {
         var value = Math.max(0, parseFloat(amount) || 0);
+        var safeCurrency = String(currencyCode || '').trim() || 'BRL';
+        var safeLocale = normalizeLocale(locale);
+
+        if (window.Intl && window.Intl.NumberFormat) {
+            try {
+                return new window.Intl.NumberFormat(safeLocale, {
+                    style: 'currency',
+                    currency: safeCurrency,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(value);
+            } catch (e) {
+                // Fallback abaixo mantém experiência previsível.
+            }
+        }
 
         return 'R$ ' + value.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -17,6 +40,8 @@ define([
     return function (config, element) {
         var $root = $(element);
         var minAmount = parseFloat(config.minAmount) || 0;
+        var locale = normalizeLocale(config.locale);
+        var currencyCode = String(config.currencyCode || '').trim() || 'BRL';
 
         if (!config.enabled || minAmount <= 0) {
             $root.attr('hidden', 'hidden');
@@ -27,7 +52,9 @@ define([
         {
             var remaining = Math.max(0, minAmount - subtotal);
             var percent = minAmount > 0 ? Math.min(100, Math.round((subtotal / minAmount) * 100)) : 100;
-            var message = 'Faltam ' + formatCurrency(remaining) + ' para atingir o pedido mínimo de ' + formatCurrency(minAmount) + '.';
+            var message = $t('Faltam %1 para atingir o pedido mínimo de %2.')
+                .replace('%1', formatCurrency(remaining, currencyCode, locale))
+                .replace('%2', formatCurrency(minAmount, currencyCode, locale));
 
             if (subtotal <= 0 || remaining <= 0.009) {
                 $root.attr('hidden', 'hidden');

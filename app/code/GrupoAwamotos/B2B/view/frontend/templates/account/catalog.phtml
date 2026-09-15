@@ -1,52 +1,58 @@
 <?php
 /** @var \GrupoAwamotos\B2B\Block\Account\Catalog $block */
 ?>
-<div class="b2b-private-label-catalog">
+<div class="b2b-private-label-catalog b2b-page-shell">
     <div class="b2b-section-header">
         <h1><?= $block->escapeHtml(__('Catálogo exclusivo')) ?></h1>
         <p class="section-subtitle"><?= $block->escapeHtml(__('Produtos da sua marca, visíveis somente para sua conta.')) ?></p>
     </div>
 
     <?php if ($block->hasExclusiveProducts()): ?>
-        <table class="data table b2b-catalog-table" id="b2b-private-label-catalog">
-            <caption class="table-caption"><?= $block->escapeHtml(__('Produtos Private Label')) ?></caption>
-            <thead>
-                <tr>
-                    <th scope="col" class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th scope="col" class="col name"><?= $block->escapeHtml(__('Produto')) ?></th>
-                    <th scope="col" class="col label"><?= $block->escapeHtml(__('Sua Marca')) ?></th>
-                    <th scope="col" class="col actions"><?= $block->escapeHtml(__('Ação')) ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($block->getExclusiveProducts() as $product): ?>
+        <div class="table-wrapper">
+            <table class="data table b2b-catalog-table"
+                   id="b2b-private-label-catalog"
+                   aria-label="<?= $block->escapeHtmlAttr(__('Tabela de catálogo exclusivo')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Produtos Private Label')) ?></caption>
+                <thead>
                     <tr>
-                        <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>">
-                            <span><?= $block->escapeHtml($product['sku']) ?></span>
-                        </td>
-                        <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Produto')) ?>">
-                            <?= $block->escapeHtml($product['name']) ?>
-                        </td>
-                        <td class="col label" data-th="<?= $block->escapeHtmlAttr(__('Sua Marca')) ?>">
-                            <?php if ($product['label']): ?>
-                                <strong><?= $block->escapeHtml($product['label']) ?></strong>
-                            <?php else: ?>
-                                <span class="no-label">—</span>
-                            <?php endif; ?>
-                        </td>
-                        <td class="col actions" data-th="<?= $block->escapeHtmlAttr(__('Ação')) ?>">
-                            <a href="<?= $block->escapeUrl($product['url']) ?>"
-                               class="action view">
-                                <?= $block->escapeHtml(__('Ver produto')) ?>
-                            </a>
-                        </td>
+                        <th scope="col" class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                        <th scope="col" class="col name"><?= $block->escapeHtml(__('Produto')) ?></th>
+                        <th scope="col" class="col label"><?= $block->escapeHtml(__('Sua Marca')) ?></th>
+                        <th scope="col" class="col actions"><?= $block->escapeHtml(__('Ação')) ?></th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($block->getExclusiveProducts() as $product): ?>
+                        <tr>
+                            <td class="col sku" data-th="<?= $block->escapeHtmlAttr(__('SKU')) ?>">
+                                <span><?= $block->escapeHtml($product['sku']) ?></span>
+                            </td>
+                            <td class="col name" data-th="<?= $block->escapeHtmlAttr(__('Produto')) ?>">
+                                <?= $block->escapeHtml($product['name']) ?>
+                            </td>
+                            <td class="col label" data-th="<?= $block->escapeHtmlAttr(__('Sua Marca')) ?>">
+                                <?php if ($product['label']): ?>
+                                    <strong><?= $block->escapeHtml($product['label']) ?></strong>
+                                <?php else: ?>
+                                    <span class="no-label">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="col actions" data-th="<?= $block->escapeHtmlAttr(__('Ação')) ?>">
+                                <a href="<?= $block->escapeUrl($product['url']) ?>"
+                                   class="action secondary"
+                                   aria-label="<?= $block->escapeHtmlAttr(__('Ver produto %1', $product['name'])) ?>">
+                                    <?= $block->escapeHtml(__('Ver produto')) ?>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php else: ?>
-        <div class="message info empty">
-            <span><?= $block->escapeHtml(__('Nenhum produto exclusivo cadastrado para sua marca ainda.')) ?></span>
+        <div class="awa-empty-state" role="status" aria-live="polite">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhum produto exclusivo')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Quando sua marca receber itens dedicados, eles aparecerão aqui automaticamente.')) ?></p>
         </div>
     <?php endif; ?>
 </div>

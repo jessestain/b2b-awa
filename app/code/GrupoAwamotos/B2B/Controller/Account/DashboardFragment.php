@@ -85,5 +85,4 @@ class DashboardFragment implements HttpGetActionInterface
             ->setHeader('Content-Type', 'text/html; charset=UTF-8', true)
             ->setContents($html);
     }
-
 }

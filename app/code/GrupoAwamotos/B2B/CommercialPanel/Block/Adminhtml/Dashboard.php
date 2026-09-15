@@ -115,7 +115,7 @@ class Dashboard extends Template
     {
         return $this->getUrl(
             'awa_commercial/commercialcustomer/view',
-            ['customer_id' => $customerId, '_fragment' => 'tab-contatos']
+            ['customer_id' => $customerId, '_query' => ['tab' => 'contatos']]
         );
     }
 

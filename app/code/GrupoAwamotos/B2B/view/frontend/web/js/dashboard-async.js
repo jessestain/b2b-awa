@@ -5,6 +5,68 @@
 define(['jquery', 'mage/translate'], function ($, $t) {
     'use strict';
 
+    function toBoundedPercent(value)
+    {
+        let numeric = Number(value);
+
+        if (!isFinite(numeric)) {
+            return null;
+        }
+
+        return Math.max(0, Math.min(100, Math.round(numeric)));
+    }
+
+    function isSafeCssColor(value)
+    {
+        if (!value) {
+            return false;
+        }
+
+        let color = String(value).trim();
+        return /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color) ||
+            /^(?:rgb|rgba|hsl|hsla)\([^)]{3,}\)$/.test(color) ||
+            /^var\(--[a-zA-Z0-9_-]+\)$/.test(color) ||
+            /^[a-zA-Z]+$/.test(color);
+    }
+
+    function applyDynamicStyles(rootNode)
+    {
+        let root = rootNode && rootNode.querySelectorAll ? rootNode : document;
+
+        root.querySelectorAll('.b2b-rfm-badge[data-rfm-color]').forEach(function (element) {
+            let color = String(element.getAttribute('data-rfm-color') || '').trim();
+
+            if (!isSafeCssColor(color)) {
+                element.style.removeProperty('--b2b-rfm-color');
+                return;
+            }
+
+            element.style.setProperty('--b2b-rfm-color', color);
+        });
+
+        root.querySelectorAll('.rfm-tag[data-rfm-tag-color]').forEach(function (element) {
+            let color = String(element.getAttribute('data-rfm-tag-color') || '').trim();
+
+            if (!isSafeCssColor(color)) {
+                element.style.removeProperty('--b2b-rfm-tag-bg');
+                return;
+            }
+
+            element.style.setProperty('--b2b-rfm-tag-bg', color);
+        });
+
+        root.querySelectorAll('.progress-fill[data-bar-width], .credit-bar-fill[data-bar-width]').forEach(function (element) {
+            let width = toBoundedPercent(element.getAttribute('data-bar-width'));
+
+            if (width === null) {
+                element.style.removeProperty('--b2b-bar-width');
+                return;
+            }
+
+            element.style.setProperty('--b2b-bar-width', String(width));
+        });
+    }
+
     return function (config) {
         let baseUrl = config.ajaxUrl || '/b2b/account/dashboardData';
         let fragmentUrl = config.fragmentUrl || '';
@@ -358,9 +420,7 @@ define(['jquery', 'mage/translate'], function ($, $t) {
                         $panel.attr('aria-busy', 'false');
                         $panel.addClass('b2b-dashboard-lazy-panel--loaded');
                         $panel.html(html);
-                        if (window.mage && typeof window.mage.apply === 'function') {
-                            window.mage.apply();
-                        }
+                        applyDynamicStyles($panel.get(0));
                     } else {
                         $panel.remove();
                     }
@@ -419,6 +479,7 @@ define(['jquery', 'mage/translate'], function ($, $t) {
 
         function scheduleWork()
         {
+            applyDynamicStyles(document);
             loadJsonSections();
             initLazyPanels();
         }

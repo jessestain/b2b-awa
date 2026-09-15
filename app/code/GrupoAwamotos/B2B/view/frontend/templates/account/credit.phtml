@@ -3,8 +3,16 @@
 $credit = $block->getCreditLimit();
 $transactions = $block->getTransactions();
 $usagePercent = $block->getUsagePercent();
+$usage = min(100.0, (float) $usagePercent);
+$creditLimit = $credit ? (float) $credit->getCreditLimit() : 0.0;
+$usedCredit = $credit ? (float) $credit->getUsedCredit() : 0.0;
+$availableCredit = $credit ? (float) $credit->getAvailableCredit() : 0.0;
 ?>
-<div class="b2b-credit-page b2b-page-shell">
+<div class="b2b-credit-page b2b-page-shell"
+     data-mage-init='<?= /* @noEscape */ json_encode(
+         ['GrupoAwamotos_B2B/js/account/credit-usage' => new \stdClass()],
+         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+     ) ?>'>
     <div class="b2b-section-header">
         <h1><?= $block->escapeHtml(__('Meu Crédito B2B')) ?></h1>
         <p class="section-subtitle"><?= $block->escapeHtml(__('Limite disponível, uso atual e histórico de movimentações.')) ?></p>
@@ -13,45 +21,52 @@ $usagePercent = $block->getUsagePercent();
     <!-- Resumo de Crédito -->
     <div class="credit-summary-cards">
         <div class="credit-card credit-card--limit">
-            <span class="credit-card__label"><?= __('Limite Total') ?></span>
-            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($credit->getCreditLimit()) ?></span>
+            <span class="credit-card__label"><?= $block->escapeHtml(__('Limite Total')) ?></span>
+            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($creditLimit) ?></span>
         </div>
         <div class="credit-card credit-card--used">
-            <span class="credit-card__label"><?= __('Utilizado') ?></span>
-            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($credit->getUsedCredit()) ?></span>
+            <span class="credit-card__label"><?= $block->escapeHtml(__('Utilizado')) ?></span>
+            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($usedCredit) ?></span>
         </div>
         <div class="credit-card credit-card--available">
-            <span class="credit-card__label"><?= __('Disponível') ?></span>
-            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($credit->getAvailableCredit()) ?></span>
+            <span class="credit-card__label"><?= $block->escapeHtml(__('Disponível')) ?></span>
+            <span class="credit-card__value"><?= /* @noEscape */ $block->formatPrice($availableCredit) ?></span>
         </div>
     </div>
 
     <!-- Barra de Uso -->
     <div class="credit-usage-bar">
         <div class="credit-usage-bar__label">
-            <span><?= __('Uso do Crédito') ?></span>
-            <span><?= number_format(min(100.0, (float)$usagePercent), 0) ?>%</span>
+            <span><?= $block->escapeHtml(__('Uso do Crédito')) ?></span>
+            <span><?= $block->escapeHtml((string) (int) round((float) $usage)) ?>%</span>
         </div>
-        <div class="credit-usage-bar__track">
+        <div class="credit-usage-bar__track"
+             role="progressbar"
+             aria-label="<?= $block->escapeHtmlAttr(__('Uso do crédito')) ?>"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             aria-valuenow="<?= $block->escapeHtmlAttr((string) $usage) ?>">
             <div class="credit-usage-bar__fill <?= $usagePercent > 80 ? 'credit-usage-bar__fill--warning' : '' ?>"
-                 style="--b2b-credit-width:<?= min(100.0, (float)$usagePercent) ?>%"></div>
+                 data-usage-percent="<?= $block->escapeHtmlAttr((string) $usage) ?>"></div>
         </div>
     </div>
 
     <!-- Histórico de Transações -->
     <div class="credit-transactions">
-        <h2><?= __('Histórico de Transações') ?></h2>
+        <h2><?= $block->escapeHtml(__('Histórico de Transações')) ?></h2>
 
         <?php if ($transactions->getSize() > 0): ?>
-            <table class="data table table-credit-transactions">
+            <div class="table-wrapper">
+            <table class="data table table-credit-transactions" aria-label="<?= $block->escapeHtmlAttr(__('Histórico de transações de crédito')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Histórico de transações de crédito')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= __('Data') ?></th>
-                        <th><?= __('Tipo') ?></th>
-                        <th><?= __('Valor') ?></th>
-                        <th><?= __('Saldo Após') ?></th>
-                        <th><?= __('Referência') ?></th>
-                        <th><?= __('Observação') ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Tipo')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Valor')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Saldo Após')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Referência')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Observação')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +74,7 @@ $usagePercent = $block->getUsagePercent();
                         <?php $amount = (float) $txn->getData('amount'); ?>
                         <tr>
                             <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>">
-                                <?= $block->escapeHtml(date('d/m/Y H:i', strtotime($txn->getData('created_at')))) ?>
+                                <?= $block->escapeHtml($block->formatDateTime((string) $txn->getData('created_at'))) ?>
                             </td>
                             <td data-th="<?= $block->escapeHtmlAttr(__('Tipo')) ?>">
                                 <span class="txn-type txn-type--<?= $block->escapeHtmlAttr($txn->getData('type')) ?>">
@@ -78,8 +93,12 @@ $usagePercent = $block->getUsagePercent();
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            </div>
         <?php else: ?>
-            <p class="empty-message"><?= $block->escapeHtml(__('Nenhuma movimentação ainda. Compras e pagamentos com crédito aparecem aqui.')) ?></p>
+            <div class="awa-empty-state" role="status" aria-live="polite">
+                <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhuma movimentação ainda')) ?></p>
+                <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Compras e pagamentos com crédito aparecem aqui.')) ?></p>
+            </div>
         <?php endif; ?>
     </div>
 </div>

@@ -19,42 +19,41 @@
    1. TOKENS LOCAIS B2B — aliases semânticos apontando para globais
    ========================================================================== */
 :root {
-    /* Bridges de cor: --b2b-acct-dash-c* → semântica real
-     * Mantém compatibilidade retroativa sem quebrar dashboard.css existente */
-    --b2b-acct-dash-success:          #059669;   /* c5 */
-    --b2b-acct-dash-success-bg:       #d1fae5;   /* c4 */
-    --b2b-acct-dash-success-text:     #065f46;   /* c11 */
-    --b2b-acct-dash-success-dark:     #15803d;   /* c30 */
-    --b2b-acct-dash-success-light:    #f0fdf4;   /* c21 */
+    /* Bridges de cor: --b2b-acct-dash-c* → tokens AWA (sem hex solto) */
+    --b2b-acct-dash-success:          var(--awa-success);
+    --b2b-acct-dash-success-bg:       var(--awa-success-bg, color-mix(in srgb, var(--awa-success) 14%, var(--awa-bg)));
+    --b2b-acct-dash-success-text:     color-mix(in srgb, var(--awa-success) 78%, var(--awa-text));
+    --b2b-acct-dash-success-dark:     color-mix(in srgb, var(--awa-success) 85%, var(--awa-text));
+    --b2b-acct-dash-success-light:    color-mix(in srgb, var(--awa-success) 6%, var(--awa-bg));
 
-    --b2b-acct-dash-warning:          #d97706;   /* c7 */
-    --b2b-acct-dash-warning-bg:       #fef3c7;   /* c6 */
-    --b2b-acct-dash-warning-text:     #92400e;   /* c28 */
-    --b2b-acct-dash-warning-dark:     #78350f;   /* c29 */
-    --b2b-acct-dash-warning-amber:    #f59e0b;   /* c2 */
+    --b2b-acct-dash-warning:          var(--awa-warning);
+    --b2b-acct-dash-warning-bg:       var(--awa-warning-bg);
+    --b2b-acct-dash-warning-text:     var(--awa-warning-text, var(--awa-msg-warning-text, var(--awa-text-primary)));
+    --b2b-acct-dash-warning-dark:     color-mix(in srgb, var(--awa-warning) 72%, var(--awa-text));
+    --b2b-acct-dash-warning-amber:    var(--awa-warning);
 
-    --b2b-acct-dash-danger:           #dc2626;   /* c9 */
-    --b2b-acct-dash-danger-bg:        #fee2e2;   /* c13 */
-    --b2b-acct-dash-danger-text:      #b91c1c;   /* c14 */
-    --b2b-acct-dash-danger-strong:    #ef4444;   /* c26 */
+    --b2b-acct-dash-danger:           var(--awa-primary);
+    --b2b-acct-dash-danger-bg:        color-mix(in srgb, var(--awa-primary) 10%, var(--awa-bg));
+    --b2b-acct-dash-danger-text:      var(--awa-primary-dark);
+    --b2b-acct-dash-danger-strong:    var(--awa-primary);
 
-    --b2b-acct-dash-info:             #1d4ed8;   /* c33 */
-    --b2b-acct-dash-info-bg:          #eff6ff;   /* c32 */
-    --b2b-acct-dash-info-bg-indigo:   #e0e7ff;   /* c16 */
-    --b2b-acct-dash-info-text:        #4338ca;   /* c17 */
+    --b2b-acct-dash-info:             var(--awa-text-secondary, var(--awa-text-muted));
+    --b2b-acct-dash-info-bg:          var(--awa-bg-subtle);
+    --b2b-acct-dash-info-bg-indigo:   color-mix(in srgb, var(--awa-border) 55%, var(--awa-bg));
+    --b2b-acct-dash-info-text:        var(--awa-text-primary, var(--awa-text));
 
-    --b2b-acct-dash-neutral-50:       #f8fafc;   /* bg-muted */
-    --b2b-acct-dash-neutral-100:      #f1f5f9;   /* c34 */
-    --b2b-acct-dash-neutral-200:      #e2e8f0;   /* c36 */
-    --b2b-acct-dash-neutral-300:      #94a3b8;   /* c39 */
-    --b2b-acct-dash-neutral-400:      #64748b;   /* c31 */
-    --b2b-acct-dash-neutral-500:      #475569;   /* c37 */
-    --b2b-acct-dash-neutral-600:      #4b5563;   /* c8 */
-    --b2b-acct-dash-neutral-700:      #374151;   /* c18 */
-    --b2b-acct-dash-neutral-900:      #1e293b;   /* c35 */
+    --b2b-acct-dash-neutral-50:       var(--awa-bg-subtle);
+    --b2b-acct-dash-neutral-100:      var(--awa-bg-subtle);
+    --b2b-acct-dash-neutral-200:      var(--awa-border, var(--awa-line));
+    --b2b-acct-dash-neutral-300:      var(--awa-text-muted);
+    --b2b-acct-dash-neutral-400:      var(--awa-text-muted);
+    --b2b-acct-dash-neutral-500:      var(--awa-text-secondary, var(--awa-text-muted));
+    --b2b-acct-dash-neutral-600:      var(--awa-text-secondary, var(--awa-text-muted));
+    --b2b-acct-dash-neutral-700:      var(--awa-text-primary, var(--awa-text));
+    --b2b-acct-dash-neutral-900:      var(--awa-text-primary, var(--awa-text));
 
-    --b2b-acct-dash-primary:          var(--awa-primary, #b73337);
-    --b2b-acct-dash-primary-dark:     var(--awa-primary-hover, #8e2629);
+    --b2b-acct-dash-primary:          var(--awa-primary);
+    --b2b-acct-dash-primary-dark:     var(--awa-primary-dark, var(--awa-primary-hover));
 
     /* Spacing bridges → tokens fluidos globais */
     --b2b-dashboard-gap-tight:        var(--gap-tight, var(--size-xs,  0.75rem));
@@ -177,7 +176,7 @@
 .b2b-section-link,
 .b2b-dashboard-see-all {
     align-items: center;
-    border-radius: var(--awa-radius-sm, 4px);
+    border-radius: var(--awa-b2b-radius, 8px);
     cursor: pointer;
     display: inline-flex;
     flex-shrink: 0;
@@ -196,16 +195,16 @@
 @media (hover: hover) and (pointer: fine) {
     .b2b-section-link:hover,
     .b2b-dashboard-see-all:hover {
-        background-color: color-mix(in srgb, var(--awa-primary, #b73337) 8%, transparent);
-        color: var(--awa-primary, #b73337);
+        background-color: color-mix(in srgb, var(--awa-primary) 8%, transparent);
+        color: var(--awa-primary);
     }
 }
 
 .b2b-section-link:focus-visible,
 .b2b-dashboard-see-all:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337);
+    outline: 2px solid var(--awa-primary);
     outline-offset: 2px;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--awa-primary, #b73337) 14%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--awa-primary) 14%, transparent);
 }
 
 /* ==========================================================================
@@ -278,7 +277,7 @@
 .b2b-field input:focus-visible,
 .b2b-field select:focus-visible,
 .b2b-field textarea:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337);
+    outline: 2px solid var(--awa-primary);
     outline-offset: 0;
 }
 
@@ -288,7 +287,7 @@
 .b2b-btn,
 .b2b-action-btn {
     align-items: center;
-    border-radius: var(--awa-radius-md, 6px);
+    border-radius: var(--awa-b2b-radius, 8px);
     cursor: pointer;
     display: inline-flex;
     font-weight: var(--awa-weight-semibold, 600);

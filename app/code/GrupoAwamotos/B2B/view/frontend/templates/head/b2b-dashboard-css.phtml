@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 /** @var \Magento\Framework\View\Element\Template $block */
 // 2026-06-15: dashboard-refinement.css absorvido em awa-b2b-dashboard-late.css (save 1 async recalc)
-// 2026-06-15: dashboard-impeccable-audit.css dividido em phases + terminal (cache granularity)
-$visualUpgradeUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/dashboard-visual-upgrade.css');
+// 2026-08-17: camadas de auditoria/upgrade legadas removidas da fila ativa.
 $lateUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/awa-b2b-dashboard-late.css');
-$auditPhasesUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/dashboard-audit-phases.css');
-$auditTerminalUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/dashboard-audit-terminal.css');
-$assetVersion = '20260716-v80-main-dark';
+$chromeUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/pages-dashboard-chrome.css');
+$assetVersion = '20260817-v101-ssot';
 ?>
 <style id="awa-b2b-dashboard-critical">
 /* Critical inline: estado visual imediato antes dos bundles assíncronos carregarem.
@@ -40,13 +38,14 @@ html body#html-body:is(.account, .b2b-account-dashboard) .account-nav-title {
 
 html body#html-body:is(.account, .b2b-account-dashboard) .account-nav-title strong {
     color: var(--awa-text, #1a1a1a) !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
     letter-spacing: normal !important;
     text-transform: none !important;
 }
 
 html body#html-body:is(.account, .b2b-account-dashboard) .account-nav-item .account-nav-link {
+    min-height: 44px !important;
     border-radius: 4px !important;
     border-left: 0 !important;
     border-inline-start: 0 !important;
@@ -722,13 +721,14 @@ html body#html-body.b2b-account-dashboard .page-wrapper #block-collapsible-nav :
 }
 
 html body#html-body.b2b-account-dashboard .page-wrapper #block-collapsible-nav :is(li.nav.item > a, .account-nav-link, .account-nav-text) {
-    display: block !important;
+    display: flex !important;
+    align-items: center !important;
     width: 100% !important;
-    min-height: 36px !important;
-    padding: 8px 10px !important;
+    min-height: 44px !important;
+    padding: 10px 16px !important;
     border-radius: 4px !important;
     color: var(--awa-text, #333333) !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
     line-height: 1.35 !important;
     white-space: normal !important;
@@ -770,7 +770,7 @@ html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard svg {
 html body#html-body.b2b-account-dashboard .page-wrapper .b2b-dashboard :is(
     .checklist-icon svg,
     .section-header svg,
-    .b2b-section > h3 svg,
+    .b2b-section > :is(h2, h3) svg,
     .onboarding-title svg
 ) {
     width: 20px !important;
@@ -846,46 +846,10 @@ html body#html-body:is(.account, .b2b-account-dashboard) .page-wrapper .minicart
       href="<?= $block->escapeUrl($lateUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"
       media="print"
       onload="this.media='all'"/>
-<script>
-(function (w, d) {
-    'use strict';
-    // Ordem de carga: visual-upgrade → audit-phases → audit-terminal (SSOT final-wins carrega por último)
-    var urls = [
-        <?= /* @noEscape */ json_encode($visualUpgradeUrl . '?v=' . $assetVersion, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
-        <?= /* @noEscape */ json_encode($auditPhasesUrl . '?v=' . $assetVersion, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>,
-        <?= /* @noEscape */ json_encode($auditTerminalUrl . '?v=' . $assetVersion, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>
-    ];
-    function inject(href) {
-        if (!href || d.querySelector('link[href="' + href + '"]')) {
-            return;
-        }
-        var link = d.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.media = 'all';
-        link.fetchPriority = 'low';
-        d.head.appendChild(link);
-    }
-    function schedule() {
-        var i = 0;
-        (function next() {
-            if (i >= urls.length) {
-                return;
-            }
-            inject(urls[i++]);
-            w.setTimeout(next, 120);
-        }());
-    }
-    if ('requestIdleCallback' in w) {
-        w.requestIdleCallback(schedule, { timeout: 6000 });
-    } else {
-        w.setTimeout(schedule, 2000);
-    }
-}(window, document));
-</script>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($chromeUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"
+      media="all"/>
 <noscript>
-    <link rel="stylesheet" href="<?= $block->escapeUrl($visualUpgradeUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
     <link rel="stylesheet" href="<?= $block->escapeUrl($lateUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
-    <link rel="stylesheet" href="<?= $block->escapeUrl($auditPhasesUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
-    <link rel="stylesheet" href="<?= $block->escapeUrl($auditTerminalUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
+    <link rel="stylesheet" href="<?= $block->escapeUrl($chromeUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
 </noscript>

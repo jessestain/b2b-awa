@@ -258,7 +258,8 @@ class CnpjValidatorTest extends TestCase
 
         $this->assertNotNull($result);
         $this->assertTrue($result['valid']);
-        $this->assertSame('cache', $result['source']);
+        $this->assertSame('api', $result['source']);
+        $this->assertTrue($result['cached']);
     }
 
     // ====================================================================
@@ -407,6 +408,144 @@ class CnpjValidatorTest extends TestCase
 
         $result = $this->validator->validateApi('11222333000181');
         $this->assertNull($result);
+    }
+
+    public function testValidateApiFallsBackLocallyWhenReceitaReturnsError(): void
+    {
+        $apiResponse = json_encode(['status' => 'ERROR', 'message' => 'CNPJ rejeitado pela Receita Federal']);
+
+        $this->scopeConfig->method('isSetFlag')->willReturnCallback(function (string $path) {
+            return match (true) {
+                str_contains($path, 'allow_local_fallback') => true,
+                str_contains($path, 'cache_enabled') => false,
+                str_contains($path, 'enabled') => true,
+                default => false,
+            };
+        });
+
+        $this->scopeConfig->method('getValue')->willReturnCallback(function (string $path) {
+            return match (true) {
+                str_contains($path, 'api_url') => 'https://receitaws.com.br/v1/cnpj/',
+                str_contains($path, 'timeout') => '10',
+                default => null,
+            };
+        });
+
+        $this->stubLookupHttp([
+            'receitaws' => ['status' => 200, 'body' => $apiResponse ?: '{}'],
+            'brasilapi' => ['status' => 404, 'body' => '{"message":"not found"}'],
+            'cnpj.ws' => ['status' => 404, 'body' => '{"error":"not found"}'],
+        ]);
+
+        $result = $this->validator->validateApi('11222333000181');
+
+        $this->assertNotNull($result);
+        $this->assertTrue($result['valid']);
+        $this->assertSame('fallback', $result['source']);
+        $this->assertTrue($result['api_error']);
+        $this->assertStringContainsString('bases públicas da Receita', (string) $result['message']);
+    }
+
+    public function testValidateApiUsesCnpjWsWhenReceitaAndBrasilApiMiss(): void
+    {
+        $cnpjWs = json_encode([
+            'razao_social' => 'Empresa Nova LTDA',
+            'porte' => ['descricao' => 'Micro Empresa'],
+            'natureza_juridica' => ['descricao' => 'Sociedade Empresária Limitada'],
+            'estabelecimento' => [
+                'tipo' => 'Matriz',
+                'nome_fantasia' => 'Empresa Nova',
+                'situacao_cadastral' => 'Ativa',
+                'tipo_logradouro' => 'Rua',
+                'logradouro' => 'Central',
+                'numero' => '10',
+                'complemento' => '',
+                'bairro' => 'Centro',
+                'cep' => '14800000',
+                'ddd1' => '16',
+                'telefone1' => '33333333',
+                'email' => 'contato@example.com',
+                'cidade' => ['nome' => 'Araraquara'],
+                'estado' => ['sigla' => 'SP'],
+                'atividade_principal' => [
+                    'id' => '4541206',
+                    'subclasse' => '4541-2/06',
+                    'descricao' => 'Comércio a varejo de peças',
+                ],
+            ],
+        ]);
+
+        $this->scopeConfig->method('isSetFlag')->willReturnCallback(function (string $path) {
+            return match (true) {
+                str_contains($path, 'allow_local_fallback') => false,
+                str_contains($path, 'require_active') => true,
+                str_contains($path, 'cache_enabled') => false,
+                str_contains($path, 'enabled') => true,
+                default => false,
+            };
+        });
+
+        $this->scopeConfig->method('getValue')->willReturnCallback(function (string $path) {
+            return match (true) {
+                str_contains($path, 'api_url') => 'https://receitaws.com.br/v1/cnpj/',
+                str_contains($path, 'timeout') => '10',
+                default => null,
+            };
+        });
+
+        $this->stubLookupHttp([
+            'receitaws' => [
+                'status' => 200,
+                'body' => json_encode(['status' => 'ERROR', 'message' => 'CNPJ rejeitado pela Receita Federal']) ?: '{}',
+            ],
+            'brasilapi' => ['status' => 404, 'body' => '{"message":"not found"}'],
+            'cnpj.ws' => ['status' => 200, 'body' => $cnpjWs ?: '{}'],
+        ]);
+
+        $result = $this->validator->validateApi('11222333000181');
+
+        $this->assertNotNull($result);
+        $this->assertTrue($result['valid']);
+        $this->assertSame('cnpjws', $result['source']);
+        $this->assertSame('Empresa Nova LTDA', $result['razao_social']);
+        $this->assertSame('Empresa Nova', $result['nome_fantasia']);
+        $this->assertSame('ATIVA', $result['situacao']);
+        $this->assertSame('SP', $result['uf']);
+        $this->assertSame('Araraquara', $result['municipio']);
+        $this->assertSame('14800000', $result['cep']);
+        $this->assertSame('1633333333', $result['telefone']);
+        $this->assertSame('Comércio a varejo de peças', $result['atividade_principal']);
+    }
+
+    /**
+     * @param array<string, array{status: int, body: string}> $responsesByNeedle
+     */
+    private function stubLookupHttp(array $responsesByNeedle): void
+    {
+        $lastUrl = new \stdClass();
+        $lastUrl->value = '';
+
+        $this->curl->method('get')->willReturnCallback(function ($uri) use ($lastUrl) {
+            $lastUrl->value = (string) $uri;
+        });
+        $this->curl->method('getBody')->willReturnCallback(function () use ($lastUrl, $responsesByNeedle) {
+            foreach ($responsesByNeedle as $needle => $payload) {
+                if (str_contains($lastUrl->value, $needle)) {
+                    return $payload['body'];
+                }
+            }
+
+            return '{}';
+        });
+        $this->curl->method('getStatus')->willReturnCallback(function () use ($lastUrl, $responsesByNeedle) {
+            foreach ($responsesByNeedle as $needle => $payload) {
+                if (str_contains($lastUrl->value, $needle)) {
+                    return $payload['status'];
+                }
+            }
+
+            return 0;
+        });
     }
 
     // ====================================================================

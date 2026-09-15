@@ -119,7 +119,10 @@ class SessionMessages extends Messages
             $metadata->setPath('/');
             $this->cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME, $metadata);
         } catch (\Exception $exception) {
-            // Cookie missing or headers already sent — safe to ignore.
+            $this->_logger->debug(
+                '[SessionMessages::clearMessagesCookie] Cookie ausente ou headers já enviados: '
+                . $exception->getMessage()
+            );
         }
     }
 }

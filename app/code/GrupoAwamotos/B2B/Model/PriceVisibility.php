@@ -19,6 +19,7 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
 
@@ -60,6 +61,7 @@ class PriceVisibility implements PriceVisibilityInterface
     private ?ErpCodeResolver $erpCodeResolver;
     private ?PurchaseHistory $purchaseHistory;
     private HttpContext $httpContext;
+    private PhpCookieManager $cookieManager;
 
     /**
      * @var bool|null
@@ -80,6 +82,7 @@ class PriceVisibility implements PriceVisibilityInterface
         CustomerRepositoryInterface $customerRepository,
         HttpContext $httpContext,
         UrlInterface $urlBuilder,
+        PhpCookieManager $cookieManager,
         ?SyncLogResource $syncLogResource = null,
         ?LoggerInterface $logger = null,
         ?ErpCodeResolver $erpCodeResolver = null,
@@ -90,6 +93,7 @@ class PriceVisibility implements PriceVisibilityInterface
         $this->customerRepository = $customerRepository;
         $this->httpContext = $httpContext;
         $this->urlBuilder = $urlBuilder;
+        $this->cookieManager = $cookieManager;
         $this->syncLogResource = $syncLogResource;
         $this->logger = $logger ?? new \Psr\Log\NullLogger();
         $this->erpCodeResolver = $erpCodeResolver;
@@ -221,8 +225,7 @@ class PriceVisibility implements PriceVisibilityInterface
             $approvalStatus = $this->getCustomerApprovalStatus();
 
             // Aprovado mas sem código ERP — tabela de preços em definição
-            if (
-                $approvalStatus === ApprovalStatus::STATUS_APPROVED
+            if ($approvalStatus === ApprovalStatus::STATUS_APPROVED
                 && $this->isApprovedCustomerMissingErp()
             ) {
                 $msg = $this->config->getPendingErpMessage();
@@ -261,8 +264,7 @@ class PriceVisibility implements PriceVisibilityInterface
         );
 
         // Guest PDP/PLP: CTA de cadastro real no HTML (não via CSS content).
-        if (
-            !$this->isLoggedInContext()
+        if (!$this->isLoggedInContext()
             && !preg_match('#/(?:b2b/register|customer/account/create)(?:/|"|\\s|>|\\?)#i', $message)
         ) {
             $safeRegisterUrl = htmlspecialchars($registerUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -482,7 +484,7 @@ class PriceVisibility implements PriceVisibilityInterface
 
         // Null = guest (removed as value==default) OR context not yet populated.
         // Cookie check avoids session_start() for anonymous requests.
-        if (!isset($_COOKIE[session_name()])) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return false;
         }
 
@@ -496,7 +498,7 @@ class PriceVisibility implements PriceVisibilityInterface
             return $contextCustomerId;
         }
         // Avoid session_start() for guests — cookie check first.
-        if (!isset($_COOKIE[session_name()])) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return 0;
         }
         return (int) $this->customerSession->getCustomerId();

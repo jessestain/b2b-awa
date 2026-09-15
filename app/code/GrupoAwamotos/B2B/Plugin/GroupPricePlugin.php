@@ -25,11 +25,15 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 class GroupPricePlugin
 {
+    private const CONTEXT_APPROVAL_STATUS = 'b2b_approval_status';
+    private const CONTEXT_PRICE_LIST = 'erp_price_list';
+
     private Config $config;
     private CustomerSession $customerSession;
     private CustomerRepositoryInterface $customerRepository;
@@ -38,6 +42,7 @@ class GroupPricePlugin
     private LoggerInterface $logger;
     private ?ErpCodeResolver $erpCodeResolver;
     private HttpContext $httpContext;
+    private PhpCookieManager $cookieManager;
 
     /** Cache: productId → computed price */
     private array $processedProducts = [];
@@ -58,12 +63,14 @@ class GroupPricePlugin
         CustomerPriceProvider $customerPriceProvider,
         SyncLogResource $syncLogResource,
         HttpContext $httpContext,
+        PhpCookieManager $cookieManager,
         ?LoggerInterface $logger = null,
         ?ErpCodeResolver $erpCodeResolver = null
     ) {
         $this->config = $config;
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
+        $this->cookieManager = $cookieManager;
         $this->customerPriceProvider = $customerPriceProvider;
         $this->syncLogResource = $syncLogResource;
         $this->httpContext = $httpContext;
@@ -133,22 +140,26 @@ class GroupPricePlugin
             return $basePrice;
         }
 
+        $sku = (string) $product->getSku();
+        if ($sku === '') {
+            return $basePrice;
+        }
+
         // Customer has ERP code → price comes from ERP
         $erpCode = $this->getCustomerErpCode();
         if ($erpCode !== null) {
-            $sku = $product->getSku();
             $erpPrice = $this->customerPriceProvider->getCustomerPrice($erpCode, $sku);
-            if ($erpPrice !== null && $erpPrice > 0) {
-                // ERP is the sole pricing authority: neutralize all Magento price overrides
-                // so the Pricing Pool only sees the ERP price.
-                // special_price and catalog_rule_price are cleared from the data array
-                // because getSpecialPrice() is a magic method (__call) that reads from
-                // getData(), so after-plugins on it don't fire reliably.
-                $product->setData('special_price', null);
-                $product->setData('special_from_date', null);
-                $product->setData('special_to_date', null);
-                $product->setData('catalog_rule_price', null);
+            if ($this->applyAuthorizedErpPrice($product, $erpPrice)) {
+                return $erpPrice;
+            }
+        }
 
+        // FPC/HTML render: customer session is depersonalized before toHtml(),
+        // but HttpContext still carries the price-list vary token (list:version).
+        $listCode = $this->resolveHttpContextPriceListCode();
+        if ($listCode !== null) {
+            $erpPrice = $this->customerPriceProvider->getAuthorizedListPrice($listCode, $sku);
+            if ($this->applyAuthorizedErpPrice($product, $erpPrice)) {
                 return $erpPrice;
             }
         }
@@ -157,6 +168,42 @@ class GroupPricePlugin
         // → use base Magento price (VLRVDSUG NACIONAL, already synced from ERP)
         // ERP is the pricing authority — no group discounts applied
         return $basePrice;
+    }
+
+    /**
+     * Neutralize Magento competing prices when an ERP unit price is the authority.
+     */
+    private function applyAuthorizedErpPrice(Product $product, ?float $erpPrice): bool
+    {
+        if ($erpPrice === null || $erpPrice <= 0) {
+            return false;
+        }
+
+        $product->setData('special_price', null);
+        $product->setData('special_from_date', null);
+        $product->setData('special_to_date', null);
+        $product->setData('catalog_rule_price', null);
+
+        return true;
+    }
+
+    /**
+     * Parse erp_price_list HttpContext token ("45:3", "24:1").
+     */
+    private function resolveHttpContextPriceListCode(): ?int
+    {
+        $token = $this->httpContext->getValue(self::CONTEXT_PRICE_LIST);
+        if (!is_string($token) || $token === '' || $token === '0' || $token === 'logged_in') {
+            return null;
+        }
+
+        if (!preg_match('/^(\d+)(?::|$)/', $token, $matches)) {
+            return null;
+        }
+
+        $listCode = (int) $matches[1];
+
+        return $listCode > 0 ? $listCode : null;
     }
 
     /**
@@ -174,7 +221,7 @@ class GroupPricePlugin
         }
         // Null = guest (removed as value==default) OR context not yet set.
         // Cookie check avoids session_start() for every anonymous request.
-        if (!isset($_COOKIE[session_name()])) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return false;
         }
         return (bool) $this->customerSession->isLoggedIn();
@@ -194,6 +241,7 @@ class GroupPricePlugin
         try {
             $customerId = (int) $this->customerSession->getCustomerId();
             if ($customerId <= 0) {
+                $this->erpCodeCache = null;
                 return null;
             }
             $customer = $this->customerRepository->getById($customerId);
@@ -222,7 +270,7 @@ class GroupPricePlugin
     }
 
     /**
-     * Get customer approval status via repository
+     * Get customer approval status via HttpContext (FPC-safe) then repository.
      */
     private function getCustomerApprovalStatus(): ?string
     {
@@ -230,14 +278,21 @@ class GroupPricePlugin
             return $this->approvalStatusCache;
         }
 
+        $contextStatus = $this->httpContext->getValue(self::CONTEXT_APPROVAL_STATUS);
+        if (is_string($contextStatus) && $contextStatus !== '' && $contextStatus !== 'guest') {
+            $this->approvalStatusCache = $contextStatus;
+            return $this->approvalStatusCache;
+        }
+
         try {
-            $customerId = $this->customerSession->getCustomerId();
+            $customerId = (int) $this->customerSession->getCustomerId();
             if ($customerId <= 0) {
+                $this->approvalStatusCache = null;
                 return null;
             }
             $customer = $this->customerRepository->getById($customerId);
             $attr = $customer->getCustomAttribute('b2b_approval_status');
-            $this->approvalStatusCache = $attr ? $attr->getValue() : null;
+            $this->approvalStatusCache = $attr ? (string) $attr->getValue() : null;
         } catch (\Exception $e) {
             $this->approvalStatusCache = null;
         }

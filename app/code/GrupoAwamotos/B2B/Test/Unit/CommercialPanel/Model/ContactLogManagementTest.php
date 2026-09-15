@@ -45,6 +45,7 @@ class ContactLogManagementTest extends TestCase
     {
         $this->portfolioScope->method('canAccessCustomer')->with(42)->willReturn(true);
         $this->currentAttendant->method('getId')->willReturn(7);
+        $this->currentAttendant->method('getIdForCustomer')->with(42)->willReturn(7);
 
         $contactLog = $this->createMock(ContactLog::class);
         $contactLog->method('setCustomerId')->willReturnSelf();
@@ -73,6 +74,36 @@ class ContactLogManagementTest extends TestCase
         $this->assertSame('whatsapp', $result->getContactType());
         $this->assertSame(7, $result->getAttendantId());
         $this->assertSame(99, $result->getAdminUserId());
+    }
+
+    public function testRegisterContactUsesPortfolioAttendantWhenAdminIsNotSeller(): void
+    {
+        $this->portfolioScope->method('canAccessCustomer')->with(42)->willReturn(true);
+        $this->currentAttendant->method('getId')->willReturn(null);
+        $this->currentAttendant->method('getIdForCustomer')->with(42)->willReturn(8);
+
+        $contactLog = $this->createMock(ContactLog::class);
+        $contactLog->method('setCustomerId')->willReturnSelf();
+        $contactLog->method('setAttendantId')->with(8)->willReturnSelf();
+        $contactLog->method('setAdminUserId')->willReturnSelf();
+        $contactLog->method('setContactType')->willReturnSelf();
+        $contactLog->method('setObservation')->willReturnSelf();
+        $contactLog->method('setNextAction')->willReturnSelf();
+        $contactLog->method('setNextActionAt')->willReturnSelf();
+        $contactLog->method('getCustomerId')->willReturn(42);
+        $contactLog->method('getContactType')->willReturn('whatsapp');
+        $contactLog->method('getAttendantId')->willReturn(8);
+        $contactLog->method('getAdminUserId')->willReturn(1);
+        $this->contactLogFactory->method('create')->willReturn($contactLog);
+        $this->contactLogResource->expects($this->once())->method('save')->with($contactLog);
+
+        $result = $this->service->registerContact([
+            'customer_id' => 42,
+            'contact_type' => 'whatsapp',
+            'observation' => 'Contato registrado pela supervisão.',
+        ], 1);
+
+        $this->assertSame(8, $result->getAttendantId());
     }
 
     public function testRegisterContactDeniedOutsidePortfolio(): void

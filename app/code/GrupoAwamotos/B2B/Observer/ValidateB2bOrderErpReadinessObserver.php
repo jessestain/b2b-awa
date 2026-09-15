@@ -59,8 +59,7 @@ class ValidateB2bOrderErpReadinessObserver implements ObserverInterface
         }
 
         $street = implode(' ', array_filter($shipping->getStreet() ?? []));
-        if (
-            trim($street) === '' || trim((string) $shipping->getCity()) === ''
+        if (trim($street) === '' || trim((string) $shipping->getCity()) === ''
             || trim((string) $shipping->getPostcode()) === ''
             || trim((string) $shipping->getRegion()) === ''
         ) {

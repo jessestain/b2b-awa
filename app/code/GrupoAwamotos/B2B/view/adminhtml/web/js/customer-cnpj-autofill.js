@@ -461,13 +461,23 @@ define([
                     showMessage(
                         $wrapper,
                         'success',
-                        'CNPJ válido localmente. API indisponível para autopreenchimento.'
+                        response.message || 'CNPJ válido localmente. API indisponível para autopreenchimento.'
                     );
                     return;
                 }
 
-                if (response.source === 'cache') {
+                if (response.cached) {
                     showMessage($wrapper, 'success', 'Dados preenchidos a partir do cache local.');
+                    return;
+                }
+
+                if (response.source === 'cnpjws') {
+                    showMessage($wrapper, 'success', 'CNPJ válido. Dados preenchidos da base pública (CNPJ.ws).');
+                    return;
+                }
+
+                if (response.source === 'brasilapi') {
+                    showMessage($wrapper, 'success', 'CNPJ válido. Dados preenchidos da BrasilAPI.');
                     return;
                 }
 

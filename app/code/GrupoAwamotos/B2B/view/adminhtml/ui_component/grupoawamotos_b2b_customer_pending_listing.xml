@@ -11,14 +11,14 @@
             <item name="provider" xsi:type="string">grupoawamotos_b2b_customer_pending_listing.grupoawamotos_b2b_customer_pending_listing_data_source</item>
         </item>
     </argument>
-    
+
     <settings>
         <spinner>grupoawamotos_b2b_customer_pending_columns</spinner>
         <deps>
             <dep>grupoawamotos_b2b_customer_pending_listing.grupoawamotos_b2b_customer_pending_listing_data_source</dep>
         </deps>
     </settings>
-    
+
     <dataSource name="grupoawamotos_b2b_customer_pending_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <updateUrl path="mui/index/render"/>
@@ -31,7 +31,7 @@
             </settings>
         </dataProvider>
     </dataSource>
-    
+
     <listingToolbar name="listing_top">
         <settings>
             <sticky>true</sticky>
@@ -51,6 +51,17 @@
                     <label translate="true">Aprovar</label>
                 </settings>
             </action>
+            <action name="review">
+                <settings>
+                    <confirm>
+                        <message translate="true">Pedir dados adicionais aos clientes selecionados?</message>
+                        <title translate="true">Pedir dados</title>
+                    </confirm>
+                    <url path="grupoawamotos_b2b/customer/massRequestReview"/>
+                    <type>review</type>
+                    <label translate="true">Pedir dados</label>
+                </settings>
+            </action>
             <action name="reject">
                 <settings>
                     <confirm>
@@ -65,14 +76,14 @@
         </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
-    
+
     <columns name="grupoawamotos_b2b_customer_pending_columns">
         <selectionsColumn name="ids">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>
         </selectionsColumn>
-        
+
         <column name="entity_id">
             <settings>
                 <filter>textRange</filter>
@@ -80,57 +91,64 @@
                 <sorting>desc</sorting>
             </settings>
         </column>
-        
+
         <column name="firstname">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Nome</label>
             </settings>
         </column>
-        
+
         <column name="lastname">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Sobrenome</label>
             </settings>
         </column>
-        
+
         <column name="email">
             <settings>
                 <filter>text</filter>
                 <label translate="true">E-mail</label>
             </settings>
         </column>
-        
+
         <column name="b2b_cnpj">
             <settings>
                 <filter>text</filter>
                 <label translate="true">CNPJ</label>
             </settings>
         </column>
-        
+
         <column name="b2b_razao_social">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Razão Social</label>
             </settings>
         </column>
-        
+
         <column name="b2b_phone">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Telefone</label>
             </settings>
         </column>
-        
-        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+
+        <column name="created_at">
             <settings>
-                <filter>dateRange</filter>
-                <label translate="true">Cadastrado em</label>
-                <dataType>date</dataType>
+                <visible>false</visible>
+                <controlVisibility>false</controlVisibility>
+                <label translate="true">created_at</label>
             </settings>
         </column>
-        
+        <column name="created_at_display">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Cadastrado em</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+
         <actionsColumn name="actions" class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\CustomerActions">
             <settings>
                 <indexField>entity_id</indexField>

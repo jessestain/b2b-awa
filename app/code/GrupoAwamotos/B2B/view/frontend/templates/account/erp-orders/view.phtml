@@ -4,7 +4,7 @@ $order = $block->getOrderDetail();
 if (!$order) {
     ?>
     <div class="b2b-erp-order-view b2b-page-shell">
-        <div class="awa-empty-state" role="status">
+        <div class="awa-empty-state" role="status" aria-live="polite">
             <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Pedido não encontrado')) ?></p>
             <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Este pedido ERP não existe ou não está disponível para sua conta.')) ?></p>
             <div class="awa-empty-state__actions">
@@ -65,14 +65,15 @@ $status = (string) ($order['status'] ?? '');
     <section class="b2b-erp-order-view__items">
         <h2><?= $block->escapeHtml(__('Itens do pedido')) ?></h2>
         <div class="table-wrapper">
-            <table class="data-table">
+            <table class="data-table" aria-label="<?= $block->escapeHtmlAttr(__('Itens do pedido ERP')) ?>">
+                <caption class="sr-only"><?= $block->escapeHtml(__('Itens do pedido ERP')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= $block->escapeHtml(__('SKU')) ?></th>
-                        <th><?= $block->escapeHtml(__('Produto')) ?></th>
-                        <th><?= $block->escapeHtml(__('Qtd')) ?></th>
-                        <th><?= $block->escapeHtml(__('Preço')) ?></th>
-                        <th><?= $block->escapeHtml(__('Total')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('SKU')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Produto')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Qtd')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Preço')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Total')) ?></th>
                     </tr>
                 </thead>
                 <tbody>

@@ -10,26 +10,27 @@ $summary = $block->getSummary();
 $activeTab = $block->getActiveTab();
 $receivables = $block->getReceivables();
 ?>
-<div class="account b2b-finance-page">
-
-    <div class="b2b-dashboard-header">
-        <div>
-            <h1 class="dashboard-title page-title">
-                <span><?= $escaper->escapeHtml(__('Financeiro')) ?></span>
-            </h1>
-        </div>
+<div class="account b2b-finance-page b2b-page-shell">
+    <div class="b2b-section-header">
+        <h1><?= $escaper->escapeHtml(__('Financeiro')) ?></h1>
+        <p class="section-subtitle"><?= $escaper->escapeHtml(__('Acompanhe títulos, vencimentos e impressão de boletos por situação.')) ?></p>
     </div>
-
-    <div class="column main">
 
         <div class="b2b-section">
             <nav class="b2b-finance-tabs" aria-label="<?= $escaper->escapeHtmlAttr(__('Filtro de situação')) ?>">
                 <?php foreach ($block->getTabs() as $tab): ?>
+                    <?php $tabCount = isset($summary[$tab]) ? (int) $summary[$tab] : null; ?>
                     <a href="<?= $escaper->escapeUrl($block->getTabUrl($tab)) ?>"
-                       class="action <?= $tab === $activeTab ? 'primary' : 'secondary' ?>">
+                       class="action <?= $tab === $activeTab ? 'primary' : 'secondary' ?>"
+                       <?= $tab === $activeTab ? 'aria-current="page"' : '' ?>
+                       aria-label="<?= $escaper->escapeHtmlAttr(
+                           $tabCount !== null
+                               ? __('%1 (%2 títulos)', $block->getTabLabel($tab), $tabCount)
+                               : $block->getTabLabel($tab)
+                       ) ?>">
                         <?= $escaper->escapeHtml($block->getTabLabel($tab)) ?>
-                        <?php if (isset($summary[$tab])): ?>
-                            (<?= (int) $summary[$tab] ?>)
+                        <?php if ($tabCount !== null): ?>
+                            (<?= (int) $tabCount ?>)
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
@@ -38,46 +39,49 @@ $receivables = $block->getReceivables();
 
         <?php if (empty($receivables)): ?>
         <div class="b2b-section">
-            <div class="empty-state-message">
-                <p><?= $escaper->escapeHtml(__('Nenhum título encontrado para esta situação.')) ?></p>
+            <div class="awa-empty-state" role="status" aria-live="polite">
+                <p class="awa-empty-state__title"><?= $escaper->escapeHtml(__('Nenhum título encontrado')) ?></p>
+                <p class="awa-empty-state__hint"><?= $escaper->escapeHtml(__('Selecione outra situação para verificar títulos em aberto, vencidos ou já pagos.')) ?></p>
             </div>
         </div>
         <?php else: ?>
         <div class="b2b-section">
-            <div class="b2b-table-scroll"
+            <div class="table-wrapper b2b-table-scroll"
                  data-mage-init='{"GrupoAwamotos_B2B/js/finance/print-modal": {}}'>
             <table class="data-table" aria-label="<?= $escaper->escapeHtmlAttr(__('Títulos financeiros')) ?>">
+                <caption class="sr-only"><?= $escaper->escapeHtml(__('Tabela de títulos financeiros')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= $escaper->escapeHtml(__('Documento')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Pedido')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Emissão')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Vencimento')) ?></th>
-                        <th class="col-total"><?= $escaper->escapeHtml(__('Valor')) ?></th>
-                        <th><?= $escaper->escapeHtml(__('Situação')) ?></th>
-                        <th class="col-actions"></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Documento')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Pedido')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Emissão')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Vencimento')) ?></th>
+                        <th scope="col" class="col-total"><?= $escaper->escapeHtml(__('Valor')) ?></th>
+                        <th scope="col"><?= $escaper->escapeHtml(__('Situação')) ?></th>
+                        <th scope="col" class="col-actions"><?= $escaper->escapeHtml(__('Ações')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($receivables as $titulo): ?>
                     <tr>
-                        <td><?= $escaper->escapeHtml((string) ($titulo['nro_documento'] ?? '')) ?></td>
-                        <td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Documento')) ?>"><?= $escaper->escapeHtml((string) ($titulo['nro_documento'] ?? '')) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Pedido')) ?>">
                             <?php if (!empty($titulo['pedido'])): ?>
                                 #<?= (int) $titulo['pedido'] ?>
                             <?php endif; ?>
                         </td>
-                        <td><?= $escaper->escapeHtml((string) ($titulo['data_emissao_fmt'] ?? '')) ?></td>
-                        <td><?= $escaper->escapeHtml((string) ($titulo['data_vencimento_fmt'] ?? '')) ?></td>
-                        <td class="col-total"><?= $escaper->escapeHtml((string) ($titulo['valor_devido_fmt'] ?? '')) ?></td>
-                        <td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Emissão')) ?>"><?= $escaper->escapeHtml((string) ($titulo['data_emissao_fmt'] ?? '')) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Vencimento')) ?>"><?= $escaper->escapeHtml((string) ($titulo['data_vencimento_fmt'] ?? '')) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Valor')) ?>" class="col-total"><?= $escaper->escapeHtml((string) ($titulo['valor_devido_fmt'] ?? '')) ?></td>
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Situação')) ?>">
                             <span class="b2b-finance-badge b2b-finance-badge--<?= $escaper->escapeHtmlAttr((string) ($titulo['situacao'] ?? '')) ?>">
                                 <?= $escaper->escapeHtml($block->getTabLabel((string) ($titulo['situacao'] ?? ''))) ?>
                             </span>
                         </td>
-                        <td class="col-actions">
+                        <td data-th="<?= $escaper->escapeHtmlAttr(__('Ações')) ?>" class="col-actions">
                             <a class="action secondary"
                                href="<?= $escaper->escapeUrl($block->getPrintUrl((int) ($titulo['codigo'] ?? 0))) ?>"
+                               aria-label="<?= $escaper->escapeHtmlAttr(__('Imprimir boleto do documento %1', (string) ($titulo['nro_documento'] ?? ''))) ?>"
                                data-print-boleto-url="<?= $escaper->escapeUrl($block->getPrintUrl((int) ($titulo['codigo'] ?? 0))) ?>">
                                 <?= $escaper->escapeHtml(__('Imprimir')) ?>
                             </a>
@@ -89,6 +93,4 @@ $receivables = $block->getReceivables();
             </div>
         </div>
         <?php endif; ?>
-
-    </div>
 </div>

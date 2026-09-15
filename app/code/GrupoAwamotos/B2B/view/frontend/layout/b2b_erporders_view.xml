@@ -5,8 +5,11 @@
     <update handle="customer_account"/>
     <head>
         <title>Detalhe Pedido ERP</title>
+        <css src="GrupoAwamotos_B2B::css/account/pages-operations.css"/>
     </head>
     <body>
+        <!-- Evita H1 duplicado: título vem do view.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceContainer name="content">
             <block class="GrupoAwamotos\B2B\Block\Account\ErpOrders"
                    name="b2b.account.erporders"

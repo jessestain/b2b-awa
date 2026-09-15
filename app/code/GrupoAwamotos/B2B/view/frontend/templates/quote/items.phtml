@@ -11,14 +11,15 @@ $quote = $parentBlock ? $parentBlock->getQuote() : null;
 <?php if (!empty($items)): ?>
     <div class="b2b-quote-items">
         <h3><?= $block->escapeHtml(__('Itens do Carrinho')) ?></h3>
-        <table class="data table table-quote-items">
+        <table class="data table table-quote-items" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de itens do carrinho para cotação')) ?>">
+            <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Itens do carrinho para cotação')) ?></caption>
             <thead>
                 <tr>
-                    <th class="col product"><?= $block->escapeHtml(__('Produto')) ?></th>
-                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
-                    <th class="col price"><?= $block->escapeHtml(__('Preço')) ?></th>
-                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th scope="col" class="col product"><?= $block->escapeHtml(__('Produto')) ?></th>
+                    <th scope="col" class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th scope="col" class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
+                    <th scope="col" class="col price"><?= $block->escapeHtml(__('Preço')) ?></th>
+                    <th scope="col" class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,10 +35,10 @@ $quote = $parentBlock ? $parentBlock->getQuote() : null;
                             <?= (int) $item->getQty() ?>
                         </td>
                         <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Preço')) ?>">
-                            R$ <?= number_format((float) $item->getPrice(), 2, ',', '.') ?>
+                            <?= /* @noEscape */ $parentBlock->formatPrice((float) $item->getPrice()) ?>
                         </td>
                         <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
-                            R$ <?= number_format((float) $item->getRowTotal(), 2, ',', '.') ?>
+                            <?= /* @noEscape */ $parentBlock->formatPrice((float) $item->getRowTotal()) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -49,7 +50,7 @@ $quote = $parentBlock ? $parentBlock->getQuote() : null;
                             <strong><?= $block->escapeHtml(__('Total')) ?></strong>
                         </td>
                         <td class="col total-value">
-                            <strong>R$ <?= number_format((float) $quote->getGrandTotal(), 2, ',', '.') ?></strong>
+                            <strong><?= /* @noEscape */ $parentBlock->formatPrice((float) $quote->getGrandTotal()) ?></strong>
                         </td>
                     </tr>
                 </tfoot>

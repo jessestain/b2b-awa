@@ -155,6 +155,29 @@ body.b2b-auth-shell.b2b-register-success .page-main .column.main {
     line-height: 1.5;
 }
 
+.success-panel-link {
+    display: inline;
+    margin-left: 0.35em;
+    color: var(--awa-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.success-panel-link:hover,
+.success-panel-link:focus-visible {
+    color: var(--awa-primary-hover);
+}
+
+.b2b-register-success-shell.is-approved .success-icon {
+    background: color-mix(in srgb, var(--awa-success) 12%, var(--awa-bg-surface));
+    color: var(--awa-success);
+}
+
+.b2b-register-success-shell.is-approved .step-item.completed :is(h2, h3, .step-heading) {
+    color: var(--awa-success);
+}
+
 .success-support {
     padding-top: 24px;
     border-top: 1px solid var(--awa-color-border, #e5e5e5);

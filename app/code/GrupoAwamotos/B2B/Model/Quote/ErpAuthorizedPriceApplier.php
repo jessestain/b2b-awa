@@ -24,8 +24,8 @@ use Psr\Log\LoggerInterface;
  */
 class ErpAuthorizedPriceApplier
 {
-    private const OPTION_PRICE_LIST = 'erp_authorized_price_list';
-    private const OPTION_UNIT_PRICE = 'erp_authorized_unit_price';
+    public const OPTION_PRICE_LIST = 'erp_authorized_price_list';
+    public const OPTION_UNIT_PRICE = 'erp_authorized_unit_price';
 
     public function __construct(
         private readonly Config $config,

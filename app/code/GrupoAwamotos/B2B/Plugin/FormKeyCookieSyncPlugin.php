@@ -8,6 +8,7 @@ use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Garante cookie form_key alinhado ao hidden input em páginas com formulário.
@@ -25,7 +26,8 @@ class FormKeyCookieSyncPlugin
     public function __construct(
         private readonly CookieFormKey $cookieFormKey,
         private readonly CookieMetadataFactory $cookieMetadataFactory,
-        private readonly ConfigInterface $sessionConfig
+        private readonly ConfigInterface $sessionConfig,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -59,8 +61,11 @@ class FormKeyCookieSyncPlugin
 
             $this->cookieFormKey->set($result, $metadata);
             $this->cookieSetInRequest = true;
-        } catch (\Throwable) {
-            // Cookie já enviado ou headers bloqueados — não quebra render.
+        } catch (\Throwable $e) {
+            $this->logger->debug(
+                '[FormKeyCookieSyncPlugin::afterGetFormKey] Cookie já enviado ou headers bloqueados: '
+                . $e->getMessage()
+            );
         }
 
         return $result;

@@ -333,6 +333,11 @@
 "CNPJ validated successfully","CNPJ validado com sucesso"
 "Could not validate CNPJ","Não foi possível validar o CNPJ"
 "CNPJ not found in Receita Federal","CNPJ não encontrado na Receita Federal"
+"Preencha os dados da empresa manualmente.","Preencha os dados da empresa manualmente."
+"O CNPJ é válido, mas ainda não consta nas bases públicas. Informe razão social e endereço. A conta ficará pendente de aprovação.","O CNPJ é válido, mas ainda não consta nas bases públicas. Informe razão social e endereço. A conta ficará pendente de aprovação."
+"Cadastro público (CNPJ.ws)","Cadastro público (CNPJ.ws)"
+"Dados da BrasilAPI","Dados da BrasilAPI"
+"CNPJ válido, mas ainda não consta nas bases públicas da Receita. Preencha os dados manualmente. A conta ficará pendente de aprovação.","CNPJ válido, mas ainda não consta nas bases públicas da Receita. Preencha os dados manualmente. A conta ficará pendente de aprovação."
 "Company is inactive","Empresa inativa"
 "Company status: %1","Situação da empresa: %1"
 

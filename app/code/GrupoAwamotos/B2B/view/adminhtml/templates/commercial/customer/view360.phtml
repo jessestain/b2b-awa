@@ -15,6 +15,7 @@ $tasks = $block->getOpenTasks();
 $suggestions = $block->getSuggestions();
 $customerId = $block->getCustomerId();
 $tabs = $block->getTabList();
+$activeTab = $block->getActiveTabId();
 ?>
 
 <?php if ($customer === []): ?>
@@ -41,17 +42,18 @@ $tabs = $block->getTabList();
         <nav class="awa-tabs" role="tablist">
             <?php foreach ($tabs as $tabId => $tabLabel): ?>
                 <button type="button"
-                        class="awa-tab-btn"
+                        class="awa-tab-btn<?= $tabId === $activeTab ? ' is-active' : '' ?>"
                         role="tab"
                         data-tab="tab-<?= $block->escapeHtmlAttr($tabId) ?>"
-                        id="btn-tab-<?= $block->escapeHtmlAttr($tabId) ?>">
+                        id="btn-tab-<?= $block->escapeHtmlAttr($tabId) ?>"
+                        <?= $tabId === $activeTab ? ' aria-selected="true"' : ' aria-selected="false"' ?>>
                     <?= $block->escapeHtml($tabLabel) ?>
                 </button>
             <?php endforeach; ?>
         </nav>
 
         <!-- Resumo -->
-        <div class="awa-tab-panel" id="tab-resumo" role="tabpanel">
+        <div class="awa-tab-panel" id="tab-resumo" role="tabpanel"<?php if ($activeTab !== 'resumo'): ?> hidden<?php endif; ?>>
             <div class="awa-commercial-grid">
                 <section class="awa-section">
                     <h2><?= $block->escapeHtml(__('Dados cadastrais')) ?></h2>
@@ -106,7 +108,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Pedidos -->
-        <div class="awa-tab-panel" id="tab-pedidos" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-pedidos" role="tabpanel"<?php if ($activeTab !== 'pedidos'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Pedidos')) ?></h2>
                 <?php if ($orders === []): ?>
@@ -137,7 +139,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Cotações -->
-        <div class="awa-tab-panel" id="tab-cotacoes" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-cotacoes" role="tabpanel"<?php if ($activeTab !== 'cotacoes'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Cotações')) ?></h2>
                 <?php if ($quotes === []): ?>
@@ -168,7 +170,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Carrinho -->
-        <div class="awa-tab-panel" id="tab-carrinho" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-carrinho" role="tabpanel"<?php if ($activeTab !== 'carrinho'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Carrinhos abandonados')) ?></h2>
                 <?php if ($carts === []): ?>
@@ -199,7 +201,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Contatos -->
-        <div class="awa-tab-panel" id="tab-contatos" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-contatos" role="tabpanel"<?php if ($activeTab !== 'contatos'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Registrar contato')) ?></h2>
                 <form class="awa-contact-form" method="post" action="<?= $block->escapeUrl($block->getSaveContactUrl()) ?>">
@@ -269,7 +271,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Tarefas -->
-        <div class="awa-tab-panel" id="tab-tarefas" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-tarefas" role="tabpanel"<?php if ($activeTab !== 'tarefas'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Criar tarefa')) ?></h2>
                 <form class="awa-task-form" method="post" action="<?= $block->escapeUrl($block->getSaveTaskUrl()) ?>">
@@ -345,7 +347,7 @@ $tabs = $block->getTabList();
         </div>
 
         <!-- Sugestões -->
-        <div class="awa-tab-panel" id="tab-sugestoes" role="tabpanel" hidden>
+        <div class="awa-tab-panel" id="tab-sugestoes" role="tabpanel"<?php if ($activeTab !== 'sugestoes'): ?> hidden<?php endif; ?>>
             <section class="awa-section awa-section-full">
                 <h2><?= $block->escapeHtml(__('Sugestões de recompra')) ?></h2>
                 <p class="awa-hint"><?= $block->escapeHtml(__('Produtos que o cliente já comprou e não repõe há mais de 90 dias.')) ?></p>
@@ -379,23 +381,42 @@ $tabs = $block->getTabList();
     require(['jquery'], function ($) {
         'use strict';
 
+        function persistTab(tabId) {
+            var slug = String(tabId).replace(/^tab-/, '');
+            var url = new URL(window.location.href);
+            url.searchParams.set('tab', slug);
+            url.hash = '';
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', url.toString());
+            }
+        }
+
         function activateTab(tabId) {
             $('.awa-tab-panel').attr('hidden', true);
-            $('.awa-tab-btn').removeClass('is-active');
+            $('.awa-tab-btn').removeClass('is-active').attr('aria-selected', 'false');
             $('#' + tabId).removeAttr('hidden');
-            $('[data-tab="' + tabId + '"]').addClass('is-active');
+            $('[data-tab="' + tabId + '"]').addClass('is-active').attr('aria-selected', 'true');
         }
 
         $('.awa-tab-btn').on('click', function () {
-            activateTab($(this).data('tab'));
+            var tabId = $(this).data('tab');
+            activateTab(tabId);
+            persistTab(tabId);
         });
 
+        var phpTab = '<?= $block->escapeJs($activeTab) ?>';
+        var params = new URLSearchParams(window.location.search);
+        var queryTab = params.get('tab');
         var hash = window.location.hash.replace('#', '');
+        var initial = 'tab-resumo';
         if (hash && $('#' + hash).length) {
-            activateTab(hash);
-        } else {
-            activateTab('tab-resumo');
+            initial = hash;
+        } else if (queryTab && $('#tab-' + queryTab).length) {
+            initial = 'tab-' + queryTab;
+        } else if (phpTab && $('#tab-' + phpTab).length) {
+            initial = 'tab-' + phpTab;
         }
+        activateTab(initial);
     });
     </script>
 <?php endif; ?>

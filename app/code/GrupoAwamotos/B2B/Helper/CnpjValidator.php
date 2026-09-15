@@ -62,6 +62,16 @@ class CnpjValidator extends AbstractHelper
         return $this->receitaLookup->lookup($cnpj, $forceRefresh);
     }
 
+    /**
+     * Cached Receita payload only — never hits the network.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function getCachedPayloadOnly(string $cnpj): ?array
+    {
+        return $this->receitaLookup->getCachedPayloadOnly($cnpj);
+    }
+
     public function format(string $cnpj): string
     {
         return $this->checksum->format($cnpj);

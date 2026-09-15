@@ -1,5 +1,5 @@
 .b2b-landing {
-    --b2b-primary: var(--awa-primary, #A33B3B);
+    --b2b-primary: var(--awa-brand, #b73337);
     --b2b-dark: #1a1a1a;
     --b2b-bg: #f8fafc;
 

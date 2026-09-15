@@ -40,7 +40,20 @@ class B2bRegistrationEnrichmentObserver implements ObserverInterface
         $customerId = (int) $customer->getId();
         $attribution = $this->attributionResolver->fromRequest($this->request);
 
-        $this->assignResponsibleSeller($customerId, $attribution);
+        try {
+            $this->assignResponsibleSeller($customerId, $attribution);
+        } catch (\Throwable $e) {
+            $this->logger->error('[B2B Register] Falha ao atribuir vendedor; cadastro preservado', [
+                'customer_id' => $customerId,
+                'error' => $e->getMessage(),
+            ]);
+            // #region agent log
+            $this->agentDebugLog('P0', 'assign-seller-error', [
+                'customerId' => $customerId,
+                'error' => $e->getMessage(),
+            ]);
+            // #endregion
+        }
 
         $this->logger->info('[B2B Register] Cadastro enriquecido', [
             'customer_id' => $customerId,
@@ -70,6 +83,14 @@ class B2bRegistrationEnrichmentObserver implements ObserverInterface
             $attribution->erpSellerCode
         );
 
+        // #region agent log
+        $this->agentDebugLog('P0', 'assign-seller', [
+            'customerId' => $customerId,
+            'resolvedAttendantId' => $attendantId,
+            'hasReferral' => $attribution->hasAttendantReferral(),
+        ]);
+        // #endregion
+
         if ($attendantId !== null) {
             $this->attendantManager->assignCustomerToAttendant(
                 $customerId,
@@ -82,5 +103,29 @@ class B2bRegistrationEnrichmentObserver implements ObserverInterface
         }
 
         $this->attendantManager->autoAssignCustomer($customerId);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function agentDebugLog(string $hypothesisId, string $message, array $data): void
+    {
+        $payload = json_encode([
+            'sessionId' => '419192',
+            'runId' => 'post-fix',
+            'hypothesisId' => $hypothesisId,
+            'location' => 'B2bRegistrationEnrichmentObserver.php',
+            'message' => $message,
+            'data' => $data,
+            'timestamp' => (int) round(microtime(true) * 1000),
+        ], JSON_UNESCAPED_UNICODE);
+        if (!is_string($payload)) {
+            return;
+        }
+        @file_put_contents(
+            '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-419192.log',
+            $payload . "\n",
+            FILE_APPEND
+        );
     }
 }

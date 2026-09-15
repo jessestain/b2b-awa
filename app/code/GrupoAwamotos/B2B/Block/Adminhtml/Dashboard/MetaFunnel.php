@@ -280,17 +280,23 @@ class MetaFunnel extends Template
         $logTable = $this->resourceConnection->getTableName('grupoawamotos_b2b_customer_approval_log');
         $days = $this->getChartWindowDays();
 
-        $sql = "SELECT
-                    DATE(created_at) AS day,
-                    SUM(CASE WHEN action = 'registered' THEN 1 ELSE 0 END) AS registered,
-                    SUM(CASE WHEN action = 'approved' THEN 1 ELSE 0 END) AS approved,
-                    SUM(CASE WHEN action = 'rejected' THEN 1 ELSE 0 END) AS rejected
-                FROM {$logTable}
-                WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
-                GROUP BY DATE(created_at)
-                ORDER BY day ASC";
+        // Same query as before, but built with the framework Select so the
+        // bound values flow through Varien_Db_Select's parameter binding.
+        $select = $conn->select()
+            ->from(
+                $logTable,
+                [
+                    'day'        => new \Zend_Db_Expr('DATE(created_at)'),
+                    'registered' => new \Zend_Db_Expr("SUM(CASE WHEN action = 'registered' THEN 1 ELSE 0 END)"),
+                    'approved'   => new \Zend_Db_Expr("SUM(CASE WHEN action = 'approved' THEN 1 ELSE 0 END)"),
+                    'rejected'   => new \Zend_Db_Expr("SUM(CASE WHEN action = 'rejected' THEN 1 ELSE 0 END)"),
+                ]
+            )
+            ->where('created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)', (int) $days)
+            ->group(new \Zend_Db_Expr('DATE(created_at)'))
+            ->order('day ASC');
 
-        $rows = $conn->fetchAll($sql, [(int)$days]);
+        $rows = $conn->fetchAll($select);
         $indexed = [];
         foreach ($rows as $row) {
             $indexed[(string) $row['day']] = [

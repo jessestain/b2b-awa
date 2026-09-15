@@ -35,6 +35,41 @@
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <filters name="listing_filters"/>
+        <massaction name="listing_massaction">
+            <action name="approve">
+                <settings>
+                    <confirm>
+                        <message translate="true">Aprovar os clientes selecionados?</message>
+                        <title translate="true">Aprovar clientes</title>
+                    </confirm>
+                    <url path="grupoawamotos_b2b/customer/massApprove"/>
+                    <type>approve</type>
+                    <label translate="true">Aprovar</label>
+                </settings>
+            </action>
+            <action name="review">
+                <settings>
+                    <confirm>
+                        <message translate="true">Pedir dados adicionais aos clientes selecionados?</message>
+                        <title translate="true">Pedir dados</title>
+                    </confirm>
+                    <url path="grupoawamotos_b2b/customer/massRequestReview"/>
+                    <type>review</type>
+                    <label translate="true">Pedir dados</label>
+                </settings>
+            </action>
+            <action name="reject">
+                <settings>
+                    <confirm>
+                        <message translate="true">Rejeitar os clientes selecionados?</message>
+                        <title translate="true">Rejeitar clientes</title>
+                    </confirm>
+                    <url path="grupoawamotos_b2b/customer/massReject"/>
+                    <type>reject</type>
+                    <label translate="true">Rejeitar</label>
+                </settings>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
 
@@ -78,12 +113,13 @@
             </settings>
         </column>
 
-        <column name="erp_customer_sync_status" class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\ErpSyncStatusLabel">
+        <column name="erp_customer_sync_status"
+                class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\ErpSyncStatusLabel"
+                component="Magento_Ui/js/grid/columns/column">
             <settings>
-                <filter>select</filter>
-                <options class="GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ErpCustomerSyncStatus"/>
+                <filter>text</filter>
                 <label translate="true">Status ERP</label>
-                <dataType>select</dataType>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
             </settings>
         </column>
 
@@ -141,27 +177,34 @@
                 <label translate="true">Perfil CNAE</label>
             </settings>
         </column>
-        <column name="b2b_approval_score" class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\ApprovalScoreColumn">
+        <column name="b2b_approval_score"
+                class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\ApprovalScoreColumn"
+                component="Magento_Ui/js/grid/columns/column">
             <settings>
-                <filter>select</filter>
-                <options class="GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ApprovalScore"/>
+                <filter>text</filter>
                 <label translate="true">Score B2B</label>
-                <dataType>select</dataType>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
             </settings>
         </column>
-        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
+        <column name="created_at">
             <settings>
-                <filter>dateRange</filter>
+                <visible>false</visible>
+                <controlVisibility>false</controlVisibility>
+                <label translate="true">created_at</label>
+            </settings>
+        </column>
+        <column name="created_at_display">
+            <settings>
+                <filter>text</filter>
                 <label translate="true">Data Cadastro</label>
+                <sortable>false</sortable>
             </settings>
         </column>
 
-        <column name="last_erp_sync_display" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
+        <column name="last_erp_sync_display" component="Magento_Ui/js/grid/columns/column">
             <settings>
-                <filter>dateRange</filter>
+                <filter>text</filter>
                 <label translate="true">Última Sync ERP</label>
-                <dataType>date</dataType>
             </settings>
         </column>
 
@@ -171,5 +214,12 @@
                 <label translate="true">Motivo do Bloqueio</label>
             </settings>
         </column>
+
+        <actionsColumn name="actions" class="GrupoAwamotos\B2B\Ui\Component\Listing\Column\CustomerActions">
+            <settings>
+                <indexField>entity_id</indexField>
+                <label translate="true">Ações</label>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>

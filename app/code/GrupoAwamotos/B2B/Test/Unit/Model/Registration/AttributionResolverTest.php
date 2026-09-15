@@ -47,4 +47,26 @@ class AttributionResolverTest extends TestCase
 
         self::assertSame('alert(1)facebook', $data->utmSource);
     }
+
+    public function testFromParamsReadsUtmFromLandingQueryWhenPostIsEmpty(): void
+    {
+        $data = $this->resolver->fromParams([
+            'registration_landing' => '/b2b/register/?utm_source=google&utm_medium=cpc&utm_campaign=revendedor-sp',
+        ]);
+
+        self::assertSame('google', $data->utmSource);
+        self::assertSame('cpc', $data->utmMedium);
+        self::assertSame('revendedor-sp', $data->utmCampaign);
+    }
+
+    public function testMergeFirstTouchKeepsStoredUtm(): void
+    {
+        $merged = $this->resolver->mergeFirstTouch(
+            ['utm_source' => 'google'],
+            ['utm_source' => 'facebook', 'utm_medium' => 'cpc']
+        );
+
+        self::assertSame('google', $merged['utm_source']);
+        self::assertSame('cpc', $merged['utm_medium']);
+    }
 }

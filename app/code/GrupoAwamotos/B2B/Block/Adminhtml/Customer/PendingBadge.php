@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\B2B\Block\Adminhtml\Customer;
 
-use GrupoAwamotos\B2B\Model\ResourceModel\B2bCustomer\Collection;
-use GrupoAwamotos\B2B\Model\ResourceModel\B2bCustomer\CollectionFactory;
+use GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ApprovalStatus;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Exibe o número de cadastros B2B pendentes de aprovação no topo da lista admin.
@@ -27,7 +27,10 @@ class PendingBadge extends Template
     public function getPendingCount(): int
     {
         return (int) $this->collectionFactory->create()
-            ->addPendingFilter()
+            ->addAttributeToFilter(
+                'b2b_approval_status',
+                ['eq' => ApprovalStatus::STATUS_PENDING]
+            )
             ->getSize();
     }
 }

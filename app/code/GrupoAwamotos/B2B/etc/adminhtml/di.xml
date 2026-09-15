@@ -35,7 +35,7 @@
             <argument name="filterPool" xsi:type="object" shared="false">B2BCarrierGridFilterPool</argument>
         </arguments>
     </virtualType>
-    
+
     <virtualType name="B2BCarrierGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
@@ -123,6 +123,12 @@
         <plugin name="grupoawamotos_b2b_commercial_denied_redirect"
                 type="GrupoAwamotos\B2B\CommercialPanel\Plugin\DeniedPageDebugPlugin"
                 sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <plugin name="grupoawamotos_b2b_reporting_search_probe"
+                type="GrupoAwamotos\B2B\Plugin\Admin\ReportingSearchProbePlugin"
+                sortOrder="999"/>
     </type>
 
 </config>

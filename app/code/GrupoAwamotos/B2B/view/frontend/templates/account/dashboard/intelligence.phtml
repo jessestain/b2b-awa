@@ -26,8 +26,9 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
             <div class="intelligence-card rfm-card">
                 <div class="card-header">
                     <h3><?= $block->escapeHtml(__('Seu Perfil de Compra')) ?></h3>
-                    <span class="rfm-tag" style="--b2b-rfm-tag-bg: <?= $block->escapeHtmlAttr($rfm['segment_color'] ?? '#6b7280') ?>">
-                        <?= $block->escapeHtml($rfm['segment_label'] ?? 'Novo') ?>
+                    <span class="rfm-tag"
+                          data-rfm-tag-color="<?= $block->escapeHtmlAttr((string) ($rfm['segment_color'] ?? '')) ?>">
+                        <?= $block->escapeHtml($rfm['segment_label'] ?? (string) __('Novo')) ?>
                     </span>
                 </div>
                 <div class="rfm-stats">
@@ -41,7 +42,7 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
                     </div>
                     <div class="rfm-item">
                         <span class="label"><?= $block->escapeHtml(__('Valor Total:')) ?></span>
-                        <span class="value"><?= $block->escapeHtml($block->formatPrice((float)($rfm['monetary'] ?? 0))) ?></span>
+                        <span class="value"><?= /* @noEscape */ $block->formatPrice((float) ($rfm['monetary'] ?? 0)) ?></span>
                     </div>
                 </div>
                 <div class="rfm-recommendation">
@@ -58,11 +59,11 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
                 </div>
                 <div class="frequency-content">
                     <div class="frequency-main">
-                        <span class="freq-value"><?= $block->escapeHtml($frequency['avg_days_between_orders']) ?></span>
+                        <span class="freq-value"><?= $block->escapeHtml((string) ($frequency['avg_days_between_orders'] ?? 0)) ?></span>
                         <span class="freq-unit"><?= $block->escapeHtml(__('dias em média')) ?></span>
                     </div>
                     <p class="freq-detail">
-                        <?= $block->escapeHtml(__('Seu menor intervalo foi de %1 dias e o maior de %2 dias.', $frequency['min_days'], $frequency['max_days'])) ?>
+                        <?= $block->escapeHtml(__('Seu menor intervalo foi de %1 dias e o maior de %2 dias.', $frequency['min_days'] ?? 0, $frequency['max_days'] ?? 0)) ?>
                     </p>
                 </div>
             </div>
@@ -71,11 +72,11 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
         <?php if (!$hasAnyIntelligenceCard): ?>
             <div class="intelligence-card intelligence-empty-card">
                 <div class="card-header">
-                    <h3><?= $block->escapeHtml(__('Seu painel esta sendo preparado')) ?></h3>
+                    <h3><?= $block->escapeHtml(__('Seu painel está sendo preparado')) ?></h3>
                 </div>
                 <div class="intelligence-empty-content">
-                    <p><?= $block->escapeHtml(__('Ainda nao encontramos historico suficiente no ERP para montar os indicadores de recencia, frequencia e valor.')) ?></p>
-                    <p><?= $block->escapeHtml(__('Assim que novos dados forem sincronizados, esta area sera atualizada automaticamente.')) ?></p>
+                    <p><?= $block->escapeHtml(__('Ainda não encontramos histórico suficiente no ERP para montar os indicadores de recência, frequência e valor.')) ?></p>
+                    <p><?= $block->escapeHtml(__('Assim que novos dados forem sincronizados, esta área será atualizada automaticamente.')) ?></p>
                 </div>
             </div>
         <?php endif; ?>
@@ -89,7 +90,10 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
             </div>
             <div class="b2b-chart-container advanced-chart">
                 <canvas id="b2b-performance-trend-chart"
-                        data-chart-data='<?= $block->escapeHtmlAttr(json_encode($trend)) ?>'
+                        data-chart-data='<?= $block->escapeHtmlAttr((string) json_encode(
+                            $trend,
+                            JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+                        )) ?>'
                         aria-label="<?= $block->escapeHtmlAttr(__('Gráfico de tendência de performance')) ?>" role="img"></canvas>
             </div>
         </div>

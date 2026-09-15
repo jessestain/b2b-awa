@@ -9,17 +9,17 @@ $totalPages = max(1, (int) ceil($total / $pageSize));
 ?>
 <div class="b2b-erp-orders b2b-page-shell">
     <div class="b2b-section-header">
-        <h1><?= $block->escapeHtml(__('Pedidos ERP')) ?></h1>
+        <h1 id="b2b-erp-orders-title"><?= $block->escapeHtml(__('Pedidos ERP')) ?></h1>
         <p class="section-subtitle"><?= $block->escapeHtml(__('Pedidos importados do ERP com status, itens e totais.')) ?></p>
     </div>
 
     <?php if (!$block->isAvailable()): ?>
-        <div class="awa-empty-state" role="status">
+        <div class="awa-empty-state" role="status" aria-live="polite">
             <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Integração ERP indisponível')) ?></p>
             <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('A sincronização com o ERP está indisponível. Tente de novo em alguns minutos ou fale com o suporte AWA.')) ?></p>
         </div>
     <?php elseif ($orders === []): ?>
-        <div class="awa-empty-state" role="status">
+        <div class="awa-empty-state" role="status" aria-live="polite">
             <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhum pedido ERP')) ?></p>
             <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Quando o ERP enviar pedidos para esta conta, o histórico aparece aqui.')) ?></p>
             <div class="awa-empty-state__actions">
@@ -30,16 +30,16 @@ $totalPages = max(1, (int) ceil($total / $pageSize));
         </div>
     <?php else: ?>
         <div class="table-wrapper">
-            <table class="data-table erp-orders-table">
+            <table class="data-table erp-orders-table" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de pedidos ERP')) ?>">
                 <caption class="sr-only"><?= $block->escapeHtml(__('Pedidos ERP')) ?></caption>
                 <thead>
                     <tr>
-                        <th><?= $block->escapeHtml(__('Pedido')) ?></th>
-                        <th><?= $block->escapeHtml(__('Data')) ?></th>
-                        <th><?= $block->escapeHtml(__('Status')) ?></th>
-                        <th><?= $block->escapeHtml(__('Itens')) ?></th>
-                        <th><?= $block->escapeHtml(__('Total')) ?></th>
-                        <th><?= $block->escapeHtml(__('Ações')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Pedido')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Itens')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Total')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Ações')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +57,8 @@ $totalPages = max(1, (int) ceil($total / $pageSize));
                         <td data-th="<?= $block->escapeHtmlAttr(__('Total')) ?>"><?= /* @noEscape */ $block->formatPrice((float) ($order['valor_total'] ?? 0)) ?></td>
                         <td data-th="<?= $block->escapeHtmlAttr(__('Ações')) ?>">
                             <a class="action view"
-                               href="<?= $block->escapeUrl($block->getViewUrl((int) ($order['pedido_id'] ?? 0))) ?>">
+                               href="<?= $block->escapeUrl($block->getViewUrl((int) ($order['pedido_id'] ?? 0))) ?>"
+                               aria-label="<?= $block->escapeHtmlAttr(__('Ver detalhes do pedido ERP %1', (string) ($order['pedido_id'] ?? ''))) ?>">
                                 <?= $block->escapeHtml(__('Detalhes')) ?>
                             </a>
                         </td>
@@ -68,12 +69,13 @@ $totalPages = max(1, (int) ceil($total / $pageSize));
         </div>
 
         <?php if ($totalPages > 1): ?>
-        <nav class="b2b-erp-orders__pager" aria-label="<?= $block->escapeHtmlAttr(__('Paginação')) ?>">
+        <nav class="b2b-erp-orders__pager" aria-label="<?= $block->escapeHtmlAttr(__('Paginação dos pedidos ERP')) ?>">
             <?php for ($p = 1; $p <= $totalPages; $p++): ?>
                 <?php if ($p === $page): ?>
-                    <span class="current"><?= (int) $p ?></span>
+                    <span class="current" aria-current="page" aria-label="<?= $block->escapeHtmlAttr(__('Página %1', (int) $p)) ?>"><?= (int) $p ?></span>
                 <?php else: ?>
-                    <a href="<?= $block->escapeUrl($block->getListUrl() . '?p=' . $p) ?>"><?= (int) $p ?></a>
+                    <a href="<?= $block->escapeUrl($block->getListUrl() . '?p=' . $p) ?>"
+                       aria-label="<?= $block->escapeHtmlAttr(__('Ir para a página %1', (int) $p)) ?>"><?= (int) $p ?></a>
                 <?php endif; ?>
             <?php endfor; ?>
         </nav>

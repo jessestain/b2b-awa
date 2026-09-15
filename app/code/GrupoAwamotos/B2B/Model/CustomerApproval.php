@@ -245,6 +245,44 @@ class CustomerApproval implements CustomerApprovalInterface
     /**
      * @inheritDoc
      */
+    public function requestDataReview(int $customerId, ?int $adminUserId = null, ?string $message = null): bool
+    {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+            $oldStatus = $this->getCustomerAttributeValue($customer, 'b2b_approval_status');
+
+            $customer->setCustomAttribute('b2b_approval_status', ApprovalStatus::STATUS_DATA_REVIEW);
+            $this->customerRepository->save($customer);
+
+            $this->logAction(
+                $customerId,
+                'needs_information',
+                $oldStatus,
+                ApprovalStatus::STATUS_DATA_REVIEW,
+                $adminUserId,
+                $message
+            );
+
+            $this->eventManager->dispatch('grupoawamotos_b2b_customer_data_review_requested', [
+                'customer_id' => $customerId,
+                'customer' => $customer,
+                'old_status' => $oldStatus,
+                'message' => $message,
+                'admin_user_id' => $adminUserId,
+            ]);
+
+            $this->logger->info(sprintf('B2B: Cliente #%d movido para revisão de cadastro', $customerId));
+
+            return true;
+        } catch (\Exception $e) {
+            $this->logger->error('B2B requestDataReview error: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getApprovalStatus(int $customerId): ?string
     {
         try {

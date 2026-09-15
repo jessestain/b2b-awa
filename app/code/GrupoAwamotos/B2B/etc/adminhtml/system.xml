@@ -385,7 +385,7 @@
                 <field id="direct_cnaes" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>CNAEs - Perfil Direto (Motos)</label>
                     <comment><![CDATA[Códigos CNAE separados por vírgula. Empresas com estes CNAEs são classificadas como <strong>Perfil Direto</strong>.<br/>
-                    Padrão: 4541-2/01, 4541-2/02, 4541-2/03, 4541-2/04, 4541-2/05, 4543-9/00, 3091-1/00]]></comment>
+                    Padrão: 4541-2/01, 4541-2/02, 4541-2/03, 4541-2/04, 4541-2/05, 4541-2/06, 4543-9/00, 3091-1/00]]></comment>
                     <depends>
                         <field id="enabled">1</field>
                     </depends>

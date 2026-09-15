@@ -8,6 +8,7 @@ use GrupoAwamotos\B2B\ViewModel\Cart\EmptyCartContext;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Psr\Log\LoggerInterface;
 
 class ExpressEmptyCartFlagManager
 {
@@ -16,7 +17,8 @@ class ExpressEmptyCartFlagManager
     public function __construct(
         private readonly CheckoutSession $checkoutSession,
         private readonly PhpCookieManager $cookieManager,
-        private readonly CookieMetadataFactory $cookieMetadataFactory
+        private readonly CookieMetadataFactory $cookieMetadataFactory,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -64,8 +66,11 @@ class ExpressEmptyCartFlagManager
                 $metadata
             );
             $this->cookieQueued = true;
-        } catch (\Exception) {
-            // Cookie opcional; sessão checkout é o fallback principal.
+        } catch (\Exception $e) {
+            $this->logger->debug(
+                '[ExpressEmptyCartFlagManager::setCookie] Cookie opcional falhou, '
+                . 'sessão checkout é o fallback: ' . $e->getMessage()
+            );
         }
     }
 }

@@ -12,6 +12,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -34,6 +35,7 @@ class CustomerPriceListContextPlugin
     private LoggerInterface $logger;
     private ?ErpCodeResolver $erpCodeResolver;
     private HttpContext $httpContext;
+    private PhpCookieManager $cookieManager;
 
     public function __construct(
         CustomerSession $customerSession,
@@ -42,6 +44,7 @@ class CustomerPriceListContextPlugin
         CustomerPriceProvider $customerPriceProvider,
         CustomerRepositoryInterface $customerRepository,
         HttpContext $httpContext,
+        PhpCookieManager $cookieManager,
         ?LoggerInterface $logger = null,
         ?ErpCodeResolver $erpCodeResolver = null
     ) {
@@ -51,6 +54,7 @@ class CustomerPriceListContextPlugin
         $this->customerPriceProvider = $customerPriceProvider;
         $this->customerRepository = $customerRepository;
         $this->httpContext = $httpContext;
+        $this->cookieManager = $cookieManager;
         $this->logger = $logger ?? new NullLogger();
         $this->erpCodeResolver = $erpCodeResolver;
     }
@@ -85,7 +89,7 @@ class CustomerPriceListContextPlugin
         $context = $context ?? $this->httpContext;
         $sessionCookie = $request
             ? $request->getCookie(session_name())
-            : ($_COOKIE[session_name()] ?? null);
+            : $this->cookieManager->getCookie(session_name());
 
         if ($sessionCookie === null) {
             return;

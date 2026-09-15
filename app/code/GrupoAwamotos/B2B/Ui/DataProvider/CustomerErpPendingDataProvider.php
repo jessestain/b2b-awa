@@ -181,7 +181,13 @@ class CustomerErpPendingDataProvider extends AbstractDataProvider
 
         $rows = [];
         foreach ($this->getCollection() as $item) {
-            $rows[] = $item->getData();
+            $row = $item->getData();
+            unset(
+                $row['password_hash'],
+                $row['rp_token'],
+                $row['rp_token_created_at']
+            );
+            $rows[] = $row;
         }
 
         $items = $this->gridEnricher->enrichRows($rows);

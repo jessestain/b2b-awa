@@ -602,6 +602,20 @@ class Dashboard extends Template
     }
 
     /**
+     * Registra falhas não críticas ocorridas durante o render do template (ex.: dados ERP
+     * indisponíveis). Exposto como método público pois templates PHTML não têm acesso direto
+     * à propriedade protegida `_logger` herdada de AbstractBlock.
+     *
+     * @param string $context
+     * @param \Throwable $e
+     * @return void
+     */
+    public function logTemplateWarning(string $context, \Throwable $e): void
+    {
+        $this->_logger->warning('[B2B Dashboard] ' . $context . ': ' . $e->getMessage());
+    }
+
+    /**
      * Get onboarding checklist for new B2B customers
      *
      * @return array
@@ -939,5 +953,4 @@ class Dashboard extends Template
             return substr($date, 0, 16);
         }
     }
-
 }

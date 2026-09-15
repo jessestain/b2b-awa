@@ -12,7 +12,11 @@ $approvalWidgetConfig = [
 ];
 ?>
 <div class="b2b-approval-page b2b-page-shell"
-     data-mage-init='<?= /* @noEscape */ json_encode(['GrupoAwamotos_B2B/js/account/approval-actions' => $approvalWidgetConfig]) ?>'>
+     data-mage-init='<?= /* @noEscape */ json_encode(
+         ['GrupoAwamotos_B2B/js/account/approval-actions' => $approvalWidgetConfig],
+         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+     ) ?>'>
+    <p class="b2b-live-region" data-role="approval-live" aria-live="polite"></p>
     <div class="b2b-section-header">
         <h1><?= $block->escapeHtml(__('Aprovações de Pedidos')) ?></h1>
         <p class="section-subtitle"><?= $block->escapeHtml(__('Liberar ou recusar pedidos que exigem aprovação da empresa.')) ?></p>
@@ -24,95 +28,119 @@ $approvalWidgetConfig = [
     <?php if ($canApprove && $pendingApprovals->getSize() > 0): ?>
     <!-- Pedidos Aguardando Sua Aprovação -->
     <div class="approval-section">
-        <h2><?= __('Aguardando Sua Aprovação') ?> <span class="count">(<?= (int)$pendingApprovals->getSize() ?>)</span></h2>
-        <table class="data table table-approvals">
-            <thead>
-                <tr>
-                    <th><?= __('Pedido') ?></th>
-                    <th><?= __('Valor') ?></th>
-                    <th><?= __('Nível Atual') ?></th>
-                    <th><?= __('Nível Requerido') ?></th>
-                    <th><?= __('Data') ?></th>
-                    <th><?= __('Ações') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($pendingApprovals as $approval): ?>
-                <tr>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Pedido')) ?>">
-                        <?= $block->escapeHtml($block->getOrderIncrementId((int)$approval->getData('order_id'))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Valor')) ?>">
-                        <?= /* @noEscape */ $block->formatPrice((float)$approval->getData('order_total')) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Nível')) ?>">
-                        <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('current_level'))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Requerido')) ?>">
-                        <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('required_level'))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>">
-                        <?= $block->escapeHtml(date('d/m/Y H:i', strtotime($approval->getData('created_at')))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Ações')) ?>" class="approval-actions">
-                        <button type="button" class="btn-approve"
-                                data-action="approve"
-                                data-approval-id="<?= (int) $approval->getId() ?>">
-                            <?= __('Aprovar') ?>
-                        </button>
-                        <button type="button" class="btn-reject"
-                                data-action="reject"
-                                data-approval-id="<?= (int) $approval->getId() ?>">
-                            <?= __('Rejeitar') ?>
-                        </button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <h2>
+            <?= $block->escapeHtml(__('Aguardando Sua Aprovação')) ?>
+            <span class="count">(<?= (int) $pendingApprovals->getSize() ?>)</span>
+        </h2>
+        <div class="table-wrapper">
+            <table class="data table table-approvals" aria-label="<?= $block->escapeHtmlAttr(__('Pedidos aguardando aprovação')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Pedidos aguardando aprovação')) ?></caption>
+                <thead>
+                    <tr>
+                        <th scope="col"><?= $block->escapeHtml(__('Pedido')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Valor')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Nível Atual')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Nível Requerido')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Ações')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($pendingApprovals as $approval): ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Pedido')) ?>">
+                            <?= $block->escapeHtml($block->getOrderIncrementId((int)$approval->getData('order_id'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Valor')) ?>">
+                            <?= /* @noEscape */ $block->formatPrice((float)$approval->getData('order_total')) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Nível Atual')) ?>">
+                            <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('current_level'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Nível Requerido')) ?>">
+                            <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('required_level'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>">
+                            <?= $block->escapeHtml($block->formatDateTime((string) $approval->getData('created_at'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Ações')) ?>" class="approval-actions">
+                            <button type="button"
+                                    class="action primary btn-approve"
+                                    data-action="approve"
+                                    aria-label="<?= $block->escapeHtmlAttr(__('Aprovar pedido %1', $block->getOrderIncrementId((int)$approval->getData('order_id')))) ?>"
+                                    data-approval-id="<?= (int) $approval->getId() ?>">
+                                <span><?= $block->escapeHtml(__('Aprovar')) ?></span>
+                            </button>
+                            <button type="button"
+                                    class="action delete btn-reject"
+                                    data-action="reject"
+                                    aria-label="<?= $block->escapeHtmlAttr(__('Rejeitar pedido %1', $block->getOrderIncrementId((int)$approval->getData('order_id')))) ?>"
+                                    data-approval-id="<?= (int) $approval->getId() ?>">
+                                <span><?= $block->escapeHtml(__('Rejeitar')) ?></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <?php elseif ($canApprove): ?>
+    <div class="approval-section">
+        <h2><?= $block->escapeHtml(__('Aguardando Sua Aprovação')) ?></h2>
+        <div class="awa-empty-state" role="status" aria-live="polite">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhum pedido aguardando sua aprovação')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Quando um pedido da empresa exigir liberação, ele aparece nesta lista.')) ?></p>
+        </div>
     </div>
     <?php endif; ?>
 
     <!-- Meus Pedidos em Aprovação -->
     <div class="approval-section">
-        <h2><?= __('Meus Pedidos em Aprovação') ?></h2>
+        <h2><?= $block->escapeHtml(__('Meus Pedidos em Aprovação')) ?></h2>
         <?php if ($myApprovals->getSize() > 0): ?>
-        <table class="data table table-my-approvals">
-            <thead>
-                <tr>
-                    <th><?= __('Pedido') ?></th>
-                    <th><?= __('Valor') ?></th>
-                    <th><?= __('Status') ?></th>
-                    <th><?= __('Nível Atual') ?></th>
-                    <th><?= __('Data') ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($myApprovals as $approval): ?>
-                <tr>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Pedido')) ?>">
-                        <?= $block->escapeHtml($block->getOrderIncrementId((int)$approval->getData('order_id'))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Valor')) ?>">
-                        <?= /* @noEscape */ $block->formatPrice((float)$approval->getData('order_total')) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>">
-                        <span class="approval-status approval-status--<?= $block->escapeHtmlAttr($approval->getData('status')) ?>">
-                            <?= $block->escapeHtml($block->getStatusLabel($approval->getData('status'))) ?>
-                        </span>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Nível')) ?>">
-                        <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('current_level'))) ?>
-                    </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>">
-                        <?= $block->escapeHtml(date('d/m/Y H:i', strtotime($approval->getData('created_at')))) ?>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table class="data table table-my-approvals" aria-label="<?= $block->escapeHtmlAttr(__('Meus pedidos em aprovação')) ?>">
+                <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Meus pedidos em aprovação')) ?></caption>
+                <thead>
+                    <tr>
+                        <th scope="col"><?= $block->escapeHtml(__('Pedido')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Valor')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Nível Atual')) ?></th>
+                        <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($myApprovals as $approval): ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Pedido')) ?>">
+                            <?= $block->escapeHtml($block->getOrderIncrementId((int)$approval->getData('order_id'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Valor')) ?>">
+                            <?= /* @noEscape */ $block->formatPrice((float)$approval->getData('order_total')) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>">
+                            <span class="approval-status approval-status--<?= $block->escapeHtmlAttr((string) $approval->getData('status')) ?>">
+                                <?= $block->escapeHtml($block->getStatusLabel((string) $approval->getData('status'))) ?>
+                            </span>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Nível Atual')) ?>">
+                            <?= $block->escapeHtml($block->getLevelLabel((int)$approval->getData('current_level'))) ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>">
+                            <?= $block->escapeHtml($block->formatDateTime((string) $approval->getData('created_at'))) ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         <?php else: ?>
-            <p class="empty-message"><?= $block->escapeHtml(__('Nenhum pedido seu aguarda aprovação no momento.')) ?></p>
+            <div class="awa-empty-state" role="status" aria-live="polite">
+                <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Nenhum pedido em aprovação')) ?></p>
+                <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Nenhum pedido seu aguarda aprovação no momento.')) ?></p>
+            </div>
         <?php endif; ?>
     </div>
 </div>

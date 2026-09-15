@@ -18,6 +18,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Psr\Log\LoggerInterface;
 
 class ClaimPost implements HttpPostActionInterface
 {
@@ -28,6 +29,7 @@ class ClaimPost implements HttpPostActionInterface
     private AccountManagementInterface $accountManagement;
     private CustomerRepositoryInterface $customerRepository;
     private SearchCriteriaBuilder $searchCriteriaBuilder;
+    private LoggerInterface $logger;
 
     public function __construct(
         RequestInterface $request,
@@ -36,7 +38,8 @@ class ClaimPost implements HttpPostActionInterface
         ManagerInterface $messageManager,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        LoggerInterface $logger
     ) {
         $this->request = $request;
         $this->redirectFactory = $redirectFactory;
@@ -45,6 +48,7 @@ class ClaimPost implements HttpPostActionInterface
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->logger = $logger;
     }
 
     public function execute()
@@ -73,7 +77,9 @@ class ClaimPost implements HttpPostActionInterface
                 );
             }
         } catch (\Throwable $e) {
-            // Silencia erros para não revelar se a conta existe
+            // Não expõe o erro ao usuário (evita revelar se a conta existe), mas registra
+            // no log para permitir diagnóstico de falhas reais (ex.: serviço de e-mail fora).
+            $this->logger->debug('[ClaimPost::execute] Falha ao iniciar reset de senha: ' . $e->getMessage());
         }
 
         // Mensagem genérica por segurança (não revela se conta existe)

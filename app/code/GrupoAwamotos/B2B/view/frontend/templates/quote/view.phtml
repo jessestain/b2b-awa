@@ -17,7 +17,10 @@ $quoteViewConfig = [
 ];
 ?>
 <div class="b2b-quote-view b2b-page-shell"
-     data-mage-init='<?= /* @noEscape */ json_encode(['GrupoAwamotos_B2B/js/quote/view' => $quoteViewConfig]) ?>'>
+     data-mage-init='<?= /* @noEscape */ json_encode(
+         ['GrupoAwamotos_B2B/js/quote/view' => $quoteViewConfig],
+         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+     ) ?>'>
     <div class="quote-view-header">
         <div class="quote-view-title">
             <h1><?= $block->escapeHtml(__('Cotação #%1', $quote->getRequestId())) ?></h1>
@@ -72,7 +75,7 @@ $quoteViewConfig = [
     <!-- Mensagem do Cliente -->
     <?php if ($quote->getMessage()): ?>
         <div class="quote-view-section">
-            <h3><?= $block->escapeHtml(__('Sua Mensagem')) ?></h3>
+            <h2><?= $block->escapeHtml(__('Sua Mensagem')) ?></h2>
             <div class="quote-message">
                 <?= $block->escapeHtml($quote->getMessage()) ?>
             </div>
@@ -82,7 +85,7 @@ $quoteViewConfig = [
     <!-- Notas do Administrador -->
     <?php if ($quote->getAdminNotes()): ?>
         <div class="quote-view-section">
-            <h3><?= $block->escapeHtml(__('Resposta do Vendedor')) ?></h3>
+            <h2><?= $block->escapeHtml(__('Resposta do Vendedor')) ?></h2>
             <div class="quote-admin-notes">
                 <?= $block->escapeHtml($quote->getAdminNotes()) ?>
             </div>
@@ -92,16 +95,17 @@ $quoteViewConfig = [
     <!-- Itens da Cotação -->
     <?php if (!empty($items)): ?>
         <div class="quote-view-section">
-            <h3><?= $block->escapeHtml(__('Itens Solicitados')) ?></h3>
+            <h2><?= $block->escapeHtml(__('Itens Solicitados')) ?></h2>
             <div class="table-wrapper">
-                <table class="data table table-quote-items">
+                <table class="data table table-quote-items" aria-label="<?= $block->escapeHtmlAttr(__('Tabela de itens solicitados na cotação')) ?>">
+                    <caption class="table-caption sr-only"><?= $block->escapeHtml(__('Itens da cotação')) ?></caption>
                     <thead>
                         <tr>
-                            <th class="col product"><?= $block->escapeHtml(__('Produto')) ?></th>
-                            <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                            <th class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
-                            <th class="col price"><?= $block->escapeHtml(__('Preço Unit.')) ?></th>
-                            <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                            <th scope="col" class="col product"><?= $block->escapeHtml(__('Produto')) ?></th>
+                            <th scope="col" class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                            <th scope="col" class="col qty"><?= $block->escapeHtml(__('Qtd')) ?></th>
+                            <th scope="col" class="col price"><?= $block->escapeHtml(__('Preço Unit.')) ?></th>
+                            <th scope="col" class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,14 +133,14 @@ $quoteViewConfig = [
                                 </td>
                                 <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Preço Unit.')) ?>">
                                     <?php if ($quotedPrice !== null && $quotedPrice !== $originalPrice): ?>
-                                        <span class="original-price">R$ <?= number_format($originalPrice, 2, ',', '.') ?></span>
-                                        <span class="quoted-price">R$ <?= number_format($quotedPrice, 2, ',', '.') ?></span>
+                                        <span class="original-price"><?= /* @noEscape */ $block->formatPrice($originalPrice) ?></span>
+                                        <span class="quoted-price"><?= /* @noEscape */ $block->formatPrice($quotedPrice) ?></span>
                                     <?php else: ?>
-                                        R$ <?= number_format($displayPrice, 2, ',', '.') ?>
+                                        <?= /* @noEscape */ $block->formatPrice($displayPrice) ?>
                                     <?php endif; ?>
                                 </td>
                                 <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
-                                    R$ <?= number_format($subtotal, 2, ',', '.') ?>
+                                    <?= /* @noEscape */ $block->formatPrice($subtotal) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -147,7 +151,7 @@ $quoteViewConfig = [
                                 <strong><?= $block->escapeHtml(__('Total Solicitado')) ?></strong>
                             </td>
                             <td class="col total-value">
-                                <strong>R$ <?= number_format($total, 2, ',', '.') ?></strong>
+                                <strong><?= /* @noEscape */ $block->formatPrice($total) ?></strong>
                             </td>
                         </tr>
                         <?php if ($quote->getQuotedTotal()): ?>
@@ -169,7 +173,7 @@ $quoteViewConfig = [
     <!-- Ações de Aceitar/Rejeitar (quando status = quoted e não expirado) -->
     <?php if ($block->canAcceptOrReject()): ?>
         <div class="quote-view-section quote-decision-section">
-            <h3><?= $block->escapeHtml(__('Responder Cotação')) ?></h3>
+            <h2><?= $block->escapeHtml(__('Responder Cotação')) ?></h2>
             <p class="decision-info"><?= $block->escapeHtml(__('Analise os valores acima e escolha uma opção:')) ?></p>
             <div class="quote-decision-actions">
                 <form method="post" action="<?= $block->escapeUrl($block->getAcceptUrl()) ?>" class="quote-accept-form">

@@ -54,22 +54,21 @@ class FormKeySessionGuardPlugin
      */
     private function shouldPersistFormKeyOnGet(): bool
     {
-        if (isset($_COOKIE[session_name()]) && $_COOKIE[session_name()] !== '') {
+        $cookie = $this->request->getCookie(session_name());
+        if ($cookie !== null && $cookie !== '') {
             return true;
         }
 
         $path = rtrim($this->request->getPathInfo(), '/') ?: '/';
 
-        foreach (
-            [
+        foreach ([
             '/b2b/account/login',
             '/customer/account/login',
             '/checkout/cart',
             '/checkout',
             '/onepagecheckout',
             '/expresscheckout.html',
-            ] as $criticalPath
-        ) {
+            ] as $criticalPath) {
             if ($path === $criticalPath || str_starts_with($path, $criticalPath . '/')) {
                 return true;
             }

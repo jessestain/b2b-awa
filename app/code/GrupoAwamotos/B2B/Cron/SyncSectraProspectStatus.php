@@ -58,8 +58,7 @@ class SyncSectraProspectStatus
             $cancelResult = $this->stuckOrderCleanup->cancelOrdersForUnvalidatedCustomers($dryRun);
             $imported = $this->orderImportGate->syncImportedOrderFlags();
 
-            if (
-                $validation['validated'] > 0 || $validation['still_pending'] > 0 || $released > 0 || $imported > 0
+            if ($validation['validated'] > 0 || $validation['still_pending'] > 0 || $released > 0 || $imported > 0
                 || $cancelResult['cancelled'] > 0 || count($cancelResult['candidates']) > 0
             ) {
                 $this->logger->info('[B2B-Sectra] Cron validação prospect', [

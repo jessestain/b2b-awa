@@ -48,18 +48,25 @@ if ($shouldRenderErpPanel) {
             }
         }
     } catch (\Throwable $erpException) {
-        // ERP unavailable — dashboard renders without ERP data
+        // ERP indisponível — dashboard renderiza sem os dados do ERP (degradação graciosa).
+        $block->logTemplateWarning('Dados ERP indisponíveis no dashboard', $erpException);
     }
 
     $erpDashboardHtml = (string) $erpBlock->toHtml();
 }
 ?>
-<div class="b2b-dashboard" role="region" aria-labelledby="b2b-dashboard-title">
+<div class="b2b-dashboard b2b-page-shell" role="region" aria-labelledby="b2b-dashboard-title">
     <div id="b2b-dashboard-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <?php if (!$block->isB2BCustomer()): ?>
-        <div class="message info">
-            <span><?= $block->escapeHtml(__('Esta área é exclusiva para clientes B2B. Se você é uma empresa, solicite seu cadastro B2B.')) ?></span>
+        <div class="awa-empty-state" role="status">
+            <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Área exclusiva para clientes B2B')) ?></p>
+            <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Se você é uma empresa, solicite seu cadastro B2B para ver preços, cotações e pedidos empresariais.')) ?></p>
+            <div class="awa-empty-state__actions">
+                <a href="<?= $block->escapeUrl($block->getUrl('b2b/register')) ?>" class="action primary">
+                    <?= $block->escapeHtml(__('Solicitar cadastro B2B')) ?>
+                </a>
+            </div>
         </div>
     <?php else: ?>
         <!-- Header com Status -->
@@ -84,7 +91,8 @@ if ($shouldRenderErpPanel) {
                         <?php endif; ?>
                     </span>
                     <?php if ($erpRfm && !empty($erpRfm['segment_label'])): ?>
-                        <span class="b2b-rfm-badge" style="--b2b-rfm-color:<?= $block->escapeHtmlAttr($erpRfm['segment_color'] ?? '#6b7280') ?>">
+                        <span class="b2b-rfm-badge"
+                              data-rfm-color="<?= $block->escapeHtmlAttr((string) ($erpRfm['segment_color'] ?? '')) ?>">
                             <?= $block->escapeHtml($erpRfm['segment_label']) ?>
                         </span>
                     <?php endif; ?>
@@ -136,7 +144,7 @@ if ($shouldRenderErpPanel) {
                     </h2>
                     <div class="onboarding-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="--b2b-bar-width:<?= (int)$progress ?>"></div>
+                            <div class="progress-fill" data-bar-width="<?= (int) $progress ?>"></div>
                         </div>
                         <span class="progress-text"><?= (int)$progress ?>% <?= $block->escapeHtml(__('completo')) ?></span>
                     </div>
@@ -146,9 +154,9 @@ if ($shouldRenderErpPanel) {
                         <div class="checklist-item <?= $item['done'] ? 'done' : 'pending' ?>">
                             <div class="checklist-icon">
                                 <?php if ($item['done']): ?>
-                                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                                 <?php else: ?>
-                                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+                                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
                                 <?php endif; ?>
                             </div>
                             <div class="checklist-content">
@@ -238,7 +246,8 @@ if ($shouldRenderErpPanel) {
                         </div>
                         <div class="credit-bar">
                             <?php $percentage = $credit['limit'] > 0 ? ($credit['used'] / $credit['limit']) * 100 : 0; ?>
-                            <div class="credit-bar-fill" style="--b2b-bar-width:<?= $block->escapeHtmlAttr((string) (int) min((float) $percentage, 100.0)) ?>"></div>
+                            <div class="credit-bar-fill"
+                                 data-bar-width="<?= $block->escapeHtmlAttr((string) (int) min((float) $percentage, 100.0)) ?>"></div>
                         </div>
                     </div>
                 </div>
@@ -319,10 +328,10 @@ if ($shouldRenderErpPanel) {
         <?php if (!empty($erpSuggestions)): ?>
             <div class="b2b-section erp-suggestions-section">
                 <div class="section-header">
-                    <h3>
+                    <h2>
                         <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                         <?= $block->escapeHtml(__('Produtos Sugeridos para Você')) ?>
-                    </h3>
+                    </h2>
                     <a href="<?= $block->escapeUrl($block->getUrl('erpintegration/customer/suggestedcart')) ?>" class="view-all">
                         <?= $block->escapeHtml(__('Ver Carrinho Sugerido')) ?> &rarr;
                     </a>
@@ -382,10 +391,10 @@ if ($shouldRenderErpPanel) {
         <?php if (!empty($erpReorder)): ?>
             <div class="b2b-section erp-reorder-section">
                 <div class="section-header">
-                    <h3>
+                    <h2>
                         <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                         <?= $block->escapeHtml(__('Hora de Repor')) ?>
-                    </h3>
+                    </h2>
                     <a href="<?= $block->escapeUrl($block->getUrl('erpintegration/customer/suggestedcart')) ?>" class="view-all">
                         <?= $block->escapeHtml(__('Ver Todos')) ?> &rarr;
                     </a>
@@ -457,22 +466,23 @@ if ($shouldRenderErpPanel) {
         <?php if (!empty($erpOrders)): ?>
             <div class="b2b-section orders-section erp-orders" data-dashboard-section="orders">
                 <div class="section-header">
-                    <h3>
+                    <h2>
                         <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                         <?= $block->escapeHtml(__('Últimos Pedidos')) ?>
-                    </h3>
+                    </h2>
                     <a href="<?= $block->escapeUrl($block->getOrdersUrl()) ?>" class="view-all">
                         <?= $block->escapeHtml(__('Ver Todos')) ?>
                     </a>
                 </div>
+                <div class="table-wrapper">
                 <table class="data-table orders-table" aria-label="<?= $block->escapeHtmlAttr(__('Pedidos recentes do ERP')) ?>">
                     <caption class="sr-only"><?= $block->escapeHtml(__('Pedidos recentes do ERP')) ?></caption>
                     <thead>
                         <tr>
-                            <th><?= $block->escapeHtml(__('Pedido')) ?></th>
-                            <th><?= $block->escapeHtml(__('Data')) ?></th>
-                            <th><?= $block->escapeHtml(__('Status')) ?></th>
-                            <th><?= $block->escapeHtml(__('Total')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Pedido')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Total')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -491,6 +501,7 @@ if ($shouldRenderErpPanel) {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             </div>
         <?php else: ?>
             <!-- Fallback: Últimos Pedidos do Magento -->
@@ -498,19 +509,20 @@ if ($shouldRenderErpPanel) {
             <?php if ($orders->getSize() > 0): ?>
                 <div class="b2b-section orders-section" data-dashboard-section="orders">
                     <div class="section-header">
-                        <h3><?= $block->escapeHtml(__('Últimos Pedidos')) ?></h3>
+                        <h2><?= $block->escapeHtml(__('Últimos Pedidos')) ?></h2>
                         <a href="<?= $block->escapeUrl($block->getOrdersUrl()) ?>" class="view-all">
                             <?= $block->escapeHtml(__('Ver Todos')) ?>
                         </a>
                     </div>
+                    <div class="table-wrapper">
                     <table class="data-table orders-table" aria-label="<?= $block->escapeHtmlAttr(__('Pedidos recentes')) ?>">
                         <caption class="sr-only"><?= $block->escapeHtml(__('Pedidos recentes')) ?></caption>
                         <thead>
                             <tr>
-                                <th><?= $block->escapeHtml(__('Pedido')) ?></th>
-                                <th><?= $block->escapeHtml(__('Data')) ?></th>
-                                <th><?= $block->escapeHtml(__('Status')) ?></th>
-                                <th><?= $block->escapeHtml(__('Total')) ?></th>
+                                <th scope="col"><?= $block->escapeHtml(__('Pedido')) ?></th>
+                                <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                                <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                                <th scope="col"><?= $block->escapeHtml(__('Total')) ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -521,21 +533,23 @@ if ($shouldRenderErpPanel) {
                                             #<?= $block->escapeHtml($order->getIncrementId()) ?>
                                         </a>
                                     </td>
-                                    <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml(date('d/m/Y H:i', strtotime($order->getCreatedAt()))) ?></td>
+                                    <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml($block->formatDateTime((string) $order->getCreatedAt())) ?></td>
                                     <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>"><?= $block->escapeHtml($order->getStatusLabel()) ?></td>
                                     <td data-th="<?= $block->escapeHtmlAttr(__('Total')) ?>"><?= /* @noEscape */ $block->formatPrice($order->getGrandTotal()) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             <?php else: ?>
                 <div class="b2b-section orders-section orders-empty-state" data-dashboard-section="orders">
                     <div class="section-header">
-                        <h3><?= $block->escapeHtml(__('Últimos Pedidos')) ?></h3>
+                        <h2><?= $block->escapeHtml(__('Últimos Pedidos')) ?></h2>
                     </div>
-                    <div class="empty-state-message">
-                        <p><?= $block->escapeHtml(__('Você ainda não realizou nenhum pedido.')) ?></p>
+                    <div class="awa-empty-state" role="status" aria-live="polite">
+                        <p class="awa-empty-state__title"><?= $block->escapeHtml(__('Você ainda não realizou nenhum pedido')) ?></p>
+                        <p class="awa-empty-state__hint"><?= $block->escapeHtml(__('Após o primeiro pedido concluído, esta seção mostrará os pedidos mais recentes.')) ?></p>
                         <a href="<?= $block->escapeUrl($block->getUrl('catalogsearch/result/?q=')) ?>" class="action primary">
                             <?= $block->escapeHtml(__('Explorar Catálogo')) ?>
                         </a>
@@ -549,27 +563,28 @@ if ($shouldRenderErpPanel) {
         <?php if ($quotes->getSize() > 0): ?>
             <div class="b2b-section quotes-section" data-dashboard-section="quotes">
                 <div class="section-header">
-                    <h3><?= $block->escapeHtml(__('Últimas Cotações')) ?></h3>
+                    <h2><?= $block->escapeHtml(__('Últimas Cotações')) ?></h2>
                     <a href="<?= $block->escapeUrl($block->getQuotesListUrl()) ?>" class="view-all">
                         <?= $block->escapeHtml(__('Ver Todas')) ?>
                     </a>
                 </div>
+                <div class="table-wrapper">
                 <table class="data-table quotes-table" aria-label="<?= $block->escapeHtmlAttr(__('Cotações recentes')) ?>">
                     <caption class="sr-only"><?= $block->escapeHtml(__('Cotações recentes')) ?></caption>
                     <thead>
                         <tr>
-                            <th><?= $block->escapeHtml(__('Nº')) ?></th>
-                            <th><?= $block->escapeHtml(__('Data')) ?></th>
-                            <th><?= $block->escapeHtml(__('Status')) ?></th>
-                            <th><?= $block->escapeHtml(__('Valor Cotado')) ?></th>
-                            <th><?= $block->escapeHtml(__('Válido Até')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Nº')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Valor Cotado')) ?></th>
+                            <th scope="col"><?= $block->escapeHtml(__('Válido Até')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($quotes as $quote): ?>
                             <tr>
                                 <td data-th="<?= $block->escapeHtmlAttr(__('Nº')) ?>">#<?= (int)$quote->getId() ?></td>
-                                <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml(date('d/m/Y H:i', strtotime($quote->getCreatedAt()))) ?></td>
+                                <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml($block->formatDateTime((string) $quote->getCreatedAt())) ?></td>
                                 <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>">
                                     <span class="status-badge <?= $block->escapeHtmlAttr($block->getStatusClass($quote->getStatus())) ?>">
                                         <?= $block->escapeHtml($block->getStatusLabel($quote->getStatus())) ?>
@@ -584,7 +599,7 @@ if ($shouldRenderErpPanel) {
                                 </td>
                                 <td data-th="<?= $block->escapeHtmlAttr(__('Válido Até')) ?>">
                                     <?php if ($quote->getExpiresAt()): ?>
-                                        <?= $block->escapeHtml(date('d/m/Y', strtotime($quote->getExpiresAt()))) ?>
+                                        <?= $block->escapeHtml($block->formatDate((string) $quote->getExpiresAt())) ?>
                                     <?php else: ?>
                                         <span class="no-value">-</span>
                                     <?php endif; ?>
@@ -593,6 +608,7 @@ if ($shouldRenderErpPanel) {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             </div>
         <?php endif; ?>
 
@@ -601,10 +617,10 @@ if ($shouldRenderErpPanel) {
         <!-- ============================= -->
         <?php if (!empty($suggestions)): ?>
             <div class="b2b-section b2b-suggestions-section">
-                <h3>
+                <h2>
                     <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                     <?= $block->escapeHtml(__('Sugestões para você')) ?>
-                </h3>
+                </h2>
                 <div class="suggestions-grid">
                     <?php foreach ($suggestions as $suggestion): ?>
                         <div class="suggestion-card suggestion-<?= $block->escapeHtmlAttr($suggestion['type']) ?>">
@@ -628,10 +644,10 @@ if ($shouldRenderErpPanel) {
         <?php $categories = $block->getFeaturedCategories(); ?>
         <?php if (!empty($categories) && empty($erpOrders) && $block->getRecentOrders(1)->getSize() === 0): ?>
             <div class="b2b-section categories-section">
-                <h3>
+                <h2>
                     <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     <?= $block->escapeHtml(__('Explore nossas categorias')) ?>
-                </h3>
+                </h2>
                 <div class="categories-grid">
                     <?php foreach ($categories as $cat): ?>
                         <a href="<?= $block->escapeUrl($cat['url']) ?>" class="category-chip">
@@ -644,7 +660,7 @@ if ($shouldRenderErpPanel) {
 
         <!-- Ações Rápidas -->
         <div class="b2b-quick-actions">
-            <h3><?= $block->escapeHtml(__('Ações Rápidas')) ?></h3>
+            <h2><?= $block->escapeHtml(__('Ações Rápidas')) ?></h2>
             <div class="actions-grid">
                 <?php if ($erpCode): ?>
                     <a href="<?= $block->escapeUrl($block->getUrl('erpintegration/customer/suggestedcart')) ?>" class="action-item action-highlight">
@@ -714,7 +730,7 @@ if ($shouldRenderErpPanel) {
         <?php $attendant = $block->getAttendantInfo(); ?>
         <?php if ($attendant): ?>
             <div class="b2b-section attendant-section">
-                <h3><?= $block->escapeHtml(__('Seu Atendente')) ?></h3>
+                <h2><?= $block->escapeHtml(__('Seu Atendente')) ?></h2>
                 <div class="attendant-card">
                     <div class="attendant-avatar">
                         <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -742,7 +758,7 @@ if ($shouldRenderErpPanel) {
                         <?php endif; ?>
                         <?php if (!empty($attendant['whatsapp'])): ?>
                             <?php $whatsappNumber = preg_replace('/\D/', '', $attendant['whatsapp']); ?>
-                            <a href="https://wa.me/55<?= $block->escapeHtmlAttr($whatsappNumber) ?>" class="contact-link whatsapp-link" data-b2b-contact-track="dashboard_attendant_whatsapp" data-b2b-contact-channel="whatsapp" target="_blank" title="WhatsApp" rel="noopener">
+                            <a href="https://wa.me/55<?= $block->escapeHtmlAttr($whatsappNumber) ?>" class="contact-link whatsapp-link" data-b2b-contact-track="dashboard_attendant_whatsapp" data-b2b-contact-channel="whatsapp" target="_blank" rel="noopener" aria-label="<?= $block->escapeHtmlAttr(__('WhatsApp (abre em nova aba)')) ?>">
                                 <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                                 <span>WhatsApp</span>
                             </a>

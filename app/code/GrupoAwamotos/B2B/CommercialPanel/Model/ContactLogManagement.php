@@ -41,7 +41,8 @@ class ContactLogManagement implements ContactLogManagementInterface
             throw new LocalizedException(__('Cliente inválido.'));
         }
 
-        if (!$this->portfolioScope->canAccessCustomer($customerId)) {
+        $canAccess = $this->portfolioScope->canAccessCustomer($customerId);
+        if (!$canAccess) {
             throw new LocalizedException(__('Cliente fora da sua carteira comercial.'));
         }
 
@@ -68,7 +69,7 @@ class ContactLogManagement implements ContactLogManagementInterface
         /** @var ContactLogInterface $contactLog */
         $contactLog = $this->contactLogFactory->create();
         $contactLog->setCustomerId($customerId);
-        $contactLog->setAttendantId($this->currentAttendant->getId());
+        $contactLog->setAttendantId($this->currentAttendant->getIdForCustomer($customerId));
         $contactLog->setAdminUserId($adminUserId);
         $contactLog->setContactType($contactType);
         $contactLog->setObservation($observation);

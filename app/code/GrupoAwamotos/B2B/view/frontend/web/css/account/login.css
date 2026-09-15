@@ -1,4 +1,16 @@
 :root {
+    /* Auth empty layout não carrega _tokens.less.
+       Literais = @awa-color-primary / hover. Declarar ANTES de qualquer color-mix:
+       var(--x, #hex) dentro de color-mix() invalida o restante deste :root no Chromium. */
+    --awa-brand: #b73337;
+    --awa-brand-dark: #8e2629;
+    --awa-primary: #b73337;
+    --awa-primary-hover: #8e2629;
+    --awa-primary-dark: #8e2629;
+    --awa-red: #b73337;
+    --awa-auth-primary: #b73337;
+    --awa-auth-primary-hover: #8e2629;
+    --awa-text-inverse: #ffffff;
     /* ── b2b-auth — tokens corporativos (densidade 2025–2026) ─── */
     --b2b-auth-container-max: min(100%, 480px);
     --b2b-auth-card-max: 440px;
@@ -22,28 +34,28 @@
     --b2b-auth-font-body: 0.875rem;
     --b2b-auth-font-label: 0.75rem;
     --b2b-auth-font-note: 0.75rem;
-    --b2b-auth-focus-ring: var(--awa-focus-ring, 0 0 0 2px rgb(183 51 55 / 12%));
+    --b2b-auth-focus-ring: 0 0 0 2px rgba(183, 51, 55, 0.12);
 
     /* ── b2b-login — design tokens legados ─── */
-    --b2b-login-c1: #f7f8fa;
-    --b2b-login-c2: #eef1f5;
-    --b2b-login-border-main: #e5e7eb;
-    --b2b-login-c3: #4b5563;
-    --b2b-login-c4: #374151;
-    --b2b-login-c5: #6b7280;
-    --b2b-login-border-mid: #d1d5db;
-    --b2b-login-c6: #dc2626;
-    --b2b-login-bg: #f9fafb;
-    --b2b-login-c7: #fecaca;
-    --b2b-login-c8: #fef2f2;
-    --b2b-login-c9: #991b1b;
-    --b2b-login-c10: #bbf7d0;
-    --b2b-login-c11: #f0fdf4;
-    --b2b-login-c12: #166534;
-    --b2b-login-c13: #117a6f;
-    --b2b-login-c14: #075e54;
-    --b2b-login-white: #fff;
-    --b2b-login-light-gray: #ccc;
+    --b2b-login-c1: var(--awa-bg-soft, var(--awa-bg-subtle));
+    --b2b-login-c2: var(--awa-bg-subtle);
+    --b2b-login-border-main: var(--awa-border);
+    --b2b-login-c3: var(--awa-text-secondary, var(--awa-text-muted));
+    --b2b-login-c4: var(--awa-text-primary, var(--awa-text));
+    --b2b-login-c5: var(--awa-text-muted);
+    --b2b-login-border-mid: var(--awa-border, var(--awa-line));
+    --b2b-login-c6: var(--awa-error, var(--awa-primary));
+    --b2b-login-bg: var(--awa-bg-subtle);
+    --b2b-login-c7: color-mix(in srgb, var(--awa-error, var(--awa-primary)) 26%, var(--awa-border));
+    --b2b-login-c8: color-mix(in srgb, var(--awa-error, var(--awa-primary)) 8%, var(--awa-bg));
+    --b2b-login-c9: var(--awa-error-text, var(--awa-primary-dark));
+    --b2b-login-c10: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 26%, var(--awa-border));
+    --b2b-login-c11: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 8%, var(--awa-bg));
+    --b2b-login-c12: var(--awa-success-text, var(--awa-text-primary));
+    --b2b-login-c13: var(--awa-success, var(--awa-primary-dark));
+    --b2b-login-c14: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 85%, var(--awa-text));
+    --b2b-login-white: var(--awa-bg);
+    --b2b-login-light-gray: var(--awa-border);
 }
 
 /* Route shell reset: this file is the CSS loaded by b2b_auth_shell. */
@@ -66,17 +78,13 @@ body.b2b-auth-shell.b2b-register-index .page-main.container {
 
 body.b2b-auth-shell .page-main > .columns,
 body.b2b-auth-shell .page-main .column.main {
+    display: block !important;
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
     margin-inline: 0 !important;
     padding-inline: 0 !important;
     box-sizing: border-box !important;
-}
-
-body.b2b-auth-shell .page-main > .columns,
-body.b2b-auth-shell .page-main .column.main {
-    display: block !important;
 }
 
 body.b2b-auth-shell.b2b-account-login .page-wrapper .column.main,
@@ -96,9 +104,9 @@ body.b2b-register-success .page-wrapper .column.main {
 /* Shell — fundo único, container centralizado (SSOT padding no page-main) */
 html,
 body.b2b-auth-shell {
-    background: var(--awa-bg, #ffffff);
+    background: var(--awa-bg);
     background-image: none;
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     margin: 0;
     padding: 0;
     min-height: 100%;
@@ -113,7 +121,7 @@ body.b2b-auth-shell::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: #ffffff;
+    background: var(--awa-bg);
     pointer-events: none;
     z-index: -1;
 }
@@ -280,12 +288,12 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
     left: var(--b2b-auth-card-pad-x);
     right: var(--b2b-auth-card-pad-x);
     height: 3px;
-    border-radius: 0 0 3px 3px;
+    border-radius: 0 0 var(--awa-radius-sm) var(--awa-radius-sm);
     background: linear-gradient(
         90deg,
         transparent 0%,
-        var(--awa-primary, #b73337) 12%,
-        var(--awa-primary, #b73337) 88%,
+        var(--awa-primary) 12%,
+        var(--awa-primary) 88%,
         transparent 100%
     );
 }
@@ -294,7 +302,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 .b2b-login-title {
     font-size: var(--b2b-auth-font-title);
     font-weight: var(--awa-weight-bold, 700);
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
     text-align: center;
     margin: 0;
     letter-spacing: -0.02em;
@@ -317,7 +325,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
     font-size: var(--b2b-auth-font-label);
     line-height: 1.4;
     text-align: center;
-    color: var(--awa-text-muted, #666);
+    color: var(--awa-text-muted);
     max-width: 34ch;
     margin-inline: auto;
 }
@@ -428,11 +436,12 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 }
 
 .b2b-field input:focus {
-    outline: none;
+    border-color: var(--awa-primary);
 }
 
 .b2b-field input:focus-visible {
-    outline: none;
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
     border-color: var(--awa-primary);
     box-shadow: var(--awa-focus-ring, 0 0 0 2px rgb(183 51 55 / 12%));
 }
@@ -443,7 +452,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 }
 
 .b2b-field input::placeholder {
-    color: var(--awa-text-muted, #666);
+    color: var(--awa-text-muted);
 }
 
 .b2b-password-toggle {
@@ -484,7 +493,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 .b2b-password-toggle:hover {
     background: color-mix(in srgb, var(--awa-primary) 6%, var(--awa-bg-surface, var(--b2b-login-white)));
     border-color: var(--awa-color-border, var(--b2b-login-border-mid));
-    color: var(--awa-text-primary, #333);
+    color: var(--awa-text-primary, var(--awa-text));
 }
 
 .b2b-password-toggle:focus-visible {
@@ -535,7 +544,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
     max-width: 440px;
     min-height: 44px;
     background: var(--awa-primary);
-    color: var(--awa-bg-surface, var(--b2b-login-white));
+    color: var(--awa-text-inverse);
     border: none;
     border-radius: var(--awa-radius-sm, 8px);
     font-size: var(--b2b-auth-font-body, 0.875rem);
@@ -603,7 +612,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 .b2b-login-divider span {
     font-size: var(--b2b-auth-font-label);
     font-weight: var(--awa-weight-semibold, 600);
-    color: var(--awa-text-muted, #666);
+    color: var(--awa-text-muted);
     text-transform: lowercase;
 }
 
@@ -669,7 +678,7 @@ body.b2b-auth-shell:not(.b2b-register-index) .b2b-login-page {
 .b2b-btn-claim:hover,
 .b2b-btn-claim:focus {
     background: var(--awa-bg-soft, var(--b2b-login-bg));
-    border-color: var(--awa-text-muted, #666);
+    border-color: var(--awa-text-muted);
     color: var(--awa-text-primary, var(--awa-text));
     text-decoration: none;
 }
@@ -679,7 +688,7 @@ body.b2b-account-login .b2b-btn-entrar,
 body.b2b-account-forgotpassword .b2b-btn-entrar,
 body.b2b-account-claim .b2b-btn-claim-submit,
 body.b2b-register-index .create-b2b-account {
-    color: var(--awa-bg-surface, var(--b2b-login-white)) !important;
+    color: var(--awa-text-inverse) !important;
 }
 
 body.b2b-account-login .b2b-btn-entrar span,
@@ -697,7 +706,7 @@ body.b2b-account-claim .b2b-btn-claim-submit:hover,
 body.b2b-account-claim .b2b-btn-claim-submit:focus,
 body.b2b-register-index .create-b2b-account:hover,
 body.b2b-register-index .create-b2b-account:focus {
-    color: var(--awa-bg-surface, var(--b2b-login-white)) !important;
+    color: var(--awa-text-inverse) !important;
 }
 
 /* Footer — alinhado à largura do card */
@@ -725,15 +734,12 @@ body.b2b-account-claim .page.messages {
     font-size: 12px;
     color: var(--awa-error, var(--b2b-login-c6));
     margin-top: 4px;
+    display: block;
+    line-height: 1.35;
 }
 
 .b2b-field input.mage-error {
     border-color: var(--awa-error, var(--b2b-login-c6));
-}
-
-.b2b-login-form .mage-error {
-    display: block;
-    line-height: 1.35;
 }
 
 /* ==========================================================================
@@ -842,10 +848,9 @@ body.b2b-account-claim .page.messages {
 .b2b-btn-claim-submit {
     display: block;
     width: 100%;
-    max-width: none;
     min-height: var(--b2b-auth-touch);
     background: var(--awa-primary);
-    color: var(--b2b-login-white);
+    color: var(--awa-text-inverse);
     border: none;
     border-radius: var(--b2b-auth-radius-control);
     font-size: var(--b2b-auth-font-body);
@@ -959,7 +964,7 @@ body.b2b-auth-shell .b2b-login-form {
     position: fixed;
     inset: 0;
     z-index: var(--awa-z-overlay, 1000);
-    background: color-mix(in srgb, var(--awa-bg, #ffffff) 94%, transparent);
+    background: color-mix(in srgb, var(--awa-bg) 94%, transparent);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -971,7 +976,7 @@ body.b2b-auth-shell .b2b-login-form {
     width: 40px;
     height: 40px;
     border: 3px solid rgb(183 51 55 / 20%);
-    border-top-color: var(--awa-primary, #b73337);
+    border-top-color: var(--awa-primary);
     border-radius: 50%;
     animation: b2bAuthSpin 0.7s linear infinite;
 }
@@ -979,14 +984,14 @@ body.b2b-auth-shell .b2b-login-form {
 .b2b-auth-loading-label {
     font-size: 15px;
     font-weight: 600;
-    color: var(--awa-text-primary, #1f2937);
+    color: var(--awa-text-primary, var(--awa-text));
     letter-spacing: 0.01em;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .b2b-auth-spinner {
         animation: none;
-        border-top-color: var(--awa-primary, #b73337);
+        border-top-color: var(--awa-primary);
         opacity: 0.7;
     }
 }
@@ -997,18 +1002,9 @@ body.b2b-auth-shell .b2b-login-form {
    ========================================================================== */
 
 @media (max-width: 400px) {
-    .b2b-login-page {
-        width: 100%;
-    }
-
     .b2b-login-card {
         --b2b-auth-card-pad-x: 12px;
         --b2b-auth-card-pad-y: 12px;
-        width: 100%;
-    }
-
-    .b2b-field input {
-        font-size: 16px !important; /* prevent iOS auto-zoom */
     }
 
     .b2b-btn-register,
@@ -1019,10 +1015,6 @@ body.b2b-auth-shell .b2b-login-form {
         padding-left: 12px;
         padding-right: 12px;
     }
-
-    .b2b-login-divider {
-        max-width: 100%;
-    }
 }
 
 /* ==========================================================================
@@ -1031,7 +1023,13 @@ body.b2b-auth-shell .b2b-login-form {
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim, .b2b-register-index)
     .column.main > div[data-bind*="messages"] {
-    display: none !important;
+    display: block !important;
+    margin-bottom: var(--b2b-auth-gap-md, 12px) !important;
+}
+
+body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim, .b2b-register-index)
+    .column.main > div[data-bind*="messages"] .message {
+    border-radius: var(--awa-radius-sm, 8px) !important;
 }
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
@@ -1040,14 +1038,14 @@ body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.25 !important;
-    color: var(--awa-text-primary, #333) !important;
+    color: var(--awa-text-primary, var(--awa-text)) !important;
     text-transform: none !important;
 }
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
     .page-wrapper .b2b-login-page .b2b-login-subtitle {
     font-size: var(--b2b-auth-font-label) !important;
-    color: var(--awa-text-muted, #666) !important;
+    color: var(--awa-text-muted) !important;
 }
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
@@ -1068,9 +1066,9 @@ body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword
     .page-wrapper .b2b-login-page .b2b-btn-entrar,
 body#html-body.b2b-auth-shell.b2b-account-claim .page-wrapper .b2b-login-page .b2b-btn-claim-submit {
     min-height: 44px !important;
-    background: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary) !important;
     border: none !important;
-    color: var(--awa-bg-surface, #fff) !important;
+    color: var(--awa-text-inverse) !important;
     border-radius: 8px !important;
     font-size: 15px !important;
     font-weight: 600 !important;
@@ -1082,8 +1080,8 @@ body#html-body.b2b-auth-shell.b2b-account-claim .page-wrapper .b2b-login-page .b
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
     .page-wrapper .b2b-login-page .b2b-btn-register {
     background: transparent !important;
-    border: 1px solid var(--awa-primary, #b73337) !important;
-    color: var(--awa-primary, #b73337) !important;
+    border: 1px solid var(--awa-primary) !important;
+    color: var(--awa-primary) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     box-shadow: none !important;
@@ -1093,16 +1091,16 @@ body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword
     .page-wrapper .b2b-login-page .b2b-btn-register:hover,
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
     .page-wrapper .b2b-login-page .b2b-btn-register:focus-visible {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 6%, transparent) !important;
-    border-color: var(--awa-primary-hover, #8e2629) !important;
-    color: var(--awa-primary-hover, #8e2629) !important;
+    background: color-mix(in srgb, var(--awa-primary) 6%, transparent) !important;
+    border-color: var(--awa-primary-dark) !important;
+    color: var(--awa-primary-dark) !important;
 }
 
 html body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
     .page-wrapper .b2b-login-page .b2b-btn-claim {
-    background: var(--awa-bg-surface, #fff) !important;
-    border: 1px solid var(--awa-color-border, #e5e5e5) !important;
-    color: var(--awa-text-primary, #333) !important;
+    background: var(--awa-bg-surface, var(--awa-bg)) !important;
+    border: 1px solid var(--awa-color-border, var(--awa-border)) !important;
+    color: var(--awa-text-primary, var(--awa-text)) !important;
     font-size: var(--b2b-auth-font-body, 0.875rem) !important;
     font-weight: 600 !important;
     padding-top: 8px !important;
@@ -1116,13 +1114,18 @@ body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword
     .page-wrapper .b2b-login-page .b2b-btn-claim:hover,
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim)
     .page-wrapper .b2b-login-page .b2b-btn-claim:focus-visible {
-    background: var(--awa-bg-soft, #f7f7f7) !important;
-    border-color: var(--awa-text-muted, #666) !important;
+    background: var(--awa-bg-soft, var(--awa-bg-subtle)) !important;
+    border-color: var(--awa-text-muted) !important;
 }
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim, .b2b-register-index, .b2b-register-success)
     .page-wrapper .b2b-login-page .b2b-login-whatsapp,
-body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp {
+body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main :is(
+    a.b2b-login-whatsapp,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1131,9 +1134,11 @@ body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .pa
     min-block-size: 44px !important;
     height: 44px !important;
     padding: var(--b2b-auth-gap-sm, 8px) var(--b2b-auth-gap-lg, 16px) !important;
-    background: #117a6f !important;
-    border: 1px solid #117a6f !important;
-    color: #fff !important;
+    background: var(--awa-success, #117a6f) !important;
+    border: 1px solid var(--awa-success, #117a6f) !important;
+    /* branco tokenizado — vence link brand do design-system (#awa-boost) */
+    color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
+    -webkit-text-fill-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
     border-radius: var(--b2b-auth-radius-control, 8px) !important;
     font-size: 14px !important;
     text-decoration: none !important;
@@ -1145,15 +1150,20 @@ body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim, .b2b-register-index, .b2b-register-success)
     .page-wrapper .b2b-login-page .b2b-login-whatsapp:focus-visible,
 body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp:hover,
-body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp:focus-visible {
-    background: #075e54 !important;
-    border-color: #075e54 !important;
-    color: #fff !important;
+body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp:focus-visible,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp:hover,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp:focus-visible {
+    background: color-mix(in srgb, var(--awa-success, #117a6f) 82%, var(--awa-text, #111827)) !important;
+    border-color: color-mix(in srgb, var(--awa-success, #117a6f) 82%, var(--awa-text, #111827)) !important;
+    color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
+    -webkit-text-fill-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
 }
 
 body#html-body.b2b-auth-shell:is(.b2b-account-login, .b2b-account-forgotpassword, .b2b-account-claim, .b2b-register-index, .b2b-register-success)
-    .page-wrapper .b2b-login-whatsapp strong {
-    color: inherit !important;
+    .page-wrapper .b2b-login-whatsapp strong,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp :is(strong, span) {
+    color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
+    -webkit-text-fill-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
     font-weight: 700 !important;
 }
 
@@ -1188,20 +1198,20 @@ body#html-body.b2b-auth-shell.b2b-register-success .page-wrapper .b2b-login-page
     font-weight: 700 !important;
     letter-spacing: -0.02em !important;
     line-height: 1.25 !important;
-    color: var(--awa-text-primary, #333) !important;
+    color: var(--awa-text-primary, var(--awa-text)) !important;
     text-transform: none !important;
 }
 
 body#html-body.b2b-auth-shell.b2b-register-success .page-wrapper .b2b-login-page .success-subtitle {
     font-size: 14px !important;
-    color: var(--awa-text-muted, #666) !important;
+    color: var(--awa-text-muted) !important;
 }
 
 body#html-body.b2b-auth-shell.b2b-register-success .page-wrapper .b2b-login-page .b2b-btn-entrar {
     min-height: 44px !important;
-    background: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary) !important;
     border: none !important;
-    color: var(--awa-bg-surface, #fff) !important;
+    color: var(--awa-text-inverse) !important;
     border-radius: 8px !important;
     font-size: 15px !important;
     font-weight: 600 !important;
@@ -1296,7 +1306,7 @@ body.b2b-auth-shell .success-actions .login-note {
     margin: 0;
     font-size: var(--b2b-auth-font-label);
     line-height: 1.4;
-    color: var(--awa-text-muted, #666);
+    color: var(--awa-text-muted);
 }
 
 body.b2b-auth-shell .success-support p {
@@ -1326,3 +1336,53 @@ body.b2b-auth-shell #awaBackToTop {
     display: none !important; /* vence estilo inline/JS que alterna visibilidade */
 }
 
+/* CTA lock deduplicado: regras finais vivem em cta-lock-20260815.css. */
+
+/* Captcha Magento no shell B2B (user_login / user_forgotpassword) */
+.b2b-field-captcha .field.captcha {
+    display: grid;
+    gap: var(--b2b-auth-gap-xs);
+    margin: 0;
+}
+.b2b-field-captcha .field.captcha > .label {
+    padding: 0;
+}
+.b2b-field-captcha .field.captcha > .label span {
+    display: block;
+    margin: 0;
+    font-size: var(--b2b-auth-font-label);
+    font-weight: var(--awa-weight-semibold, 600);
+    color: var(--awa-text-primary, var(--b2b-login-c4));
+    line-height: 1.45;
+}
+.b2b-field-captcha .control.captcha {
+    display: grid;
+    gap: var(--b2b-auth-gap-xs);
+}
+.b2b-field-captcha .captcha-image {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.b2b-field-captcha .captcha-img {
+    display: block;
+    height: 50px;
+    width: auto;
+    max-width: 100%;
+    border: 1px solid var(--awa-color-border, var(--b2b-login-border-mid));
+    border-radius: var(--awa-radius-sm, 8px);
+    background: #fff;
+}
+.b2b-field-captcha .action.reload.captcha-reload {
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--awa-color-border, var(--b2b-login-border-mid));
+    border-radius: var(--awa-radius-sm, 8px);
+    background: var(--awa-bg-surface, #fff);
+    cursor: pointer;
+    font-size: 13px;
+}
+.b2b-field-captcha .nested {
+    margin: 0;
+}

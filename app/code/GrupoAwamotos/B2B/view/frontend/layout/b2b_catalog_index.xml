@@ -2,7 +2,12 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
+    <head>
+        <css src="GrupoAwamotos_B2B::css/account/pages-operations.css"/>
+    </head>
     <body>
+        <!-- Evita H1 duplicado: título vem do template account/catalog.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceContainer name="content">
             <block class="GrupoAwamotos\B2B\Block\Account\Catalog"
                    name="b2b.account.catalog"

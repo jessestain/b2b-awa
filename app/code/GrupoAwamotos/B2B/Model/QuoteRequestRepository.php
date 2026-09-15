@@ -307,8 +307,7 @@ class QuoteRequestRepository implements QuoteRequestRepositoryInterface
     {
         $quoteRequest = $this->getById($requestId);
 
-        if (
-            !in_array($quoteRequest->getStatus(), [
+        if (!in_array($quoteRequest->getStatus(), [
             QuoteRequestInterface::STATUS_QUOTED,
             QuoteRequestInterface::STATUS_ACCEPTED
             ])

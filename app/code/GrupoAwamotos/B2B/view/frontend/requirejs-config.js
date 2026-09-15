@@ -8,8 +8,8 @@
  */
 var config = {
     paths: {
-        'GrupoAwamotos_B2B/js/account/approval-actions': 'GrupoAwamotos_B2B/js/account/approval-actions.min',
-        'GrupoAwamotos_B2B/js/account/company-manager': 'GrupoAwamotos_B2B/js/account/company-manager.min',
+        'GrupoAwamotos_B2B/js/account/approval-actions': 'GrupoAwamotos_B2B/js/account/approval-actions-v2.min',
+        'GrupoAwamotos_B2B/js/account/company-manager': 'GrupoAwamotos_B2B/js/account/company-manager-v2.min',
         'GrupoAwamotos_B2B/js/account/nav-mobile': 'GrupoAwamotos_B2B/js/account/nav-mobile.min',
         'GrupoAwamotos_B2B/js/account/onboarding': 'GrupoAwamotos_B2B/js/account/onboarding.min',
         'GrupoAwamotos_B2B/js/account/performance-charts': 'GrupoAwamotos_B2B/js/account/performance-charts.min',
@@ -46,7 +46,7 @@ var config = {
         'GrupoAwamotos_B2B/js/register-form': 'GrupoAwamotos_B2B/js/register-form.min',
         'GrupoAwamotos_B2B/js/shoppinglist-modal': 'GrupoAwamotos_B2B/js/shoppinglist-modal.min',
         'GrupoAwamotos_B2B/js/shoppinglist/index': 'GrupoAwamotos_B2B/js/shoppinglist/index.min',
-        'GrupoAwamotos_B2B/js/shoppinglist/view': 'GrupoAwamotos_B2B/js/shoppinglist/view.min',
+        'GrupoAwamotos_B2B/js/shoppinglist/view': 'GrupoAwamotos_B2B/js/shoppinglist/view-v2.min',
         'GrupoAwamotos_B2B/js/view/checkout/b2b-terms': 'GrupoAwamotos_B2B/js/view/checkout/b2b-terms.min',
         'GrupoAwamotos_B2B/js/view/checkout/order-notes': 'GrupoAwamotos_B2B/js/view/checkout/order-notes.min',
         'GrupoAwamotos_B2B/js/view/checkout/po-number': 'GrupoAwamotos_B2B/js/view/checkout/po-number.min',
@@ -82,3 +82,4 @@ var config = {
         }
     }
 };
+

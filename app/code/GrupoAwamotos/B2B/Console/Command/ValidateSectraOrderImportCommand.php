@@ -26,6 +26,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Valida disponibilidade de pedidos B2B para Sectra → Integração AWA → Importar Pedidos.
@@ -55,6 +56,7 @@ class ValidateSectraOrderImportCommand extends Command
         private readonly StockHelper $stockHelper,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly State $appState,
+        private readonly LoggerInterface $logger,
         ?string $name = null
     ) {
         parent::__construct($name);
@@ -739,8 +741,11 @@ class ValidateSectraOrderImportCommand extends Command
                 if ($product->isSalable() && $product->getTypeId() === 'simple') {
                     return $product;
                 }
-            } catch (\Exception) {
-                // fall through to auto selection
+            } catch (\Exception $e) {
+                $this->logger->debug(
+                    '[ValidateSectraOrderImportCommand::findSalableProduct] SKU preferido indisponível, '
+                    . 'usando seleção automática: ' . $e->getMessage()
+                );
             }
         }
 
@@ -835,6 +840,9 @@ class ValidateSectraOrderImportCommand extends Command
     {
         try {
             $this->appState->setAreaCode(Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception) {
             // already set
         }

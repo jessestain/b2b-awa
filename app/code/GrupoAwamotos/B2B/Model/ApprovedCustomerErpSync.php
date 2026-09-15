@@ -183,6 +183,7 @@ class ApprovedCustomerErpSync
             }
         }
 
+
         if ($targetErpCode === null || $targetErpCode <= 0) {
             return null;
         }
@@ -218,30 +219,40 @@ class ApprovedCustomerErpSync
             $action = self::ACTION_LINKED_BY_CNPJ;
         }
 
+        $promotedToNative = $this->b2bClientRegistration->promoteMagentoProspectToNativeClient(
+            $targetErpCode
+        );
         $this->ensureErpValidatorRegistration($customer, (string) $targetErpCode, $newGroupId);
         // Cadastro de Cliente (7D4C6FBD) — not prospect-only — gates Importar Pedidos.
+        $hasCadastro = $this->b2bClientRegistration->hasCadastroCliente($targetErpCode);
+        $hasProspectOrigin = $this->b2bClientRegistration->isClientProspectRegistered($targetErpCode);
+        $isNativeClient = $this->b2bClientRegistration->isExistingErpNativeClient($targetErpCode);
         $erpValidated = $this->b2bClientRegistration->isClientReadyForSectraOrderImport($targetErpCode);
-        $erpSyncStatus = $erpValidated
+
+
+
+        $erpCustomerReady = $erpValidated && $isNativeClient;
+        $erpSyncStatus = $erpCustomerReady
             ? ErpCustomerSyncStatus::CUSTOMER_VALIDATED_IN_ERP
             : ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION;
         $this->setCustomerSyncStatus($customer, $erpSyncStatus);
         $this->syncCreditLimit($customer);
 
-        if ($createdProspect && $erpValidated) {
+        if ($createdProspect && $promotedToNative && $erpValidated) {
             $message = sprintf(
-                'Prospect criado no ERP #%d (autonomia Magento) e validado para Importar Pedidos.',
+                'Cliente criado no ERP #%d (autonomia Magento) e validado para Importar Pedidos.',
                 $targetErpCode
             );
         } elseif ($createdProspect) {
             $message = sprintf(
-                'Prospect criado no ERP #%d — Cadastro de Cliente pendente no validador.',
+                'Prospect criado no ERP #%d — promoção nativa ou Cadastro de Cliente pendente.',
                 $targetErpCode
             );
-        } elseif ($erpValidated) {
+        } elseif ($erpCustomerReady) {
             $message = sprintf('Cliente já existia no ERP — vínculo #%d (validado para Importar Pedidos).', $targetErpCode);
         } else {
             $message = sprintf(
-                'Cliente vinculado ao ERP #%d — aguardando Cadastro de Cliente no validador (auto via write_connection ou Exportar Clientes).',
+                'Cliente vinculado ao ERP #%d — aguardando promoção nativa ou Cadastro no validador.',
                 $targetErpCode
             );
         }

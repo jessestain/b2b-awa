@@ -16,6 +16,13 @@
                   instance="GrupoAwamotos\B2B\Observer\CustomerRegistrationNotification"/>
     </event>
 
+    <event name="grupoawamotos_b2b_registration_submitted">
+        <observer name="grupoawamotos_b2b_registration_enrichment"
+                  instance="GrupoAwamotos\B2B\Observer\B2bRegistrationEnrichmentObserver"/>
+        <observer name="grupoawamotos_b2b_form_registration_notification"
+                  instance="GrupoAwamotos\B2B\Observer\CustomerRegistrationNotification"/>
+    </event>
+
     <event name="customer_login">
         <observer name="grupoawamotos_b2b_customer_login"
                   instance="GrupoAwamotos\B2B\Observer\CustomerLoginObserver"/>
@@ -26,6 +33,21 @@
                   instance="GrupoAwamotos\B2B\Observer\OrderNotification"/>
         <observer name="grupoawamotos_b2b_order_approval_trigger"
                   instance="GrupoAwamotos\B2B\Observer\OrderPlaceAfterObserver"/>
+    </event>
+
+    <event name="checkout_submit_all_after">
+        <observer name="grupoawamotos_b2b_mark_order_success_empty_cart"
+                  instance="GrupoAwamotos\B2B\Observer\MarkOrderSuccessEmptyCartObserver"/>
+    </event>
+
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="grupoawamotos_b2b_mark_order_success_empty_cart_success_page"
+                  instance="GrupoAwamotos\B2B\Observer\MarkOrderSuccessEmptyCartObserver"/>
+    </event>
+
+    <event name="checkout_cart_product_add_after">
+        <observer name="grupoawamotos_b2b_clear_order_success_empty_cart"
+                  instance="GrupoAwamotos\B2B\Observer\ClearOrderSuccessEmptyCartObserver"/>
     </event>
 
     <event name="catalog_product_collection_load_after">

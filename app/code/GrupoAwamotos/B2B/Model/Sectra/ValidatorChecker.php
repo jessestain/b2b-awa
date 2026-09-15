@@ -51,8 +51,15 @@ class ValidatorChecker
     public function isCustomerValidatedInSectra(int $magentoCustomerId): bool
     {
         $sectraChave = $this->resolveSectraChave($magentoCustomerId);
-        $inB2bConfirmed = $this->isInB2bConfirmedTable($sectraChave);
+        if ($sectraChave === null || $sectraChave <= 0) {
+            return false;
+        }
+
         $inCadastroValidator = $this->isSectraChaveRegistered($sectraChave);
+        if ($inCadastroValidator) {
+            $this->ensureConfirmedLocally($sectraChave);
+        }
+        $inB2bConfirmed = $this->isInB2bConfirmedTable($sectraChave);
 
         return $inB2bConfirmed && $inCadastroValidator;
     }
@@ -95,6 +102,28 @@ class ValidatorChecker
         );
 
         return $exists !== false;
+    }
+
+    /**
+     * Keep the local OpenCart confirmation row in sync when Sectra already
+     * has Cadastro de Cliente. The OpenCart bridge cron is parked in production
+     * (Feb-30 schedule), so this MySQL upsert is the release path for held orders.
+     */
+    public function ensureConfirmedLocally(int $sectraChave): void
+    {
+        if ($sectraChave <= 0) {
+            return;
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->insertOnDuplicate(
+            $this->resourceConnection->getTableName('oc_customer_b2b_confirmed'),
+            [
+                'customer_id' => $sectraChave,
+                'synced_at' => date('Y-m-d H:i:s'),
+            ],
+            ['synced_at']
+        );
     }
 
     public function getCustomerErpCode(int $magentoCustomerId): ?int

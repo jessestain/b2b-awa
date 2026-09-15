@@ -8,6 +8,7 @@
             <module name="Magento_Sales"/>
             <module name="GrupoAwamotos_ERPIntegration"/>
             <module name="GrupoAwamotos_ProductIntelligence"/>
+            <module name="GrupoAwamotos_SchemaOrg"/>
         </sequence>
     </module>
 </config>

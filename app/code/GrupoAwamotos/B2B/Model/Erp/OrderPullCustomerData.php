@@ -201,8 +201,7 @@ class OrderPullCustomerData implements B2bOrderPullCustomerDataInterface
         }
 
         $street = implode(' ', array_filter($address->getStreet() ?? []));
-        if (
-            trim($street) === '' || trim((string) $address->getCity()) === ''
+        if (trim($street) === '' || trim((string) $address->getCity()) === ''
             || trim((string) $address->getPostcode()) === ''
             || trim((string) $address->getRegion()) === ''
         ) {

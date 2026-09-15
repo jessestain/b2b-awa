@@ -1,16 +1,18 @@
 <?php
 
 /**
- * Plugin to add B2B approval status and customer_id to HTTP Context for FPC cache variation.
+ * Plugin to add B2B approval status to HTTP Context for FPC cache variation.
  *
- * Without this, Magento's built-in Full Page Cache uses the same cache key
- * for all logged-in customers in the same customer_group — meaning a page
- * rendered for a "pending" customer (with prices hidden) gets served to
- * "approved" customers and vice-versa.
+ * Without this, Magento's Full Page Cache uses the same cache key for all
+ * logged-in customers in the same customer_group — a page rendered for a
+ * "pending" customer (prices hidden) would be served to "approved" customers.
  *
- * By adding b2b_approval_status and customer_id to the HTTP context, the FPC generates
- * separate cache entries per approval status AND per customer, preventing
- * customer A's personal data (name, company) from being served to customer B.
+ * Vary only by auth + approval status. Personal data (name, company, orders)
+ * must stay in customer-data sections (b2b_panel, last-ordered-items), not HTML.
+ * customer_id in the vary string created one Varnish object per customer and
+ * forced PHP (~1s TTFB) on every logged-in catalog/home hit.
+ *
+ * Price lists stay on CustomerPriceListContextPlugin (~13 variants).
  */
 
 declare(strict_types=1);
@@ -22,18 +24,20 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
 class HttpContextPlugin
 {
     public function __construct(
         private readonly HttpContext $httpContext,
         private readonly CustomerSession $customerSession,
-        private readonly Config $config
+        private readonly Config $config,
+        private readonly PhpCookieManager $cookieManager
     ) {
     }
 
     /**
-     * Set B2B approval status and customer_id in HTTP context before action dispatch.
+     * Set B2B approval status in HTTP context before action dispatch.
      *
      * IMPORTANT PERFORMANCE NOTE: This method must NOT start a PHP session for anonymous
      * requests. Calling customerSession->isLoggedIn() starts the session, which:
@@ -73,10 +77,12 @@ class HttpContextPlugin
         // that the FPC PhpCookieDisabler can strip PHPSESSID from cached responses.
         // NOTE: use PHP's session_name() — do NOT call $this->customerSession->*() here
         // because CustomerSession extends SessionManager whose constructor starts the session.
-        if (($request ? $request->getCookie(session_name()) : ($_COOKIE[session_name()] ?? null)) === null) {
+        $sessionCookie = $request
+            ? $request->getCookie(session_name())
+            : $this->cookieManager->getCookie(session_name());
+        if ($sessionCookie === null) {
             $this->httpContext->setValue(CustomerContext::CONTEXT_AUTH, false, false);
             $this->httpContext->setValue('b2b_approval_status', 'guest', 'guest');
-            $this->httpContext->setValue('customer_id', 0, 0);
             return;
         }
 
@@ -90,13 +96,6 @@ class HttpContextPlugin
                 $attr = $customerData->getCustomAttribute('b2b_approval_status');
                 $approvalStatus = $attr ? (string) $attr->getValue() : 'approved';
             }
-
-            // Add customer_id to FPC vary key so each customer gets their own cache entry.
-            // This prevents personal data (name, company) from leaking between customers
-            // in the same customer group (e.g., all Atacado customers in group 4).
-            $this->httpContext->setValue('customer_id', (int) $this->customerSession->getCustomerId(), 0);
-        } else {
-            $this->httpContext->setValue('customer_id', 0, 0);
         }
 
         $this->httpContext->setValue(CustomerContext::CONTEXT_AUTH, $isLoggedIn, false);

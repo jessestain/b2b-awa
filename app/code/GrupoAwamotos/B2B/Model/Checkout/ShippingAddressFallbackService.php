@@ -11,6 +11,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Psr\Log\LoggerInterface;
 
 /**
  * Completa shipping address incompleto (ex.: regionId ausente) antes do place order.
@@ -20,7 +21,8 @@ class ShippingAddressFallbackService
     public function __construct(
         private readonly CartRepositoryInterface $cartRepository,
         private readonly CustomerRepositoryInterface $customerRepository,
-        private readonly AddressRepositoryInterface $addressRepository
+        private readonly AddressRepositoryInterface $addressRepository,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -83,8 +85,11 @@ class ShippingAddressFallbackService
         if ($customerAddressId > 0) {
             try {
                 return $this->addressRepository->getById($customerAddressId);
-            } catch (\Throwable) {
-                // continue
+            } catch (\Throwable $e) {
+                $this->logger->debug(
+                    '[ShippingAddressFallbackService::resolveSourceAddress] Endereço do quote não '
+                    . 'encontrado, tentando próximo fallback: ' . $e->getMessage()
+                );
             }
         }
 
@@ -103,8 +108,11 @@ class ShippingAddressFallbackService
         if ($defaultShippingId > 0) {
             try {
                 return $this->addressRepository->getById($defaultShippingId);
-            } catch (\Throwable) {
-                // continue
+            } catch (\Throwable $e) {
+                $this->logger->debug(
+                    '[ShippingAddressFallbackService::resolveSourceAddress] Endereço padrão de '
+                    . 'entrega não encontrado, tentando próximo fallback: ' . $e->getMessage()
+                );
             }
         }
 
@@ -131,8 +139,7 @@ class ShippingAddressFallbackService
         if (!trim((string) $target->getPostcode()) && trim((string) $source->getPostcode())) {
             $target->setPostcode((string) $source->getPostcode());
         }
-        if (
-            $this->isPlaceholderTelephone((string) $target->getTelephone())
+        if ($this->isPlaceholderTelephone((string) $target->getTelephone())
             && !$this->isPlaceholderTelephone((string) $source->getTelephone())
         ) {
             $target->setTelephone((string) $source->getTelephone());

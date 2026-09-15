@@ -17,7 +17,7 @@
     --b2b-mkt-c11: #9ca3af;
     --b2b-mkt-c12: #dcfce7;
     --b2b-mkt-c13: #ecfdf5;
-    --b2b-mkt-c14: #1976d2;
+    --b2b-mkt-c14: var(--awa-brand, #b73337);
     --b2b-mkt-c15: #374151;
     --b2b-mkt-border-mid: #d1d5db;
     --b2b-mkt-c16: #4b5563;
@@ -773,8 +773,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--awa-red, #A33B3B) !important;
-    border-color: var(--awa-red, #A33B3B) !important;
+    background: var(--awa-red, #b73337) !important;
+    border-color: var(--awa-red, #b73337) !important;
     padding: 12px 25px;
     font-size: 1rem;
     border-radius: 4px;
@@ -827,7 +827,7 @@
 
 .b2b-payment-terms .select:focus {
     border-color: var(--b2b-mkt-c14);
-    box-shadow: 0 0 0 2px rgb(25 118 210 / 15%);
+    box-shadow: 0 0 0 2px rgb(183 51 55 / 15%);
     outline: none;
 }
 

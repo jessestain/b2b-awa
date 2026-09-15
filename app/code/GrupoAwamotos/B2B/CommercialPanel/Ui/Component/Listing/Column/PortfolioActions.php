@@ -48,28 +48,28 @@ class PortfolioActions extends Column
                 'contact' => [
                     'href' => $this->urlBuilder->getUrl(
                         'awa_commercial/commercialcustomer/view',
-                        ['customer_id' => $customerId, '_fragment' => 'tab-contatos']
+                        ['customer_id' => $customerId, '_query' => ['tab' => 'contatos']]
                     ),
                     'label' => __('Registrar Contato'),
                 ],
                 'create_task' => [
                     'href' => $this->urlBuilder->getUrl(
                         'awa_commercial/commercialcustomer/view',
-                        ['customer_id' => $customerId, '_fragment' => 'tab-tarefas']
+                        ['customer_id' => $customerId, '_query' => ['tab' => 'tarefas']]
                     ),
                     'label' => __('Criar Tarefa'),
                 ],
                 'orders' => [
                     'href' => $this->urlBuilder->getUrl(
                         'awa_commercial/commercialcustomer/view',
-                        ['customer_id' => $customerId, '_fragment' => 'tab-pedidos']
+                        ['customer_id' => $customerId, '_query' => ['tab' => 'pedidos']]
                     ),
                     'label' => __('Ver Pedidos'),
                 ],
                 'quotes' => [
                     'href' => $this->urlBuilder->getUrl(
                         'awa_commercial/commercialcustomer/view',
-                        ['customer_id' => $customerId, '_fragment' => 'tab-cotacoes']
+                        ['customer_id' => $customerId, '_query' => ['tab' => 'cotacoes']]
                     ),
                     'label' => __('Ver Cotações'),
                 ],

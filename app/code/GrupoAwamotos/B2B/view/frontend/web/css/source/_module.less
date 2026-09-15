@@ -11,13 +11,13 @@
     padding: 0 16px;
     min-height: 48px;
     max-height: 48px;
-    background: var(--awa-primary-light, #f9e5e5);
-    border-bottom: 1px solid #f0c0c0;
+    background: var(--awa-primary-light, var(--awa-bg-subtle));
+    border-bottom: 1px solid var(--awa-border);
     box-sizing: border-box;
     overflow: hidden;
 
     &[aria-hidden="true"],
-    &--hidden { display: none !important; }
+    &--hidden { display: none; }
 
     // Ocultar nas páginas de autenticação, B2B e checkout
     body.b2b-auth-shell &,
@@ -27,13 +27,13 @@
     body.b2b-account-login &,
     body.checkout-cart-index &,
     body.checkout-index-index &,
-    body.rokanthemes-onepagecheckout & { display: none !important; }
+    body.rokanthemes-onepagecheckout & { display: none; }
 
     &__icon {
         flex-shrink: 0;
         display: flex;
         align-items: center;
-        color: var(--awa-primary, #b73337);
+        color: var(--awa-primary);
 
         svg { display: block; width: 18px; height: 18px; }
     }
@@ -43,7 +43,7 @@
         min-width: 0;
         font-size: 13px;
         line-height: 1.35;
-        color: #5a2020;
+        color: var(--awa-text-primary, var(--awa-text));
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -65,22 +65,22 @@
         font-size: 13px;
         font-weight: 600;
         line-height: 1;
-        color: #fff !important;
-        background: var(--awa-primary, #b73337);
+        color: var(--awa-text-inverse, var(--awa-bg));
+        background: var(--awa-primary);
         border: none;
-        border-radius: var(--awa-radius-sm, 4px);
+        border-radius: var(--awa-radius-sm);
         text-decoration: none;
         white-space: nowrap;
         cursor: pointer;
         transition: background 0.15s ease;
 
         &:hover, &:focus {
-            background: var(--awa-primary-hover, #8e2629);
-            color: #fff !important;
+            background: var(--awa-primary-dark, var(--awa-primary-hover, var(--awa-primary)));
+            color: var(--awa-text-inverse, var(--awa-bg));
             text-decoration: none;
         }
         &:focus-visible {
-            outline: 2px solid var(--awa-primary, #b73337);
+            outline: 2px solid var(--awa-primary);
             outline-offset: 2px;
         }
     }
@@ -88,11 +88,11 @@
     &__link {
         font-size: 13px;
         font-weight: 500;
-        color: var(--awa-primary, #b73337);
+        color: var(--awa-primary);
         text-decoration: underline;
         white-space: nowrap;
 
-        &:hover { color: var(--awa-primary-hover, #8e2629); }
+        &:hover { color: var(--awa-primary-dark, var(--awa-primary-hover, var(--awa-primary))); }
     }
 
     @media (max-width: 767px) {
@@ -118,13 +118,13 @@
     .b2b-login-cta {
         display: inline-block;
         font-size: 12px;
-        color: #666;
+        color: var(--awa-text-muted);
         line-height: 1.4;
     }
 
     .b2b-login-link,
     .b2b-register-link {
-        color: #e31f2a;
+        color: var(--awa-primary);
         font-weight: 600;
         text-decoration: none;
 
@@ -152,20 +152,20 @@
         h1 {
             font-size: 26px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: var(--awa-text-primary, var(--awa-text));
             margin-bottom: 10px;
         }
 
         p {
-            color: #555;
+            color: var(--awa-text-muted);
             font-size: 14px;
             line-height: 1.6;
         }
     }
 
     .fieldset {
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
+        border: 1px solid var(--awa-border);
+        border-radius: var(--awa-radius-sm);
         padding: 20px 24px;
         margin-bottom: 20px;
 
@@ -173,7 +173,7 @@
             padding: 0 8px;
             font-size: 14px;
             font-weight: 700;
-            color: #333;
+            color: var(--awa-text-primary, var(--awa-text));
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -186,28 +186,28 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #444;
+            color: var(--awa-text-primary, var(--awa-text));
             margin-bottom: 5px;
         }
 
         .control input {
             width: 100%;
             padding: 9px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid var(--awa-border);
+            border-radius: var(--awa-radius-sm);
             font-size: 14px;
             transition: border-color 0.2s;
 
             &:focus {
-                border-color: #e31f2a;
+                border-color: var(--awa-primary);
                 outline: none;
-                box-shadow: 0 0 0 2px rgba(227, 31, 42, 0.1);
+                box-shadow: 0 0 0 2px color-mix(in srgb, var(--awa-primary) 12%, transparent);
             }
         }
 
         &.required .label::after {
             content: ' *';
-            color: #e31f2a;
+            color: var(--awa-primary);
         }
     }
 
@@ -219,39 +219,39 @@
         flex-wrap: wrap;
 
         .action.submit.primary {
-            background: #e31f2a;
-            color: #fff;
+            background: var(--awa-primary);
+            color: var(--awa-text-inverse, var(--awa-bg));
             border: none;
             padding: 12px 32px;
             font-size: 15px;
             font-weight: 700;
-            border-radius: 4px;
+            border-radius: var(--awa-radius-sm);
             cursor: pointer;
             transition: background 0.2s;
 
-            &:hover { background: #c41a23; }
+            &:hover { background: var(--awa-primary-dark, var(--awa-primary-hover, var(--awa-primary))); }
         }
 
         .action.login {
             font-size: 13px;
-            color: #666;
+            color: var(--awa-text-muted);
             text-decoration: none;
 
-            &:hover { color: #e31f2a; }
+            &:hover { color: var(--awa-primary); }
         }
     }
 
     // Status de validação do CNPJ
     #cnpj {
-        &.valid   { border-color: #2e7d32; }
-        &.invalid { border-color: #c62828; }
+        &.valid   { border-color: var(--awa-success); }
+        &.invalid { border-color: var(--awa-danger, var(--awa-error, var(--awa-primary))); }
     }
 
     .cnpj-feedback {
         font-size: 11px;
         margin-top: 4px;
-        &.ok  { color: #2e7d32; }
-        &.err { color: #c62828; }
+        &.ok  { color: var(--awa-success); }
+        &.err { color: var(--awa-danger, var(--awa-error, var(--awa-primary))); }
     }
 
     // Linhas de campos lado a lado (Número+Complemento, Cidade+UF)
@@ -263,7 +263,7 @@
             flex-wrap: wrap;
 
             > .field {
-                flex: 1 1 100% !important;
+                flex: 1 1 100%;
                 min-width: 0;
             }
         }
@@ -274,15 +274,15 @@
 
 // ── Painel B2B na página da conta do cliente ─────────────────────────────────
 .b2b-account-status {
-    background: #f5f5f5;
-    border-left: 4px solid #e31f2a;
+    background: var(--awa-bg-subtle);
+    border-inline-start: 2px solid var(--awa-primary);
     padding: 12px 16px;
     margin-bottom: 20px;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 var(--awa-radius-sm) var(--awa-radius-sm) 0;
 
-    &.approved  { border-color: #2e7d32; }
-    &.pending   { border-color: #f57c00; }
-    &.rejected  { border-color: #c62828; }
+    &.approved  { border-inline-start-color: var(--awa-success); }
+    &.pending   { border-inline-start-color: var(--awa-warning, var(--awa-primary)); }
+    &.rejected  { border-inline-start-color: var(--awa-danger, var(--awa-error, var(--awa-primary))); }
 
     .b2b-status-label {
         font-weight: 700;
@@ -292,17 +292,17 @@
     p {
         font-size: 12px;
         margin: 6px 0 0;
-        color: #666;
+        color: var(--awa-text-muted);
     }
 
-    &.approved p { color: #1b5e20; }
-    &.rejected p { color: #c62828; }
+    &.approved p { color: var(--awa-success); }
+    &.rejected p { color: var(--awa-danger, var(--awa-error, var(--awa-primary))); }
 
     a {
         display: inline-block;
         margin-top: 10px;
         font-size: 13px;
-        color: var(--awa-primary, #b73337);
+        color: var(--awa-primary);
         text-decoration: none;
 
         &:hover { text-decoration: underline; }

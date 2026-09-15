@@ -201,8 +201,7 @@ class StuckOrderCleanup
             'SELECT sectra_import_status FROM sales_order WHERE entity_id = ?',
             [$orderId]
         );
-        if (
-            $sectraStatus === SectraImportStatus::IMPORTED
+        if ($sectraStatus === SectraImportStatus::IMPORTED
             || $sectraStatus === SectraImportStatus::ORDER_CANCELLED_BEFORE_ERP_IMPORT
             || $sectraStatus === SectraImportStatus::READY_FOR_IMPORT
         ) {

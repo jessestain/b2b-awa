@@ -57,9 +57,31 @@ define([
         });
     }
 
-    function formatCurrency(amount)
+    function normalizeLocale(locale)
+    {
+        var normalized = String(locale || '').replace('_', '-').trim();
+
+        return normalized || 'pt-BR';
+    }
+
+    function formatCurrencyLocalized(amount, currencyCode, locale)
     {
         var value = Math.max(0, parseFloat(amount) || 0);
+        var safeCurrency = String(currencyCode || '').trim() || 'BRL';
+        var safeLocale = normalizeLocale(locale);
+
+        if (window.Intl && window.Intl.NumberFormat) {
+            try {
+                return new window.Intl.NumberFormat(safeLocale, {
+                    style: 'currency',
+                    currency: safeCurrency,
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(value);
+            } catch (e) {
+                // fallback abaixo mantém UX estável.
+            }
+        }
 
         return 'R$ ' + value.toLocaleString('pt-BR', {
             minimumFractionDigits: 2,
@@ -101,7 +123,7 @@ define([
         return $('.opc-sidebar, #opc-sidebar').first();
     }
 
-    function render($root, minAmount, subtotal)
+    function render($root, minAmount, subtotal, locale, currencyCode)
     {
         var remaining = Math.max(0, minAmount - subtotal);
         var percent = minAmount > 0 ? Math.min(100, Math.round((subtotal / minAmount) * 100)) : 100;
@@ -112,8 +134,8 @@ define([
         }
 
         var message = $t('Faltam %1 para atingir o pedido mínimo de %2.')
-            .replace('%1', formatCurrency(remaining))
-            .replace('%2', formatCurrency(minAmount));
+            .replace('%1', formatCurrencyLocalized(remaining, currencyCode, locale))
+            .replace('%2', formatCurrencyLocalized(minAmount, currencyCode, locale));
 
         $root.removeAttr('hidden').removeAttr('aria-hidden');
         $root.toggleClass('awa-b2b-min-order-progress--near', percent >= 80);
@@ -204,13 +226,15 @@ define([
         }
 
         var minAmount = parseFloat(config.minAmount) || 0;
+        var locale = normalizeLocale(config.locale);
+        var currencyCode = String(config.currencyCode || '').trim() || 'BRL';
         var $root = ensureRoot();
 
         if (!$root.length) {
             return;
         }
 
-        render($root, minAmount, getCheckoutSubtotal());
+        render($root, minAmount, getCheckoutSubtotal(), locale, currencyCode);
     }
 
     function isCheckoutPage()

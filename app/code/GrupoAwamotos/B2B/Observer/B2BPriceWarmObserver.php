@@ -12,6 +12,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -33,6 +34,7 @@ class B2BPriceWarmObserver implements ObserverInterface
     private SyncLogResource $syncLogResource;
     private LoggerInterface $logger;
     private ?ErpCodeResolver $erpCodeResolver;
+    private PhpCookieManager $cookieManager;
 
     /** @var int|null|false  false = not yet fetched */
     private int|null|false $erpCodeCache = false;
@@ -50,6 +52,7 @@ class B2BPriceWarmObserver implements ObserverInterface
         CustomerPriceProvider $customerPriceProvider,
         SyncLogResource $syncLogResource,
         LoggerInterface $logger,
+        PhpCookieManager $cookieManager,
         ?ErpCodeResolver $erpCodeResolver = null
     ) {
         $this->config                = $config;
@@ -58,15 +61,15 @@ class B2BPriceWarmObserver implements ObserverInterface
         $this->customerPriceProvider = $customerPriceProvider;
         $this->syncLogResource       = $syncLogResource;
         $this->logger                = $logger;
+        $this->cookieManager         = $cookieManager;
         $this->erpCodeResolver       = $erpCodeResolver;
     }
 
     public function execute(Observer $observer): void
     {
         // Avoid session_start() for guests: check cookie before calling isLoggedIn().
-        if (
-            !$this->config->isEnabled()
-            || !isset($_COOKIE[session_name()])
+        if (!$this->config->isEnabled()
+            || $this->cookieManager->getCookie(session_name()) === null
             || !$this->customerSession->isLoggedIn()
         ) {
             return;

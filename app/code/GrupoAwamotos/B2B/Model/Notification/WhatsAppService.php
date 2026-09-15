@@ -164,7 +164,7 @@ class WhatsAppService
                 "📋 *CNPJ:* {cnpj}\n" .
                 "📧 *Email:* {email}\n" .
                 "📱 *Telefone:* {phone}\n\n" .
-                "⏳ Aguardando aprovação no painel admin.",
+                "{status_note}",
 
             'new_quote' => "📋 *Nova Solicitação de Cotação*\n\n" .
                 "👤 *Cliente:* {customer_name}\n" .
@@ -219,6 +219,10 @@ class WhatsAppService
         ];
 
         $message = $templates[$type] ?? $templates['new_registration'];
+
+        if ($type === 'new_registration' && trim((string) ($data['status_note'] ?? '')) === '') {
+            $data['status_note'] = '⏳ Aguardando aprovação no painel admin.';
+        }
 
         foreach ($data as $key => $value) {
             $message = str_replace("{{$key}}", (string) $value, $message);

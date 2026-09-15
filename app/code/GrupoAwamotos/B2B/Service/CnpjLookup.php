@@ -173,7 +173,8 @@ class CnpjLookup
                 [self::CACHE_TAG],
                 self::CACHE_TTL
             );
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger->warning('[CnpjLookup::saveToPersistentCache] Exceção ignorada: ' . $e->getMessage());
             // Best-effort cache; never break lookup flow.
         }
     }

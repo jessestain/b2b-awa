@@ -33,6 +33,7 @@ class CnaeClassifier
         '4541-2/03', // Comércio a varejo de motocicletas e motonetas novas
         '4541-2/04', // Comércio a varejo de motocicletas e motonetas usadas
         '4541-2/05', // Comércio a varejo de peças e acessórios para motocicletas e motonetas
+        '4541-2/06', // Comércio a varejo de peças e acessórios novos para motocicletas e motonetas
         '4543-9/00', // Manutenção e reparação de motocicletas e motonetas
         '3091-1/00', // Fabricação de motocicletas, peças e acessórios
     ];

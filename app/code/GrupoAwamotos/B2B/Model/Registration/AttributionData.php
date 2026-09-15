@@ -54,6 +54,35 @@ final class AttributionData
         return $data;
     }
 
+    /**
+     * Request/session keys used to persist first-touch attribution across steps.
+     *
+     * @return array<string, string>
+     */
+    public function toRequestParams(): array
+    {
+        $data = [
+            'cname' => $this->campaignName,
+            'utm_source' => $this->utmSource,
+            'utm_medium' => $this->utmMedium,
+            'utm_campaign' => $this->utmCampaign,
+            'utm_content' => $this->utmContent,
+            'utm_term' => $this->utmTerm,
+            'registration_landing' => $this->landingPath,
+        ];
+        if ($this->attendantId !== null && $this->attendantId > 0) {
+            $data['attendant'] = (string) $this->attendantId;
+        }
+        if ($this->erpSellerCode !== null && $this->erpSellerCode > 0) {
+            $data['vendedor'] = (string) $this->erpSellerCode;
+        }
+
+        return array_filter(
+            $data,
+            static fn (string $value): bool => $value !== ''
+        );
+    }
+
     public function hasAttendantReferral(): bool
     {
         return ($this->attendantId !== null && $this->attendantId > 0)

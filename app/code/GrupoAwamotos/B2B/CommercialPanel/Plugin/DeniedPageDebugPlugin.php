@@ -15,8 +15,6 @@ use Magento\Framework\Controller\Result\RedirectFactory;
  */
 class DeniedPageDebugPlugin
 {
-    private const ACL_COMMERCIAL_DASHBOARD = 'GrupoAwamotos_B2B::commercial_dashboard';
-
     public function __construct(
         private readonly AdminSession $adminSession,
         private readonly PortfolioScopeInterface $portfolioScope,
@@ -35,8 +33,16 @@ class DeniedPageDebugPlugin
             return $proceed();
         }
 
-        $hasCommercialDash = $this->authorization->isAllowed(self::ACL_COMMERCIAL_DASHBOARD);
-        if ($this->portfolioScope->isCockpitOnlyUser() || $hasCommercialDash) {
+        // Apenas cockpit-only. Admin com Magento_Backend::all também tem
+        // commercial_dashboard; redirecioná-lo esconde admin/denied real
+        // (secret key inválida, ACL de criar pedido, etc.).
+        $isFullAdmin = $this->authorization->isAllowed('Magento_Backend::all');
+        $isCockpitOnly = $this->portfolioScope->isCockpitOnlyUser();
+        $willRedirect = !$isFullAdmin && $isCockpitOnly;
+        // #region agent log
+        file_put_contents('/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-302306.log', json_encode(['sessionId' => '302306', 'runId' => 'verify', 'hypothesisId' => 'H1', 'location' => 'DeniedPageDebugPlugin.php:aroundExecute', 'message' => 'admin/denied decision', 'data' => ['isFullAdmin' => $isFullAdmin, 'isCockpitOnly' => $isCockpitOnly, 'willRedirect' => $willRedirect], 'timestamp' => (int) round(microtime(true) * 1000)]) . "\n", FILE_APPEND | LOCK_EX);
+        // #endregion
+        if ($willRedirect) {
             return $this->redirectFactory->create()
                 ->setPath('awa_commercial/commercialdashboard/index');
         }

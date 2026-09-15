@@ -14,6 +14,8 @@
     </head>
     <body>
         <attribute name="class" value="b2b-account-dashboard"/>
+        <!-- Evita H1 duplicado: título vem do template account/dashboard.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="rexisml.recommendations" remove="true"/>
         <referenceBlock name="sale.reorder.sidebar" remove="true"/>
         <referenceBlock name="head.additional">

@@ -4,6 +4,8 @@
 
     <preference for="GrupoAwamotos\B2B\CommercialPanel\Api\PortfolioScopeInterface"
                 type="GrupoAwamotos\B2B\CommercialPanel\Model\PortfolioScope"/>
+    <preference for="GrupoAwamotos\B2B\CommercialPanel\Api\ContactLogManagementInterface"
+                type="GrupoAwamotos\B2B\CommercialPanel\Model\ContactLogManagement"/>
 
     <!-- Data sources para UI Components (CollectionFactory) -->
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
@@ -89,6 +91,13 @@
                 <item name="b2b_sectra_cancel_stuck_orders" xsi:type="object">GrupoAwamotos\B2B\Console\Command\CancelStuckOrdersCommand</item>
             </argument>
         </arguments>
+    </type>
+
+    <!-- Sincroniza b2b_cnpj → taxvat e valida unicidade no save do CustomerRepository -->
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="grupoawamotos_b2b_validate_cnpj_on_save"
+                type="GrupoAwamotos\B2B\Plugin\Customer\ValidateCnpjOnSavePlugin"
+                sortOrder="20"/>
     </type>
 
     <!-- Checkout REST (webapi_rest) usa area global — billing fallback precisa estar aqui -->

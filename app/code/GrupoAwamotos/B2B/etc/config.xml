@@ -87,7 +87,7 @@
             <cnae_profiling>
                 <enabled>1</enabled>
                 <auto_approve_direct>0</auto_approve_direct>
-                <direct_cnaes>4541-2/01,4541-2/02,4541-2/03,4541-2/04,4541-2/05,4543-9/00,3091-1/00</direct_cnaes>
+                <direct_cnaes>4541-2/01,4541-2/02,4541-2/03,4541-2/04,4541-2/05,4541-2/06,4543-9/00,3091-1/00</direct_cnaes>
                 <adjacent_cnaes>4530-7/01,4530-7/02,4530-7/03,4530-7/04,4520-0/01,4520-0/06,4511-1/01,4512-9/01,4520-0/04,4520-0/05</adjacent_cnaes>
             </cnae_profiling>
             <checkout>

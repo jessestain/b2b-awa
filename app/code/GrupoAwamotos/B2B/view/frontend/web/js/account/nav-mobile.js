@@ -69,7 +69,10 @@ define([], function () {
         navBlock.dataset.awaNavBlockToggle = '1';
         navBlock.classList.add('awa-nav--mobile-collapsible');
 
-        var expanded = content.querySelector('.nav.item.current, .nav.items .current') !== null;
+        /* CDP 375/vh812: expanded=true (por .current) deixava navH=365 e
+           dashboard em y=664. O accordion da seção já destaca o item atual;
+           o bloco "Minha Conta" começa fechado para o painel entrar na dobra. */
+        var expanded = false;
         navBlock.classList.toggle('awa-nav--expanded', expanded);
         title.setAttribute('aria-expanded', expanded ? 'true' : 'false');
         title.setAttribute('role', 'button');
@@ -78,6 +81,7 @@ define([], function () {
         function setExpanded(isOpen)
         {
             navBlock.classList.toggle('awa-nav--expanded', isOpen);
+            navBlock.classList.toggle('awa-nav--user-open', isOpen);
             title.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         }
 
@@ -137,6 +141,7 @@ define([], function () {
 
             wrapSection(node, items);
         }
+
     }
 
     return init;

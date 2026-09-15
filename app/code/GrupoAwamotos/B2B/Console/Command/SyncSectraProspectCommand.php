@@ -38,6 +38,9 @@ class SyncSectraProspectCommand extends Command
     {
         try {
             $this->appState->setAreaCode(Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (LocalizedException) {
             // area already set
         }

@@ -72,6 +72,53 @@ class AttendantManager
     }
 
     /**
+     * Resolve attendant from a B2B registration referral (URL id or ERP VENDPREF).
+     */
+    public function resolveAttendantIdFromReferral(?int $attendantId, ?int $erpSellerCode): ?int
+    {
+        if ($attendantId !== null && $attendantId > 0) {
+            $row = $this->getAttendantById($attendantId);
+            if (is_array($row) && (int) ($row['is_active'] ?? 0) === 1) {
+                return (int) $row['attendant_id'];
+            }
+        }
+
+        if ($erpSellerCode !== null && $erpSellerCode > 0) {
+            $row = $this->getActiveAttendantByErpSellerCode($erpSellerCode);
+            if (is_array($row)) {
+                return (int) $row['attendant_id'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getActiveAttendantByErpSellerCode(int $erpSellerCode): ?array
+    {
+        if ($erpSellerCode <= 0) {
+            return null;
+        }
+
+        $connection = $this->resource->getConnection();
+        $table = $this->resource->getTableName(self::TABLE_ATTENDANTS);
+        $select = $connection->select()
+            ->from($table)
+            ->where('erp_seller_code = ?', $erpSellerCode)
+            ->where('is_active = ?', 1)
+            ->where('name NOT LIKE ?', '%SMOKE%')
+            ->where('name NOT LIKE ?', '%UAT%')
+            ->order('attendant_id ASC')
+            ->limit(1);
+
+        $result = $connection->fetchRow($select);
+
+        return $result ?: null;
+    }
+
+    /**
      * Obtém atendente responsável por um cliente
      */
     public function getCustomerAttendant(int $customerId): ?array
@@ -166,7 +213,8 @@ class AttendantManager
 
     /**
      * Obtém atendente com menos clientes ativos
-     * Respeita max_customers — só retorna atendentes abaixo do limite
+     * Respeita max_customers — só retorna atendentes abaixo do limite.
+     * Exclui contas SMOKE/UAT da distribuição automática de produção.
      */
     public function getAttendantWithLeastCustomers(?string $department = null): ?array
     {
@@ -177,6 +225,8 @@ class AttendantManager
             ->from($table)
             ->where('is_active = ?', 1)
             ->where('customer_count < max_customers')
+            ->where('name NOT LIKE ?', '%SMOKE%')
+            ->where('name NOT LIKE ?', '%UAT%')
             ->order('customer_count ASC')
             ->limit(1);
 

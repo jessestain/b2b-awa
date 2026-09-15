@@ -37,12 +37,27 @@ class CockpitAccessGuard
         'awa_commercial',
     ];
 
+    /**
+     * Operação comercial no Admin Magento: criar/ver pedido e ficha do cliente.
+     * Prefixo de route/controller[/action] em minúsculas.
+     *
+     * @var string[]
+     */
+    private const ALLOWED_PATH_PREFIXES = [
+        'sales/order_create',
+        'sales/order/view',
+        'sales/order/index',
+        'customer/index/edit',
+        'customer/index/index',
+        'loginascustomer',
+    ];
+
     public function isRequestAllowed(RequestInterface $request): bool
     {
         $routeName = strtolower((string) $request->getRouteName());
-        $controllerName = (string) $request->getControllerName();
-        $actionName = (string) $request->getActionName();
-        $fullPath = strtolower($routeName . '/' . $controllerName . '/' . $actionName);
+        $controllerName = strtolower((string) $request->getControllerName());
+        $actionName = strtolower((string) $request->getActionName());
+        $fullPath = $routeName . '/' . $controllerName . '/' . $actionName;
 
         if (in_array($fullPath, self::ALLOWED_FULL_PATHS, true)) {
             return true;
@@ -50,6 +65,12 @@ class CockpitAccessGuard
 
         if (in_array($routeName, self::ALLOWED_ROUTE_NAMES, true)) {
             return true;
+        }
+
+        foreach (self::ALLOWED_PATH_PREFIXES as $prefix) {
+            if ($fullPath === $prefix || str_starts_with($fullPath, $prefix . '/')) {
+                return true;
+            }
         }
 
         return false;

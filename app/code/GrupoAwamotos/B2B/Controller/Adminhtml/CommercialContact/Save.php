@@ -51,7 +51,10 @@ class Save extends Action implements HttpPostActionInterface
 
         return $redirect->setPath(
             'awa_commercial/commercialcustomer/view',
-            ['customer_id' => $customerId > 0 ? $customerId : null]
+            [
+                'customer_id' => $customerId > 0 ? $customerId : null,
+                '_query' => ['tab' => 'contatos'],
+            ]
         );
     }
 }

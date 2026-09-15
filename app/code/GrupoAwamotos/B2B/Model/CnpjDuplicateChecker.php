@@ -77,5 +77,4 @@ class CnpjDuplicateChecker
     {
         return (string) preg_replace('/\D+/', '', $value);
     }
-
 }

@@ -1,0 +1,38 @@
+/** pages-operations.css
+ * Layout específico de financeiro, ERP, assinaturas e catálogo privado.
+ * Tabelas, badges, pager e botões herdam pages-core-v2.css. */
+
+#html-body:is(.account, [class*='b2b-']) .b2b-page-shell:is(
+    .b2b-finance-page,
+    .b2b-subscriptions-list,
+    .b2b-erp-orders,
+    .b2b-erp-order-view,
+    .b2b-private-label-catalog
+) {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 1.5vw, 18px);
+}
+
+#html-body:is(.account, [class*='b2b-']) .b2b-subscriptions-list .table-subscriptions-items .col.actions {
+    white-space: nowrap;
+}
+
+#html-body:is(.account, [class*='b2b-']) .b2b-subscriptions-list .table-subscriptions-items .col.actions .action + .action {
+    margin-inline-start: 6px;
+}
+
+#html-body:is(.account, [class*='b2b-']) .b2b-private-label-catalog .no-label {
+    color: var(--awa-text-muted);
+}
+
+@media (max-width: 767px) {
+    #html-body:is(.account, [class*='b2b-']) .b2b-subscriptions-list .table-subscriptions-items .col.actions {
+        white-space: normal;
+        min-width: 0;
+    }
+
+    #html-body:is(.account, [class*='b2b-']) .b2b-subscriptions-list .table-subscriptions-items .col.actions .action {
+        width: 100%;
+    }
+}

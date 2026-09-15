@@ -13,8 +13,21 @@ use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 class View360 extends Template
 {
+    /** @var string[] */
+    private const ALLOWED_TABS = [
+        'resumo',
+        'pedidos',
+        'cotacoes',
+        'carrinho',
+        'contatos',
+        'tarefas',
+        'sugestoes',
+    ];
+
     /** @var array<string, mixed>|null */
     private ?array $customerDataCache = null;
+
+    private ?string $activeTabId = null;
 
     public function __construct(
         Context $context,
@@ -141,6 +154,21 @@ class View360 extends Template
             'tarefas' => (string) __('Tarefas'),
             'sugestoes' => (string) __('Sugestões'),
         ];
+    }
+
+    /**
+     * Aba inicial da ficha. Query ?tab= sobrevive ao admin Magento; hash #tab-* é descartado.
+     */
+    public function getActiveTabId(): string
+    {
+        if ($this->activeTabId !== null) {
+            return $this->activeTabId;
+        }
+
+        $tab = strtolower(trim((string) $this->getRequest()->getParam('tab')));
+        $this->activeTabId = in_array($tab, self::ALLOWED_TABS, true) ? $tab : 'resumo';
+
+        return $this->activeTabId;
     }
 
     public function getSaveContactUrl(): string

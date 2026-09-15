@@ -57,6 +57,11 @@ class CustomerListingDataProvider extends AbstractDataProvider
         $items = [];
         foreach ($this->getCollection() as $customer) {
             $row = $customer->getData();
+            unset(
+                $row['password_hash'],
+                $row['rp_token'],
+                $row['rp_token_created_at']
+            );
             $row['name'] = trim(
                 (string) ($row['firstname'] ?? '') . ' ' . (string) ($row['lastname'] ?? '')
             );

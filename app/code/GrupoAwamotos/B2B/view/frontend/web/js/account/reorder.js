@@ -334,6 +334,7 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
             var $card = $form.closest('.reorder-card');
             var $submit = $form.find('[type="submit"]');
             var orderId = $form.find('[name="order_id"]').val();
+            var shouldUnlockSubmit = true;
             var items = $form.find('[name="items[]"]:checked').map(function () {
                 return this.value;
             }).get();
@@ -356,7 +357,10 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
                 return;
             }
 
-            $submit.prop('disabled', true).addClass('is-loading').attr('aria-disabled', 'true');
+            $submit.prop('disabled', true)
+                .addClass('is-loading')
+                .attr('aria-disabled', 'true')
+                .attr('aria-busy', 'true');
 
             $.ajax({
                 url: addUrl,
@@ -374,9 +378,23 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
                 }
 
                 if (response && response.success && response.cart_url) {
+                    shouldUnlockSubmit = false;
+                    $submit.text($t('Redirecionando…'));
                     window.setTimeout(function () {
                         window.location.href = response.cart_url;
                     }, 700);
+                    return;
+                }
+
+                if (!response || !response.success) {
+                    if (!response || !response.message) {
+                        showLiveMessage($root, $t('Não foi possível adicionar ao carrinho. Tente novamente.'), 'error');
+                    }
+                    return;
+                }
+
+                if (!response.message) {
+                    showLiveMessage($root, $t('Itens adicionados ao carrinho.'), 'success');
                 }
             }).fail(function (xhr) {
                 if (xhr && xhr.status === 403) {
@@ -390,8 +408,14 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
 
                 showLiveMessage($root, $t('Não foi possível adicionar ao carrinho. Tente novamente.'), 'error');
             }).always(function () {
+                if (!shouldUnlockSubmit) {
+                    return;
+                }
+
                 if (!isPriceStatePending($card)) {
-                    $submit.prop('disabled', false).attr('aria-disabled', 'false');
+                    $submit.prop('disabled', false)
+                        .attr('aria-disabled', 'false')
+                        .attr('aria-busy', 'false');
                 }
                 $submit.removeClass('is-loading');
             });

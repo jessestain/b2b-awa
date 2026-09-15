@@ -9,6 +9,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\Area;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
 /**
  * Oculta produtos OEM/exclusivos de todos os clientes exceto o dono cadastrado
@@ -27,7 +28,8 @@ class ExclusiveProductCollectionFilter
     public function __construct(
         private readonly CustomerSession $customerSession,
         private readonly ResourceConnection $resourceConnection,
-        private readonly AppState $appState
+        private readonly AppState $appState,
+        private readonly PhpCookieManager $cookieManager
     ) {
     }
 
@@ -81,7 +83,7 @@ class ExclusiveProductCollectionFilter
      */
     private function resolveCustomerIdForFilter(): int
     {
-        if (($_COOKIE[session_name()] ?? null) === null) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return 0;
         }
 

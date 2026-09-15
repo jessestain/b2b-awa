@@ -17,42 +17,45 @@ if ($quotes->getSize() === 0) {
             <?= $block->escapeHtml(__('Ver Todas')) ?>
         </a>
     </div>
-    <table class="data-table quotes-table" aria-label="<?= $block->escapeHtmlAttr(__('Cotações recentes')) ?>">
-        <thead>
-            <tr>
-                <th><?= $block->escapeHtml(__('Nº')) ?></th>
-                <th><?= $block->escapeHtml(__('Data')) ?></th>
-                <th><?= $block->escapeHtml(__('Status')) ?></th>
-                <th><?= $block->escapeHtml(__('Valor Cotado')) ?></th>
-                <th><?= $block->escapeHtml(__('Válido Até')) ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($quotes as $quote): ?>
+    <div class="table-wrapper">
+        <table class="data-table quotes-table" aria-label="<?= $block->escapeHtmlAttr(__('Cotações recentes')) ?>">
+            <caption class="sr-only"><?= $block->escapeHtml(__('Cotações recentes')) ?></caption>
+            <thead>
                 <tr>
-                    <td>#<?= (int) $quote->getId() ?></td>
-                    <td><?= $block->escapeHtml(date('d/m/Y H:i', strtotime((string) $quote->getCreatedAt()))) ?></td>
-                    <td>
-                        <span class="status-badge <?= $block->escapeHtmlAttr($block->getStatusClass((string) $quote->getStatus())) ?>">
-                            <?= $block->escapeHtml($block->getStatusLabel((string) $quote->getStatus())) ?>
-                        </span>
-                    </td>
-                    <td>
-                        <?php if ($quote->getQuotedTotal()): ?>
-                            <?= /* @noEscape */ $block->formatPrice((float) $quote->getQuotedTotal()) ?>
-                        <?php else: ?>
-                            <span class="no-value">-</span>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if ($quote->getExpiresAt()): ?>
-                            <?= $block->escapeHtml(date('d/m/Y', strtotime((string) $quote->getExpiresAt()))) ?>
-                        <?php else: ?>
-                            <span class="no-value">-</span>
-                        <?php endif; ?>
-                    </td>
+                    <th scope="col"><?= $block->escapeHtml(__('Nº')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('Data')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('Status')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('Valor Cotado')) ?></th>
+                    <th scope="col"><?= $block->escapeHtml(__('Válido Até')) ?></th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($quotes as $quote): ?>
+                    <tr>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Nº')) ?>">#<?= (int) $quote->getId() ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Data')) ?>"><?= $block->escapeHtml($block->formatDateTime((string) $quote->getCreatedAt())) ?></td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Status')) ?>">
+                            <span class="status-badge <?= $block->escapeHtmlAttr($block->getStatusClass((string) $quote->getStatus())) ?>">
+                                <?= $block->escapeHtml($block->getStatusLabel((string) $quote->getStatus())) ?>
+                            </span>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Valor Cotado')) ?>">
+                            <?php if ($quote->getQuotedTotal()): ?>
+                                <?= /* @noEscape */ $block->formatPrice((float) $quote->getQuotedTotal()) ?>
+                            <?php else: ?>
+                                <span class="no-value">-</span>
+                            <?php endif; ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtmlAttr(__('Válido Até')) ?>">
+                            <?php if ($quote->getExpiresAt()): ?>
+                                <?= $block->escapeHtml($block->formatDate((string) $quote->getExpiresAt())) ?>
+                            <?php else: ?>
+                                <span class="no-value">-</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>

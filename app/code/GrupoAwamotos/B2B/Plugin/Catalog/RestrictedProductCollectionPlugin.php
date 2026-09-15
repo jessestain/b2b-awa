@@ -11,6 +11,7 @@ namespace GrupoAwamotos\B2B\Plugin\Catalog;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Customer\Model\Session as CustomerSession;
 use GrupoAwamotos\B2B\Helper\Data as B2BHelper;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 
 class RestrictedProductCollectionPlugin
@@ -35,13 +36,20 @@ class RestrictedProductCollectionPlugin
      */
     private $filterApplied = false;
 
+    /**
+     * @var PhpCookieManager
+     */
+    private $cookieManager;
+
     public function __construct(
         CustomerSession $customerSession,
         B2BHelper $b2bHelper,
+        PhpCookieManager $cookieManager,
         ?LoggerInterface $logger = null
     ) {
         $this->customerSession = $customerSession;
         $this->b2bHelper = $b2bHelper;
+        $this->cookieManager = $cookieManager;
         $this->logger = $logger;
     }
 
@@ -78,7 +86,7 @@ class RestrictedProductCollectionPlugin
         }
 
         // Avoid session_start() for guests: check cookie before calling isLoggedIn().
-        $hasCookie  = isset($_COOKIE[session_name()]);
+        $hasCookie  = $this->cookieManager->getCookie(session_name()) !== null;
         $isLoggedIn = $hasCookie && $this->customerSession->isLoggedIn();
         $customerGroupId = $isLoggedIn ? (int) $this->customerSession->getCustomerGroupId() : 0;
         $isB2BCustomer = in_array($customerGroupId, $this->b2bHelper->getB2BGroupIds(), true);

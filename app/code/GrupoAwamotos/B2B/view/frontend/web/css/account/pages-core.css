@@ -1,14 +1,40 @@
-/** pages-core.css — shell, nav (§70 optimize + §148 AWA SSOT)
- * Aliases --b2b-pg-* removidos em 2026-06-15: todos os consumers foram
- * migrados para tokens --awa-* diretos. */
+/** pages-core.css — base shell + navegação da conta B2B
+ * Camada operacional (tabelas/cards/botões/status) foi consolidada em pages-core-v2.css.
+ */
 
 .b2b-page-shell {
-    --awa-b2b-primary: var(--awa-primary, #b73337);
-    --awa-b2b-primary-dark: var(--awa-primary-hover, #8e2629);
-    --awa-b2b-ink: var(--awa-text-primary, #333333);
-    --awa-b2b-muted: var(--awa-text-muted, #666666);
-    --awa-b2b-border: var(--awa-border, #e5e7eb);
-    --awa-b2b-soft: var(--awa-b2b-bg-soft, #f8fafc);
+    --awa-b2b-primary: var(--awa-primary);
+    --awa-b2b-primary-dark: var(--awa-primary-dark, var(--awa-primary-hover, var(--awa-primary)));
+    --awa-b2b-ink: var(--awa-text-primary, var(--awa-text));
+    --awa-b2b-muted: var(--awa-text-muted, var(--awa-text-secondary));
+    --awa-b2b-border: var(--awa-border, var(--awa-line));
+    --awa-b2b-soft: var(--awa-b2b-bg-soft, var(--awa-bg-subtle));
+    --awa-b2b-danger: var(--awa-danger, var(--awa-error, var(--awa-primary)));
+    --awa-b2b-success: var(--awa-success);
+    --awa-b2b-radius: var(--awa-acct-panel-radius, var(--awa-radius-sm));
+    --awa-b2b-control-h: var(--awa-control-height, 44px);
+    width: 100%;
+    box-sizing: border-box;
+    color: var(--awa-b2b-ink);
+    font-family: var(--awa-font-body, inherit);
+    line-height: 1.45;
+}
+
+#html-body:is(.account, [class*='b2b-']) .page-wrapper .b2b-page-shell {
+    --awa-b2b-shell-max: var(--awa-page-dash, 1280px);
+    max-width: min(100%, var(--awa-b2b-shell-max));
+    margin-inline: auto;
+    align-items: stretch;
+}
+
+#html-body:is(.account, [class*='b2b-']) .page-wrapper .b2b-page-shell > * {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#html-body:is(.account, [class*='b2b-']) .page-wrapper .b2b-page-shell table {
+    width: 100%;
 }
 
 .b2b-page-shell .b2b-section-header {
@@ -40,25 +66,67 @@
 .b2b-page-shell .badge--admin,
 .b2b-page-shell .badge--approver {
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius);
     font-size: 12px;
     font-weight: 600;
     text-transform: none;
     letter-spacing: normal;
 }
 
-.b2b-page-shell .empty-message {
+.b2b-page-shell .empty-message,
+.b2b-page-shell .awa-empty-state,
+.b2b-page-shell .message.info.empty {
     color: var(--awa-b2b-muted);
-    text-align: center;
-    padding: 40px 16px; /* @awa-s-5 = 40px, passo mais próximo na escala 8px */
+    text-align: left;
+    padding: clamp(16px, 2.5vw, 24px);
+    border: 1px solid var(--awa-b2b-border);
+    border-radius: var(--awa-b2b-radius);
+    background: var(--awa-bg, var(--awa-bg-surface));
+    box-sizing: border-box;
+}
+
+.b2b-page-shell .awa-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--awa-s-1, 8px);
+    max-width: 42rem;
+}
+
+.b2b-page-shell .awa-empty-state__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--awa-b2b-ink);
+}
+
+.b2b-page-shell .awa-empty-state__hint {
+    margin: 0;
+    max-width: 65ch;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--awa-b2b-muted);
+}
+
+.b2b-page-shell .awa-empty-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: var(--awa-s-1, 8px);
+}
+
+.b2b-page-shell .awa-empty-state__actions .action {
+    min-height: var(--awa-b2b-control-h, 44px);
 }
 
 #html-body:is(.account, [class*='b2b-']) .account-nav-item.current .account-nav-text,
 #html-body:is(.account, [class*='b2b-']) .account-nav-item.current .account-nav-link {
     color: var(--awa-b2b-primary);
     font-weight: 600;
-    background: color-mix(in srgb, var(--awa-b2b-primary) 8%, #ffffff);
-    border-radius: 8px;
+    background: color-mix(in srgb, var(--awa-b2b-primary) 8%, var(--awa-bg));
+    border-radius: var(--awa-b2b-radius);
     border-left: 0;
     border-inline-start: 0;
 }
@@ -73,9 +141,9 @@
     text-decoration: none;
     border-left: 0;
     border-inline-start: 0;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius);
     font-size: 14px;
-    color: var(--awa-text, #444444);
+    color: var(--awa-text, var(--awa-text-primary));
 }
 
 #html-body:is(.account, [class*='b2b-']) .account-nav-section {
@@ -101,9 +169,9 @@
 }
 
 #html-body:is(.account, [class*='b2b-']) .account-nav-wrapper {
-    background: var(--awa-bg-surface, #ffffff);
+    background: var(--awa-bg-surface, var(--awa-bg));
     border: 1px solid var(--awa-b2b-border);
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius);
     overflow: visible;
     padding: 0;
     width: 100%;
@@ -112,7 +180,7 @@
 }
 
 #html-body:is(.account, [class*='b2b-']) .account-nav-title {
-    background: var(--awa-bg-surface, #ffffff);
+    background: var(--awa-bg-surface, var(--awa-bg));
     padding: 12px 16px;
     margin: 0;
     border-bottom: 1px solid var(--awa-b2b-border);
@@ -121,7 +189,7 @@
 #html-body:is(.account, [class*='b2b-']) .account-nav-title strong {
     font-size: 14px;
     font-weight: 700;
-    color: var(--awa-b2b-ink, #333333);
+    color: var(--awa-b2b-ink, var(--awa-text-primary, var(--awa-text)));
     letter-spacing: normal;
     text-transform: none;
 }
@@ -140,3 +208,6 @@
     float: none;
     margin: 0;
 }
+
+/* Camada operacional B2B foi centralizada em pages-core-v2.css
+ * (loader: GrupoAwamotos_B2B::head/b2b-pages-css.phtml). */

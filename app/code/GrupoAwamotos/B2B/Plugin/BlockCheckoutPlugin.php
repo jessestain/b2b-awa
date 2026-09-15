@@ -16,6 +16,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Message\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class BlockCheckoutPlugin
 {
@@ -54,6 +55,11 @@ class BlockCheckoutPlugin
      */
     private $loginRefererParams;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         PriceVisibilityInterface $priceVisibility,
         Config $config,
@@ -61,7 +67,8 @@ class BlockCheckoutPlugin
         ManagerInterface $messageManager,
         CustomerSession $customerSession,
         CheckoutSession $checkoutSession,
-        LoginRefererParams $loginRefererParams
+        LoginRefererParams $loginRefererParams,
+        LoggerInterface $logger
     ) {
         $this->priceVisibility = $priceVisibility;
         $this->config = $config;
@@ -70,6 +77,7 @@ class BlockCheckoutPlugin
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
         $this->loginRefererParams = $loginRefererParams;
+        $this->logger = $logger;
     }
 
     /**
@@ -132,7 +140,7 @@ class BlockCheckoutPlugin
                         return $redirect->setPath('checkout/cart');
                     }
                 } catch (\Exception $e) {
-                    // If we can't check the quote, allow checkout to proceed
+                    $this->logger->warning('[BlockCheckoutPlugin::aroundExecute] Exceção ignorada: ' . $e->getMessage());
                 }
             }
         }

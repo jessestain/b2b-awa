@@ -25,10 +25,13 @@ $quickOrderConfig = [
 ];
 ?>
 <div class="b2b-quickorder b2b-page-shell"
-     data-mage-init='<?= /* @noEscape */ json_encode(['GrupoAwamotos_B2B/js/quickorder' => $quickOrderConfig]) ?>'>
-    <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Pedido Rápido')) ?></strong>
-        <p class="quickorder-description">
+     data-mage-init='<?= /* @noEscape */ json_encode(
+         ['GrupoAwamotos_B2B/js/quickorder' => $quickOrderConfig],
+         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
+     ) ?>'>
+    <div class="b2b-section-header">
+        <h1><?= $block->escapeHtml(__('Pedido Rápido')) ?></h1>
+        <p class="section-subtitle">
             <?= $block->escapeHtml(__('Adicione produtos rapidamente informando o SKU e a quantidade desejada.')) ?>
         </p>
     </div>
@@ -36,7 +39,8 @@ $quickOrderConfig = [
     <!-- CSV Upload Zone -->
     <div class="quickorder-csv-zone" id="quickorder-csv-zone">
         <div class="csv-dropzone" id="csv-dropzone" role="button" tabindex="0"
-             aria-label="<?= $block->escapeHtmlAttr(__('Importar produtos via CSV')) ?>">
+             aria-label="<?= $block->escapeHtmlAttr(__('Importar produtos via CSV')) ?>"
+             aria-describedby="csv-dropzone-hint">
             <div class="csv-dropzone__icon" aria-hidden="true">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -46,13 +50,13 @@ $quickOrderConfig = [
                 </svg>
             </div>
             <p class="csv-dropzone__text"><?= $block->escapeHtml(__('Arraste um arquivo CSV aqui ou clique para selecionar')) ?></p>
-            <p class="csv-dropzone__hint"><?= $block->escapeHtml(__('Formato: SKU, Quantidade (uma linha por produto)')) ?></p>
+            <p class="csv-dropzone__hint" id="csv-dropzone-hint"><?= $block->escapeHtml(__('Formato: SKU, Quantidade (uma linha por produto)')) ?></p>
             <input type="file" id="csv-file-input" accept=".csv,text/csv" class="csv-dropzone__input" aria-hidden="true" />
         </div>
         <div class="csv-actions">
-            <a href="#" id="csv-download-sample" class="csv-sample-link">
+            <button type="button" id="csv-download-sample" class="action secondary csv-sample-link">
                 <span><?= $block->escapeHtml(__('Baixar modelo CSV')) ?></span>
-            </a>
+            </button>
             <span class="csv-status" id="csv-status" role="status" aria-live="polite"></span>
         </div>
     </div>
@@ -73,9 +77,9 @@ $quickOrderConfig = [
             </button>
         </div>
 
-        <div class="quickorder-results" id="quickorder-results" style="display:none;">
-            <div class="results-success" id="quickorder-success"></div>
-            <div class="results-errors" id="quickorder-errors"></div>
+        <div class="quickorder-results is-hidden" id="quickorder-results" hidden aria-hidden="true" role="status" aria-live="polite" aria-atomic="false">
+            <div class="results-success" id="quickorder-success" aria-live="polite"></div>
+            <div class="results-errors" id="quickorder-errors" aria-live="assertive"></div>
         </div>
 
         <div class="quickorder-actions">

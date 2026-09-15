@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Template: Página "Acesse sua conta" (estilo Forceline)
  *
@@ -20,15 +22,16 @@
     </div>
 
     <div class="b2b-login-card">
-        <h1 class="b2b-login-title">Acesse sua conta</h1>
+        <h1 class="b2b-login-title"><?= $escaper->escapeHtml(__('Acesse sua conta')) ?></h1>
         <p class="b2b-login-subtitle">
-            Preencha seus dados de login para acessar sua central do cliente
+            <?= $escaper->escapeHtml(__('Preencha seus dados de login para acessar sua central do cliente')) ?>
         </p>
 
         <form class="b2b-login-form"
               action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
               method="post"
               id="b2b-login-form"
+              novalidate
               data-mage-init='{"validation":{}}'>
             <?= $block->getBlockHtml('formkey') ?>
 
@@ -40,10 +43,11 @@
                        autocomplete="username"
                        autocapitalize="none"
                        spellcheck="false"
-                       inputmode="email"
+                       inputmode="text"
                        required
+                       aria-required="true"
                        data-validate="{required:true}"
-                       placeholder="E-mail ou CNPJ"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('E-mail ou CNPJ')) ?>"
                        aria-describedby="b2b-login-user-note" />
                 <div id="b2b-login-user-note" class="b2b-field-note">
                     <?= $escaper->escapeHtml(__('Use o e-mail cadastrado ou o CNPJ da empresa para localizar sua conta.')) ?>
@@ -58,8 +62,9 @@
                            id="b2b-pass"
                            autocomplete="current-password"
                            required
+                           aria-required="true"
                            data-validate="{required:true}"
-                           placeholder="Senha"
+                           placeholder="<?= $escaper->escapeHtmlAttr(__('Senha')) ?>"
                            aria-describedby="b2b-login-password-note" />
                     <button type="button"
                             class="b2b-password-toggle"
@@ -77,13 +82,20 @@
             </div>
 
             <div class="b2b-login-forgot">
-                <span>Esqueceu sua senha?</span>
-                <a href="<?= $escaper->escapeUrl($block->getForgotPasswordUrl()) ?>">Recuperar</a>
+                <span><?= $escaper->escapeHtml(__('Esqueceu sua senha?')) ?></span>
+                <a href="<?= $escaper->escapeUrl($block->getForgotPasswordUrl()) ?>"><?= $escaper->escapeHtml(__('Recuperar')) ?></a>
             </div>
 
+            <?php $b2bCaptchaHtml = $block->getChildHtml('captcha'); ?>
+            <?php if (trim((string)$b2bCaptchaHtml) !== ''): ?>
+            <div class="b2b-field b2b-field-captcha">
+                <?= $b2bCaptchaHtml ?>
+            </div>
+            <?php endif; ?>
+
             <div class="b2b-login-actions">
-                <button type="submit" class="b2b-btn-entrar" title="Entrar">
-                    <span>Entrar</span>
+                <button type="submit" class="b2b-btn-entrar" title="<?= $escaper->escapeHtmlAttr(__('Entrar')) ?>">
+                    <span><?= $escaper->escapeHtml(__('Entrar')) ?></span>
                 </button>
             </div>
         </form>
@@ -114,30 +126,30 @@
         </script>
 
         <div class="b2b-login-divider">
-            <span>OU</span>
+            <span><?= $escaper->escapeHtml(__('ou')) ?></span>
         </div>
 
         <div class="b2b-login-ctas">
             <a href="<?= $escaper->escapeUrl($block->getB2BRegisterUrl()) ?>" class="b2b-btn-register">
-                Primeiro acesso? <strong>Cadastre-se</strong>
+                <?= $escaper->escapeHtml(__('Primeiro acesso?')) ?> <strong><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
             </a>
 
             <a href="<?= $escaper->escapeUrl($block->getClaimAccountUrl()) ?>" class="b2b-btn-claim">
-                Comprou e não possui senha? <strong>Cadastre-se</strong>
+                <?= $escaper->escapeHtml(__('Comprou e não possui senha?')) ?> <strong><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
             </a>
         </div>
     </div>
 
     <div class="b2b-login-footer">
         <a href="https://wa.me/5516997367588?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20para%20acessar%20minha%20conta%20B2B"
-           class="b2b-login-whatsapp"
+           class="b2b-login-whatsapp b2b-btn-whatsapp"
               data-b2b-contact-track="login_help_whatsapp"
               data-b2b-contact-channel="whatsapp"
            target="_blank"
            rel="noopener noreferrer">
-            Precisa de ajuda? Fale conosco pelo <strong>WhatsApp</strong>
+            <?= $escaper->escapeHtml(__('Precisa de ajuda? Fale conosco pelo')) ?> <strong><?= $escaper->escapeHtml(__('WhatsApp')) ?></strong>
         </a>
-        <p class="b2b-login-footer-brand">Grupo AWA Motos</p>
+        <p class="b2b-login-footer-brand"><?= $escaper->escapeHtml(__('Grupo AWA Motos')) ?></p>
         <p class="b2b-login-footer-contact">awamotos@awamotos.com.br</p>
     </div>
 </div>

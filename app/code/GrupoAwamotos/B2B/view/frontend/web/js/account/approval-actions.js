@@ -28,18 +28,62 @@ define([
         return '';
     }
 
-    function createRejectModal(onConfirm)
+    function createRejectModal(messages, onConfirm)
     {
+        var reasonLabel = messages.rejectReasonLabel || $t('Motivo da rejeição');
+        var reasonHint = messages.rejectReasonPrompt || $t('Informe ao menos 10 caracteres.');
+        var minReasonLength = 10;
+        var fieldId = 'b2b-approval-reject-reason-' + Date.now();
+        var hintId = fieldId + '-hint';
+        var errorId = fieldId + '-error';
+        var isSubmitting = false;
         var $modal = $('<div class="b2b-approval-reject-modal" role="dialog" aria-modal="true"></div>');
         var $form = $('<form class="b2b-approval-reject-modal__form"></form>');
         var $label = $('<label class="b2b-approval-reject-modal__label"></label>')
-            .text($t('Motivo da rejeição'));
+            .attr('for', fieldId)
+            .text(reasonLabel);
         var $textarea = $('<textarea class="b2b-approval-reject-modal__textarea" required minlength="10" rows="4"></textarea>')
-            .attr('aria-label', $t('Motivo da rejeição'));
+            .attr({
+                id: fieldId,
+                'data-role': 'reject-reason',
+                'aria-label': reasonLabel,
+                'aria-describedby': hintId + ' ' + errorId,
+                'aria-invalid': 'false'
+            });
         var $hint = $('<p class="b2b-approval-reject-modal__hint"></p>')
-            .text($t('Informe ao menos 10 caracteres.'));
+            .attr('id', hintId)
+            .text(reasonHint);
+        var $error = $('<p class="b2b-approval-reject-modal__error" role="alert" aria-live="assertive"></p>')
+            .attr('id', errorId)
+            .hide();
 
-        $form.append($label, $textarea, $hint);
+        function setValidationError(message)
+        {
+            if (!message) {
+                $textarea.attr('aria-invalid', 'false');
+                $error.text('').hide();
+                return;
+            }
+
+            $textarea.attr('aria-invalid', 'true');
+            $error.text(message).show();
+        }
+
+        function getValidatedReason()
+        {
+            var reason = $.trim($textarea.val());
+
+            if (reason.length < minReasonLength) {
+                setValidationError(reasonHint);
+                $textarea.trigger('focus');
+                return '';
+            }
+
+            setValidationError('');
+            return reason;
+        }
+
+        $form.append($label, $textarea, $hint, $error);
         $modal.append($form);
 
         var popup = modal({
@@ -50,24 +94,44 @@ define([
                 text: $t('Cancelar'),
                 class: 'action-secondary',
                 click: function () {
+                    if (isSubmitting) {
+                        return;
+                    }
                     this.closeModal(true);
                 }
             }, {
                 text: $t('Confirmar rejeição'),
                 class: 'action-primary',
                 click: function () {
-                    var reason = $.trim($textarea.val());
-                    if (reason.length < 10) {
-                        $textarea.trigger('focus');
+                    var reason;
+
+                    if (isSubmitting) {
                         return;
                     }
+
+                    reason = getValidatedReason();
+                    if (!reason) {
+                        return;
+                    }
+
+                    isSubmitting = true;
                     this.closeModal(true);
                     onConfirm(reason);
                 }
-            }]
+            }],
+            closed: function () {
+                $form.off('submit');
+                $textarea.off('input');
+                $modal.remove();
+            }
         }, $modal);
 
-        $textarea.attr('data-role', 'reject-reason');
+        $textarea.on('input', function () {
+            if ($.trim($textarea.val()).length >= minReasonLength) {
+                setValidationError('');
+            }
+        });
+
         popup.openModal();
 
         $form.on('submit', function (event) {
@@ -80,6 +144,18 @@ define([
         var $root = $(element);
         var actionUrl = config.actionUrl || '';
         var messages = config.messages || {};
+        var $liveRegion = $root.find('[data-role="approval-live"]').first();
+
+        function announce(message)
+        {
+            if (!$liveRegion.length || !message) {
+                return;
+            }
+            $liveRegion.text('');
+            window.setTimeout(function () {
+                $liveRegion.text(message);
+            }, 10);
+        }
 
         if (!actionUrl) {
             return;
@@ -87,20 +163,27 @@ define([
 
         $root.on('click', '[data-action="approve"], [data-action="reject"]', function () {
             var $button = $(this);
+            var $actionButtons = $button.closest('.approval-actions').find('[data-action]');
             var approvalId = parseInt($button.data('approval-id'), 10) || 0;
             var action = $button.data('action') || '';
 
-            if (!approvalId || !action) {
+            if (!approvalId || !action || $button.prop('disabled') || $button.hasClass('is-loading')) {
                 return;
             }
 
             var submitAction = function (comment) {
-                $button.prop('disabled', true).addClass('is-loading');
+                $actionButtons.prop('disabled', true).addClass('is-loading').attr('aria-busy', 'true');
+                announce(
+                    action === 'reject'
+                        ? $t('Registrando rejeição do pedido. Aguarde.')
+                        : $t('Registrando aprovação do pedido. Aguarde.')
+                );
 
                 $.ajax({
                     url: actionUrl,
                     type: 'POST',
                     dataType: 'json',
+                    timeout: 20000,
                     data: {
                         approval_id: approvalId,
                         action: action,
@@ -110,21 +193,30 @@ define([
                     }
                 }).done(function (response) {
                     if (response && response.message) {
+                        announce(response.message);
                         showAlert(response.message);
                     }
 
                     if (response && response.success) {
+                        announce($t('Decisão registrada. Atualizando pedidos em aprovação.'));
                         window.location.reload();
+                        return;
+                    }
+
+                    if (!response || !response.message) {
+                        announce(messages.processError || $t('Erro ao processar. Tente novamente.'));
+                        showAlert(messages.processError || $t('Erro ao processar. Tente novamente.'));
                     }
                 }).fail(function () {
+                    announce(messages.processError || $t('Erro ao processar. Tente novamente.'));
                     showAlert(messages.processError || $t('Erro ao processar. Tente novamente.'));
                 }).always(function () {
-                    $button.prop('disabled', false).removeClass('is-loading');
+                    $actionButtons.prop('disabled', false).removeClass('is-loading').removeAttr('aria-busy');
                 });
             };
 
             if (action === 'reject') {
-                createRejectModal(submitAction);
+                createRejectModal(messages, submitAction);
                 return;
             }
 

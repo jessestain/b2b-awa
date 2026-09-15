@@ -1,0 +1,120 @@
+/** pages-sales.css — carrega DEPOIS de awa-b2b-pages-late.css
+ * Histórico e detalhe Magento (sales/order/*) + blocos B2B (export, NF-e).
+ * Não edita late/export/erp-operations (hex e radius legado). */
+
+html body#html-body:is(.sales-order-history, .sales-order-view, .account) .page-wrapper .b2b-page-shell.b2b-sales-history {
+    --awa-b2b-radius: var(--awa-acct-panel-radius, var(--awa-radius-sm));
+    --awa-b2b-control-h: 44px;
+}
+
+html body#html-body:is(.sales-order-history, .sales-order-view) .page-wrapper :is(
+    .action.view,
+    .action.order,
+    .action.print,
+    .action.back,
+    .b2b-export-csv-btn,
+    .pages a,
+    .pages .current,
+    .b2b-order-operations__actions .action
+) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--awa-b2b-control-h, 44px);
+    box-sizing: border-box;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+    text-decoration: none;
+}
+
+html body#html-body.sales-order-history .page-wrapper .b2b-sales-history .col.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+html body#html-body.sales-order-history .page-wrapper .b2b-export-csv-btn {
+    /* !important: export.css força verde hex e translateY no hover. */
+    background: var(--awa-primary) !important;
+    color: var(--awa-bg-surface, var(--awa-bg)) !important;
+    transform: none !important;
+    min-height: var(--awa-b2b-control-h, 44px);
+}
+
+html body#html-body.sales-order-history .page-wrapper .b2b-export-csv-btn:hover,
+html body#html-body.sales-order-history .page-wrapper .b2b-export-csv-btn:focus-visible {
+    background: var(--awa-primary-dark) !important;
+    color: var(--awa-bg-surface, var(--awa-bg)) !important;
+    transform: none !important;
+}
+
+html body#html-body.sales-order-view .page-wrapper :is(
+    .awa-order-status-badge,
+    .order-status.awa-order-status-badge
+) {
+    /* !important: late.css usa pill 999px + texto info sobre fundo primary (contraste). */
+    min-height: 28px !important;
+    padding: 4px 10px !important;
+    border-radius: var(--awa-radius-sm) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    letter-spacing: normal !important;
+    color: var(--awa-primary-dark) !important;
+    background: color-mix(in srgb, var(--awa-primary) 10%, var(--awa-bg)) !important;
+    border: 1px solid color-mix(in srgb, var(--awa-primary) 22%, var(--awa-border)) !important;
+}
+
+html body#html-body.sales-order-view .page-wrapper .b2b-order-operations {
+    margin: 0 0 clamp(16px, 2vw, 24px);
+    padding: clamp(12px, 1.5vw, 18px);
+    border: 1px solid var(--awa-border);
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+    background: var(--awa-bg-surface, var(--awa-bg));
+}
+
+html body#html-body.sales-order-view .page-wrapper .b2b-order-operations__panel {
+    padding: clamp(12px, 1.5vw, 16px);
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+    background: var(--awa-bg, var(--awa-bg-surface));
+    border: 1px solid var(--awa-border);
+}
+
+html body#html-body.sales-order-view .page-wrapper .b2b-order-operations__empty {
+    margin: 0;
+    color: var(--awa-text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+html body#html-body:is(.sales-order-history, .sales-order-view) .page-wrapper :is(
+    a,
+    button,
+    .action
+):focus-visible {
+    outline: 2px solid var(--awa-primary);
+    outline-offset: 2px;
+}
+
+html body#html-body.sales-order-view .page-wrapper .block-order-details-view .box {
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
+}
+
+@media (max-width: 767px) {
+    html body#html-body.sales-order-history .page-wrapper .b2b-sales-history .col.actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    html body#html-body.sales-order-history .page-wrapper .b2b-sales-history .col.actions .action {
+        width: 100%;
+    }
+
+    html body#html-body.sales-order-view .page-wrapper .b2b-order-operations__grid {
+        grid-template-columns: 1fr;
+    }
+
+    html body#html-body.sales-order-view .page-wrapper .b2b-order-operations__meta > div {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+}

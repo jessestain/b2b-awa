@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace GrupoAwamotos\B2B\Block\Register;
 
 use GrupoAwamotos\B2B\Model\AuthLogoResolver;
+use GrupoAwamotos\B2B\Model\Registration\AttributionResolver;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -199,6 +200,19 @@ class Form extends Template
         );
     }
 
+    public function getIdempotencyToken(): string
+    {
+        $existing = trim((string) $this->customerSession->getData('b2b_register_idempotency_token'));
+        if ($existing !== '') {
+            return $existing;
+        }
+
+        $token = bin2hex(random_bytes(16));
+        $this->customerSession->setData('b2b_register_idempotency_token', $token);
+
+        return $token;
+    }
+
     /**
      * @return array<string, string>
      */
@@ -213,5 +227,38 @@ class Form extends Template
         $this->persistedFormData = is_array($data) ? $data : [];
 
         return $this->persistedFormData;
+    }
+
+    /**
+     * First-touch UTM/vendedor captured from the register URL and kept in session.
+     *
+     * @return array<string, string>
+     */
+    public function getAttributionFieldValues(): array
+    {
+        $resolver = new AttributionResolver();
+        $stored = $this->customerSession->getData('b2b_attribution');
+        $stored = is_array($stored) ? $stored : [];
+        $incoming = $resolver->fromParams($this->getRequest()->getParams())->toRequestParams();
+        $merged = $resolver->mergeFirstTouch($stored, $incoming);
+        $this->customerSession->setData('b2b_attribution', $merged);
+
+        if (trim((string) $this->customerSession->getData('b2b_entry_url')) === '') {
+            $uri = (string) ($this->getRequest()->getServer('REQUEST_URI') ?? '');
+            if ($uri !== '') {
+                $this->customerSession->setData('b2b_entry_url', mb_substr($uri, 0, 512));
+            }
+        }
+
+        return [
+            'utm_source' => (string) ($merged['utm_source'] ?? ''),
+            'utm_medium' => (string) ($merged['utm_medium'] ?? ''),
+            'utm_campaign' => (string) ($merged['utm_campaign'] ?? ''),
+            'utm_content' => (string) ($merged['utm_content'] ?? ''),
+            'utm_term' => (string) ($merged['utm_term'] ?? ''),
+            'cname' => (string) ($merged['cname'] ?? $merged['campaign'] ?? $merged['b2b_registration_campaign'] ?? ''),
+            'attendant' => (string) ($merged['attendant'] ?? $merged['attendant_id'] ?? ''),
+            'vendedor' => (string) ($merged['vendedor'] ?? $merged['erp_seller_code'] ?? ''),
+        ];
     }
 }

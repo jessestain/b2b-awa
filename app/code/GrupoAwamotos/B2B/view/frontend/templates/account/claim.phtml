@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Template: Página "Ativar Acesso Online" (claim de conta)
  *
@@ -20,20 +22,20 @@
     </div>
 
     <div class="b2b-login-card">
-        <h1 class="b2b-login-title">Ativar Acesso Online</h1>
+        <h1 class="b2b-login-title"><?= $escaper->escapeHtml(__('Ativar Acesso Online')) ?></h1>
         <p class="b2b-login-subtitle">
-            J&aacute; comprou conosco e precisa de acesso &agrave; loja online?
+            <?= $escaper->escapeHtml(__('Já comprou conosco e precisa de acesso à loja online?')) ?>
         </p>
 
         <p class="b2b-claim-description">
-            Informe seu e-mail ou CNPJ cadastrado e enviaremos um link
-            para voc&ecirc; criar sua senha de acesso.
+            <?= $escaper->escapeHtml(__('Informe seu e-mail ou CNPJ cadastrado e enviaremos um link para você criar sua senha de acesso.')) ?>
         </p>
 
         <form class="b2b-login-form"
               action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>"
               method="post"
               id="b2b-claim-form"
+              novalidate
               data-mage-init='{"validation":{}}'>
             <?= $block->getBlockHtml('formkey') ?>
 
@@ -45,10 +47,11 @@
                        autocomplete="username"
                        autocapitalize="none"
                        spellcheck="false"
-                       inputmode="email"
+                       inputmode="text"
                        required
+                       aria-required="true"
                        data-validate="{required:true}"
-                       placeholder="E-mail ou CNPJ"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('E-mail ou CNPJ')) ?>"
                        aria-describedby="b2b-claim-user-note" />
                 <div id="b2b-claim-user-note" class="b2b-field-note">
                     <?= $escaper->escapeHtml(__('Use os mesmos dados informados nas compras anteriores para localizar seu cadastro.')) ?>
@@ -56,8 +59,8 @@
             </div>
 
             <div class="b2b-login-actions">
-                <button type="submit" class="b2b-btn-claim-submit" title="Enviar link de acesso">
-                    <span>ENVIAR LINK DE ACESSO</span>
+                <button type="submit" class="b2b-btn-claim-submit" title="<?= $escaper->escapeHtmlAttr(__('Enviar link de acesso')) ?>">
+                    <span><?= $escaper->escapeHtml(__('Enviar link de acesso')) ?></span>
                 </button>
             </div>
         </form>
@@ -83,7 +86,7 @@
         </script>
 
         <a href="<?= $escaper->escapeUrl($block->getLoginUrl()) ?>" class="b2b-claim-back">
-            &larr; Voltar para login
+            <?= $escaper->escapeHtml(__('Voltar para login')) ?>
         </a>
     </div>
 
@@ -94,7 +97,7 @@
               data-b2b-contact-channel="whatsapp"
            target="_blank"
            rel="noopener noreferrer">
-            Precisa de ajuda? Fale conosco pelo <strong>WhatsApp</strong>
+            <?= $escaper->escapeHtml(__('Precisa de ajuda? Fale conosco pelo')) ?> <strong><?= $escaper->escapeHtml(__('WhatsApp')) ?></strong>
         </a>
         <p class="b2b-login-footer-brand">Grupo AWA Motos</p>
         <p class="b2b-login-footer-contact">awamotos@awamotos.com.br</p>

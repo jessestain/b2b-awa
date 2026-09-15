@@ -92,8 +92,7 @@ class RegistrationBackfillService
                 $report['no_razao_social']++;
             }
 
-            if (
-                $this->validatorChecker->isCustomerValidatedInSectra($customerId)
+            if ($this->validatorChecker->isCustomerValidatedInSectra($customerId)
                 && (trim((string) $customer->getData('b2b_phone')) === ''
                     || trim((string) $customer->getData('b2b_razao_social')) === '')
             ) {
@@ -316,36 +315,20 @@ class RegistrationBackfillService
     }
 
     /**
+     * Restrict the default CLI batch to commercial queue customers.
+     *
+     * Previously this matched any CNPJ customer with empty ERP/origin/campaign,
+     * including already approved accounts. Auto-assign and attribution markers
+     * must not run against that population.
+     *
      * @param \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
      */
     private function applyPendingOnlyFilter($collection): void
     {
-        $erpAttrId = $this->resolveAttributeId('erp_customer_sync_status');
-        $originAttrId = $this->resolveAttributeId('b2b_origin_host');
-        $campaignAttrId = $this->resolveAttributeId('b2b_registration_campaign');
-        $varcharTable = $this->resourceConnection->getTableName('customer_entity_varchar');
-
-        $collection->getSelect()->joinLeft(
-            ['bf_erp' => $varcharTable],
-            "bf_erp.entity_id = e.entity_id AND bf_erp.attribute_id = {$erpAttrId}",
-            []
-        )->joinLeft(
-            ['bf_origin' => $varcharTable],
-            "bf_origin.entity_id = e.entity_id AND bf_origin.attribute_id = {$originAttrId}",
-            []
-        )->joinLeft(
-            ['bf_campaign' => $varcharTable],
-            "bf_campaign.entity_id = e.entity_id AND bf_campaign.attribute_id = {$campaignAttrId}",
-            []
+        $collection->addAttributeToFilter(
+            'b2b_approval_status',
+            ['in' => [ApprovalStatus::STATUS_PENDING, ApprovalStatus::STATUS_DATA_REVIEW]]
         );
-
-        $collection->getSelect()->where(
-            '(bf_erp.value IS NULL OR bf_erp.value = \'\')'
-            . ' OR (bf_origin.value IS NULL OR bf_origin.value = \'\')'
-            . ' OR (bf_campaign.value IS NULL OR bf_campaign.value = \'\')'
-        );
-
-        $collection->getSelect()->group('e.entity_id');
     }
 
     /**

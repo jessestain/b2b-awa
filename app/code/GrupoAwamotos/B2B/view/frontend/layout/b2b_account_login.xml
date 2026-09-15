@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      layout="1column"
+      layout="empty"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="b2b_auth_shell"/>
     <head>
@@ -23,6 +23,20 @@
                        name="auth.logo"
                        as="auth_logo"
                        template="GrupoAwamotos_B2B::html/auth-logo.phtml"/>
+                <block class="Magento\Captcha\Block\Captcha"
+                       name="b2b.account.login.captcha"
+                       as="captcha"
+                       cacheable="false">
+                    <action method="setFormId">
+                        <argument name="formId" xsi:type="string">user_login</argument>
+                    </action>
+                    <action method="setImgWidth">
+                        <argument name="width" xsi:type="string">230</argument>
+                    </action>
+                    <action method="setImgHeight">
+                        <argument name="height" xsi:type="string">50</argument>
+                    </action>
+                </block>
                 <block class="GrupoAwamotos\B2B\Block\Account\SessionMessages"
                        name="b2b_login_messages"
                        as="b2b_login_messages"

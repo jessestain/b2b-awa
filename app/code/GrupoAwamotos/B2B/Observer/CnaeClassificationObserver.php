@@ -144,8 +144,7 @@ class CnaeClassificationObserver implements ObserverInterface
                 $cnaeDescription
             ));
 
-            if (
-                $profile === CnaeClassifier::PROFILE_DIRECT
+            if ($profile === CnaeClassifier::PROFILE_DIRECT
                 && $this->cnaeClassifier->isAutoApproveDirectEnabled()
             ) {
                 $this->customerApproval->approveCustomer(

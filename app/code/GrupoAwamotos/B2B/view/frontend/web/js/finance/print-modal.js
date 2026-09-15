@@ -7,9 +7,17 @@
 define([
     'jquery',
     'mage/translate',
-    'Magento_Ui/js/modal/modal'
-], function ($, $t, modal) {
+    'Magento_Ui/js/modal/modal',
+    'Magento_Ui/js/modal/alert'
+], function ($, $t, modal, alertModal) {
     'use strict';
+
+    function showAlert(message) {
+        alertModal({
+            title: $t('B2B'),
+            content: message
+        });
+    }
 
     /**
      * Referencia ao popup atualmente aberto (evita 2+ modais empilhados
@@ -75,20 +83,44 @@ define([
     }
 
     /**
+     * Normaliza e valida URL de impressão para evitar protocolos inseguros.
+     *
+     * @param {string} rawUrl
+     * @returns {string}
+     */
+    function normalizePrintUrl(rawUrl) {
+        var parsed;
+
+        try {
+            parsed = new URL(rawUrl, window.location.origin);
+        } catch (e) {
+            return '';
+        }
+
+        if (!/^https?:$/.test(parsed.protocol)) {
+            return '';
+        }
+
+        return parsed.toString();
+    }
+
+    /**
      * Aviso no modal quando o ambiente nao tem preview de impressao.
      *
      * @param {jQuery} $content
+     * @param {string} message
      */
-    function showModalPrintNotice($content) {
+    function showModalNotice($content, message) {
         var $existing = $content.find('.b2b-finance-print-modal__notice');
 
         if ($existing.length) {
+            $existing.text(message);
             return;
         }
 
         $content.prepend(
             '<p class="b2b-finance-print-modal__notice" role="status">' +
-                $t('O boleto já está visível acima. Para imprimir com preview, use Chrome ou Edge.') +
+                message +
             '</p>'
         );
     }
@@ -135,7 +167,6 @@ define([
         return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'embed=1';
     }
 
-
     /**
      * @param {string} url
      */
@@ -154,6 +185,8 @@ define([
         var $frame = $content.find('.b2b-finance-print-modal__frame');
         var $loading = $content.find('.b2b-finance-print-modal__loading');
         var timeoutId;
+        var isFrameReady = false;
+        var embedUrl = toEmbedUrl(url);
 
         var popup = modal({
             title: $t('Imprimir boleto'),
@@ -180,6 +213,10 @@ define([
                             return amp ? sep : '';
                         }).replace(/[?&]$/, '');
 
+                        if (!isFrameReady && (!baseUrl || baseUrl.indexOf('about:blank') === 0)) {
+                            showModalNotice($content, $t('Aguarde o boleto terminar de carregar para imprimir.'));
+                            return;
+                        }
 
                         // Cursor/Electron: manter boleto no modal, sem navegar nem dialogo vazio.
                         if (!canPreview) {
@@ -188,7 +225,12 @@ define([
                             var boletoReady = !!(readyDoc && readyDoc.querySelector('#b2b-print-boleto-root'));
 
                             if (boletoReady) {
-                                showModalPrintNotice($content);
+                                showModalNotice(
+                                    $content,
+                                    $t('O boleto já está visível acima. Para imprimir com preview, use Chrome ou Edge.')
+                                );
+                            } else {
+                                showModalNotice($content, $t('Aguarde o boleto terminar de carregar para imprimir.'));
                             }
 
                             return;
@@ -209,7 +251,10 @@ define([
                                 frameEl.contentWindow.focus();
                                 frameEl.contentWindow.print();
                             } catch (error) {
-                                showModalPrintNotice($content);
+                                showModalNotice(
+                                    $content,
+                                    $t('Não foi possível abrir a impressão no momento. Tente novamente.')
+                                );
                             }
                         }
                     }
@@ -273,6 +318,7 @@ define([
                 return;
             }
 
+            isFrameReady = true;
             clearTimeout(timeoutId);
             if (readyPollId) {
                 window.clearInterval(readyPollId);
@@ -358,7 +404,7 @@ define([
                 }
                 onFrameReady('load-rebound');
             });
-            $frame.attr('src', toEmbedUrl(url));
+            $frame.attr('src', embedUrl);
             return;
         }
 
@@ -366,9 +412,9 @@ define([
         if (typeof $content.modal === 'function') {
             $content.modal('openModal');
             fixModalStack();
-            $frame.attr('src', toEmbedUrl(url));
+            $frame.attr('src', embedUrl);
         } else {
-            $frame.attr('src', toEmbedUrl(url));
+            $frame.attr('src', embedUrl);
         }
     }
 
@@ -377,18 +423,22 @@ define([
 
         $scope.off('click.b2bPrintModal', '[data-print-boleto-url]');
         $scope.on('click.b2bPrintModal', '[data-print-boleto-url]', function (event) {
-            var url = $(event.currentTarget).attr('data-print-boleto-url');
+            var rawUrl = $(event.currentTarget).attr('data-print-boleto-url');
+            var url = normalizePrintUrl(rawUrl);
 
             event.preventDefault();
 
             if (!url) {
+                showAlert($t('Não foi possível abrir o boleto. Atualize a página e tente novamente.'));
                 return;
             }
 
             try {
                 openPrintModal(url);
             } catch (error) {
-                window.location.href = url;
+                if (!openPrintTab(url)) {
+                    window.location.href = url;
+                }
             }
         });
     }
@@ -403,6 +453,7 @@ define([
      * bug real que causava "nao abre o modal" para o usuario.
      */
     return function () {
+
         if (!globalBindingApplied) {
             bindClickHandler();
             globalBindingApplied = true;

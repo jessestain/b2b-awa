@@ -43,16 +43,14 @@ class ErpPendingQueueResolver
             return (string) __('Aguardando aprovação comercial');
         }
 
-        if (
-            $erpStatus === ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION
+        if ($erpStatus === ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION
             || $erpStatus === ErpCustomerSyncStatus::AWAITING_ERP_VALIDATION
             || $erpStatus === 'pending_erp_validation'
         ) {
             return (string) __('Aguardando validação ERP/Sectra');
         }
 
-        if (
-            $erpStatus === ErpCustomerSyncStatus::PROSPECT_MAGENTO
+        if ($erpStatus === ErpCustomerSyncStatus::PROSPECT_MAGENTO
             || $erpStatus === ErpCustomerSyncStatus::PROSPECT_SENT_SECTRA
         ) {
             return (string) __('Prospect enviado — aguardando validação ERP');

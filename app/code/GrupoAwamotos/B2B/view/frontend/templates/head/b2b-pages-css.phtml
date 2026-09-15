@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 /** @var \Magento\Framework\View\Element\Template $block */
 $cssUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/awa-b2b-pages-late.css');
-$assetVersion = '20260717-v85-modal-zstack';
+$salesUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/pages-sales.css');
+$ssotUrl = $block->getViewFileUrl('GrupoAwamotos_B2B::css/account/pages-core-v2.css');
+$assetVersion = '20260817-v100-ssot';
 ?>
 <style id="awa-b2b-pages-critical">
 /* §148 critical — superfícies operacionais antes do late.css async */
@@ -50,11 +52,12 @@ html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .b2b-page-shell 
 html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper :is(
     .awa-empty-state,
     .b2b-empty-state,
+    .b2b-cotacao-empty,
     .credit-card,
     .table-wrapper,
     .b2b-quote-wrapper
 ) {
-    border-radius: 4px !important;
+    border-radius: var(--awa-radius-sm, 8px) !important;
     box-shadow: none !important;
 }
 
@@ -81,7 +84,7 @@ html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper :is(
 html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper :is(.data.table th, table thead th) {
     text-transform: none !important;
     font-size: 13px !important;
-    background: var(--awa-bg-muted, #f8fafc) !important;
+    background: var(--awa-neutral-50, var(--awa-bg-muted)) !important;
 }
 
 html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper :is(
@@ -99,19 +102,13 @@ html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .b2b-quote-form-
     .b2b-quote-form,
     .b2b-quote-wrapper
 ) {
-    border-radius: 4px !important;
+    border-radius: var(--awa-radius-sm, 8px) !important;
     box-shadow: none !important;
-}
-
-html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .b2b-quote-form-container .data.table th {
-    text-transform: none !important;
-    font-size: 13px !important;
-    background: var(--awa-bg-muted, #f8fafc) !important;
 }
 
 html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .b2b-quote-form-container .action.primary {
     min-height: 44px !important;
-    border-radius: 4px !important;
+    border-radius: var(--awa-radius-sm, 8px) !important;
     box-shadow: none !important;
 }
 
@@ -151,7 +148,18 @@ html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .page-main {
       href="<?= $block->escapeUrl($cssUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"
       media="print"
       onload="this.media='all'"/>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($salesUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"
+      media="print"
+      onload="this.media='all'"/>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($ssotUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"
+      media="all"/>
 <noscript>
     <link rel="stylesheet"
           href="<?= $block->escapeUrl($cssUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
+    <link rel="stylesheet"
+          href="<?= $block->escapeUrl($salesUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
+    <link rel="stylesheet"
+          href="<?= $block->escapeUrl($ssotUrl) ?>?v=<?= $block->escapeHtmlAttr($assetVersion) ?>"/>
 </noscript>

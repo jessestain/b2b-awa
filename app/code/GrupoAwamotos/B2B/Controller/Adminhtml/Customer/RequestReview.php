@@ -8,10 +8,11 @@ use GrupoAwamotos\B2B\Api\CustomerApprovalInterface;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session as AdminSession;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultInterface;
 
-class RequestReview extends Action implements HttpPostActionInterface
+class RequestReview extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     public const ADMIN_RESOURCE = 'GrupoAwamotos_B2B::customer_approval';
 

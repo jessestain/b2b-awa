@@ -19,8 +19,13 @@ $b2bRegisterUrl = $escaper->escapeUrl($block->getB2bRegisterUrl());
 $accountUrl = $escaper->escapeUrl($block->getAccountUrl());
 $pendingMessage = $escaper->escapeHtml($block->getPendingMessage());
 
-// Mode determines body class and JS behavior
-$mode = $isGuest ? 'guest' : 'pending';
+if ($isGuest) {
+    $mode = 'guest';
+} elseif ($isPending) {
+    $mode = 'pending';
+} else {
+    $mode = 'approved_restricted';
+}
 ?>
 
 <?php if ($isGuest): ?>
@@ -32,29 +37,41 @@ $mode = $isGuest ? 'guest' : 'pending';
      hidden
      inert>
     <div class="b2b-login-modal" role="dialog" aria-modal="true" aria-labelledby="b2b-login-title" aria-describedby="b2b-login-desc" tabindex="-1">
-        <div class="b2b-login-modal-header">
-            <button type="button" class="b2b-login-modal-close" data-b2b-login-close aria-label="<?= $escaper->escapeHtmlAttr(__('Fechar')) ?>">&times;</button>
-            <h3 id="b2b-login-title"><?= $escaper->escapeHtml($isStrictB2B ? __('Portal de Compra Empresarial') : __('Faça login para comprar')) ?></h3>
-            <p id="b2b-login-desc"><?= $escaper->escapeHtml($isStrictB2B ? __('Cadastre sua empresa ou faça login para visualizar preços e comprar no atacado.') : __('Crie sua conta e aproveite nossas ofertas!')) ?></p>
-        </div>
-        <div class="b2b-login-modal-body">
-            <div class="b2b-login-options">
-                <?php if (!$isStrictB2B): ?>
-                <a href="<?= /* @noEscape */ $registerUrl ?>" class="b2b-login-option">
-                    <span class="b2b-login-option-title"><?= $escaper->escapeHtml(__('Cadastro Pessoa Física')) ?></span>
-                    <span class="b2b-login-option-desc"><?= $escaper->escapeHtml(__('Para compras pessoais - rápido e fácil')) ?></span>
-                </a>
-                <?php endif; ?>
+        <div class="b2b-login-modal__inner" role="document">
+            <header class="b2b-login-modal-header">
+                <h3 id="b2b-login-title"><?= $escaper->escapeHtml($isStrictB2B ? __('Portal de Compra Empresarial') : __('Faça login para comprar')) ?></h3>
+                <p id="b2b-login-desc"><?= $escaper->escapeHtml($isStrictB2B ? __('Cadastre sua empresa ou faça login para visualizar preços e comprar no atacado.') : __('Crie sua conta e aproveite nossas ofertas!')) ?></p>
+                <button type="button"
+                        class="b2b-login-modal-close"
+                        data-b2b-login-close
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Fechar')) ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M6 6l12 12M18 6L6 18"/>
+                    </svg>
+                    <span class="visually-hidden"><?= $escaper->escapeHtml(__('Fechar')) ?></span>
+                </button>
+            </header>
+            <div class="b2b-login-modal-body">
+                <div class="b2b-login-options">
+                    <?php if (!$isStrictB2B): ?>
+                    <a href="<?= /* @noEscape */ $registerUrl ?>" class="b2b-login-option">
+                        <span class="b2b-login-option-title"><?= $escaper->escapeHtml(__('Cadastro Pessoa Física')) ?></span>
+                        <span class="b2b-login-option-desc"><?= $escaper->escapeHtml(__('Para compras pessoais - rápido e fácil')) ?></span>
+                    </a>
+                    <?php endif; ?>
 
-                <a href="<?= /* @noEscape */ $b2bRegisterUrl ?>" class="b2b-login-option b2b-primary">
-                    <span class="b2b-login-option-title"><?= $escaper->escapeHtml(__('Cadastro Empresarial (B2B)')) ?></span>
-                    <span class="b2b-login-option-desc"><?= $escaper->escapeHtml($isStrictB2B ? __('Para empresas, oficinas e revendas com CNPJ e condições especiais.') : __('Revendedores e empresas - descontos especiais!')) ?></span>
-                </a>
+                    <a href="<?= /* @noEscape */ $b2bRegisterUrl ?>" class="b2b-login-option b2b-primary">
+                        <span class="b2b-login-option-title"><?= $escaper->escapeHtml(__('Cadastro Empresarial (B2B)')) ?></span>
+                        <span class="b2b-login-option-desc"><?= $escaper->escapeHtml($isStrictB2B ? __('Para empresas, oficinas e revendas com CNPJ e condições especiais.') : __('Revendedores e empresas - descontos especiais!')) ?></span>
+                    </a>
+                </div>
             </div>
-
-            <div class="b2b-login-already">
-                <?= $escaper->escapeHtml(__('Já tem conta?')) ?> <a href="<?= $loginUrl ?>"><?= $escaper->escapeHtml(__('Fazer login')) ?></a>
-            </div>
+            <footer class="b2b-login-modal-footer">
+                <p class="b2b-login-already">
+                    <?= $escaper->escapeHtml(__('Já tem conta?')) ?>
+                    <a href="<?= $loginUrl ?>"><?= $escaper->escapeHtml(__('Fazer login')) ?></a>
+                </p>
+            </footer>
         </div>
     </div>
 </div>
@@ -85,8 +102,16 @@ $mode = $isGuest ? 'guest' : 'pending';
 <?php
 $l2cConfig = [
     'mode' => $mode,
-    'pdpButtonText' => (string) ($isGuest ? __('Entrar para Comprar') : __('Aguardando Aprovação')),
-    'listingButtonText' => (string) ($isGuest ? __('Entrar para Comprar') : __('Aguardando Aprovação')),
+    'pdpButtonText' => (string) (
+        $isGuest
+            ? __('Entrar para Comprar')
+            : ($isPending ? __('Aguardando Aprovação') : __('Consultar vendas'))
+    ),
+    'listingButtonText' => (string) (
+        $isGuest
+            ? __('Entrar para Comprar')
+            : ($isPending ? __('Aguardando Aprovação') : __('Consultar vendas'))
+    ),
 ];
 $isHomePage = $block->getRequest()
     && $block->getRequest()->getFullActionName() === 'cms_index_index';

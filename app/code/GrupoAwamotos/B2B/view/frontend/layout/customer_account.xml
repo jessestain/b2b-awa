@@ -4,6 +4,7 @@
     <head>
         <!-- §70 optimize: core (~4KB). Folhas por rota nos layouts filhos. -->
         <css src="GrupoAwamotos_B2B::css/account/pages-core.css"/>
+        <!-- pages-core-v2: SSOT terminal via b2b-pages-css.phtml (depois de late/table-stack/sales). -->
     </head>
     <body>
         <!-- BUG-CORE-2026-07-04: Magento\Framework\View\Page\Config::addBodyClass()
@@ -54,9 +55,10 @@
             <referenceBlock name="customer-account-navigation-delimiter-1" remove="true"/>
             <referenceBlock name="customer-account-navigation-delimiter-2" remove="true"/>
 
-            <!-- Links Magento duplicados (Painel B2B e Minhas Faturas já cobrem) -->
+            <!-- Links Magento duplicados (Painel B2B já cobre Minha Conta) -->
             <referenceBlock name="customer-account-navigation-account-link" remove="true"/>
             <referenceBlock name="customer-account-navigation-orders-link" remove="true"/>
+            <!-- B2B-QA-006: orders-link nativo permanece removido; o item Meus Pedidos abaixo é o canônico -->
 
             <!-- === SEÇÃO B2B (topo da sidebar) — grupos para chunking ≤4 por grupo ===
                  ATENÇÃO: Magento\Customer\Block\Account\Navigation::compare() ordena
@@ -164,11 +166,11 @@
                 </arguments>
             </block>
 
-            <!-- Minhas Faturas / Pedidos -->
+            <!-- Meus Pedidos (histórico Magento). Não rotular como Faturas: b2b/finance/index é outra tela. -->
             <block class="Magento\Customer\Block\Account\SortLink"
                    name="customer-account-navigation-b2b-invoices-link">
                 <arguments>
-                    <argument name="label" xsi:type="string" translate="true">Minhas Faturas</argument>
+                    <argument name="label" xsi:type="string" translate="true">Meus Pedidos</argument>
                     <argument name="path" xsi:type="string">sales/order/history</argument>
                     <argument name="sortOrder" xsi:type="number">290</argument>
                 </arguments>

@@ -14,9 +14,9 @@
 }
 
 .b2b-credit-page .credit-card {
-    background: var(--awa-bg-surface, #ffffff);
+    background: var(--awa-bg-surface, var(--awa-bg));
     border: 1px solid var(--awa-b2b-border);
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     padding: 20px;
     text-align: center;
 }
@@ -37,11 +37,11 @@
 }
 
 .b2b-credit-page .credit-card--used .credit-card__value {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary);
 }
 
 .b2b-credit-page .credit-card--available .credit-card__value {
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
 }
 
 .b2b-credit-page .credit-usage-bar {
@@ -58,20 +58,21 @@
 
 .b2b-credit-page .credit-usage-bar__track {
     height: 10px;
-    background: var(--awa-border, #e5e7eb);
-    border-radius: 999px;
+    background: var(--awa-border);
+    border-radius: var(--awa-radius-pill);
     overflow: hidden;
 }
 
 .b2b-credit-page .credit-usage-bar__fill {
     height: 100%;
+    width: var(--b2b-credit-width, 0%);
     background: var(--awa-primary, var(--awa-b2b-primary));
-    border-radius: 999px;
+    border-radius: var(--awa-radius-pill);
     transition: transform 0.35s ease-out;
 }
 
 .b2b-credit-page .credit-usage-bar__fill--warning {
-    background: var(--awa-primary, #b73337);
+    background: var(--awa-primary);
 }
 
 .b2b-credit-page .credit-transactions h2 {
@@ -87,56 +88,56 @@
 .b2b-credit-page .table-credit-transactions th,
 .b2b-credit-page .table-credit-transactions td {
     padding: 10px 12px;
-    border-bottom: 1px solid var(--awa-bg-muted, #f8fafc);
+    border-bottom: 1px solid var(--awa-bg-subtle);
 }
 
 .b2b-credit-page .table-credit-transactions th {
     text-align: left;
-    background: var(--awa-bg-muted, var(--awa-b2b-bg-soft, #f8fafc));
-    border-bottom: 1px solid var(--awa-border, #e5e7eb);
+    background: var(--awa-bg-subtle);
+    border-bottom: 1px solid var(--awa-border);
     font-size: 13px;
     text-transform: none;
     letter-spacing: normal;
-    color: var(--awa-text-muted, #666666);
+    color: var(--awa-text-muted);
 }
 
 .b2b-credit-page .txn-positive {
-    color: var(--awa-success, #16a34a);
+    color: var(--awa-success, var(--awa-primary-dark));
     font-weight: 600;
 }
 
 .b2b-credit-page .txn-negative {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary);
     font-weight: 600;
 }
 
 .b2b-credit-page .txn-type {
     font-size: 12px;
     padding: 4px 10px;
-    border-radius: 8px;
+    border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
     font-weight: 600;
     text-transform: none;
-    background: var(--awa-bg-muted, #f3f4f6);
+    background: var(--awa-bg-subtle);
 }
 
 .b2b-credit-page .txn-type--charge {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #ffffff);
-    color: var(--awa-primary-hover, #8e2629);
+    background: color-mix(in srgb, var(--awa-primary) 8%, var(--awa-bg));
+    color: var(--awa-primary-dark);
 }
 
 .b2b-credit-page .txn-type--refund {
-    background: color-mix(in srgb, var(--awa-success, #16a34a) 10%, #ffffff);
-    color: color-mix(in srgb, var(--awa-success, #16a34a) 85%, #000000);
+    background: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 10%, var(--awa-bg));
+    color: color-mix(in srgb, var(--awa-success, var(--awa-primary-dark)) 85%, var(--awa-text));
 }
 
 .b2b-credit-page .txn-type--adjustment {
-    background: var(--awa-warning-bg, #fef3c7);
-    color: #92400e;
+    background: var(--awa-warning-bg, var(--awa-bg-subtle));
+    color: var(--awa-warning-text, var(--awa-text-primary));
 }
 
 .b2b-credit-page .txn-type--payment {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #ffffff);
-    color: var(--awa-primary-hover, #8e2629);
+    background: color-mix(in srgb, var(--awa-primary) 8%, var(--awa-bg));
+    color: var(--awa-primary-dark);
 }
 
 @media (max-width: 767px) {
@@ -146,5 +147,11 @@
 
     .b2b-credit-page .credit-card__value {
         font-size: 22px;
+    }
+
+    .b2b-credit-page .table-wrapper {
+        overflow-x: visible;
+        border: 0;
+        background: transparent;
     }
 }
