@@ -21,6 +21,98 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) {
     --awa-container-catalog: 1280px;
 }
 
+/* R27 (revisado 2026-09-15) — nomes completos preservavam modelo/lado/rosca,
+   mas geravam linhas de grade com alturas diferentes (título sem clamp variava
+   entre 2 e 3+ linhas conforme o produto). Clamp de 2 linhas com altura fixa.
+   Ver PADRONIZACAO_LAYOUT.md A7 fatia 19. */
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index)
+  .page-wrapper .wrapper.grid.products-grid .item-product
+  :is(.product-name,.product-item-name) {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    min-height: calc(1.35em * 2) !important;
+    max-height: calc(1.35em * 2) !important;
+    height: auto !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+    text-overflow: ellipsis !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index)
+  .page-wrapper .wrapper.grid.products-grid .item-product
+  :is(.product-name a,.product-item-name a,a.product-item-link,.product-item-link) {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    min-height: calc(1.35em * 2) !important;
+    max-height: calc(1.35em * 2) !important;
+    height: auto !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+    text-overflow: ellipsis !important;
+  }
+}
+
+/* AWA visual-audit 2026-09-07 — lote 10: ações e alvos da PLP. */
+@layer awa-visual-priority {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .wrapper.grid.products-grid .item-product .b2b-login-to-see-price.price-box {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 72px !important;
+        overflow: visible !important;
+        gap: 4px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .wrapper.grid.products-grid .item-product a.b2b-login-to-see-price__message--action {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+        height: auto !important;
+        padding: 5px 4px !important;
+        overflow: visible !important;
+        white-space: normal !important;
+        text-overflow: clip !important;
+        overflow-wrap: anywhere !important;
+        -webkit-line-clamp: unset !important;
+        line-height: 1.2 !important;
+        text-align: center !important;
+        text-decoration: underline !important;
+        text-underline-offset: 2px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .filter-options-content a {
+        display: flex !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+        min-height: 44px !important;
+        height: auto !important;
+        padding-block: 8px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .products-grid .quickview-link {
+        box-sizing: border-box !important;
+        inline-size: 44px !important;
+        width: 44px !important;
+        min-width: 44px !important;
+        block-size: 44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
+    }
+}
+
 /* Container — eixo 1280px */
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper :is(.nav-breadcrumbs, #maincontent.page-main.container, .page-main.container) {
@@ -279,16 +371,19 @@ html body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-i
 
 html body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .wrapper.grid.products-grid .item-product .product-name {
-    min-height: calc(1.35em * 2) !important;
+    min-height: calc(1.35em * 3) !important;
     margin: 0 !important;
 }
 
 html body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .wrapper.grid.products-grid .item-product .product-item-link {
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 2 !important;
-    overflow: hidden !important;
+    display: block !important;
+    -webkit-box-orient: initial !important;
+    -webkit-line-clamp: unset !important;
+    line-clamp: unset !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
     font-size: 13px !important;
     font-weight: 600 !important;
     line-height: 1.35 !important;
@@ -447,6 +542,32 @@ html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearc
     padding-block: var(--awa-space-3, 12px) !important;
 }
 
+/* AWA visual-audit 2026-08-26 lote2: o lock 112/140 recortava cat-*.png 1080²
+   numa faixa ~11:1. Restaura o contrato align-grid 180–220 (attrs 1216×220).
+   !important: vence este mesmo arquivo (3× #html-body) e o density pass. */
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .awa-category-hero.awa-category-hero--has-image {
+    position: relative !important;
+    min-height: 180px !important;
+    max-height: 220px !important;
+    height: 220px !important;
+    padding-block: 16px 20px !important;
+}
+
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .awa-category-hero.awa-category-hero--has-image .awa-category-hero__bg-image {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center 35% !important;
+}
+
 html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .awa-category-hero h1.awa-category-hero__title {
     overflow: visible !important;
@@ -473,7 +594,9 @@ html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearc
     max-height: 44px !important;
     margin: 0 !important;
     box-sizing: border-box !important;
-    padding: 0 44px 0 14px !important;
+    /* AWA visual-audit 2026-08-26: ícone .mst_categorySearch_searchIcon fica à esquerda.
+       !important: vence layout-bundle input { padding }. */
+    padding: 0 14px 0 44px !important;
     border: 1px solid var(--awa-border) !important;
     border-radius: var(--awa-radius-md, 8px) !important;
     background: var(--awa-bg) !important;
@@ -488,6 +611,21 @@ html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearc
     opacity: 1 !important;
 }
 
+/* AWA visual-audit 2026-08-26: ancora o ícone à esquerda; pointer-events none
+   para o clique ir no input. !important: o Mirasvit posiciona o ícone via JS/CSS próprio. */
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .mst_categorySearch .mst_categorySearch_searchIcon {
+    position: absolute !important;
+    left: 14px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 16px !important;
+    height: 16px !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
 html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .awa-plp-b2b-gate-banner {
     margin: 0 0 var(--awa-plp-stack-gap) !important;
@@ -495,4 +633,656 @@ html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearc
     min-height: 0 !important;
     height: auto !important;
     box-sizing: border-box !important;
+}
+
+/* AWA visual-audit 2026-08-26 lote3: #modes-label-top herdava 24px/700 do
+   grupo de ícones Grade/Lista (align-grid). !important: vence esse grupo. */
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products {
+    align-items: center !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products .modes {
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products :is(.modes .modes-label, #modes-label-top) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+    min-height: 44px !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    min-width: 0 !important;
+    padding: 0 12px !important;
+    font-size: var(--awa-font-sm, 13px) !important;
+    font-weight: var(--awa-weight-semibold, 600) !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products .modes .modes-mode {
+    align-self: center !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products :is(.toolbar-sorter.sorter, .field.limiter) {
+    align-items: center !important;
+    min-height: 44px !important;
+}
+
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index):not(:has(#layered-ajax-filter-block, .block.filter))
+.page-wrapper .toolbar.toolbar-products :is(.modes .modes-label, #modes-label-top) {
+    display: none !important;
+}
+
+@media (min-width: 992px) {
+    /* Guest PLP: sidebar 280px sem filtro. !important: vence visual-fixes 280px 1fr. */
+    html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .page-main > .columns.layout.layout-2-col:not(:has(#layered-ajax-filter-block, .block.filter, .sidebar-main)) {
+        grid-template-columns: minmax(0, 1fr) !important;
+        column-gap: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .page-main > .columns.layout.layout-2-col:not(:has(#layered-ajax-filter-block, .block.filter, .sidebar-main))
+    > :is([class*="col-sm-3"], [class*="col-lg-2"]) {
+        display: none !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* AWA visual-audit 2026-08-27 lote5: busca mobile mostrava .field.limiter
+   (select "12" sem rótulo, +44px) enquanto a PLP já esconde o mesmo controle.
+   Causa: display:flex tardio vence super-global .limiter{display:none} e o vfix.
+   !important: vence align-grid / design-system na cascata da busca. */
+@media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .toolbar.toolbar-products
+    .field.limiter {
+        display: none !important;
+    }
+}
+
+/* AWA visual-audit 2026-08-27 lote5: "Você quis dizer" nativo Magento é
+   <dl class="block">, não .message.notice (CSS morto no defer-global). */
+html body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index
+.page-wrapper
+.search.results
+dl.block:has(> dt.title) {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    margin: 0 0 var(--awa-plp-stack-gap, var(--awa-space-3, 12px)) !important;
+    padding: 8px 12px !important;
+    border: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas)) !important;
+    border-radius: 8px !important;
+    background: var(--awa-bg-subtle, color-mix(in srgb, CanvasText 4%, Canvas)) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
+    line-height: 1.35 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index
+.page-wrapper
+.search.results
+dl.block:has(> dt.title)
+> dt.title {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    font-weight: 600 !important;
+    color: var(--awa-text, CanvasText) !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index
+.page-wrapper
+.search.results
+dl.block:has(> dt.title)
+> dd.item {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index
+.page-wrapper
+.search.results
+dl.block:has(> dt.title)
+> dd.item
+a {
+    color: var(--awa-red, var(--awa-primary)) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index
+.page-wrapper
+.search.results
+dl.block:has(> dt.title)
+.count {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--awa-text-muted, color-mix(in srgb, CanvasText 55%, Canvas)) !important;
+}
+
+/* AWA visual-audit 2026-08-27 lote-hero-plp-cat */
+@media (max-width: 767px) {
+  /* Bug 1 FOUC: só o 1º slide do hero mobile até o Swiper iniciar.
+     Selector inclui .wrapper_slider.visible-xs .awa-hero-swiper (o lock antigo
+     não amarrava o slider mobile e o 2º slide pintava como fundo). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper:not(.swiper-initialized):not(.awa-hero-swiper-ready)
+    .swiper-slide:not(:first-child) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    max-width: 0 !important;
+    position: absolute !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper:not(.swiper-initialized):not(.awa-hero-swiper-ready)
+    .swiper-slide:first-child {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    position: relative !important;
+  }
+
+  /* Bug 1 overlay: slider_005 (desktop+mobile) já traz QUALIDADE/INOVAÇÃO/TECNOLOGIA.
+     Esconde título+desc injetados; mantém o CTA vermelho. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    :is(.slide-title, .slide-desc, h2.slide-title, p.slide-desc) {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    .text-banner {
+    background: transparent !important;
+    background-image: none !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider
+    .swiper-slide:has(img[src*="slider_005"])
+    :is(.awa-hero-slide__cta, a.action.primary) {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    font-size: inherit !important;
+  }
+
+  /* Bug 3: carrossel de categorias — largura fluida + 2 linhas no mobile */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    :is(#awa-cat-carousel .awa-category-carousel__item, #awa-cat-carousel > .awa-category-carousel__item, .top-home-content--category-carousel .awa-category-carousel__item) {
+    flex: 0 0 auto !important;
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+    flex-basis: max(42vw, 10.5rem) !important;
+    width: max(42vw, 10.5rem) !important;
+    min-width: 42vw !important;
+    max-width: min(56vw, 12.5rem) !important;
+    box-sizing: border-box !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    :is(.awa-category-carousel__label, .awa-category-carousel__count) {
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: unset !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    max-width: 100% !important;
+  }
+
+  /* Bug 2: banner B2B da PLP — CTAs em coluna, sem clip */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__actions {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline-start: 0 !important;
+    margin-inline-end: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action--primary,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper
+    .awa-plp-b2b-gate-banner__action--secondary {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+    white-space: normal !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* ==========================================================================
+   AWA visual lote9 2026-08-27 — PLP hero cover + layout lock
+   Marker: awa-lote9-20260827
+   ========================================================================== */
+
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .awa-category-hero.awa-category-hero--has-image .awa-category-hero__bg-image {
+    object-fit: cover !important;
+    object-position: center 30% !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    transform: none !important;
+    image-rendering: auto !important;
+    image-rendering: high-quality !important;
+}
+
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .awa-category-hero {
+    --awa-primary: #b73337;
+}
+
+html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper :is(
+    .awa-plp-b2b-gate-banner__action,
+    .action.tocart,
+    .product-item-link,
+    a.action
+) {
+    transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper :is(
+        .awa-plp-b2b-gate-banner__action,
+        .action.tocart,
+        .product-item-link,
+        a.action
+    ) {
+        transition: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+    }
+}
+
+/* ==========================================================================
+   AWA visual audit 2026-09-08 — lote 15 / PLP mobile context + controls
+   Marker: awa-plp-mobile-r25-20260908
+   ========================================================================== */
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+.page-wrapper .toolbar.toolbar-products:not(.toolbar-products--bottom-slim) .field.limiter > .limiter-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+@media (max-width: 767px) {
+    /* Keep the existing B2B gate useful on small screens. A late legacy rule
+       hides every paragraph in this component, so the CTAs lose their context. */
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .awa-plp-b2b-gate-banner__title,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .awa-plp-b2b-gate-banner__desc {
+        position: static !important;
+        display: block !important;
+        visibility: visible !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        clip-path: none !important;
+        white-space: normal !important;
+        text-overflow: clip !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .awa-plp-b2b-gate-banner__title {
+        color: var(--awa-text, #1a1a1a) !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        line-height: 1.3 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .awa-plp-b2b-gate-banner__desc {
+        color: var(--awa-text-muted, #666) !important;
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        line-height: 1.45 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .awa-plp-b2b-gate-banner__actions {
+        margin-top: 4px !important;
+    }
+
+    /* Restore the existing limiter as a labelled, full-width toolbar row. */
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .toolbar.toolbar-products:not(.toolbar-products--bottom-slim) .field.limiter {
+        display: flex !important;
+        visibility: visible !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        grid-column: 1 / -1 !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        min-height: 44px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 8px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .toolbar.toolbar-products:not(.toolbar-products--bottom-slim) .field.limiter > .limiter-label {
+        position: static !important;
+        display: inline-flex !important;
+        visibility: visible !important;
+        align-items: center !important;
+        flex: 1 1 auto !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 44px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        clip: auto !important;
+        clip-path: none !important;
+        overflow: visible !important;
+        color: var(--awa-text-muted, #666) !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        letter-spacing: .02em !important;
+        text-transform: uppercase !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .toolbar.toolbar-products:not(.toolbar-products--bottom-slim) .field.limiter > .control {
+        display: flex !important;
+        flex: 0 0 112px !important;
+        width: 112px !important;
+        max-width: 112px !important;
+        margin: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper .toolbar.toolbar-products:not(.toolbar-products--bottom-slim) .limiter-options {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Neutralise Bootstrap's negative row and content-box padding around the
+       bottom pager; this was the 45 px clipped area in the mobile main column. */
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products > .row:has(.sort-pagi-bar-bottom) {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin-inline: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products > .row:has(.sort-pagi-bar-bottom) > [class*="col-"] {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        padding-inline: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products .sort-pagi-bar-bottom,
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products .toolbar-products--bottom-slim,
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products .toolbar-products--bottom-slim > .center,
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products .toolbar-products--bottom-slim :is(.pages, .pages-items, .toolbar-amount) {
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
+    .page-wrapper #layered-ajax-list-products .toolbar-products--bottom-slim .pages-items {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+}
+
+/* ==========================================================================
+   Search clarity pass r26 — AWA-065/066/068
+   The inline critical bundle uses 24 repeated body IDs. The deliberately
+   stronger route scope below keeps this targeted search fix authoritative.
+   ========================================================================== */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+.columns > [class*="col-"]:not(.col-main) > .mst-search-in__wrapper .mst-search-in__item {
+    align-items: center !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+    min-height: 44px !important;
+    white-space: normal !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+.columns > [class*="col-"]:not(.col-main) > .mst-search-in__wrapper .mst-search-in__item .name {
+    display: block !important;
+    min-width: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+    -webkit-box-orient: initial !important;
+    -webkit-line-clamp: unset !important;
+}
+
+@media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper .breadcrumbs {
+        display: none !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper .col-main > p.message.notice {
+        display: block !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        line-height: 1.5 !important;
+        overflow-wrap: anywhere !important;
+        text-align: left !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > p.message.notice > strong {
+        display: inline !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > p.message.notice > strong > a {
+        display: inline !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        color: #b73337 !important;
+        font: inherit !important;
+        text-decoration: underline !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper .col-main > .mst-search-in__wrapper {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        margin: 12px 0 !important;
+        padding: 0 !important;
+        gap: 8px !important;
+        overflow: visible !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > .mst-search-in__wrapper > .mst-search-in__title {
+        grid-column: 1 / -1 !important;
+        min-width: 0 !important;
+        min-height: 24px !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > .mst-search-in__wrapper > .mst-search-in__item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 44px !important;
+        margin: 0 !important;
+        padding: 8px 10px !important;
+        gap: 6px !important;
+        overflow: hidden !important;
+        white-space: normal !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > .mst-search-in__wrapper > .mst-search-in__item .name {
+        display: block !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        overflow-wrap: anywhere !important;
+        text-overflow: clip !important;
+        white-space: normal !important;
+        -webkit-box-orient: initial !important;
+        -webkit-line-clamp: unset !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalogsearch-result-index .page-wrapper
+    .col-main > .mst-search-in__wrapper > .mst-search-in__item .count {
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+    }
 }

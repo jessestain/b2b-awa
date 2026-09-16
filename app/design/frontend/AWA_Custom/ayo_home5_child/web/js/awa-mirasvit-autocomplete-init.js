@@ -136,7 +136,7 @@
             var loadModules = function () {
                 w.require([
                     'jquery',
-                    'Mirasvit_SearchAutocomplete/js/autocomplete',
+                    'Mirasvit_SearchAutocomplete/js/autocomplete.popular-r9',
                     'Mirasvit_SearchAutocomplete/js/typeahead'
                 ], function ($, autocomplete, typeahead) {
                     $(d).ready(function () {
@@ -165,6 +165,9 @@
                                 new typeahead($searchInput).init(cfg.config);
                             }
                             new autocomplete($searchInput).init(cfg.config);
+                            if (d.activeElement === searchInput) {
+                                $searchInput.trigger('focus');
+                            }
                             replayPendingQuery($searchInput);
                         });
                     });
@@ -215,6 +218,12 @@
                 bootstrap();
             }
         }, { capture: true });
+
+        var alreadyFocused = d.activeElement;
+        if (alreadyFocused && typeof alreadyFocused.closest === 'function' &&
+            alreadyFocused.closest('#search, #mobile_search, .minisearch, #search_mini_form, .block-search')) {
+            bootstrap();
+        }
 
         /* Intent-only: evita require/jQuery no load (home + carrinho/checkout) */
     } else {

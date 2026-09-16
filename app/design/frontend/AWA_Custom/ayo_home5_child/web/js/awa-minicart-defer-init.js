@@ -148,10 +148,6 @@
     const MINICART_UPDATE_MIN_INTERVAL_MS = 120;
     let minicartUpdateQueued = false;
     let minicartUpdateLastRunTs = 0;
-    let minicartDebugScheduleCount = 0;
-    let minicartDebugRunCount = 0;
-    let minicartDebugSlowRuns = 0;
-
     function getHeaderMinicartShell() {
         return document.querySelector(HEADER_MINICART_SHELL_SELECTOR);
     }
@@ -257,13 +253,6 @@
             return;
         }
 
-        minicartDebugScheduleCount += 1;
-        if (minicartDebugScheduleCount === 1 || minicartDebugScheduleCount % 200 === 0) {
-            // #region agent log
-            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState',message:'queue schedule sample',data:{scheduleCount:minicartDebugScheduleCount,delay:delay||0,queued:minicartUpdateQueued},timestamp:Date.now()})}).catch(()=>{});
-            // #endregion
-        }
-
         if (typeof delay === 'number' && delay > 0) {
             window.setTimeout(function () {
                 queueUpdateExpandedState();
@@ -284,12 +273,6 @@
                 window.requestAnimationFrame(function () {
                     minicartUpdateQueued = false;
                     minicartUpdateLastRunTs = Date.now();
-                    minicartDebugRunCount += 1;
-                    if (minicartDebugRunCount === 1 || minicartDebugRunCount % 100 === 0) {
-                        // #region agent log
-                        fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState:raf-waited',message:'queue run sample',data:{runCount:minicartDebugRunCount,wait:wait},timestamp:Date.now()})}).catch(()=>{});
-                        // #endregion
-                    }
                     updateExpandedState();
                 });
             }, wait);
@@ -299,12 +282,6 @@
         window.requestAnimationFrame(function () {
             minicartUpdateQueued = false;
             minicartUpdateLastRunTs = Date.now();
-            minicartDebugRunCount += 1;
-            if (minicartDebugRunCount === 1 || minicartDebugRunCount % 100 === 0) {
-                // #region agent log
-                fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H9',location:'awa-minicart-defer-init.js:queueUpdateExpandedState:raf-now',message:'queue run sample',data:{runCount:minicartDebugRunCount,wait:0},timestamp:Date.now()})}).catch(()=>{});
-                // #endregion
-            }
             updateExpandedState();
         });
     }
@@ -1141,13 +1118,6 @@
         syncBodyScrollLock(expanded);
         syncFloatingCtas(expanded || panelVisible);
 
-        let updateDuration = Date.now() - updateStartedAt;
-        if (updateDuration >= 40 && minicartDebugSlowRuns < 6) {
-            minicartDebugSlowRuns += 1;
-            // #region agent log
-            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H11',location:'awa-minicart-defer-init.js:updateExpandedState',message:'slow updateExpandedState',data:{durationMs:updateDuration,expanded:expanded,panelVisible:panelVisible,hasRuntimeTrigger:hasRuntimeTrigger},timestamp:Date.now()})}).catch(()=>{});
-            // #endregion
-        }
         } finally {
             window.__awaMinicartStateSyncing = false;
         }
@@ -1299,9 +1269,6 @@
                 return;
             }
             window.__awaMinicartCartPageBooted = true;
-            // #region agent log
-            fetch('/awa-debug-50aadf.php',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'50aadf'},body:JSON.stringify({sessionId:'50aadf',runId:'post-fix-minicart-throttle',hypothesisId:'H10',location:'awa-minicart-defer-init.js:boot',message:'cart page short-circuit active',data:{pathname:(window.location&&window.location.pathname)||'',guardsOnlyMode:guardsOnlyMode},timestamp:Date.now()})}).catch(()=>{});
-            // #endregion
             bindTriggerGuard();
             bindShellFallbackNavigation();
             bindEscapeClose();

@@ -63,6 +63,298 @@
   }
 }
 
+/* P1 home mobile r14 (2026-09-05): devolve fluxo natural ao cabecalho de
+   categorias. Locks anteriores fixavam secao/container em 220px e faziam
+   titulo, subtitulo, setas e CTA ocuparem a mesma area. */
+@layer awa-fixes {
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .top-home-content--category-carousel,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .top-home-content--category-carousel > .container {
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      min-block-size: 0 !important;
+      max-height: none !important;
+      max-block-size: none !important;
+      overflow: visible !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .top-home-content--category-carousel > .container {
+      grid-template-rows: auto !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .top-home-content--category-carousel header.awa-category-carousel__header.awa-section-header {
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
+      gap: 4px !important;
+      width: 100% !important;
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      min-block-size: 0 !important;
+      max-height: none !important;
+      max-block-size: none !important;
+      margin: 0 0 12px !important;
+      overflow: visible !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-section-header__left {
+      display: block !important;
+      flex: none !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      min-block-size: 0 !important;
+      max-height: none !important;
+      max-block-size: none !important;
+      overflow: visible !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-section-header__title,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-section-header__subtitle {
+      box-sizing: border-box !important;
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      min-block-size: 0 !important;
+      max-height: none !important;
+      max-block-size: none !important;
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-category-carousel__actions {
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex: none !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      width: 100% !important;
+      height: 44px !important;
+      block-size: 44px !important;
+      min-height: 44px !important;
+      min-block-size: 44px !important;
+      white-space: nowrap !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-category-carousel__nav,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-category-carousel__cta-link {
+      position: static !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+  }
+}
+
+/* P1 home mobile r15 (2026-09-05): sem espaco reservado quando a paginacao
+   do carrossel de categorias nao recebeu nenhum marcador. */
+@layer awa-fixes {
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .top-home-content--category-carousel .awa-category-carousel__dots:empty {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+}
+
+/* P1 home mobile r16 (2026-09-05): banners promocionais legiveis em reel
+   horizontal, reutilizando as quatro artes e os links existentes. */
+@layer awa-fixes {
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .awa-product-promo-banners {
+      margin-bottom: 16px !important;
+      margin-block-end: 16px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .awa-product-promo-banners .awa-product-promo-banners__grid {
+      box-sizing: border-box !important;
+      display: grid !important;
+      grid-auto-flow: column !important;
+      grid-template-columns: none !important;
+      grid-auto-columns: min(100%, 280px) !important;
+      align-items: stretch !important;
+      gap: 12px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      scroll-snap-type: x mandatory !important;
+      scroll-padding-inline: 0 !important;
+      overscroll-behavior-x: contain !important;
+      padding: 0 0 4px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .awa-product-promo-banners .awa-product-promo-banners__item {
+      box-sizing: border-box !important;
+      display: block !important;
+      flex: none !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: auto !important;
+      block-size: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      aspect-ratio: 331 / 249 !important;
+      overflow: hidden !important;
+      scroll-snap-align: start !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .awa-product-promo-banners .awa-product-promo-banners__item picture,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-index-index
+      .page-wrapper .content-top-home .awa-product-promo-banners .awa-product-promo-banners__item img {
+      display: block !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: none !important;
+      object-fit: contain !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PLP mobile filter dialog — modal surface, usable close action and backdrop.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  html body#html-body[data-awa-filter-dialog-open="true"] {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+  }
+
+  html body#html-body .awa-filter-drawer-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 1299 !important;
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: rgb(15 23 42 / 46%) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html body#html-body .awa-filter-drawer-overlay.is-active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  html body#html-body.awa-plp-filters-expanded #layered-ajax-filter-block[data-awa-filter-dialog="open"],
+  html body#html-body.awa-plp-filters-expanded .sidebar-main > .block.filter[data-awa-filter-dialog="open"] {
+    position: fixed !important;
+    inset-block: 0 !important;
+    inset-inline-start: 0 !important;
+    inset-inline-end: auto !important;
+    z-index: 1300 !important;
+    display: block !important;
+    width: min(86vw, 360px) !important;
+    min-width: 0 !important;
+    max-width: min(86vw, 360px) !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 12px 12px 0 !important;
+    background: #fff !important;
+    box-shadow: 12px 0 32px rgb(15 23 42 / 20%) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body.awa-plp-filters-expanded #layered-ajax-filter-block[data-awa-filter-dialog="open"] .block-title.filter-title,
+  html body#html-body.awa-plp-filters-expanded .sidebar-main > .block.filter[data-awa-filter-dialog="open"] .block-title.filter-title {
+    position: sticky !important;
+    inset-block-start: 0 !important;
+    z-index: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 64px !important;
+    margin: 0 !important;
+    padding: 10px 12px 10px 20px !important;
+    border-block-end: 1px solid #e5e7eb !important;
+    background: #fff !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body #layered-ajax-filter-block .awa-filter-dialog-close,
+  html body#html-body .sidebar-main > .block.filter .awa-filter-dialog-close {
+    display: none !important;
+  }
+
+  html body#html-body.awa-plp-filters-expanded #layered-ajax-filter-block[data-awa-filter-dialog="open"] .awa-filter-dialog-close,
+  html body#html-body.awa-plp-filters-expanded .sidebar-main > .block.filter[data-awa-filter-dialog="open"] .awa-filter-dialog-close {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #334155 !important;
+    box-shadow: 0 2px 8px rgb(15 23 42 / 10%) !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+  }
+
+  html body#html-body.awa-plp-filters-expanded #layered-ajax-filter-block[data-awa-filter-dialog="open"] .awa-filter-dialog-close:focus-visible,
+  html body#html-body.awa-plp-filters-expanded .sidebar-main > .block.filter[data-awa-filter-dialog="open"] .awa-filter-dialog-close:focus-visible {
+    outline: 2px solid #b73337 !important;
+    outline-offset: 2px !important;
+  }
+}
+
 /* Placeholder CLS: hide unless body.awa-header-is-sticky (cart/PLP não herdam home guard) */
 #awa-header-cls-placeholder {
   display: none !important;
@@ -947,11 +1239,17 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 }
 
 
-/* SEÇÃO 51.29 — PDP guest price visible; hide empty social-proof skeleton; related imgs visible */
+/* SEÇÃO 51.29 — PDP guest price visible; hierarquia B2B sem CTA concorrente;
+   hide empty social-proof skeleton; related imgs visible */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price {
+  align-items: flex-start !important;
+  text-align: left !important;
+}
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price a:not(.b2b-register-cta) {
   display: inline-flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  align-self: flex-start !important;
+  justify-content: flex-start !important;
   visibility: visible !important;
   opacity: 1 !important;
   clip: auto !important;
@@ -960,18 +1258,36 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   max-width: 100% !important;
   min-height: 44px !important;
   height: auto !important;
-  padding: 10px 20px !important;
-  margin: 0 0 8px !important;
-  background: #b73337 !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
+  padding: 10px 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  color: var(--awa-primary, #b73337) !important;
+  -webkit-text-fill-color: var(--awa-primary, #b73337) !important;
   border: 0 !important;
-  border-radius: 6px !important;
+  border-radius: 0 !important;
   font-size: 14px !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   line-height: 1.2 !important;
-  text-decoration: none !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
   white-space: nowrap !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price .b2b-register-cta {
+  align-self: flex-start !important;
+  justify-content: flex-start !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 44px !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 10px 0 !important;
+  background: transparent !important;
+  color: var(--awa-primary, #b73337) !important;
+  -webkit-text-fill-color: var(--awa-primary, #b73337) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
 }
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .social-proof-container:empty {
   display: none !important;
@@ -1529,7 +1845,8 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .opc-block-summary .details-qty,
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.rokanthemes-onepagecheckout,.onepagecheckout-index-index,.checkout-index-index) .page-wrapper .opc-block-summary .qty-button {
   display: inline-flex !important;
-  flex-wrap: nowrap !important;
+  /* Preserve the existing cascade lock, but allow controls to fit narrow summaries. */
+  flex-wrap: wrap !important;
   align-items: center !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
@@ -1646,4 +1963,535 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   min-height: 44px !important;
   overflow: visible !important;
   white-space: nowrap !important;
+}
+/* SECAO 51.61 — header search vertical center (2026-09-04)
+   Evidence PLP 1920: logo/account/minicart cy~34; search form cy~22 (delta 12px).
+   Cause: .awa-header-search-col is 68px; visual-audit sets .block-search{display:block}
+   and form#search_mini_form{height:44px;margin:0} so the control sticks to the cell top.
+   Home already centers; PLP loses it after this sheet. Flex-center the 44px control.
+   Also lock input+button to 44px border-box (home measured 42px). Tokens only. */
+@media (min-width: 992px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col :is(.block-search, .block-content),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col :is(.block-search, .block-content) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form {
+  margin-block: auto !important;
+  box-sizing: border-box !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form input#search,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form input#search,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form :is(button.action.search, .action.search),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form :is(button.action.search, .action.search) {
+  box-sizing: border-box !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+}
+}
+
+/* AWA 51.61 — Remove obsolete CB 300 white sliver mask.
+   The current banner asset already contains the intentional gray thumbnail well;
+   the legacy pseudo-element covered only part of it and rendered as a white block. */
+html body#html-body.cms-index-index
+  .page-wrapper
+  .top-home-content--above-fold
+  .wrapper_slider.hidden-xs
+  :is(.swiper-slide:first-child, .banner_item:first-child)
+  .banner_item_bg::after {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* AWA 51.64 — Mobile navigation drawer stacking and internal flow.
+   The Magento body overlay was painted above the header stacking context and
+   the drawer shell used a horizontal flex row, hiding the actual navigation. */
+@media (max-width: 991px) {
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open)::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) > .awa-mobile-drawer-overlay.is-active {
+    z-index: 199 !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header {
+    z-index: 200 !important;
+    pointer-events: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header > #header,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header .header-wrapper-sticky > .awa-main-header {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header .header-wrapper-sticky > .awa-nav-bar,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header .awa-header-categories,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header .awa-nav-categories,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header .sections.nav-sections,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation {
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open > .awa-menu-drawer-header {
+    position: relative !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 44px !important;
+    margin: 0 0 12px !important;
+    padding: 0 4px 12px !important;
+    border-bottom: 1px solid var(--awa-border, #e5e5e5) !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open > .awa-menu-drawer-header .awa-mobile-drawer-close {
+    position: static !important;
+    flex: 0 0 44px !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open > .section-item-content {
+    position: relative !important;
+    inset: auto !important;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  /* A regra terminal do menu usa uma cadeia de IDs repetidos. Este seletor
+     deliberadamente a supera até a consolidação definitiva da cascata. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) > button.awa-mobile-drawer-overlay.is-active {
+    z-index: 199 !important;
+    clip-path: inset(0 0 0 min(86vw, 360px)) !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) #awa-ai-chat-root {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper nav.fixed-bottom[aria-label="Navegação Móvel"] {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    clip-path: inset(100%) !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ~ #awa-primary-navigation,
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-primary-navigation:not(.is-awa-mobile-open) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    clip-path: inset(100%) !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open .navigation.verticalmenu {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open .navigation.verticalmenu > .title-category-dropdown {
+    display: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open .navigation.verticalmenu > ul.togge-menu {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > a.level-top {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding-inline-end: 52px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* O link ocupa a linha inteira. O expansor precisa ficar acima dele para o
+     toque não navegar para a categoria e precisa de um indicador visível. */
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > button.open-children-toggle.navigation__toggle {
+    position: absolute !important;
+    inset-block-start: 2px !important;
+    inset-inline-end: 4px !important;
+    z-index: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: transparent !important;
+    color: #475569 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > button.open-children-toggle.navigation__toggle::before {
+    content: "" !important;
+    display: block !important;
+    width: 9px !important;
+    height: 9px !important;
+    border: 0 !important;
+    border-inline-end: 2px solid currentColor !important;
+    border-block-end: 2px solid currentColor !important;
+    transform: rotate(45deg) translate(-2px, -2px) !important;
+    transform-origin: 50% 50% !important;
+    transition: transform 160ms ease !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > button.open-children-toggle.navigation__toggle[aria-expanded="true"]::before {
+    transform: rotate(225deg) translate(-2px, -2px) !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > button.open-children-toggle.navigation__toggle:focus-visible {
+    outline: 2px solid #b73337 !important;
+    outline-offset: -2px !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0 > .submenu {
+    position: static !important;
+    inset: auto !important;
+    display: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.awa-menu-drawer-open, .nav-open) .page-wrapper .awa-site-header #awa-category-navigation.is-awa-mobile-open ul.togge-menu > li.level0:has(> .open-children-toggle[aria-expanded="true"]) > .submenu {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+/* Mobile header: keep the dedicated 44px account control and remove the
+   duplicated desktop icon that occupied the cart hit area. */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"]
+    .awa-header-account-prompt > a.awa-header-account-prompt__icon[data-awa-icon-link="true"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip-path: inset(100%) !important;
+  }
+}
+
+/* AWA P1 home mobile r12 — keep the existing search in one row and show the
+   full intrinsic hero artwork. The rules join the site's first-priority layer
+   because older critical bundles also contain important mobile locks. */
+@layer awa-fixes {
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) 44px !important;
+      grid-template-areas: "field submit" !important;
+      align-items: stretch !important;
+      width: 100% !important;
+      height: 44px !important;
+      min-height: 44px !important;
+      max-height: 44px !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form :is(.field.search, .field.search .control, input#search, .actions, button.action.search) {
+      height: 42px !important;
+      min-height: 42px !important;
+      max-height: 42px !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form .field.search {
+      display: block !important;
+      grid-area: field !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form .field.search > .label {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form .control {
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form input#search {
+      display: block !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      line-height: 1.35 !important;
+      padding: 0 12px !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form .actions {
+      display: flex !important;
+      grid-area: submit !important;
+      position: static !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      max-width: 44px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form button.action.search {
+      display: flex !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      max-width: 44px !important;
+      padding: 0 !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold {
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .banner-slider.banner-slider2 {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      border-radius: 12px !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs :is(.awa-hero-swiper, .swiper-wrapper, .swiper-slide:first-child, .banner_item:first-child, .banner_item_bg) {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs .banner_item_bg > a {
+      position: static !important;
+      inset: auto !important;
+    }
+
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs .banner_item_bg :is(a, picture, img) {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      object-fit: contain !important;
+      object-position: center !important;
+    }
+  }
+}
+
+/* Keep the established desktop inset after moving sizing out of inline markup. */
+@layer awa-fixes {
+  @media (min-width: 768px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home-content--above-fold > .banner-slider.banner-slider2 {
+      box-sizing: border-box !important;
+      width: calc(100% - 48px) !important;
+      max-width: calc(100% - 48px) !important;
+      margin-inline: 24px !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+    }
+  }
+}
+
+/* P2-CART-CURRENT-LINK 2026-09-08: a pagina do carrinho desativa o flyout.
+   Nesta rota, o mesmo icone vira link normal e nao anuncia dialog inexistente. */
+html body#html-body.checkout-cart-index .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper.awa-cart-page-link-wrapper {
+  align-items: center !important;
+  display: flex !important;
+  flex: 0 0 44px !important;
+  height: 44px !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  max-height: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
+  overflow: visible !important;
+  position: relative !important;
+  width: 44px !important;
+}
+
+html body#html-body.checkout-cart-index .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper > a.awa-cart-page-link {
+  align-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  color: var(--awa-primary, #b73337) !important;
+  display: flex !important;
+  height: 44px !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  max-height: 44px !important;
+  max-width: 44px !important;
+  min-height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+  position: relative !important;
+  text-decoration: none !important;
+  width: 44px !important;
+}
+
+html body#html-body.checkout-cart-index .page-wrapper .awa-site-header .awa-cart-page-link .awa-minicart-icon {
+  display: block !important;
+  height: 20px !important;
+  width: 20px !important;
+}
+
+html body#html-body.checkout-cart-index .page-wrapper .awa-site-header .awa-cart-page-link .counter.qty {
+  display: none !important;
+}
+
+/* Mobile navigation owns its icon mappings. Cart/checkout omit icomoon.css;
+   reuse the installed font without relying on the optional vendor bundle. */
+@font-face {
+  font-family: AwaMobileNavIcons;
+  src: url('../fonts/icomoon.woff') format('woff');
+  font-style: normal;
+  font-weight: normal;
+  font-display: block;
+}
+
+@media (max-width: 767px) {
+  body#html-body nav[data-awa-mobile-nav] .icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-inline: auto;
+    flex: 0 0 20px;
+  }
+
+  body#html-body nav[data-awa-mobile-nav] .icon::before {
+    /* Overrides generic icon/font resets in the page-specific bundles. */
+    font-family: AwaMobileNavIcons !important;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 20px;
+    display: block;
+    text-align: center;
+  }
+
+  body#html-body nav[data-awa-mobile-nav] .icon-home::before { content: '\e97c'; }
+  body#html-body nav[data-awa-mobile-nav] .icon-menu::before { content: '\e994'; }
+  body#html-body nav[data-awa-mobile-nav] .icon-users::before { content: '\e9ff'; }
+  body#html-body nav[data-awa-mobile-nav] .icon-shopping-cart::before { content: '\e9d1'; }
 }

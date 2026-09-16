@@ -693,45 +693,61 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-step-indicator {
     color: var(--awa-text-secondary) !important;
 }
 
+body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-form-status {
+    display: none !important;
+}
+
+body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-form-status.has-message:not(:empty) {
+    display: block !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    border: 1px solid rgb(183 51 55 / 35%) !important;
+    border-radius: var(--b2b-auth-radius-control, 8px) !important;
+    background: rgb(183 51 55 / 7%) !important;
+    color: var(--awa-primary-dark, #8f2529) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+}
+
+body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progress-step.is-locked,
+body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progress-step[aria-disabled="true"] {
+    cursor: not-allowed !important;
+    color: var(--awa-text-secondary, #667085) !important;
+    background: var(--awa-bg-soft, #f8fafc) !important;
+    border-color: var(--awa-border-subtle, #e5e7eb) !important;
+}
+
 /* Mobile: labels do stepper legíveis (vence font-size:0 de bundles async) */
 @media (max-width: 575px) {
     body#html-body.b2b-auth-shell.b2b-register-index
         #b2b-register-shell
         .b2b-register-progress
         .progress-step {
-        font-size: 12px !important;
-        gap: 6px !important;
+        font-size: 10px !important;
+        gap: 2px !important;
         min-width: 0 !important;
         overflow: hidden !important;
+        padding-inline: 2px !important;
     }
 
     body#html-body.b2b-auth-shell.b2b-register-index
         #b2b-register-shell
         .b2b-register-progress
         .progress-step__label {
-        font-size: 11px !important;
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+        clip: auto !important;
+        clip-path: none !important;
+        border: 0 !important;
+        font-size: 10px !important;
         line-height: 1.2 !important;
         white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
         max-width: 100% !important;
-    }
-
-    body#html-body.b2b-auth-shell.b2b-register-index
-        #b2b-register-shell
-        .b2b-register-progress
-        .progress-step:not(.is-active)
-        .progress-step__label {
-        /* inactive: número só — label na ativa via grid :has */
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        padding: 0 !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        clip: rect(0, 0, 0, 0) !important;
-        white-space: nowrap !important;
-        border: 0 !important;
     }
 }
 
@@ -1237,4 +1253,3 @@ html body.b2b-auth-shell :is(#b2b-register-page-shell, .b2b-login-page, .b2b-reg
   padding-bottom: 200px !important;
   box-sizing: border-box !important;
 }
-

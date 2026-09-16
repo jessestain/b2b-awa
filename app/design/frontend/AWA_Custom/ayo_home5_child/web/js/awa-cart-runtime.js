@@ -54,10 +54,10 @@ define([
             }
         });
 
-        /* Reaplica stop se o footer já estiver na viewport (neutralize limpa o inline). */
-        if (document.body.classList.contains('awa-cart-footer-inview')) {
-            applyCartSummaryFooterStop(true);
-        }
+        /* Sempre reaplicar: se só inview=true, o clamp 789px volta no desktop. */
+        applyCartSummaryFooterStop(
+            !!(document.body && document.body.classList.contains('awa-cart-footer-inview'))
+        );
     }
 
     /**
@@ -86,6 +86,20 @@ define([
                 el.style.setProperty('overflow-y', 'visible', 'important');
                 el.style.setProperty('z-index', 'auto', 'important');
                 el.classList.remove('_sticky');
+            } else if (window.matchMedia('(min-width: 992px)').matches) {
+                /* AQ: max-height viewport + overflow auto (H29/inline) cortava
+                   #block-shipping e cupom. CDP 1286: 777 vs scrollH 1126.
+                   Soltar o clamp: o grid cresce e o footer desce. */
+                el.style.removeProperty('position');
+                el.style.removeProperty('top');
+                el.style.removeProperty('bottom');
+                el.style.removeProperty('left');
+                el.style.removeProperty('z-index');
+                el.style.setProperty('max-height', 'none', 'important');
+                el.style.setProperty('height', 'auto', 'important');
+                el.style.setProperty('overflow', 'visible', 'important');
+                el.style.setProperty('overflow-x', 'visible', 'important');
+                el.style.setProperty('overflow-y', 'visible', 'important');
             } else {
                 el.style.removeProperty('position');
                 el.style.removeProperty('top');
@@ -94,7 +108,6 @@ define([
                 el.style.removeProperty('max-height');
                 el.style.removeProperty('height');
                 el.style.removeProperty('z-index');
-                /* Vence align-grid overflow:visible — sem isso o frete vaza no sticky. */
                 el.style.setProperty('overflow-x', 'hidden', 'important');
                 el.style.setProperty('overflow-y', 'auto', 'important');
                 el.style.setProperty('overflow', 'hidden auto', 'important');

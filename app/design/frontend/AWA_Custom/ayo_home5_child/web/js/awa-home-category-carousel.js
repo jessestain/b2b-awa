@@ -20,6 +20,7 @@ define([], function () {
 
     return function (config, track) {
         let root;
+        let scroller;
         let prev;
         let next;
         let dotsWrap;
@@ -38,6 +39,7 @@ define([], function () {
         track.dataset.awaCategoryCarouselInit = '1';
 
         root = track.closest('.top-home-content--category-carousel') || document;
+        scroller = track.closest('.awa-category-carousel__viewport') || track;
         prev = root.querySelector('.awa-category-carousel__prev');
         next = root.querySelector('.awa-category-carousel__next');
         dotsWrap = root.querySelector('#awa-cat-dots');
@@ -47,8 +49,8 @@ define([], function () {
             return;
         }
 
-        track.style.touchAction = 'pan-x pan-y';
-        track.style.overscrollBehaviorX = 'contain';
+        scroller.style.touchAction = 'pan-x pan-y';
+        scroller.style.overscrollBehaviorX = 'contain';
         if (!track.id) {
             track.id = 'awa-cat-carousel-track';
         }
@@ -57,21 +59,21 @@ define([], function () {
         track.setAttribute('aria-label', root.getAttribute('aria-label') || 'Carrossel de categorias');
 
         function getScrollAmount() {
-            // Scroll by almost a full page (track.clientWidth) to match dots logic
-            let scroll = track.clientWidth;
+            // Scroll by almost a full visible page to match dots logic.
+            let scroll = scroller.clientWidth;
             let item = items[0];
             if (item) {
                 let style = getComputedStyle(track);
                 let gap = parseInt(style.gap, 10) || 16;
                 let itemW = item.offsetWidth + gap;
                 // Round down to nearest whole item to prevent cutting
-                scroll = Math.floor(track.clientWidth / itemW) * itemW;
+                scroll = Math.floor(scroller.clientWidth / itemW) * itemW;
             }
             return Math.max(scroll, 280);
         }
 
         function getMaxScroll() {
-            return Math.max(0, track.scrollWidth - track.clientWidth);
+            return Math.max(0, scroller.scrollWidth - scroller.clientWidth);
         }
 
         // r22l: ignore leftover sub-card scroll (desktop often has 8–40px) so we
@@ -128,7 +130,7 @@ define([], function () {
         }
 
         function buildPageOffsets() {
-            let rawTrackW = Number(track.clientWidth) || 0;
+            let rawTrackW = Number(scroller.clientWidth) || 0;
             let trackW = Math.max(1, Math.floor(rawTrackW));
             let maxScroll = Math.max(0, Math.floor(getMaxScroll()));
             let maxPages = 60;
@@ -168,7 +170,7 @@ define([], function () {
         }
 
         function getCurrentPage() {
-            let currentScroll = track.scrollLeft;
+            let currentScroll = scroller.scrollLeft;
             let activeIndex = 0;
             let activeDistance = Infinity;
 
@@ -206,8 +208,8 @@ define([], function () {
         function updateNavState() {
             let maxScroll = getMaxScroll();
             let meaningful = hasMeaningfulScroll();
-            let atStart = track.scrollLeft <= 4;
-            let atEnd = track.scrollLeft >= (maxScroll - 4);
+            let atStart = scroller.scrollLeft <= 4;
+            let atEnd = scroller.scrollLeft >= (maxScroll - 4);
 
             [prev, next].forEach(function (button, idx) {
                 let disabled;
@@ -242,8 +244,8 @@ define([], function () {
             let pages;
             let i;
 
-            trackW = track.offsetWidth;
-            scrollW = track.scrollWidth;
+            trackW = scroller.offsetWidth;
+            scrollW = scroller.scrollWidth;
             buildPageOffsets();
 
             // r22m: always sync idle nav even when dots node is missing/empty.
@@ -291,7 +293,7 @@ define([], function () {
                     }
 
                     dot.addEventListener('click', function () {
-                        track.scrollTo({left: pageOffsets[pageIndex] || 0, behavior: scrollBehavior()});
+                        scroller.scrollTo({left: pageOffsets[pageIndex] || 0, behavior: scrollBehavior()});
                     });
 
                     dotsWrap.appendChild(dot);
@@ -352,17 +354,17 @@ define([], function () {
                 return;
             }
             if (btn.classList.contains('awa-category-carousel__prev')) {
-                track.scrollBy({left: -getScrollAmount(), behavior: scrollBehavior()});
+                scroller.scrollBy({left: -getScrollAmount(), behavior: scrollBehavior()});
                 return;
             }
             if (btn.classList.contains('awa-category-carousel__next')) {
-                track.scrollBy({left: getScrollAmount(), behavior: scrollBehavior()});
+                scroller.scrollBy({left: getScrollAmount(), behavior: scrollBehavior()});
             }
         });
 
         track.addEventListener('touchstart', function (event) {
             startX = event.touches[0].pageX;
-            startScrollLeft = track.scrollLeft;
+            startScrollLeft = scroller.scrollLeft;
             isDragging = true;
         }, {passive: true});
 
@@ -371,7 +373,7 @@ define([], function () {
                 return;
             }
 
-            track.scrollLeft = startScrollLeft - (event.touches[0].pageX - startX);
+            scroller.scrollLeft = startScrollLeft - (event.touches[0].pageX - startX);
         }, {passive: true});
 
         track.addEventListener('touchend', function () {
@@ -380,7 +382,7 @@ define([], function () {
                 return;
             }
             let page = getCurrentPage();
-            track.scrollTo({
+            scroller.scrollTo({
                 left: pageOffsets[page] || 0,
                 behavior: scrollBehavior()
             });
@@ -392,28 +394,28 @@ define([], function () {
         track.setAttribute('tabindex', '0');
         track.addEventListener('keydown', function (event) {
             if (event.key === 'ArrowRight') {
-                track.scrollBy({left: getScrollAmount(), behavior: scrollBehavior()});
+                scroller.scrollBy({left: getScrollAmount(), behavior: scrollBehavior()});
                 event.preventDefault();
             }
 
             if (event.key === 'ArrowLeft') {
-                track.scrollBy({left: -getScrollAmount(), behavior: scrollBehavior()});
+                scroller.scrollBy({left: -getScrollAmount(), behavior: scrollBehavior()});
                 event.preventDefault();
             }
 
             if (event.key === 'Home') {
-                track.scrollTo({left: 0, behavior: scrollBehavior()});
+                scroller.scrollTo({left: 0, behavior: scrollBehavior()});
                 event.preventDefault();
             }
 
             if (event.key === 'End') {
                 buildPageOffsets();
-                track.scrollTo({left: pageOffsets[pageOffsets.length - 1] || 0, behavior: scrollBehavior()});
+                scroller.scrollTo({left: pageOffsets[pageOffsets.length - 1] || 0, behavior: scrollBehavior()});
                 event.preventDefault();
             }
         });
 
-        track.addEventListener('scroll', scheduleDotsUpdate, {passive: true});
+        scroller.addEventListener('scroll', scheduleDotsUpdate, {passive: true});
         buildDots();
         updateDots();
         syncNavChrome();

@@ -128,6 +128,10 @@ define(['jquery', 'mage/translate'], function ($, $t) {
         }
 
         if (!mq.matches || !bar || bar.hidden || !document.body.classList.contains('awa-cart-mobile-bar-active')) {
+            if (window.matchMedia('(min-width: 992px)').matches) {
+                /* Desktop: não apagar max-height:none do unclamp (AQ). */
+                return;
+            }
             summary.style.removeProperty('max-height');
             document.documentElement.style.removeProperty('--awa-cart-summary-max-h');
             document.documentElement.style.removeProperty('--awa-cart-mobile-bar-clearance');

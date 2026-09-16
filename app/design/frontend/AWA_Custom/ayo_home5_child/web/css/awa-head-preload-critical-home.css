@@ -1,20 +1,20 @@
 :root {
     /* ── head-preload — design tokens ─── */
-    --head-preload-c1: var(--awa-text-primary, var(--awa-text-primary));
-    --head-preload-c2: var(--awa-bg, var(--awa-bg));
-    --head-preload-c3: var(--awa-bg-subtle, var(--awa-bg-subtle));
-    --head-preload-c4: var(--awa-primary, var(--awa-primary));
-    --head-preload-c5: var(--awa-bg, var(--awa-bg));
-    --head-preload-c6: var(--awa-text, var(--awa-text));
+    --head-preload-c1: var(--awa-text-primary, #333333);
+    --head-preload-c2: var(--awa-bg, #ffffff);
+    --head-preload-c3: var(--awa-bg-subtle, #f8fafc);
+    --head-preload-c4: var(--awa-primary, #b73337);
+    --head-preload-c5: var(--awa-bg, #ffffff);
+    --head-preload-c6: var(--awa-text, #333333);
     --head-preload-c7: var(--awa-border-strong, #ccc);
     --head-preload-footer-surface: var(--awa-bg-subtle, #f9fafb);
     --head-preload-footer-inner: var(--head-preload-c2);
     --head-preload-footer-text: var(--head-preload-c6);
-    --head-preload-footer-muted: var(--awa-text-secondary, var(--awa-text-secondary));
+    --head-preload-footer-muted: var(--awa-text-secondary, #666666);
     --head-preload-footer-border: var(--awa-border, #e2e2e2);
     --head-preload-footer-copyright: var(--awa-bg-subtle, #f1f5f9);
     /* Token canônico: valor literal, sem cadeia var() para garantir resolução em JS */
-    --awa-primary: var(--awa-primary);
+    --awa-primary: #b73337;
     --awa-red: var(--awa-primary);
     /* Tokens estendidos — 1º paint home (espelha awa-design-tokens.css 2026-06-01) */
     --awa-font-weight-bold: 700;

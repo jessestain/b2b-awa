@@ -7,8 +7,8 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
 html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.header-nav.awa-nav-bar>.container,
 html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar>.container{padding-inline:0!important;padding-left:0!important;padding-right:0!important;gap:0!important;column-gap:0!important;row-gap:0!important}
 html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-nav-bar__inner,
-html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar .awa-nav-bar__inner{padding-inline:24px!important;padding-left:24px!important;padding-right:24px!important;box-sizing:border-box!important}
-html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-wrapper-sticky :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row],.awa-main-header__inner){padding-inline:24px!important;padding-left:24px!important;padding-right:24px!important}
+html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar .awa-nav-bar__inner{padding-inline:var(--awa-grid-container-pad,16px)!important;padding-left:var(--awa-grid-container-pad,16px)!important;padding-right:var(--awa-grid-container-pad,16px)!important;box-sizing:border-box!important}
+html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-wrapper-sticky :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row],.awa-main-header__inner){padding-inline:var(--awa-grid-container-pad,16px)!important;padding-left:var(--awa-grid-container-pad,16px)!important;padding-right:var(--awa-grid-container-pad,16px)!important}
 }
 
 /* FIX 2026-08-05: condensed header — remove borda/box do form de busca no estado icon-only.
@@ -16,3 +16,176 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
    existente). A regra de border neste arquivo não tinha override para .awa-header-condensed. */
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"].awa-header-condensed .awa-header-search-col :is(form#search_mini_form,form.minisearch),
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"].awa-header-condensed .awa-header-search-col :is(form#search_mini_form,form.minisearch):focus-within{border:0!important;background:transparent!important;box-shadow:none!important;outline:none!important;overflow:visible!important}
+/* SECAO 51.61 — header search vertical center (2026-09-04)
+   Evidence PLP 1920: logo/account/minicart cy~34; search form cy~22 (delta 12px).
+   Cause: .awa-header-search-col is 68px; visual-audit sets .block-search{display:block}
+   and form#search_mini_form{height:44px;margin:0} so the control sticks to the cell top.
+   Home already centers; PLP loses it after this sheet. Flex-center the 44px control.
+   Also lock input+button to 44px border-box (home measured 42px). Tokens only. */
+@media (min-width: 992px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col :is(.block-search, .block-content),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col :is(.block-search, .block-content) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form {
+  margin-block: auto !important;
+  box-sizing: border-box !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form input#search,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form input#search,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form :is(button.action.search, .action.search),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper header.awa-site-header[data-awa-header-mode="default"] .awa-header-search-col form#search_mini_form :is(button.action.search, .action.search) {
+  box-sizing: border-box !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+}
+}
+
+/* SECAO 51.63 — footer desktop heading (visual-audit is last terminal sheet)
+   design-system sets min-height:44px on .awa-footer-section__toggle. On ≥992px
+   panels are expanded; hide chevron and drop button chrome. Keep 44px on mobile. */
+@media (min-width: 992px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle{
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-block: 0 !important;
+  margin: 0 0 var(--awa-space-2, 8px) !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  font-weight: 700 !important;
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle::after,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle::before{
+  content: none !important;
+  display: none !important;
+}
+}
+
+/* SECAO 51.64 — header stack height (2026-09-04 w4)
+   CDP: sticky 116, site header 160. --awa-header-stack-h ainda soma promo 44px
+   enquanto .header-container está display:none. height:auto segue filhos visíveis.
+   Se a barra promo voltar ao fluxo, o pai cresce sozinho. */
+@media (min-width: 992px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header[data-awa-header-mode="default"]{
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  --awa-header-promo-h: 0px !important;
+  --awa-header-stack-h: var(--awa-header-sticky-h, 116px) !important;
+}
+}
+
+/* Hero sem imagem: lock 112/140 (plp-shell + vfix-search) vs conteúdo ~80px.
+   Price-box pad 8 + min 32 infla o preço; preço→CTA permanece 16.
+   Trust-bar pad 18 → 16 (escala 4/8/12/16). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-category-view .page-wrapper .awa-category-hero:not(.awa-category-hero--has-image){
+  min-height: 0 !important;
+  max-height: none !important;
+  height: auto !important;
+  align-items: flex-start !important;
+  padding-block: var(--awa-space-2, 8px) !important;
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-category-view .page-wrapper .awa-category-hero:not(.awa-category-hero--has-image) .awa-category-hero__content{
+  padding-block-end: var(--awa-space-2, 8px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product :is(.info-price,.price-box){
+  min-height: 0 !important;
+  padding-block: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .item-product .product-info-cart{
+  margin-block-start: var(--awa-space-4, 16px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) .awa-footer-trust-bar{
+  padding-block: var(--awa-space-4, 16px) !important;
+}
+
+/* SECAO 51.65 — last terminal: PDP related shelf + empty-cart 44 (visual-audit wins last)
+   SSOT 51.61 can lose inside @layer vs unlayered visual-fixes clamp(24px,3vw,32px)
+   on ALL PDP .price-box .price. Related cards are .item-product; hero stays
+   .product-info-main. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .item-product :is(.info-price .price, .price-box .price, .price-final_price .price){
+  font-size: var(--awa-font-size-lg, 18px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: var(--awa-text) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .item-product :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart){
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  background: var(--awa-primary) !important;
+  color: var(--awa-text-inverse) !important;
+  border-radius: var(--awa-radius-sm) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index .page-wrapper a.awa-cart-empty__cta{
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  padding-block: 0 !important;
+  padding-inline: var(--awa-space-5, 20px) !important;
+  white-space: nowrap !important;
+  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+/* SECAO 51.66 — home B2B shelf CTA (visual-audit last when this sheet loads) */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .product-info-cart{
+  display: flex !important;
+  flex-direction: column !important;
+  position: static !important;
+  width: 100% !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .awa-card-view-product{
+  display: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .item-product :is(.info-price .price, .price-box .price, .price-final_price .price){
+  font-size: var(--awa-font-size-lg, 18px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: var(--awa-text) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .item-product :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart){
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  background: var(--awa-primary) !important;
+  color: var(--awa-text-inverse) !important;
+  border-radius: var(--awa-radius-sm) !important;
+}

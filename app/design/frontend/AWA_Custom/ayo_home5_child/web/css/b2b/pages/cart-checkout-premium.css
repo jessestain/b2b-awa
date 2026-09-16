@@ -2067,8 +2067,8 @@ body.rokanthemes-onepagecheckout .form.form-login .create-account .confirm-pass 
 body.checkout-index-index .shipping-address-item,
 body.rokanthemes-onepagecheckout .shipping-address-item {
     position: relative;
-    display: grid;
-    gap: var(--awa-gap-xs);
+    /* The address renderer contains text and BRs, not grid cells. */
+    display: block;
     padding: 16px 16px 14px;
     background: var(--awa-bg-surface);
     border: 1px solid var(--awa-cc-border);
@@ -3916,4 +3916,3 @@ html body.checkout-index-index .modal-custom.authentication-dropdown {
     box-shadow: var(--awa-cc-shadow-cta);
     transform: translateY(-1px);
 }
-

@@ -5,7 +5,7 @@
 
 :root {
     --awa-vfix-gap-md: var(--awa-space-4, 16px);
-    --awa-vfix-radius-md: var(--awa-radius-md, 12px);
+    --awa-vfix-radius-md: var(--awa-radius-sm, 8px);
 }
 
 body.b2b-auth-shell .page-main {

@@ -170,12 +170,13 @@
     --awa-ease:           cubic-bezier(0.4, 0, 0.2, 1);
     --awa-ease-out:       cubic-bezier(0, 0, 0.2, 1);
     --awa-ease-in:        cubic-bezier(0.4, 0, 1, 1);
-    --awa-ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
+    --awa-ease-spring:    cubic-bezier(0.22, 1, 0.36, 1);
     --awa-duration-fast:  150ms;
     --awa-duration:       250ms;
     --awa-duration-slow:  400ms;
-    --awa-hover-lift:     -4px;
-    --awa-hover-scale:    1.02;
+    // Hover must not change layout geometry (CLS). Optical only.
+    --awa-hover-lift:     0px;
+    --awa-hover-scale:    1;
 
     // ── Spacing (8px Grid System) ──────────────────────────────────────────
     --awa-space-1:      4px;
@@ -188,8 +189,18 @@
     --awa-space-8:      40px;
     --awa-space-9:      48px;
     --awa-space-10: 48px;
-  --awa-space-12: 56px;
-  --awa-space-16: 80px;
+    --awa-space-11: 64px;
+    --awa-space-12: 56px;
+    --awa-space-16: 80px;
+    --awa-control-height: @awa-control-height;
+    --awa-gutter-desktop: @awa-page-pad-desktop;
+    --awa-gutter-tablet:  @awa-page-pad-tablet;
+    --awa-gutter-mobile:  @awa-page-pad-mobile;
+    --awa-search-height:  @awa-control-height;
+    --awa-button-height:  @awa-control-height;
+    --awa-input-height:   @awa-control-height;
+    --awa-grid-gap:       @awa-gap-md;
+    --awa-section-gap-desktop: @awa-section-spacing-desktop;
 
     --awa-space-xs:     var(--awa-space-1);
     --awa-space-sm:     var(--awa-space-2);

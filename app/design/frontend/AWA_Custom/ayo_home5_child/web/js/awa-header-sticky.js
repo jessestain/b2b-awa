@@ -105,6 +105,7 @@ define([], function () {
             };
 
             if (!isSticky) {
+                var shouldResetDesktopGridColumns = window.matchMedia('(max-width: 991px)').matches;
                 apply(header, 'isolation', null);
                 apply(header, 'z-index', null);
                 apply(stickyWrapper, 'z-index', null);
@@ -120,9 +121,13 @@ define([], function () {
                 apply(row, 'min-height', null);
                 apply(row, 'max-height', null);
                 apply(row, 'grid-template-areas', null);
-                apply(row, 'grid-template-columns', null);
+                if (shouldResetDesktopGridColumns) {
+                    apply(row, 'grid-template-columns', null);
+                }
                 apply(row, 'grid-template-rows', null);
-                apply(row, 'grid-template', null);
+                if (shouldResetDesktopGridColumns) {
+                    apply(row, 'grid-template', null);
+                }
                 var primaryRowReset = header.querySelector('.awa-header-primary-row');
                 apply(primaryRowReset, 'display', null);
                 apply(primaryRowReset, 'grid-area', null);

@@ -50,6 +50,58 @@
     var AUTO_RESUME_DELAY = 5200;
     var REFRESH_DELAY = 140;
 
+    /* Home freeze 2026-09-01: init ONE shelf per idle/rAF tick.
+     * Eager sync init of ~48 home shelves + scroll rescan was a multi-second
+     * Style&Layout wedge (Lighthouse ~75s on this file). */
+    var pendingShelfInits = [];
+    var shelfInitPumping = false;
+
+    function scheduleIdle(fn, timeoutMs) {
+        if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(fn, { timeout: timeoutMs || 200 });
+            return;
+        }
+        window.setTimeout(fn, 16);
+    }
+
+    function enqueueShelfInit(shelf) {
+        if (!shelf || shelf.dataset.awaCarouselQueued === '1' || shelf.classList.contains('awa-carousel-ready')) {
+            return;
+        }
+        shelf.dataset.awaCarouselQueued = '1';
+        pendingShelfInits.push(shelf);
+        pumpShelfInits();
+    }
+
+    function pumpShelfInits() {
+        if (shelfInitPumping) {
+            return;
+        }
+        shelfInitPumping = true;
+
+        function next() {
+            var shelf = pendingShelfInits.shift();
+            if (!shelf) {
+                shelfInitPumping = false;
+                return;
+            }
+            try {
+                if (shelf.matches && shelf.matches('.category_tab_slider, .productTabContent')) {
+                    initTabSliderShelf(shelf);
+                } else {
+                    initScrollShelf(shelf);
+                }
+            } catch (ignore) {
+                /* one shelf must not block the rest */
+            }
+            scheduleIdle(function () {
+                window.requestAnimationFrame(next);
+            }, 120);
+        }
+
+        window.requestAnimationFrame(next);
+    }
+
     function qsa(sel, root) {
         return Array.prototype.slice.call((root || document).querySelectorAll(sel));
     }
@@ -332,7 +384,6 @@
 
     function preloadImageOnce(img) {
         var href = imageUrl(img);
-        var link;
         var cache = window.__awaCarouselPreloadedImages || {};
         var keys;
 
@@ -348,26 +399,18 @@
         cache[href] = true;
         window.__awaCarouselPreloadedImages = cache;
 
-        if (img) {
-            img.loading = 'eager';
-            img.decoding = 'async';
-            if ('fetchPriority' in img) {
-                img.fetchPriority = 'low';
-            }
-        }
-
-        if (document.querySelector('link[rel="preload"][as="image"][href="' + href.replace(/"/g, '\\"') + '"]')) {
+        if (!img) {
             return;
         }
 
-        link = document.createElement('link');
-        link.rel = 'preload';
-        link.as = 'image';
-        link.href = href;
-        if ('fetchPriority' in link) {
-            link.fetchPriority = 'low';
+        /* Native lazy-load is enough below the fold. Do not inject
+         * <link rel=preload as=image> (duplicates the img request and
+         * competes with hero LCP). Warm only when caller confirmed the
+         * carousel is on-screen. */
+        img.decoding = 'async';
+        if (img.loading === 'lazy') {
+            img.loading = 'eager';
         }
-        (document.head || document.documentElement).appendChild(link);
     }
 
     function findHeaderForMount(mount) {
@@ -627,26 +670,17 @@
     }
 
     function syncAutoplayToggleAvailability(chrome, enabled, paused) {
-        var nav = chrome && chrome.nav ? chrome.nav : null;
+        // AWA 2026-08-09: botao de pausa removido da UI a pedido do produto.
+        // O autoplay do carrossel continua funcionando normalmente (bindAutoMotion);
+        // apenas o controle visual de pausa/retomada deixa de ser exibido.
         var button = chrome && chrome.toggle ? chrome.toggle : null;
-        var host = nav && nav.parentElement ? nav.parentElement : null;
 
         if (!button) {
             return;
         }
 
-        button.hidden = !enabled;
-        button.disabled = !enabled;
-        if (nav) {
-            nav.classList.toggle('has-autoplay-toggle', !!enabled);
-        }
-        if (host) {
-            host.classList.toggle('has-carousel-autoplay-toggle', !!enabled);
-        }
-
-        if (enabled) {
-            setAutoplayToggleState(button, !!paused);
-        }
+        button.hidden = true;
+        button.disabled = true;
     }
 
     function resolveNavMountRoot(mount, nav) {
@@ -903,7 +937,13 @@
         queueAnchoredNavViewportResync(root);
     }
 
-    window.__awaMountShelfNavInHeaders = mountAllShelfNavInHeaders;
+    window.__awaMountShelfNavInHeaders = function (scope) {
+        /* Home: do not remount/rescan every shelf from bootstrap onload. */
+        if (isHomePage() && (!scope || scope === document || scope.nodeType === 9)) {
+            return;
+        }
+        mountAllShelfNavInHeaders(scope);
+    };
 
     window.addEventListener('resize', function () {
         syncAnchoredNavViewportBoxes(document);
@@ -1122,6 +1162,7 @@
         track.classList.remove('owl', 'owl-carousel', 'owl-loaded', 'owl-theme', 'swiper-wrapper');
         track.classList.add('awa-carousel__track');
         track.removeAttribute('style');
+        track.removeAttribute('aria-live');
 
         Array.prototype.slice.call(track.children).forEach(function (slide) {
             if (slide.nodeType !== 1) {
@@ -1359,12 +1400,24 @@
         if (!viewport) {
             return;
         }
-        var alreadyBound = viewport.dataset.awaScrollBound === '1';
+        if (viewport.dataset.awaScrollBound === '1') {
+            return;
+        }
+        var alreadyBound = false;
         viewport.dataset.awaScrollBound = '1';
 
-        /* BUG-2463a2: scroll-padding-inline > 0 desloca o snap (ex.: 229→217)
-         * e clipa o ultimo card em trilhos de N colunas com gap. */
-        viewport.style.setProperty('scroll-padding-inline', '0', 'important');
+        /* BUG-2463a2: scroll-padding-inline sem gutter no track desloca o snap.
+         * Mais Vendidos reserva o track (52px) para as setas overlay — o
+         * scroll-padding tem de ser o mesmo valor, senão o snap nativo come o gutter. */
+        var trackForPad = viewport.querySelector('.awa-carousel__track');
+        var trackPadInline = trackForPad
+            ? (parseFloat(window.getComputedStyle(trackForPad).paddingLeft) || 0)
+            : 0;
+        viewport.style.setProperty(
+            'scroll-padding-inline',
+            trackPadInline > 0 ? trackPadInline + 'px' : '0',
+            'important'
+        );
 
         var prev = chrome.prev;
         var next = chrome.next;
@@ -1394,11 +1447,17 @@
             }
 
             var track = viewport.querySelector('.awa-carousel__track');
-            var base = track ? track.offsetLeft : 0;
+            var trackPad = 0;
+            if (track) {
+                trackPad = parseFloat(window.getComputedStyle(track).paddingLeft) || 0;
+            }
             var offsets = qsa('.awa-carousel__slide', viewport)
                 .filter(visibleBox)
                 .map(function (slide) {
-                    return Math.max(0, Math.round(slide.offsetLeft - base));
+                    /* offsetLeft already is the viewport scroll coordinate. Subtracting
+                     * track.offsetLeft made "previous" target the current native snap
+                     * point whenever the track had an outer gutter (for example 8px). */
+                    return Math.max(0, Math.round(slide.offsetLeft - trackPad));
                 })
                 .filter(function (value, index, list) {
                     return index === 0 || Math.abs(value - list[index - 1]) > 2;
@@ -1434,13 +1493,15 @@
 
         function slideAtSnap(offset) {
             var track = viewport.querySelector('.awa-carousel__track');
-            var base = track ? track.offsetLeft : 0;
+            var trackPad = track
+                ? (parseFloat(window.getComputedStyle(track).paddingLeft) || 0)
+                : 0;
             var slides = qsa('.awa-carousel__slide', viewport).filter(visibleBox);
             var chosen = slides[0] || null;
             var distance = Infinity;
 
             slides.forEach(function (slide) {
-                var currentDistance = Math.abs(Math.max(0, Math.round(slide.offsetLeft - base)) - offset);
+                var currentDistance = Math.abs(Math.max(0, Math.round(slide.offsetLeft - trackPad)) - offset);
                 if (currentDistance < distance) {
                     distance = currentDistance;
                     chosen = slide;
@@ -1605,7 +1666,8 @@
             var meta = activeSlideMeta();
             var accessibilityPlan = computeSlideAccessibilityPlan();
             var liveLabel = computeLiveLabel(viewport);
-            var preloadImg = scrollable ? findImageAtSnap(targetSnap(1)) : null;
+            var viewportIsOnScreen = !!(carouselVisibilityState && carouselVisibilityState.get(viewport) === true);
+            var preloadImg = (scrollable && viewportIsOnScreen) ? findImageAtSnap(targetSnap(1)) : null;
 
             return function applyUpdate() {
                 if (carouselRoot) {
@@ -1824,6 +1886,9 @@
     }
 
     function initScrollShelf(shelf) {
+        if (!shelf || shelf.classList.contains('awa-carousel-ready')) {
+            return;
+        }
         var structure = ensureShelfStructure(shelf);
         if (!structure || !structure.container || !structure.track) {
             return;
@@ -1835,6 +1900,9 @@
         wireScroll(structure.container, chrome);
 
         markReady(structure.shelf, structure.container);
+        if (isHomePage()) {
+            refreshOneShelf(structure.shelf);
+        }
     }
 
     /* Grupo D (Rokanthemes Categorytab / ProductTab): o markup agrupa N produtos
@@ -1910,6 +1978,10 @@
     function scanTabSliders(scope) {
         TAB_SLIDER_SELECTORS.forEach(function (sel) {
             qsa(sel, scope).forEach(function (slider) {
+                if (isHomePage()) {
+                    enqueueShelfInit(slider);
+                    return;
+                }
                 var structure = normalizeTabSlider(slider);
                 if (!structure) {
                     return;
@@ -1964,11 +2036,12 @@
     function scanShelf(root) {
         var scope = root && root.nodeType === 1 ? root : document;
         var NESTED_GUARD = SHELF_SELECTORS.join(',');
+        var home = isHomePage();
         SHELF_SELECTORS.forEach(function (sel) {
             qsa(sel, scope).forEach(function (shelf) {
                 if (shelf.dataset.awaScrollReady === '1') {
                     if (!shelf.classList.contains('awa-carousel-ready') && visibleBox(shelf)) {
-                        initScrollShelf(shelf);
+                        enqueueShelfInit(shelf);
                     }
                     return;
                 }
@@ -1982,24 +2055,25 @@
                 if (shelf.matches('.block.related, .block.upsell')) {
                     prepareRelatedBlock(shelf);
                 }
-                if (isEagerShelf(shelf)) {
-                    shelf.dataset.awaScrollReady = '1';
-                    initScrollShelf(shelf);
+                shelf.dataset.awaScrollReady = '1';
+                /* Home: never eager-init ALL featured/standard/compact at once.
+                 * IO + idle queue inits only the intersecting shelf. */
+                if (isEagerShelf(shelf) && !home) {
+                    enqueueShelfInit(shelf);
                     return;
                 }
-                shelf.dataset.awaScrollReady = '1';
                 whenVisible(shelf, function () {
-                    initScrollShelf(shelf);
-                }, '480px 0px');
+                    enqueueShelfInit(shelf);
+                }, home ? '160px 0px' : '480px 0px');
             });
         });
 
         scanTabSliders(scope);
 
-        mountAllShelfNavInHeaders(scope);
-
-        // Carrosséis já montados podem ter mudado de visibilidade (abas): força re-medida.
-        document.dispatchEvent(new CustomEvent('awa:carousel:refresh'));
+        if (!home) {
+            mountAllShelfNavInHeaders(scope);
+            document.dispatchEvent(new CustomEvent('awa:carousel:refresh'));
+        }
     }
 
     function guardOverflow() {
@@ -2058,8 +2132,127 @@
 
     }
 
+    function refreshOneShelf(shelf) {
+        if (!shelf || !shelf.nodeType) {
+            return;
+        }
+        mountAllShelfNavInHeaders(shelf);
+        var viewport = shelf.querySelector ? shelf.querySelector('.awa-carousel__viewport') : null;
+        if (!viewport) {
+            return;
+        }
+        var docW = document.documentElement.clientWidth;
+        if (viewport.getBoundingClientRect().width > docW + 2) {
+            viewport.classList.add('is-awa-viewport-width-guarded');
+        }
+    }
+
+    function initTabSliderShelf(slider) {
+        if (slider && slider.classList.contains('awa-carousel-ready')) {
+            return;
+        }
+        var structure = normalizeTabSlider(slider);
+        if (!structure) {
+            return;
+        }
+        markPending(structure.shelf);
+        var chrome = prepareChrome(structure.shelf, structure.container);
+        wireScroll(structure.container, chrome);
+        markReady(structure.shelf, structure.container);
+        if (isHomePage()) {
+            refreshOneShelf(structure.shelf);
+        }
+    }
+
+    function observeHomeShelves() {
+        var NESTED_GUARD = SHELF_SELECTORS.join(',');
+        var io = null;
+
+        function shelfAlreadyReady(el) {
+            return !!(el && (
+                el.classList.contains('awa-carousel-ready') ||
+                el.dataset.awaCarouselQueued === '1'
+            ));
+        }
+
+        function observe(el) {
+            if (!el || el.dataset.awaHomeObserved === '1') {
+                return;
+            }
+            if (shelfAlreadyReady(el)) {
+                el.dataset.awaHomeObserved = '1';
+                return;
+            }
+            el.dataset.awaHomeObserved = '1';
+            if (io) {
+                io.observe(el);
+                return;
+            }
+            whenVisible(el, function () {
+                if (shelfAlreadyReady(el)) {
+                    return;
+                }
+                enqueueShelfInit(el);
+            }, '160px 0px');
+        }
+
+        if (typeof IntersectionObserver !== 'undefined') {
+            io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    var el = entry.target;
+                    /* Home freeze r3: Mais Vendidos re-entry must be a no-op. */
+                    if (shelfAlreadyReady(el)) {
+                        io.unobserve(el);
+                        return;
+                    }
+                    if (!entry.isIntersecting) {
+                        return;
+                    }
+                    io.unobserve(el);
+                    enqueueShelfInit(el);
+                });
+            }, { rootMargin: '160px 0px', threshold: 0.01 });
+        }
+
+        SHELF_SELECTORS.forEach(function (sel) {
+            qsa(sel, document).forEach(function (shelf) {
+                if (shelf.dataset.awaScrollReady === '1') {
+                    return;
+                }
+                if (shelf.querySelector(NESTED_GUARD)) {
+                    shelf.dataset.awaScrollReady = '1';
+                    return;
+                }
+                if (shelf.matches('.block.related, .block.upsell')) {
+                    prepareRelatedBlock(shelf);
+                }
+                shelf.dataset.awaScrollReady = '1';
+                observe(shelf);
+            });
+        });
+
+        TAB_SLIDER_SELECTORS.forEach(function (sel) {
+            qsa(sel, document).forEach(function (slider) {
+                if (slider.dataset.awaSliderNorm === '1' || slider.dataset.awaHomeObserved === '1') {
+                    return;
+                }
+                observe(slider);
+            });
+        });
+    }
+
     function boot() {
         bindDynamicRefreshTriggers();
+
+        if (isHomePage()) {
+            /* Home freeze r3: IntersectionObserver + idle one-shelf pump only.
+             * Ready/queued shelves are unobserved (no re-init on Mais Vendidos re-entry).
+             * Do not scanShelf(document)/refreshMountedNav(document)/guardOverflow()
+             * immediately, on load, delayed timers, observer, or window scroll. */
+            observeHomeShelves();
+            return;
+        }
+
         scanShelf(document);
         refreshMountedNav(document);
         guardOverflow();
@@ -2091,34 +2284,6 @@
                     refreshMountedNav(document);
                 }, 300);
             }).observe(mutationRoot, { childList: true, subtree: false });
-        }
-
-        if (document.body && (
-            document.body.classList.contains('cms-index-index') ||
-            document.body.classList.contains('cms-home') ||
-            document.body.classList.contains('cms-homepage_ayo_home5')
-        )) {
-            var scrollTimer = null;
-            window.addEventListener('scroll', function () {
-                window.clearTimeout(scrollTimer);
-                scrollTimer = window.setTimeout(function () {
-                    scanShelf(document);
-                    refreshMountedNav(document);
-                    guardOverflow();
-                }, 120);
-            }, { passive: true });
-
-            window.setTimeout(function () {
-                scanShelf(document);
-                refreshMountedNav(document);
-                guardOverflow();
-            }, 650);
-
-            window.setTimeout(function () {
-                scanShelf(document);
-                refreshMountedNav(document);
-                guardOverflow();
-            }, 1800);
         }
     }
 
@@ -2231,9 +2396,9 @@
         css += ''
             + '/* VISUAL-CRAWL-HOME-CONTRAST-20260604 */'
             + 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) :is(.page_footer,.page-footer) :is(.awa-footer-trust-item,.awa-footer-business-contact__action,.awa-footer-atendimento__store-badge){'
-            + 'background-color:rgba(0,0,0,.72)!important;color:rgb(255,255,255)!important}'
+            + 'background-color:color-mix(in srgb,var(--awa-text, #333) 72%, transparent)!important;color:var(--awa-text-inverse, #fff)!important}'
             + 'html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) :is(.page_footer,.page-footer) :is(.awa-footer-trust-copy strong,.awa-footer-trust-copy span,.awa-footer-business-contact__action-copy,.awa-footer-business-contact__action-copy strong,.awa-footer-business-contact__action-copy small,.awa-footer-atendimento__store-badge){'
-            + 'color:rgb(255,255,255)!important;text-shadow:none!important}';
+            + 'color:var(--awa-text-inverse, #fff)!important;text-shadow:none!important}';
 
         var style = document.getElementById(homeId);
 

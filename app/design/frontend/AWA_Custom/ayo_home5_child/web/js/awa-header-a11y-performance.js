@@ -689,7 +689,7 @@
 
         function syncSearchSubmitState() {
             let query = normalizeText(input.value || '');
-            let shouldEnable = query.length > 0;
+            let shouldEnable = query.length >= 2;
 
             if (!submitBtn) {
                 return;
@@ -1406,6 +1406,7 @@
                     setImportantStyle(link, 'margin', '0');
                     setImportantStyle(link, 'border', '0');
                     setImportantStyle(link, 'box-shadow', 'none');
+
                 }
             );
         }

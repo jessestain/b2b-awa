@@ -385,3 +385,44 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   z-index: 9999 !important;
 }
 
+/* AWA visual-audit 2026-09-07 — lote 9, controles flutuantes sem oclusão.
+   Em viewports sem gutter lateral suficiente, os atalhos opcionais cobriam
+   imagens, CTAs e campos. Em desktop largo, ficam no gutter externo. */
+@media (max-width: 1364px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper #awa-back-to-top,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-back-to-top {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+@media (min-width: 1365px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-ai-chat-root {
+    right: 4px !important;
+    left: auto !important;
+    inset-inline-end: 4px !important;
+    inset-inline-start: auto !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-ai-chat-root .awa-ai-chat__toggle-label {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* AWA visual-audit 2026-09-07 — lote 9, reserva inferior terminal.
+   Regras tardias de PLP reduziam o padding para 72px mesmo com banner maior.
+   A camada existente vence declarações importantes fora de camada. */
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) .page-wrapper {
+    padding-bottom: calc(var(--awa-cookie-banner-height, 136px) + 8px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  @media (max-width: 991px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.b2b-auth-shell).awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) .page-wrapper {
+      padding-bottom: calc(var(--awa-cookie-banner-height, 210px) + var(--awa-mobile-bottom-nav-h, 64px) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+  }
+}

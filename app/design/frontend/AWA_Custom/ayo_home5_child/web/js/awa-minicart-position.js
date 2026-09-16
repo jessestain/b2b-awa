@@ -117,6 +117,10 @@ define([], function () {
             return { skipped: true, reason: 'checkout-cart-index' };
         }
 
+        if (!document.querySelector('[data-block="minicart"].is-open, .minicart-wrapper.is-open')) {
+            return { skipped: true, reason: 'minicart-closed' };
+        }
+
         wrapper = target.closest('[data-block="minicart"], .minicart-wrapper');
         dialog = target.closest('.ui-dialog, .mage-dropdown-dialog');
         trigger = document.querySelector(
@@ -124,7 +128,6 @@ define([], function () {
         );
 
         if (wrapper) {
-            wrapper.classList.add('active', 'is-open', 'show');
             wrapper.setAttribute('data-awa-minicart-dropdown', '1');
         }
 
@@ -178,7 +181,6 @@ define([], function () {
             target.style.setProperty('visibility', 'visible', 'important');
             target.style.setProperty('opacity', '1', 'important');
             target.style.setProperty('pointer-events', 'auto', 'important');
-            target.classList.add('_active', 'active', 'is-open');
             target.setAttribute('aria-hidden', 'false');
         }
 
@@ -320,11 +322,7 @@ define([], function () {
      */
     function centerCurrentMinicart(options) {
         var panel = document.querySelector(
-            '.minicart-wrapper.is-open .block-minicart, ' +
-            '.minicart-wrapper.active .block-minicart, ' +
-            '.block-minicart._active, ' +
-            '.block-minicart.is-open, ' +
-            '[data-block="minicart"] .block-minicart'
+            '[data-block="minicart"].is-open .block-minicart, .minicart-wrapper.is-open .block-minicart'
         );
 
         return scheduleCenterOpenMinicartPanel(panel, options);

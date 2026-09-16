@@ -897,6 +897,7 @@ h1.page-title,
     html body#html-body .page-wrapper nav.fixed-bottom.mobile-bottom-nav,
     html body#html-body .page-wrapper nav.fixed-bottom,
     html body#html-body .page-wrapper .mobile-bottom-nav {
+        box-sizing: border-box !important; /* content-box + pad 8px rendered 81px on PDP */
         min-height: 64px !important;
         max-height: 72px !important;
         height: auto !important;
@@ -1241,15 +1242,18 @@ html body#html-body .ayo-home5-section:not(.top-home-content--above-fold) {
     }
 }
 
-/* G7: Product promo banners compactado mobile */
+/* G7: Product promo banners — compact padding only.
+   height/max-height 100px clipped 463/349 WYSIWYG creatives (picture ~241px),
+   cutting BAGAGEIRO/title out of the artwork. Restore auto height.
+   !important required: G7 historically locked both properties with !important. */
 @media (max-width: 767px) {
     html body#html-body.cms-index-index .page-wrapper .awa-product-promo-banners {
         padding-block: 12px !important;
         margin-block: 12px !important;
     }
     html body#html-body.cms-index-index .page-wrapper .awa-product-promo-banners__item {
-        height: 100px !important;
-        max-height: 100px !important;
+        height: auto !important;
+        max-height: none !important;
     }
 }
 
@@ -1874,7 +1878,7 @@ html body#html-body#html-body#html-body input.input-text#search {
         pointer-events: none !important;
     }
 
-    html body#html-body:is(.background_shadow, .background_shadow_show, .nav-open, .awa-vertical-menu-open)
+    html body#html-body:is(.background_shadow, .background_shadow_show, .awa-menu-drawer-open, .awa-vertical-menu-open, .nav-open.awa-menu-drawer-open)
         :is(.shadow_bkg, .shadow_bkg_show) {
         pointer-events: auto !important;
     }
@@ -2095,6 +2099,7 @@ html body#html-body#html-body#html-body input.input-text#search {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
+            box-sizing: border-box !important;
             min-height: 64px !important;
             max-height: 72px !important;
             height: auto !important;
@@ -2248,6 +2253,7 @@ html body#html-body#html-body#html-body input.input-text#search {
             left: 0 !important;
             right: 0 !important;
             z-index: 999 !important;
+            box-sizing: border-box !important;
             min-height: 64px !important;
             max-height: 72px !important;
             height: auto !important;
@@ -3133,9 +3139,9 @@ html body#html-body#html-body#html-body input.input-text#search {
         transform: scale(0.98) !important;
     }
 
-    /* PDP - price box destaquem */
-    html body#html-body.catalog-product-view .page-wrapper .price-box .price,
-    html body#html-body.catalog-product-view .page-wrapper .info-price .price {
+    /* PDP - price box destaquem (somente buy-box; cards related usam contrato 18/700) */
+    html body#html-body.catalog-product-view .page-wrapper .product-info-main .price-box .price,
+    html body#html-body.catalog-product-view .page-wrapper .product-info-main .info-price .price {
         color: var(--awa-primary, var(--awa-primary)) !important;
         font-size: clamp(24px, 3vw, 32px) !important;
         font-weight: 800 !important;
@@ -4511,6 +4517,102 @@ html body#html-body#html-body#html-body input.input-text#search {
     html body#html-body.catalog-category-view .page-wrapper .breadcrumbs a:hover {
         color: var(--awa-primary, var(--awa-primary)) !important;
         text-decoration: underline !important;
+    }
+
+    /* Desktop: 14px na faixa ~24px (seleção original 23px). 36px/lh36
+       centrava o glifo mas deixava 8px vazios acima/abaixo. */
+    @media (min-width: 768px) {
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs,
+        html body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs {
+            font-size: 14px !important;
+            line-height: 24px !important;
+            min-height: 24px !important;
+            height: 24px !important;
+            max-height: 24px !important;
+            padding-block: 0 !important;
+            margin-block: 0 !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs {
+            margin-inline: auto !important;
+            width: 100% !important;
+            max-width: min(100%, 1280px) !important;
+            padding-inline: var(--awa-shell-pad, clamp(16px, 3vw, 24px)) !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs {
+            margin-inline: 0 !important;
+            padding-inline: 0 !important;
+            width: auto !important;
+            max-width: 100% !important;
+            display: inline-flex !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs:not(:has(ul.items)) {
+            display: none !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            max-height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero__crumbs,
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero .breadcrumbs {
+            margin: 0 0 8px !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero .breadcrumbs :is(a, span, strong) {
+            font-weight: 600 !important;
+            color: var(--awa-text-secondary) !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero .breadcrumbs strong {
+            color: var(--awa-text-primary) !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero {
+            display: flex !important;
+            align-items: flex-start !important;
+            padding-block: 8px 12px !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .awa-category-hero__content {
+            align-self: flex-start !important;
+            padding-block-start: 0 !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper #maincontent.page-main {
+            padding-top: 0 !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs ul.items {
+            display: inline-flex !important;
+            width: max-content !important;
+            max-width: 100% !important;
+            flex: 0 0 auto !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs ul.items > .item,
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs ul.items > .item:last-child {
+            flex: 0 1 auto !important;
+            width: auto !important;
+            max-width: none !important;
+            min-width: 0 !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs :is(.item, a, strong, span) {
+            font-size: 14px !important;
+            line-height: 24px !important;
+            min-height: 24px !important;
+            height: 24px !important;
+            max-height: 24px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        html body#html-body.catalog-category-view .page-wrapper .breadcrumbs a {
+            min-height: 24px !important;
+            height: 24px !important;
+            padding-block: 0 !important;
+            font-size: 14px !important;
+            line-height: 24px !important;
+        }
     }
 
     /* ==== FILTER EXPAND/COLLAPSE ANIMATION ==== */
@@ -6966,6 +7068,24 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
     overflow: hidden !important;
 }
 
+/* Minicart conflict guard (mobile + desktop): avoid transparent panel over hero/carousel */
+html body#html-body .page-wrapper .minicart-wrapper:is(.active, .show, .is-open) .block-minicart:is(._active, .active, .is-open),
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel:is(._active, .active, .is-open) {
+    background-color: var(--awa-bg) !important;
+    background-image: none !important;
+    z-index: 10040 !important;
+    isolation: isolate !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .block-content,
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .minicart-items-wrapper,
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .awa-minicart-footer {
+    background-color: var(--awa-bg) !important;
+    background-image: none !important;
+}
+
 
 /* H-pager-rwd1 (2026-08-02) — UNLAYERED all breakpoints.
    CDP tablet/desktop: toolbar border-block 1px (themes+defer), amount below,
@@ -7553,17 +7673,17 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category
 }
 
 @layer awa-cta-green {
-  /* H-pdp-tocart-green: layered !important beats defer-global layered red */
+  /* P2-PDP-ATC 2026-08-17: identidade --awa-brand (antes success/verde). Layer mantida para vencer defer-global. */
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main button#product-addtocart-button,
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main button.action.tocart,
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-add-form button.tocart,
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main button#product-addtocart-button.action.primary {
-  background: var(--awa-success, #16a34a) !important;
-  background-color: var(--awa-success, #16a34a) !important;
+  background: var(--awa-brand) !important;
+  background-color: var(--awa-brand) !important;
   background-image: none !important;
   border: 0 !important;
-  border-color: var(--awa-success, #16a34a) !important;
-  color: var(--awa-bg, #fff) !important;
+  border-color: var(--awa-brand) !important;
+  color: var(--awa-surface) !important;
   box-shadow: none !important;
 }
 
@@ -7572,10 +7692,10 @@ html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-add-form button.tocart:hover,
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main button#product-addtocart-button:focus-visible,
 html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main button.action.tocart:focus-visible {
-  background: var(--awa-success-mid, var(--awa-success-dark, #15803d)) !important;
-  background-color: var(--awa-success-mid, var(--awa-success-dark, #15803d)) !important;
+  background: var(--awa-brand-dark) !important;
+  background-color: var(--awa-brand-dark) !important;
   background-image: none !important;
-  color: var(--awa-bg, #fff) !important;
+  color: var(--awa-surface) !important;
   box-shadow: none !important;
 }
 
@@ -7833,4 +7953,18 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
     line-height: 1.35 !important;
     margin: 0 !important;
     overflow: hidden !important;
+}
+
+/* Mais Vendidos: setas overlay (44px) cobriam o 1o/ultimo card.
+   Reserva gutter no viewport. !important: guerra de padding no lock terminal. */
+@media (min-width: 768px) {
+    html body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+        .page-wrapper
+        .content-top-home
+        .awa-carousel-section--featured
+        .awa-shelf--carousel
+        .awa-carousel__track {
+        box-sizing: content-box !important;
+        padding-inline: calc(var(--awa-touch-target, 44px) + 8px) !important;
+    }
 }

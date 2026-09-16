@@ -3466,14 +3466,22 @@ body.cms-index-index .slick-dots {
     .page-header .header-main .container,
     .page-header .header-middle .container,
     .page-header .header-container .container,
-    .header-control.header-nav > .container,
-    .header-control.awa-nav-bar > .container,
     .page-header .nav-sections .navigation,
     .page-header .navigation {
       width: ~"min(1280px, calc(100% - 24px))" !important;
       max-inline-size: var(--awa-container-max, 1280px) !important;
       margin-inline: auto !important;
       padding-inline: 0 !important;
+    }
+
+    .header-control.header-nav > .container,
+    .header-control.awa-nav-bar > .container {
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin-inline: 0 !important;
+      padding-inline: 0 !important;
+      box-sizing: border-box !important;
     }
 
     .header.awa-main-header,
@@ -3609,8 +3617,10 @@ body.cms-index-index .slick-dots {
 
     .header-control.awa-nav-bar,
     .header-control.header-nav {
-      width: ~"min(1280px, calc(100% - 24px))" !important;
-      margin-inline: auto !important;
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin-inline: 0 !important;
       padding-inline: 0 !important;
     }
   }
@@ -3735,9 +3745,10 @@ body.cms-index-index .slick-dots {
 
     .page-header .header-control.awa-nav-bar,
     .page-header .header-control.header-nav {
-      width: ~"min(1280px, 100%)" !important;
-      max-inline-size: var(--awa-container-max, 1280px) !important;
-      margin-inline: auto !important;
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin-inline: 0 !important;
       padding-inline: 0 !important;
     }
   }
@@ -4027,13 +4038,9 @@ html body#html-body .page-wrapper :is(.page-footer, .page_footer) {
     .page-header .header-main .container,
     .page-header .header-middle .container,
     .page-header .header-container .container,
-    .header-control.header-nav > .container,
-    .header-control.awa-nav-bar > .container,
     .page-header .nav-sections .navigation,
-    .page-header .navigation,
-    .header-control.awa-nav-bar,
-    .header-control.header-nav.awa-nav-bar {
-      width: ~"min(1280px, calc(100% - 32px))" !important;
+    .page-header .navigation {
+      width: ~"min(100%, 1280px)" !important;
       max-inline-size: var(--awa-container-max, 1280px) !important;
       margin-inline: auto !important;
       padding-inline: 0 !important;
@@ -4199,21 +4206,31 @@ html body#html-body .page-wrapper :is(.page-footer, .page_footer) {
     .header-control.awa-nav-bar,
     .header-control.header-nav.awa-nav-bar {
       display: block !important;
-      width: ~"min(1280px, calc(100% - 32px))" !important;
-      max-inline-size: var(--awa-container-max, 1280px) !important;
-      margin: 0 auto !important;
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin: 0 !important;
       padding-inline: 0 !important;
       box-sizing: border-box !important;
     }
 
     .header-control.awa-nav-bar > .container,
-    .header-control.header-nav.awa-nav-bar > .container,
+    .header-control.header-nav.awa-nav-bar > .container {
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin-inline: 0 !important;
+      padding-inline: 0 !important;
+      box-sizing: border-box !important;
+    }
+
     .header-control.awa-nav-bar .awa-nav-bar__inner,
     .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner {
       width: 100% !important;
-      max-width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
       margin-inline: 0 !important;
-      padding-inline: 0 !important;
+      padding-inline: ~"max(24px, calc((100% - 1280px) / 2 + 24px))" !important;
       box-sizing: border-box !important;
     }
 
@@ -4364,21 +4381,31 @@ html body#html-body .page-wrapper :is(.page-footer, .page_footer) {
     .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,
     .header-control.awa-nav-bar,
     .header-control.header-nav.awa-nav-bar {
-      width: ~"min(1280px, calc(100% - 32px))" !important;
-      max-inline-size: var(--awa-container-max, 1280px) !important;
-      margin: 0 auto !important;
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin: 0 !important;
       padding-inline: 0 !important;
       box-sizing: border-box !important;
     }
 
     .header-control.awa-nav-bar > .container,
-    .header-control.header-nav.awa-nav-bar > .container,
+    .header-control.header-nav.awa-nav-bar > .container {
+      width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
+      margin-inline: 0 !important;
+      padding-inline: 0 !important;
+      box-sizing: border-box !important;
+    }
+
     .header-control.awa-nav-bar .awa-nav-bar__inner,
     .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner {
       width: 100% !important;
-      max-width: 100% !important;
+      max-width: none !important;
+      max-inline-size: none !important;
       margin-inline: 0 !important;
-      padding-inline: 0 !important;
+      padding-inline: ~"max(24px, calc((100% - 1280px) / 2 + 24px))" !important;
       box-sizing: border-box !important;
     }
   }

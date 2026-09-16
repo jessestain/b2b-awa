@@ -19,7 +19,46 @@ define([
      * @param {Object|String} config
      * @param {String} component
      */
+    function isCmsHome() {
+        return !!(document.body && (
+            document.body.classList.contains('cms-index-index') ||
+            document.body.classList.contains('cms-home') ||
+            document.body.classList.contains('cms-homepage_ayo_home5')
+        ));
+    }
+
+    function isHeroNode(el) {
+        return !!(el && el.closest && el.closest(
+            '.wrapper_slider, .awa-hero-swiper, .awa-hero-slider, .awa-hero'
+        ));
+    }
+
+    function shouldSkipHomeShelfComponent(component, el) {
+        var name;
+        if (!isCmsHome()) {
+            return false;
+        }
+        name = String(component || '');
+        if (/AiAssistant|ai-assistant/i.test(name)) {
+            return !window.__awaHomePaintDeferredReady;
+        }
+        /* r4d: Magento_Ui messages/knockout app, pageCache block render, captcha */
+        if (/Magento_Ui\/js\/core\/app|pageCache|Magento_PageCache\/js\/page-cache|Magento_Captcha\/|\bcaptcha\b/i.test(name)) {
+            return !window.__awaHomePaintDeferredReady;
+        }
+        if (!/(owl|swiper|tab-carousel|superdeals|rokanthemes-owl|owl-carousel-init)/i.test(name)) {
+            return false;
+        }
+        if (isHeroNode(el)) {
+            return !window.__awaHomePaintDeferredReady;
+        }
+        return true;
+    }
+
     function safeInit(el, config, component) {
+        if (shouldSkipHomeShelfComponent(component, el)) {
+            return;
+        }
         require([component], function (fn) {
             var $el;
             var bound;

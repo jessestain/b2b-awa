@@ -766,31 +766,8 @@ html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-l
     margin: 0 !important;
   }
 
-  /*
-   * Round 24 — BUG-NAV-HOME-ICON (debug d5b5db):
-   * .icon-home recebe content U+E069 (simple-line-icons) mas
-   * [class*=" icon-"] força font-family: icomoon !important.
-   * Resultado: glifo ausente no item Início da bottom nav.
-   * Fix: alinhar font + content do simple-line-icons (mesmo set de Conta/Carrinho).
-   */
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    .icon.icon-home,
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    .icon-home {
-    font-family: 'simple-line-icons' !important;
-  }
-
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    .icon-home::before {
-    content: '\e069' !important;
-    font-family: 'simple-line-icons' !important;
-  }
+  /* Icon mappings are owned by awa-header-contract-grid; do not mix
+     simple-line-icons codepoints with the shared navigation font. */
 
   html body#html-body
     nav.fixed-bottom
@@ -1213,6 +1190,32 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
   .page-wrapper .awa-hero-b2b-cta
   .awa-hero-benefits__item--interactive:has(> .awa-hero-benefits__link[href*="wa.me/"]) {
   display: none !important;
+}
+
+/* Round 21A — BUG-H-AXIS-016: nav desktop 16px fora do eixo em páginas internas.
+   Vence trilhos 1280-24/32 do themes/styles e ancora nav no mesmo shell do main/footer. */
+@media (min-width: 992px) {
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.awa-nav-bar,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar {
+    width: min(100%, 1280px) !important;
+    max-width: 1280px !important;
+    margin-inline: auto !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar > .container,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar > .container,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+    box-sizing: border-box !important;
+  }
 }
 
 /* Round 21 — BUG-H-028 (follow-up): touch targets pequenos no header/footer mobile.

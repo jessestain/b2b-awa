@@ -318,6 +318,15 @@ define(['jquery'], function ($) {
                 'box-sizing': 'border-box'
             });
 
+            // PDP only: keep long, model-specific recommendation names readable.
+            // The touch-target pass writes inline !important styles, so apply the
+            // matching three-line clamp in the same existing pass.
+            if (document.body.classList.contains('catalog-product-view')) {
+                forceTouch44(document.querySelectorAll('.awa-pdp-related .product-item-link'), {
+                    '-webkit-line-clamp': '3'
+                });
+            }
+
             forceTouch44(document.querySelectorAll('.rx-pdp-login-link, .awa-related-price-notice__login-link'), {
                 'display': 'inline-flex',
                 'align-items': 'center',

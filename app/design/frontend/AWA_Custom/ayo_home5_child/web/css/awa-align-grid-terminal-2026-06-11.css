@@ -16,6 +16,52 @@ html body#html-body {
   --awa-grid-thumb-ratio: 1 / 1;
 }
 
+/* R27 (revisado 2026-09-15) — nomes completos preservavam aplicação/acabamento,
+   mas geravam cards com altura inconsistente entre prateleiras (título sem clamp
+   fazia o card variar conforme o texto quebrasse em 2 ou 3 linhas). Agora aplica
+   clamp de 2 linhas com altura fixa. Ver PADRONIZACAO_LAYOUT.md A7 fatia 19. */
+@layer awa-fixes {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home .awa-shelf--carousel
+  :is(h3.product-name,.product-name,.product-name a,a.product-item-link,.product-item-link) {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    min-height: calc(1.35em * 2) !important;
+    max-height: calc(1.35em * 2) !important;
+    height: auto !important;
+    overflow: hidden !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.35 !important;
+  }
+
+  /* R27 — o CTA de preço B2B precisa caber no card estreito sem corte. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+  .page-wrapper .content-top-home .awa-shelf--carousel
+  .awa-home-price-gate a.awa-card-view-product.action.secondary {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 6px !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: normal !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+  }
+}
+
 @media (max-width: 767px) {
   html body#html-body {
     --awa-grid-container-pad: 16px;
@@ -4916,14 +4962,15 @@ html body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-i
     .page-wrapper
     .cart-container
     .cart-summary {
-    order: 0 !important;
+    /* Keep item review before totals on narrow screens; preserve the cascade lock. */
+    order: 1 !important;
   }
 
   html body#html-body#html-body.checkout-cart-index
     .page-wrapper
     .cart-container
     .form-cart {
-    order: 1 !important;
+    order: 0 !important;
   }
 }
 
@@ -5181,7 +5228,7 @@ html body#html-body#html-body:is(.b2b-account-dashboard, [class*="b2b-"])
     .content-top-home
     .awa-shelf--carousel
     ul.owl.awa-carousel__track {
-    gap: 8px !important;
+    gap: 12px !important;
   }
 
   html body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
@@ -24335,27 +24382,12 @@ html
   }
 }
 
-/* H-cart-bar-nav (e86806):
-   Runtime cart mobile: .awa-cart-mobile-bar (bottom:0,z:900) 100% sob
-   nav.fixed-bottom (z:999) — CDP overlap 64×375. Critical CSS
-   `body.checkout-cart-index nav.fixed-bottom{display:none!important}` é
-   UNLAYERED e perde para @layer awa-visual-priority
-   `display:block!important` (layered important > unlayered important).
-   Fix: hide nav no carrinho DENTRO da mesma layer, spec ≥ show rule. */
+/* H-cart-bar-nav (r27):
+   A navegação global permanece no carrinho vazio. Quando o carrinho preenchido
+   ativa a barra fixa de total/checkout, apenas então a nav é ocultada para não
+   criar duas superfícies concorrentes no mesmo bottom edge. */
 @layer awa-visual-priority {
   @media (max-width: 767px) {
-    html
-      body#html-body.checkout-cart-index
-      .page-wrapper
-      nav.fixed-bottom.hidden-sm.hidden-md.hidden-lg,
-    html
-      body#html-body.checkout-cart-index
-      .page-wrapper
-      nav.fixed-bottom.hidden-sm.hidden-md.hidden-lg.mobile-bottom-nav,
-    html
-      body#html-body.checkout-cart-index
-      .page-wrapper
-      nav.fixed-bottom,
     html
       body#html-body.checkout-cart-index.awa-cart-mobile-bar-active
       .page-wrapper
@@ -25687,12 +25719,12 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-home .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr,
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-homepage_ayo_home5 .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr {
   position: absolute !important;
-  inset: calc(50% - 18px) 0 auto 0 !important;
-  top: calc(50% - 18px) !important;
+  inset: 0 0 20px 0 !important;
+  top: 0 !important;
   right: 0 !important;
-  bottom: auto !important;
+  bottom: 20px !important;
   left: 0 !important;
-  height: 0 !important;
+  height: auto !important;
   transform: none !important;
   pointer-events: none !important;
   z-index: 6 !important;
@@ -25702,9 +25734,9 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-home .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr :is(.awa-owl-nav__btn,.awa-carousel__arrow,.awa-carousel__button,.owl-prev,.owl-next),
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.cms-homepage_ayo_home5 .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr :is(.awa-owl-nav__btn,.awa-carousel__arrow,.awa-carousel__button,.owl-prev,.owl-next) {
   position: absolute !important;
-  top: 0 !important;
+  top: 50% !important;
   bottom: auto !important;
-  inset-block-start: 0 !important;
+  inset-block-start: 50% !important;
   inset-block-end: auto !important;
   transform: translateY(-50%) !important;
   pointer-events: auto !important;
@@ -25738,12 +25770,12 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   .awa-shelf--carousel[class*="rokan-"]
   > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr[data-awa-nav-anchor="viewport"] {
   position: absolute !important;
-  inset: 220px 0 auto 0 !important;
-  top: 220px !important;
-  bottom: auto !important;
+  inset: 0 0 20px 0 !important;
+  top: 0 !important;
+  bottom: 20px !important;
   left: 0 !important;
   right: 0 !important;
-  height: 0 !important;
+  height: auto !important;
   transform: none !important;
   pointer-events: none !important;
   z-index: 6 !important;
@@ -25756,9 +25788,9 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   > .awa-owl-nav.awa-carousel__nav.awa-carousel-chrome-ssr[data-awa-nav-anchor="viewport"]
   :is(.awa-owl-nav__btn, .awa-carousel__arrow, .awa-carousel__button, .owl-prev, .owl-next) {
   position: absolute !important;
-  top: 0 !important;
+  top: 50% !important;
   bottom: auto !important;
-  inset-block-start: 0 !important;
+  inset-block-start: 50% !important;
   inset-block-end: auto !important;
   transform: translateY(-50%) !important;
   pointer-events: auto !important;
@@ -25771,10 +25803,10 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 html body#html-body.cms-index-index .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"],
 html body#html-body.cms-home .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"],
 html body#html-body.cms-homepage_ayo_home5 .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"] {
-  top: 220px !important;
-  bottom: auto !important;
-  inset: 220px 0 auto 0 !important;
-  height: 0 !important;
+  top: 0 !important;
+  bottom: 20px !important;
+  inset: 0 0 20px 0 !important;
+  height: auto !important;
   transform: none !important;
   pointer-events: none !important;
   z-index: 6 !important;
@@ -25783,9 +25815,9 @@ html body#html-body.cms-homepage_ayo_home5 .page-wrapper .content-top-home .awa-
 html body#html-body.cms-index-index .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"] :is(.awa-owl-nav__btn, .awa-carousel__arrow, .awa-carousel__button, .owl-prev, .owl-next),
 html body#html-body.cms-home .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"] :is(.awa-owl-nav__btn, .awa-carousel__arrow, .awa-carousel__button, .owl-prev, .owl-next),
 html body#html-body.cms-homepage_ayo_home5 .page-wrapper .content-top-home .awa-shelf--carousel[class*="rokan-"] > .awa-owl-nav.awa-carousel__nav[data-awa-nav-anchor="viewport"] :is(.awa-owl-nav__btn, .awa-carousel__arrow, .awa-carousel__button, .owl-prev, .owl-next) {
-  top: 0 !important;
+  top: 50% !important;
   bottom: auto !important;
-  inset-block-start: 0 !important;
+  inset-block-start: 50% !important;
   inset-block-end: auto !important;
   transform: translateY(-50%) !important;
   pointer-events: auto !important;

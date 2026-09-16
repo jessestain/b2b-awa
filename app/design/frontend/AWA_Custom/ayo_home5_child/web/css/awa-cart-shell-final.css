@@ -113,8 +113,8 @@ html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__icon-
     width: 56px !important;
     height: 56px !important;
     margin: 0 auto !important;
-    color: var(--awa-primary, var(--awa-primary)) !important;
-    background: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 10%, var(--awa-bg, var(--awa-bg))) !important;
+    color: var(--awa-primary, #b73337) !important;
+    background: color-mix(in srgb, var(--awa-primary, #b73337) 10%, var(--awa-bg, var(--awa-bg))) !important;
     border-radius: 50% !important;
 }
 
@@ -149,7 +149,7 @@ html body#html-body.checkout-cart-index .page-wrapper .awa-cart-empty__min-order
     max-width: 72ch !important;
     border-radius: 8px !important;
     border: 1px solid var(--awa-border, var(--awa-border)) !important;
-    background: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 5%, var(--awa-bg, var(--awa-bg))) !important;
+    background: color-mix(in srgb, var(--awa-primary, #b73337) 5%, var(--awa-bg, var(--awa-bg))) !important;
     font-size: 13px !important;
     line-height: 1.4 !important;
     text-align: center !important;
@@ -210,7 +210,7 @@ html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__secon
 html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__suggestion, .awa-order-success__cta-secondary, .awa-order-success__wa) {
     border: 1px solid var(--awa-border, var(--awa-border)) !important;
     background: var(--awa-bg, var(--awa-bg)) !important;
-    color: var(--awa-primary, var(--awa-primary)) !important;
+    color: var(--awa-primary, #b73337) !important;
 }
 
 html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__categories, .awa-order-success__categories) {
@@ -221,7 +221,7 @@ html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__categ
     max-width: 100% !important;
     border: 1px solid var(--awa-border, var(--awa-border)) !important;
     border-radius: 8px !important;
-    background: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 4%, var(--awa-bg, var(--awa-bg))) !important;
+    background: color-mix(in srgb, var(--awa-primary, #b73337) 4%, var(--awa-bg, var(--awa-bg))) !important;
     text-align: center !important;
 }
 
@@ -250,7 +250,7 @@ html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__categ
     font-size: 13px !important;
     font-weight: 700 !important;
     line-height: 1.3 !important;
-    color: var(--awa-primary, var(--awa-primary)) !important;
+    color: var(--awa-primary, #b73337) !important;
 }
 
 html body#html-body.checkout-cart-index .page-wrapper :is(.awa-cart-empty__trust, .awa-order-success__trust) {
@@ -275,7 +275,7 @@ html body#html-body.checkout-cart-index .page-wrapper .awa-order-success__card {
     padding: var(--awa-cart-gap-md) !important;
     border: 1px solid var(--awa-border, var(--awa-border)) !important;
     border-radius: 8px !important;
-    background: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 4%, var(--awa-bg, var(--awa-bg))) !important;
+    background: color-mix(in srgb, var(--awa-primary, #b73337) 4%, var(--awa-bg, var(--awa-bg))) !important;
 }
 
 html body#html-body.checkout-cart-index .page-wrapper .awa-order-success__details {
@@ -314,7 +314,7 @@ html body#html-body.checkout-cart-index .page-wrapper .awa-order-success__row dd
 }
 
 html body#html-body.checkout-cart-index .page-wrapper :is(.awa-order-success__number, .awa-order-success__total) {
-    color: var(--awa-primary, var(--awa-primary)) !important;
+    color: var(--awa-primary, #b73337) !important;
     font-weight: 700 !important;
 }
 
@@ -781,14 +781,14 @@ html body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index 
 html body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index .page-wrapper
 .awa-site-header[data-awa-header-mode='default'] .awa-header-search-col form#search_mini_form {
     background: var(--awa-bg, var(--awa-bg)) !important;
-    border: 1px solid color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 24%, var(--awa-border, #e5e7eb)) !important;
+    border: 1px solid color-mix(in srgb, var(--awa-primary, #b73337) 24%, var(--awa-border, #e5e7eb)) !important;
     box-shadow: none !important;
     outline: none !important;
 }
 
 html body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index .page-wrapper
 .awa-site-header[data-awa-header-mode='default'] .awa-header-search-col form#search_mini_form:focus-within {
-    border-color: var(--awa-primary, var(--awa-primary)) !important;
+    border-color: var(--awa-primary, #b73337) !important;
     box-shadow: none !important;
     outline: none !important;
 }
@@ -926,9 +926,9 @@ html body#html-body.checkout-cart-index .cart.table-wrapper .awa-cart-item-actio
 
 html body#html-body.checkout-cart-index .cart.table-wrapper .awa-cart-item-actions .action-delete:hover,
 html body#html-body.checkout-cart-index .cart.table-wrapper .awa-cart-item-actions .action-delete:focus-visible {
-    border-color: var(--awa-primary, var(--awa-primary)) !important;
-    background: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 7%, var(--awa-bg, var(--awa-bg))) !important;
-    color: var(--awa-primary, var(--awa-primary)) !important;
+    border-color: var(--awa-primary, #b73337) !important;
+    background: color-mix(in srgb, var(--awa-primary, #b73337) 7%, var(--awa-bg, var(--awa-bg))) !important;
+    color: var(--awa-primary, #b73337) !important;
 }
 
 html body#html-body.checkout-cart-index .cart-summary #block-shipping,

@@ -1101,6 +1101,12 @@
         var header = document.querySelector('.awa-site-header');
         var isDesktop = !!(window.matchMedia && window.matchMedia('(min-width: 992px)').matches);
         var nextLayoutKey;
+        var prompt = document.querySelector('.awa-header-account-prompt');
+        var promptRect = prompt ? prompt.getBoundingClientRect() : null;
+        var panelRect = panel ? panel.getBoundingClientRect() : null;
+        var overlapPx = (promptRect && panelRect)
+            ? Math.max(0, Math.round(promptRect.bottom - panelRect.top))
+            : -1;
 
         // AWA Fix: skip fixed positioning in auth shells to avoid conflict with absolute positioning
         if (typeof isAuthShell === 'function' && isAuthShell()) {

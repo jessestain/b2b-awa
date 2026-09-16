@@ -274,7 +274,7 @@ var classObserver = new MutationObserver(function () {
 // Não forçar estilos inline no shell do footer/trust bar.
         // Mantemos essas superfícies controladas por CSS para evitar drift visual
         // e style="" inflado no DOM.
-        document.querySelectorAll('.page_footer,footer.page-footer,.page-footer').forEach(function (el) {
+        document.querySelectorAll('footer.page-footer,.page-footer').forEach(function (el) {
             [
                 'background',
                 'background-color',
@@ -299,6 +299,17 @@ var classObserver = new MutationObserver(function () {
                 'max-width',
                 'width'
             ].forEach(function (prop) { el.style.removeProperty(prop); });
+            s(el, 'max-width', 'none');
+            s(el, 'width', '100%');
+            s(el, 'margin-left', '0');
+            s(el, 'margin-right', '0');
+            s(el, 'margin-inline', '0');
+            s(el, 'padding-left', '0');
+            s(el, 'padding-right', '0');
+            s(el, 'padding-inline', '0');
+            s(el, 'box-sizing', 'border-box');
+        });
+        document.querySelectorAll('footer.page-footer > .page_footer, .page-footer > .page_footer').forEach(function (el) {
             s(el, 'max-width', 'none');
             s(el, 'width', '100%');
             s(el, 'margin-left', '0');

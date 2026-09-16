@@ -10,6 +10,8 @@ define(['jquery'], function ($) {
 
     let OBSERVER_KEY   = '__awaHomeCategoryCompatObserver';
     let SCHEDULED_KEY  = '__awaHomeCategoryCompatScheduled';
+    let DEBUG_ONCE_KEY = '__awaHomeCategoryCompatDebugOnce';
+    let QUICKVIEW_OBSERVER_KEY = '__awaQuickviewA11yObserver';
     let MAX_OBS_FIRES  = 12;     /* disconnect after N relevant mutations */
     let obsFireCount   = 0;
 
@@ -26,14 +28,32 @@ define(['jquery'], function ($) {
         '.owl-controls'
     ];
 
-    function isRelevantPage() {
+    function isHomePage() {
         let b = document.body;
         return !!(b && (
             b.classList.contains('cms-index-index') ||
-            b.classList.contains('cms-home') ||
+            b.classList.contains('cms-home')
+        ));
+    }
+
+    function isCatalogListPage() {
+        let b = document.body;
+        return !!(b && (
             b.classList.contains('catalog-category-view') ||
             b.classList.contains('catalogsearch-result-index')
         ));
+    }
+
+    function isRelevantPage() {
+        return isHomePage() || isCatalogListPage();
+    }
+
+    function debugOnce(hypothesisId, message, data) {
+        window[DEBUG_ONCE_KEY] = window[DEBUG_ONCE_KEY] || {};
+        if (window[DEBUG_ONCE_KEY][message]) {
+            return;
+        }
+        window[DEBUG_ONCE_KEY][message] = true;
     }
 
     function isVisible(el) {
@@ -222,20 +242,50 @@ define(['jquery'], function ($) {
         var block;
         var content;
         var title;
+        var closeButton;
 
         for (i = 0; i < blocks.length; i++) {
             block = blocks[i];
             content = block.querySelector('.block-content.filter-content');
-            if (!content || content.querySelector('.block-title.filter-title')) {
+            if (!content) {
                 continue;
             }
-            title = document.createElement('div');
-            title.className = 'block-title filter-title';
-            title.setAttribute('role', 'heading');
-            title.setAttribute('aria-level', '2');
-            title.innerHTML = '<strong data-role="title">Comprar por</strong>';
-            content.insertBefore(title, content.firstChild);
+
+            title = content.querySelector('.block-title.filter-title');
+            if (!title) {
+                title = document.createElement('div');
+                title.className = 'block-title filter-title';
+                title.setAttribute('role', 'heading');
+                title.setAttribute('aria-level', '2');
+                title.innerHTML = '<strong data-role="title">Comprar por</strong>';
+                content.insertBefore(title, content.firstChild);
+            }
+
+            if (!title.id) {
+                title.id = 'awa-plp-filter-title';
+            }
+
+            if (!title.querySelector('[data-awa-filter-close="true"]')) {
+                closeButton = document.createElement('button');
+                closeButton.type = 'button';
+                closeButton.className = 'action awa-filter-dialog-close';
+                closeButton.setAttribute('data-awa-filter-close', 'true');
+                closeButton.setAttribute('aria-label', 'Fechar filtros');
+                closeButton.innerHTML = '<span aria-hidden="true">&times;</span>';
+                title.appendChild(closeButton);
+            }
         }
+    }
+
+    function ensureFilterDialogOverlay() {
+        var overlay = document.querySelector('.awa-filter-drawer-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'awa-filter-drawer-overlay';
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(overlay);
+        }
+        return $(overlay);
     }
 
     /**
@@ -263,6 +313,78 @@ define(['jquery'], function ($) {
         return fixed;
     }
 
+    function syncQuickviewTriggerState() {
+        var $triggers = $('.products-grid .quickview-link, .products-grid [data-role="quickview-button"]');
+        var $dialog = $('#quick-window').first();
+        var open = $dialog.length &&
+            $dialog.attr('aria-hidden') === 'false' &&
+            $('body').hasClass('quickview-open');
+
+        $triggers.attr('aria-expanded', 'false');
+        if (open) {
+            $triggers.filter('.active').first().attr('aria-expanded', 'true');
+        }
+    }
+
+    function ensureQuickviewObserver() {
+        var $dialog = $('#quick-window').first();
+        if (!$dialog.length || !window.MutationObserver || window[QUICKVIEW_OBSERVER_KEY]) {
+            return;
+        }
+
+        window[QUICKVIEW_OBSERVER_KEY] = new window.MutationObserver(syncQuickviewTriggerState);
+        window[QUICKVIEW_OBSERVER_KEY].observe($dialog.get(0), {
+            attributes: true,
+            attributeFilter: ['aria-hidden', 'class', 'style']
+        });
+    }
+
+    function applyPlpControlA11y() {
+        var quickSelector = '.products-grid .quickview-link, .products-grid [data-role="quickview-button"]';
+
+        $('.modes').attr({ role: 'group', 'aria-label': 'Modo de exibição dos produtos' });
+        $('.modes .modes-mode.active').attr({
+            role: 'button',
+            'aria-pressed': 'true',
+            'aria-disabled': 'true'
+        });
+        $('.modes a[data-role="mode-switcher"]').attr({
+            role: 'button',
+            'aria-pressed': 'false'
+        });
+
+        $(document)
+            .off('keydown.awaModeSwitcher', '.modes a[data-role="mode-switcher"]')
+            .on('keydown.awaModeSwitcher', '.modes a[data-role="mode-switcher"]', function (e) {
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+
+        $(quickSelector).attr({
+            role: 'button',
+            'aria-haspopup': 'dialog',
+            'aria-controls': 'quick-window',
+            'aria-expanded': 'false'
+        });
+
+        $(document)
+            .off('click.awaQuickviewTrigger', quickSelector)
+            .on('click.awaQuickviewTrigger', quickSelector, function () {
+                $(quickSelector).attr('aria-expanded', 'false');
+                $(this).attr('aria-expanded', 'true');
+                window.setTimeout(ensureQuickviewObserver, 0);
+            })
+            .off('click.awaQuickviewClose', '#quickview-close, #quick-background')
+            .on('click.awaQuickviewClose', '#quickview-close, #quick-background', function () {
+                $(quickSelector).attr('aria-expanded', 'false');
+            });
+
+        ensureQuickviewObserver();
+        syncQuickviewTriggerState();
+    }
+
     function applyPlpA11y() {
         let isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
         let isCategoryOrSearch = document.body &&
@@ -272,6 +394,8 @@ define(['jquery'], function ($) {
         $('.toolbar.toolbar-products').each(function () {
             $(this).attr('data-awa-component', $(this).attr('data-awa-component') || 'plp-toolbar');
         });
+
+        applyPlpControlA11y();
 
         fixEscapedPriceFilterLabels(document);
 
@@ -371,10 +495,18 @@ define(['jquery'], function ($) {
                     .on('click.awaFilterToggle', '.toolbar .modes .modes-label[data-awa-filter-toggle="true"]', function (e) {
                         if (isMobileViewport()) {
                             e.preventDefault();
-                            $body.toggleClass('awa-plp-filters-collapsed');
-                            $body.toggleClass('awa-plp-filters-expanded', !$body.hasClass('awa-plp-filters-collapsed'));
-                            updateFilterLabel();
+                            setMobileFilterExpanded($body.hasClass('awa-plp-filters-collapsed'), true);
                         }
+                    });
+
+                $(document)
+                    .off('click.awaFilterDialogClose', '[data-awa-filter-close="true"], .awa-filter-drawer-overlay')
+                    .on('click.awaFilterDialogClose', '[data-awa-filter-close="true"], .awa-filter-drawer-overlay', function (e) {
+                        if (!isMobileViewport() || $body.hasClass('awa-plp-filters-collapsed')) {
+                            return;
+                        }
+                        e.preventDefault();
+                        setMobileFilterExpanded(false, true);
                     });
 
                 var onFilterViewport = function () {
@@ -420,14 +552,136 @@ define(['jquery'], function ($) {
             }
         }
 
+        function filterFocusableElements($panel) {
+            return $panel.find(
+                'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), ' +
+                'select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            ).filter(function () {
+                return isVisible(this) && window.getComputedStyle(this).visibility !== 'hidden';
+            });
+        }
+
+        function bindFilterDialogKeyboard($panel) {
+            $(document).off('keydown.awaFilterDialog').on('keydown.awaFilterDialog', function (e) {
+                var $focusable;
+                var first;
+                var last;
+                var active;
+
+                if (!isMobileViewport() || $('body').hasClass('awa-plp-filters-collapsed')) {
+                    return;
+                }
+
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    setMobileFilterExpanded(false, true);
+                    return;
+                }
+
+                if (e.key !== 'Tab') {
+                    return;
+                }
+
+                $focusable = filterFocusableElements($panel);
+                if (!$focusable.length) {
+                    e.preventDefault();
+                    $panel.get(0).focus();
+                    return;
+                }
+
+                first = $focusable.get(0);
+                last = $focusable.get($focusable.length - 1);
+                active = document.activeElement;
+
+                if (!$.contains($panel.get(0), active)) {
+                    e.preventDefault();
+                    first.focus();
+                } else if (e.shiftKey && active === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && active === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            });
+        }
+
+        function setMobileFilterExpanded(expanded, restoreFocus) {
+            var $b = $('body');
+            var $panel = $('#layered-ajax-filter-block, .block.filter').first();
+            var $toggle = $('.shop-tab-select .toolbar.toolbar-products').find('.modes .modes-label').first();
+            var returnFocus = window.__awaFilterReturnFocus;
+
+            if (!isMobileViewport() || !$panel.length) {
+                return;
+            }
+
+            if (expanded) {
+                window.__awaFilterReturnFocus = $toggle.get(0) || document.activeElement;
+                $b.removeClass('awa-plp-filters-collapsed').addClass('awa-plp-filters-expanded');
+                updateFilterLabel();
+                bindFilterDialogKeyboard($panel);
+                window.setTimeout(function () {
+                    var close = $panel.find('[data-awa-filter-close="true"]').get(0);
+                    (close || $panel.get(0)).focus({ preventScroll: true });
+                }, 0);
+                return;
+            }
+
+            $b.addClass('awa-plp-filters-collapsed').removeClass('awa-plp-filters-expanded');
+            updateFilterLabel();
+            $(document).off('keydown.awaFilterDialog');
+            if (restoreFocus && returnFocus && typeof returnFocus.focus === 'function') {
+                window.setTimeout(function () {
+                    returnFocus.focus({ preventScroll: true });
+                }, 0);
+            }
+            window.__awaFilterReturnFocus = null;
+        }
+
+        function isDesktopSidebarHidden() {
+            var cols = document.querySelector('#maincontent.page-main > .columns.layout.layout-2-col.row, #maincontent.page-main > .columns.layout-2-col.row');
+            var side;
+            var style;
+            var rect;
+            if (!cols) {
+                return false;
+            }
+            side = cols.querySelector('.col-xs-12.col-sm-3.col-md-3.col-lg-2, .sidebar-main');
+            if (!side && cols.children && cols.children.length) {
+                side = cols.children[0];
+            }
+            if (!side) {
+                return false;
+            }
+            style = window.getComputedStyle(side);
+            rect = side.getBoundingClientRect();
+            return !!(
+                side.hidden === true
+                || side.getAttribute('aria-hidden') === 'true'
+                || !style
+                || style.display === 'none'
+                || style.visibility === 'hidden'
+                || !rect
+                || rect.width <= 1
+            );
+        }
+
         function updateFilterLabel() {
             var $body  = $('body');
             var $label = $('.shop-tab-select .toolbar.toolbar-products').find('.modes .modes-label').first();
             var $filter = $('#layered-ajax-filter-block, .block.filter').first();
+            var desktopHidden = false;
+            var collapsed = false;
             if (!$label.length) { return; }
             syncFilterViewportState();
             let isMob    = isMobileViewport();
-            let collapsed = isMob && $body.hasClass('awa-plp-filters-collapsed');
+            if (isMob) {
+                collapsed = $body.hasClass('awa-plp-filters-collapsed');
+            } else {
+                desktopHidden = isDesktopSidebarHidden();
+                collapsed = desktopHidden;
+            }
             var filterText = collapsed ? 'Mostrar Filtros' : 'Ocultar Filtros';
             $label.text(filterText)
                   .attr({
@@ -436,36 +690,28 @@ define(['jquery'], function ($) {
                   });
             if ($filter.length) {
                 $filter.attr('aria-hidden', collapsed ? 'true' : 'false');
+                if (isMob && !collapsed) {
+                    ensureFilterTitle();
+                    $filter.attr({
+                        role: 'dialog',
+                        'aria-modal': 'true',
+                        'aria-labelledby': 'awa-plp-filter-title',
+                        tabindex: '-1',
+                        'data-awa-filter-dialog': 'open'
+                    });
+                    ensureFilterDialogOverlay().addClass('is-active');
+                    $body.attr('data-awa-filter-dialog-open', 'true');
+                } else {
+                    if ($filter.attr('data-awa-filter-dialog')) {
+                        $filter.removeAttr('role aria-modal aria-labelledby tabindex data-awa-filter-dialog');
+                    }
+                    ensureFilterDialogOverlay().removeClass('is-active');
+                    $body.removeAttr('data-awa-filter-dialog-open');
+                }
             }
-            // #region agent log
-            try {
-                var listMode = document.querySelector('.toolbar .modes a.modes-mode.mode-list');
-                fetch('http://localhost:7242/ingest/85de6e60-1f5e-477a-a2b3-4840c3c33dfd', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Debug-Session-Id': 'f85cea'
-                    },
-                    body: JSON.stringify({
-                        sessionId: 'f85cea',
-                        runId: 'post-fix-plp-a11y',
-                        hypothesisId: 'A',
-                        location: 'awa-custom-home-category-compat.js:updateFilterLabel',
-                        message: 'plp filter/mode a11y labels',
-                        data: {
-                            vw: window.innerWidth || 0,
-                            filterText: filterText,
-                            filterAria: $label.attr('aria-label') || null,
-                            listLabelledBy: listMode ? listMode.getAttribute('aria-labelledby') : null,
-                            listAriaLabel: listMode ? listMode.getAttribute('aria-label') : null,
-                            listAccNameOk: !!(listMode && listMode.getAttribute('aria-label') &&
-                                !/Filtros/i.test(listMode.getAttribute('aria-label') || ''))
-                        },
-                        timestamp: Date.now()
-                    })
-                }).catch(function () {});
-            } catch (e) {}
-            // #endregion
+            if (!isMob && !window.__awaCompatDesktopFilterLogged) {
+                window.__awaCompatDesktopFilterLogged = true;
+            }
         }
     }
 
@@ -510,6 +756,17 @@ define(['jquery'], function ($) {
     /* ---- Master run ---- */
     function runAll() {
         if (!isRelevantPage()) { return; }
+
+        if (!isHomePage()) {
+            /* PLP/search: evita varreduras completas que geravam travadas intermitentes. */
+            applySearchA11y();
+            applyPlpA11y();
+            debugOnce('H21', 'heavy run skipped on catalog list route', {
+                routeType: 'catalog-list'
+            });
+            return;
+        }
+
         applyVerticalMenuA11y();
         applyCustomMenuA11y();
         applySearchA11y();
@@ -579,6 +836,12 @@ define(['jquery'], function ($) {
 
         if (!window.MutationObserver || window[OBSERVER_KEY]) { return; }
         if (!document.body) { return; }
+        if (!isHomePage()) {
+            debugOnce('H22', 'compat observer skipped on non-home route', {
+                routeType: 'catalog-list'
+            });
+            return;
+        }
 
         roots = resolveObserverRoots();
         if (!roots.length) {
@@ -621,6 +884,10 @@ define(['jquery'], function ($) {
                 bindFilterOverlayWatchdog();
                 applyPlpA11y();
             });
+            debugOnce('H21', 'catalog bootstrap running in lightweight mode', {
+                routeType: 'catalog-list'
+            });
+            return;
         }
 
         /* Adiado para apos o LCP:

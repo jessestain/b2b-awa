@@ -1,0 +1,10 @@
+/**
+ * B2B-QA-007 — keep Magento pt_BR grand total on one line at tablet widths.
+ * Loaded on customer account handles (including sales_order_view).
+ */
+#html-body.sales-order-view .order-details-items tfoot .grand_total .amount,
+#html-body.sales-order-view .order-details-items tfoot .grand_total .amount .price {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+}

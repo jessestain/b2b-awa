@@ -42,7 +42,7 @@
     --awa-home-pad-sm: 16px;
     --awa-home-col-gap: 24px;
     --awa-home-section-gap: clamp(32px, 5vw, 56px);
-    --awa-radius-sm: 6px;
+    --awa-radius-sm: 8px;
     --awa-radius-md: 12px;
 }
 

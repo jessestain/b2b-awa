@@ -1,5 +1,9 @@
 /**
- * Home PSI — adia require config + merged bundle até interação real do usuário.
+ * Storefront PSI — adia a cadeia AMD Magento até após o parser.
+ * freeze-fix-r10: plugin emits no executable require.min.js on cms home; stub stays.
+ * appendMerged remains a no-op on cms home (no mixins/owl inject).
+ * Home: idle ~3.5s / interação. Catálogo (data-awa-boot-mode=catalog): idle curto
+ * para o 1º paint não esperar require.js e o 1º tocart/filtro não ser engolido.
  */
 (function (w, d) {
     'use strict';
@@ -8,8 +12,8 @@
     var userIntent = false;
     var delayedBootScheduled = false;
     var events = ['pointerdown', 'keydown', 'touchstart'];
-    var MIN_PASSIVE_BOOT_MS = 5000;
-    var disableAutoBoot = true;
+    var MIN_PASSIVE_BOOT_MS = 0;
+    var disableAutoBoot = false;
 
     function cleanup() {
         events.forEach(function (eventName) {
@@ -27,7 +31,7 @@
         }
 
         return !!(evt.target && evt.target.closest && evt.target.closest(
-            'a, button, input, select, textarea, label, summary, [role="button"], [role="link"], .minicart-wrapper, .awa-header-account-prompt, #search_mini_form, .awa-hero-swiper__nav, .swiper-pagination-bullet, .awa-category-carousel__item, .product-item, .item-product'
+            'a, button, input, select, textarea, label, summary, [role="button"], [role="link"], .minicart-wrapper, .awa-header-account-prompt, #search_mini_form, .awa-hero-swiper__nav, .swiper-pagination-bullet, .awa-category-carousel__item, .product-item, .item-product, .action.tocart, .tocart, .box-tocart, .product-info-main, .product-options-wrapper, .swatch-attribute, #layered-filter-block, .filter-options, .pages, .sorter, .modes'
         ));
     }
 
@@ -77,8 +81,186 @@
         }
     }
 
+    function decodeMagentoJsString(raw) {
+        return String(raw).replace(/\\u([0-9a-fA-F]{4})/g, function (_, hex) {
+            return String.fromCharCode(parseInt(hex, 16));
+        });
+    }
+
+    function magentoInlineText() {
+        var inline = d.getElementById('awa-home-bootstrap-inline');
+
+        return (inline && inline.textContent) || '';
+    }
+
+    function parseMagentoInlineBaseUrl() {
+        var match = /baseUrl['"]\s*:\s*['"]([^'"]+)/.exec(magentoInlineText());
+
+        return match ? decodeMagentoJsString(match[1]) : '';
+    }
+
+    function magentoCtxBaseUrl() {
+        try {
+            return (w.require.s.contexts._.config.baseUrl) || '';
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function hasMagentoHeroMap() {
+        try {
+            var map = w.require.s.contexts._.config.map['*'];
+
+            return !!(map && map.awaHeroSlider);
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
+     * Magento require.js só aplica o objeto { baseUrl } se window.require
+     * NÃO for function. O stub AWA é function, então o core ignora o
+     * baseUrl Magento e o min-resolver captura './'.
+     */
+    function ensureMagentoRequireConfigObject() {
+        var baseUrl;
+        var loc;
+        var base;
+        var text;
+
+        runInline();
+        text = magentoInlineText();
+        loc = /LOCALE\s*=\s*'([^']*)'/.exec(text);
+        base = /BASE_URL\s*=\s*'([^']*)'/.exec(text);
+        if (loc) {
+            w.LOCALE = decodeMagentoJsString(loc[1]);
+        }
+        if (base) {
+            w.BASE_URL = decodeMagentoJsString(base[1]);
+        }
+        baseUrl = parseMagentoInlineBaseUrl();
+        if (!baseUrl) {
+            return;
+        }
+        if (typeof w.require === 'function') {
+            w.requirejs = undefined;
+            w.require = { baseUrl: baseUrl };
+            return;
+        }
+        if (!w.require || typeof w.require !== 'object') {
+            w.require = { baseUrl: baseUrl };
+            return;
+        }
+        if (!w.require.baseUrl) {
+            w.require.baseUrl = baseUrl;
+        }
+    }
+
+    function applyMagentoRequireBaseUrl() {
+        var baseUrl = parseMagentoInlineBaseUrl();
+
+        if (!baseUrl || typeof w.require !== 'function' || typeof w.require.config !== 'function' || w.require._awaStub) {
+            return false;
+        }
+        if (magentoCtxBaseUrl() === baseUrl) {
+            return false;
+        }
+        w.require.config({ baseUrl: baseUrl });
+
+        return magentoCtxBaseUrl() === baseUrl;
+    }
+
+    function wrapMagentoNewContext() {
+        if (typeof w.require !== 'function' || !w.require.s || typeof w.require.s.newContext !== 'function' || w.require.s.__awaNewContextWrapped) {
+            return false;
+        }
+
+        var origNewContext = w.require.s.newContext;
+
+        w.require.s.newContext = function () {
+            var created = origNewContext.apply(this, arguments);
+
+            bindMagentoUnbundledContext();
+
+            return created;
+        };
+        w.require.s.__awaNewContextWrapped = 1;
+
+        return true;
+    }
+
+    /**
+     * Magento mixins.js cria o contexto RequireJS `$` e replica require.config
+     * nele, inclusive `deps` (o array é compartilhado com `_`). O `$` não recebe
+     * o min-resolver do core, então carrega mage/common.js (404) em paralelo a
+     * common.min.js. Isolar deps e aplicar o mesmo rewrite Magento de .min.js
+     * só no `$`. getPath() usa toUrl sem extensão — mixins do Magento seguem ok.
+     */
+    function bindMagentoUnbundledContext() {
+        var ctx;
+        var origConfigure;
+        var origNameToUrl;
+
+        if (typeof w.require !== 'function' || !w.require.s || !w.require.s.contexts) {
+            return false;
+        }
+
+        ctx = w.require.s.contexts['$'];
+        if (!ctx) {
+            return false;
+        }
+
+        if (!ctx.__awaUnbundledDepsPatched && typeof ctx.configure === 'function') {
+            origConfigure = ctx.configure;
+            ctx.configure = function (cfg) {
+                var copy;
+                var key;
+
+                if (cfg && Object.prototype.hasOwnProperty.call(cfg, 'deps')) {
+                    copy = {};
+                    for (key in cfg) {
+                        if (Object.prototype.hasOwnProperty.call(cfg, key) && key !== 'deps') {
+                            copy[key] = cfg[key];
+                        }
+                    }
+                    cfg = copy;
+                }
+
+                origConfigure.call(this, cfg);
+                ctx.config.deps = [];
+            };
+            ctx.__awaUnbundledDepsPatched = 1;
+        }
+
+        if (ctx.config) {
+            ctx.config.deps = [];
+        }
+
+        if (!ctx.__awaMagentoMinBound && typeof ctx.nameToUrl === 'function') {
+            origNameToUrl = ctx.nameToUrl;
+            ctx.nameToUrl = function () {
+                var url = origNameToUrl.apply(ctx, arguments);
+                var base = (ctx.config && ctx.config.baseUrl) || magentoCtxBaseUrl() || '';
+
+                if (!url || !base || url.indexOf(base) !== 0) {
+                    return url;
+                }
+                if (url.indexOf('/awa-') !== -1 || url.indexOf('/hugerte/') !== -1 || url.indexOf('/v1/songbird') !== -1 || url.indexOf('https://www.google.com/recaptcha/api.js') !== -1) {
+                    return url;
+                }
+
+                return url.replace(/(\.min)?\.js$/, '.min.js');
+            };
+            ctx.__awaMagentoMinBound = 1;
+        }
+
+        return true;
+    }
+
     function waitForRealRequire(callback, attempts) {
         var left = attempts || 80;
+
+        bindMagentoUnbundledContext();
 
         if (typeof w.awaFlushRequireQueue === 'function' && w.awaFlushRequireQueue()) {
             callback();
@@ -138,6 +320,12 @@
     }
 
     function loadShelfCarouselScript(source) {
+        /* Isolation r4: never inject awa-scroll-carousel on cms_index_index. */
+        var bootStore = d.getElementById('awa-home-bootstrap-merged');
+        var bootMode = bootStore && bootStore.getAttribute('data-awa-boot-mode');
+        if (bootMode === 'home' || (d.body && d.body.classList && d.body.classList.contains('cms-index-index'))) {
+            return false;
+        }
         if (d.querySelector('script[data-awa-shelf-carousel-js="1"]')) {
             return true;
         }
@@ -165,39 +353,137 @@
         }
     }
 
+    function isCatalogBoot() {
+        var store = d.getElementById('awa-home-bootstrap-merged');
+
+        return !!(store && store.getAttribute('data-awa-boot-mode') === 'catalog');
+    }
+
+    function parseAmdSrcs(store) {
+        var raw;
+        var parsed;
+
+        if (!store) {
+            return [];
+        }
+
+        raw = store.getAttribute('data-amd-srcs');
+        if (raw) {
+            try {
+                parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    return parsed.filter(function (src) {
+                        return !!src;
+                    });
+                }
+            } catch (e) {
+                /* fall through to data-src */
+            }
+        }
+
+        raw = store.getAttribute('data-src');
+        return raw ? [raw] : [];
+    }
+
     function appendMerged(onReady) {
         var store = d.getElementById('awa-home-bootstrap-merged');
+        var srcs;
+        var bootMode = store && store.getAttribute('data-awa-boot-mode');
+
+        /* freeze-fix-r9 (r5/r7 intent): do not inject mixins/resolver/config
+         * on cms home. mage/apply + owl on a 2nd downward pass freeze. */
+        if (bootMode === 'home' || isCmsHome()) {
+            return;
+        }
 
         if (!store) {
             ensureCarouselRuntime('no-merged-store', onReady);
             return;
         }
 
-        var src = store.getAttribute('data-src');
+        srcs = parseAmdSrcs(store);
 
-        if (!src || d.querySelector('script[data-awa-merged-bundle="1"]')) {
+        if (!srcs.length || d.querySelector('script[data-awa-merged-bundle="1"]')) {
             ensureCarouselRuntime('merged-already-loaded', onReady);
             return;
         }
 
-        var script = d.createElement('script');
-
-        script.src = src;
-        script.type = 'text/javascript';
-        script.defer = true;
-        script.setAttribute('data-awa-merged-bundle', '1');
-        script.onload = function () {
-            waitForRealRequire(function () {
-                ensureCarouselRuntime('merged-onload', onReady);
-            });
-        };
-        script.onerror = function () {
-            if (typeof onReady === 'function') {
-                onReady();
-            }
-        };
+        ensureMagentoRequireConfigObject();
         prepareForMergedBundle();
-        (d.body || d.documentElement).appendChild(script);
+
+        var proceeded = false;
+        var chainTimer = w.setTimeout(function () {
+            proceed('amd-chain-timeout');
+        }, 30000);
+
+        function proceed(reason) {
+            if (proceeded) {
+                return;
+            }
+            proceeded = true;
+            w.clearTimeout(chainTimer);
+            waitForRealRequire(function () {
+                ensureCarouselRuntime(reason || 'amd-proceed', onReady);
+            });
+        }
+
+        function loadNext(index) {
+            if (index >= srcs.length) {
+                proceed('amd-chain-onload');
+                return;
+            }
+
+            var script = d.createElement('script');
+            var settled = false;
+            var scriptTimer;
+
+            script.src = srcs[index];
+            script.type = 'text/javascript';
+            script.async = true;
+            if (index === srcs.length - 1) {
+                script.setAttribute('data-awa-merged-bundle', '1');
+            }
+
+            function settle(ok) {
+                if (settled) {
+                    return;
+                }
+                settled = true;
+                w.clearTimeout(scriptTimer);
+                if (!ok) {
+                    try {
+                        if (script.parentNode) {
+                            script.parentNode.removeChild(script);
+                        }
+                    } catch (ignore) {
+                        /* ignore */
+                    }
+                    proceed('amd-chain-onerror');
+                    return;
+                }
+                if (index === 0) {
+                    applyMagentoRequireBaseUrl();
+                    wrapMagentoNewContext();
+                }
+                if (index >= 2) {
+                    bindMagentoUnbundledContext();
+                }
+                loadNext(index + 1);
+            }
+
+            script.onload = function () {
+                settle(true);
+            };
+            script.onerror = function () {
+                settle(false);
+            };
+            scriptTimer = w.setTimeout(function () {
+                settle(false);
+            }, 8000);
+            (d.body || d.documentElement).appendChild(script);
+        }
+
+        loadNext(0);
     }
 
     function syncHeroA11y() {
@@ -257,7 +543,7 @@
 
     function initHeroSliders() {
         function runHeroInit() {
-            if (typeof w.require !== 'function' || w.require._awaStub) {
+            if (typeof w.require !== 'function' || w.require._awaStub || !hasMagentoHeroMap()) {
                 return false;
             }
 
@@ -292,16 +578,21 @@
             return;
         }
 
-        // Sem require-stub na home, waitForRealRequire degrada para timeout cego de 4s;
-        // se o require.js real demorar mais, o hero ficava sem init permanente.
-        // Retry com polling até o require real aparecer (cap 30s).
-        var heroAttempts = 120;
-        var heroTimer = w.setInterval(function () {
-            heroAttempts -= 1;
-            if (d.querySelector('.awa-hero-swiper-ready') || runHeroInit() || heroAttempts <= 0) {
-                w.clearInterval(heroTimer);
+        // One rAF + one idle retry — do not poll for 30s (120 x 250ms).
+        function retryHeroOnce() {
+            if (d.querySelector('.awa-hero-swiper-ready')) {
+                return;
             }
-        }, 250);
+            runHeroInit();
+        }
+        if (w.requestAnimationFrame) {
+            w.requestAnimationFrame(retryHeroOnce);
+        }
+        if (w.requestIdleCallback) {
+            w.requestIdleCallback(retryHeroOnce, { timeout: 300 });
+        } else {
+            w.setTimeout(retryHeroOnce, 0);
+        }
     }
 
     d.addEventListener('awa:carousel-runtime-ready', function () {
@@ -311,7 +602,70 @@
         }
     });
 
+    function isCmsHome() {
+        return !!(d.body && (
+            d.body.classList.contains('cms-index-index') ||
+            d.body.classList.contains('cms-home') ||
+            d.body.classList.contains('cms-homepage_ayo_home5')
+        ));
+    }
+
+    function guardHomeProductCarousels() {
+        /* freeze-fix-r6: r5 no-op — do not require(['jquery']) on cms home. */
+        if (isCmsHome()) {
+            return;
+        }
+        if (typeof w.require !== 'function' || w.require._awaStub) {
+            return;
+        }
+        w.require(['jquery'], function ($) {
+            if (!$ || !$.fn) {
+                return;
+            }
+            function wrapPlugin(name) {
+                var orig = $.fn[name];
+                if (typeof orig !== 'function' || orig._awaHomeSkip) {
+                    return;
+                }
+                $.fn[name] = function () {
+                    var filtered = this.filter(function () {
+                        if (!this || !this.closest) {
+                            return true;
+                        }
+                        if (this.closest('.wrapper_slider, .awa-hero-swiper, .awa-hero-slider, .awa-hero')) {
+                            return true;
+                        }
+                        return !this.closest(
+                            '.awa-shelf, .awa-shelf--carousel, .awa-carousel-section, .rokan-bestseller, .rokan-newproduct, .categorytab-container, .hot-deal-tab-slider, .awa-carousel__track'
+                        );
+                    });
+                    if (!filtered.length) {
+                        return this;
+                    }
+                    return orig.apply(filtered, arguments);
+                };
+                $.fn[name]._awaHomeSkip = true;
+            }
+            wrapPlugin('owlCarousel');
+            wrapPlugin('swiper');
+        }, function () {
+            /* jquery missing — skip guard */
+        });
+    }
+
     function initRokanTheme(onReady) {
+        /* Home freeze r3: CSS scroll-snap owns product shelves.
+         * Skip rokanthemes/theme on cms-index-index (child theme.js is already a
+         * home no-op; this also avoids pulling jquery/domReady for Owl/Swiper
+         * shelf widgets). Hero stays via initHeroSliders. */
+        if (isCmsHome()) {
+            /* freeze-fix-r6: r5 no-op — no rokanthemes/owl/swiper/jquery on home. */
+            if (typeof onReady === 'function') {
+                onReady();
+            }
+            return;
+        }
+
         if (typeof w.require !== 'function' || w.require._awaStub) {
             if (typeof onReady === 'function') {
                 onReady();
@@ -446,13 +800,40 @@
         }, { passive: true, capture: true, once: true });
     });
 
+    var catalogBoot = isCatalogBoot();
+
+    if (catalogBoot) {
+        ['pointerover', 'focusin'].forEach(function (eventName) {
+            d.addEventListener(eventName, function (evt) {
+                if (evt.target && evt.target.closest && evt.target.closest(
+                    '.column.main, .products, .product-info-main, .sidebar-main, #layered-filter-block, .box-tocart'
+                )) {
+                    bootNow();
+                }
+            }, { passive: true, capture: true, once: true });
+        });
+    }
+
     if (!disableAutoBoot) {
-        if (w.requestIdleCallback) {
-            w.requestIdleCallback(function () {
-                bootNow();
-            }, { timeout: 3500 });
+        function bootOnDomReady() {
+            boot(true);
+        }
+        if (d.readyState === 'loading') {
+            d.addEventListener('DOMContentLoaded', bootOnDomReady, { once: true });
         } else {
-            w.setTimeout(bootNow, 3500);
+            bootOnDomReady();
+        }
+        // Catalog: keep a short idle fallback so first tocart is not swallowed.
+        if (catalogBoot) {
+            if (w.requestIdleCallback) {
+                w.requestIdleCallback(function () {
+                    boot(true);
+                }, { timeout: 150 });
+            } else {
+                w.setTimeout(function () {
+                    boot(true);
+                }, 0);
+            }
         }
     }
 

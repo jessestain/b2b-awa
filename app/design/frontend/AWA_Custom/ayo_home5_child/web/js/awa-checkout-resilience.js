@@ -91,7 +91,6 @@ define([
             return;
         }
 
-        lastBannerKey = bannerKey;
         hideBanner();
 
         var $host = findBannerHost();
@@ -99,6 +98,8 @@ define([
         if (!$host.length) {
             return;
         }
+
+        lastBannerKey = bannerKey;
 
         var $banner = $(
             '<div class="awa-checkout-resilience" ' + BANNER_ATTR + ' role="alert" aria-live="assertive" tabindex="-1">' +
@@ -218,24 +219,6 @@ define([
     }
 
     /**
-     * Recupera CTA/loader presos após falha silenciosa no OPC.
-     *
-     * @returns {void}
-     */
-    function recoverStuckPlaceOrderState() {
-        var hasStuckButton = $('.btn-placeorder.is-processing, .btn-placeorder[aria-busy="true"]').length > 0;
-        var hasLoader = $('.loading-mask:visible').filter(function () {
-            return this.id !== 'checkout-loader';
-        }).length > 0;
-
-        if (!hasStuckButton && !hasLoader) {
-            return;
-        }
-
-        releasePlaceOrderLock();
-    }
-
-    /**
      * @returns {void}
      */
     function bindStuckPlaceOrderWatchdog() {
@@ -244,11 +227,9 @@ define([
 
         window.setInterval(function () {
             var isBusy = $('.btn-placeorder[aria-busy="true"]').length > 0;
-            var hasLoader = $('.loading-mask:visible').filter(function () {
-                return this.id !== 'checkout-loader';
-            }).length > 0;
 
-            if (!isBusy && !hasLoader) {
+            // Shipping/totals loaders do not mean an order was submitted.
+            if (!isBusy) {
                 stuckSince = 0;
                 return;
             }
@@ -263,9 +244,10 @@ define([
             }
 
             stuckSince = 0;
-            releasePlaceOrderLock();
+            // A slow response does not prove failure. Keep the submission lock
+            // until the request lifecycle resolves; never invite a blind retry.
             showBanner(
-                $t('O pedido demorou para responder. Revise os dados e clique em Concluir Pedido novamente.'),
+                $t('A confirmação do pedido está demorando. Não envie novamente. Confira Meus Pedidos ou fale com nossa equipe antes de tentar outra vez.'),
                 'stuck-watchdog'
             );
         }, 5000);
@@ -274,8 +256,6 @@ define([
     if (isCheckoutPage()) {
         bindEvents();
         bindStuckPlaceOrderWatchdog();
-
-        window.setTimeout(recoverStuckPlaceOrderState, 4000);
 
         if (!window.navigator.onLine) {
             showBanner(

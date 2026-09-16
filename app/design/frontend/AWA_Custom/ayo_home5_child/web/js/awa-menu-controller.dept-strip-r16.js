@@ -17,7 +17,6 @@ define([
     var DOC_BOOTED = false;
     var RUNTIME_STYLE_FIX_ID = 'awa-vmenu-runtime-fixes-v2';
     var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
     function isDesktop() {
         return window.matchMedia
             ? window.matchMedia('(min-width: ' + DESKTOP_MIN + 'px)').matches
@@ -28,19 +27,13 @@ define([
         return !isDesktop();
     }
 
-    function resolveDebugRunId() {
-        var fallback = 'run-unknown';
-        try {
-            var params = new URLSearchParams(window.location.search || '');
-            var runId = params.get('f5fb4a_user_run') || params.get('trace') || '';
-            runId = (runId || '').replace(/[^a-zA-Z0-9_.:-]/g, '');
-            return runId || fallback;
-        } catch (_err) {
-            return fallback;
-        }
-    }
-
-    function postAgentDebugLog(hypothesisId, message, data) {
+    /* 768–991: o header restaura Departamentos como dropdown, não drawer.
+     * isMobile() ainda é true (DESKTOP_MIN=992), então o click ia só para
+     * openDrawer() — e o segundo clique no-op porque this.open já é true. */
+    function isTabletNav() {
+        return window.matchMedia
+            ? window.matchMedia('(min-width: 768px) and (max-width: 991px)').matches
+            : (window.innerWidth >= 768 && window.innerWidth <= 991);
     }
 
     function isPlpTabletAxisScope() {
@@ -86,22 +79,6 @@ define([
         trigger = root.querySelector('[data-role="awa-vertical-menu-trigger"]');
         rootRect = root.getBoundingClientRect();
         triggerRect = trigger ? trigger.getBoundingClientRect() : null;
-        postAgentDebugLog(
-            'H-PLP-DISPLAY-CONTENTS-DRIFT',
-            'plp-tablet-axis-normalize',
-            {
-                reason: reason || 'unknown',
-                active: active,
-                viewport: { w: window.innerWidth, h: window.innerHeight },
-                rootX: +rootRect.x.toFixed(2),
-                rootPaddingLeft: window.getComputedStyle(root).paddingLeft,
-                triggerX: triggerRect ? +triggerRect.x.toFixed(2) : null,
-                triggerOffsetLeft: trigger ? trigger.offsetLeft : null,
-                wrapperDisplays: wrappers.map(function (node) {
-                    return node.className + ':' + window.getComputedStyle(node).display;
-                }).join('|')
-            }
-        );
     }
 
     function applyHomeMenuStyle(element, declarations) {
@@ -525,11 +502,11 @@ define([
         /* L1/especificidade: impeccable-refine usa html body#html-body… no nav-bar e
          * vencía color:primary do runtime (bg active aplicava; texto ficava --awa-text).
          * Martelo #html-body×5 alinha ao padrão align-grid do tema. */
-        var vmenuActiveLink =
+        var vmenuActiveItem =
             'html body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header '
-            + '.navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown '
-            + '> li.ui-menu-item.level0:is(:hover, .awa-vmf-active, .vmm-active, :focus-within) '
-            + '> a.level-top.navigation__link';
+            + '.navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown[data-awa-menu-state="open"] '
+            + '> li.ui-menu-item.level0:is(:hover, .awa-vmf-active, .vmm-active, :focus-within, .ui-state-active, .ui-state-focus, .active)';
+        var vmenuActiveLink = vmenuActiveItem + ' > a.level-top.navigation__link';
         styleEl.textContent = [
             '#html-body .page-wrapper .navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown > li.ui-menu-item.level0 {',
             '  box-sizing: border-box !important;',
@@ -566,9 +543,15 @@ define([
             'html body#html-body .page-wrapper .navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown > li.ui-menu-item.level0 > a.level-top.navigation__link .navigation__label {',
             '  color: inherit !important;',
             '}',
+            vmenuActiveItem + ' {',
+            '  border-radius: 8px !important;',
+            '  box-shadow: inset 3px 0 0 var(--awa-primary, #b73337) !important;',
+            '}',
             vmenuActiveLink + ' {',
-            '  background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, transparent) !important;',
+            '  background: color-mix(in srgb, var(--awa-primary, #b73337) 10%, var(--awa-bg-surface, #fff)) !important;',
             '  color: var(--awa-primary, #b73337) !important;',
+            '  outline: 2px solid color-mix(in srgb, var(--awa-primary, #b73337) 45%, transparent) !important;',
+            '  outline-offset: -2px !important;',
             '}',
             vmenuActiveLink + ' .navigation__label {',
             '  color: inherit !important;',
@@ -750,7 +733,11 @@ define([
             if (!isDesktop()) {
                 return;
             }
-            document.querySelectorAll('.' + PORTAL_CLASS).forEach(function (portal) {
+            var portals = document.querySelectorAll('.' + PORTAL_CLASS);
+            if (!portals.length) {
+                return;
+            }
+            portals.forEach(function (portal) {
                 var id = portal.dataset.awVmfLiMenu;
                 var li = id && self.root.querySelector('li.level0[data-menu="' + id + '"]');
                 if (li) {
@@ -1137,33 +1124,75 @@ define([
         });
     }
 
+    function isMenuPanelOpen(panel) {
+        if (!panel) {
+            return false;
+        }
+
+        return panel.getAttribute('data-awa-menu-state') === 'open'
+            || panel.classList.contains('menu-open')
+            || panel.classList.contains('vmm-open')
+            || panel.getAttribute('aria-hidden') === 'false';
+    }
+
     function applyTruncationTitles(panel) {
+        var startedAt = (window.performance && typeof window.performance.now === 'function')
+            ? window.performance.now()
+            : Date.now();
+        var links;
+        var updates = [];
+        var changedTitles = 0;
+        var durationMs;
+
         if (!panel) {
             return;
         }
-        panel.querySelectorAll('a.level-top, a.navigation__link').forEach(function (link) {
+
+        if (!isMenuPanelOpen(panel)) {
+            return;
+        }
+
+        links = panel.querySelectorAll('a.level-top, a.navigation__link');
+        links.forEach(function (link) {
             var label = link.querySelector('.navigation__label');
             var text = label ? (label.textContent || '').trim()
                 : link.getAttribute('data-awa-clean-label') || '';
-
-            if (link.hasAttribute('title')) {
-                var cur = link.getAttribute('title');
-                var hasBadge = !!link.querySelector('.cat-label');
-                if (hasBadge || (text && cur !== text)) {
-                    link.removeAttribute('title');
-                }
-            }
+            var hasBadge = !!link.querySelector('.cat-label');
+            var desiredTitle = '';
 
             if (!text || !label) {
                 return;
             }
 
-            if (label.scrollWidth > label.clientWidth + 1) {
-                link.setAttribute('title', text);
-            } else {
-                link.removeAttribute('title');
+            if (!hasBadge) {
+                desiredTitle = text;
+            }
+
+            updates.push({
+                link: link,
+                desiredTitle: desiredTitle
+            });
+        });
+
+        updates.forEach(function (update) {
+            var currentTitle = update.link.getAttribute('title') || '';
+            if (update.desiredTitle) {
+                if (currentTitle !== update.desiredTitle) {
+                    update.link.setAttribute('title', update.desiredTitle);
+                    changedTitles += 1;
+                }
+                return;
+            }
+
+            if (currentTitle) {
+                update.link.removeAttribute('title');
+                changedTitles += 1;
             }
         });
+
+        durationMs = ((window.performance && typeof window.performance.now === 'function')
+            ? window.performance.now()
+            : Date.now()) - startedAt;
     }
 
     /* ── DeptMenu ─────────────────────────────────────────────────────── */
@@ -1468,6 +1497,24 @@ define([
         this.trigger.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
+            if (isTabletNav()) {
+                self.isOpen = !!(self.isOpen
+                    || self.trigger.getAttribute('aria-expanded') === 'true'
+                    || self.panel.getAttribute('data-awa-menu-state') === 'open'
+                    || self.panel.classList.contains('menu-open')
+                    || self.panel.classList.contains('vmm-open')
+                    || document.body.classList.contains('awa-menu-dept-open')
+                    || document.body.classList.contains('awa-menu-drawer-open'));
+                if (self.isOpen) {
+                    self.close();
+                    if (mobileDrawer && mobileDrawer.open && typeof mobileDrawer.closeDrawer === 'function') {
+                        mobileDrawer.closeDrawer();
+                    }
+                } else {
+                    self.open();
+                }
+                return;
+            }
             if (isMobile()) {
                 mobileDrawer.openDrawer();
                 return;
@@ -1500,6 +1547,16 @@ define([
                 return;
             }
             e.preventDefault();
+            if (isTabletNav()) {
+                self.open();
+                window.requestAnimationFrame(function () {
+                    var first = self.panel.querySelector('[data-role="awa-vmenu-search"], a.level-top, a.navigation__link');
+                    if (first) {
+                        first.focus();
+                    }
+                });
+                return;
+            }
             if (isMobile()) {
                 mobileDrawer.openDrawer();
                 return;

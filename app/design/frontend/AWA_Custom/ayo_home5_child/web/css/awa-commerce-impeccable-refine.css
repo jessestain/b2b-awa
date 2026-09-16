@@ -1612,15 +1612,40 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete .store .
  * Home também omite as regras de sugestões populares do awa-defer-global-bundle.
  * Sem elas, cada termo herda min-height:44px + padding vertical e vira uma linha
  * de ~50px. Mantém o padrão de chips já usado nas páginas internas.
+ *
+ * 2026-08-21: painel popular — gap abaixo do input, título sem caixa-alta,
+ * chips sem a classe Magento .title (que herdava text-transform:uppercase).
  */
+html body#html-body .page-wrapper .awa-site-header
+.mst-searchautocomplete__autocomplete._active {
+    /* top vem de ensurePosition (outerHeight + 8). calc(100% + 8px) usa a
+     * altura do form (offsetParent), ~42px, e cola o painel no input. */
+    left: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+}
+
+html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+.mst-searchautocomplete__index.popular .mst-searchautocomplete__index-title {
+    color: var(--awa-text) !important;
+    background: transparent !important;
+    border-bottom: 0 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 14px 16px 10px !important;
+}
+
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular ul {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 12px !important;
     margin: 0 !important;
-    padding: 8px 12px 12px !important;
+    padding: 0 16px 20px !important;
     list-style: none !important;
 }
 
@@ -1643,25 +1668,37 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular
-.mst-searchautocomplete__item.popular a {
+.mst-searchautocomplete__item.popular:is(:hover, ._active) {
+    background: transparent !important;
+}
+
+html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+.mst-searchautocomplete__index.popular
+.mst-searchautocomplete__item.popular a,
+html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+.mst-searchautocomplete__index.popular a.awa-search-chip {
     display: inline-flex !important;
     align-items: center !important;
-    min-height: 32px !important;
-    padding: 4px 12px !important;
+    min-height: 36px !important;
+    padding: 6px 12px !important;
     border: 1px solid var(--awa-border-subtle, #eee) !important;
     border-radius: var(--awa-radius-pill, 9999px) !important;
     background: var(--awa-bg-muted, #f7f7f7) !important;
     color: var(--awa-text, #333) !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     line-height: 1.25 !important;
+    letter-spacing: 0 !important;
     text-decoration: none !important;
+    text-transform: none !important;
     white-space: nowrap !important;
 }
 
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular
-.mst-searchautocomplete__item.popular:is(:hover, ._active) a {
+.mst-searchautocomplete__item.popular:is(:hover, ._active) a,
+html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+.mst-searchautocomplete__index.popular a.awa-search-chip:hover {
     border-color: color-mix(in srgb, var(--awa-primary, #b73337) 35%, var(--awa-border, #e5e7eb)) !important;
     background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, var(--awa-bg, #fff)) !important;
     color: var(--awa-primary-hover, #8e2629) !important;
@@ -1669,7 +1706,9 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular
-.mst-searchautocomplete__item.popular a:focus-visible {
+.mst-searchautocomplete__item.popular a:focus-visible,
+html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+.mst-searchautocomplete__index.popular a.awa-search-chip:focus-visible {
     outline: 2px solid var(--awa-primary, #b73337) !important;
     outline-offset: 2px !important;
 }
@@ -1677,7 +1716,9 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 @media (max-width: 767px) {
     html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
     .mst-searchautocomplete__index.popular
-    .mst-searchautocomplete__item.popular a {
+    .mst-searchautocomplete__item.popular a,
+    html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
+    .mst-searchautocomplete__index.popular a.awa-search-chip {
         min-height: 44px !important;
     }
 }
@@ -2342,69 +2383,142 @@ html body#html-body.checkout-cart-index .page-wrapper .awa-cart-empty__cta.actio
     text-transform: none !important;
 }
 
-/* Modal login B2B — site-wide */
+/* Modal login B2B — gramática Magento (header/content/footer), superfície clara */
+html body#html-body .page-wrapper #b2b-login-modal.b2b-login-modal-overlay,
+html body#html-body .page-wrapper #b2b-login-modal {
+    padding: max(var(--awa-space-4, 16px), env(safe-area-inset-top, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-right, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-bottom, 0px))
+        max(var(--awa-space-4, 16px), env(safe-area-inset-left, 0px)) !important;
+    box-sizing: border-box !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
 html body#html-body .b2b-login-modal-overlay.active {
-    background: rgb(15 23 42 / 45%) !important;
+    background: var(--awa-bg-overlay, rgb(15 23 42 / 50%)) !important;
 }
 
-html body#html-body .b2b-login-modal {
-    border: 1px solid var(--awa-border, var(--awa-border)) !important;
-    border-radius: var(--awa-radius-lg, 16px) !important;
-    background: var(--awa-bg, var(--awa-bg)) !important;
-    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%)) !important;
-    overflow: hidden !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal {
+    padding: 0 !important;
+    border: 1px solid var(--awa-border) !important;
+    border-radius: var(--awa-radius-lg, 12px) !important;
+    background: var(--awa-bg) !important;
+    box-shadow: inset 0 3px 0 0 var(--awa-primary), var(--awa-shadow-lg, 0 20px 32px rgb(15 23 42 / 12%)) !important;
+    overflow: auto !important;
 }
 
-html body#html-body .b2b-login-modal-header {
-    padding: var(--awa-space-5, 20px) var(--awa-space-6, 24px) !important;
-    border-bottom: 0 !important;
-    background: linear-gradient(135deg, var(--awa-primary, var(--awa-primary)) 0%, color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 82%, #000) 100%) !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    gap: var(--awa-space-2, 8px) var(--awa-space-3, 12px) !important;
+    padding: var(--awa-space-5, 20px) var(--awa-space-5, 20px) var(--awa-space-4, 16px) !important;
+    border-bottom: 1px solid var(--awa-border) !important;
+    background: var(--awa-bg) !important;
+    text-align: start !important;
 }
 
-html body#html-body .b2b-login-modal-header :is(h3, .b2b-login-option-title) {
-    font-size: var(--awa-font-xl, 18px) !important;
-    font-weight: var(--awa-weight-bold, 700) !important;
-    color: var(--awa-text, var(--awa-text)) !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-header :is(h3, .modal-title),
+html body#html-body .page-wrapper #b2b-login-modal #b2b-login-title {
+    grid-column: 1 !important;
     margin: 0 !important;
+    padding: 0 !important;
+    font-size: var(--awa-font-xl, 1.125rem) !important;
+    font-weight: var(--awa-weight-semibold, 600) !important;
+    line-height: 1.3 !important;
+    color: var(--awa-text) !important;
 }
 
-/* Impeccable 2026-06-08: header do modal é vermelho → título/descrição em branco.
-   (Os .b2b-login-option-title ficam no corpo branco e seguem escuros — não tocar.) */
-html body#html-body .b2b-login-modal-header h3,
-html body#html-body #b2b-login-title {
-    color: var(--awa-bg) !important;
-}
-html body#html-body .b2b-login-modal-header p,
-html body#html-body #b2b-login-desc {
-    color: color-mix(in srgb, var(--awa-bg) 90%, transparent) !important;
-}
-
-html body#html-body .b2b-login-modal-body {
-    padding: var(--awa-space-5, 20px) var(--awa-space-6, 24px) !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-header p,
+html body#html-body .page-wrapper #b2b-login-modal #b2b-login-desc {
+    grid-column: 1 !important;
+    margin: 0 !important;
+    max-width: 36ch !important;
+    font-size: var(--awa-font-sm, 0.875rem) !important;
+    line-height: 1.45 !important;
+    color: var(--awa-text-muted) !important;
 }
 
-html body#html-body .b2b-login-modal-close {
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-body {
+    padding: var(--awa-space-5, 20px) !important;
+}
+
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-footer {
+    margin: 0 !important;
+    padding: var(--awa-space-4, 16px) var(--awa-space-5, 20px) !important;
+    border-top: 1px solid var(--awa-border) !important;
+    background: var(--awa-bg-page, var(--awa-bg)) !important;
+}
+
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-close {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    grid-column: 2 !important;
     width: 44px !important;
     height: 44px !important;
     min-width: 44px !important;
     min-height: 44px !important;
-    border-radius: var(--awa-radius-sm) !important;
-    color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: var(--awa-radius-sm, 6px) !important;
+    background: transparent !important;
+    color: var(--awa-text-muted) !important;
 }
 
-html body#html-body .b2b-login-option {
-    border: 1px solid var(--awa-border, var(--awa-border)) !important;
-    border-radius: var(--awa-radius-md, 8px) !important;
-    padding: var(--awa-space-4, 16px) !important;
-    background: var(--awa-bg, var(--awa-bg)) !important;
-    transition: border-color var(--awa-duration-fast) var(--awa-ease-out-quint),
-        background-color var(--awa-duration-fast) var(--awa-ease-out-quint) !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-close::before {
+    content: none !important;
+    display: none !important;
+}
+
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option {
+    border: 1px solid var(--awa-border) !important;
+    border-radius: var(--awa-radius-sm, 6px) !important;
+    padding: 14px 16px !important;
+    background: var(--awa-bg) !important;
+    min-height: 48px !important;
+    text-transform: none !important;
+    transition: border-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, ease),
+        background-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, ease) !important;
+}
+
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.b2b-primary,
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.action.primary {
+    display: flex !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    background: var(--awa-primary) !important;
+    border-color: var(--awa-primary) !important;
+    color: var(--awa-text-inverse, var(--awa-bg)) !important;
+    box-shadow: none !important;
+    white-space: normal !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.b2b-primary .b2b-login-option-title,
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.b2b-primary .b2b-login-option-desc,
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.action.primary .b2b-login-option-title,
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.action.primary .b2b-login-option-desc {
+    color: var(--awa-text-inverse, var(--awa-bg)) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    html body#html-body .b2b-login-option:hover {
-        border-color: color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 35%, var(--awa-border, var(--awa-border))) !important;
+    html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option:hover {
+        border-color: color-mix(in srgb, var(--awa-primary) 35%, var(--awa-border)) !important;
         background: var(--awa-primary-subtle, rgb(183 51 55 / 8%)) !important;
+    }
+
+    html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.b2b-primary:hover,
+    html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.action.primary:hover {
+        background: var(--awa-primary-hover) !important;
+        border-color: var(--awa-primary-hover) !important;
+    }
+
+    html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal-close:hover {
+        background: var(--awa-primary-subtle, rgb(183 51 55 / 8%)) !important;
+        color: var(--awa-primary) !important;
+        transform: none !important;
     }
 }
 
@@ -2883,10 +2997,10 @@ html body#html-body #awa-cookie-banner.awa-cookie-banner--visible {
     box-shadow: 0 -4px 14px rgb(15 23 42 / 12%) !important;
 }
 
-html body#html-body .b2b-login-modal {
-    border: 0 !important;
-    box-shadow: 0 12px 30px rgb(15 23 42 / 16%) !important;
-    overflow: visible !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal {
+    border: 1px solid var(--awa-border) !important;
+    box-shadow: inset 0 3px 0 0 var(--awa-primary), var(--awa-shadow-lg, 0 20px 32px rgb(15 23 42 / 12%)) !important;
+    overflow: auto !important;
 }
 
 /* Home wrappers: prevent widespread "positioned child clipped" warnings */
@@ -3191,10 +3305,10 @@ html body#html-body #awa-cookie-banner.awa-cookie-banner--visible {
     box-shadow: 0 -4px 12px rgb(15 23 42 / 10%) !important;
 }
 
-html body#html-body .b2b-login-modal {
-    border: 0 !important;
-    box-shadow: 0 8px 24px rgb(15 23 42 / 14%) !important;
-    overflow: visible !important;
+html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal {
+    border: 1px solid var(--awa-border) !important;
+    box-shadow: inset 0 3px 0 0 var(--awa-primary), var(--awa-shadow-lg, 0 20px 32px rgb(15 23 42 / 12%)) !important;
+    overflow: auto !important;
 }
 
 /* Kickers repetidos — vence awa-home-gate-polish-type */
@@ -5241,8 +5355,65 @@ html body#html-body #b2b-login-modal:not(.active) {
 }
 
 html body#html-body .b2b-login-modal-overlay.active,
-html body#html-body #b2b-login-modal.active {
+html body#html-body#html-body #b2b-login-modal.active {
     display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: var(--awa-z-modal, 10200) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgb(15 23 42 / 52%) !important;
+}
+
+/* Modal B2B no body (Magento_Ui append) — gramática header/content/footer */
+html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal {
+    background: var(--awa-bg, #fff) !important;
+    opacity: 1 !important;
+    padding: 0 !important;
+}
+
+html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-header {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    grid-template-rows: auto auto !important;
+    column-gap: var(--awa-space-3, 12px) !important;
+    row-gap: var(--awa-space-2, 8px) !important;
+    background: var(--awa-bg, #fff) !important;
+    border-bottom: 1px solid var(--awa-border) !important;
+    text-align: start !important;
+}
+
+html body#html-body#html-body #b2b-login-modal.active #b2b-login-title,
+html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-header h3 {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    color: var(--awa-text) !important;
+    margin: 0 !important;
+}
+
+html body#html-body#html-body #b2b-login-modal.active #b2b-login-desc,
+html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-header p {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    max-width: 36ch !important;
+    color: var(--awa-text-muted) !important;
+    font-size: var(--awa-font-sm, 0.875rem) !important;
+}
+
+html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-close {
+    grid-column: 2 !important;
+    grid-row: 1 / span 2 !important;
+    justify-self: end !important;
+    align-self: start !important;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    background: transparent !important;
+    color: var(--awa-text-muted) !important;
 }
 
 /* BUG-W: resolvido diretamente na regra da linha ~2309 */
@@ -5373,11 +5544,10 @@ html body#html-body .page-wrapper #header .header-content:not(#__awa-no-match) {
     align-items: center !important;
 }
 
-/* ─── FIX-H2: Mobile ≤599px — promo bar linha única com CTA centralizado ────────────
-   Causa: p.awa-b2b-promo-bar__text tem flex-wrap:wrap e conteúdo (lead + cta + tail)
-   excede a largura do container (~210px), resultando em 2-3 linhas que transbordam o
-   max-height:44px da barra. O overflow:visible expõe conteúdo fora do box.
-   Solução: ocultar lead/tail, centralizar apenas o botão CTA, forçar nowrap. */
+/* ─── FIX-H2: Mobile ≤599px — promo bar linha única ────────────────────────────────
+   2026-08-17: o copy curto "Vendas B2B · CNPJ" cabe em 390 com CTA. display:none
+   no lead (workaround de wrap do texto longo) deixava só "Cadastre-se" na home,
+   onde este arquivo entra deferred. Tail continua oculto. Nowrap + ellipsis. */
 @media (max-width: 599px) {
     html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
         .awa-b2b-promo-bar__inner {
@@ -5391,15 +5561,39 @@ html body#html-body .page-wrapper #header .header-content:not(#__awa-no-match) {
 
     html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
         p.awa-b2b-promo-bar__text {
-        flex-wrap: nowrap !important;
-        overflow: hidden !important;
-        justify-content: center !important;
-        gap: 0 !important;
+        flex-wrap: nowrap !important; /* uma linha: lead-short + CTA */
+        overflow: hidden !important; /* não transborda a barra 44px */
+        justify-content: flex-start !important; /* lead à esquerda, CTA ao lado */
+        gap: 8px !important; /* respiro entre copy e Cadastre-se */
     }
 
     html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
         :is(.awa-b2b-promo-bar__lead, span.awa-b2b-promo-bar__lead) {
-        display: none !important;
+        display: inline-flex !important; /* restaura copy curto na home */
+        align-items: center !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        max-width: none !important; /* vence visual-fixes calc(100% - 60px) que recortava ~34px */
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        visibility: visible !important;
+    }
+
+    html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
+        .awa-b2b-promo-bar__lead-short {
+        display: block !important; /* copy mobile "Vendas B2B · CNPJ" */
+        max-width: 100% !important; /* vence calc(100% - 60px) do visual-fixes */
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        visibility: visible !important;
+        width: auto !important;
+    }
+
+    html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
+        .awa-b2b-promo-bar__lead-long {
+        display: none !important; /* mobile usa o copy curto */
     }
 
     html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)

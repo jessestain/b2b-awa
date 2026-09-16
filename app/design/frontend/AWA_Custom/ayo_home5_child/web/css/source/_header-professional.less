@@ -398,19 +398,31 @@ body .page-wrapper .awa-site-header .awa-minicart-label {
 // ╚══════════════════════════════════════════════════════════════════════════╝
 
 body .page-wrapper .awa-site-header .header-control.awa-nav-bar {
+  width: 100%;
+  max-width: none;
   background: @awa-color-white;
   border-top: 1px solid @awa-color-border-subtle;
   border-bottom: 1px solid @awa-color-border-subtle;
 
-  .container {
-    max-width: @ds-grid-max-width;
-    margin: 0 auto;
-    padding: 0 @ds-space-md;
+  > .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
   }
 
   .awa-nav-bar__inner {
-    display: flex !important;
-    align-items: stretch;
+    display: flex;
+    align-items: center;
+    gap: var(--awa-space-4, 16px);
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: none !important;
+    max-inline-size: none !important;
+    min-height: var(--awa-nav-bar-h, 48px);
+    height: var(--awa-nav-bar-h, 48px);
+    margin-inline: 0 !important;
+    padding-inline: ~"max(24px, calc((100% - 1280px) / 2 + 24px))" !important;
   }
 }
 

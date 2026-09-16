@@ -5,6 +5,144 @@
 define(function () {
     'use strict';
 
+    function safeSameOriginUrl(url) {
+        if (!url || typeof url !== 'string') {
+            return '';
+        }
+        if (url.charAt(0) === '/' && url.charAt(1) !== '/') {
+            return url;
+        }
+        try {
+            var parsed = new URL(url, document.baseURI);
+            if (parsed.origin === window.location.origin) {
+                return parsed.href;
+            }
+        } catch (e) {
+            return '';
+        }
+        return '';
+    }
+
+    function sectionValue(customerData, name) {
+        var source;
+
+        if (!customerData || typeof customerData.get !== 'function') {
+            return {};
+        }
+        source = customerData.get(name);
+        return typeof source === 'function' ? source() : source;
+    }
+
+    function isPrivateCustomer(customerData) {
+        var customer = sectionValue(customerData, 'customer') || {};
+        var b2b = sectionValue(customerData, 'b2b_panel') || {};
+
+        return !!(customer.firstname || customer.fullname || customer.websiteId || b2b.is_b2b || b2b.company_name);
+    }
+
+    function hydrateHomeRecentOrders(customerData) {
+        var root = document.querySelector('[data-awa-home-recent-hydrate="1"]');
+        var list;
+        var empty;
+        var emptyGuest;
+        var emptyLogged;
+        var link;
+        var source;
+        var customerSource;
+        var b2bSource;
+
+        if (!root || root.getAttribute('data-awa-home-recent-hydrated') === '1') {
+            return;
+        }
+
+        list = root.querySelector('[data-awa-home-recent-list]');
+        empty = root.querySelector('[data-awa-home-recent-empty]');
+        emptyGuest = root.querySelector('[data-awa-home-recent-empty-guest]');
+        emptyLogged = root.querySelector('[data-awa-home-recent-empty-logged]');
+        link = root.querySelector('[data-awa-home-recent-orders-link]');
+        if (!list || !empty || typeof customerData.get !== 'function') {
+            return;
+        }
+
+        function showEmpty(loggedIn) {
+            var pending = root.querySelector('[data-awa-home-recent-pending]');
+            if (pending) {
+                pending.hidden = true;
+            }
+            list.hidden = true;
+            empty.hidden = false;
+            if (emptyGuest) {
+                emptyGuest.hidden = !!loggedIn;
+            }
+            if (emptyLogged) {
+                emptyLogged.hidden = !loggedIn;
+            }
+            if (link) {
+                link.hidden = true;
+            }
+            root.setAttribute('data-awa-home-recent-state', loggedIn ? 'logged_empty' : 'guest');
+        }
+
+        function render() {
+            var data = sectionValue(customerData, 'last-ordered-items') || {};
+            var items = Array.isArray(data.items) ? data.items : [];
+            var loggedIn = isPrivateCustomer(customerData) || items.length > 0;
+
+            list.textContent = '';
+            if (!items.length) {
+                showEmpty(loggedIn);
+                return;
+            }
+
+            items.forEach(function (item) {
+                var li = document.createElement('li');
+                var name = item && item.name != null ? String(item.name) : '';
+                var href = safeSameOriginUrl(item && item.url);
+
+                li.className = 'awa-home-recent-orders__item';
+                if (href) {
+                    var anchor = document.createElement('a');
+                    anchor.className = 'awa-home-recent-orders__item-link';
+                    anchor.href = href;
+                    anchor.textContent = name;
+                    li.appendChild(anchor);
+                } else {
+                    var span = document.createElement('span');
+                    span.className = 'awa-home-recent-orders__item-name';
+                    span.textContent = name;
+                    li.appendChild(span);
+                }
+                list.appendChild(li);
+            });
+
+            var pending = root.querySelector('[data-awa-home-recent-pending]');
+            if (pending) {
+                pending.hidden = true;
+            }
+            list.hidden = false;
+            empty.hidden = true;
+            if (link) {
+                link.hidden = false;
+            }
+            root.setAttribute('data-awa-home-recent-state', 'has_items');
+        }
+
+        source = customerData.get('last-ordered-items');
+        customerSource = customerData.get('customer');
+        b2bSource = customerData.get('b2b_panel');
+        render();
+        if (source && typeof source.subscribe === 'function') {
+            source.subscribe(render);
+        }
+        if (customerSource && typeof customerSource.subscribe === 'function') {
+            customerSource.subscribe(render);
+        }
+        if (b2bSource && typeof b2bSource.subscribe === 'function') {
+            b2bSource.subscribe(render);
+        }
+        root.setAttribute('data-awa-home-recent-hydrated', '1');
+    }
+
     function execute(payload) {
         return new Promise(function (resolve) {
             require([
@@ -13,7 +151,10 @@ define(function () {
             ], function (sectionConfigModule, customerDataModule) {
                 sectionConfigModule['Magento_Customer/js/section-config'](payload.section);
                 customerDataModule['Magento_Customer/js/customer-data'](payload.customer);
-                customerDataModule.getInitCustomerData().done(resolve);
+                customerDataModule.getInitCustomerData().done(function () {
+                    hydrateHomeRecentOrders(customerDataModule);
+                    resolve();
+                });
             });
         });
     }

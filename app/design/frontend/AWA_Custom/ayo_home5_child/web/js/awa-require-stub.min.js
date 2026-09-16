@@ -102,4 +102,19 @@
 
         return true;
     };
+
+    function flushWhenDomReady() {
+        if (typeof w.awaFlushRequireQueue === 'function') {
+            w.awaFlushRequireQueue();
+        }
+    }
+
+    var doc = w.document;
+    if (doc) {
+        if (doc.readyState === 'loading') {
+            doc.addEventListener('DOMContentLoaded', flushWhenDomReady, { once: true });
+        } else {
+            flushWhenDomReady();
+        }
+    }
 })(window);

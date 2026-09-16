@@ -1615,7 +1615,7 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .pa
 // 78. HEADER REFERENCE MATCH §78 — layout aprovado pelo anexo (2026-06-08)
 //     Header full-width: promo vermelha, busca ampla, ações compactas e nav branca.
 // AWA fix 2026-07-06: exclui páginas B2B (dashboard/shell) — a promo bar é
-// propositalmente ocultada nessas páginas (v. §polish v19 em dashboard-audit-phases.css),
+// propositalmente ocultada nessas páginas (lock legado incorporado na cascata ativa),
 // mas esta regra (especificidade alta) forçava display:flex e revertia o hide,
 // deixando a barra invisível (visibility:hidden) porém ocupando 44px de altura
 // e com overflow:hidden recortando os filhos posicionados (close button, CTA short).
@@ -1896,10 +1896,9 @@ html body#html-body:not(.onepagecheckout-index-index):not(.checkout-index-index)
             justify-content: center !important;
         }
 
-        /* Minicart: sem fundo/borda, ícone primary maior */
+        /* Minicart Magento: único CTA. Fallback LCP sai do flex quando .action.showcart existe. */
         .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart,
-        .awa-header-minicart .minicart-wrapper .action.showcart,
-        .awa-header-minicart .awa-header-cart-fallback {
+        .awa-header-minicart .minicart-wrapper .action.showcart {
             width: 44px !important;
             min-width: 44px !important;
             height: 44px !important;
@@ -1908,12 +1907,28 @@ html body#html-body:not(.onepagecheckout-index-index):not(.checkout-index-index)
             border-radius: 0 !important;
             background: transparent !important;
             background-color: transparent !important;
-            color: var(--awa-primary, #b73337) !important;
+            color: var(--awa-primary) !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             box-shadow: none !important;
             outline: none !important;
+            position: relative !important;
+            inset: auto !important;
+        }
+
+        .awa-header-minicart:has(.minicart-wrapper .action.showcart) > .awa-header-cart-fallback {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+        }
+
+        .awa-header-primary-row > .awa-header-cart-link {
+            display: none !important;
         }
 
         .awa-header-minicart .action.showcart :is(.awa-minicart-icon, .awa-header-cart-fallback__icon),

@@ -31,6 +31,12 @@ define(['Magento_Customer/js/customer-data'], function (customerData) {
             );
         }
 
+
+
+
+
+
+
         function hidePromoBarForLoggedIn() {
             let promo = document.getElementById('awa-b2b-promo-bar')
                 || document.querySelector('.awa-b2b-promo-bar');
@@ -51,6 +57,52 @@ define(['Magento_Customer/js/customer-data'], function (customerData) {
             promo.style.setProperty('overflow', 'hidden', 'important');
             promo.setAttribute('aria-hidden', 'true');
             promo.setAttribute('inert', '');
+
+            // lockPromoRow last tick 3200ms / MutationObserver disconnect 3500ms.
+            // customer-data often arrives later; inline 160px on .awa-site-header then sticks.
+            var shell = promo.closest('#header.header-container')
+                || document.getElementById('header');
+            if (shell) {
+                shell.style.removeProperty('display');
+                if (shell.getAttribute('aria-hidden') === 'true') {
+                    shell.removeAttribute('aria-hidden');
+                }
+                shell.removeAttribute('inert');
+                shell.classList.add('awa-b2b-promo-shell--collapsed');
+                shell.style.setProperty('height', '0px', 'important');
+                shell.style.setProperty('min-height', '0px', 'important');
+                shell.style.setProperty('max-height', '0px', 'important');
+                var content = shell.querySelector(':scope > .header-content');
+                if (content) {
+                    content.style.setProperty('height', '0px', 'important');
+                    content.style.setProperty('min-height', '0px', 'important');
+                    content.style.setProperty('max-height', '0px', 'important');
+                }
+            }
+            document.documentElement.classList.add('awa-b2b-promo-dismissed');
+            var site = document.querySelector('.page-wrapper .awa-site-header');
+            var b2bKnown = !!document.querySelector('.page-wrapper .awa-site-header .b2b-status-panel');
+            var isDesktop = !(window.matchMedia) || window.matchMedia('(min-width: 992px)').matches;
+            if (site && isDesktop) {
+                if (b2bKnown) {
+                    site.style.setProperty('height', 'auto', 'important');
+                    site.style.setProperty('min-height', '0px', 'important');
+                    site.style.setProperty('max-height', 'none', 'important');
+                    site.style.setProperty('--awa-header-promo-h', '0px', 'important');
+                    site.style.setProperty('--awa-header-stack-h', 'auto', 'important');
+                } else {
+                    site.style.setProperty('height', '116px', 'important');
+                    site.style.setProperty('min-height', '116px', 'important');
+                    site.style.setProperty('max-height', '116px', 'important');
+                    site.style.setProperty('--awa-header-promo-h', '0px', 'important');
+                    site.style.setProperty('--awa-header-stack-h', '116px', 'important');
+                }
+            }
+
+            if (typeof window.__awaQueueHeaderLock === 'function') {
+                window.__awaQueueHeaderLock();
+            }
+
         }
 
         function updateRightCol(data) {
@@ -876,7 +928,8 @@ define(['Magento_Customer/js/customer-data'], function (customerData) {
             let cacheRaw = window.localStorage ? window.localStorage.getItem('mage-cache-storage') : null;
             let cacheObj = cacheRaw ? JSON.parse(cacheRaw) : null;
             let cachedCustomer = cacheObj && cacheObj.customer ? cacheObj.customer : null;
-            if (cookieMatch || isLoggedIn(cachedCustomer) || hasB2bStatusPanel()) {
+            let cacheLogged = isLoggedIn(cachedCustomer);
+            if (cookieMatch || cacheLogged || hasB2bStatusPanel()) {
                 hidePromoBarForLoggedIn();
             }
         } catch (e) {

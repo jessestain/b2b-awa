@@ -242,8 +242,24 @@ define([
             return;
         }
 
+        function isDecorativeInsideVisibleControl(el) {
+            if (!el || typeof el.closest !== 'function') {
+                return false;
+            }
+            var control = el.closest('a, button, [role="button"], [role="link"]');
+            if (!control || control === el) {
+                return false;
+            }
+            return control.getAttribute('aria-hidden') !== 'true'
+                && !control.hasAttribute('hidden');
+        }
+
         function syncInert(el) {
             if (el.getAttribute('aria-hidden') === 'true') {
+                if (isDecorativeInsideVisibleControl(el)) {
+                    el.removeAttribute('inert');
+                    return;
+                }
                 el.setAttribute('inert', '');
             } else {
                 el.removeAttribute('inert');

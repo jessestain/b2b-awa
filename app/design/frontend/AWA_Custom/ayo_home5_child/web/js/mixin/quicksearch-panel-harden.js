@@ -14,6 +14,9 @@ define([
             _create: function () {
                 this._awaPromoteTimer = null;
                 this._super();
+                this.options.minSearchLength = 2;
+                this._awaSyncSubmit();
+                this._awaBindSubmitRescue();
             },
 
             /**
@@ -59,7 +62,63 @@ define([
              */
             _onPropertyChange: function () {
                 this._super();
+                this._awaSyncSubmit();
                 this._awaSchedulePromote();
+            },
+
+            /**
+             * Keep submit enabled as soon as the query meets min length.
+             * Magento form-mini disables the button in _create and during the
+             * 300ms suggestionDelay window, which swallows the first click.
+             */
+            _awaSyncSubmit: function () {
+                var length;
+                var minLen;
+
+                if (!this.submitBtn) {
+                    return;
+                }
+
+                length = $.trim(this.element.val() || '').length;
+                minLen = parseInt(this.options.minSearchLength, 10) || 2;
+                this.submitBtn.disabled = length < minLen;
+                this.submitBtn.setAttribute('aria-disabled', length < minLen ? 'true' : 'false');
+            },
+
+            /**
+             * Magento form-mini sets submitBtn.disabled=true at the start of
+             * _onPropertyChange. A click that lands in that window is discarded
+             * because disabled buttons do not fire click/submit.
+             * Re-enable on form mousedown (parent still receives the event).
+             */
+            _awaBindSubmitRescue: function () {
+                var widget = this;
+                var formEl;
+
+                if (!this.searchForm || !this.searchForm.length || this.searchForm.data('awaSubmitRescue')) {
+                    return;
+                }
+
+                formEl = this.searchForm.get(0);
+                if (!formEl) {
+                    return;
+                }
+
+                this.searchForm.data('awaSubmitRescue', true);
+                formEl.addEventListener('mousedown', function (event) {
+                    var actions;
+
+                    if (!widget.submitBtn) {
+                        return;
+                    }
+
+                    actions = widget.searchForm.find('.actions').get(0);
+                    if (event.target === widget.submitBtn
+                        || widget.submitBtn.contains(event.target)
+                        || (actions && actions.contains(event.target))) {
+                        widget._awaSyncSubmit();
+                    }
+                }, true);
             }
         });
 

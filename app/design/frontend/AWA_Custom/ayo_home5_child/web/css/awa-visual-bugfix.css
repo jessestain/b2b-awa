@@ -55,7 +55,7 @@
     min-height: 44px !important;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    FIX-R2-5: Home hero banner vertical misalignment
    Symptom: banner image starts ~30px below its overlay text, causing odd crop/
    duplicated-looking text at the top of the hero.
@@ -206,9 +206,9 @@
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .awa-category-hero--has-image {
     --awa-text-primary: var(--awa-color-text-primary, var(--awa-text));
-    --awa-text-secondary: var(--awa-text-secondary, var(--awa-text-secondary));
-    background: var(--awa-bg, var(--awa-bg)) !important;
-    border: 1px solid var(--awa-border, var(--awa-border)) !important;
+    --awa-text-secondary: #666666;
+    background: var(--awa-bg, #ffffff) !important;
+    border: 1px solid var(--awa-border, #e5e5e5) !important;
 }
 
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)

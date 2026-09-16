@@ -56,7 +56,7 @@
 @awa-color-link-hover:   @awa-color-primary-dark;
 
 // ── Spacing scale (contrato visual oficial) ───────────────────────────────
-// Escala estrutural oficial: 4 8 12 16 24 32 40 48 64
+// Escala estrutural oficial: 4 8 12 16 24 32 40 48 (64 = space-11, raro)
 // `20px` permanece apenas como alias legado de compatibilidade para migração
 // progressiva. Não usar `@awa-space-5` em novos espaçamentos estruturais.
 // @space-* = alias interno sem prefixo
@@ -71,7 +71,10 @@
 @space-7:  32px;  @awa-space-7:  @space-7;
 @space-8:  40px;  @awa-space-8:  @space-8;
 @space-9:  48px;  @awa-space-9:  @space-9;
-@space-10: 64px;  @awa-space-10: @space-10;
+// 64px was unused and fought --awa-space-10: 48px in _tokens.less.
+// Canonical large step is 48px (space-9). Keep space-10 as alias.
+@space-10: 48px;  @awa-space-10: @space-10;
+@space-11: 64px;  @awa-space-11: @space-11;
 @awa-space-legacy-20: @space-5;
 
 // ── Gap scale (4px rhythm) ────────────────────────────────────────────────

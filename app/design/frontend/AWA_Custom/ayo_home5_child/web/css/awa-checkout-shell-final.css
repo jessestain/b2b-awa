@@ -6,7 +6,8 @@
 html body#html-body:is(
     .checkout-index-index,
     .rokanthemes-onepagecheckout,
-    .onepagecheckout-index-index
+    .onepagecheckout-index-index,
+    .checkout-onepage-success
 ) {
     --awa-checkout-gap-xs: 4px;
     --awa-checkout-gap-sm: 8px;
@@ -17,6 +18,11 @@ html body#html-body:is(
     --awa-checkout-sidebar-max: 320px;
     --awa-checkout-gap: var(--awa-checkout-gap-lg);
     --awa-checkout-gap-mobile: var(--awa-checkout-gap-md);
+    /* Magento checkout: shell vence styles-l OKLCH */
+    --awa-primary: var(--awa-brand, #b73337);
+    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
+    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
+    --awa-red: var(--awa-brand, #b73337);
 }
 
 /* ── Page shell — inset único 16px ───────────────────────────────────────── */
@@ -171,6 +177,9 @@ html body#html-body.checkout-onepage-success {
     --awa-checkout-gap-lg: 16px;
     --awa-grid-shell-max: min(100%, 1280px);
     --awa-grid-container-pad: 16px;
+    --awa-primary: var(--awa-brand, #b73337);
+    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
+    --awa-red: var(--awa-brand, #b73337);
 }
 
 html body#html-body.checkout-onepage-success .page-wrapper .page-main.container {

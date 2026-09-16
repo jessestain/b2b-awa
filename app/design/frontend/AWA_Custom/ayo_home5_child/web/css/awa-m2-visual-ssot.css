@@ -730,7 +730,7 @@ html body#html-body.catalog-category-view .page-wrapper .awa-category-hero--has-
   text-shadow: none !important;
 }
 html body#html-body.catalog-category-view .page-wrapper .awa-category-hero--has-image .awa-category-hero__count {
-  color: #555 !important;
+  color: var(--awa-text-muted) !important;
 }
 
 
@@ -802,11 +802,11 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   height: auto !important;
   padding: 10px 20px !important;
   margin: 0 0 8px !important;
-  background: #b73337 !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
+  background: var(--awa-primary) !important;
+  color: var(--awa-text-inverse) !important;
+  -webkit-text-fill-color: var(--awa-text-inverse) !important;
   border: 0 !important;
-  border-radius: 6px !important;
+  border-radius: var(--awa-radius-sm) !important;
   font-size: 14px !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
@@ -1486,4 +1486,896 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   min-height: 44px !important;
   overflow: visible !important;
   white-space: nowrap !important;
+}
+/* SECAO 51.61 — product card purchase cluster (2026-09-04)
+   Evidence search /catalogsearch: .product-info-cart position:absolute, CTA below card.
+   PLP /bagageiros: uniform 459px cards; price same visual weight as title.
+   Home uses div.item-product (not li). Keep CTA in-flow; pin price+CTA as one cluster.
+   Hover: transform/opacity/shadow only — no height change, no CLS.
+   Scale: 4/8/12. Tokens var(--awa-*). 19x #html-body to win prior 18x SSOT locks. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product {
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  gap: var(--awa-space-2, 8px) !important;
+  min-width: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .item-product :is(.product-name a, .product-item-name a, .product-item-link) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+  min-height: calc(1.35em * 2) !important;
+  max-height: calc(1.35em * 2) !important;
+  line-height: 1.35 !important;
+}
+/* PDP recommendation shelves need one extra line for long, model-specific
+   motorcycle-part names. PLP, search and home cards stay on the 2-line lock. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .item-product :is(.product-name, .product-name a, .product-item-name, .product-item-name a, .product-item-link) {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  line-clamp: 3 !important;
+  overflow: hidden !important;
+  min-height: calc(1.35em * 3 + 8px) !important;
+  max-height: calc(1.35em * 3 + 8px) !important;
+  line-height: 1.35 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .awa-b2b-sku {
+  margin: 0 !important;
+  gap: var(--awa-space-1, 4px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .info-price {
+  margin-block-start: auto !important;
+  margin-block-end: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product :is(.info-price .price, .price-box .price, .price-final_price .price) {
+  font-size: var(--awa-font-size-lg, 18px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: var(--awa-text) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart {
+  position: static !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  margin-block-start: var(--awa-space-4, 16px) !important;
+  padding-block-start: 0 !important;
+  min-height: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-thumb {
+  overflow: hidden !important;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--awa-shadow-sm) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product:hover .product-thumb img,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product:hover .product-image-photo {
+  transform: none !important;
+}
+}
+@media (prefers-reduced-motion: reduce) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product {
+  transform: none !important;
+  transition: none !important;
+}
+}
+
+/* SECAO 51.62 — breadcrumb contrast + purchase-cluster gap (2026-09-04 w2)
+   Breadcrumb: super-global pinta li com --awa-gray-500 (~text-secondary/#999) sobre branco.
+   AA 4.5:1 em 12px pede no mínimo --awa-text-muted (#666). Crumb atual: --awa-text (#333).
+   Card gap: .product-info-cart ainda media ~64px vs CTA 44px (padding/min-height residual).
+   Footer desktop: o toggle accordion precisa parecer heading (painel já aberto ≥992px). */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.checkout-cart-index,.cms-page-view) .page-wrapper :is(.breadcrumbs,.nav-breadcrumbs) :is(li,.item){
+  color: var(--awa-text-muted) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.checkout-cart-index,.cms-page-view) .page-wrapper :is(.breadcrumbs,.nav-breadcrumbs) a{
+  color: var(--awa-text-muted) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.checkout-cart-index,.cms-page-view) .page-wrapper :is(.breadcrumbs,.nav-breadcrumbs) a:hover,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.checkout-cart-index,.cms-page-view) .page-wrapper :is(.breadcrumbs,.nav-breadcrumbs) a:focus-visible{
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.checkout-cart-index,.cms-page-view) .page-wrapper :is(.breadcrumbs,.nav-breadcrumbs) :is(.item:last-child, li:last-child, strong){
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart{
+  padding: 0 !important;
+  padding-block: 0 !important;
+  margin-block-start: var(--awa-space-4, 16px) !important;
+  margin-block-end: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  gap: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart :is(form,.actions,.actions-primary){
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  gap: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart :is(.action.tocart,button.tocart,.tocart){
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  padding-block: 0 !important;
+}
+@media (min-width: 992px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle{
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding-block: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  font-weight: 700 !important;
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle::after,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) button.awa-footer-section__toggle::before{
+  content: none !important;
+  display: none !important;
+}
+}
+
+/* SECAO 51.63 — mobile CTA wrap + forms/tables (2026-09-04 w3)
+   360 2-col: btn inner ~100px vs 14px/16px pad. Texto cabe em 2 linhas se pad=8 e 12px.
+   Forms: qty/login/newsletter 44px. Tabelas conta/pedido: tokens, overflow-x auto. */
+@media (max-width: 767px) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart :is(.action.tocart,button.tocart,.tocart){
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding-inline: var(--awa-space-2, 8px) !important;
+  font-size: var(--awa-font-size-xs, 12px) !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: unset !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart :is(.action.tocart,button.tocart,.tocart) span{
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: unset !important;
+  max-width: 100% !important;
+  line-height: 1.2 !important;
+}
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.customer-account-login,.customer-account-create,.customer-account-forgotpassword,.catalog-product-view,.checkout-cart-index,.cms-index-index) .page-wrapper :is(input.input-text,input[type="email"],input[type="password"],input[type="tel"],input[type="text"],select,textarea){
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .box-tocart .input-text.qty,
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper input.qty{
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  min-width: 52px !important;
+  margin: 0 !important;
+  padding-block: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.sales-order-view,.checkout-cart-index,.customer-account-index,.sales-order-history) .page-wrapper .table-wrapper{
+  overflow-x: auto !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.sales-order-view,.checkout-cart-index,.customer-account-index,.sales-order-history) .page-wrapper table :is(th,td){
+  padding: var(--awa-space-3, 12px) var(--awa-space-4, 16px) !important;
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.sales-order-view,.checkout-cart-index,.customer-account-index,.sales-order-history) .page-wrapper table th{
+  font-weight: 600 !important;
+  background: var(--awa-bg-surface) !important;
+}
+
+/* SECAO 51.65 — shelf contract on PDP related + empty-cart CTA (2026-09-04 w6)
+   51.61 excluded catalog-product-view; related .price inherited PDP hero 32/800/brand.
+   Main buy-box stays in .product-info-main (untouched). Empty CTA wrapped to 72px
+   at ~205px width; nowrap + 44 matches PLP desktop control height. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .item-product :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart){
+  box-sizing: border-box !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  font-size: var(--awa-font-size-14, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  background: var(--awa-primary) !important;
+  color: var(--awa-text-inverse) !important;
+  border-radius: var(--awa-radius-sm) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index .page-wrapper a.awa-cart-empty__cta{
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  padding-block: 0 !important;
+  padding-inline: var(--awa-space-5, 20px) !important;
+  white-space: nowrap !important;
+  font-size: var(--awa-font-size-14, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+/* SECAO 51.66 — home logged-in B2B shelf = PLP card (2026-09-04 w7)
+   Home FPC omits body.customer-logged-in; header private content has .b2b-status-panel.
+   Guest "Ver produto" is intentional. Show .product-info-cart + hide view-product when B2B. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .product-info-cart{
+  display: flex !important;
+  flex-direction: column !important;
+  position: static !important;
+  width: 100% !important;
+  margin-block-start: var(--awa-space-4, 16px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .awa-card-view-product{
+  display: none !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .item-product :is(.info-price .price, .price-box .price, .price-final_price .price){
+  font-size: var(--awa-font-size-lg, 18px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: var(--awa-text) !important;
+  font-variant-numeric: tabular-nums !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .item-product :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart){
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 44px !important;
+  width: 100% !important;
+  font-size: var(--awa-font-size-14, 14px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  background: var(--awa-primary) !important;
+  color: var(--awa-text-inverse) !important;
+  border-radius: var(--awa-radius-sm) !important;
+}
+
+/* SECAO 51.67 — Design System V4 (Fujioka principles, AWA identity)
+   Measured 2026-09-04: home wrapper already pads 24px; inner .container pads 24px
+   again (carousel 1184 vs 1232). Search form 44px vs input 42px at 1280/1440.
+   Card .price computed 14px despite 51.61 targeting .info-price .price.
+   Price→CTA 51px on PLP. Hover tokens no longer lift/scale layout.
+   One gutter, one control height, one card price size.
+   Token overrides here because _tokens.less is not redeployed via SCD in this wave. */
+:root, html, html body#html-body {
+  --awa-hover-lift: 0px !important;
+  --awa-hover-scale: 1 !important;
+  --awa-control-height: 44px;
+  --awa-search-height: 44px;
+  --awa-button-height: 44px;
+  --awa-input-height: 44px;
+  --awa-gutter-desktop: 24px;
+  --awa-gutter-tablet: 16px;
+  --awa-gutter-mobile: 16px;
+}
+/* design-system @layer awa-visual-priority.awa-header-first-paint-lock sets
+   padding-inline:24 on .awa-carousel-section>.container (1 ID). Unlayered SSOT
+   !important loses to that nested layer. Append the same nested layer. */
+@layer awa-visual-priority {
+  @layer awa-header-first-paint-lock {
+    @media (min-width: 992px) {
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper :is(.awa-carousel-section,.awa-grid-section,.awa-home-section,.top-home-content) > .container {
+        padding-inline: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        box-sizing: border-box !important;
+      }
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper :is(.awa-grid-section,.awa-home-section) {
+        padding-inline: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        box-sizing: border-box !important;
+      }
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product .product-info {
+        padding-block: 0 !important;
+        min-height: 0 !important;
+      }
+    }
+  }
+  @layer awa-fixes {
+    @media (min-width: 992px) {
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel-section,.awa-shelf--carousel) .item-product :is(.content-item-product,.awa-product-card) {
+        gap: 0 !important;
+        row-gap: 0 !important;
+      }
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product .product-info {
+        padding-block: 0 !important;
+        min-height: 0 !important;
+      }
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product .info-price {
+        min-height: 0 !important;
+        height: auto !important;
+        margin-block-end: 0 !important;
+      }
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .item-product .product-info-cart :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart) {
+        font-size: var(--awa-font-size-14, 14px) !important;
+        font-weight: 700 !important;
+      }
+    }
+  }
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header :is(form#search_mini_form, form.minisearch) {
+  height: var(--awa-search-height, 44px) !important;
+  min-height: var(--awa-search-height, 44px) !important;
+  max-height: var(--awa-search-height, 44px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header :is(form#search_mini_form, form.minisearch) :is(input#search, input.input-text, button.action.search, .action.search) {
+  box-sizing: border-box !important;
+  height: var(--awa-search-height, 44px) !important;
+  min-height: var(--awa-search-height, 44px) !important;
+  max-height: var(--awa-search-height, 44px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product :is(.price-box span.price, .price-wrapper .price, .special-price .price, .awa-price .price) {
+  font-size: var(--awa-font-size-lg, 18px) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: var(--awa-text) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product :is(.old-price .price, .price-box .old-price .price) {
+  font-size: var(--awa-font-size-sm, 13px) !important;
+  font-weight: 400 !important;
+  color: var(--awa-text-muted) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .product-info-cart {
+  margin-block-start: var(--awa-space-4, 16px) !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view) .page-wrapper .item-product .awa-card-view-product {
+  margin-block-start: var(--awa-space-4, 16px) !important;
+  min-height: var(--awa-button-height, 44px) !important;
+  height: var(--awa-button-height, 44px) !important;
+}
+/* SECAO 51.68 — home shelf: gap 6 + product-info pad 8 + cart mt 16 = 39px
+   price→CTA. Keep 16px as the only space between info and CTA. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product :is(.content-item-product,.awa-product-card) {
+  gap: 0 !important;
+  row-gap: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product .product-info {
+  padding-block: 0 !important;
+  min-height: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .item-product .info-price {
+  min-height: 0 !important;
+  height: auto !important;
+  margin-block-end: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .item-product .product-info-cart :is(.action.tocart,button.tocart,.tocart) {
+  font-size: var(--awa-font-size-14, 14px) !important;
+  font-weight: 700 !important;
+}
+
+/* SECAO 51.69 — V5 P1 families (2026-09-04 w13)
+   Category carousel: integer columns from track 100%, not hardcoded 144px
+   (8×144 + 7×12 = 1236 > inner 1232). Keep overflow-x:auto; hide scrollbar;
+   snap to card start. Do not overflow:hidden.
+   PDP purchase box: one 44px row (qty + CTA). Label visually hidden.
+   Footer: footer-bottom padding-block 16 on the 24/8/16 scale. */
+@layer awa-visual-priority {
+  @layer awa-header-first-paint-lock {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-category-carousel__viewport,#awa-cat-carousel) {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      scrollbar-width: none !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-category-carousel__viewport,#awa-cat-carousel)::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+    @media (min-width: 768px) {
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel .awa-category-carousel__item,
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel > .awa-category-carousel__item {
+        flex: 0 0 calc((100% - 4 * 12px) / 5) !important;
+        flex-grow: 0 !important;
+        flex-shrink: 0 !important;
+        flex-basis: calc((100% - 4 * 12px) / 5) !important;
+        width: calc((100% - 4 * 12px) / 5) !important;
+        min-width: 0 !important;
+        max-width: calc((100% - 4 * 12px) / 5) !important;
+        box-sizing: border-box !important;
+        scroll-snap-align: start !important;
+      }
+    }
+    @media (min-width: 992px) {
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel .awa-category-carousel__item,
+      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel > .awa-category-carousel__item {
+        flex: 0 0 calc((100% - 7 * 12px) / 8) !important;
+        flex-grow: 0 !important;
+        flex-shrink: 0 !important;
+        flex-basis: calc((100% - 7 * 12px) / 8) !important;
+        width: calc((100% - 7 * 12px) / 8) !important;
+        min-width: 0 !important;
+        max-width: calc((100% - 7 * 12px) / 8) !important;
+        box-sizing: border-box !important;
+        scroll-snap-align: start !important;
+      }
+    }
+  }
+  @layer awa-fixes {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      height: auto !important;
+      min-height: var(--awa-control-height, 44px) !important;
+      max-height: none !important;
+      overflow: visible !important;
+      gap: var(--awa-space-2, 8px) !important;
+      box-sizing: border-box !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .fieldset {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      width: 100% !important;
+      gap: var(--awa-space-2, 8px) !important;
+      margin: 0 !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .field.qty {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: relative !important;
+      flex: 0 0 auto !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .field.qty .control {
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: stretch !important;
+      height: var(--awa-control-height, 44px) !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .field.qty .label {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .actions {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: stretch !important;
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart :is(.action.tocart,.action.primary.tocart,#product-addtocart-button) {
+      height: var(--awa-control-height, 44px) !important;
+      min-height: var(--awa-control-height, 44px) !important;
+      max-height: var(--awa-control-height, 44px) !important;
+      font-size: var(--awa-font-size-14, 14px) !important;
+      font-weight: 700 !important;
+      transform: none !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.catalog-category-view,.checkout-cart-index,.customer-account-index) .page-wrapper :is(footer.page-footer,.page_footer) .footer-bottom {
+      padding-block: var(--awa-space-4, 16px) !important;
+      box-sizing: border-box !important;
+    }
+  }
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-category-carousel__viewport,#awa-cat-carousel) {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  scroll-snap-type: x mandatory !important;
+  box-sizing: border-box !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-category-carousel__viewport,#awa-cat-carousel)::-webkit-scrollbar {
+  display: none !important;
+  height: 0 !important;
+}
+@media (min-width: 768px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel .awa-category-carousel__item,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel > .awa-category-carousel__item {
+    flex: 0 0 calc((100% - 4 * 12px) / 5) !important;
+    flex-basis: calc((100% - 4 * 12px) / 5) !important;
+    width: calc((100% - 4 * 12px) / 5) !important;
+    min-width: 0 !important;
+    max-width: calc((100% - 4 * 12px) / 5) !important;
+    scroll-snap-align: start !important;
+    box-sizing: border-box !important;
+  }
+}
+@media (min-width: 992px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel .awa-category-carousel__item,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel > .awa-category-carousel__item {
+    flex: 0 0 calc((100% - 7 * 12px) / 8) !important;
+    flex-basis: calc((100% - 7 * 12px) / 8) !important;
+    width: calc((100% - 7 * 12px) / 8) !important;
+    min-width: 0 !important;
+    max-width: calc((100% - 7 * 12px) / 8) !important;
+    scroll-snap-align: start !important;
+    box-sizing: border-box !important;
+  }
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  height: auto !important;
+  min-height: var(--awa-control-height, 44px) !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .fieldset {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  gap: var(--awa-space-2, 8px) !important;
+  width: 100% !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .field.qty .label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart :is(.action.tocart,.action.primary.tocart,#product-addtocart-button) {
+  height: var(--awa-control-height, 44px) !important;
+  min-height: var(--awa-control-height, 44px) !important;
+  max-height: var(--awa-control-height, 44px) !important;
+  font-size: var(--awa-font-size-14, 14px) !important;
+  font-weight: 700 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer) .footer-bottom {
+  padding-block: var(--awa-space-4, 16px) !important;
+}
+
+/* SECAO 51.70 — V6 closure: header account hit-area 44; do not inflate the
+   13/14 two-line type. Click target is .b2b-status-trigger (was min-height:0
+   = 32.4px text stack). Desktop/tablet header row >=56 so 44 fits. */
+@media (min-width: 768px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header :is(.b2b-status-panel, .awa-header-account-prompt) {
+    min-height: var(--awa-control-height, 44px) !important;
+    height: var(--awa-control-height, 44px) !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .b2b-status-trigger,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt {
+    box-sizing: border-box !important;
+    min-height: var(--awa-control-height, 44px) !important;
+    height: var(--awa-control-height, 44px) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding-block: 0 !important;
+  }
+}
+
+/* SECAO 51.80 — W17 home families (Wave A+B).
+   Same named layer as design-system/plugin locks: layered !important
+   beats unlayered radius 0 / gap 8. Pagination 52px is also replaced
+   in design-system (descendant lock that beat §32.4 child combinator). */
+@layer awa-visual-priority {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    :is(.awa-hero__pagination, .swiper-pagination.awa-hero__pagination) {
+    height: 28px !important;
+    min-height: 28px !important;
+    max-height: 36px !important;
+    padding-block: 0 !important;
+    background: transparent !important;
+    inset-block-end: var(--awa-space-3, 12px) !important;
+    bottom: var(--awa-space-3, 12px) !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(footer.page-footer, .page_footer)
+    ul.velaFooterLinks {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(footer.page-footer, .page_footer)
+    ul.velaFooterLinks
+    li {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.3 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(footer.page-footer, .page_footer)
+    ul.velaFooterLinks
+    a {
+    display: flex !important;
+    align-items: center !important;
+    min-height: var(--awa-control-height, 44px) !important;
+    height: auto !important;
+    max-height: none !important;
+    padding-block: 0 !important;
+    line-height: 1.3 !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .awa-product-card {
+    border-radius: var(--awa-radius-sm, 8px) !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    :is(.awa-carousel__track, ul.owl.awa-carousel__track) {
+    gap: var(--awa-space-3, 12px) !important;
+  }
+
+  /* W18 #21 — SKU region is the 6px inter-shelf drift (chip vs bare),
+     not Novo badge and not title line-count. One meta row for all shelves. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product
+    .awa-b2b-sku {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    min-height: 22px !important;
+    height: 22px !important;
+    max-height: 22px !important;
+    padding: 4px 8px !important;
+    line-height: 1.25 !important;
+    font-size: 11px !important;
+    gap: var(--awa-space-1, 4px) !important;
+    margin: 0 !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product
+    .product-thumb {
+    position: relative !important;
+    order: 1 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product
+    .product-info {
+    order: 2 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product
+    .product-info-cart {
+    order: 3 !important;
+    margin-block-start: var(--awa-space-2, 8px) !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product:hover {
+    transform: none !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index)
+    .page-wrapper
+    .item-product
+    :is(.hot-onsale, .onsale.new-lable) {
+    position: absolute !important;
+    top: var(--awa-space-2, 8px) !important;
+    left: var(--awa-space-2, 8px) !important;
+    right: auto !important;
+    bottom: auto !important;
+    z-index: 4 !important;
+    margin: 0 !important;
+    pointer-events: none !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .awa-section-header {
+    min-height: var(--awa-control-height, 44px) !important;
+    align-items: center !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    :is(.awa-section-header__link, .awa-shelf__view-all, a.awa-shelf-view-all) {
+    font-size: var(--awa-font-size-14, 14px) !important;
+    min-height: var(--awa-control-height, 44px) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__nav
+    :is(.awa-category-carousel__prev, .awa-category-carousel__next) {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    .b2b-status-trigger {
+    font-size: var(--awa-font-size-14, 14px) !important;
+    line-height: 1.2 !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
+    .page-wrapper
+    .awa-site-header
+    .header-wrapper-sticky {
+    position: sticky !important;
+    inset-block-start: 0 !important;
+    top: 0 !important;
+    z-index: 1210 !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    :is(.block-search .control, form#search_mini_form .control, form#search_mini_form .field.search) {
+    margin-top: 0 !important;
+    margin-block-start: 0 !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    form#search_mini_form
+    input#search {
+    height: var(--awa-control-height, 44px) !important;
+    min-height: var(--awa-control-height, 44px) !important;
+    max-height: var(--awa-control-height, 44px) !important;
+    line-height: var(--awa-control-height, 44px) !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    .awa-header-search-col {
+    align-self: center !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
+    .page-wrapper
+    .awa-home-recent-orders__pending {
+    margin: 0 !important;
+    padding-block: var(--awa-space-4, 16px) !important;
+    font-size: var(--awa-font-size-14, 14px) !important;
+    color: var(--awa-text-secondary) !important;
+  }
+
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .header-wrapper-sticky,
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      :is(.awa-main-header__inner[data-awa-header-row], .wp-header[data-awa-header-row]) {
+      height: 88px !important;
+      min-height: 88px !important;
+      max-height: 88px !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      :is(.awa-main-header__inner[data-awa-header-row], .wp-header[data-awa-header-row]) {
+      grid-template-rows: 44px 44px !important;
+      align-content: start !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .b2b-status-panel {
+      position: absolute !important;
+      width: 0 !important;
+      height: 0 !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      pointer-events: none !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .b2b-status-trigger {
+      display: none !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .awa-header-account-prompt {
+      display: flex !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      overflow: visible !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .awa-header-account-prompt__mobile-link {
+      display: inline-flex !important;
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      .page-wrapper
+      .awa-site-header
+      .awa-header-search-col {
+      align-self: start !important;
+      grid-area: search !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+      nav.fixed-bottom[data-awa-mobile-nav] {
+      position: fixed !important;
+      inset-inline: 0 !important;
+      inset-block-end: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      top: auto !important;
+      z-index: 1000 !important;
+      width: 100% !important;
+      height: 44px !important;
+      display: block !important;
+    }
+  }
 }

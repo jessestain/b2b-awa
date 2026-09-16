@@ -281,6 +281,36 @@ define([], function () {
             });
         }
 
+        function clearNavAxisInlineLock(el) {
+            if (!el || !el.style) {
+                return;
+            }
+            ['width', 'max-width', 'margin-inline', 'margin-left', 'margin-right',
+                'padding-inline', 'padding-left', 'padding-right', 'box-sizing']
+                .forEach(function (prop) {
+                    el.style.removeProperty(prop);
+                });
+        }
+
+        function applyDesktopNavAxisLock() {
+            var body = document.body;
+            if (!body) {
+                return;
+            }
+
+            /* Contrato: barra full-bleed; inner = rail 1280. Sem style="" de geometria. */
+            document.querySelectorAll(
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-wrapper-sticky > .header-control.awa-nav-bar, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.header-nav.awa-nav-bar, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar > .container, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.header-nav.awa-nav-bar > .container, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.awa-nav-bar .awa-nav-bar__inner, ' +
+                '.page-wrapper .awa-site-header[data-awa-header-mode="default"] .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner'
+            ).forEach(clearNavAxisInlineLock);
+        }
+
         function bindMenuViewportBoundary() {
             var lastDesktop = isDesktopViewport();
 
@@ -292,6 +322,7 @@ define([], function () {
 
                 if (isDesktop) {
                     resetMobileDrawerStateForDesktop();
+                    applyDesktopNavAxisLock();
                 } else {
                     syncNavAria();
                 }
@@ -348,7 +379,7 @@ define([], function () {
                 return;
             }
 
-            hasValue = String(controls.searchInput.value || '').trim().length > 0;
+            hasValue = String(controls.searchInput.value || '').trim().length >= 2;
             controls.submitBtn.disabled = !hasValue;
             controls.submitBtn.setAttribute('aria-disabled', hasValue ? 'false' : 'true');
         }
@@ -386,6 +417,7 @@ define([], function () {
         }, true);
 
         bindMenuViewportBoundary();
+        applyDesktopNavAxisLock();
 
     };
 });

@@ -107,20 +107,11 @@
         applyAllFixes();
     }
 
-    // A PDP já inicializa galeria e prateleira por eventos próprios; observar todo
-    // o body aqui multiplica o custo de cada mutação durante o carregamento.
-    if (
-        !isHomePage &&
-        !d.body.classList.contains('catalog-product-view') &&
-        typeof MutationObserver !== 'undefined'
-    ) {
-        var pending = null;
-        var observer = new MutationObserver(function () {
-            if (pending) clearTimeout(pending);
-            pending = setTimeout(applyAllFixes, 100);
-        });
-        observer.observe(d.body, { childList: true, subtree: true });
-    }
+    // Magento layered ajax / KO emite contentUpdated. Observar document.body
+    // (subtree) em PLP/search multiplicava applyAllFixes a cada mutação.
+    d.addEventListener('contentUpdated', function () {
+        applyAllFixes();
+    });
 
     // Re-aplicar apos load (carrossel pode ser inicializado async)
     w.addEventListener('load', function () {

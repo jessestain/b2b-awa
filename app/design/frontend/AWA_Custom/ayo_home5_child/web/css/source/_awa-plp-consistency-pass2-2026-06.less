@@ -334,6 +334,24 @@
     }
 }
 
+// ── Guard rail: CTA primário da PLP precisa vencer regras globais de link ─────
+@media (min-width: 768px) {
+    @{awa-plp-search-scope} .page-wrapper .awa-plp-b2b-gate-banner__action--primary {
+        color: var(--awa-text-inverse, @awa-color-white) !important; // vence custom_default.css a{color!important}
+        text-decoration: none !important;
+    }
+}
+
+// Mobile: botão preenchido (não só link vermelho). Inverse no fundo primário.
+@media (max-width: 767px) {
+    @{awa-plp-search-scope} .page-wrapper .awa-plp-b2b-gate-banner__action--primary {
+        background: var(--awa-primary, @awa-color-primary) !important; // vence fundo transparente legado
+        color: var(--awa-text-inverse, @awa-color-white) !important; // vence custom_default.css a{color!important}
+        font-weight: @awa-weight-bold;
+        text-decoration: none !important;
+    }
+}
+
 // ── Logistics badge (sem inline styles) ───────────────────────────────────────
 @{awa-plp-search-scope} .page-wrapper .awa-b2b-logistics {
     display: flex;

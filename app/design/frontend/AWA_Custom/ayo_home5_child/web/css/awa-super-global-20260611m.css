@@ -25,7 +25,7 @@
     --awa-sg-c23: #f1f5f9;
     --awa-sg-c24: #3a3a3a;
     --awa-sg-c25: #ebebeb;
-    --awa-sg-c26: var(--awa-primary);
+    --awa-sg-c26: var(--awa-brand, #b73337);
     --awa-sg-c27: var(--awa-border);
     --awa-sg-c28: #a63135;
     --awa-sg-c29: var(--awa-text-primary);
@@ -40,7 +40,7 @@
     --awa-sg-c38: #fff1f2;
     --awa-sg-c39: #1e293b;
     --awa-sg-c40: #334155;
-    --awa-sg-c41: var(--awa-primary-hover);
+    --awa-sg-c41: var(--awa-brand-dark, #8e2629);
     --awa-sg-c42: #962a2e;
     --awa-sg-c43: #dcdde3;
     --awa-sg-c44: #982c30;
@@ -67,13 +67,13 @@
 }
 /* AWA token bridge — maps legacy --awa-sg-c* to canonical design tokens (2026-06-12) */
 :root {
-    --awa-primary: var(--awa-sg-c26, var(--awa-primary));
-    --awa-primary-hover: var(--awa-sg-c41, var(--awa-primary-hover));
-    --awa-text: var(--awa-sg-c54, var(--awa-text));
+    --awa-primary: var(--awa-brand, #b73337);
+    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
+    --awa-text: var(--awa-sg-c54, #333333);
     --awa-text-muted: var(--awa-sg-c53, var(--awa-text-secondary));
-    --awa-bg: var(--awa-sg-c35, var(--awa-bg));
+    --awa-bg: var(--awa-sg-c35, #ffffff);
     --awa-bg-soft: var(--awa-sg-c50, var(--awa-bg-subtle));
-    --awa-border: var(--awa-sg-c27, var(--awa-border));
+    --awa-border: var(--awa-sg-c27, #e5e5e5);
     --awa-gap-xs: 4px;
     --awa-gap-sm: 8px;
     --awa-gap-md: 12px;
@@ -91,7 +91,7 @@
    A ordem é estabelecida pela primeira ocorrência de cada @layer bloco abaixo. */
 :root{
 color-scheme: light;
---awa-red: var(--awa-primary, var(--awa-primary));
+--awa-red: var(--awa-primary);
 --awa-red-dark: var(--awa-primary-hover, var(--awa-primary-hover));
 --awa-red-light: color-mix(in srgb, var(--awa-red) 16%, transparent);
 --awa-red-extra-light: color-mix(in srgb, var(--awa-red) 8%, transparent);
@@ -238,8 +238,8 @@ color-scheme: light;
 --awa-opacity-subtle: 0.6;
 --awa-opacity-medium: 0.7;
 --awa-opacity-high: 0.85;
---awa-primary: var(--awa-sg-c26);
---awa-primary-hover: var(--awa-sg-c41);
+--awa-primary: var(--awa-brand, #b73337);
+--awa-primary-hover: var(--awa-brand-dark, #8e2629);
 --awa-primary-light: #f9e5e5;
 --awa-primary-subtle: rgb(183 51 55 / 6%);
 
@@ -280,11 +280,11 @@ color-scheme: light;
 --awa-fs-7xl: 40px;
 --awa-fs-8xl: 48px;
 --awa-fs-9xl: 56px;
---awa-text: var(--awa-text);
+--awa-text: #333333;
 --awa-text-muted: var(--awa-text-secondary);
 --awa-text-light: #999999;
 --awa-text-inverse: var(--awa-sg-c35);
---awa-bg: var(--awa-sg-c35);
+--awa-bg: #ffffff;
 --awa-bg-elevated: var(--awa-sg-c35);
 --awa-bg-dark: var(--awa-sg-c29);
 --awa-border: var(--awa-sg-c19);
@@ -2815,7 +2815,7 @@ body .page-wrapper .block-search input[type="text"]:focus-visible,
 #search:focus-visible{border:var(--awa-none, none) !important;border-color:var(--awa-transparent, transparent) !important;outline:var(--awa-none, none) !important;}body .page-wrapper .block-search form#search_mini_form:focus-within,
 body .page-wrapper .block-search form.minisearch:focus-within,
 body .page-wrapper .awa-professional-search form.minisearch:focus-within,
-body .page-wrapper #search_mini_form:focus-within{border-color:var(--awa-text-light, var(--awa-sg-c60)) !important;}@layer awa-fixes{:root{--awa-brand-primary:var(--awa-red);--awa-brand-hover:var(--awa-red-dark);--awa-text-main:var(--awa-gray-700, var(--awa-text));--awa-text-inverse:var(--awa-white, var(--awa-sg-c35));--awa-red:var(--awa-red);--awa-red-dark:var(--awa-red-dark);--awa-text:var(--awa-text-main);--color-primary:var(--awa-red);--color-primary-dark:var(--awa-red-dark);--color-text:var(--awa-text-main);--link-color:var(--awa-red);--link-color-hover:var(--awa-red-dark);}@media (hover:none) and (pointer:coarse){:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .page-wrapper:is(
+body .page-wrapper #search_mini_form:focus-within{border-color:var(--awa-text-light, var(--awa-sg-c60)) !important;}@layer awa-fixes{:root{--awa-brand-primary:var(--awa-red);--awa-brand-hover:var(--awa-red-dark);--awa-text-main:var(--awa-gray-700, var(--awa-text));--awa-text-inverse:var(--awa-white, var(--awa-sg-c35));--awa-red:var(--awa-primary);--awa-red-dark:var(--awa-primary-hover);--awa-text:var(--awa-text-main);--color-primary:var(--awa-red);--color-primary-dark:var(--awa-red-dark);--color-text:var(--awa-text-main);--link-color:var(--awa-red);--link-color-hover:var(--awa-red-dark);}@media (hover:none) and (pointer:coarse){:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .page-wrapper:is(
 .the_blog .post-item,
 .blog-post-item,
 .testimonials-slider .item,

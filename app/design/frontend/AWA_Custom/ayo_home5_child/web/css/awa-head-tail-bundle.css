@@ -676,7 +676,7 @@ html body#html-body :is(.shadow_bkg, .shadow_bkg_show) {
   pointer-events: none !important;
 }
 
-html body#html-body:is(.background_shadow, .background_shadow_show, .nav-open, .awa-vertical-menu-open)
+html body#html-body:is(.background_shadow, .background_shadow_show, .awa-menu-drawer-open, .awa-vertical-menu-open, .nav-open.awa-menu-drawer-open)
   :is(.shadow_bkg, .shadow_bkg_show) {
   pointer-events: auto !important;
 }
@@ -1812,8 +1812,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 /* ── 1. ROOT TOKEN OVERRIDE — Paleta AWA Red (Fase 7) ── */
 :root {
     /* === PALETA PRIMÁRIA AWA RED === */
-    --awa-primary:          var(--awa-primary);
-    --awa-primary-hover:    var(--awa-primary-hover);
+    --awa-primary:          #b73337;
+    --awa-primary-hover:    #8e2629;
     --awa-primary-dark:     var(--awa-primary-hover);
     --awa-primary-light:    #fcefee;
     --awa-primary-subtle:   rgba(183, 51, 55, 0.08);
@@ -1828,14 +1828,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
     --awa-cta-subtle:       rgba(183, 51, 55, 0.08);
 
     /* Texto */
-    --awa-text:             var(--awa-text);
+    --awa-text:             #333333;
     --awa-text-primary:     var(--awa-text);
-    --awa-text-secondary:   var(--awa-text-secondary);
+    --awa-text-secondary:   #666666;
     --awa-text-muted:       var(--awa-text-secondary); /* was #999999 (~2.85:1 on white, fails WCAG AA 4.5:1); aligned with --awa-text-secondary (Impeccable audit 2026-07-06) */
     --awa-text-inverse:     var(--awa-bg);
 
     /* Backgrounds */
-    --awa-bg:               var(--awa-bg);
+    --awa-bg:               #ffffff;
     --awa-bg-subtle:        #F8FAFC;
     --awa-bg-muted:         #F1F5F9;
     --awa-bg-surface:       var(--awa-bg);

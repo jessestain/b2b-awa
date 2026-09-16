@@ -446,10 +446,14 @@ body.awa-pdp-sticky-cta-visible .awa-pdp-sticky-cta {
 
 .catalog-product-view .product-info-main .product-social-links a,
 .catalog-product-view .product-info-main .product-addto-links a {
-    min-height: 38px;
+    /* WCAG 2.5.8 / AWA 44: share <a> sem .action ficava 38px; Imprimir já 44. */
+    min-height: var(--awa-touch-target, 44px);
+    min-width: var(--awa-touch-target, 44px);
     display: inline-flex;
     align-items: center;
+    box-sizing: border-box;
     border-radius: 10px;
+    padding-block: var(--awa-space-2, 8px);
     padding-inline: var(--awa-space-2-5); /* P2-fluid: era 10px */
 }
 

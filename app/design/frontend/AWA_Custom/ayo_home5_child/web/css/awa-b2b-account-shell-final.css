@@ -34,6 +34,12 @@ html body#html-body:is(
     --awa-grid-gap-tight: var(--awa-acct-gap-md);
     --awa-grid-gap-loose: var(--awa-acct-gap-md);
     --awa-shell-gutter-account: var(--awa-acct-shell-pad);
+    /* Magento 2columns-left: shell vence styles-l OKLCH e super-global circular */
+    --awa-primary: var(--awa-brand, #b73337);
+    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
+    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
+    --awa-red: var(--awa-brand, #b73337);
+    --awa-b2b-primary: var(--awa-brand, #b73337);
 }
 
 /* Flow tier — cotações/listas/quickorder: conteúdo mais estreito */
