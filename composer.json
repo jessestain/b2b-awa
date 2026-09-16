@@ -33,14 +33,14 @@
             "@quality:docs"
         ]
     },
-    "version": "2.4.8-p3",
+    "version": "2.4.8-p5",
     "require": {
         "creativestyle/magesuite-magepack": "^1.1",
         "cweagans/composer-patches": "^1.7",
         "laminas/laminas-http": "^2.22",
         "magento/composer-dependency-version-audit-plugin": "~0.1",
         "magento/composer-root-update-plugin": "^2.0.4",
-        "magento/product-community-edition": "2.4.8-p3",
+        "magento/product-community-edition": "2.4.8-p5",
         "magepal/magento2-gmailsmtpapp": "^3.0",
         "rafaelstz/traducao_magento2_pt_br": "dev-master",
         "swissup/module-search-mysql-legacy": "^1.1"
@@ -70,14 +70,14 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
+        "magento/magento-allure-phpunit": "^3.0.2",
         "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "^5.0",
         "pdepend/pdepend": "3.x-dev",
         "phpmd/phpmd": "3.x-dev",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^10.5",
-        "symfony/finder": "^6.4",
-        "magento/magento-allure-phpunit": "^3.0.2"
+        "symfony/finder": "^6.4"
     },
     "conflict": {
         "gene/bluefoot": "*"
