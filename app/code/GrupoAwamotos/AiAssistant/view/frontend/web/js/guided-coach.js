@@ -16,7 +16,15 @@ define([
         b2bSeen:    'awa_guide_b2b_seen',
         wasGuest:   'awa_guide_was_guest',
         soundOn:    'awa_guide_sound',
-        suppressUntil: 'awa_guide_suppress_until'
+        suppressUntil: 'awa_guide_suppress_until',
+        registerClosed: 'awa_guide_register_closed_v2'
+    };
+
+    var REGISTER_STEP_MESSAGES = {
+        '1': 'Digite o CNPJ da empresa. Depois confira os dados encontrados.',
+        '2': 'Digite o CEP e confira número e complemento.',
+        '3': 'Informe o contato da pessoa que acessará a AWA Motos. Evite usar o e-mail do contador.',
+        '4': 'Crie sua senha. Por segurança, ela não pode ser visualizada pelo assistente.'
     };
 
     var CHECKOUT_BODY = [
@@ -103,6 +111,38 @@ define([
         return CHECKOUT_BODY.some(function (cls) {
             return body.classList.contains(cls);
         });
+    }
+
+    function isRegisterPage() {
+        var body = document.body;
+        if (body && body.classList && body.classList.contains('b2b-register-index')) {
+            return true;
+        }
+        return !!document.getElementById('b2b-register-form');
+    }
+
+    function isCookieBannerVisible() {
+        var banner = document.getElementById('awa-cookie-banner');
+        var style;
+
+        if (!banner || !banner.classList.contains('awa-cookie-banner--visible')) {
+            return false;
+        }
+
+        style = window.getComputedStyle ? window.getComputedStyle(banner) : null;
+        return !style || (
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            style.opacity !== '0'
+        );
+    }
+
+    function currentRegisterStep() {
+        var active = document.querySelector('.progress-step.is-active');
+        if (!active) {
+            return '1';
+        }
+        return String(active.getAttribute('data-step-number') || '1');
     }
 
     function emit(action, detail) {
@@ -258,14 +298,23 @@ define([
             if (scenario) {
                 component._markScenarioSeen(scenario);
             }
-            /* Suppress globally for N days on explicit user dismissal */
+            /* Suppress globally for N days on explicit user dismissal, except cadastro B2B (sessão). */
             if (reason === 'close' || reason === 'dismiss') {
-                setSuppressed(parseInt(cfg.suppressDays, 10) || 7);
+                if (isRegisterPage()) {
+                    storageSet(STORAGE.registerClosed, '1');
+                } else {
+                    setSuppressed(parseInt(cfg.suppressDays, 10) || 7);
+                }
             }
             emit('dismiss', { scenario: scenario, reason: reason || 'close' });
         };
 
         component._showCoach = function (scenario, message) {
+            /* Evita sobrepor a escolha de privacidade na primeira visita. */
+            if (isCookieBannerVisible()) {
+                return;
+            }
+
             component.coachScenario(scenario);
             component.coachMessage(message);
             component.coachShowHowTo(false);
@@ -291,6 +340,11 @@ define([
             emit(action, { scenario: scenario });
 
             switch (action) {
+            case 'open_guide':
+                if (typeof component.startSlotGuide === 'function') {
+                    component.startSlotGuide();
+                }
+                break;
             case 'search':
                 component.dismissCoach('search');
                 focusSearch();
@@ -361,6 +415,17 @@ define([
          * Não exibe se houver supressão global ou modal aberto.
          */
         component._pickScenario = function () {
+            if (isRegisterPage()) {
+                if (storageGet(STORAGE.registerClosed) === '1') {
+                    return null;
+                }
+                var step = currentRegisterStep();
+                return {
+                    scenario: 'register_step_' + step,
+                    message: REGISTER_STEP_MESSAGES[step] || REGISTER_STEP_MESSAGES['1']
+                };
+            }
+
             if (isSuppressedGlobally(parseInt(cfg.suppressDays, 10) || 7)) {
                 return null;
             }
@@ -419,17 +484,22 @@ define([
                 storageSet(STORAGE.wasGuest, '1');
             }
 
-            if (!cfg.enabled || isCheckoutPage()) {
+            if (isCheckoutPage()) {
+                return;
+            }
+            if (!cfg.enabled && !isRegisterPage()) {
                 return;
             }
 
-            /* Não exibir em páginas de autenticação */
+            /* Não exibir em login Magento (o cadastro B2B tem coach próprio). */
             var bodyClasses = document.body && document.body.className || '';
-            if (/customer-account-login|customer-account-create|customer-account-forgotpassword/.test(bodyClasses)) {
+            if (!isRegisterPage()
+                && /customer-account-login|customer-account-create|customer-account-forgotpassword/.test(bodyClasses)
+            ) {
                 return;
             }
 
-            var delay = parseInt(cfg.delayMs, 10) || 6000;
+            var delay = isRegisterPage() ? 600 : (parseInt(cfg.delayMs, 10) || 6000);
 
             cancelSchedule = scheduleIdle(function () {
                 if (component.isOpen && component.isOpen()) {
@@ -440,6 +510,29 @@ define([
                     component._showCoach(pick.scenario, pick.message);
                 }
             }, delay);
+
+            if (isRegisterPage()) {
+                var progress = document.querySelector('.b2b-register-progress');
+                if (progress && typeof MutationObserver === 'function') {
+                    var lastStep = currentRegisterStep();
+                    var observer = new MutationObserver(function () {
+                        if (storageGet(STORAGE.registerClosed) === '1') {
+                            return;
+                        }
+                        var nextStep = currentRegisterStep();
+                        if (nextStep === lastStep) {
+                            return;
+                        }
+                        lastStep = nextStep;
+                        var pick = component._pickScenario();
+                        if (pick) {
+                            component._showCoach(pick.scenario, pick.message);
+                            emit('register_step_help', { step: nextStep });
+                        }
+                    });
+                    observer.observe(progress, { attributes: true, subtree: true, attributeFilter: ['class', 'aria-current'] });
+                }
+            }
 
             component._coachOpenSub = component.isOpen.subscribe(function (open) {
                 if (open && cancelSchedule) {

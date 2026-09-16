@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GrupoAwamotos\AiAssistant\ViewModel;
 
 use GrupoAwamotos\AiAssistant\Helper\Config;
+use GrupoAwamotos\AiAssistant\Model\Guide\SlotGuide;
 use GrupoAwamotos\B2B\Model\CustomerApproval;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -62,6 +63,9 @@ class ChatWidget implements ArgumentInterface
     {
         $isB2B    = $this->isB2BCustomer();
         $howToBuy = $this->config->getHowToBuyCmsUrl();
+        $slotGuide = new SlotGuide();
+        $guideStart = $slotGuide->toClient($slotGuide->start(), $isB2B);
+        $guideIdle = $slotGuide->toClient($slotGuide->idle(), $isB2B);
 
         return $this->json->serialize([
             'endpoint'       => $this->getEndpointUrl(),
@@ -73,11 +77,21 @@ class ChatWidget implements ArgumentInterface
             'helpCenterUrl'  => $this->url->getUrl('ajuda'),
             'privacyPolicyUrl' => $this->getPrivacyPolicyUrl(),
             'handoffUrl'     => $this->getHandoffUrl(),
+            'registerUrl'    => $this->url->getUrl('b2b/register'),
+            'guideStart'     => [
+                'reply' => SlotGuide::START_REPLY,
+                'chips' => $guideStart['chips'],
+                'progress' => 1,
+                'total' => 3,
+            ],
+            'guideIdle'      => [
+                'chips' => $guideIdle['chips'],
+            ],
             'guidedCoach'    => [
                 'enabled'         => $this->config->isGuidedCoachEnabled(),
                 'delayMs'         => $this->config->getGuidedCoachDelayMs(),
                 'autoDismissMs'   => $this->config->getGuidedCoachAutoDismissMs(),
-                'firstVisitMessage' => 'Bem-vindo a AWA Motos! Quer ajuda para encontrar a peca certa no primeiro acesso?',
+                'firstVisitMessage' => 'Bem-vindo a AWA Motos! Quer ajuda para encontrar a peça certa no primeiro acesso?',
                 'guestMessage'    => $this->config->getGuidedCoachGuestMessage(),
                 'customerMessage' => $this->config->getGuidedCoachAuthMessage(),
                 'authMessage'     => $this->config->getGuidedCoachAuthMessage(),

@@ -10,10 +10,20 @@
     position:    fixed;
     bottom:      24px;
     right:       24px;
-    z-index:     9999;
+    /* Above the storefront header (100120), below account/menu overlays (100320). */
+    z-index:     var(--awa-layer-assistant, 100200);
+    width:       56px;
+    height:      56px;
+    overflow:    visible;
     font-family: inherit;
     font-size:   14px;
     line-height: 1.5;
+}
+
+#awa-ai-chat-root .awa-ai-chat__launcher {
+    position: relative;
+    width:    56px;
+    height:   56px;
 }
 
 /* ── Bubble de abertura ───────────────────────────────────────────
@@ -54,11 +64,50 @@
     outline-offset: 3px;
 }
 
+#awa-ai-chat-root .awa-ai-chat__toggle-label {
+    position:        absolute;
+    bottom:          calc(100% + 8px);
+    left:            50%;
+    transform:       translateX(-50%);
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           max-content;
+    max-width:       none;
+    min-height:      20px;
+    padding:         4px 10px;
+    border-radius:   var(--awa-radius-full, 9999px);
+    background:      color-mix(in srgb, var(--awa-ink, #1a1717) 88%, var(--awa-surface, #fff) 12%);
+    color:           var(--awa-text-inverse, #fff);
+    border:          1px solid color-mix(in srgb, var(--awa-surface, #fff) 20%, transparent);
+    font-size:       10px;
+    font-weight:     700;
+    letter-spacing:  0.04em;
+    line-height:     1;
+    white-space:     nowrap;
+    pointer-events:  none;
+    text-transform:  uppercase;
+}
+
+#awa-ai-chat-root:has(.awa-ai-coach--visible) .awa-ai-chat__toggle-label,
+#awa-ai-chat-root:has(.awa-ai-chat__panel--open) .awa-ai-chat__toggle-label,
+#awa-ai-chat-root:has(.awa-ai-chat__toggle[aria-expanded="true"]) .awa-ai-chat__toggle-label {
+    opacity:    0;
+    visibility: hidden;
+}
+
+.awa-ai-chat__toggle-icon {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    line-height:     0;
+}
 .awa-ai-chat__toggle-icon svg {
-    transition: transform 0.2s ease;
+    display:    block;
+    transition: opacity 0.15s ease;
 }
 .awa-ai-chat__toggle-icon--open svg {
-    transform: rotate(90deg) scale(.8);
+    transform: none;
 }
 
 /* ── Painel flutuante ───────────────────────────────────────────── */
@@ -68,8 +117,8 @@
     right:          0;
     width:          360px;
     max-width:      calc(100vw - 48px);
-    height:         520px;
-    max-height:     calc(100vh - 120px);
+    height:         min(680px, calc(100vh - 96px));
+    max-height:     calc(100vh - 96px);
     background:     var(--awa-surface, var(--awa-bg, #fff));
     border-radius:  var(--awa-radius-md, 16px);
     box-shadow:     var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
@@ -109,16 +158,30 @@
     font-weight: 700;
     font-size:   15px;
 }
+.awa-ai-chat__header-actions {
+    display:     flex;
+    align-items: center;
+    gap:         2px;
+    flex-shrink: 0;
+}
 .awa-ai-chat__close {
-    background:    transparent;
-    border:        none;
-    color:         var(--awa-text-inverse, #fff);
-    font-size:     18px;
-    line-height:   1;
-    cursor:        pointer;
-    padding:       4px 12px;
-    border-radius: var(--awa-radius-xs, 4px);
-    transition:    background 0.15s ease;
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           36px;
+    height:          36px;
+    min-width:       36px;
+    min-height:      36px;
+    padding:         0;
+    margin:          0;
+    background:      transparent;
+    border:          none;
+    color:           var(--awa-text-inverse, #fff);
+    font-size:       18px;
+    line-height:     1;
+    cursor:          pointer;
+    border-radius:   var(--awa-radius-full, 9999px);
+    transition:      background 0.15s ease;
 }
 .awa-ai-chat__close:hover {
     background: rgb(255 255 255 / 20%);
@@ -130,7 +193,8 @@
 
 /* ── Área de mensagens ──────────────────────────────────────────── */
 .awa-ai-chat__messages {
-    flex:            1;
+    flex:            1 1 auto;
+    min-height:      228px;
     overflow-y:      auto;
     padding:         16px;
     display:         flex;
@@ -361,6 +425,9 @@
         right:  12px;
         bottom: 12px;
     }
+    #awa-ai-chat-root .awa-ai-chat__toggle-label {
+        display: none;
+    }
     .awa-ai-chat__panel {
         width:     calc(100vw - 24px);
         right:     0;
@@ -435,7 +502,7 @@
 }
 .awa-ai-coach__actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 8px;
 }
 .awa-ai-coach__btn {
@@ -499,6 +566,49 @@
     }
 }
 
+/* ── Botão de som (dentro do header do painel) ─────────────────── */
+#awa-ai-chat-root .awa-ai-chat__sound-btn {
+    position:         static;
+    display:          inline-flex !important;
+    align-items:      center !important;
+    justify-content:  center !important;
+    box-sizing:       border-box !important;
+    width:            36px !important;
+    height:           36px !important;
+    min-width:        36px !important;
+    min-height:       36px !important;
+    max-width:        36px !important;
+    max-height:       36px !important;
+    padding:          0 !important;
+    margin:           0 !important;
+    border:           none !important;
+    border-radius:    var(--awa-radius-full, 9999px) !important;
+    background:       transparent !important;
+    background-color: transparent !important;
+    color:            var(--awa-text-inverse, #fff) !important;
+    cursor:           pointer;
+    box-shadow:       none !important;
+    appearance:       none;
+    -webkit-appearance: none;
+    transition:       background .15s ease, opacity .15s ease;
+}
+
+#awa-ai-chat-root .awa-ai-chat__sound-btn[aria-pressed="false"] {
+    opacity: .72;
+}
+
+#awa-ai-chat-root .awa-ai-chat__sound-btn:hover,
+#awa-ai-chat-root .awa-ai-chat__sound-btn:focus-visible {
+    background:       rgb(255 255 255 / 20%) !important;
+    background-color: rgb(255 255 255 / 20%) !important;
+    opacity:          1;
+}
+
+#awa-ai-chat-root .awa-ai-chat__sound-btn:focus-visible {
+    outline:        2px solid var(--awa-text-inverse, #fff);
+    outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .awa-ai-coach {
         transition: none;
@@ -518,5 +628,78 @@
     .awa-ai-coach__btn {
         min-height: 44px;
         font-size: 12px;
+    }
+}
+
+/* ── Guia passo a passo (chips) ─────────────────────────────────── */
+.awa-ai-chat__guide-progress {
+    margin: 0;
+    padding: 8px 16px 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--awa-text-secondary);
+}
+
+.awa-ai-chat__chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px 16px 4px;
+    background: var(--awa-surface, var(--awa-bg, #fff));
+}
+
+#awa-ai-chat-root .awa-ai-chat__chip {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100% !important;
+    max-width: 100%;
+    min-width: 0 !important;
+    min-height: 40px !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 8px 12px !important;
+    border: 1px solid var(--awa-border, rgb(0 0 0 / 12%)) !important;
+    border-radius: var(--awa-radius-full, 9999px) !important;
+    background: var(--awa-surface, #fff) !important;
+    background-color: var(--awa-surface, #fff) !important;
+    color: var(--awa-text-primary) !important;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: none;
+    cursor: pointer;
+    box-shadow: none !important;
+    box-sizing: border-box;
+}
+
+#awa-ai-chat-root .awa-ai-chat__chip--primary {
+    background: var(--awa-primary) !important;
+    background-color: var(--awa-primary) !important;
+    border-color: var(--awa-primary) !important;
+    color: var(--awa-text-inverse, #fff) !important;
+}
+
+#awa-ai-chat-root .awa-ai-chat__chip:hover,
+#awa-ai-chat-root .awa-ai-chat__chip:focus-visible {
+    border-color: var(--awa-primary) !important;
+    color: var(--awa-primary) !important;
+}
+
+#awa-ai-chat-root .awa-ai-chat__chip--primary:hover,
+#awa-ai-chat-root .awa-ai-chat__chip--primary:focus-visible {
+    color: var(--awa-text-inverse, #fff) !important;
+    filter: brightness(1.05);
+}
+
+#awa-ai-chat-root .awa-ai-chat__chip:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+    #awa-ai-chat-root .awa-ai-chat__chip {
+        min-height: 44px !important;
     }
 }

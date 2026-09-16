@@ -114,8 +114,7 @@ class ProductQueryParser
             }
         }
         $oilCycle = '';
-        if (
-            preg_match('/\b(óleo|oleo)\b/u', $part) === 1
+        if (preg_match('/\b(óleo|oleo)\b/u', $part) === 1
             && preg_match('/\b([24]t)\b/u', $lower, $cycle) === 1
         ) {
             $oilCycle = $cycle[1];

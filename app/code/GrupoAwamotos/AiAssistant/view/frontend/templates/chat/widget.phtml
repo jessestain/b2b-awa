@@ -12,9 +12,14 @@ if (!$vm || !$vm->isEnabled()) {
 }
 
 $widgetConfig = $vm->getWidgetConfigJson();
+$fullActionName = $block->getRequest() ? (string) $block->getRequest()->getFullActionName() : '';
+$isHome = $fullActionName === 'cms_index_index';
+$isCatalogPlp = $fullActionName === 'catalog_category_view'
+    || $fullActionName === 'catalogsearch_result_index';
+$deferAi = $isHome || $isCatalogPlp;
 ?>
 
-<div id="awa-ai-chat-root" data-bind="scope: 'AwaAiChat'">
+<div id="awa-ai-chat-root" data-bind="scope: 'AwaAiChat'"<?= $deferAi ? ' data-awa-ai-defer="1"' : '' ?>>
 
     <!-- Guided purchase coach (anchored to FAB — not a second floater) -->
     <div class="awa-ai-coach"
@@ -47,94 +52,65 @@ $widgetConfig = $vm->getWidgetConfigJson();
         <!-- ko if: isGuestCoach -->
         <div class="awa-ai-coach__actions">
             <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--primary"
-                    data-bind="click: function () { coachAction('search'); }">
-                <?= $escaper->escapeHtml(__('Buscar peça')) ?>
+                    data-bind="click: function () { coachAction('open_guide'); }">
+                <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
             <button type="button" class="awa-ai-coach__btn"
                     data-bind="click: function () { coachAction('how_to_buy'); }">
                 <?= $escaper->escapeHtml(__('Como comprar')) ?>
-            </button>
-            <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('login'); }">
-                <?= $escaper->escapeHtml(__('Fazer login')) ?>
-            </button>
-            <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('register'); }">
-                <?= $escaper->escapeHtml(__('Cadastro B2B')) ?>
             </button>
         </div>
         <!-- /ko -->
         <!-- ko if: isAuthCoach -->
         <div class="awa-ai-coach__actions">
             <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--primary"
-                    data-bind="click: function () { coachAction('search'); }">
-                <?= $escaper->escapeHtml(__('Buscar peça')) ?>
+                    data-bind="click: function () { coachAction('open_guide'); }">
+                <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
             <button type="button" class="awa-ai-coach__btn"
                     data-bind="click: function () { coachAction('orders'); }">
                 <?= $escaper->escapeHtml(__('Ver pedidos')) ?>
-            </button>
-            <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('reorder'); }">
-                <?= $escaper->escapeHtml(__('Repetir compra')) ?>
-            </button>
-            <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('open_chat'); }">
-                <?= $escaper->escapeHtml(__('Falar no chat')) ?>
-            </button>
-            <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('help_center'); }">
-                <?= $escaper->escapeHtml(__('Central de Ajuda')) ?>
             </button>
         </div>
         <!-- /ko -->
         <!-- ko if: ko.utils.unwrapObservable(coachScenario) === 'b2b' -->
         <div class="awa-ai-coach__actions">
             <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--primary"
-                    data-bind="click: function () { coachAction('open_chat'); }">
-                <?= $escaper->escapeHtml(__('Tirar dúvida com a IA')) ?>
+                    data-bind="click: function () { coachAction('open_guide'); }">
+                <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
             <button type="button" class="awa-ai-coach__btn"
-                    data-bind="click: function () { coachAction('help_center'); }">
-                <?= $escaper->escapeHtml(__('Central de Ajuda B2B')) ?>
+                    data-bind="click: function () { coachAction('open_chat'); }">
+                <?= $escaper->escapeHtml(__('Falar no chat')) ?>
             </button>
         </div>
         <!-- /ko -->
         <!-- /ko -->
     </div>
 
-    <!-- Sound toggle — visible always, triggers chime only after user click -->
-    <button type="button"
-            class="awa-ai-chat__sound-btn"
-            data-bind="click: toggleSound,
-                       attr: { 'aria-label': soundEnabled() ? 'Silenciar notificações' : 'Ativar som',
-                               'aria-pressed': soundEnabled() ? 'true' : 'false',
-                               title: soundEnabled() ? 'Silenciar' : 'Ativar som' }">
-        <!-- ko ifnot: soundEnabled -->
-        <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="currentColor"/>
-        </svg>
-        <!-- /ko -->
-        <!-- ko if: soundEnabled -->
-        <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-        </svg>
-        <!-- /ko -->
-    </button>
-
-    <!-- Chat toggle bubble -->
-    <button type="button"
-            class="awa-ai-chat__toggle"
-            data-bind="click: toggleChat,
-                       css: fabPulseCss,
-                       attr: { 'aria-expanded': isOpen() ? 'true' : 'false', 'aria-label': isOpen() ? 'Fechar assistente' : 'Abrir assistente AWA' }">
-        <span class="awa-ai-chat__toggle-icon" data-bind="css: { 'awa-ai-chat__toggle-icon--open': isOpen }">
-            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor"/>
-            </svg>
-        </span>
+    <div class="awa-ai-chat__launcher">
         <span class="awa-ai-chat__toggle-label" aria-hidden="true"><?= $escaper->escapeHtml(__('Assistente')) ?></span>
-    </button>
+        <button type="button"
+                id="assistente" class="awa-ai-chat__toggle"
+                aria-expanded="false"
+                aria-label="Abrir assistente AWA"
+                data-bind="click: toggleChat,
+                           css: fabPulseCss,
+                           attr: { 'aria-expanded': isOpen() ? 'true' : 'false', 'aria-label': isOpen() ? 'Fechar assistente' : 'Abrir assistente AWA' }">
+            <span class="awa-ai-chat__toggle-icon" data-bind="css: { 'awa-ai-chat__toggle-icon--open': isOpen }">
+                <!-- ko ifnot: isOpen -->
+                <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor"/>
+                </svg>
+                <!-- /ko -->
+                <!-- ko if: isOpen -->
+                <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M18.3 5.71 12 12.01 5.7 5.7 4.29 7.11 10.59 13.4 4.29 19.7 5.7 21.11 12 14.81 18.3 21.11 19.71 19.7 13.41 13.4 19.71 7.11z" fill="currentColor"/>
+                </svg>
+                <!-- /ko -->
+            </span>
+        </button>
+    </div>
 
     <!-- Chat panel -->
     <div class="awa-ai-chat__panel"
@@ -155,15 +131,34 @@ $widgetConfig = $vm->getWidgetConfigJson();
                     <span class="awa-ai-chat__subtitle"><?= $escaper->escapeHtml(__('Assistente com IA · peças e pedidos')) ?></span>
                 </div>
             </div>
-            <button type="button"
-                    class="awa-ai-chat__close"
-                    data-bind="click: toggleChat"
-                    aria-label="Fechar">&#x2715;</button>
+            <div class="awa-ai-chat__header-actions">
+                <button type="button"
+                        class="awa-ai-chat__sound-btn"
+                        data-bind="click: toggleSound,
+                                   attr: { 'aria-label': soundEnabled() ? 'Silenciar notificações' : 'Ativar som',
+                                           'aria-pressed': soundEnabled() ? 'true' : 'false',
+                                           title: soundEnabled() ? 'Silenciar' : 'Ativar som' }">
+                    <!-- ko ifnot: soundEnabled -->
+                    <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z" fill="currentColor"/>
+                    </svg>
+                    <!-- /ko -->
+                    <!-- ko if: soundEnabled -->
+                    <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                    </svg>
+                    <!-- /ko -->
+                </button>
+                <button type="button"
+                        class="awa-ai-chat__close"
+                        data-bind="click: toggleChat"
+                        aria-label="Fechar">&#x2715;</button>
+            </div>
         </div>
 
         <!-- Messages area -->
         <div class="awa-ai-chat__messages" role="log" aria-live="polite">
-            <!-- ko foreach: { data: messages, afterRender: function () { $data._scrollToBottom(); } } -->
+            <!-- ko foreach: messages -->
             <div class="awa-ai-chat__msg"
                  data-bind="css: { 'awa-ai-chat__msg--user': role === 'user', 'awa-ai-chat__msg--assistant': role === 'assistant' }">
                 <div class="awa-ai-chat__msg-bubble" data-bind="html: $parent.formatMessage(content)"></div>
@@ -171,28 +166,28 @@ $widgetConfig = $vm->getWidgetConfigJson();
                      data-bind="visible: role === 'assistant' && products && products.length">
                     <!-- ko foreach: products -->
                     <a class="awa-ai-chat__product"
-                       data-bind="attr: { href: url }"
+                       data-bind="attr: { href: $data.url }"
                        target="_blank"
                        rel="noopener noreferrer">
-                        <!-- ko if: image_url -->
+                        <!-- ko if: $data.image_url -->
                         <img class="awa-ai-chat__product-thumb"
                              width="48"
                              height="48"
                              loading="lazy"
                              decoding="async"
                              alt=""
-                             data-bind="attr: { src: image_url }">
+                             data-bind="attr: { src: $data.image_url }">
                         <!-- /ko -->
                         <span class="awa-ai-chat__product-body">
-                            <span class="awa-ai-chat__product-name" data-bind="text: name"></span>
+                            <span class="awa-ai-chat__product-name" data-bind="text: $data.name"></span>
                             <span class="awa-ai-chat__product-meta">
-                                <span data-bind="text: sku"></span>
-                                <!-- ko if: price_formatted -->
-                                <strong data-bind="text: price_formatted"></strong>
+                                <span data-bind="text: $data.sku"></span>
+                                <!-- ko if: $data.price_formatted -->
+                                <strong data-bind="text: $data.price_formatted"></strong>
                                 <!-- /ko -->
                             </span>
-                            <!-- ko if: fitment -->
-                            <span class="awa-ai-chat__product-meta" data-bind="text: fitment"></span>
+                            <!-- ko if: $data.fitment -->
+                            <span class="awa-ai-chat__product-meta" data-bind="text: $data.fitment"></span>
                             <!-- /ko -->
                         </span>
                     </a>
@@ -230,6 +225,23 @@ $widgetConfig = $vm->getWidgetConfigJson();
         <div class="awa-ai-chat__error" role="alert" data-bind="text: errorMsg"></div>
         <!-- /ko -->
 
+        <!-- ko if: $data.guideProgressLabel -->
+        <p class="awa-ai-chat__guide-progress" data-bind="text: guideProgressLabel, visible: guideProgressLabel"></p>
+        <!-- /ko -->
+        <div class="awa-ai-chat__chips"
+             role="group"
+             aria-label="<?= $escaper->escapeHtmlAttr(__('Sugestões do assistente')) ?>"
+             data-bind="foreach: $data.guideChips || [], visible: $data.hasGuideChips">
+            <button type="button"
+                    class="awa-ai-chat__chip"
+                    data-bind="click: function (data) { $parent.selectGuideChip(data); },
+                               text: caption,
+                               disable: $parent.isLoading,
+                               css: { 'awa-ai-chat__chip--primary': !!primary }">
+                <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
+            </button>
+        </div>
+
         <!-- Input form -->
         <form class="awa-ai-chat__form" data-bind="submit: sendMessage">
             <label class="sr-only" for="awa-ai-chat-input">
@@ -241,6 +253,7 @@ $widgetConfig = $vm->getWidgetConfigJson();
                       maxlength="1000"
                       placeholder="<?= $escaper->escapeHtmlAttr(__('Digite sua pergunta…')) ?>"
                       data-bind="textInput: inputText,
+                                 attr: { placeholder: $data.inputPlaceholder },
                                  event: { keydown: handleKeydown },
                                  disable: isLoading"></textarea>
             <button type="button"
@@ -271,6 +284,126 @@ $widgetConfig = $vm->getWidgetConfigJson();
     </div>
 </div>
 
+<?php if ($isHome): ?>
+<script>
+(function (w, d) {
+    'use strict';
+    if (w.__awaAiAssistantDeferInstalled) {
+        return;
+    }
+    w.__awaAiAssistantDeferInstalled = true;
+    var cfg = <?= /* @noEscape */ $widgetConfig ?>;
+    var loaded = false;
+    function apply(fromClick) {
+        if (loaded) {
+            return;
+        }
+        loaded = true;
+        function run() {
+            if (typeof w.require !== 'function' || w.require._awaStub) {
+                loaded = false;
+                return;
+            }
+            w.require(['Magento_Ui/js/core/app'], function (app) {
+                try {
+                    app({
+                        components: {
+                            AwaAiChat: {
+                                component: 'GrupoAwamotos_AiAssistant/js/ai-assistant',
+                                config: cfg
+                            }
+                        }
+                    });
+                } catch (e) { /* ignore */ }
+            }, function () { loaded = false; });
+        }
+        if (typeof w.awaRunWhenRequire === 'function') {
+            w.awaRunWhenRequire(run, { key: 'awa-ai-assistant-defer' });
+        } else {
+            run();
+        }
+    }
+    function onFab(evt) {
+        var t = evt.target && evt.target.closest && evt.target.closest('#assistente, #awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
+        if (!t) {
+            return;
+        }
+        apply(true);
+    }
+    d.addEventListener('click', onFab, true);
+    function idleLoad() {
+        apply(false);
+    }
+    d.addEventListener('awa-home-paint-deferred', function () {
+        if (w.requestIdleCallback) {
+            w.requestIdleCallback(idleLoad, { timeout: 1000 });
+        } else {
+            w.setTimeout(idleLoad, 1000);
+        }
+    }, { once: true });
+})(window, document);
+</script>
+<?php elseif ($isCatalogPlp): ?>
+<script>
+(function (w, d) {
+    'use strict';
+    if (w.__awaAiAssistantDeferInstalled) {
+        return;
+    }
+    w.__awaAiAssistantDeferInstalled = true;
+    var cfg = <?= /* @noEscape */ $widgetConfig ?>;
+    var loaded = false;
+    function apply() {
+        if (loaded) {
+            return;
+        }
+        loaded = true;
+        function run() {
+            if (typeof w.require !== 'function' || w.require._awaStub) {
+                loaded = false;
+                return;
+            }
+            w.require(['Magento_Ui/js/core/app'], function (app) {
+                try {
+                    app({
+                        components: {
+                            AwaAiChat: {
+                                component: 'GrupoAwamotos_AiAssistant/js/ai-assistant',
+                                config: cfg
+                            }
+                        }
+                    });
+                } catch (e) { /* ignore */ }
+            }, function () { loaded = false; });
+        }
+        if (typeof w.awaRunWhenRequire === 'function') {
+            w.awaRunWhenRequire(run, { key: 'awa-ai-assistant-defer-plp' });
+        } else {
+            run();
+        }
+    }
+    function onFab(evt) {
+        var t = evt.target && evt.target.closest && evt.target.closest('#assistente, #awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
+        if (!t) {
+            return;
+        }
+        apply();
+    }
+    d.addEventListener('click', onFab, true);
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (evtName) {
+        w.addEventListener(evtName, apply, { once: true, passive: true, capture: true });
+    });
+    function idleLoad() {
+        apply();
+    }
+    if (w.requestIdleCallback) {
+        w.requestIdleCallback(idleLoad, { timeout: 1000 });
+    } else {
+        w.setTimeout(idleLoad, 1000);
+    }
+})(window, document);
+</script>
+<?php else: ?>
 <script type="text/x-magento-init">
 {
     "*": {
@@ -285,3 +418,5 @@ $widgetConfig = $vm->getWidgetConfigJson();
     }
 }
 </script>
+<?php endif; ?>
+

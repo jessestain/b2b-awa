@@ -109,6 +109,7 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
             'ip_address' => $ipAddress,
             'is_b2b'     => $isB2BApproved,
             'channel'    => $channel,
+            'guide'      => $this->sanitizeGuide($body['guide'] ?? null),
         ];
 
         if ($this->customerSession->isLoggedIn()) {
@@ -133,6 +134,7 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
                 'history' => $handled['history'] ?? [],
                 'products' => $handled['products'] ?? [],
                 'confirmation' => $confirmation,
+                'guide' => is_array($handled['guide'] ?? null) ? $handled['guide'] : null,
                 'error' => null,
             ]);
         } catch (\Exception $e) {
@@ -269,6 +271,33 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
         }
 
         return $out;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function sanitizeGuide(mixed $raw): array
+    {
+        if (!is_array($raw)) {
+            return ['active' => false];
+        }
+
+        $allowedSteps = ['part', 'bike', 'year', 'results'];
+        $step = (string) ($raw['step'] ?? 'part');
+        $clip = static function (mixed $value): string {
+            $text = trim(strip_tags((string) $value));
+            return mb_strlen($text) > 80 ? mb_substr($text, 0, 80) : $text;
+        };
+
+        return [
+            'active' => !empty($raw['active']),
+            'step' => in_array($step, $allowedSteps, true) ? $step : 'part',
+            'part' => $clip($raw['part'] ?? ''),
+            'brand' => $clip($raw['brand'] ?? ''),
+            'model' => $clip($raw['model'] ?? ''),
+            'year' => $clip($raw['year'] ?? ''),
+            'skipped_part' => !empty($raw['skipped_part']),
+        ];
     }
 
     private function buildSessionId(string $ipAddress): string

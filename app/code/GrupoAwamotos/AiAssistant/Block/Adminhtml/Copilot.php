@@ -19,8 +19,8 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class Copilot extends Template
 {
-    private Config  $aiConfig;
-    private Json    $jsonSerializer;
+    private Config $aiConfig;
+    private Json $jsonSerializer;
     private FormKey $formKeyHelper;
 
     public function __construct(

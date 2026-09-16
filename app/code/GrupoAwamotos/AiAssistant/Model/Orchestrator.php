@@ -9,6 +9,7 @@ use GrupoAwamotos\AiAssistant\Api\LlmClientInterface;
 use GrupoAwamotos\AiAssistant\Api\ToolInterface;
 use GrupoAwamotos\AiAssistant\Exception\LlmException;
 use GrupoAwamotos\AiAssistant\Helper\Config;
+use GrupoAwamotos\AiAssistant\Model\Guide\SlotGuide;
 use GrupoAwamotos\AiAssistant\Model\Query\ProductQueryParser;
 use Psr\Log\LoggerInterface;
 
@@ -94,6 +95,10 @@ PROMPT,
         $intent        = $parser->parse($userMessage);
         $safeHistory   = $this->redactHistory($history);
         $safeMessage   = $this->piiRedactor->redact($userMessage);
+        $slotGuide     = new SlotGuide();
+        $isB2b         = !empty($context['is_b2b']);
+        $guideState    = $slotGuide->sanitize(is_array($context['guide'] ?? null) ? $context['guide'] : []);
+        $guideSkipLlm  = false;
 
         if ($this->piiRedactor->containsSecret($userMessage)) {
             $reply = 'Por segurança, não envie senha, dados de cartão ou tokens neste chat. '
@@ -120,7 +125,50 @@ PROMPT,
                 ]),
                 'products' => [],
                 'deferred_write' => null,
+                'guide' => $slotGuide->toClient($slotGuide->idle(), $isB2b),
             ];
+        }
+
+        if ($guideState['active']) {
+            $advanced = $slotGuide->advance($guideState, $safeMessage, $intent);
+            if ($advanced['exit']) {
+                $guideState = $slotGuide->idle();
+            } elseif (!$advanced['ready']) {
+                $reply = $advanced['reply'];
+                $guideState = $advanced['state'];
+                $this->logger->log(
+                    sessionId: $sessionId,
+                    channel: $channel,
+                    userMessage: $safeMessage,
+                    assistantResponse: $reply,
+                    toolsCalled: [],
+                    model: 'guide',
+                    tokensUsed: 0,
+                    status: 'ok',
+                    errorDetail: null,
+                    customerId: isset($context['customer_id']) ? (int) $context['customer_id'] : null,
+                    ipAddress: $context['ip_address'] ?? null
+                );
+                $maxHistory = $this->config->getMaxHistoryMessages();
+                $newHistory = $history;
+                $newHistory[] = ['role' => 'user', 'content' => $userMessage];
+                $newHistory[] = ['role' => 'assistant', 'content' => $reply];
+                if (count($newHistory) > $maxHistory * 2) {
+                    $newHistory = array_slice($newHistory, -($maxHistory * 2));
+                }
+
+                return [
+                    'reply' => $reply,
+                    'history' => $newHistory,
+                    'products' => [],
+                    'deferred_write' => null,
+                    'guide' => $slotGuide->toClient($guideState, $isB2b),
+                ];
+            } else {
+                $guideState = $advanced['state'];
+                $intent = $slotGuide->intentFromState($guideState, $intent);
+                $guideSkipLlm = true;
+            }
         }
 
         $messages      = $this->buildMessages($systemPrompt, $safeHistory, $safeMessage);
@@ -153,35 +201,42 @@ PROMPT,
         }
 
         try {
-            for ($round = 0; $round < self::MAX_TOOL_ROUNDS; $round++) {
-                $response     = $this->llmClient->chat($messages, $toolSchemas);
-                $totalTokens += $response->getTotalTokens();
-                $modelUsed    = $response->getModel();
+            if ($guideSkipLlm && $catalogPrefetched) {
+                $guideState['step'] = SlotGuide::STEP_RESULTS;
+                $reply = $productsOut !== []
+                    ? $slotGuide->composeFoundReply($guideState, $productsOut, $isB2b)
+                    : $slotGuide->composeMissReply($guideState);
+                $modelUsed = 'guide+catalog';
+                $totalTokens = 0;
+            } else {
+                for ($round = 0; $round < self::MAX_TOOL_ROUNDS; $round++) {
+                    $response     = $this->llmClient->chat($messages, $toolSchemas);
+                    $totalTokens += $response->getTotalTokens();
+                    $modelUsed    = $response->getModel();
 
-                if (!$response->hasToolCalls()) {
-                    $reply = (string) $response->getContent();
-                    if (
-                        !$forcedSearchRetry
+                    if (!$response->hasToolCalls()) {
+                        $reply = (string) $response->getContent();
+                        if (!$forcedSearchRetry
                         && !$catalogPrefetched
                         && !$isHelpCenterQuestion
                         && $round < self::MAX_TOOL_ROUNDS - 1
                         && $this->shouldForceCatalogTool($intent, $reply, $productsOut, $toolsCalled)
-                    ) {
-                        $forcedSearchRetry = true;
-                        $messages[] = ['role' => 'assistant', 'content' => $reply];
-                        $messages[] = [
+                        ) {
+                            $forcedSearchRetry = true;
+                            $messages[] = ['role' => 'assistant', 'content' => $reply];
+                            $messages[] = [
                             'role' => 'user',
                             'content' => 'Essa resposta inventou catálogo. Ignore-a. '
                                 . 'Chame fitment_search (se houver moto) ou catalog_search agora. '
                                 . 'Responda somente com o tool_call, sem texto e sem inventar SKU.',
-                        ];
-                        $reply = '';
-                        continue;
+                            ];
+                            $reply = '';
+                            continue;
+                        }
+                        break;
                     }
-                    break;
-                }
 
-                $messages[] = [
+                    $messages[] = [
                     'role'       => 'assistant',
                     'content'    => $response->getContent() ?? '',
                     'tool_calls' => array_map(fn($tc) => [
@@ -192,54 +247,54 @@ PROMPT,
                             'arguments' => json_encode($tc['arguments']),
                         ],
                     ], $response->getToolCalls()),
-                ];
+                    ];
 
-                foreach ($response->getToolCalls() as $tc) {
-                    $toolName  = $tc['name'];
-                    $toolsCalled[] = $toolName;
-                    $toolResult = $this->executeTool($toolName, $tc['arguments'], $context, $channelTools);
+                    foreach ($response->getToolCalls() as $tc) {
+                        $toolName  = $tc['name'];
+                        $toolsCalled[] = $toolName;
+                        $toolResult = $this->executeTool($toolName, $tc['arguments'], $context, $channelTools);
 
-                    if (
-                        in_array($toolName, self::CATALOG_TOOLS, true)
+                        if (in_array($toolName, self::CATALOG_TOOLS, true)
                         && is_array($toolResult)
                         && !empty($toolResult['products'])
-                    ) {
-                        $productsOut = $this->presentProducts(
-                            array_slice($toolResult['products'], 0, 5),
-                            $channel,
-                            $context
-                        );
-                    }
+                        ) {
+                            $productsOut = $this->presentProducts(
+                                array_slice($toolResult['products'], 0, 5),
+                                $channel,
+                                $context
+                            );
+                        }
 
-                    $llmToolResult = $toolResult;
-                    if (!empty($toolResult['deferred_write'])) {
-                        $deferredWrite = [
+                        $llmToolResult = $toolResult;
+                        if (!empty($toolResult['deferred_write'])) {
+                            $deferredWrite = [
                             'tool'    => $toolName,
                             'action'  => (string) ($toolResult['action'] ?? ''),
                             'payload' => is_array($toolResult['payload'] ?? null) ? $toolResult['payload'] : [],
                             'summary' => (string) ($toolResult['summary'] ?? ''),
-                        ];
-                        $llmToolResult = [
+                            ];
+                            $llmToolResult = [
                             'status'  => 'pending_confirmation',
                             'message' => 'Aguardando o cliente confirmar no botão da interface. '
                                 . 'Não chame esta ferramenta de escrita novamente neste turno.',
-                        ];
-                    }
+                            ];
+                        }
 
-                    $messages[] = [
+                        $messages[] = [
                         'role'         => 'tool',
                         'tool_call_id' => $tc['id'],
                         'name'         => $toolName,
                         'content'      => json_encode($llmToolResult, JSON_UNESCAPED_UNICODE),
-                    ];
+                        ];
+                    }
                 }
-            }
 
-            if ($reply === '') {
-                $reply = 'Desculpe, não consegui processar sua solicitação. Tente novamente ou fale com nosso atendimento.';
-            }
+                if ($reply === '') {
+                    $reply = 'Desculpe, não consegui processar sua solicitação. Tente novamente ou fale com nosso atendimento.';
+                }
 
-            $reply = $this->reconcileReplyWithProducts($reply, $productsOut);
+                $reply = $this->reconcileReplyWithProducts($reply, $productsOut);
+            }
         } catch (LlmException $e) {
             $reply       = 'No momento o assistente está temporariamente indisponível. Por favor, use nosso chat ao vivo ou entre em contato pelo WhatsApp.';
             $status      = 'llm_error';
@@ -253,7 +308,10 @@ PROMPT,
         }
 
         if ($productsOut !== []) {
-            if ($channel === self::CHANNEL_STOREFRONT) {
+            if ($guideState['active']) {
+                $guideState['step'] = SlotGuide::STEP_RESULTS;
+                $reply = $slotGuide->composeFoundReply($guideState, $productsOut, $isB2b);
+            } elseif ($channel === self::CHANNEL_STOREFRONT) {
                 $reply = $this->composeFoundReply($productsOut);
             } else {
                 $reply = $this->reconcileReplyWithProducts($reply, $productsOut);
@@ -293,6 +351,7 @@ PROMPT,
             'history' => $newHistory,
             'products' => $productsOut,
             'deferred_write' => $deferredWrite,
+            'guide' => $slotGuide->toClient($guideState, $isB2b),
         ];
     }
 
