@@ -27,7 +27,7 @@
     <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
     <preference for="Magento\Framework\App\ObjectManager\ConfigWriterInterface" type="Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
-    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design" />
+    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy" />
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
@@ -186,7 +186,7 @@
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv" />
-    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config" />
+    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy" />
     <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\BulkPublisherInterface" type="Magento\Framework\MessageQueue\Bulk\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\MessageIdGeneratorInterface" type="Magento\Framework\MessageQueue\MessageIdGenerator" />
@@ -427,7 +427,7 @@
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\ObjectManager\ConfigCache">
@@ -444,7 +444,7 @@
     <type name="Magento\Framework\Interception\Config\Config">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">interception</argument>
         </arguments>
     </type>
@@ -456,7 +456,7 @@
     <type name="Magento\Framework\Interception\PluginList\PluginList">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig\Proxy</argument>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
                 <item name="primary" xsi:type="string">primary</item>
@@ -466,7 +466,7 @@
     </type>
     <type name="Magento\Framework\Interception\PluginListGenerator">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="logger" xsi:type="object">\Psr\Log\LoggerInterface\Proxy</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
                 <item name="primary" xsi:type="string">primary</item>
@@ -1878,7 +1878,7 @@
                 <item name="MySQL-8.4" xsi:type="string">^8\.4\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
-                <item name="MariaDB-11.4" xsi:type="string">^11\.4\.</item>
+                <item name="MariaDB-(11.4-11.8)" xsi:type="string">^11\.[4|8]\.</item>
             </argument>
         </arguments>
     </type>
