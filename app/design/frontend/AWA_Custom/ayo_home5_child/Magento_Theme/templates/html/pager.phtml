@@ -1,6 +1,7 @@
 <?php
 /**
  * Pager template — AWA override (unique paging-label IDs per toolbar slot).
+ * A quebra inline evita que locks legados recortem a navegação em 320 px.
  *
  * @var \Magento\Theme\Block\Html\Pager $block
  * @var \Magento\Framework\Escaper $escaper
@@ -44,7 +45,9 @@ $pagingLabelId = 'paging-label-' . $pagerSlot;
         <?php if ($block->getLastPageNum()>1): ?>
         <div class="pages">
             <strong class="label pages-label" id="<?= $block->escapeHtmlAttr($pagingLabelId) ?>"><?= $block->escapeHtml(__('Page')) ?></strong>
-            <ul class="items pages-items" aria-labelledby="<?= $block->escapeHtmlAttr($pagingLabelId) ?>">
+            <ul class="items pages-items"
+                aria-labelledby="<?= $block->escapeHtmlAttr($pagingLabelId) ?>"
+                style="flex-wrap: wrap !important; justify-content: center !important;">
             <?php if (!$block->isFirstPage()): ?>
                 <li class="item pages-item-previous">
                     <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
@@ -83,8 +86,8 @@ $pagingLabelId = 'paging-label-' . $pagerSlot;
             <?php foreach ($block->getFramePages() as $_page): ?>
                 <?php if ($block->isPageCurrent($_page)): ?>
                     <li class="item current">
-                        <strong class="page">
-                            <span class="label"><?= $block->escapeHtml(__('You\'re currently reading page')) ?></span>
+                        <strong class="page" aria-current="page">
+                            <span class="label"><?= $block->escapeHtml(__('Página atual')) ?></span>
                             <span><?= $block->escapeHtml($localeFormatter->formatNumber($_page)) ?></span>
                         </strong>
                     </li>

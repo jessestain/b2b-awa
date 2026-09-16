@@ -9,6 +9,11 @@ $isHomeRoute = $fullActionName === 'cms_index_index' || $pathSlug === '';
 $isDemoStagePreview = $fullActionName === 'cms_page_view'
     && in_array($pathSlug, ['homepage_ayo_home5_stage', 'homepage_ayo_home5_demo_stage'], true);
 $isProductRoute = $fullActionName === 'catalog_product_view';
+$isCheckoutRoute = in_array($fullActionName, [
+    'checkout_cart_index',
+    'checkout_index_index',
+    'onepagecheckout_index_index',
+], true);
 $disableAwaPostThemeoptionCss = (bool) $block->getData('disable_awa_post_themeoption_css');
 
 if ($isHomeRoute || $isDemoStagePreview) {
@@ -18,10 +23,17 @@ if ($isHomeRoute || $isDemoStagePreview) {
 if ($disableAwaPostThemeoptionCss) {
     return;
 }
+
+/* Adobe: eliminate render-blocking CSS. Home already skips this block.
+ * Catalog/PDP: print→all after parse (~100KB). Cart/checkout stays sync
+ * so .action.checkout / premium shell do not FOUC. */
+$linkMedia = $isCheckoutRoute
+    ? 'media="all"'
+    : 'media="print" onload="this.media=\'all\'" data-awa-defer="post-themeoption"';
 ?>
 <link rel="stylesheet"
       type="text/css"
-      media="all"
+      <?= /* @noEscape */ $linkMedia ?>
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-round9-post-themeoption-overrides.css')) ?>" />
 <?php
 /**
@@ -33,19 +45,20 @@ if ($disableAwaPostThemeoptionCss) {
 ?>
 <link rel="stylesheet"
       type="text/css"
-      media="all"
+      <?= /* @noEscape */ $linkMedia ?>
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-components-b2b-foundation.css')) ?>" />
 <link rel="stylesheet"
       type="text/css"
-      media="all"
+      <?= /* @noEscape */ $linkMedia ?>
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-compat-b2b-nav-plp-cart-checkout.css')) ?>" />
-<?php if (!$isProductRoute): ?>
+<?php if ($isCheckoutRoute): ?>
 <link rel="stylesheet"
       type="text/css"
       media="all"
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-page-b2b-cart-checkout-premium.css')) ?>" />
+<?php elseif (!$isProductRoute): ?>
 <link rel="stylesheet"
       type="text/css"
-      media="all"
+      <?= /* @noEscape */ $linkMedia ?>
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-page-home-category-premium.css')) ?>" />
 <?php endif; ?>

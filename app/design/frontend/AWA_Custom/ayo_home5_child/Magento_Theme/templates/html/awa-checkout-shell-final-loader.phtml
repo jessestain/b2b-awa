@@ -6,12 +6,8 @@ declare(strict_types=1);
 
 /** @var \Magento\Framework\View\Element\Template $block */
 $shellUrl = $block->getViewFileUrl('css/awa-checkout-shell-final.css');
-$assetVersion = '20260725-ssot1-onda4-step24';
+$assetVersion = '20260810-ssot-visual';
 $shellUrlVersioned = $shellUrl . '?v=' . $assetVersion;
-$asyncInit = json_encode(
-    ['js/awa-async-stylesheet' => ['urls' => [$shellUrlVersioned]]],
-    JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
-);
 ?>
 <style id="awa-checkout-shell-critical">
 /* Anti-FOUC — 1280px + gap 16px antes do shell-final.css */
@@ -56,7 +52,3 @@ html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepa
 </style>
 <link rel="stylesheet"
       href="<?= $block->escapeUrl($shellUrlVersioned) ?>"/>
-<div class="awa-async-css-loader awa-checkout-shell-final-async" hidden data-mage-init="<?= $block->escapeHtmlAttr($asyncInit) ?>"></div>
-<noscript>
-    <link rel="stylesheet" href="<?= $block->escapeUrl($shellUrlVersioned) ?>"/>
-</noscript>

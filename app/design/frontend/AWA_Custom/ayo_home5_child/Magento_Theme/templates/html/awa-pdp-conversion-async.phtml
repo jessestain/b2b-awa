@@ -27,11 +27,52 @@ $faqUrl        = $block->getViewFileUrl('css/awa-pdp-faq-2026-06-27.css');
 <link rel="stylesheet" href="<?= $block->escapeUrl($premiumUrl) ?>" media="print" onload="this.media='all'" data-awa-pdp-css="premium"/>
 <link rel="stylesheet" href="<?= $block->escapeUrl($faqUrl) ?>" media="print" onload="this.media='all'" data-awa-pdp-css="faq"/>
 <style id="awa-pdp-terminal-wins-2026-06-17">
-/* B2B gate CTA — texto branco sobre primário (vence ui-simplify :is(a,.price-label a)). */
+/* PDP B2B: mantém os atalhos de preço/cadastro contextuais e reserva o botão
+   preenchido para a ação principal de entrada/compras. */
+html body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price {
+    align-items: flex-start !important;
+    text-align: left !important;
+}
 html body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price a:not(.b2b-register-cta) {
+    align-self: flex-start !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--awa-primary, #b73337) !important;
+    -webkit-text-fill-color: var(--awa-primary, #b73337) !important;
+    display: inline-flex !important;
+    justify-content: flex-start !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .product-info-main .product-info-price .b2b-login-to-see-price .b2b-register-cta {
+    align-self: flex-start !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--awa-primary, #b73337) !important;
+    -webkit-text-fill-color: var(--awa-primary, #b73337) !important;
+    display: inline-flex !important;
+    justify-content: flex-start !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 44px !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .box-tocart.b2b-login-to-buy-mode .b2b-login-to-buy-btn {
+    background: var(--awa-primary, #b73337) !important;
+    border-color: var(--awa-primary, #b73337) !important;
     color: #fff !important;
-    -webkit-text-fill-color: #fff !important;
-    background: #b73337 !important;
 }
 html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .item-product.awa-carousel-card-slot {
     border-radius: 8px !important;
@@ -357,8 +398,36 @@ html body#html-body.catalog-product-view .awa-dark-mode-toggle {
 html body#html-body.catalog-product-view .page-wrapper :is(.awa-pdp-related, .rx-pdp-crosssell, .awa-pdp-mostviewed) {
     overflow-x: clip !important;
 }
+html body#html-body.catalog-product-view .page-wrapper :is(.awa-pdp-faq, .awa-pdp-related) {
+    scroll-margin-top: 72px !important;
+}
 html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related.awa-shelf--carousel .awa-carousel__viewport {
-    scrollbar-width: thin !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related.awa-shelf--carousel .awa-carousel__viewport::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport']
+    :is(.awa-owl-nav__btn--prev, .awa-carousel__button--prev) {
+    left: var(--awa-carousel-button-offset, 16px) !important;
+    right: auto !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport']
+    :is(.awa-owl-nav__btn--next, .awa-carousel__button--next) {
+    right: var(--awa-carousel-button-offset, 16px) !important;
+    left: auto !important;
+}
+html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related :is(
+    .awa-carousel__toggle,
+    .awa-carousel__toggle[hidden],
+    .awa-carousel__toggle:disabled
+) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 @media (max-width: 767px) {
     html body#html-body.catalog-product-view .page-wrapper .awa-site-header .awa-header-search-col,

@@ -480,7 +480,9 @@ require(['domReady!'], function () {
     function stripDeptTriggerInlineTypography() {
         document.querySelectorAll('[data-role="awa-vertical-menu-trigger"], .awa-vmenu-trigger-text').forEach(function (el) {
             ['font-size', 'font-weight', 'line-height'].forEach(function (prop) {
-                el.style.removeProperty(prop);
+                if (el.style.getPropertyValue(prop)) {
+                    el.style.removeProperty(prop);
+                }
             });
             if (!el.getAttribute('style')) {
                 el.removeAttribute('style');
@@ -489,17 +491,24 @@ require(['domReady!'], function () {
     }
 
     function guardDeptTriggerInlineTypography() {
+        var targets;
+
         stripDeptTriggerInlineTypography();
         if (window.__awaDeptTypographyStripObserver) {
+            return;
+        }
+        targets = document.querySelectorAll('[data-role="awa-vertical-menu-trigger"], .awa-vmenu-trigger-text');
+        if (!targets.length || typeof MutationObserver === 'undefined') {
             return;
         }
         window.__awaDeptTypographyStripObserver = new MutationObserver(function () {
             stripDeptTriggerInlineTypography();
         });
-        window.__awaDeptTypographyStripObserver.observe(document.documentElement, {
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['style']
+        Array.prototype.forEach.call(targets, function (el) {
+            window.__awaDeptTypographyStripObserver.observe(el, {
+                attributes: true,
+                attributeFilter: ['style']
+            });
         });
     }
 
@@ -509,12 +518,7 @@ require(['domReady!'], function () {
         }
 
         window.__awaA11yProductLinksBooted = true;
-
         guardDeptTriggerInlineTypography();
-        window.requestAnimationFrame(guardDeptTriggerInlineTypography);
-        [0, 100, 500, 1500].forEach(function (delay) {
-            window.setTimeout(guardDeptTriggerInlineTypography, delay);
-        });
 
 
         runFixes(document);

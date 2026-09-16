@@ -54,6 +54,11 @@ $isCatalogMerchandisingRoute = in_array($fullActionName, [
 ], true) || in_array('catalog_category_view', $layoutHandles, true)
     || in_array('catalog_product_view', $layoutHandles, true)
     || in_array('catalogsearch_result_index', $layoutHandles, true);
+$isCatalogListRoute = in_array($fullActionName, [
+    'catalog_category_view',
+    'catalogsearch_result_index',
+], true) || in_array('catalog_category_view', $layoutHandles, true)
+    || in_array('catalogsearch_result_index', $layoutHandles, true);
 $isCartOrCheckoutRoute = in_array('checkout_cart_index', $layoutHandles, true)
     || in_array('checkout_index_index', $layoutHandles, true)
     || in_array($fullActionName, [
@@ -192,6 +197,9 @@ $renderIntentScriptLoader = static function (
 
     var done = false;
 
+    function dbg(stage, data) {
+    }
+
     function isMobile() {
         return !!(w.matchMedia && w.matchMedia('(max-width: 767px)').matches);
     }
@@ -210,12 +218,20 @@ $renderIntentScriptLoader = static function (
 
     function appendScript() {
         if (d.querySelector('script[data-awa-lazy-src="' + src + '"]')) {
+            dbg('append_skip_existing', { path: w.location.pathname || '' });
             return;
         }
         var script = d.createElement('script');
+        script.onload = function () {
+            dbg('script_loaded', { path: w.location.pathname || '' });
+        };
+        script.onerror = function () {
+            dbg('script_error', { path: w.location.pathname || '' });
+        };
         script.src = src;
         script.defer = true;
         script.setAttribute('data-awa-lazy-src', src);
+        dbg('append_script', { path: w.location.pathname || '' });
         (d.body || d.documentElement).appendChild(script);
     }
 
@@ -244,6 +260,10 @@ $renderIntentScriptLoader = static function (
      * script roda.
      */
     function scheduleAppendScript() {
+        dbg('schedule_append', {
+            path: w.location.pathname || '',
+            ric: w.requestIdleCallback ? 1 : 0
+        });
         if (w.requestIdleCallback) {
             w.requestIdleCallback(appendScript, { timeout: 300 });
         } else {
@@ -256,6 +276,10 @@ $renderIntentScriptLoader = static function (
             return;
         }
         done = true;
+        dbg('trigger', {
+            path: w.location.pathname || '',
+            mobile: isMobile() ? 1 : 0
+        });
         cleanup();
         scheduleAppendScript();
     }
@@ -273,6 +297,10 @@ $renderIntentScriptLoader = static function (
             }
         }
 
+        dbg('intent_' + ev.type, {
+            path: w.location.pathname || '',
+            mobile: isMobile() ? 1 : 0
+        });
         trigger();
     }
 
@@ -291,6 +319,11 @@ $renderIntentScriptLoader = static function (
             w.setTimeout(trigger, desktopIdleTimeout);
         }
     }
+    dbg('loader_init', {
+        path: w.location.pathname || '',
+        mobile: isMobile() ? 1 : 0,
+        selectors: selectors.length
+    });
 })(window, document);
 </script>
 HTML;
@@ -329,11 +362,12 @@ HTML;
     '.top-account',
     '#search',
     '#search_mini_form'
-], 2200) ?>
+], 2200, !$isCatalogListRoute) ?>
 <?php endif; ?>
 <?php if (!$shouldSkipMinicartDeferInit): ?>
 <script>
 (function (w, d) {
+    var deferOnCatalogIntentOnly = <?= $isCatalogListRoute ? 'true' : 'false' ?>;
     var isHomeByPath = !w.location || w.location.pathname === '' || w.location.pathname === '/';
     var body = d.body;
     var isHomeByBodyClass = !!(body && (
@@ -345,6 +379,11 @@ HTML;
     var isHome = isHomeByPath || isHomeByBodyClass || isHomeByMarker;
     var src;
     var script;
+    var runtime = w.__awaHeaderMinicartRuntime = w.__awaHeaderMinicartRuntime || {};
+    var intentBound = false;
+    var pendingReplayTarget = null;
+    var idleTimerId = null;
+    var idleCallbackId = null;
 
     if (isHome) {
         return;
@@ -354,30 +393,151 @@ HTML;
         $block->getViewFileUrl('js/awa-minicart-defer-init.js') . '?v=' . rawurlencode($minicartRuntimeVersion),
         JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
     ) ?>;
-    var runtime = w.__awaHeaderMinicartRuntime = w.__awaHeaderMinicartRuntime || {};
+
     if (runtime.functionalOwner && runtime.functionalOwner !== 'defer') {
         return;
     }
-    if (w.__awaMinicartDeferClaim || w.__awaMinicartDeferInit || d.querySelector('script[src="' + src + '"], script[data-awa-defer-init="' + src + '"]')) {
+
+    function appendDeferScript() {
+        if (w.__awaMinicartDeferClaim || w.__awaMinicartDeferInit || d.querySelector('script[src="' + src + '"], script[data-awa-defer-init="' + src + '"]')) {
+            return;
+        }
+
+        runtime.functionalOwner = 'defer';
+        runtime.functionalOwnerSource = runtime.functionalOwnerSource || 'awa-custom-js-loader';
+        runtime.functionalOwnerClaimedAt = runtime.functionalOwnerClaimedAt || Date.now();
+        w.__awaMinicartDeferClaim = true;
+
+        script = d.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.setAttribute('data-awa-defer-init', src);
+        if (pendingReplayTarget) {
+            script.addEventListener('load', function () {
+                var replayTarget = pendingReplayTarget;
+                pendingReplayTarget = null;
+                if (!replayTarget || !replayTarget.isConnected) {
+                    return;
+                }
+                w.setTimeout(function () {
+                    try {
+                        replayTarget.dispatchEvent(new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: w
+                        }));
+                    } catch (e) {
+                        if (typeof replayTarget.click === 'function') {
+                            replayTarget.click();
+                        }
+                    }
+                }, 0);
+            }, { once: true });
+        }
+        (d.head || d.documentElement).appendChild(script);
+    }
+
+    function clearIntentListeners() {
+        if (!intentBound) {
+            return;
+        }
+        intentBound = false;
+        w.removeEventListener('pointerdown', onIntent, true);
+        w.removeEventListener('touchstart', onIntent, true);
+        w.removeEventListener('click', onIntent, true);
+        w.removeEventListener('keydown', onIntent, true);
+        if (idleTimerId !== null) {
+            w.clearTimeout(idleTimerId);
+            idleTimerId = null;
+        }
+        if (idleCallbackId !== null && typeof w.cancelIdleCallback === 'function') {
+            w.cancelIdleCallback(idleCallbackId);
+            idleCallbackId = null;
+        }
+    }
+
+    function bootFromIdle() {
+        clearIntentListeners();
+        appendDeferScript();
+    }
+
+    function resolveIntentTarget(event) {
+        var target = event && event.target ? event.target : null;
+        if (target && target.nodeType === 3) {
+            target = target.parentElement;
+        }
+        if (target && !target.closest && target.parentElement) {
+            target = target.parentElement;
+        }
+        return target && target.closest ? target : null;
+    }
+
+    function getMinicartTrigger(target) {
+        if (!target) {
+            return null;
+        }
+        return target.closest('.action.showcart,.showcart,.header-mini-cart,[data-awa-minicart-defer="trigger"]');
+    }
+
+    function isMinicartIntent(event) {
+        var target = resolveIntentTarget(event);
+        if (!target || !target.closest) {
+            return false;
+        }
+        return !!target.closest(
+            '.action.showcart,.showcart,.header-mini-cart,[data-awa-minicart-defer="trigger"],' +
+            '.minicart-wrapper,.mini-cart-wrapper,[data-awa-header-minicart-shell="true"],' +
+            '[data-block="minicart"],[data-role="minicart-content"]'
+        );
+    }
+
+    function onIntent(event) {
+        if (!isMinicartIntent(event)) {
+            return;
+        }
+        var eventType = event && event.type ? event.type : '';
+        var target = resolveIntentTarget(event);
+        var triggerTarget = getMinicartTrigger(target);
+
+        if (triggerTarget && eventType === 'pointerdown') {
+            return;
+        }
+
+        if (triggerTarget && (eventType === 'click' || (eventType === 'keydown' && (event.key === 'Enter' || event.key === ' ')))) {
+            pendingReplayTarget = triggerTarget;
+            if (event.preventDefault) {
+                event.preventDefault();
+            }
+            if (event.stopImmediatePropagation) {
+                event.stopImmediatePropagation();
+            } else if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+        }
+
+        clearIntentListeners();
+        appendDeferScript();
+    }
+
+    if (deferOnCatalogIntentOnly) {
+        if (w.__awaMinicartDeferClaim || w.__awaMinicartDeferInit || d.querySelector('script[src="' + src + '"], script[data-awa-defer-init="' + src + '"]')) {
+            return;
+        }
+        intentBound = true;
+        w.addEventListener('pointerdown', onIntent, { capture: true, passive: true });
+        w.addEventListener('touchstart', onIntent, { capture: true, passive: true });
+        w.addEventListener('click', onIntent, true);
+        w.addEventListener('keydown', onIntent, true);
         return;
     }
 
-    runtime.functionalOwner = 'defer';
-    runtime.functionalOwnerSource = runtime.functionalOwnerSource || 'awa-custom-js-loader';
-    runtime.functionalOwnerClaimedAt = runtime.functionalOwnerClaimedAt || Date.now();
-    w.__awaMinicartDeferClaim = true;
-
-    script = d.createElement('script');
-    script.src = src;
-    script.defer = true;
-    script.setAttribute('data-awa-defer-init', src);
-    (d.head || d.documentElement).appendChild(script);
+    appendDeferScript();
 }(window, document));
 </script>
 <?php endif; ?>
 <?php if (!$isCartOrCheckoutRoute): ?>
 <?php if ($shouldEagerLoadHeaderA11y): ?>
-<script src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-header-a11y-performance.min.js')) ?>" defer></script>
+<script src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-header-a11y-performance.min.js')) ?>?v=<?= $block->escapeHtmlAttr($minicartRuntimeVersion) ?>" defer></script>
 <?php else: ?>
 <script>
 (function (w, d) {
@@ -387,7 +547,7 @@ HTML;
     }
 
     function closeMobileNavPreflight() {
-        d.body.classList.remove('nav-open', 'awa-nav-preflight', 'awa-menu-drawer-open', 'nav-before-open');
+        d.body.classList.remove('nav-open', 'awa-nav-preflight', 'awa-menu-drawer-open', 'nav-before-open', 'background_shadow', 'background_shadow_show');
         var toggle = d.querySelector('[data-awa-nav-toggle="true"]');
         if (toggle) {
             toggle.setAttribute('aria-expanded', 'false');
@@ -423,14 +583,91 @@ HTML;
             return;
         }
         if (!d.body.classList.contains('nav-open') && !d.body.classList.contains('nav-before-open')) {
-            d.body.classList.add('nav-open', 'awa-nav-preflight');
+            d.body.classList.add('awa-nav-preflight');
             toggle.setAttribute('aria-expanded', 'true');
         }
     }
     d.addEventListener('pointerdown', onNavPreflight, { capture: true, passive: true });
 }(window, document));
 </script>
-<?= /* @noEscape */ $renderIntentScriptLoader($block->escapeUrl($block->getViewFileUrl('js/awa-header-a11y-performance.min.js')), [
+<script>
+(function (w, d) {
+    'use strict';
+    if (w.__awaNavShadowGuardInit) {
+        return;
+    }
+    w.__awaNavShadowGuardInit = true;
+
+    function isDrawerActuallyOpen() {
+        return d.body.classList.contains('awa-menu-drawer-open')
+            || d.body.classList.contains('background_shadow_show')
+            || d.body.classList.contains('background_shadow')
+            || !!d.querySelector('#awa-primary-navigation.is-awa-mobile-open, #awa-category-navigation.is-awa-mobile-open, [data-awa-nav-shell="true"].is-awa-mobile-open');
+    }
+
+    function clearStaleNavOverlay(reason) {
+        if (isDrawerActuallyOpen()) {
+            return false;
+        }
+        if (!d.body.classList.contains('nav-open')
+            && !d.body.classList.contains('awa-nav-preflight')
+            && !d.body.classList.contains('nav-before-open')
+            && !d.body.classList.contains('background_shadow_show')) {
+            return false;
+        }
+        d.body.classList.remove(
+            'nav-open',
+            'awa-nav-preflight',
+            'awa-menu-drawer-open',
+            'nav-before-open',
+            'background_shadow',
+            'background_shadow_show',
+            'awa-vertical-menu-open'
+        );
+        d.documentElement.classList.remove('nav-open', 'nav-before-open');
+        var toggle = d.querySelector('[data-awa-nav-toggle="true"], [data-action="toggle-nav"]');
+        if (toggle) {
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+        return true;
+    }
+
+    function onShadowDismiss(ev) {
+        var target = ev.target;
+        if (!target || typeof target.closest !== 'function') {
+            return;
+        }
+        if (!target.closest('.shadow_bkg, .shadow_bkg_show')) {
+            return;
+        }
+        if (!isDrawerActuallyOpen()) {
+            clearStaleNavOverlay('shadow_click_stale');
+            return;
+        }
+        if (typeof w.__awaMenuControllerClose === 'function') {
+            w.__awaMenuControllerClose();
+            return;
+        }
+        clearStaleNavOverlay('shadow_click_fallback');
+    }
+
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', function () {
+            clearStaleNavOverlay('dom_ready');
+        }, { once: true });
+    } else {
+        clearStaleNavOverlay('immediate');
+    }
+
+    d.addEventListener('click', onShadowDismiss, true);
+    d.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') {
+            clearStaleNavOverlay('escape');
+        }
+    }, true);
+}(window, document));
+</script>
+<?= /* @noEscape */ $renderIntentScriptLoader($block->escapeUrl($block->getViewFileUrl('js/awa-header-a11y-performance.min.js') . '?v=' . rawurlencode($minicartRuntimeVersion)), [
     '.header .nav-toggle',
     '[data-awa-nav-toggle]',
     '.header .top-search',
@@ -438,7 +675,7 @@ HTML;
     '#search',
     '.top-account',
     '[data-awa-component="site-header"]'
-], 3000) ?>
+], 3000, !$isCatalogListRoute) ?>
 <?php endif; ?>
 <?php endif; ?>
 <?php endif; ?>
@@ -631,142 +868,7 @@ HTML;
 }(window));
 <?php endif; ?>
 </script>
-<?php if ($isCartOrCheckoutRoute): ?>
-<script>
-/* expresscheckout/cart overlay guard — remove overlays stuck by legacy modal/minicart scripts */
-(function (w, d) {
-    'use strict';
-
-    var overlayGuardRunning = false;
-    var overlayGuardInitialized = false;
-
-    function isCartCheckoutPage() {
-        return !!(d.body && d.body.classList.contains('checkout-cart-index'));
-    }
-
-    function overlayNeedsCleanup(el) {
-        if (!el) {
-            return false;
-        }
-
-        var style = w.getComputedStyle(el);
-
-        return el.classList.contains('_show')
-            || el.classList.contains('is-visible')
-            || el.classList.contains('is-active')
-            || style.display !== 'none'
-            || style.visibility !== 'hidden'
-            || style.opacity !== '0'
-            || style.pointerEvents !== 'none';
-    }
-
-    function hideOverlay(el) {
-        if (!overlayNeedsCleanup(el)) {
-            return;
-        }
-
-        el.classList.remove('_show', 'is-visible', 'is-active');
-        el.style.setProperty('display', 'none', 'important');
-        el.style.setProperty('opacity', '0', 'important');
-        el.style.setProperty('visibility', 'hidden', 'important');
-        el.style.setProperty('pointer-events', 'none', 'important');
-    }
-
-    function clearStuckOverlays() {
-        var overlays;
-        var i;
-        var hasVisibleModal;
-
-        if (!isCartCheckoutPage() || overlayGuardRunning) {
-            return;
-        }
-
-        overlayGuardRunning = true;
-
-        try {
-            overlays = d.querySelectorAll(
-                '.modals-overlay, .modal-custom-overlay, .awa-mobile-drawer-overlay, .awa-nav-overlay'
-            );
-
-            for (i = 0; i < overlays.length; i += 1) {
-                hideOverlay(overlays[i]);
-            }
-
-            d.querySelectorAll('.modal-popup._show, .modal-slide._show').forEach(function (modal) {
-                if (!overlayNeedsCleanup(modal)) {
-                    return;
-                }
-
-                modal.classList.remove('_show');
-                modal.style.setProperty('display', 'none', 'important');
-            });
-
-            hasVisibleModal = !!d.querySelector('.modal-popup._show, .modal-slide._show');
-
-            if (!hasVisibleModal && (
-                d.body.classList.contains('_has-modal')
-                || d.body.classList.contains('awa-mobile-drawer-open')
-                || d.body.classList.contains('nav-open')
-                || d.body.classList.contains('nav-before-open')
-                || d.body.style.overflow
-            )) {
-                d.body.classList.remove('_has-modal', 'awa-mobile-drawer-open', 'nav-open', 'nav-before-open');
-                d.body.style.removeProperty('overflow');
-                d.documentElement.classList.remove('nav-open', 'nav-before-open');
-            }
-
-            d.querySelectorAll('.minicart-wrapper').forEach(function (wrapper) {
-                wrapper.classList.remove('active', 'is-open', 'show');
-            });
-
-            d.querySelectorAll('.block-minicart').forEach(function (panel) {
-                if (!overlayNeedsCleanup(panel) && !panel.classList.contains('_active')) {
-                    return;
-                }
-                panel.classList.remove('_active');
-                panel.setAttribute('aria-hidden', 'true');
-                hideOverlay(panel);
-            });
-
-            d.querySelectorAll('.action.showcart[aria-expanded="true"]').forEach(function (trigger) {
-                trigger.setAttribute('aria-expanded', 'false');
-            });
-        } finally {
-            overlayGuardRunning = false;
-        }
-    }
-
-    function initOverlayGuard() {
-        if (!isCartCheckoutPage() || overlayGuardInitialized) {
-            return;
-        }
-
-        overlayGuardInitialized = true;
-        clearStuckOverlays();
-        w.setTimeout(clearStuckOverlays, 120);
-        w.setTimeout(clearStuckOverlays, 600);
-
-        d.addEventListener('click', function () {
-            w.setTimeout(clearStuckOverlays, 40);
-        }, true);
-    }
-
-    function maybeInitOverlayGuard() {
-        if (!isCartCheckoutPage()) {
-            return;
-        }
-
-        initOverlayGuard();
-    }
-
-    if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', maybeInitOverlayGuard, { once: true });
-    } else {
-        maybeInitOverlayGuard();
-    }
-}(window, document));
-</script>
-<?php endif; ?>
+<?php /* Navigation, modal and minicart controllers own their overlays and scroll locks. */ ?>
 <script>
 /* Service Worker cleanup — disabled after stale HTML/CSS cache regressions */
 if ('serviceWorker' in navigator) {

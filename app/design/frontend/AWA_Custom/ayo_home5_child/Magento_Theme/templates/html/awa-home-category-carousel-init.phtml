@@ -11,6 +11,29 @@ declare(strict_types=1);
     var maxRequireRetries = 80;
     var pendingDir = 0; // -1 prev, +1 next (first-click race)
 
+    function getScroller(track) {
+        return track && (track.closest('.awa-category-carousel__viewport') || track);
+    }
+
+    function getScrollAmount(track, scroller) {
+        var items = track ? track.querySelectorAll('.awa-category-carousel__item') : [];
+        var style = track ? w.getComputedStyle(track) : null;
+        var gap = style ? (parseInt(style.gap, 10) || 16) : 16;
+        var itemW = items[0] ? (items[0].offsetWidth + gap) : 280;
+        return Math.max(Math.floor(scroller.clientWidth / itemW) * itemW, 280);
+    }
+
+    function scrollNative(track, dir, behavior) {
+        var scroller = getScroller(track);
+        if (!track || !scroller || !dir) {
+            return;
+        }
+        scroller.scrollBy({
+            left: dir * getScrollAmount(track, scroller),
+            behavior: behavior || 'auto'
+        });
+    }
+
     function isCarouselIntentTarget(target) {
         if (!target || typeof target.closest !== 'function') {
             return false;
@@ -25,12 +48,7 @@ declare(strict_types=1);
         if (!track || !dir) {
             return;
         }
-        var items = track.querySelectorAll('.awa-category-carousel__item');
-        var style = w.getComputedStyle(track);
-        var gap = parseInt(style.gap, 10) || 16;
-        var itemW = items[0] ? (items[0].offsetWidth + gap) : 280;
-        var amount = Math.max(Math.floor(track.clientWidth / itemW) * itemW, 280);
-        track.scrollBy({ left: dir * amount, behavior: 'auto' });
+        scrollNative(track, dir, 'auto');
     }
 
     function initCategoryCarousel() {
@@ -91,6 +109,24 @@ declare(strict_types=1);
         initCategoryCarousel();
     }
 
+    function onClickFallback(event) {
+        var target = event && event.target ? event.target : null;
+        var btn = target && typeof target.closest === 'function'
+            ? target.closest('.awa-category-carousel__prev, .awa-category-carousel__next')
+            : null;
+        var track;
+        var dir;
+
+        if (!btn || ready) {
+            return;
+        }
+
+        track = d.getElementById('awa-cat-carousel');
+        dir = btn.classList.contains('awa-category-carousel__next') ? 1 : -1;
+        pendingDir = 0;
+        scrollNative(track, dir, 'smooth');
+    }
+
     function schedule() {
         var target = d.getElementById('awa-cat-carousel');
         if (!target) {
@@ -107,6 +143,7 @@ declare(strict_types=1);
         ['pointerdown', 'keydown', 'touchstart'].forEach(function (name) {
             w.addEventListener(name, onIntent, { capture: true, passive: name !== 'keydown' });
         });
+        w.addEventListener('click', onClickFallback, { capture: true, passive: true });
     }
 
     if (d.readyState === 'loading') {

@@ -8,7 +8,10 @@
 $viewportId = trim((string) $block->getData('viewport_id'));
 $prevLabel = (string) __('Anterior');
 $nextLabel = (string) __('Próximo');
-$progressLabel = (string) __('Progresso do carrossel');
+$progressLabel = trim((string) $block->getData('progress_label'));
+if ($progressLabel === '') {
+    $progressLabel = (string) __('Progresso do carrossel');
+}
 $noscriptHint = (string) __('Deslize horizontalmente ou use as setas para ver mais produtos.');
 $controlsAttr = $viewportId !== '' ? ' aria-controls="' . $block->escapeHtmlAttr($viewportId) . '"' : '';
 ?>

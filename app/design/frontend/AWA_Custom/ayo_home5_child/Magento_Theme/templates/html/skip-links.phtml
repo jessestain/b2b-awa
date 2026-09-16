@@ -4,7 +4,8 @@
  *
  * Correção WCAG 2.1 SC 2.4.1 (Bypass Blocks):
  *   – O link original usava href="#store.menu" que não existe no DOM customizado.
- *   – Corrigido para #awa-primary-navigation (ID real do container de navegação).
+ *   – Corrigido para #awa-category-navigation, ID já existente no menu.
+ *     #awa-primary-navigation permanece como shell do drawer mobile.
  *   – O link "Ir para o conteúdo" mantém #maincontent (Magento padrão).
  *
  * Template original: app/design/frontend/ayo/ayo_default/Magento_Theme/templates/html/skip-links.phtml
@@ -30,7 +31,7 @@ $mainContentTarget = match ($fullActionName) {
     <span><?= $block->escapeHtml(__('Ir para o conteúdo principal')) ?></span>
 </a>
 <?php if (!$isB2bAuthLightShell): ?>
-<a class="action skip nav awa-skip-link" href="#awa-primary-navigation">
+<a class="action skip nav awa-skip-link" href="#awa-category-navigation">
     <span><?= $block->escapeHtml(__('Ir para a navegação')) ?></span>
 </a>
 <?php endif; ?>

@@ -12,8 +12,13 @@ use GrupoAwamotos\Theme\Model\MinicartAssetVersion;
 $__headerGridCriticalUrl = $block->getViewFileUrl('css/awa-header-mobile-grid-critical.min.css') . '?v=20260717-scroll-offset-116';
 $__headerGridCriticalEsc = $block->escapeUrl($__headerGridCriticalUrl);
 $__minicartRuntimeVersion = MinicartAssetVersion::RUNTIME;
+$__request = $block->getRequest();
+$__fullActionName = $__request ? (string) $__request->getFullActionName() : '';
+$__layoutHandles = $block->getLayout() ? $block->getLayout()->getUpdate()->getHandles() : [];
+$__isCatalogListRoute = in_array($__fullActionName, ['catalog_category_view', 'catalogsearch_result_index'], true)
+    || in_array('catalog_category_view', $__layoutHandles, true)
+    || in_array('catalogsearch_result_index', $__layoutHandles, true);
 ?>
-<link rel="preload" href="<?= $__headerGridCriticalEsc ?>" as="style" fetchpriority="high"/>
 <link rel="stylesheet" href="<?= $__headerGridCriticalEsc ?>" media="all" id="awa-header-mobile-grid-critical"/>
 <script>
 (function (w, d) {
@@ -26,6 +31,7 @@ $__minicartRuntimeVersion = MinicartAssetVersion::RUNTIME;
     }
     var isHomeByPath = !w.location || w.location.pathname === '' || w.location.pathname === '/';
     var body = d.body;
+    var skipCatalogAutoBoot = <?= $__isCatalogListRoute ? 'true' : 'false' ?>;
     var runtime = w.__awaHeaderMinicartRuntime = w.__awaHeaderMinicartRuntime || {};
     var src;
     var script;
@@ -74,6 +80,10 @@ $__minicartRuntimeVersion = MinicartAssetVersion::RUNTIME;
     ));
     var isHomeByMarker = !!d.getElementById('awa-home-bootstrap-merged');
     if (isHomeByPath || isHomeByBodyClass || isHomeByMarker) {
+        return;
+    }
+    // PLP/busca: o loader primário controla o boot por intenção para reduzir TBT.
+    if (skipCatalogAutoBoot) {
         return;
     }
     src = <?= json_encode(

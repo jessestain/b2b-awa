@@ -11,6 +11,7 @@ if ($block->getHeroImageUrl() === '') {
 }
 ?>
 <!-- P9b: oculta slider desktop no 1º paint mobile (hidden-xs depende de CSS gated na home) -->
+<?php if ((string) $block->getRequest()->getFullActionName() !== 'cms_index_index') : /* AWA_HOME_INLINE_CSS_CUT_20260902 */ ?>
 <style id="awa-hero-lcp-critical">
 @media(max-width:767px){.wrapper_slider.hidden-xs{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;pointer-events:none!important}.wrapper_slider.visible-xs{display:block!important}}
 @media(min-width:768px){.wrapper_slider.visible-xs{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;pointer-events:none!important}}
@@ -19,14 +20,15 @@ if ($block->getHeroImageUrl() === '') {
 .wrapper_slider.visible-xs .swiper-slide{display:flex;flex-direction:column;align-items:stretch}
 .wrapper_slider.visible-xs .banner_item_bg{position:relative;overflow:hidden}
 .wrapper_slider.visible-xs .banner_item_bg>a{position:absolute;inset:0;width:100%;height:100%;display:block}
-.wrapper_slider.visible-xs .banner_item_bg picture,.wrapper_slider.visible-xs .banner_item_bg img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;background:var(--awa-surface)}
-.wrapper_slider.hidden-xs .banner_item_bg{aspect-ratio:1920/470;min-height:clamp(160px,24.5vw,470px)}
+.wrapper_slider.visible-xs .banner_item_bg picture,.wrapper_slider.visible-xs .banner_item_bg img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;background:transparent}
+.wrapper_slider.hidden-xs .banner_item_bg{aspect-ratio:unset;min-height:clamp(176px,24.5vw,472px)}
 .wrapper_slider .banner_item_bg picture>source{display:none!important;width:0!important;height:0!important}
-.wrapper_slider .banner_item_bg img,.wrapper_slider .banner_item_bg picture{display:block;width:100%;height:100%;object-fit:contain;object-position:center;background:var(--awa-surface)}
+.wrapper_slider .banner_item_bg img,.wrapper_slider .banner_item_bg picture{display:block;width:100%;height:100%;object-fit:cover;object-position:center;background:transparent}
 /* r44c: full-bleed + altura final no 1º paint (evita LCP re-stamp 1280→1340 / wrapH 455→341). */
 @media(min-width:768px){
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(#maincontent.page-main.container,#maincontent.page-main,main.page-main#maincontent,.content-top-home){width:100%!important;max-width:none!important;max-inline-size:none!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold{width:100%!important;max-width:100%!important;margin-inline:0!important;padding-inline:0!important;overflow:visible!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold>.banner-slider.banner-slider2{width:100vw!important;max-width:100vw!important;margin-left:calc(50% - 50vw)!important;margin-right:0!important;padding-inline:0!important;overflow:hidden!important;border-radius:0!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold>.banner-slider.banner-slider2{width:100%!important;max-width:100%!important;margin-left:0!important;margin-right:0!important;padding-inline:0!important;overflow:hidden!important;border-radius:0!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-wrapper,
@@ -34,13 +36,19 @@ if ($block->getHeroImageUrl() === '') {
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg :is(a,picture,img){width:100%!important;max-width:100%!important;margin-inline:0!important;box-sizing:border-box!important}
-/* r76d/H12 CLS: height:auto+aspect liberava 420→335 e late 339→313 (1920/488). Lock shell final. */
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold{height:339px!important;min-height:339px!important;max-height:339px!important;overflow:hidden!important}
+/* r76d/H12 + 1426e1-H: lock = 18vw (SKU no 1º ecrã 1366). First-paint = density. */
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold{height:clamp(176px,24.5vw,472px)!important;min-height:clamp(176px,24.5vw,472px)!important;max-height:clamp(176px,24.5vw,472px)!important;padding-block:0!important;margin-block:0!important;overflow:hidden!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper,
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .swiper-wrapper,
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs :is(.swiper-slide,.banner_item,.banner_item_bg){height:331px!important;min-height:331px!important;max-height:331px!important;aspect-ratio:unset!important;overflow:hidden!important;box-sizing:border-box!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg :is(a,picture,img){display:block!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;object-fit:cover!important;object-position:center!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs :is(.swiper-slide,.banner_item,.banner_item_bg){height:clamp(176px,24.5vw,472px)!important;min-height:clamp(176px,24.5vw,472px)!important;max-height:clamp(176px,24.5vw,472px)!important;aspect-ratio:unset!important;overflow:hidden!important;box-sizing:border-box!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .banner_item_bg :is(a,picture,img){display:block!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;object-fit:cover!important;object-position:center!important;border-radius:0!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper.swiper-fade .swiper-slide{opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:0!important;transition:none!important}
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper.swiper-fade .swiper-slide:is(.swiper-slide-active,.swiper-slide-duplicate-active){opacity:1!important;visibility:visible!important;pointer-events:auto!important;z-index:2!important;position:relative!important}
+}
+@media(min-width:992px){
+html body#html-body.awa-menu-dept-open:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold{padding-inline-start:calc(var(--awa-vmenu-panel-width,304px) + 12px)!important}
+html body#html-body.awa-menu-dept-open:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home>.top-home-content--above-fold>.banner-slider.banner-slider2{width:100%!important;max-width:100%!important;margin-left:0!important;margin-right:0!important}
 }
 /* P12: shelf pré-init — linha única, larguras fixas (espelha awa-shelf-carousel.css) */
 #html-body .awa-shelf--carousel ul.owl.awa-carousel__track:not(.owl-carousel):not(.owl-loaded){display:flex!important;flex-flow:row nowrap!important;flex-wrap:nowrap!important;gap:0!important;min-height:var(--awa-shelf-preinit-h,300px)!important;max-height:var(--awa-shelf-preinit-h,300px)!important;overflow:visible!important;overflow-x:visible!important;overflow-y:visible!important;grid-template-columns:none!important}
@@ -58,3 +66,4 @@ if ($block->getHeroImageUrl() === '') {
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home .awa-carousel-section .awa-carousel__viewport.awa-carousel-ready{max-block-size:none!important;max-height:none!important;overflow-x:auto!important;overflow-y:hidden!important}
 #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .content-top-home .awa-carousel-section :is(ul.owl.owl-carousel:not(.owl-loaded),ul.owl:not(.owl-loaded),ol.product-items:not(.owl-loaded),.product-items:not(.owl-loaded)){display:flex!important;flex-flow:row nowrap!important}
 </style>
+<?php endif; ?>

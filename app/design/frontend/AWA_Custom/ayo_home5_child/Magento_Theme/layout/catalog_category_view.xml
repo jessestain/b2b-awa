@@ -12,5 +12,14 @@
         <remove src="css/awa-home-density-grid-20260611.min.css"/>
         <!-- CSS de shell da home removido no catálogo; stack PLP é aplicado por bundles/critical ativos. -->
         <remove src="css/awa-home-shell-final.css"/>
+        <!-- Fotorama/PDP only — na PLP o CSS bloqueava o 1º paint (~5KB, 150ms no Lighthouse).
+             Fase 6 fatia 2: faz parte de CatalogPlpCssParity::LAYOUT_REMOVE_SRCS. -->
+        <remove src="mage/gallery/gallery.css"/>
+        <!-- Checkout-only: seletores body.checkout-* — parse morto na PLP (~32KB). -->
+        <remove src="css/awa-page-b2b-cart-checkout-premium.css"/>
     </head>
+    <body>
+        <!-- PLP é grade, não vitrine carousel — loader global em default.xml. -->
+        <referenceBlock name="awa.shelf.carousel" remove="true"/>
+    </body>
 </page>

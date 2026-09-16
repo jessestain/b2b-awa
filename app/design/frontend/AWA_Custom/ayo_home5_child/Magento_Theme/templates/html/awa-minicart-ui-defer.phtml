@@ -34,5 +34,5 @@ $payload = json_encode([
 $payload = preg_replace('#</(\s*)script#i', '<\\/\\1script', (string) $payload);
 ?>
 <script type="application/json" id="awa-minicart-ui-json"><?= /* @noEscape */ $payload ?></script>
-<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-minicart-home-click-guard.js')) ?>?v=<?= $block->escapeHtmlAttr($minicartRuntimeVersion) ?>" id="awa-minicart-home-click-guard"></script>
+<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('Magento_Theme::js/awa-minicart-home-click-guard.js')) ?>?v=<?= $block->escapeHtmlAttr($minicartRuntimeVersion) ?>" id="awa-minicart-home-click-guard"></script>
 <script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-minicart-ui-bootstrap-home.min.js')) ?>?v=<?= $block->escapeHtmlAttr($minicartRuntimeVersion) ?>"></script>

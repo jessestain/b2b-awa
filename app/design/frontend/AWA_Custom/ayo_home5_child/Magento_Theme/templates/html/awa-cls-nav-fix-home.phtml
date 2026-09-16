@@ -9,5 +9,5 @@ $clsUrl = $block->getViewFileUrl('css/awa-cls-nav-fix.min.css');
 /* BUG-SHELL-CLS-NAV-OFFSET-001: bust immutable cache (max-age=31536000) após sticky mobile 96 (BUG-SHELL-MOBILE-STICKY-OVERSIZE-001) */
 $clsUrl .= (str_contains($clsUrl, '?') ? '&' : '?') . 'v=20260805-mobile-sticky-96-r2';
 ?>
-<link rel="stylesheet" href="<?= $block->escapeUrl($clsUrl) ?>" media="all" data-awa-first-paint-critical="cls-nav"/>
+<link rel="stylesheet" href="<?= $block->escapeUrl($clsUrl) ?>" media="print" onload="this.media='all'" data-awa-first-paint-critical="cls-nav"/>
 <noscript><link rel="stylesheet" href="<?= $block->escapeUrl($clsUrl) ?>"/></noscript>

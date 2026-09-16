@@ -23,6 +23,7 @@ $isHome = $fullActionName === 'cms_index_index';
 $isAccount = str_starts_with($fullActionName, 'customer_account')
     || str_starts_with($fullActionName, 'b2b_account');
 $isCart = $fullActionName === 'checkout_cart_index';
+$accountUrl = $block->getUrl('b2b/account/login');
 
 ?>
 <nav class="fixed-bottom hidden-sm hidden-md hidden-lg" role="navigation" aria-label="<?= $escaper->escapeHtmlAttr(__('Navegação Móvel')) ?>" data-awa-mobile-nav="v4-deptos">
@@ -43,7 +44,8 @@ $isCart = $fullActionName === 'checkout_cart_index';
                 </button>
             </li>
             <li class="<?= $isAccount ? 'active' : '' ?>">
-                <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/')) ?>" aria-label="<?= $escaper->escapeHtmlAttr(__('Minha Conta')) ?>" title="<?= $escaper->escapeHtmlAttr(__('Minha Conta')) ?>"<?= $isAccount ? ' aria-current="page"' : '' ?>>
+                <?php /* O controller B2B redireciona clientes já autenticados ao painel. */ ?>
+                <a href="<?= $escaper->escapeUrl($accountUrl) ?>" aria-label="<?= $escaper->escapeHtmlAttr(__('Minha Conta')) ?>" title="<?= $escaper->escapeHtmlAttr(__('Minha Conta')) ?>"<?= $isAccount ? ' aria-current="page"' : '' ?>>
                     <span class="icon icon-users" aria-hidden="true"></span>
                     <?= $escaper->escapeHtml(__('Conta')) ?>
                 </a>

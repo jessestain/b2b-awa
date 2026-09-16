@@ -33,16 +33,21 @@ $collectionFactory = $this->helper(\Magento\Catalog\Helper\Data::class);
 $quickLinks = [
     ['name' => 'Nossas Marcas', 'url' => $directUrl('nossas-marcas')],
     ['name' => 'Lançamentos',   'url' => $cmsPageUrl('lancamentos')],
-    ['name' => 'Catálogo',      'url' => $directUrl('catalogo')],
+    ['name' => 'Catálogo',      'url' => $cmsPageUrl('catalogo')],
 ];
+
+$requestPath = trim((string) $block->getRequest()->getOriginalPathInfo(), '/');
 ?>
-<div class="awa-nav-quick-links" data-awa-nav-quick="true" role="navigation" aria-label="<?= $escaper->escapeHtmlAttr(__('Links rápidos de categorias')) ?>">
+<div class="awa-nav-quick-links" data-awa-nav-quick="true">
     <ul class="awa-nav-quick-links__list">
         <?php foreach ($quickLinks as $link): ?>
+        <?php
+            $linkPath = trim((string) (parse_url((string) $link['url'], PHP_URL_PATH) ?: ''), '/');
+            $isCurrent = $linkPath !== '' && strcasecmp($linkPath, $requestPath) === 0;
+        ?>
         <li class="awa-nav-quick-links__item">
             <a href="<?= $escaper->escapeUrl($link['url']) ?>"
-               class="awa-nav-quick-links__link"
-               title="<?= $escaper->escapeHtmlAttr($link['name']) ?>">
+               class="awa-nav-quick-links__link"<?= $isCurrent ? ' aria-current="page"' : '' ?>>
                 <?= $escaper->escapeHtml($link['name']) ?>
             </a>
         </li>

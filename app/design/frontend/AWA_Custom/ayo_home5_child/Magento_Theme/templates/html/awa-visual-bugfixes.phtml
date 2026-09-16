@@ -2,10 +2,17 @@
 /**
  * AWA Motos - Visual Bug Fixes Loader (Onda 8)
  *
- * Carrega CSS e JS de correcao para os 47 bugs visuais identificados
- * na auditoria de 2026-06-28.
+ * Carrega JS pontual (owl pause, aria, LCP). Home já cobre isso em CSS
+ * terminal (awa-home-visual-fixes-inline) — não baixar o script lá.
  *
  * @var \Magento\Framework\View\Element\Template $block
  */
+declare(strict_types=1);
+
+$request = $block->getRequest();
+$fullActionName = $request ? (string) $request->getFullActionName() : '';
+if ($fullActionName === 'cms_index_index') {
+    return;
+}
 ?>
-<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-visual-bugfixes.js')) ?>?v=20260802-pager-clean" id="awa-visual-bugfixes"></script>
+<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-visual-bugfixes.js')) ?>?v=20260813-js-opt-r9" id="awa-visual-bugfixes"></script>

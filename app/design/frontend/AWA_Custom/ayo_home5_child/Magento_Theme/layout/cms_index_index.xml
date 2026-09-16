@@ -12,8 +12,68 @@
         <!-- Home-only: pause toggle dos carrosséis — defer via awa-head-preload (GTmetrix 2026-07-23) -->
         <remove src="css/awa-home-launches-toggle-fix.css"/>
         <remove src="css/awa-home-launches-toggle-fix.min.css"/>
+        <!-- Isolation r4: no shelf-carousel JS on home. Native CSS scroll-snap remains. -->
+        <remove src="js/awa-scroll-carousel.js"/>
+        <remove src="js/awa-scroll-carousel.min.js"/>
+        <remove src="js/awa-home-shelf-bootstrap.js"/>
+        <remove src="js/awa-home-shelf-bootstrap.min.js"/>
+        <!-- Home LCP: design-system is last XML css (~736KB) but still render-blocking.
+             Keep header-contract-grid blocking; critical-stack / critical-home stay print→all.
+             Load design-system print→all after the LCP image in awa-home-critical-stack.phtml. -->
+        <remove src="css/awa-design-system.css"/>
+        <remove src="css/awa-design-system.min.css"/>
+        <!-- Home 2026-09-02b: animate.css + owl already compiled into themes.min.css.
+             Drop parent extras (owl.carousel / animation_theme / owl-tabs / third-party bundle). -->
+        <remove src="css/owl.carousel.css"/>
+        <remove src="css/owl.carousel.min.css"/>
+        <remove src="css/animation_theme.css"/>
+        <remove src="css/awa-round2-home-owl-tabs.css"/>
+        <remove src="css/awa-round2-home-owl-tabs.min.css"/>
+        <remove src="css/themes5.css"/>
+        <remove src="css/bootstrap.css"/>
+        <remove src="css/font-awesome.min.css"/>
+        <remove src="css/icomoon.css"/>
+        <remove src="css/simple-line-icons.css"/>
+        <remove src="css/awa-third-party-bundle.css"/>
+        <remove src="css/awa-third-party-bundle.min.css"/>
+        <!-- freeze-fix-r7 paint: Magento minify emits css/themes.min.css (2.3MB)
+             even when css/themes.css is already removed in default_head_blocks.
+             Home already has design-system + critical + footer-lock. Do not parse
+             parent themes mid-scroll (Chrome freeze at the red trust strip). -->
+        <remove src="css/themes.min.css"/>
+        <remove src="css/themes.css"/>
+        <!-- Home freeze 2026-09-02 r8: awa-home-deferred-stack (559KB, 42 :has())
+             was plugin-injected print→all. :has(.awa-carousel-ready) on ~48 shelves
+             kills the main thread when the red trust strip hits the viewport.
+             Design-system already forces content-visibility:visible on below-fold. -->
+        <remove src="css/awa-home-deferred-stack.min.css"/>
+        <remove src="css/awa-home-deferred-stack.css"/>
+        <!-- Home freeze 2026-09-02 overflow: do not load impeccable-refine on cms_index_index.
+             css-gate QUEUE_HOME_LOAD_LAST injected it after the first footer pass and re-set
+             overflow-x:clip on html/body/.page-wrapper (kills SEÇÃO 53 overflow:visible). -->
+        <remove src="css/awa-commerce-impeccable-refine.css"/>
+        <remove src="css/awa-commerce-impeccable-refine.min.css"/>
+        <!-- Home freeze 2026-09-02: do not load css-gate JS / QUEUE_HOME_LOAD_LAST on cms_index_index.
+             MutationObserver on documentElement froze main thread (scrollbar visible, scrollTop=0). -->
+        <remove src="js/awa-css-gate.js"/>
+        <remove src="js/awa-css-gate.min.js"/>
     </head>
     <body>
+        <!-- Home freeze r4d: do not compile Magento_Ui messages KO / pageCache block
+             render on cms_index_index first paint. form_key_provider stays (client
+             cookie only; home is already FPC HIT; newsletter/tocart need form_key). -->
+        <referenceBlock name="messages" remove="true"/>
+        <referenceBlock name="ajax.message.placeholder" remove="true"/>
+        <referenceBlock name="pageCache" remove="true"/>
+        <!-- Isolation r4: awa.shelf.carousel loader removed on home; CSS scroll-snap stays.
+             No JS arrows until a cheap init is re-enabled. Hero/AMD (require stub + defer) stay. -->
+        <referenceBlock name="awa.shelf.carousel" remove="true"/>
+        <!-- Home freeze r3: product shelves use CSS scroll-snap (engine css-scroll-snap).
+             Skip Rokan/Owl/Swiper product-shelf init on cms-index-index; hero swiper stays.
+             Guard lives in awa-home-bootstrap-defer.js + mixin-mage-apply-safe.js. -->
+        <!-- Home freeze r3c: AiAssistant x-magento-init stripped in widget.phtml on cms_index_index.
+             FAB HTML stays; chat JS loads on #assistente click or idle after paint. WhatsApp stays. -->
+        <!-- Home freeze 2026-09-01: awa-visual-bugfix-terminal-runtime is PHP-injected (OptimizeHeadStylesPlugin), not a layout script. Skipped on cms_index_index; CSS design-system sec 48/49 owns footer rules. -->
         <!-- ajaxsuite/general/enabled=0 — blocos órfãos no HTML da home -->
         <referenceBlock name="ajaxWishlistJs" remove="true"/>
         <referenceBlock name="ajaxsuite.popup.wrapper" remove="true"/>
@@ -32,5 +92,7 @@
         <!-- Bug #2 (2026-08-05): home content estava em page.top fora de <main#maincontent>,
              deixando o landmark main vazio (~489B). Move para main (antes das columns). -->
         <move element="content-top-home" destination="main" before="-"/>
+        <!-- Reuse the existing single H1 inside the main content landmark. -->
+        <move element="awa.seo.h1" destination="main" before="content-top-home"/>
     </body>
 </page>

@@ -16,8 +16,8 @@ grid-template-columns:clamp(128px,13vw,184px) minmax(0,1fr) minmax(260px,max-con
 grid-template-areas:"brand search actions"!important;
 align-items:center!important;column-gap:clamp(12px,1.6vw,24px)!important;
 min-height:var(--awa-header-main-row-h,68px)!important;height:var(--awa-header-main-row-h,68px)!important;max-height:var(--awa-header-main-row-h,68px)!important;
-padding-block:0!important;padding-inline:clamp(12px,2vw,24px)!important;
-width:100%!important;box-sizing:border-box!important;overflow:visible!important}
+padding-block:0!important;padding-inline:clamp(16px,3vw,24px)!important;
+width:min(100%,1280px)!important;max-width:1280px!important;margin-inline:auto!important;box-sizing:border-box!important;overflow:visible!important}
 html body .awa-site-header .header-wrapper-sticky .awa-header-primary-row,
 html body#html-body .page-wrapper .awa-site-header .awa-header-primary-row,
 #header .awa-header-primary-row{display:contents!important}
@@ -37,7 +37,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-search-col,
 #header :is(.awa-header-search-col,.top-search){
 grid-area:search!important;align-self:center!important;
 min-width:0!important;width:100%!important;
-max-width:clamp(380px,42vw,640px)!important;justify-self:center!important}
+max-width:none!important;justify-self:stretch!important}
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col .block-search,
 html body#html-body .page-wrapper .awa-site-header .awa-header-search-col .block-search,
 #header .awa-header-search-col .block-search{width:100%!important;max-width:100%!important;margin-inline:0!important}
@@ -45,8 +45,8 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-search-col .block
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col form#search_mini_form,
 html body#html-body .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form,
 #header .awa-header-search-col form#search_mini_form{
-display:grid!important;grid-template-columns:minmax(0,1fr) 48px!important;
-height:48px!important;min-height:48px!important;max-height:48px!important;
+display:grid!important;grid-template-columns:minmax(0,1fr) 44px!important;
+height:44px!important;min-height:44px!important;max-height:44px!important;
 border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:10px!important;
 background:var(--awa-bg-muted,#f8fafc)!important;overflow:hidden!important;box-sizing:border-box!important}
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col form#search_mini_form:focus-within,
@@ -57,13 +57,13 @@ box-shadow:0 0 0 3px color-mix(in srgb,var(--awa-primary,#b73337) 12%,transparen
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col form#search_mini_form input#search,
 html body#html-body .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form input#search,
 #header .awa-header-search-col form#search_mini_form input#search{
-height:48px!important;min-height:48px!important;font-size:14px!important;
+height:44px!important;min-height:44px!important;font-size:14px!important;
 padding-inline:16px!important;border:0!important;background:transparent!important;box-shadow:none!important}
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col form#search_mini_form button.action.search,
 html body#html-body .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form button.action.search,
 #header .awa-header-search-col form#search_mini_form button.action.search{
 display:inline-flex!important;align-items:center!important;justify-content:center!important;
-width:48px!important;min-width:48px!important;height:48px!important;
+width:44px!important;min-width:44px!important;height:44px!important;
 background:transparent!important;border:0!important;border-radius:0!important;color:var(--awa-primary,#b73337)!important}
 html body .awa-site-header .header-wrapper-sticky .awa-header-search-col form#search_mini_form button.action.search::before,
 html body#html-body .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form button.action.search::before,
@@ -76,14 +76,18 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .a
 font-size:14px!important;line-height:1.35!important;color:var(--awa-text-muted,#666)!important}
 html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--login{
 font-size:14px!important;font-weight:600!important;color:var(--awa-text,#333)!important}
+html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt{
+border:0!important;background:transparent!important;padding:0!important;box-shadow:none!important;
+min-height:44px!important;height:44px!important;max-width:none!important}
 html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register{
-font-size:13px!important;font-weight:700!important;padding:4px 10px!important;border-radius:4px!important}
+font-size:12px!important;font-weight:700!important;padding:0 2px!important;border-radius:0!important;
+background:transparent!important;color:var(--awa-text)!important;border:0!important}
 /* Nav secundária — alinhamento com container do header */
 html body#html-body .page-wrapper .header-control.awa-nav-bar .awa-nav-bar__inner,
 html body#html-body .page-wrapper .header-control.header-nav.awa-nav-bar .container,
 html body#html-body .page-wrapper .awa-site-header .awa-nav-bar__inner{
-max-inline-size: var(--awa-container-wide-max, 1440px)!important;width:100%!important;margin-inline:auto!important;
-padding-inline:clamp(12px,2vw,24px)!important;box-sizing:border-box!important}
+max-inline-size:var(--awa-container-max,1280px)!important;width:min(100%,1280px)!important;max-width:1280px!important;margin-inline:auto!important;
+padding-inline:clamp(16px,3vw,24px)!important;box-sizing:border-box!important}
 html body#html-body .page-wrapper .header-control.awa-nav-bar,
 html body#html-body .page-wrapper .header-control.header-nav.awa-nav-bar{
 height:var(--awa-header-nav-h,48px)!important;min-height:var(--awa-header-nav-h,48px)!important;max-height:var(--awa-header-nav-h,48px)!important;
@@ -125,7 +129,7 @@ overflow:visible!important;position:static!important;
 visibility:visible!important;pointer-events:auto!important}
 /* Account prompt — truncamento seguro em viewports médias (1366) */
 html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt{
-max-width:clamp(160px,18vw,240px)!important;min-width:0!important}
+max-width:none!important;min-width:0!important;width:max-content!important}
 html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__copy{
 overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
 /* Minicart badge — contraste e legibilidade desktop */

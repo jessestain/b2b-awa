@@ -26,7 +26,7 @@
             Bootstrap v3 + icon fonts (font-awesome, icomoon, simple-line-icons, owl)
             Removidos do merged bundle bloqueante 2026-05-08.
             Recarregados de forma assíncrona via awa-head-preload.phtml.
-            Critical Bootstrap grid (~2KB) já coberto pelo awa-grid-system.css async.
+            Critical Bootstrap grid (~2KB) já coberto pelo grid inline do awa-head-preload.phtml.
         -->
         <!--
             themes5.css (ayo_home5 parent) — removido do merged bundle 2026-05-09
@@ -129,7 +129,7 @@
         -->
         <!--
             AWA Layout Override CSS (2026-05-04): movidos para awa-head-preload.phtml.
-            Em XML estes CSSes carregavam ANTES do awa-super-global.css (renderizado pelo
+            Em XML estes CSSes carregavam ANTES do super-global (renderizado pelo
             head.additional PHTML), perdendo especificidade — o super-global os sobrescrevia.
             Agora carregam DEPOIS do super-global via PHTML, garantindo que "canonical" e
             "fixed" realmente ganhem (cascata correta). Ver awa-head-preload.phtml.
@@ -183,8 +183,8 @@
             AWA 2026-07-16: tokens + superfícies do modo escuro (classe body.awa-dark-mode).
             Removido 2026-07-17: toggle awa.dark.mode.toggle já remove=true em default.xml —
             folha morta no critical path (prática Magento: não carregar CSS sem UI).
+            <remove> órfão retirado 2026-08-11 (nenhum layout declara mais essa folha).
         -->
-        <remove src="Magento_Theme::css/awa-dark-mode.css"/>
         <!--
             AWA 2026-07-15: refinamento de ruído visual desktop (home/footer),
             baseado em métricas runtime do probe H6/H8.

@@ -5,11 +5,11 @@ declare(strict_types=1);
  *
  * styles-l.css NÃO é carregado aqui como <link> separado.
  * Com dev/css/merge_css_files=1 (produção), styles-l.css já está no merged bundle.
- * awa-layout-canonical.css é o último no bundle → final-wins garantido.
+ * As folhas "canonical" do bundle vêm por último → final-wins garantido.
  *
  * Carregar styles-l.css aqui causaria:
  *   1) duplo download de styles-l.css (+287KB brotli bloqueante desperdiçado)
- *   2) styles-l.css sobrescreveria awa-layout-canonical.css no DOM (viola final-wins)
+ *   2) styles-l.css sobrescreveria as folhas "canonical" do bundle no DOM (viola final-wins)
  *
  * Este bloco mantém apenas o script de correção do botão de busca.
  *

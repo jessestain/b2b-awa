@@ -27,6 +27,15 @@
  * disparar, reporta ao dataLayer (mesmo canal do awa-rum.phtml) para dar
  * visibilidade real de producao — não mascara o problema, apenas evita que o
  * cliente fique irremediavelmente travado por uma falha de terceiro/rede.
+ *
+ * 2026-09-15: GRACE_MS recalibrado de 2500ms para 8000ms. Runtime evidence
+ * (CDP, paginas reais) mostrou DOMContentLoaded consistentemente entre
+ * 2.8s-5.7s nesta PDP (dezenas de scripts awa-*.js no before.body.end) —
+ * ou seja, o timer disparava um falso positivo em toda carga normal da
+ * pagina, antes mesmo de Magento_Catalog/js/validate-product ter chance de
+ * inicializar. O botao sempre terminava habilitado; o warning era so ruido
+ * de telemetria. 8000ms da margem real sobre o pior caso observado sem
+ * deixar de detectar uma trava genuina (falha de terceiro/rede).
  */
 ?>
 <script>
@@ -35,7 +44,7 @@
     if (w.__awaAddToCartSafetyInit) return;
     w.__awaAddToCartSafetyInit = true;
 
-    var GRACE_MS = 2500;
+    var GRACE_MS = 8000;
 
     function reportStuckButton(button) {
         if (typeof w.dataLayer === 'undefined') {

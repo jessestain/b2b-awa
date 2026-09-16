@@ -2,12 +2,12 @@
 /**
  * AWA CLS Fix v5.0 — Critical header layout CSS inline no head (2026-04-23).
  *
- * Replica as regras de layout do awa-header-premium.css (carregado async)
+ * Replica as regras de layout do header premium (folha async legada, hoje consolidada)
  * para que o header já tenha o layout final no first paint → CLS → 0.
  *
  * Inclui:
  *   1. display:contents no header (sem caixa própria = sem shift de conteúdo)
- *   2. Mobile grid layout ≤991px (replicado de awa-header-premium.css)
+ *   2. Mobile grid layout ≤991px (replicado do header premium legado)
  *   3. Promo bar min-height ≤480px
  *   4. Nav collapse na homepage (preservado do v4.1)
  *
@@ -33,7 +33,7 @@
 html { scroll-padding-top: var(--awa-header-scroll-offset); }
 
 /* AWA CLS Fix v5.0 — inline last-in-head (2026-04-23)
-   Replica layout rules de awa-header-premium.css para evitar CLS ao carregar async. */
+   Replica layout rules do header premium legado para evitar CLS ao carregar async. */
 
 /* 1. HEADER DISSOLVE — mobile mantém contents; desktop home usa block (evita faixa branca) */
 header.awa-site-header.awa-header-professional{display:contents!important}
@@ -45,7 +45,7 @@ header.awa-site-header.awa-header-professional{display:contents!important}
    NOTA v6.0 (2026-05-15): o .awa-main-header__inner.wp-header está em .header-wrapper-sticky,
    fora de #header (que contém apenas a promo-bar). Adicionados seletores com
    html body .awa-site-header .header-wrapper-sticky para especificidade 0,0,4,2
-   que supera awa-layout-bundle.css (0,0,3,2) e garante o grid mobile correto. */
+   que supera o layout-bundle (0,0,3,2) e garante o grid mobile correto. */
 @media(max-width:767px){
 /* Seletores com #header (retrocompatibilidade) + .header-wrapper-sticky (DOM atual) */
 html body .awa-site-header .header-wrapper-sticky .header .header-main :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row]),
