@@ -18,6 +18,14 @@ use Magento\Framework\Event\ObserverInterface;
 class OptimizeHtmlResponseObserver implements ObserverInterface
 {
     private const CART_PATH_PREFIX = 'checkout/cart';
+    /**
+     * @var array<string, string>
+     */
+    private const LEGACY_REDIRECT_MAP = [
+        'ofertas.html' => '/super-ofertas.html',
+        'contato' => '/contact',
+        'contact-us' => '/contact',
+    ];
 
     private const CART_STRIP_CSS_FRAGMENTS = [
         'awa-ui-promax-bundle.min.css',
@@ -62,6 +70,12 @@ class OptimizeHtmlResponseObserver implements ObserverInterface
             return;
         }
 
+        $pathInfo = trim((string) $this->request->getPathInfo(), '/');
+        $fullAction = (string) $this->request->getFullActionName();
+        if ($this->applyLegacyRedirect($response)) {
+            return;
+        }
+
         $contentType = $response->getHeader('Content-Type');
         if ($contentType && stripos($contentType->getFieldValue(), 'text/html') === false) {
             return;
@@ -72,7 +86,6 @@ class OptimizeHtmlResponseObserver implements ObserverInterface
             return;
         }
 
-        $pathInfo = trim((string) $this->request->getPathInfo(), '/');
         $isCart = $this->request->getFullActionName() === 'checkout_cart_index'
             || $pathInfo === self::CART_PATH_PREFIX
             || str_starts_with($pathInfo, self::CART_PATH_PREFIX . '/');
@@ -90,24 +103,103 @@ class OptimizeHtmlResponseObserver implements ObserverInterface
 
         $html = $this->normalizeRefineStylesheetQuery($html);
 
-        $fullAction = (string) $this->request->getFullActionName();
+        $isAuthFocusPage = in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
+            || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html);
+        $isB2bAccountFocusPage = in_array($fullAction, HeaderImpeccableCascadeLockCss::B2B_ACCOUNT_FOCUS_ACTIONS, true);
         if (in_array($fullAction, self::CATALOG_STACK_ACTIONS, true)) {
             $html = $this->stripStylesheetFragments($html, self::CATALOG_STRIP_IMPECCABLE_FRAGMENTS);
-        } elseif (!$isCart) {
+        } elseif ($fullAction !== 'cms_index_index'
+            && !$isCart
+            && !$isAuthFocusPage
+            && !$isB2bAccountFocusPage
+        ) {
             $html = $this->injectGlobalRefineStylesheetIfMissing($html);
         }
 
         $html = $this->patchStaleHeaderStickyCriticalCss($html);
         $html = $this->stripAsyncDeferredStylePreloads($html);
 
-        if ($this->request->getFullActionName() === 'cms_index_index') {
+        $html = $this->dedupeStylesheetHrefs($html);
+        $html = $this->applyRouteSpecificHtmlFixes($html, $fullAction);
+
+        $response->setBody($html);
+    }
+
+    private function applyLegacyRedirect(ResponseHttp $response): bool
+    {
+        $requestPath = $this->extractRequestPath((string) $this->request->getRequestUri());
+        $target = $this->resolveLegacyRedirectTarget($requestPath, (string) $this->request->getMethod());
+        if ($target === null) {
+            return false;
+        }
+
+        $response->setRedirect($target, 301);
+        $response->setBody('');
+
+        return true;
+    }
+
+    private function resolveLegacyRedirectTarget(string $pathInfo, string $method): ?string
+    {
+        $httpMethod = strtoupper(trim($method));
+        if ($httpMethod !== 'GET' && $httpMethod !== 'HEAD') {
+            return null;
+        }
+
+        $normalizedPath = trim($pathInfo, '/');
+        return self::LEGACY_REDIRECT_MAP[$normalizedPath] ?? null;
+    }
+
+    private function extractRequestPath(string $requestUri): string
+    {
+        $path = parse_url($requestUri, PHP_URL_PATH);
+        if (!is_string($path)) {
+            return '';
+        }
+
+        return trim($path, '/');
+    }
+
+    private function hydratePopularSearchLabels(string $html): string
+    {
+        return preg_replace_callback(
+            '/<a\b([^>]*\bhref=(["\'])([^"\']+)\2[^>]*)>\s*<\/a>/i',
+            static function (array $matches): string {
+                $queryString = parse_url($matches[3], PHP_URL_QUERY);
+                if (!is_string($queryString)) {
+                    return $matches[0];
+                }
+
+                parse_str($queryString, $queryParams);
+                $label = trim((string) ($queryParams['q'] ?? ''));
+                if ($label === '') {
+                    return $matches[0];
+                }
+
+                return '<a' . $matches[1] . '>' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</a>';
+            },
+            $html
+        ) ?? $html;
+    }
+
+    private function applyRouteSpecificHtmlFixes(string $html, string $fullAction): string
+    {
+        if ($fullAction === 'cms_index_index') {
             $html = $this->patchStaleHomeHeaderAssets($html);
             $html = $this->stripOrphanMenuDeptStylePreload($html);
         }
 
-        $html = $this->dedupeStylesheetHrefs($html);
-        $response->setBody($html);
+        if ($fullAction === 'search_term_popular') {
+            $html = $this->hydratePopularSearchLabels($html);
+        }
+
+        return $html;
     }
+
+
+
+
+
 
     private function stripCookieStatusNotice(string $html): string
     {
@@ -187,6 +279,19 @@ class OptimizeHtmlResponseObserver implements ObserverInterface
                 'awa-css-gate.min.js?v=20260601-home-opt8',
                 'awa-css-gate.min.js?v=20260601-carousel13',
                 'awa-css-gate.min.js?v=20260601-home-opt17',
+                'awa-css-gate.min.js?v=20260805-hygiene-r71',
+                'awa-css-gate.min.js?v=20260820-nav-gutter-r10',
+                'awa-css-gate.min.js?v=20260827-footer-axis-bp',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js2',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js3',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js4',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js5',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js6',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js7dbg',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js8',
+                'awa-css-gate.min.js?v=20260827-footer-axis-js9',
+                'awa-css-gate.min.js?v=20260902-gate-idle-1s',
             ],
             $gateJs,
             $html
@@ -315,6 +420,9 @@ class OptimizeHtmlResponseObserver implements ObserverInterface
         $snippet = <<<'HTML'
 <style id="awa-cart-footer-sticky-guard">
 @media (min-width:992px){
+html body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index .page-wrapper
+.cart-container :is(.cart-summary,#cart-summary,.cart-summary._sticky,#cart-summary._sticky){
+max-height:none!important;height:auto!important;overflow:visible!important;overflow-y:visible!important}
 html body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index.awa-cart-footer-inview .page-wrapper
 .cart-container :is(.cart-summary,#cart-summary,.cart-summary._sticky,#cart-summary._sticky){
 position:static!important;top:auto!important;left:auto!important;bottom:auto!important;
@@ -327,16 +435,45 @@ padding-inline:0!important;padding-left:0!important;padding-right:0!important;bo
 html body#html-body.checkout-cart-index .page-wrapper footer.page-footer
 :is(section.awa-footer-trust-bar,.awa-footer-trust-bar){
 width:100%!important;max-width:none!important;margin-inline:0!important}
+@media (min-width:768px){
+html body#html-body.checkout-cart-index .page-wrapper footer.page-footer
+:is(#newsletter-validate-detail,.form.subscribe){
+max-width:none!important;width:100%!important;margin:0!important;
+margin-inline:0!important;margin-left:0!important;margin-right:0!important}
+html body#html-body.checkout-cart-index .page-wrapper footer.page-footer
+.awa-newsletter-form-container{max-width:none!important}
+}
 </style>
 <script>
+require.config({
+    paths: {
+        'js/awa-cart-runtime': 'js/awa-cart-runtime.js?v=20260828-cart-unclamp-r2'
+    }
+});
 require(['js/awa-cart-runtime'], function (boot) {
     if (typeof boot === 'function') { boot(); }
 });
-/* Cache-bust AMD: re-apply stop com max-height none (ficha sticky vs footer). */
+/* AQ r2: AMD em cache immutable ainda aplica overflow:hidden auto no scroll.
+   MutationObserver reverte o inline (prova CDP: 80ms → mh none, innerScroll 0). */
 (function (w, d) {
     'use strict';
-    if (w.__awaCartStickyFix31c) { return; }
-    w.__awaCartStickyFix31c = 1;
+    if (w.__awaCartStickyFix32aq) { return; }
+    w.__awaCartStickyFix32aq = 1;
+    function isDesktop() {
+        return w.matchMedia('(min-width:992px)').matches;
+    }
+    function enforceDesktopUnclamp(el) {
+        if (!el || !isDesktop()) { return; }
+        if (el.style.getPropertyValue('max-height') === 'none'
+            && (el.style.getPropertyValue('overflow') === 'visible'
+                || el.style.getPropertyValue('overflow-y') === 'visible')) {
+            return;
+        }
+        el.style.setProperty('max-height', 'none', 'important');
+        el.style.setProperty('height', 'auto', 'important');
+        el.style.setProperty('overflow', 'visible', 'important');
+        el.style.setProperty('overflow-y', 'visible', 'important');
+    }
     function apply(active) {
         d.querySelectorAll('#cart-summary, .cart-container .cart-summary').forEach(function (el) {
             if (active) {
@@ -345,6 +482,10 @@ require(['js/awa-cart-runtime'], function (boot) {
                 el.style.setProperty('height', 'auto', 'important');
                 el.style.setProperty('overflow', 'visible', 'important');
                 el.style.setProperty('z-index', 'auto', 'important');
+            } else if (isDesktop()) {
+                el.style.removeProperty('position');
+                el.style.removeProperty('z-index');
+                enforceDesktopUnclamp(el);
             } else {
                 el.style.removeProperty('position');
                 el.style.removeProperty('max-height');
@@ -364,11 +505,33 @@ require(['js/awa-cart-runtime'], function (boot) {
         var near = fr.top < (w.innerHeight - 24) || fr.top < (sr.bottom + 12);
         d.body.classList.toggle('awa-cart-footer-inview', near);
         apply(near);
+        enforceNewsletterAxis();
+    }
+    function enforceNewsletterAxis() {
+        if (!isDesktop()) { return; }
+        var form = d.querySelector('footer.page-footer #newsletter-validate-detail');
+        if (!form) { return; }
+        form.style.setProperty('max-width', 'none', 'important');
+        form.style.setProperty('width', '100%', 'important');
+        form.style.setProperty('margin', '0', 'important');
+        form.style.setProperty('margin-inline', '0', 'important');
+    }
+    function watchClamp() {
+        d.querySelectorAll('#cart-summary, .cart-container .cart-summary').forEach(function (el) {
+            if (el.getAttribute('data-awa-unclamp-mo') === '1') { return; }
+            el.setAttribute('data-awa-unclamp-mo', '1');
+            new MutationObserver(function () {
+                enforceDesktopUnclamp(el);
+            }).observe(el, { attributes: true, attributeFilter: ['style'] });
+            enforceDesktopUnclamp(el);
+        });
+        enforceNewsletterAxis();
     }
     if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', check, { once: true });
+        d.addEventListener('DOMContentLoaded', function () { check(); watchClamp(); }, { once: true });
     } else {
         check();
+        watchClamp();
     }
     w.addEventListener('scroll', function () { w.requestAnimationFrame(check); }, { passive: true });
     w.addEventListener('resize', check, { passive: true });
@@ -390,8 +553,7 @@ HTML;
         }
 
         $hasFlag = (bool) $this->checkoutSession->getData(EmptyCartContext::SESSION_KEY_EXPRESS_REDIRECT)
-            || (isset($_COOKIE[EmptyCartContext::COOKIE_KEY_EXPRESS_REDIRECT])
-                && $_COOKIE[EmptyCartContext::COOKIE_KEY_EXPRESS_REDIRECT] === '1');
+            || $this->request->getCookie(EmptyCartContext::COOKIE_KEY_EXPRESS_REDIRECT) === '1';
         if (!$hasFlag) {
             return $html;
         }
@@ -429,11 +591,10 @@ HTML;
             return $html;
         }
 
-        if (
-            preg_match(
-                '/<link\s[^>]*rel=["\']stylesheet["\'][^>]*awa-menu-v2-dept-open-fix\.css[^>]*>/i',
-                $html
-            ) || preg_match('/awa-menu-v2-dept-open-fix\.css[^>]*data-awa-defer/i', $html)
+        if (preg_match(
+            '/<link\s[^>]*rel=["\']stylesheet["\'][^>]*awa-menu-v2-dept-open-fix\.css[^>]*>/i',
+            $html
+        ) || preg_match('/awa-menu-v2-dept-open-fix\.css[^>]*data-awa-defer/i', $html)
         ) {
             return $html;
         }

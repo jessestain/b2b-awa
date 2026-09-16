@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\Theme\Plugin\SlideBanner;
 
+use GrupoAwamotos\Theme\Model\Html\DebugIngestStripper;
 use Rokanthemes\SlideBanner\Block\Slider;
 
 /**
@@ -24,6 +25,6 @@ class HeroPreloadPlugin
 
     public function afterToHtml(Slider $subject, string $result): string
     {
-        return $result;
+        return DebugIngestStripper::strip($result);
     }
 }

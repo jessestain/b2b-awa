@@ -9,6 +9,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Store\Model\ScopeInterface;
 
 class FooterExperiment extends AbstractHelper
@@ -33,7 +34,8 @@ class FooterExperiment extends AbstractHelper
         Context $context,
         private readonly CustomerSession $customerSession,
         private readonly SessionManagerInterface $sessionManager,
-        private readonly FooterExperimentDecider $decider
+        private readonly FooterExperimentDecider $decider,
+        private readonly PhpCookieManager $cookieManager
     ) {
         parent::__construct($context);
     }
@@ -123,7 +125,7 @@ class FooterExperiment extends AbstractHelper
 
     private function resolveVisitorSeed(): string
     {
-        if (($_COOKIE[session_name()] ?? null) === null) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return 'guest:anonymous';
         }
 

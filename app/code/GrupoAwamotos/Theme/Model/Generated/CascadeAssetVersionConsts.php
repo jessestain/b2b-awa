@@ -13,11 +13,11 @@ namespace GrupoAwamotos\Theme\Model\Generated;
  */
 final class CascadeAssetVersionConsts
 {
-    public const ALIGN_GRID = '?v=20260903-secao51-59-shelf-ongrid-restore';
+    public const ALIGN_GRID = '?v=749503e1c5d2';
     public const FOOTER = '?v=20260903-secao51-59-shelf-ongrid-restore';
     public const HOME_CRITICAL_STACK = '?v=52e56a4b2ed3';
     public const HOME_DEFERRED_STACK = '?v=20260809-onda6b2-stack';
-    public const M2_VISUAL_SSOT = '?v=20260903-secao51-59-shelf-ongrid-restore';
+    public const M2_VISUAL_SSOT = '?v=20260904-premium-ui-w18b';
     public const REFINE = '?v=20260825-b2b-login-modal-r2';
     public const SUPER_GLOBAL = '?v=04033c253ee9';
 }

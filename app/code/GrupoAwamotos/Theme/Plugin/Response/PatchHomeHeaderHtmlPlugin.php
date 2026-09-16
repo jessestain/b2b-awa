@@ -20,6 +20,13 @@ class PatchHomeHeaderHtmlPlugin
         'onepagecheckout_index_index',
     ];
 
+    /** PLP/PDP/busca: OptimizeHeadStylesPlugin emite catalog-parity, não o cascade-lock. */
+    private const CATALOG_STACK_ACTIONS = [
+        'catalog_category_view',
+        'catalogsearch_result_index',
+        'catalog_product_view',
+    ];
+
     private static bool $isPatching = false;
 
     public function __construct(
@@ -76,26 +83,21 @@ class PatchHomeHeaderHtmlPlugin
 
             if ($action === 'cms_index_index') {
                 // Home vis-fix + distill: OptimizeHeadStylesPlugin (sortOrder 998) injeta após distill terminal.
-            } elseif (
-                in_array($action, self::CHECKOUT_FOCUS_ACTIONS, true)
+            } elseif ($action === 'helpcenter_index_index') {
+                // Não re-injetar cascade-lock (~213KB) — mesmo tratamento de checkout/auth.
+                $html = HeaderImpeccableCascadeLockCss::stripLegacyFromHtml($html);
+            } elseif (in_array($action, self::CHECKOUT_FOCUS_ACTIONS, true)
                 || in_array($action, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
                 || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html)
                 || HeaderImpeccableCascadeLockCss::isB2bAccountOperationalHtml($html)
+                || in_array($action, self::CATALOG_STACK_ACTIONS, true)
             ) {
                 $html = HeaderImpeccableCascadeLockCss::stripLegacyFromHtml($html);
-            } elseif (
-                !HeaderImpeccableCascadeLockCss::isPresentInHtml($html)
+            } elseif (!HeaderImpeccableCascadeLockCss::isPresentInHtml($html)
                 || !str_contains($html, 'awa-header-cascade-lock-guard')
             ) {
-                // BUG-MOB-SEARCH-001 (2026-07-04): CATALOG_STACK_ACTIONS foi removido do
-                // ramo de strip acima. OptimizeHeadStylesPlugin::execute() já injeta o
-                // cascade-lock v18 (com a regra display:grid do form de busca mobile,
-                // BUG-01 fix) para catalog_category_view/catalogsearch_result_index/
-                // catalog_product_view via injectBeforeBodyClose(); stripLegacyFromHtml()
-                // também remove o STYLE_ID atual (não só os legados), então rodar esse
-                // strip aqui de novo apagava o v18 recém-injetado, deixando só o guard
-                // script (evidência: <style id="v18"> ausente, <script id="...-guard">
-                // presente). Agora cai neste ramo, que só reinjeta se realmente faltar.
+                // Catálogo agora também está no ramo de strip: Optimize emite
+                // injectCatalogLightBeforeBodyClose (sem cascade-lock ~221KB).
                 $html = HeaderImpeccableCascadeLockCss::injectBeforeBodyClose($html);
             }
 
@@ -113,6 +115,17 @@ class PatchHomeHeaderHtmlPlugin
                 $html = str_replace($shellMatch[0], '', $html);
                 $moved = preg_replace('/<\/body>/i', $shellMatch[0] . "\n</body>", $html, 1);
                 $html = is_string($moved) ? $moved : $html;
+            }
+
+            $densityStyleId = 'awa-home-b2b-ops-density-20260805';
+            if ($action === 'cms_index_index' && preg_match(
+                '/<style id="' . preg_quote($densityStyleId, '/') . '"[^>]*>.*?<\/style>\s*/is',
+                $html,
+                $densityMatch
+            ) === 1) {
+                $html = str_replace($densityMatch[0], '', $html);
+                $movedDensity = preg_replace('/<\/body>/i', $densityMatch[0] . "\n</body>", $html, 1);
+                $html = is_string($movedDensity) ? $movedDensity : $html;
             }
 
             $subject->setBody($html);

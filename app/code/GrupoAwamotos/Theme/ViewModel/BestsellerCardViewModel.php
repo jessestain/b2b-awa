@@ -39,6 +39,16 @@ class BestsellerCardViewModel implements ArgumentInterface
         return $this->b2bHelper->getPriceGateDescription();
     }
 
+    public function getPriceGateCardMessage(): string
+    {
+        return $this->b2bHelper->getPriceGateCardMessage();
+    }
+
+    public function getPriceGatePrimaryUrl(): string
+    {
+        return $this->b2bHelper->getPriceGatePrimaryUrl();
+    }
+
     public function isWishlistAllowed(): bool
     {
         return $this->wishlistHelper->isAllow();

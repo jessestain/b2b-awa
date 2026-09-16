@@ -124,6 +124,10 @@ class OptimizeHeadStylesPlugin
             return;
         }
 
+        // #region agent log
+        $this->debugW18CssQueryLog('in', $fullAction, $html);
+        // #endregion
+
         $html = $this->stripRedundantAsyncNoscript($html);
         $html = $this->normalizeCssStaggerOnloadHandlers($html, $fullAction === self::HOME_ACTION);
         $html = $this->appendVisualFixesCacheBuster($html);
@@ -170,8 +174,7 @@ class OptimizeHeadStylesPlugin
             // SSOT 2026-08-10: plp-distill aposentado (migrado ao LESS refine terminal).
             // PLP usa styles-l + refine + align-grid + m2-visual-ssot + design-system.
             $subject->setHeader('X-Awa-Header-Optimize', 'v12-catalog', true);
-        } elseif (
-            $fullAction === self::NOROUTE_ACTION
+        } elseif ($fullAction === self::NOROUTE_ACTION
             || $fullAction === self::CMS_PAGE_VIEW_ACTION
             || $fullAction === self::B2B_MARKETING_LANDING_ACTION
             || $fullAction === self::HELP_CENTER_ACTION
@@ -210,8 +213,7 @@ class OptimizeHeadStylesPlugin
         $isAuthFocusPageEarly = in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
             || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html);
         $isB2bAccountFocusEarly = $this->isB2bAccountFocusPage($fullAction, $html);
-        if (
-            !in_array($fullAction, self::CATALOG_STACK_ACTIONS, true)
+        if (!in_array($fullAction, self::CATALOG_STACK_ACTIONS, true)
             && $fullAction !== self::CART_ACTION
             && $fullAction !== self::HOME_ACTION
             && !$isAuthFocusPageEarly
@@ -226,8 +228,7 @@ class OptimizeHeadStylesPlugin
             if ($fullAction === self::HOME_ACTION) {
                 // Home: v10 + critical-home no head; omitir cascade-lock (~112KB) — lock leve no body.
                 $html = HeaderImpeccableCascadeLockCss::injectHomeLightBeforeBodyClose($html);
-            } elseif (
-                in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
+            } elseif (in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
                 || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html)
             ) {
                 // Auth B2B: critical inline cobre layout — só remover cascade (~111KB).
@@ -259,8 +260,7 @@ class OptimizeHeadStylesPlugin
         $isAuthFocusPage = in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
             || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html);
         $isB2bAccountFocusPage = $this->isB2bAccountFocusPage($fullAction, $html);
-        if (
-            $fullAction !== self::HOME_ACTION
+        if ($fullAction !== self::HOME_ACTION
             && !in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)
             && !$isAuthFocusPage
             && !$isB2bAccountFocusPage
@@ -358,48 +358,47 @@ class OptimizeHeadStylesPlugin
         // r5e: B2B auth empty-shell keeps awa-b2b-auth-critical-inline only (~40KB).
         // Skip home cascade: footer-critical, promo/FAB, pixel-qa, visual-bugfix terminals.
         if (!$isAuthFocusPage) {
-        $html = $this->convertFooterCssToAsync($html, $fullAction);
+            $html = $this->convertFooterCssToAsync($html, $fullAction);
 
-        $html = $this->injectHeaderVisualAuditFixes($html, $fullAction, $isAuthFocusPage, $isB2bAccountFocusPage);
-        $html = $this->injectHomeGapMarginHotfix($html, $fullAction);
-        $html = $this->injectVisualBugfixTerminalStyles($html, $fullAction);
-        $html = $this->injectMinicartOpenTerminalStyles($html, $fullAction);
-        $html = $this->injectHomeCompactSpacingTerminalStyles($html, $fullAction);
+            $html = $this->injectHeaderVisualAuditFixes($html, $fullAction, $isAuthFocusPage, $isB2bAccountFocusPage);
+            $html = $this->injectHomeGapMarginHotfix($html, $fullAction);
+            $html = $this->injectVisualBugfixTerminalStyles($html, $fullAction);
+            $html = $this->injectMinicartOpenTerminalStyles($html, $fullAction);
+            $html = $this->injectHomeCompactSpacingTerminalStyles($html, $fullAction);
 
-        if ($fullAction === self::HOME_ACTION) {
-            $html = $this->moveHomeCriticalInlineStylesToHead($html);
-            $html = $this->stripEmptyHomePriceShells($html);
-            $html = $this->injectHomeHiddenUiGuardStyles($html);
-            // CSS/JS terminais grandes → arquivos externos cacheáveis (HTML −~140KB).
-            $html = $this->convertHomeHeavyTerminalsToExternal($html);
-            // convert recria <link> que o stack já absorveu — strip de novo sem segundo inject.
-            $html = $this->consolidateHomeDeferredStylesheetStack($html);
-            $html = $this->stripHomeHeavyParentStylesheets($html);
-            $html = $this->dedupeStylesheetHrefs($html);
-            $html = $this->injectHeaderContractGeomSsotForHome($html);
-            $html = $this->injectShelfViewAllMobileHideR18($html, $fullAction);
-            $html = $this->injectCategoryCarouselDotsR24b($html, $fullAction);
+            if ($fullAction === self::HOME_ACTION) {
+                $html = $this->moveHomeCriticalInlineStylesToHead($html);
+                $html = $this->stripEmptyHomePriceShells($html);
+                $html = $this->injectHomeHiddenUiGuardStyles($html);
+                // CSS/JS terminais grandes → arquivos externos cacheáveis (HTML −~140KB).
+                $html = $this->convertHomeHeavyTerminalsToExternal($html);
+                // convert recria <link> que o stack já absorveu — strip de novo sem segundo inject.
+                $html = $this->consolidateHomeDeferredStylesheetStack($html);
+                $html = $this->stripHomeHeavyParentStylesheets($html);
+                $html = $this->dedupeStylesheetHrefs($html);
+                $html = $this->injectHeaderContractGeomSsotForHome($html);
+                $html = $this->injectShelfViewAllMobileHideR18($html, $fullAction);
+                $html = $this->injectCategoryCarouselDotsR24b($html, $fullAction);
+            }
+
+            $html = $this->injectFooterStoreFlatR21b($html);
+            $html = $this->injectFooterCnpjFlatR26($html);
+            $html = $this->injectB2bPromoContrastR27($html);
+            $html = $this->injectFooterSealsPayFlatR28($html);
+            $html = $this->injectFooterNewsletterFormR29($html);
+            $html = $this->injectMobileFabStackR30($html);
+            $html = $this->injectDesktopFabStackR33($html);
+            $html = $this->injectMobileToggleFlatR34($html);
+            $html = $this->injectMobileBottomNavEqualR35($html);
+            $html = $this->injectOwlProgressRadiusR35($html, $fullAction);
+            $html = $this->injectCarouselNavRadiusR36($html, $fullAction);
+            $html = $this->injectCarouselToggleGutterR38($html, $fullAction);
+            $html = $this->injectB2bPromoShellR40($html);
+            $html = $this->injectMobileBottomNavInactiveR37($html);
+            $html = $this->injectFooterTrustIconFlatR31($html);
         }
 
-        $html = $this->injectFooterStoreFlatR21b($html);
-        $html = $this->injectFooterCnpjFlatR26($html);
-        $html = $this->injectB2bPromoContrastR27($html);
-        $html = $this->injectFooterSealsPayFlatR28($html);
-        $html = $this->injectFooterNewsletterFormR29($html);
-        $html = $this->injectMobileFabStackR30($html);
-        $html = $this->injectDesktopFabStackR33($html);
-        $html = $this->injectMobileToggleFlatR34($html);
-        $html = $this->injectMobileBottomNavEqualR35($html);
-        $html = $this->injectOwlProgressRadiusR35($html, $fullAction);
-        $html = $this->injectCarouselNavRadiusR36($html, $fullAction);
-        $html = $this->injectCarouselToggleGutterR38($html, $fullAction);
-        $html = $this->injectB2bPromoShellR40($html);
-        $html = $this->injectMobileBottomNavInactiveR37($html);
-        $html = $this->injectFooterTrustIconFlatR31($html);
-        }
-
-        if (
-            $fullAction === self::HOME_ACTION
+        if ($fullAction === self::HOME_ACTION
             || $fullAction === self::HELP_CENTER_ACTION
             || in_array($fullAction, self::CATALOG_STACK_ACTIONS, true)
             || in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)
@@ -409,8 +408,7 @@ class OptimizeHeadStylesPlugin
             $html = $this->stripScriptFragments($html, $this->manifest->heavyLegacyScriptFragments());
         }
         // Carrinho precisa do hydrate (trigger "Olá, …"); checkout/auth/conta não.
-        if (
-            (
+        if ((
                 in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)
                 && $fullAction !== self::CART_ACTION
             )
@@ -423,19 +421,19 @@ class OptimizeHeadStylesPlugin
         // Última camada: unifica overflow/bg do .page-wrapper e sticky entre rotas.
         // r5e: auth pages skip storefront pixel-qa / hero / PLP / header-prompt locks.
         if (!$isAuthFocusPage) {
-        $html = $this->injectCrossPageShellLock($html);
+            $html = $this->injectCrossPageShellLock($html);
         /* PIXEL-QA r5: AFTER audit/normalize — senão IDs colapsam p/ 3 e audit (7×) vence. */
-        $html = $this->injectPixelQaGutterLock($html);
+            $html = $this->injectPixelQaGutterLock($html);
         /* 2026-08-12: AFTER normalize — 13 IDs vencem design-system min-width:220px + pílula. */
-        $html = $this->injectHeaderAccountPromptLock($html);
+            $html = $this->injectHeaderAccountPromptLock($html);
         /* WCAG 2.5.8 — touch ≥44 (sorter/breadcrumb/footer); body-end vence locks inline. */
-        $html = $this->injectTouch44Terminal($html);
+            $html = $this->injectTouch44Terminal($html);
         /* Hero home: border-box + full-bleed (evita clip 16px / imgOverflow). */
-        $html = $this->injectHeroBoxTerminal($html);
+            $html = $this->injectHeroBoxTerminal($html);
         /* Home section headers: título+subtítulo empilhados (sem wrap lateral). */
-        $html = $this->injectSectionHeaderStackTerminal($html);
+            $html = $this->injectSectionHeaderStackTerminal($html);
         /* PLP: .col-main flex-shrink:0 (page-products) estourava ~18px além do gutter. */
-        $html = $this->injectPlpColContainTerminal($html);
+            $html = $this->injectPlpColContainTerminal($html);
         }
 
         /* ÚLTIMA camada chrome: depois de audit/minicart-open/pixel-qa (senão primary vence). */
@@ -468,8 +466,7 @@ class OptimizeHeadStylesPlugin
             $html = $this->injectCatalogDesktopClsGeometryLock($html);
         }
 
-        if (
-            !$isAuthFocusPage
+        if (!$isAuthFocusPage
             && !$isB2bAccountFocusPage
             && (
                 !in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)
@@ -490,7 +487,55 @@ class OptimizeHeadStylesPlugin
             $html = $this->stripHomeCssGate($html);
         }
 
+        // #region agent log
+        $this->debugW18CssQueryLog('out', $fullAction, $html);
+        $subject->setHeader('X-Awa-Debug-W18', 'plugin-ran', true);
+        // #endregion
+
         $subject->setBody($html);
+    }
+
+    /**
+     * @internal debug W18 — remover após verificação
+     */
+    private function debugW18CssQueryLog(string $phase, string $fullAction, string $html): void
+    {
+        // #region agent log
+        $extract = static function (string $html, string $needle): string {
+            if (!preg_match('/' . preg_quote($needle, '/') . '[^"\'\\s]*/', $html, $m)) {
+                return 'ABSENT';
+            }
+            return substr($m[0], 0, 120);
+        };
+        $payload = [
+            'sessionId' => 'f5fc02',
+            'runId' => 'post-fix',
+            'hypothesisId' => $phase === 'in' ? 'H4' : 'H5',
+            'location' => 'OptimizeHeadStylesPlugin.php:beforeSendResponse',
+            'message' => 'css-query-pipeline',
+            'timestamp' => (int) round(microtime(true) * 1000),
+            'data' => [
+                'phase' => $phase,
+                'fullAction' => $fullAction,
+                'hasSessionCookie' => $this->request->getCookie('PHPSESSID') !== null,
+                'constSsot' => \GrupoAwamotos\Theme\Model\Generated\CascadeAssetVersionConsts::M2_VISUAL_SSOT,
+                'constAlign' => \GrupoAwamotos\Theme\Model\Generated\CascadeAssetVersionConsts::ALIGN_GRID,
+                'manifestDs' => $this->manifest->query('design-system'),
+                'htmlSsot' => $extract($html, 'awa-m2-visual-ssot.min.css'),
+                'htmlAlign' => $extract($html, 'awa-align-grid-terminal-2026-06-11.min.css'),
+                'htmlDs' => $extract($html, 'awa-design-system.min.css'),
+                'hasW18' => str_contains($html, 'premium-ui-w18'),
+                'hasSecao59' => str_contains($html, 'secao51-59'),
+                'hasSecao60' => str_contains($html, 'secao51-60'),
+            ],
+        ];
+        $line = json_encode($payload, JSON_UNESCAPED_SLASHES) . "\n";
+        @file_put_contents(
+            '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-f5fc02.log',
+            $line,
+            FILE_APPEND | LOCK_EX
+        );
+        // #endregion
     }
 
     /**
@@ -538,8 +583,7 @@ class OptimizeHeadStylesPlugin
     private function applyLegacyRouteRedirect(
         \Magento\Framework\HTTP\PhpEnvironment\Response $response,
         string $requestPath
-    ): bool
-    {
+    ): bool {
         $method = strtoupper((string) $this->request->getMethod());
         if ($method !== 'GET' && $method !== 'HEAD') {
             return false;
@@ -573,17 +617,21 @@ class OptimizeHeadStylesPlugin
     private function resolveLegacyRequestPathCandidates(): array
     {
         $candidates = [];
-        if (isset($_SERVER['REQUEST_URI']) && is_string($_SERVER['REQUEST_URI'])) {
-            $candidates[] = $_SERVER['REQUEST_URI'];
+        $requestUri = $this->request->getServer('REQUEST_URI');
+        if (is_string($requestUri)) {
+            $candidates[] = $requestUri;
         }
-        if (isset($_SERVER['REDIRECT_URL']) && is_string($_SERVER['REDIRECT_URL'])) {
-            $candidates[] = $_SERVER['REDIRECT_URL'];
+        $redirectUrl = $this->request->getServer('REDIRECT_URL');
+        if (is_string($redirectUrl)) {
+            $candidates[] = $redirectUrl;
         }
-        if (isset($_SERVER['ORIG_PATH_INFO']) && is_string($_SERVER['ORIG_PATH_INFO'])) {
-            $candidates[] = $_SERVER['ORIG_PATH_INFO'];
+        $origPathInfo = $this->request->getServer('ORIG_PATH_INFO');
+        if (is_string($origPathInfo)) {
+            $candidates[] = $origPathInfo;
         }
-        if (isset($_SERVER['PATH_INFO']) && is_string($_SERVER['PATH_INFO'])) {
-            $candidates[] = $_SERVER['PATH_INFO'];
+        $pathInfo = $this->request->getServer('PATH_INFO');
+        if (is_string($pathInfo)) {
+            $candidates[] = $pathInfo;
         }
         if (method_exists($this->request, 'getOriginalPathInfo')) {
             $candidates[] = (string) $this->request->getOriginalPathInfo();
@@ -680,8 +728,7 @@ class OptimizeHeadStylesPlugin
      */
     private function injectCrossPageShellLock(string $html): string
     {
-        if (
-            !str_contains($html, 'page-wrapper')
+        if (!str_contains($html, 'page-wrapper')
             || !HeaderImpeccableCascadeLockCss::htmlHasSiteHeader($html)
         ) {
             return $html;
@@ -710,8 +757,7 @@ class OptimizeHeadStylesPlugin
      */
     private function injectTabletHeaderRestore(string $html): string
     {
-        if (
-            !str_contains($html, 'page-wrapper')
+        if (!str_contains($html, 'page-wrapper')
             || !HeaderImpeccableCascadeLockCss::htmlHasSiteHeader($html)
         ) {
             return $html;
@@ -834,6 +880,9 @@ class OptimizeHeadStylesPlugin
         }
 
         $query = $this->manifest->query('design-system');
+        // #region agent log
+        $this->debugW18CssQueryLog('ds-buster', 'n/a', 'QUERY=' . $query);
+        // #endregion
         if ($query === '') {
             return $html;
         }
@@ -1110,8 +1159,8 @@ class OptimizeHeadStylesPlugin
             . 'max-width:100%!important;margin-inline:0!important;box-sizing:border-box!important}'
             . $catalogScope . ' .products-grid .product-thumb{position:relative!important;overflow:hidden!important}'
             . $catalogScope . ' .products-grid .quickview-link{'
-            . 'box-sizing:border-box!important;inline-size:40px!important;block-size:40px!important;max-width:40px!important;'
-            . 'min-width:0!important;right:0!important;inset-inline-end:0!important}'
+            . 'box-sizing:border-box!important;inline-size:44px!important;block-size:44px!important;max-width:44px!important;'
+            . 'min-width:44px!important;right:0!important;inset-inline-end:0!important}'
             . $catalogScope . ' .toolbar.toolbar-products .grid-mode-show-type-products,'
             . $catalogScope . ' .products-grid :is(.product-rating,.product-reviews-summary,.rating-summary,.reviews-actions),'
             /* 51.49: hide whole Categoria group when sole option is Arrow cat=89 */
@@ -1195,8 +1244,8 @@ class OptimizeHeadStylesPlugin
             . 'document.querySelectorAll(".page_footer .footer-bottom .footer-bottom-inner,.page-footer .footer-bottom .footer-bottom-inner").forEach(function(e){'
             . 's(e,"box-sizing","border-box");s(e,"max-width","100%");s(e,"padding-inline","0");s(e,"width","100%");});'
             . 'document.querySelectorAll(".products-grid .product-thumb").forEach(function(e){s(e,"position","relative");s(e,"overflow","hidden");});'
-            . 'document.querySelectorAll(".products-grid .quickview-link").forEach(function(e){s(e,"box-sizing","border-box");s(e,"inline-size","40px");'
-            . 's(e,"block-size","40px");s(e,"max-width","40px");s(e,"min-width","0");s(e,"right","0");s(e,"inset-inline-end","0");});'
+            . 'document.querySelectorAll(".products-grid .quickview-link").forEach(function(e){s(e,"box-sizing","border-box");s(e,"inline-size","44px");'
+            . 's(e,"block-size","44px");s(e,"max-width","44px");s(e,"min-width","44px");s(e,"right","0");s(e,"inset-inline-end","0");});'
             . '}'
             . 'var ran=false;function runOnce(){if(ran){return;}ran=true;f();}'
             . 'if(document.readyState!=="loading"){runOnce();}else{document.addEventListener("DOMContentLoaded",runOnce,{once:true});}'
@@ -1875,8 +1924,7 @@ class OptimizeHeadStylesPlugin
             return true;
         }
 
-        if (
-            str_starts_with($fullAction, 'b2b_account_')
+        if (str_starts_with($fullAction, 'b2b_account_')
             && !in_array($fullAction, HeaderImpeccableCascadeLockCss::AUTH_FOCUS_ACTIONS, true)
         ) {
             return true;
@@ -2034,6 +2082,7 @@ class OptimizeHeadStylesPlugin
             'awa-visual-bugfix-terminal-runtime-20260707',
             'awa-pixel-qa-home-gutter-24',
             'awa-touch-44-terminal-js',
+            'awa-footer-desktop-heading-js',
             'awa-footer-categories-desktop-layout-v2',
             'awa-visual-bugfixes',
             'awa-home-bootstrap-defer',
@@ -2122,8 +2171,7 @@ class OptimizeHeadStylesPlugin
         $styleId = 'awa-header-visual-audit-fixes-20260630';
         $html = preg_replace('/<style id="' . preg_quote($styleId, '/') . '"[^>]*>.*?<\/style>\s*/is', '', $html) ?? $html;
 
-        if (
-            $isAuthFocusPage
+        if ($isAuthFocusPage
             || $isB2bAccountFocusPage
             || !HeaderImpeccableCascadeLockCss::htmlHasSiteHeader($html)
         ) {
@@ -2478,7 +2526,7 @@ class OptimizeHeadStylesPlugin
             . 'min-height:0!important;height:auto!important;box-sizing:border-box!important}'
             . $plp . ' .shop-tab-title{margin:0 0 var(--awa-plp-stack-gap,12px)!important}'
 
-. '@media(max-width:767px){@layer awa-header-first-paint-lock{'
+        . '@media(max-width:767px){@layer awa-header-first-paint-lock{'
             /* r57 CLS: pagination bottom:-44 (fora do hero) → relative @~2.5s (y 488→374, CLS ~0.023).
              * Lock overlay final DENTRO do hero 288 desde o first paint. */
             . 'html body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) '
@@ -2641,8 +2689,7 @@ class OptimizeHeadStylesPlugin
      */
     private function injectGlobalHeaderChromeFoucStyles(string $html): string
     {
-        if (
-            !str_contains($html, 'awa-site-header')
+        if (!str_contains($html, 'awa-site-header')
             && !str_contains($html, 'awa-header-account-prompt')
             && !str_contains($html, 'header-mini-cart')
         ) {
@@ -2675,8 +2722,7 @@ class OptimizeHeadStylesPlugin
      */
     private function injectSearchAutocompleteCompactStyles(string $html): string
     {
-        if (
-            !str_contains($html, 'mst-searchautocomplete')
+        if (!str_contains($html, 'mst-searchautocomplete')
             && !str_contains($html, 'search_mini_form')
             && !str_contains($html, 'block-search')
         ) {
@@ -2737,19 +2783,17 @@ class OptimizeHeadStylesPlugin
      */
     private function emitDeferredHeaderVisualAuditStylesheet(string $html, string $styleId): string
     {
-        if (
-            str_contains($html, 'id="' . $styleId . '"')
+        if (str_contains($html, 'id="' . $styleId . '"')
             || str_contains($html, $styleId . '.min.css')
         ) {
             return $html;
         }
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -2757,7 +2801,7 @@ class OptimizeHeadStylesPlugin
         $href = '/static/' . $versionMatch[1]
             . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/'
             . $styleId
-            . '.min.css?v=20260805-b2b-ops-density-r4';
+            . '.min.css?v=20260904-premium-ui-w9';
         $cssStagger = 'window.__awaCssQ?__awaCssQ(this):(/themes\\.min|third-party-bundle|visual-bugfix|deferred-stack/.test(this.href||\'\')?(window.__awaCssPend=window.__awaCssPend||[]).push(this):(this.media=\'all\'))';
         $link = '<link rel="stylesheet" href="' . $href . '" media="print"'
             . ' onload="' . $cssStagger . '" id="' . $styleId . '"/>';
@@ -3980,15 +4024,13 @@ CSS;
         $html = preg_replace('/<style id="awa-header-catalog-parity-v1"[^>]*>.*?<\/style>\s*/is', '', $html) ?? $html;
 
         if ($fullAction === self::HOME_ACTION) {
-            foreach (
-                [
+            foreach ([
                 'awa-home-cls-critical-opt21',
                 // r2g: NÃO stripar awa-home-critical-cls-shell — é a SSOT CLS da home
                 // (carrossel categorias / viewport). Remoção fazia overflow:hidden legado vencer.
                 'awa-home-critical-cls-final-lock',
                 'awa-header-vtex-clean-critical-20260622',
-                ] as $styleId
-            ) {
+                ] as $styleId) {
                 $html = preg_replace(
                     '/<style id="' . preg_quote($styleId, '/') . '"[^>]*>.*?<\/style>\s*/is',
                     '',
@@ -4447,7 +4489,8 @@ CSS;
                 . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
                 . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper'
                 . ' :is(.awa-hero__pagination,.swiper-pagination.awa-hero__pagination){'
-                . 'min-height:52px!important;height:52px!important;box-sizing:border-box!important}'
+                . 'height:auto!important;min-height:0!important;max-height:none!important;'
+                . 'padding-block:0!important;background:transparent!important;box-sizing:border-box!important}'
                 . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
                 . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header'
                 . ' .awa-nav-bar__inner{'
@@ -4455,13 +4498,20 @@ CSS;
                 . 'margin-inline:0!important;padding-inline:24px!important;background:transparent!important;box-sizing:border-box!important}'
                 // r58 CLS: items clamp(112px,10vw,152px)=135 @1350 → 144 late (CLS ~0.016).
                 // Shell 144 perdia para deferred-stack/themes (flex:0 0 auto + width fluid).
-                . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+                . '@media(min-width:768px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
                 . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper'
                 . ' :is(#awa-cat-carousel .awa-category-carousel__item,#awa-cat-carousel>.awa-category-carousel__item,'
                 . '.top-home-content--category-carousel .awa-category-carousel__item){'
-                . 'flex:0 0 144px!important;flex-grow:0!important;flex-shrink:0!important;flex-basis:144px!important;'
-                . 'width:144px!important;min-width:144px!important;max-width:144px!important;'
-                . 'box-sizing:border-box!important}'
+                . 'flex:0 0 calc((100% - 4 * 12px) / 5)!important;flex-grow:0!important;flex-shrink:0!important;flex-basis:calc((100% - 4 * 12px) / 5)!important;'
+                . 'width:calc((100% - 4 * 12px) / 5)!important;min-width:0!important;max-width:calc((100% - 4 * 12px) / 5)!important;'
+                . 'box-sizing:border-box!important}}'
+                . '@media(min-width:992px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
+                . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper'
+                . ' :is(#awa-cat-carousel .awa-category-carousel__item,#awa-cat-carousel>.awa-category-carousel__item,'
+                . '.top-home-content--category-carousel .awa-category-carousel__item){'
+                . 'flex:0 0 calc((100% - 7 * 12px) / 8)!important;flex-grow:0!important;flex-shrink:0!important;flex-basis:calc((100% - 7 * 12px) / 8)!important;'
+                . 'width:calc((100% - 7 * 12px) / 8)!important;min-width:0!important;max-width:calc((100% - 7 * 12px) / 8)!important;'
+                . 'box-sizing:border-box!important}}'
                 // r59 CLS: shelf padding 12→0 + container 1248→1232 @~2.5s (CLS ~0.006).
                 . 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
                 . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper'
@@ -4473,7 +4523,7 @@ CSS;
                 . ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper'
                 . ' .content-top-home :is(.awa-carousel-section,.awa-carousel-section--featured)> .container{'
                 . 'width:min(100%,1280px)!important;max-width:1280px!important;margin-inline:auto!important;'
-                . 'padding-inline:24px!important;padding-block:0!important;box-sizing:border-box!important}'
+                . 'padding-inline:0!important;padding-left:0!important;padding-right:0!important;padding-block:0!important;box-sizing:border-box!important}'
                 // 20260818: Mais Vendidos — gutter no TRACK; scroll-padding igual
                 // para o snap nativo não comer o espaço das setas (BUG-2463a2).
                 . '@media(min-width:768px){'
@@ -5184,9 +5234,7 @@ CSS;
             ) ?? $html;
             $html = preg_replace(
                 '/<head[^>]*>/i',
-                '$0<style id="awa-home-cls-geometry-guard">' . $geometryGuardCss . '</style>'
-
-                ,
+                '$0<style id="awa-home-cls-geometry-guard">' . $geometryGuardCss . '</style>',
                 $html,
                 1
             ) ?? $html;
@@ -5638,6 +5686,11 @@ CSS;
             '',
             $html
         ) ?? $html;
+        $html = preg_replace(
+            '/<script id="awa-footer-desktop-heading-js">.*?<\/script>\s*/is',
+            '',
+            $html
+        ) ?? $html;
 
         $css = '<style id="awa-touch-44-terminal">'
             . 'html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index)'
@@ -5653,12 +5706,14 @@ CSS;
             . 'display:inline-flex!important;align-items:center!important;'
             . 'min-height:0!important;min-block-size:0!important;height:auto!important;'
             . 'padding-block:2px!important;box-sizing:border-box!important}'
+            . '@media (max-width:991px){'
             . 'html body#html-body#html-body#html-body#html-body'
             . ' .page-wrapper :is(.page_footer,.page-footer)'
             . ' :is(button.awa-footer-section__toggle,.awa-footer-section__toggle){'
             . 'min-height:44px!important;height:auto!important;max-height:none!important;'
             . 'padding-block:10px!important;box-sizing:border-box!important;'
             . 'display:flex!important;align-items:center!important}'
+            . '}'
             /* Cart: critical CSS forçava Remover=34px; qty btn w=36 fora de pointer:coarse. */
             . 'html body#html-body#html-body#html-body#html-body.checkout-cart-index'
             . ' .page-wrapper .cart.table-wrapper'
@@ -5751,11 +5806,15 @@ CSS;
                 . 'boot();setTimeout(boot,1000);setTimeout(boot,3000);'
                 . 'setTimeout(function(){try{mo.disconnect();}catch(e){}},12000);}}catch(e){}'
                 . '}'
+                . 'if(window.matchMedia("(max-width: 991px)").matches){'
                 . 'set(q(".page_footer .awa-footer-section__toggle,'
                 . '.page-footer .awa-footer-section__toggle"),'
                 . '{"min-height":"44px",height:"auto","max-height":"none",'
                 . '"padding-block":"10px",display:"flex","align-items":"center",'
                 . '"box-sizing":"border-box"});'
+                . '}else{q(".page_footer .awa-footer-section__toggle,.page-footer .awa-footer-section__toggle")'
+                . '.forEach(function(el){["min-height","height","max-height","padding-block"]'
+                . '.forEach(function(k){el.style.removeProperty(k);});});}'
                 . 'set(q(".checkout-cart-index .cart.table-wrapper .action-delete,'
                 . '.checkout-cart-index .cart.table-wrapper .action.action-delete"),'
                 . '{"min-height":"44px",height:"44px","min-width":"44px",'
@@ -5782,7 +5841,19 @@ CSS;
                 . '}catch(e){}})();</script>';
         }
 
-        $payload = $css . ($js !== '' ? "\n" . $js : '');
+        /* PLP skips awa-touch-44-terminal-js; awa-ux-enhancements forceTouch44
+           still writes inline min-height 44 on footer toggles (prova CDP). */
+        $footerHeadingJs = '<script id="awa-footer-desktop-heading-js">(function(){try{'
+            . 'function c(){if(!window.matchMedia("(min-width: 992px)").matches){return;}'
+            . 'document.querySelectorAll(".page_footer .awa-footer-section__toggle,'
+            . '.page-footer .awa-footer-section__toggle").forEach(function(el){'
+            . '["min-height","height","max-height","padding-block"].forEach(function(k){'
+            . 'el.style.removeProperty(k);});});}'
+            . 'c();[0,50,200,800,2000,4000,8000].forEach(function(ms){setTimeout(c,ms);});'
+            . 'if(window.requestAnimationFrame){requestAnimationFrame(c);}'
+            . '}catch(e){}})();</script>';
+
+        $payload = $css . ($js !== '' ? "\n" . $js : '') . "\n" . $footerHeadingJs;
         $injected = preg_replace('/<\/body>/i', $payload . "\n</body>", $html, 1);
 
         return is_string($injected) ? $injected : $html;
@@ -7044,8 +7115,7 @@ CSS;
                     return $matches[0];
                 }
 
-                if (
-                    !str_contains($body, '--head-preload-c1:')
+                if (!str_contains($body, '--head-preload-c1:')
                     || !str_contains($body, '--head-preload-footer-surface:')
                 ) {
                     return $matches[0];
@@ -7090,12 +7160,11 @@ CSS;
     {
         $html = preg_replace('/<link\s[^>]*awa-m2-visual-ssot[^>]*\/?>\s*/i', '', $html) ?? $html;
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7104,6 +7173,9 @@ CSS;
             . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/'
             . HeaderImpeccableCascadeLockCss::M2_VISUAL_SSOT_FILE
             . HeaderImpeccableCascadeLockCss::M2_VISUAL_SSOT_QUERY;
+        // #region agent log
+        $this->debugW18CssQueryLog('ssot-inject', 'n/a', $href);
+        // #endregion
 
         $tag = '<link rel="stylesheet" href="' . $href . '" media="all"'
             . ' data-awa-m2-visual-ssot="1" data-awa-bundle="m2-visual-ssot"/>';
@@ -7181,12 +7253,11 @@ CSS;
             return $html;
         }
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7237,8 +7308,7 @@ CSS;
             }
             /* home-density-grid é exclusivo da home (carregado no stack dedicado);
                não reinjetar em PLP/PDP para evitar custo de parse/reflow cross-page. */
-            if (
-                $hasCatalogDensityHref
+            if ($hasCatalogDensityHref
                 && $isCatalogDensity
                 && !str_contains($html, 'data-awa-catalog-density-grid-body-terminal="1"')
             ) {
@@ -7261,16 +7331,14 @@ CSS;
                 $tag .= '<link rel="stylesheet" href="' . $href . '" media="all"'
                     . ' data-awa-align-grid-body-terminal="1" data-awa-bundle="align-grid-terminal"/>';
             }
-            if (
-                $hasHomeDensityHref
+            if ($hasHomeDensityHref
                 && $isHome
                 && !str_contains($html, 'data-awa-home-density-grid-body-terminal="1"')
             ) {
                 $tag .= '<link rel="stylesheet" href="' . $homeDensityHref . '" media="all"'
                     . ' data-awa-home-density-grid-body-terminal="1" data-awa-bundle="home-density-grid"/>';
             }
-            if (
-                $hasCatalogDensityHref
+            if ($hasCatalogDensityHref
                 && $isCatalogDensity
                 && !str_contains($html, 'data-awa-catalog-density-grid-body-terminal="1"')
             ) {
@@ -7473,12 +7541,11 @@ CSS;
      */
     private function convertHomeHeavyTerminalsToExternal(string $html): string
     {
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7486,7 +7553,7 @@ CSS;
         $staticBase = '/static/' . $versionMatch[1] . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/';
         /* P2.1 2026-07-28: bust deferred visual-audit (home nav gutter 24)
            r5 2026-08-05: upgrade condensed border fix para auditLock (0,13,4). */
-        $query = '?v=20260805-b2b-ops-density-r4';
+        $query = '?v=20260904-premium-ui-w9';
 
         // Sync: header geometry / CLS locks mínimos (above-fold).
         $syncCssIds = [
@@ -7622,12 +7689,11 @@ CSS;
             return $html;
         }
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7692,12 +7758,11 @@ CSS;
 
     private function injectHomeAlignGridStylesheetsIfMissing(string $html): string
     {
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7705,8 +7770,7 @@ CSS;
         $staticBase = '/static/' . $versionMatch[1] . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/';
         $tags = '';
 
-        if (
-            !str_contains($html, 'awa-home-critical-stack')
+        if (!str_contains($html, 'awa-home-critical-stack')
             && !str_contains($html, 'awa-bundle-async-distill-lock')
         ) {
             $tags .= '<link rel="stylesheet" href="' . $staticBase
@@ -7734,12 +7798,11 @@ CSS;
             return $html;
         }
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -7815,8 +7878,7 @@ CSS;
             if (!is_string($url)) {
                 continue;
             }
-            if (
-                str_contains($url, 'themes.min.css')
+            if (str_contains($url, 'themes.min.css')
                 || str_contains($url, '/css/themes.css')
                 || str_contains($url, 'awa-third-party-bundle')
                 || str_contains($url, 'awa-home-deferred-stack')
@@ -8050,6 +8112,7 @@ HTML;
         $plp = 'html body#html-body#html-body#html-body#html-body#html-body#html-body'
             . '#html-body#html-body#html-body#html-body#html-body#html-body'
             . '#html-body#html-body#html-body#html-body'
+            . '#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
             . ':is(.catalog-category-view,.catalogsearch-result-index)';
         $css = '<style id="awa-plp-desktop-cls-lock">'
             . '@media (min-width:768px){'
@@ -8059,19 +8122,25 @@ HTML;
             . $plp . ' .page-wrapper .awa-site-header{'
             . 'width:100%!important;max-width:none!important;box-sizing:border-box!important;'
             . 'margin:0!important;padding:0!important;'
-            . 'height:160px!important;max-height:160px!important;contain:layout!important}'
+            . 'height:auto!important;min-height:116px!important;max-height:none!important;contain:layout!important}'
             . $plp . ' .page-wrapper .awa-site-header #header.header-container,'
             . $plp . ' .page-wrapper .awa-site-header #header.header-container>.header-content,'
             . $plp . ' .page-wrapper .awa-site-header #awa-b2b-promo-bar,'
             . $plp . ' .page-wrapper .awa-site-header .awa-b2b-promo-bar,'
             . $plp . ' .page-wrapper .awa-site-header .top-header.awa-b2b-promo-bar{'
-            . 'min-height:44px!important;height:44px!important;max-height:44px!important;'
+            . 'display:none!important;min-height:0!important;height:0!important;max-height:0!important;'
             . 'width:100%!important;max-width:none!important;box-sizing:border-box!important;'
-            . 'margin:0!important;padding-block:0!important}'
+            . 'margin:0!important;padding:0!important;overflow:hidden!important;border:0!important}'
+            . $plp . ' .page-wrapper .awa-site-header:has(#awa-b2b-promo-bar:not([aria-hidden="true"])){'
+            . 'min-height:160px!important}'
+            . $plp . ' .page-wrapper .awa-site-header:has(#awa-b2b-promo-bar:not([aria-hidden="true"]))'
+            . ' :is(#header.header-container,#header.header-container>.header-content,#awa-b2b-promo-bar,.awa-b2b-promo-bar,.top-header.awa-b2b-promo-bar){'
+            . 'display:flex!important;min-height:44px!important;height:44px!important;max-height:44px!important;'
+            . 'overflow:hidden!important;padding:0!important;margin:0!important}'
             . $plp . ' .page-wrapper .awa-site-header .awa-b2b-promo-bar__inner,'
             . $plp . ' .page-wrapper .awa-site-header .awa-b2b-promo-bar__layout,'
             . $plp . ' .page-wrapper .awa-site-header .awa-b2b-promo-bar__text{'
-            . 'min-height:44px!important;height:44px!important;max-height:44px!important;'
+            . 'min-height:0!important;height:auto!important;max-height:none!important;'
             . 'box-sizing:border-box!important;margin:0!important;padding-block:0!important}'
             . $plp . ' .page-wrapper .awa-main-header__inner{'
             . 'min-height:68px!important;height:68px!important;max-height:68px!important;'
@@ -8226,11 +8295,17 @@ HTML;
             . $plp . ' .page-wrapper .block.filter .filter-options-content ol.items{'
             . 'border:0!important;box-shadow:none!important;background:transparent!important}'
             . '}}'
-            . $plp . ' .page-wrapper .awa-category-hero{'
-            . 'min-height:112px!important;height:112px!important;max-height:112px!important;'
+            . $plp . ' .page-wrapper .awa-category-hero:not(.awa-category-hero--has-image){'
+            . 'min-height:0!important;height:auto!important;max-height:none!important;'
             . 'width:100%!important;max-width:100%!important;box-sizing:border-box!important;'
             . 'margin:0!important;display:flex!important;align-items:flex-start!important;'
-            . 'padding-block:8px 12px!important}'
+            . 'padding-block:var(--awa-space-2,8px)!important;overflow:visible!important}'
+            . $plp . ' .page-wrapper :is(.page_footer,.page-footer) .awa-footer-trust-bar{'
+            . 'padding-block:16px!important}'
+            . $plp . ' .page-wrapper .item-product :is(.info-price,.price-box){'
+            . 'min-height:0!important;padding-block:0!important}'
+            . $plp . ' .page-wrapper .item-product .product-info-cart{'
+            . 'margin-block-start:8px!important}'
             /* AWA visual-audit 2026-08-26 lote2: CLS lock 112px recortava cat-*.png.
              * First-paint = 220 (attrs img 1216×220) para não gerar CLS ao soltar o lock. */
             . $plp . ' .page-wrapper .awa-category-hero.awa-category-hero--has-image{'
@@ -8499,12 +8574,11 @@ HTML;
             return $html;
         }
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -8633,6 +8707,13 @@ HTML;
      * mente no commit da navegacao, antes de qualquer <script> no fim do
      * <body> ter chance de registrar o listener a tempo.
      *
+     * 2026-09-15: ampliado para cobrir tambem "InvalidStateError: Transition
+     * was aborted because of invalid state." — variante do mesmo problema
+     * (Chromium aborta a transicao quando a aba perde visibilidade/foco
+     * durante a navegacao). Mesma causa raiz (transicao nunca chega a
+     * comitar), nome de excecao diferente; sem impacto funcional real,
+     * apenas ruido de console.
+     *
      * Injetado aqui (e nao via bloco de layout head.additional) porque
      * runtime evidence via curl (offset do script vs. offset de "</head>"
      * no HTML final) confirmou que blocos de head.additional sao fisica-
@@ -8650,7 +8731,11 @@ HTML;
         $script = '<script id="awa-view-transition-guard">'
             . '(function(w){"use strict";w.addEventListener("unhandledrejection",function(event){'
             . 'var reason=event.reason;'
-            . 'if(reason instanceof DOMException&&reason.name==="AbortError"&&reason.message==="Transition was skipped"){'
+            . 'if(!(reason instanceof DOMException)){return;}'
+            . 'if(reason.name==="AbortError"&&reason.message==="Transition was skipped"){'
+            . 'event.preventDefault();return;'
+            . '}'
+            . 'if(reason.name==="InvalidStateError"&&reason.message.indexOf("Transition was aborted")===0){'
             . 'event.preventDefault();'
             . '}'
             . '});'
@@ -8705,12 +8790,11 @@ HTML;
                 continue;
             }
 
-            if (
-                preg_match(
-                    '/href=(["\'])([^"\']*' . $fragmentPattern($fragment) . '[^"\']*)\1/is',
-                    $html,
-                    $match
-                )
+            if (preg_match(
+                '/href=(["\'])([^"\']*' . $fragmentPattern($fragment) . '[^"\']*)\1/is',
+                $html,
+                $match
+            )
             ) {
                 $urlsToGate[] = html_entity_decode($match[2], ENT_QUOTES | ENT_HTML5, 'UTF-8');
             }
@@ -8768,8 +8852,7 @@ HTML;
      */
     private function injectHeaderContractGeomSsotForHome(string $html): string
     {
-        if (
-            str_contains($html, 'data-awa-header-contract-grid-body-terminal="1"')
+        if (str_contains($html, 'data-awa-header-contract-grid-body-terminal="1"')
             && str_contains($html, $this->manifest->query('header-contract-grid'))
         ) {
             return $html;
@@ -8777,12 +8860,11 @@ HTML;
 
         $html = preg_replace('/<link\s[^>]*awa-header-contract-grid-20260626[^>]*\/?>\s*/i', '', $html) ?? $html;
 
-        if (
-            !preg_match(
-                '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
-                $html,
-                $versionMatch
-            )
+        if (!preg_match(
+            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $versionMatch
+        )
         ) {
             return $html;
         }
@@ -8986,13 +9068,12 @@ HTML;
      */
     private function extractGateQueueUrls(string $html): array
     {
-        if (
-            !preg_match(
-                '/<script\s+id="awa-css-gate-queue"\s+type="application\/json"'
+        if (!preg_match(
+            '/<script\s+id="awa-css-gate-queue"\s+type="application\/json"'
                 . '(?:\s+data-awa-terminal-href="[^"]*")?>(\[[^\]]*\])<\/script>/i',
-                $html,
-                $match
-            )
+            $html,
+            $match
+        )
         ) {
             return [];
         }

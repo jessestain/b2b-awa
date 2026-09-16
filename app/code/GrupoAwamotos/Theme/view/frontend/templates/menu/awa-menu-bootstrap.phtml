@@ -13,9 +13,24 @@ if ($isCheckoutFocus) {
     return;
 }
 $isHomePage = in_array('cms_index_index', $layoutHandles, true);
-$controllerUrl = $block->getViewFileUrl('js/awa-menu-controller.dept-strip-r16.js');
-$floatingCoreUrl = $block->getViewFileUrl('js/vendor/floating-ui.core.umd.min.js');
-$floatingDomUrl = $block->getViewFileUrl('js/vendor/floating-ui.dom.umd.min.js');
+$isCatalogPlp = in_array('catalog_category_view', $layoutHandles, true)
+    || in_array('catalogsearch_result_index', $layoutHandles, true);
+$menuRuntimeVersion = \GrupoAwamotos\Theme\Model\MinicartAssetVersion::query();
+$controllerUrl = $block->getViewFileUrl('js/awa-menu-controller.dept-strip-r16.js') . $menuRuntimeVersion;
+$floatingCoreUrl = '';
+$floatingDomUrl = '';
+
+if (is_file(BP . '/app/design/frontend/AWA_Custom/ayo_home5_child/web/js/vendor/floating-ui.core.umd.min.js')) {
+    $floatingCoreUrl = $block->getViewFileUrl('js/vendor/floating-ui.core.umd.min.js');
+} elseif (is_file(BP . '/app/code/GrupoAwamotos/Theme/view/frontend/web/js/vendor/floating-ui.core.umd.min.js')) {
+    $floatingCoreUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::js/vendor/floating-ui.core.umd.min.js');
+}
+
+if (is_file(BP . '/app/design/frontend/AWA_Custom/ayo_home5_child/web/js/vendor/floating-ui.dom.umd.min.js')) {
+    $floatingDomUrl = $block->getViewFileUrl('js/vendor/floating-ui.dom.umd.min.js');
+} elseif (is_file(BP . '/app/code/GrupoAwamotos/Theme/view/frontend/web/js/vendor/floating-ui.dom.umd.min.js')) {
+    $floatingDomUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::js/vendor/floating-ui.dom.umd.min.js');
+}
 $menuConfig = [
     'desktopBreakpoint' => 992,
     'hoverDelay' => 100,
@@ -23,7 +38,7 @@ $menuConfig = [
 ];
 $menuCssUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::css/awa-menu-v2-dept-open-fix.css');
 $runtimeUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::js/awa-menu-bootstrap-runtime.dept-strip-r16.js');
-$controllerPinUrl = preg_replace('/\.js$/i', '', $controllerUrl);
+$controllerPinUrl = preg_replace('/\.js(?:\?.*)?$/i', '', $controllerUrl);
 $runtimeConfig = [
     'controllerUrl' => $controllerUrl,
     'floatingCoreUrl' => $floatingCoreUrl,
@@ -48,28 +63,14 @@ window.__AWA_MENU_V2 = true; /* awa-dept-typography-strip-r16 */
     }
     function bootStripGuard() {
         stripDeptTriggerTypography();
-        if (!w.__awaDeptTypographyStripObserver) {
-            // r44f: MutationObserver em documentElement no DCL compete com LCP na home.
-            // Adia observe até load; strip pontual já rodou acima.
-            var startObserver = function () {
-                if (w.__awaDeptTypographyStripObserver) {
-                    return;
-                }
-                w.__awaDeptTypographyStripObserver = new MutationObserver(function () {
-                    stripDeptTriggerTypography();
-                });
-                w.__awaDeptTypographyStripObserver.observe(d.documentElement, {
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['style']
-                });
-            };
-            if (d.readyState === 'complete') {
-                startObserver();
-            } else {
-                w.addEventListener('load', startObserver, { once: true });
-            }
+        if (w.__awaDeptTypographyStripGuard) {
+            return;
         }
+        if (w.__awaDeptTypographyStripObserver && typeof w.__awaDeptTypographyStripObserver.disconnect === 'function') {
+            w.__awaDeptTypographyStripObserver.disconnect();
+            w.__awaDeptTypographyStripObserver = null;
+        }
+        w.__awaDeptTypographyStripGuard = true;
     }
     if (d.readyState === 'loading') {
         d.addEventListener('DOMContentLoaded', bootStripGuard, { once: true });
@@ -99,12 +100,17 @@ window.__AWA_MENU_V2 = true; /* awa-dept-typography-strip-r16 */
     }
     if (!pinMenuControllerPath()) {
         var pinAttempts = 0;
-        var pinTimer = w.setInterval(function () {
+        var maxPinAttempts = 16;
+        function retryPin(delayMs) {
             pinAttempts += 1;
-            if (pinMenuControllerPath() || pinAttempts > 80) {
-                w.clearInterval(pinTimer);
+            if (pinMenuControllerPath() || pinAttempts >= maxPinAttempts) {
+                return;
             }
-        }, 25);
+            w.setTimeout(function () {
+                retryPin(Math.min(delayMs + 30, 260));
+            }, delayMs);
+        }
+        retryPin(60);
     }
 })(document, window);
 </script>
@@ -112,8 +118,12 @@ window.__AWA_MENU_V2 = true; /* awa-dept-typography-strip-r16 */
     $runtimeConfig,
     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
 ) ?></script>
+<?php if ($isCatalogPlp): ?>
+<script type="text/plain" id="awa-menu-bootstrap-runtime" data-awa-catalog-menu-pending="1" data-src="<?= $block->escapeUrl($runtimeUrl) ?>"></script>
+<?php else: ?>
 <script defer src="<?= $block->escapeUrl($runtimeUrl) ?>" id="awa-menu-bootstrap-runtime"></script>
-<?php if (!$isHomePage): ?>
+<?php endif; ?>
+<?php if (!$isHomePage && $floatingCoreUrl !== '' && $floatingDomUrl !== ''): ?>
 <script defer src="<?= $block->escapeUrl($floatingCoreUrl) ?>"></script>
 <script defer src="<?= $block->escapeUrl($floatingDomUrl) ?>"></script>
 <link rel="preload" href="<?= $block->escapeUrl($menuCssUrl) ?>" as="style"/>

@@ -84,7 +84,7 @@ final class HeaderImpeccableCascadeLockCss
     // 2026-08-02 H-pager-rwd: bust — pager padronizado mobile/tablet/desktop.
     // 2026-08-02 H-badge-clip: bust — hot-onsale max-width 50px → texto legível.
     // 2026-08-02 H-badge-clip2: bust + cascade-lock inline (vence CSS imutável em cache).
-    public const VISUAL_FIXES_CSS_QUERY = '20260820-plp-crumb-hero-r10';
+    public const VISUAL_FIXES_CSS_QUERY = '20260904-pdp-related-price-w6';
 
     /**
      * Cache-busting para awa-master-fix.js após tornar o init não bloqueante
@@ -137,7 +137,7 @@ final class HeaderImpeccableCascadeLockCss
     /** PDP terminal — ui-simplify + distill-lock (round 6, 2026-06-10). */
     public const PDP_DISTILL_LOCK_QUERY = '?v=20260610-pdp';
 
-    public const PDP_UI_SIMPLIFY_QUERY = '?v=20260730-p1-ssot-title';
+    public const PDP_UI_SIMPLIFY_QUERY = '?v=20260904-cart-currentcolor';
 
     /** Grid/alinhamento terminal — última camada SSOT (2026-06-11). */
     public const ALIGN_GRID_CSS_FILE = 'awa-align-grid-terminal-2026-06-11.min.css';
@@ -9186,8 +9186,7 @@ JS;
             return false;
         }
 
-        if (
-            str_contains($html, 'data-awa-site-header="true"')
+        if (str_contains($html, 'data-awa-site-header="true"')
             || str_contains($html, "data-awa-site-header='true'")
         ) {
             return true;
@@ -9225,8 +9224,7 @@ JS;
         $html = self::stripLegacyFromHtml($html);
 
         $tag = '';
-        if (
-            !str_contains($html, self::HOME_GUARD_SCRIPT_ID)
+        if (!str_contains($html, self::HOME_GUARD_SCRIPT_ID)
             && !str_contains($html, self::GUARD_SCRIPT_ID)
             && !str_contains($html, self::DISTILL_MOBILE_GRID_SCRIPT_ID)
         ) {

@@ -615,7 +615,17 @@ class SafeVerticalmenu extends \Rokanthemes\VerticalMenu\Block\Verticalmenu
             $html .= '</a>';
 
             if ($hasChildren) {
-                $html .= $this->getSubmenuItemsHtml($subChildren, 2, $maxLevel, $columnWidth, $menuType);
+                /* Keep the nested panel id aligned with the toggle's
+                 * aria-controls (for example submenu-menu-89). */
+                $html .= $this->getSubmenuItemsHtml(
+                    $subChildren,
+                    2,
+                    $maxLevel,
+                    $columnWidth,
+                    $menuType,
+                    null,
+                    $menuToken
+                );
             }
 
             $html .= '</li>';

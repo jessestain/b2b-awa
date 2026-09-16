@@ -307,6 +307,10 @@ _testee/
 *.phtml.bak.*
 pub/lh*.webp
 
+# Backups manuais de qualquer extensão (ex.: Foo.php.bak.20260902-51-19-...)
+# Cobre o padrão real usado nas sessões de debug: <arquivo original>.bak.<sufixo>
+*.bak.*
+
 # Utility scripts (não versionados)
 gen_sitemap_tmp.php
 run_copy_verify.bat
@@ -346,3 +350,7 @@ tmp/
 .kilo/
 
 tests/e2e/test-results*/
+
+
+#Ignore cursor AI rules
+.cursor/rules/codacy.mdc

@@ -65,7 +65,10 @@ class CacheWarmupLauncher
                 'reason' => $reason,
                 'script_path' => $scriptPath,
             ]);
-            $this->shell->execute('bash %s 3', [$scriptPath]);
+            $this->shell->execute('bash %s 3 >> %s 2>&1', [
+                $scriptPath,
+                $varPath . '/log/cache_warmer.log',
+            ]);
         } catch (LocalizedException $exception) {
             $this->logger->error('[Theme] Falha ao executar cache warmer: ' . $exception->getMessage(), [
                 'reason' => $reason,

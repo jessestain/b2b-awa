@@ -17,7 +17,7 @@ class LegacyRouteRedirectPlugin
      * @var array<string, string>
      */
     private const REDIRECT_MAP = [
-        '/ofertas.html' => '/',
+        '/ofertas.html' => '/super-ofertas.html',
         '/contato' => '/contact',
         '/contact-us' => '/contact',
     ];

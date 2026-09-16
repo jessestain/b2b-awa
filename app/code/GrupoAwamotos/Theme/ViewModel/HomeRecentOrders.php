@@ -6,9 +6,17 @@ namespace GrupoAwamotos\Theme\ViewModel;
 
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Sales\CustomerData\LastOrderedItems;
 
+/**
+ * Homepage "recent orders" shell for FPC.
+ *
+ * Item lists are private: hydrate via Magento customer-data section
+ * last-ordered-items. This ViewModel must not load LastOrderedItems during
+ * HTML render, or FPC would need to vary by customer_id.
+ */
 class HomeRecentOrders implements ArgumentInterface
 {
     public const STATE_GUEST = 'guest';
@@ -19,14 +27,11 @@ class HomeRecentOrders implements ArgumentInterface
 
     private const WHATSAPP_NUMBER = '5516997367588';
 
-    /** @var array<string, mixed>|null */
-    private ?array $sectionData = null;
-
     public function __construct(
         private readonly HttpContext $httpContext,
         private readonly LastOrderedItems $lastOrderedItems,
         private readonly CategoryCarouselData $categoryCarouselData,
-        private readonly \Magento\Framework\UrlInterface $urlBuilder
+        private readonly UrlInterface $urlBuilder
     ) {
     }
 
@@ -42,30 +47,22 @@ class HomeRecentOrders implements ArgumentInterface
 
     public function getState(): string
     {
-        if (!$this->isLoggedIn()) {
-            return self::STATE_GUEST;
-        }
-
-        return $this->getRecentItems() === [] ? self::STATE_LOGGED_EMPTY : self::STATE_HAS_ITEMS;
+        return $this->isLoggedIn() ? self::STATE_LOGGED_EMPTY : self::STATE_GUEST;
     }
 
     /**
+     * Server HTML never includes order lines (FPC-safe).
+     *
      * @return list<array{id: int|string, name: string, url: string|null, is_saleable: bool, product_id: int|string}>
      */
     public function getRecentItems(): array
     {
-        if (!$this->isLoggedIn()) {
-            return [];
-        }
-
-        $items = $this->getSectionData()['items'] ?? [];
-
-        return is_array($items) ? $items : [];
+        return [];
     }
 
     public function getBestsellersUrl(): string
     {
-        return $this->urlBuilder->getUrl('', ['_direct' => 'ofertas.html']);
+        return $this->urlBuilder->getUrl('', ['_direct' => 'super-ofertas.html']);
     }
 
     public function getLoginUrl(): string
@@ -88,17 +85,5 @@ class HomeRecentOrders implements ArgumentInterface
     public function getOrdersUrl(): string
     {
         return $this->urlBuilder->getUrl('sales/order/history');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function getSectionData(): array
-    {
-        if ($this->sectionData === null) {
-            $this->sectionData = $this->lastOrderedItems->getSectionData();
-        }
-
-        return $this->sectionData;
     }
 }

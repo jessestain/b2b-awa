@@ -86,8 +86,7 @@ class HeadAssetRendererPlugin
 
             $html = preg_replace_callback($pattern, static function (array $m): string {
                 $tag = $m[0];
-                if (
-                    strpos($tag, 'media="print"') !== false
+                if (strpos($tag, 'media="print"') !== false
                     || strpos($tag, "media='print'") !== false
                     || strpos($tag, 'data-awa-gate') !== false
                     || strpos($tag, 'onload') !== false
@@ -121,8 +120,7 @@ class HeadAssetRendererPlugin
         $keptDesktopPreload = false;
 
         foreach (array_reverse($matches[0]) as $tag) {
-            if (
-                str_contains($tag, 'media="print"')
+            if (str_contains($tag, 'media="print"')
                 || str_contains($tag, "media='print'")
                 || str_contains($tag, 'onload')
                 || str_contains($tag, 'data-awa-gate')
@@ -186,8 +184,7 @@ class HeadAssetRendererPlugin
             static function (array $matches): string {
                 $original = $matches[0];
 
-                if (
-                    strpos($original, 'media="print"') !== false
+                if (strpos($original, 'media="print"') !== false
                     || strpos($original, "media='print'") !== false
                 ) {
                     return $original;
@@ -233,8 +230,7 @@ class HeadAssetRendererPlugin
             $html = preg_replace_callback($pattern, static function (array $matches): string {
                 $original = $matches[0];
 
-                if (
-                    str_contains($original, 'media="print"')
+                if (str_contains($original, 'media="print"')
                     || str_contains($original, "media='print'")
                     || str_contains($original, 'onload')
                 ) {

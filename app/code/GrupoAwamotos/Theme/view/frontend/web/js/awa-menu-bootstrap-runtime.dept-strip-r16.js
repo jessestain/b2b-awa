@@ -178,10 +178,6 @@
 
     function applyController() {
         ensureFloatingUi(function () {
-            if (!w.FloatingUIDOM) {
-                w.setTimeout(applyController, 50);
-                return;
-            }
             if (booted || typeof w.require !== 'function') {
                 if (!booted && typeof w.require !== 'function') {
                     w.setTimeout(applyController, 150);
@@ -564,6 +560,9 @@
         }, { capture: true });
 
         (function installDeptHoverFocusWatchdog() {
+            if (d.body && d.body.classList.contains("cms-index-index")) {
+                return;
+            }
             w.setInterval(function () {
                 var menuReady;
                 var nodes;

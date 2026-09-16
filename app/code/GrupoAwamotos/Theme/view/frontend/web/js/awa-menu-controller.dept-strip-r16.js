@@ -28,6 +28,15 @@ define([
         return !isDesktop();
     }
 
+    /* 768–991: o header restaura Departamentos como dropdown, não drawer.
+     * isMobile() ainda é true (DESKTOP_MIN=992), então o click ia só para
+     * openDrawer() — e o segundo clique no-op porque this.open já é true. */
+    function isTabletNav() {
+        return window.matchMedia
+            ? window.matchMedia('(min-width: 768px) and (max-width: 991px)').matches
+            : (window.innerWidth >= 768 && window.innerWidth <= 991);
+    }
+
     function resolveDebugRunId() {
         var fallback = 'run-unknown';
         try {
@@ -1468,6 +1477,24 @@ define([
         this.trigger.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
+            if (isTabletNav()) {
+                self.isOpen = !!(self.isOpen
+                    || self.trigger.getAttribute('aria-expanded') === 'true'
+                    || self.panel.getAttribute('data-awa-menu-state') === 'open'
+                    || self.panel.classList.contains('menu-open')
+                    || self.panel.classList.contains('vmm-open')
+                    || document.body.classList.contains('awa-menu-dept-open')
+                    || document.body.classList.contains('awa-menu-drawer-open'));
+                if (self.isOpen) {
+                    self.close();
+                    if (mobileDrawer && mobileDrawer.open && typeof mobileDrawer.closeDrawer === 'function') {
+                        mobileDrawer.closeDrawer();
+                    }
+                } else {
+                    self.open();
+                }
+                return;
+            }
             if (isMobile()) {
                 mobileDrawer.openDrawer();
                 return;
@@ -1500,6 +1527,16 @@ define([
                 return;
             }
             e.preventDefault();
+            if (isTabletNav()) {
+                self.open();
+                window.requestAnimationFrame(function () {
+                    var first = self.panel.querySelector('[data-role="awa-vmenu-search"], a.level-top, a.navigation__link');
+                    if (first) {
+                        first.focus();
+                    }
+                });
+                return;
+            }
             if (isMobile()) {
                 mobileDrawer.openDrawer();
                 return;

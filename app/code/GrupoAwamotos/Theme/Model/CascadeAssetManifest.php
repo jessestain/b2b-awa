@@ -102,7 +102,7 @@ final class CascadeAssetManifest
         'header-contract-grid' => [
             'file' => 'awa-header-contract-grid-20260626.min.css',
             'fragment' => 'awa-header-contract-grid-20260626',
-            'query' => '?v=20260903-secao51-59-shelf-ongrid-restore',
+            'query' => '?v=20260905-p1-home-mobile-r16',
         ],
         'home-density-grid' => [
             'file' => 'awa-home-density-grid-20260611.min.css',
@@ -128,7 +128,7 @@ final class CascadeAssetManifest
         'header-visual-audit-fixes' => [
             'file' => 'awa-header-visual-audit-fixes-20260630.min.css',
             'fragment' => 'awa-header-visual-audit-fixes-20260630',
-            'query' => '',
+            'query' => '?v=20260904-premium-ui-w9',
         ],
         'home-impeccable-terminal' => [
             'file' => 'awa-home-impeccable-terminal-v1.min.css',
@@ -320,17 +320,17 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260903-secao51-60-pdp-visual',
+            'query' => '?v=20260904-premium-ui-w18',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',
             'fragment' => 'awa-plp-shell-final',
-            'query' => '?v=20260827-visual-lote5',
+            'query' => '?v=80d1a73f2681',
         ],
         'ai-assistant' => [
             'file' => 'GrupoAwamotos_AiAssistant/css/ai-assistant.min.css',
             'fragment' => 'AiAssistant/css/ai-assistant',
-            'query' => '?v=20260821-ai-chat-chips-r24',
+            'query' => '?v=20260904-premium-ui-w17',
         ],
         'visual-qa-fixes' => [
             'file' => 'awa-visual-qa-fixes-2026-06-17.min.css',
