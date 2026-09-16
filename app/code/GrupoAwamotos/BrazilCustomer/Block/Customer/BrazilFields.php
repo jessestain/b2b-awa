@@ -122,7 +122,7 @@ class BrazilFields extends Template
                 $this->customerData['company_name'] = $this->customerData['b2b_razao_social'];
             }
         } catch (\Exception $e) {
-            // Customer not found or attribute error - return defaults
+            $this->_logger->warning('[BrazilFields::getCustomerData] Exceção ignorada: ' . $e->getMessage());
         }
 
         return $this->customerData;

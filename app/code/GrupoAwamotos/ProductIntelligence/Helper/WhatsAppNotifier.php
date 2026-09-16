@@ -181,6 +181,7 @@ class WhatsAppNotifier extends AbstractHelper
                 return $customer->getFirstname() . ' ' . $customer->getLastname();
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[WhatsAppNotifier::resolveCustomerName] Exceção ignorada: ' . $e->getMessage());
             // fallback
         }
         return 'Cliente ' . $erpCode;

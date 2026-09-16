@@ -1,27 +1,42 @@
 /* AWA Help Center — Storefront
-   Tokens var(--awa-*) only. Grid fluido: 1 / 2 / 3 colunas via auto-fit. */
+   Tokens var(--awa-*) only. Grid fluido: 1 / 2 / 3 colunas via auto-fit.
+   Magento .page-main já é o poço (max 1280 + padding 24). */
 
 .awa-helpcenter {
-    max-width: min(70rem, 100%);
-    margin: 0 auto;
-    padding: clamp(1rem, 3vw, 2.5rem) clamp(.75rem, 3vw, 1.25rem) clamp(2.5rem, 6vw, 4rem);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    padding-block: var(--awa-space-6) var(--awa-space-9);
+    padding-inline: 0;
+}
+
+body.helpcenter-index-index .column.main > .awa-helpcenter {
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .awa-helpcenter__hero {
     text-align: center;
-    padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 3vw, 2rem);
-    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    padding: var(--awa-space-8) var(--awa-space-6) var(--awa-space-7);
+    margin-bottom: var(--awa-space-8);
     background: var(--awa-primary);
-    border-radius: var(--awa-radius-lg);
+    border-radius: var(--awa-card-radius);
     color: var(--awa-text-inverse);
 }
 
-.awa-helpcenter__title {
-    font-size: clamp(1.5rem, 4vw, 2.2rem);
-    font-weight: var(--awa-weight-bold);
-    margin: 0 0 1.5rem;
-    color: var(--awa-text-inverse);
-    line-height: var(--awa-leading-tight);
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    h1.awa-helpcenter__title,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    /* design-system trava h1–h6 com 12× #awa-boost + color !important (ink). */
+    font-size: clamp(1.5rem, 4vw, 2.2rem) !important;
+    font-weight: var(--awa-weight-bold) !important;
+    margin: 0 0 var(--awa-space-6) !important;
+    color: var(--awa-text-inverse) !important;
+    line-height: var(--awa-leading-tight) !important;
     letter-spacing: var(--awa-heading-letter-spacing);
 }
 
@@ -29,32 +44,41 @@
     position: relative;
     max-width: 35rem;
     margin: 0 auto;
+    text-align: center;
 }
 
 .awa-helpcenter__hero-ask {
-    margin-top: 1rem;
+    margin-top: var(--awa-space-4);
 }
 
-body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask {
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    button.awa-helpcenter__hero-ask,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
     appearance: none;
     /* Magento pinta todo button de primary; no hero o CTA é outline sobre o vermelho */
     background: transparent !important;
     background-color: transparent !important;
     border: 1px solid color-mix(in srgb, var(--awa-text-inverse) 55%, transparent) !important;
     box-shadow: none !important;
-    min-height: 0 !important;
+    min-height: 44px !important;
     color: var(--awa-text-inverse) !important;
     font: inherit;
     font-size: .9rem;
     font-weight: var(--awa-weight-semi);
-    padding: .45rem 1rem !important;
+    padding: var(--awa-space-2) var(--awa-space-4) !important;
     border-radius: var(--awa-radius-md) !important;
     cursor: pointer;
-    display: inline-block !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
     height: auto !important;
 }
 
-body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:hover {
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    button.awa-helpcenter__hero-ask:hover,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
     background: color-mix(in srgb, var(--awa-text-inverse) 12%, transparent) !important;
 }
 
@@ -64,8 +88,10 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
 }
 
 .awa-helpcenter__search {
+    display: block;
     width: 100%;
-    padding: .85rem 1.25rem;
+    text-align: start;
+    padding: .85rem var(--awa-space-5);
     border: none;
     border-radius: var(--awa-radius-md);
     font-size: 1rem;
@@ -73,7 +99,7 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
     outline: none;
     box-sizing: border-box;
     background: var(--awa-bg-surface);
-    color: var(--awa-text);
+    color: var(--awa-ink);
 }
 
 .awa-helpcenter__search:focus {
@@ -84,7 +110,8 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
 
 .awa-helpcenter__search-results {
     position: absolute;
-    top: calc(100% + 4px);
+    /* abaixo do wrap (input + CTA), nunca por cima do botão Perguntar */
+    top: calc(100% + var(--awa-space-1));
     left: 0;
     right: 0;
     background: var(--awa-bg-surface);
@@ -93,11 +120,12 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
     z-index: var(--awa-z-dropdown);
     max-height: 22.5rem;
     overflow-y: auto;
+    text-align: left;
 }
 
 .awa-hc-res__item {
     display: block;
-    padding: .75rem 1rem;
+    padding: var(--awa-space-3) var(--awa-space-4);
     color: inherit;
     text-decoration: none;
     border-bottom: 1px solid var(--awa-border);
@@ -113,7 +141,7 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
 .awa-hc-res__title {
     display: block;
     font-size: .95rem;
-    color: var(--awa-text);
+    color: var(--awa-ink);
 }
 
 .awa-hc-res__sum {
@@ -124,36 +152,41 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
 }
 
 .awa-hc-res__none {
-    padding: 1rem;
+    padding: var(--awa-space-4);
     color: var(--awa-text-muted);
     font-size: .9rem;
     text-align: center;
 }
 
 .awa-helpcenter__hub {
-    margin-bottom: clamp(2rem, 5vw, 3rem);
+    margin-bottom: var(--awa-space-8);
 }
 
-.awa-helpcenter__hub-title {
-    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
-    font-weight: var(--awa-weight-bold);
-    color: var(--awa-text);
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    h2.awa-helpcenter__hub-title,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    font-family: var(--awa-font-display) !important;
+    font-size: clamp(1.15rem, 2.2vw, 1.375rem) !important;
+    font-weight: var(--awa-weight-bold) !important;
+    color: var(--awa-ink) !important;
     letter-spacing: -0.02em;
-    margin: 0 0 clamp(1rem, 2.5vw, 1.5rem);
-    line-height: var(--awa-leading-snug);
+    margin: 0 0 var(--awa-space-5) !important;
+    line-height: var(--awa-leading-snug) !important;
 }
 
 .awa-helpcenter__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
-    gap: clamp(.85rem, 2vw, 1.25rem);
+    /* 20rem no poço Magento 1228px → 3 colunas (6 temas em 3×2), não 4+2. */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: var(--awa-gap-card);
 }
 
 .awa-helpcenter__card {
     display: flex;
     flex-direction: column;
-    gap: .65rem;
-    padding: clamp(1.1rem, 2.2vw, 1.4rem);
+    gap: var(--awa-space-3);
+    padding: var(--awa-card-pad);
     background: var(--awa-bg-surface);
     border: 1px solid var(--awa-border);
     border-radius: var(--awa-card-radius);
@@ -186,12 +219,16 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
     display: block;
 }
 
-.awa-helpcenter__card-title {
-    font-size: 1.05rem;
-    font-weight: var(--awa-weight-semi);
-    color: var(--awa-text);
-    margin: 0;
-    line-height: var(--awa-leading-snug);
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    h3.awa-helpcenter__card-title,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    font-family: var(--awa-font-display) !important;
+    font-size: 1.05rem !important;
+    font-weight: var(--awa-weight-semi) !important;
+    color: var(--awa-ink) !important;
+    margin: 0 !important;
+    line-height: var(--awa-leading-snug) !important;
 }
 
 .awa-helpcenter__card-desc {
@@ -206,32 +243,45 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__hero-ask:focu
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: .5rem 1rem;
-    margin-top: .35rem;
+    gap: var(--awa-space-2) var(--awa-space-4);
+    margin-top: var(--awa-space-1);
 }
 
-body.helpcenter-index-index .awa-helpcenter__card-link,
-body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__card-ask,
-body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn {
+/* align-grid (folha tardia) pinta `button` com min-height 44 + padding 8/16. */
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    a.awa-helpcenter__card-link,
+    button.awa-helpcenter__card-ask,
+    button.awa-helpcenter__topic-ask-btn,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
     appearance: none;
-    /* Magento/AWA estiliza todo <button> com fill primary e min-height 44px */
     background: none !important;
     background-color: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
-    min-height: 0 !important;
+    min-height: 44px !important;
     min-width: 0 !important;
     height: auto !important;
     padding: 0 !important;
-    display: inline !important;
+    display: inline-flex !important;
+    align-items: center;
     font: inherit;
     font-size: .9rem;
     font-weight: var(--awa-weight-semi);
-    color: var(--awa-primary);
+    color: var(--awa-primary) !important;
     cursor: pointer;
     text-decoration: none;
-    line-height: 1.3;
+    line-height: var(--awa-leading-snug);
     border-radius: 0 !important;
+}
+
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    button.awa-helpcenter__card-ask,
+    button.awa-helpcenter__topic-ask-btn,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    color: var(--awa-text-muted) !important;
+    font-weight: var(--awa-weight-medium);
 }
 
 .awa-helpcenter__card-link:hover,
@@ -249,60 +299,73 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn
     border-radius: var(--awa-radius-xs);
 }
 
-.awa-helpcenter button.awa-helpcenter__card-ask,
-.awa-helpcenter button.awa-helpcenter__topic-ask-btn {
-    color: var(--awa-text-muted) !important;
-    font-weight: var(--awa-weight-medium);
-}
-
 .awa-helpcenter__cats {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+    gap: var(--awa-gap-card);
+    align-items: start;
 }
 
 .awa-helpcenter__cat {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
     border: 1px solid var(--awa-border);
-    border-radius: var(--awa-radius-lg);
-    padding: clamp(1rem, 2.5vw, 1.5rem);
+    border-radius: var(--awa-card-radius);
+    padding: var(--awa-card-pad);
     background: var(--awa-bg-surface);
-    scroll-margin-top: max(5.5rem, calc(var(--awa-header-height, 0px) + 0.75rem));
+    /* header sticky ~160px (cookie banner) > --awa-header-height 104px */
+    scroll-margin-top: max(11rem, calc(var(--awa-header-height, 6.5rem) + 4rem));
 }
 
-.awa-helpcenter__cat-title {
-    font-size: 1.2rem;
-    font-weight: var(--awa-weight-bold);
-    color: var(--awa-primary);
-    margin: 0 0 .4rem;
-    padding-bottom: .6rem;
+/* defer-global/ui-promax: `:target { scroll-margin-top: header+16 !important }` → 120px. */
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    .awa-helpcenter__cat:target,
+    .awa-helpcenter__topic:target,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    scroll-margin-top: max(11rem, calc(var(--awa-header-height, 6.5rem) + 4rem)) !important;
+}
+
+html body.helpcenter-index-index .page-wrapper .page-main .awa-helpcenter :is(
+    h2.awa-helpcenter__cat-title,
+    #awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost#awa-boost
+) {
+    font-size: 1.2rem !important;
+    font-weight: var(--awa-weight-bold) !important;
+    color: var(--awa-primary) !important;
+    margin: 0 0 var(--awa-space-2) !important;
+    line-height: var(--awa-leading-snug) !important;
+    padding-bottom: var(--awa-space-3);
     border-bottom: 2px solid var(--awa-border);
 }
 
 .awa-helpcenter__cat-desc {
     font-size: .9rem;
     color: var(--awa-text-muted);
-    margin: 0 0 1rem;
+    margin: 0 0 var(--awa-space-4);
 }
 
 .awa-helpcenter__topics {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: var(--awa-space-2);
 }
 
 .awa-helpcenter__topic {
-    border-radius: var(--awa-radius-sm);
+    border-radius: var(--awa-card-radius);
     border: 1px solid var(--awa-border);
     overflow: hidden;
-    scroll-margin-top: max(5.5rem, calc(var(--awa-header-height, 0px) + 0.75rem));
+    scroll-margin-top: max(11rem, calc(var(--awa-header-height, 6.5rem) + 4rem));
 }
 
 .awa-helpcenter__topic-title {
-    padding: .9rem 1rem;
+    padding: var(--awa-space-3) var(--awa-space-4);
+    min-height: 44px;
     cursor: pointer;
     font-size: .95rem;
     font-weight: var(--awa-weight-semi);
-    color: var(--awa-text);
+    color: var(--awa-ink);
     list-style: none;
     display: flex;
     align-items: center;
@@ -317,7 +380,7 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn
     color: var(--awa-text-muted);
     transition: transform .2s var(--awa-ease);
     flex-shrink: 0;
-    margin-left: 1rem;
+    margin-left: var(--awa-space-4);
 }
 
 .awa-helpcenter__topic[open] .awa-helpcenter__topic-title::after {
@@ -328,20 +391,22 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn
     background: var(--awa-primary-50);
 }
 
-.awa-helpcenter__topic-title::-webkit-details-marker {
+.awa-helpcenter__topic-title::-webkit-details-marker,
+.awa-helpcenter__topic-title::marker {
     display: none;
+    content: none;
 }
 
 .awa-helpcenter__topic-body {
-    padding: .5rem 1rem 1rem;
+    padding: var(--awa-space-2) var(--awa-space-4) var(--awa-space-4);
     font-size: .93rem;
     line-height: var(--awa-leading-relaxed);
-    color: var(--awa-text);
+    color: var(--awa-ink);
     border-top: 1px solid var(--awa-border);
 }
 
 .awa-helpcenter__topic-body p {
-    margin: .5rem 0;
+    margin: var(--awa-space-2) 0;
 }
 
 .awa-helpcenter__topic-body ul,
@@ -350,15 +415,15 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn
 }
 
 .awa-helpcenter__topic-ask {
-    margin: .85rem 0 0;
+    margin: var(--awa-space-4) 0 0;
 }
 
 .awa-helpcenter__empty {
     text-align: center;
-    padding: 3rem 1rem;
+    padding: var(--awa-space-9) var(--awa-space-4);
     color: var(--awa-text-muted);
     display: grid;
-    gap: 1rem;
+    gap: var(--awa-space-4);
     justify-items: center;
 }
 
@@ -376,13 +441,18 @@ body.helpcenter-index-index .awa-helpcenter button.awa-helpcenter__topic-ask-btn
 
 @media (max-width: 600px) {
     .awa-helpcenter {
-        padding: 1rem .5rem 3rem;
+        padding-block: var(--awa-space-4) var(--awa-space-9);
+        padding-inline: 0;
+    }
+
+    .awa-helpcenter__hero {
+        padding: var(--awa-space-6) var(--awa-space-4) var(--awa-space-5);
     }
 
     .awa-helpcenter__card-actions {
         flex-direction: column;
         align-items: flex-start;
-        gap: .55rem;
+        gap: var(--awa-space-2);
     }
 }
 

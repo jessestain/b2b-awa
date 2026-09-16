@@ -263,8 +263,7 @@ class CmsMissingMediaRepairer
 
         $basename = strtolower((string) pathinfo($missingMediaPath, PATHINFO_BASENAME));
 
-        if (
-            str_contains($basename, 'shipping')
+        if (str_contains($basename, 'shipping')
             || str_contains($basename, 'help')
             || str_contains($basename, 'payment')
             || str_contains($basename, 'icon_')

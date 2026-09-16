@@ -35,8 +35,18 @@ class SystemHealthCheck
 
             // Alertas operacionais (patch, cron, indexadores) via OperationalHealthService
             $operational = $this->operationalHealthService->collect();
-            if (($operational['overall'] ?? '') === 'fail') {
-                $healthData['operational'] = $operational;
+            $healthData['operational'] = $operational;
+            $runtimeFailed = 0;
+            foreach (($operational['checks'] ?? []) as $check) {
+                if (($check['status'] ?? '') !== 'fail') {
+                    continue;
+                }
+                if (($check['id'] ?? '') === 'magento_version') {
+                    continue;
+                }
+                $runtimeFailed++;
+            }
+            if ($runtimeFailed > 0) {
                 $healthData['overall_score'] = min($healthData['overall_score'], 50);
                 $healthData['overall_status'] = 'critical';
             }

@@ -44,7 +44,11 @@ final class PageFallbackPlugin
                 throw $exception;
             }
 
-            if (!$this->templateHealer->ensurePreprocessedExists($missingPath)) {
+            $this->templateHealer->ensurePreprocessedExists($missingPath);
+            $sourcePath = $this->templateHealer->resolveSourcePath($missingPath);
+            if (!is_file($missingPath)
+                && ($sourcePath === null || !is_file($sourcePath))
+            ) {
                 throw $exception;
             }
 

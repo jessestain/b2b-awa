@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\SmartSuggestions\Api;
 
-/**
- * WhatsApp Sender Interface
- */
 interface WhatsappSenderInterface
 {
     /**

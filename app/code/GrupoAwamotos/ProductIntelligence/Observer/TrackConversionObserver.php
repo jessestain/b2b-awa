@@ -109,6 +109,7 @@ class TrackConversionObserver implements ObserverInterface
                 return (string)$erpAttr->getValue();
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[TrackConversionObserver::resolveErpCode] Exceção ignorada: ' . $e->getMessage());
             // Customer not found
         }
 

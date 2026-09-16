@@ -23,17 +23,21 @@ $_price = (float) $_product->getFinalPrice();
 $_image = (string) $_product->getImage() ?: '';
 $_description = (string) ($_product->getShortDescription() ?: $_product->getDescription() ?: '');
 $_isInStock = $_product->isAvailable();
+// Nota: $block é o Magento\Catalog\Block\Product\View nativo (não pode ser alterado) e este
+// template não recebe LoggerInterface via layout; usar ObjectManager direto aqui violaria as
+// regras do projeto. Os atributos abaixo são opcionais para o JSON-LD (enriquecimento de SEO),
+// então a ausência deles é esperada para a maioria dos produtos — silenciar é intencional.
 $_brandName = '';
 try {
     $_brandName = (string) ($_product->getAttributeText('manufacturer') ?: $_product->getAttributeText('marca') ?: '');
+// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
 } catch (\Throwable $e) {
-    // ignore
 }
 $_gtin = '';
 try {
     $_gtin = (string) ($_product->getData('ean') ?: $_product->getData('gtin') ?: '');
+// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
 } catch (\Throwable $e) {
-    // ignore
 }
 
 $_url = (string) $_product->getProductUrl();
@@ -45,8 +49,9 @@ $_reviewCount = 0;
 try {
     $_ratingValue = (float) ($_product->getRatingSummary()->getRatingSummary()->getSum() / max($_product->getRatingSummary()->getRatingSummary()->getCount(), 1));
     $_reviewCount = (int) $_product->getRatingSummary()->getReviewsCount();
+// Sem reviews é o caso comum (usa o fallback $_ratingValue acima) — não é um erro a registrar.
+// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
 } catch (\Throwable $e) {
-    // ignore
 }
 
 $_productSchema = [

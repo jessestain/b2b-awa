@@ -1,10 +1,10 @@
 :root {
     /* ── cookie — design tokens ─── */
     --cookie-c1: #6f1d20;
-    --cookie-c2: #A33B3B;
+    --cookie-c2: var(--awa-brand, #b73337);
     --cookie-c3: #fca5a5;
     --cookie-c4: #f9fafb;
-    --cookie-c5: #9e2b2f;
+    --cookie-c5: var(--awa-brand-dark, #8e2629);
     --cookie-c6: #111827;
     --cookie-c7: #fff;
 }

@@ -285,7 +285,7 @@ class EmailSender implements EmailSenderInterface
                 . '<p style="margin:0;font-size:12px;color:#6b7280;">SKU: ' . $sku . ' &nbsp;|&nbsp; Qtd: ' . $qty . '</p>'
                 . '</td>'
                 . '<td style="padding:10px 8px;text-align:right;vertical-align:top;white-space:nowrap;">'
-                . '<span style="font-size:14px;font-weight:700;color:#A33B3B;">' . $price . '</span>'
+                . '<span style="font-size:14px;font-weight:700;color:#b73337;">' . $price . '</span>'
                 . '</td>'
                 . '</tr>';
         }

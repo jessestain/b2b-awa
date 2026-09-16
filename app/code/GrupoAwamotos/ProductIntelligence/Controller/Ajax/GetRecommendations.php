@@ -166,6 +166,7 @@ class GetRecommendations extends Action implements HttpGetActionInterface
                 return (string) $erpCode;
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[GetRecommendations::resolveErpCode] Exceção ignorada: ' . $e->getMessage());
             // Fallback
         }
 

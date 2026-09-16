@@ -169,8 +169,7 @@ class DiagnosticReportService
             $model = (string)($context['incident']['model'] ?? '');
             $workflow = (string)($context['incident']['workflow'] ?? '');
 
-            if (
-                $classification === $expectedClassification &&
+            if ($classification === $expectedClassification &&
                 $message === $expectedMessage &&
                 $model === $expectedModel &&
                 $workflow === $expectedWorkflow

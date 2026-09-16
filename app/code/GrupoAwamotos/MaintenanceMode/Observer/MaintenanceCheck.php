@@ -488,6 +488,10 @@ HTML;
         }
         $this->response->setBody($html);
         $this->response->sendResponse();
+        // Observer runs before dispatch; without an early halt here, the front controller
+        // would still execute the original action after this response was already sent,
+        // duplicating output.
+        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit;
     }
 

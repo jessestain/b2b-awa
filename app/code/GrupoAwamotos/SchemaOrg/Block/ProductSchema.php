@@ -162,7 +162,7 @@ class ProductSchema extends Template
                 ];
             }
         } catch (\Exception $e) {
-            // Silencioso se não houver reviews
+            $this->_logger->debug('[ProductSchema::getProductSchemaData] Sem reviews disponíveis: ' . $e->getMessage());
         }
 
         // GTIN/EAN se disponível

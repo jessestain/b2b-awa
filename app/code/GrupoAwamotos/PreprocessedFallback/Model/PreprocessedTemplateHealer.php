@@ -37,6 +37,11 @@ final class PreprocessedTemplateHealer
             return $candidate === '' ? null : str_replace('\\', '', $candidate);
         }
 
+        if (preg_match("/Failed opening required '([^']+)'/", $message, $matches)) {
+            $candidate = trim((string) $matches[1]);
+            return $candidate === '' ? null : str_replace('\\', '', $candidate);
+        }
+
         // Production: Template::fetchView loga e engole — path vem nesta mensagem.
         if (preg_match("/Invalid template file: '([^']+)'/", $message, $matches)) {
             $candidate = trim((string) $matches[1]);
@@ -106,6 +111,7 @@ final class PreprocessedTemplateHealer
         }
 
         @chmod($missingPreprocessedPath, 0664);
+        clearstatcache(true, $missingPreprocessedPath);
 
         $this->logger->warning(
             '[PreprocessedFallback] Template preprocessed ausente foi autocurado com sucesso.',
@@ -120,18 +126,23 @@ final class PreprocessedTemplateHealer
 
     public function resolveRenderablePath(string $fileName): string
     {
-        if (is_file($fileName) || !$this->isPreprocessedPath($fileName)) {
+        if (!$this->isPreprocessedPath($fileName)) {
             return $fileName;
         }
 
-        if ($this->ensurePreprocessedExists($fileName)) {
+        if (is_file($fileName)) {
             return $fileName;
         }
 
         $sourcePath = $this->resolveSourcePath($fileName);
+
+        // Autocura para as próximas requests. Esta request usa o fonte para
+        // não incluir um dest que o SCD pode apagar no mesmo instante.
+        $this->ensurePreprocessedExists($fileName);
+
         if ($sourcePath !== null && is_file($sourcePath)) {
             $this->logger->warning(
-                '[PreprocessedFallback] Renderizando template fonte diretamente por fallback.',
+                '[PreprocessedFallback] Renderizando template fonte (preprocessed ausente).',
                 [
                     'missing_preprocessed_path' => $fileName,
                     'source_path' => $sourcePath,

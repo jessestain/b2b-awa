@@ -8,6 +8,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * CategoryMetaDescriptionFallback
@@ -31,7 +32,8 @@ class CategoryMetaDescriptionFallback implements ObserverInterface
 
     public function __construct(
         private readonly PageConfig $pageConfig,
-        private readonly ScopeConfigInterface $scopeConfig
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -63,7 +65,9 @@ class CategoryMetaDescriptionFallback implements ObserverInterface
                 $parentName = (string) $parent->getName();
             }
         } catch (\Exception $e) {
-            // Ignora erro se categoria pai não existir
+            $this->logger->debug(
+                '[CategoryMetaDescriptionFallback::execute] Categoria pai não encontrada: ' . $e->getMessage()
+            );
         }
 
         if ($parentName !== '' && $parentName !== $categoryName) {

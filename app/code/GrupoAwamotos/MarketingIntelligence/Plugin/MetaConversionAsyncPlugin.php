@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GrupoAwamotos\MarketingIntelligence\Plugin;
 
 use Magento\Framework\Event\Observer;
+use Psr\Log\LoggerInterface;
 
 /**
  * Torna a chamada Meta Conversion API (ViewContent / PDP) assíncrona (fire-and-forget).
@@ -25,6 +26,11 @@ class MetaConversionAsyncPlugin
     private static array $deferred = [];
     private static bool $registered = false;
 
+    public function __construct(
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
     public function aroundExecute(
         \Meta\Conversion\Observer\ViewContent $subject,
         callable $proceed,
@@ -34,7 +40,8 @@ class MetaConversionAsyncPlugin
 
         if (!self::$registered) {
             self::$registered = true;
-            register_shutdown_function(static function (): void {
+            $logger = $this->logger;
+            register_shutdown_function(static function () use ($logger): void {
                 // Envia a resposta HTTP para o browser AGORA, antes de chamar o Facebook.
                 // Em PHP-FPM, fastcgi_finish_request() fecha o socket FastCGI
                 // mas permite que o processo PHP continue rodando.
@@ -46,9 +53,13 @@ class MetaConversionAsyncPlugin
                 foreach (self::$deferred as $task) {
                     try {
                         ($task['proceed'])($task['observer']);
-                    } catch (\Throwable) {
-                        // Silenciosamente ignora falhas da API Meta —
-                        // não vale interromper o shutdown por tracking opcional.
+                    } catch (\Throwable $e) {
+                        // Não vale interromper o shutdown por uma falha de tracking opcional,
+                        // mas registra para permitir diagnóstico se a API Meta cair com frequência.
+                        $logger->warning(
+                            '[MetaConversionAsyncPlugin] Falha ao enviar Meta Conversion API: '
+                            . $e->getMessage()
+                        );
                     }
                 }
             });

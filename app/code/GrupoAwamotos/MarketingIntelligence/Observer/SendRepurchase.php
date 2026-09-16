@@ -87,7 +87,8 @@ class SendRepurchase implements ObserverInterface
             if (!empty($cnpj) && strlen(preg_replace('/\D/', '', (string) $cnpj)) === 14) {
                 return true;
             }
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            $this->logger->warning('[SendRepurchase::isB2BCustomer] Exceção ignorada: ' . $e->getMessage());
             // Not found — not B2B
         }
 

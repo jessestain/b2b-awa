@@ -47,12 +47,13 @@ final class PhpFallbackPlugin
                 throw $exception;
             }
 
-            $retryFileName = $this->templateHealer->resolveRenderablePath($missingPath);
-            if ($retryFileName === $resolvedFileName) {
+            $this->templateHealer->ensurePreprocessedExists($missingPath);
+            $sourcePath = $this->templateHealer->resolveSourcePath($missingPath);
+            if ($sourcePath === null || !is_file($sourcePath) || $sourcePath === $resolvedFileName) {
                 throw $exception;
             }
 
-            return $proceed($block, $retryFileName, $dictionary);
+            return $proceed($block, $sourcePath, $dictionary);
         }
     }
 }

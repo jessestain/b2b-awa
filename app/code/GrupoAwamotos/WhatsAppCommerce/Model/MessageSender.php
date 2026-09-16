@@ -70,8 +70,7 @@ class MessageSender
      */
     public function sendOrderNotification(string $phone, string $orderId, string $event, array $data = []): bool
     {
-        if (
-            $this->config->isAppBuilderOffloadEnabled()
+        if ($this->config->isAppBuilderOffloadEnabled()
             && $this->appBuilderDispatcher->dispatch($phone, $orderId, $event, $data)
         ) {
             // Job accepted by the Adobe I/O Runtime action — the actual

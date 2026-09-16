@@ -41,8 +41,9 @@ class FormDataProvider extends AbstractDataProvider
             try {
                 $category = $this->repository->getById($id);
                 $this->loadedData[$id] = $category->getData();
+            // Esperado ao abrir o formulário de "nova categoria": o ID ainda não existe.
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Magento\Framework\Exception\NoSuchEntityException) {
-                // Return empty for new form
             }
         }
         return $this->loadedData;

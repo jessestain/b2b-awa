@@ -9,8 +9,8 @@
 }
 
 .fake-purchase-popup {
-    --fp-primary: var(--aw-primary, var(--awa-primary));
-    --fp-primary-dark: var(--aw-primary-dark, var(--awa-primary-hover));
+    --fp-primary: var(--awa-brand, var(--awa-primary));
+    --fp-primary-dark: var(--awa-brand-dark, var(--awa-primary-hover));
     --fp-border: #eadedf;
     --fp-soft: #fbf7f7;
 

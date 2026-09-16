@@ -18,7 +18,7 @@
 
 .social-proof-container,
 .social-proof-badge-stack {
-    --awa-sp-primary:        var(--awa-primary, #A33B3B);
+    --awa-sp-primary:        var(--awa-brand, #b73337);
     --awa-sp-primary-dark:   var(--awa-primary-hover, #8e2629);
     --awa-sp-surface:        var(--awa-white, var(--sproof-c2));
     --awa-sp-border:         var(--awa-primary-light, #f9e5e5);

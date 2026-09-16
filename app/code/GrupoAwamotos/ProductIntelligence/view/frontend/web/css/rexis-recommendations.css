@@ -40,8 +40,8 @@
 .b2b-rexis-section,
 .rexis-widget-carousel,
 .rexis-widget-simple {
-    --rx-ayo-primary: var(--aw-primary, var(--awa-primary));
-    --rx-ayo-primary-dark: var(--aw-primary-dark, var(--awa-primary-hover));
+    --rx-ayo-primary: var(--awa-brand, var(--awa-primary));
+    --rx-ayo-primary-dark: var(--awa-brand-dark, var(--awa-primary-hover));
     --rx-ayo-border: var(--awa-gray-200, #e5e7eb);
     --rx-ayo-soft: var(--awa-gray-50, #f8fafc);
     --rx-ayo-text: var(--awa-gray-700, #374151);
@@ -724,8 +724,8 @@
    §4 — PDP Cross-Sell (product/crosssell.phtml)
    ============================================================ */
 .rx-pdp-crosssell {
-    --rx-ayo-primary: var(--aw-primary, var(--awa-primary));
-    --rx-ayo-primary-dark: var(--aw-primary-dark, var(--awa-primary-hover));
+    --rx-ayo-primary: var(--awa-brand, var(--awa-primary));
+    --rx-ayo-primary-dark: var(--awa-brand-dark, var(--awa-primary-hover));
     --rx-ayo-border: var(--awa-border, #e5e5e5);
 
     margin: 0;

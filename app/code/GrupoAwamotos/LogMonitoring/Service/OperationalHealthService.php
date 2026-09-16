@@ -9,6 +9,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Indexer\Model\Indexer\CollectionFactory as IndexerCollectionFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Verificações operacionais reais para saúde da loja (CLI, cron, monitoramento).
@@ -27,17 +28,20 @@ class OperationalHealthService
     private IndexerCollectionFactory $indexerCollectionFactory;
     private ResourceConnection $resourceConnection;
     private DeploymentConfig $deploymentConfig;
+    private LoggerInterface $logger;
 
     public function __construct(
         ProductMetadataInterface $productMetadata,
         IndexerCollectionFactory $indexerCollectionFactory,
         ResourceConnection $resourceConnection,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        LoggerInterface $logger
     ) {
         $this->productMetadata = $productMetadata;
         $this->indexerCollectionFactory = $indexerCollectionFactory;
         $this->resourceConnection = $resourceConnection;
         $this->deploymentConfig = $deploymentConfig;
+        $this->logger = $logger;
     }
 
     /**
@@ -48,6 +52,7 @@ class OperationalHealthService
         $checks = [
             $this->checkMagentoVersion(),
             $this->checkDeployMode(),
+            $this->checkCompiledDi(),
             $this->checkIndexers(),
             $this->checkCron(),
             $this->checkRedis(),
@@ -136,6 +141,60 @@ class OperationalHealthService
                 ? 'Modo production'
                 : sprintf('Modo %s — use production em produção', $mode),
             'data' => ['mode' => $mode],
+        ];
+    }
+
+    /**
+     * Production HTTP bootstraps via generated/metadata/global.php.
+     * If that file is missing, FPM returns 500 and Varnish marks the backend sick
+     * while CLI commands can still appear healthy.
+     *
+     * @return array<string, mixed>
+     */
+    private function checkCompiledDi(): array
+    {
+        $mode = (string)($this->deploymentConfig->get('MAGE_MODE') ?? '');
+        $metadata = BP . '/generated/metadata/global.php';
+        $present = is_file($metadata) && is_readable($metadata);
+
+        if ($mode !== 'production') {
+            return [
+                'id' => 'compiled_di',
+                'label' => 'DI compilado',
+                'status' => 'ok',
+                'message' => 'Checagem de metadata aplica-se só em production',
+                'data' => [
+                    'path' => $metadata,
+                    'present' => $present,
+                    'mode' => $mode,
+                ],
+            ];
+        }
+
+        if ($present) {
+            $bytes = filesize($metadata);
+
+            return [
+                'id' => 'compiled_di',
+                'label' => 'DI compilado',
+                'status' => 'ok',
+                'message' => 'generated/metadata/global.php presente',
+                'data' => [
+                    'path' => $metadata,
+                    'bytes' => $bytes === false ? 0 : $bytes,
+                ],
+            ];
+        }
+
+        return [
+            'id' => 'compiled_di',
+            'label' => 'DI compilado',
+            'status' => 'fail',
+            'message' => 'generated/metadata/global.php ausente — HTTP 500 e Varnish sick. Rodar setup:di:compile',
+            'data' => [
+                'path' => $metadata,
+                'present' => false,
+            ],
         ];
     }
 
@@ -309,7 +368,10 @@ class OperationalHealthService
                     : null;
             }
         } catch (\Throwable $e) {
-            // Fall through to deploymentConfig / defaults.
+            $this->logger->debug(
+                '[OperationalHealthService::resolveOpenSearchEndpoint] Falha ao ler core_config_data, '
+                . 'usando deploymentConfig/defaults: ' . $e->getMessage()
+            );
         }
 
         if ($hostname === null || $hostname === '') {

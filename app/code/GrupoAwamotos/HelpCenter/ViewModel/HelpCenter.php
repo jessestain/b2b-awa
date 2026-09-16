@@ -119,7 +119,8 @@ class HelpCenter implements ArgumentInterface
         $collection->addAudienceFilter($this->getAudiences());
         $collection->addCategoryFilter($categoryId);
         $collection->addSortOrder();
-        return array_values($collection->getItems());
+        $items = array_values($collection->getItems());
+        return $items;
     }
 
     public function isLoggedIn(): bool

@@ -238,6 +238,7 @@ class EmailNotifier extends AbstractHelper
                         'email' => $customer->getEmail(),
                     ];
                 } catch (\Exception $e) {
+                    $this->logger->warning('[EmailNotifier::resolveCustomerInfo] Exceção ignorada: ' . $e->getMessage());
                     // Not a Magento ID
                 }
             }

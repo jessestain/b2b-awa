@@ -41,8 +41,9 @@ class FormDataProvider extends AbstractDataProvider
             try {
                 $topic = $this->repository->getById($id);
                 $this->loadedData[$id] = $topic->getData();
+            // Esperado ao abrir o formulário de "novo tópico": o ID ainda não existe.
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Magento\Framework\Exception\NoSuchEntityException) {
-                // Return empty for new form
             }
         }
         return $this->loadedData;

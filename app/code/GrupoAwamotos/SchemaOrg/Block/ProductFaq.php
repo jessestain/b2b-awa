@@ -146,7 +146,7 @@ class ProductFaq extends Template
             ],
             [
                 'question' => 'Quais formas de pagamento são aceitas?',
-                'answer' => 'Aceitamos Pix, boleto bancário e pagamento à vista. Condições a prazo dependem de análise financeira — consulte um de nossos atendentes.',
+                'answer' => 'O pagamento é a combinar para todos os pedidos. A forma e as condições de pagamento serão acordadas com nossa equipe comercial.',
             ],
             [
                 'question' => 'A nota fiscal é emitida?',

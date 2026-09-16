@@ -51,13 +51,13 @@ foreach ($categories as $cat) {
                    autocomplete="off"
                    aria-label="<?= $block->escapeHtmlAttr(__('Buscar na Central de Ajuda')) ?>"
                    data-search-url="<?= $searchUrl ?>"/>
+            <button type="button"
+                    class="awa-helpcenter__hero-ask"
+                    data-awa-ai-ask="">
+                <?= $block->escapeHtml(__('Perguntar à assistente')) ?>
+            </button>
             <div class="awa-helpcenter__search-results" id="awa-hc-results" role="listbox" aria-live="polite" hidden></div>
         </div>
-        <button type="button"
-                class="awa-helpcenter__hero-ask"
-                data-awa-ai-ask="<?= $block->escapeHtmlAttr($vm->wrapHelpQuery((string) __('preciso de orientação na loja.'))) ?>">
-            <?= $block->escapeHtml(__('Perguntar à assistente')) ?>
-        </button>
     </div>
 
     <?php if (!empty($hub)): ?>
@@ -98,7 +98,7 @@ foreach ($categories as $cat) {
         </div>
     </section>
 
-    <div class="awa-helpcenter__cats">
+    <section class="awa-helpcenter__cats" aria-label="<?= $block->escapeHtmlAttr(__('Perguntas por tema')) ?>">
         <?php foreach ($hub as $item): ?>
             <?php $cat = $item['cat']; ?>
         <div class="awa-helpcenter__cat" id="cat-<?= (int) $cat->getCategoryId() ?>">
@@ -135,7 +135,7 @@ foreach ($categories as $cat) {
             <?php endif; ?>
         </div>
         <?php endforeach; ?>
-    </div>
+    </section>
     <?php else: ?>
     <div class="awa-helpcenter__empty">
         <p><?= $block->escapeHtml(__('Nenhum tópico disponível no momento.')) ?></p>
@@ -156,9 +156,26 @@ foreach ($categories as $cat) {
     var results = document.getElementById('awa-hc-results');
     var root    = document.getElementById('awa-helpcenter');
 
+    function wrapHelpQuery(question) {
+        var q = String(question || '').trim();
+        if (!q) {
+            return '';
+        }
+        if (/central de ajuda/i.test(q)) {
+            return q;
+        }
+        return 'Central de Ajuda — ' + q;
+    }
+
     function askAssistant(query) {
-        var q = String(query || '').trim();
-        if (!q) { return; }
+        var q = wrapHelpQuery(query);
+        if (results) {
+            results.hidden = true;
+        }
+        if (!q) {
+            document.dispatchEvent(new CustomEvent('awa:helpcenter:open', { bubbles: true }));
+            return;
+        }
         window.__awaAiAskPending = q;
         document.dispatchEvent(new CustomEvent('awa:helpcenter:ask', {
             bubbles: true,
@@ -170,13 +187,35 @@ foreach ($categories as $cat) {
         }
     }
 
-    if (root) {
-        root.addEventListener('click', function (event) {
-            var btn = event.target.closest('[data-awa-ai-ask]');
-            if (!btn || !root.contains(btn)) { return; }
-            event.preventDefault();
-            askAssistant(btn.getAttribute('data-awa-ai-ask'));
-        });
+    function onAskClick(event) {
+        if (!root) {
+            return;
+        }
+        var btn = event.target && event.target.closest
+            ? event.target.closest('[data-awa-ai-ask]')
+            : null;
+        if (!btn || !root.contains(btn) || btn.disabled) {
+            return;
+        }
+        event.preventDefault();
+        if (window.__awaHcAskHandling) {
+            return;
+        }
+        window.__awaHcAskHandling = true;
+        try {
+            var q = btn.getAttribute('data-awa-ai-ask') || '';
+            if (btn.classList.contains('awa-helpcenter__hero-ask') && input) {
+                q = input.value.trim();
+            }
+            askAssistant(q);
+        } finally {
+            window.__awaHcAskHandling = false;
+        }
+    }
+
+    if (!window.__awaHcAskClickBound) {
+        window.__awaHcAskClickBound = true;
+        window.addEventListener('click', onAskClick, true);
     }
 
     if (input && results) {
@@ -186,6 +225,15 @@ foreach ($categories as $cat) {
             var q = input.value.trim();
             if (q.length < 2) { results.hidden = true; return; }
             timer = setTimeout(function () { doSearch(q); }, 280);
+        });
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                askAssistant(input.value);
+            }
+            if (event.key === 'Escape') {
+                results.hidden = true;
+            }
         });
     }
 

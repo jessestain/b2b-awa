@@ -9,6 +9,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Psr\Log\LoggerInterface;
 
 class AdminRequireBaseUrlPlugin
 {
@@ -19,7 +20,8 @@ class AdminRequireBaseUrlPlugin
         private readonly HttpRequest $request,
         private readonly AssetRepository $assetRepository,
         private readonly BackendUrlInterface $backendUrl,
-        private readonly FormKey $formKey
+        private readonly FormKey $formKey,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -54,8 +56,7 @@ class AdminRequireBaseUrlPlugin
             return;
         }
 
-        if (
-            !str_starts_with((string) $this->request->getFullActionName(), 'adminhtml_')
+        if (!str_starts_with((string) $this->request->getFullActionName(), 'adminhtml_')
             && !str_contains($html, 'page-layout-admin-')
         ) {
             return;
@@ -97,8 +98,11 @@ class AdminRequireBaseUrlPlugin
             if (is_string($baseUrl) && str_contains($baseUrl, '/adminhtml/')) {
                 return $baseUrl;
             }
-        } catch (\Throwable) {
-            // Asset repository indisponível — cai no fallback de reconstrução manual da URL abaixo.
+        } catch (\Throwable $e) {
+            $this->logger->debug(
+                '[AdminRequireBaseUrlPlugin::getStaticBaseUrl] Asset repository indisponível, '
+                . 'usando fallback: ' . $e->getMessage()
+            );
         }
 
         if (!preg_match('#((?:https?:)?//[^"\']+|)/static/(version\d+)/#', $html, $versionMatch)) {
@@ -107,7 +111,10 @@ class AdminRequireBaseUrlPlugin
 
         try {
             $contextPath = (string) $this->assetRepository->getStaticViewFileContext()->getPath();
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            $this->logger->debug(
+                '[AdminRequireBaseUrlPlugin::getStaticBaseUrl] Falha ao obter context path: ' . $e->getMessage()
+            );
             $contextPath = '';
         }
 
