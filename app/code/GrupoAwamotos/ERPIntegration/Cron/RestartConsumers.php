@@ -44,7 +44,8 @@ class RestartConsumers
         try {
             // Run watchdog script in background — it checks each consumer individually with locking
             $watchdogLog = escapeshellarg($base . '/var/log/consumer_watchdog.log');
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // Background fire-and-forget needed (`&`); Shell::execute() blocks until exit.
+            // phpcs:ignore Magento2.Security.InsecureFunction.FoundWithAlternative
             exec('bash ' . escapeshellarg($script) . " >> {$watchdogLog} 2>&1 &"); // nosemgrep: php.lang.security.exec-use.exec-use
 
             $this->logger->info('[RestartConsumers] Triggered ensure_consumers.sh');

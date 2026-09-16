@@ -699,6 +699,7 @@ class OrderSync implements OrderSyncInterface
                     try {
                         $diasEspera = (int) (new \DateTime($dtPedido))->diff(new \DateTime())->days;
                     } catch (\Exception $ignored) {
+                        $this->logger->warning('[OrderSync::updateOrderStatus] Exceção ignorada: ' . $ignored->getMessage());
                         // intentionally ignored: invalid date string — treat as 0 days
                     }
                 }

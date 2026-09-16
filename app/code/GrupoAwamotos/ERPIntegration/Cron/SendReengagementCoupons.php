@@ -161,6 +161,7 @@ class SendReengagementCoupons
                 $customer = $this->customerRepository->get($customerData['email']);
                 return (int) $customer->getId();
             } catch (\Exception $e) {
+                $this->logger->warning('[SendReengagementCoupons::findMagentoCustomerId] Exceção ignorada: ' . $e->getMessage());
                 // Customer not found by email
             }
         }
@@ -171,6 +172,7 @@ class SendReengagementCoupons
                 $customer = $this->customerRepository->getById((int) $customerData['customer_code']);
                 return (int) $customer->getId();
             } catch (\Exception $e) {
+                $this->logger->warning('[SendReengagementCoupons::findMagentoCustomerId] Exceção ignorada: ' . $e->getMessage());
                 // Customer not found
             }
         }
@@ -219,6 +221,7 @@ class SendReengagementCoupons
                 return '';
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[SendReengagementCoupons::getProductImageUrl] Exceção ignorada: ' . $e->getMessage());
             // Ignore
         }
 

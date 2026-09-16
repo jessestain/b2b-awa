@@ -782,6 +782,148 @@ class B2BClientRegistration
     }
 
     /**
+     * Promote a Magento-created ERP prospect to a native client.
+     *
+     * Only rows owned by MAGENTO_AWA are eligible. Prospects created manually
+     * in Sectra are deliberately left untouched.
+     */
+    public function promoteMagentoProspectToNativeClient(int $erpClientCode): bool
+    {
+        if ($erpClientCode <= 0) {
+            return false;
+        }
+
+        try {
+            $row = $this->readConnection->fetchOne(
+                "SELECT CKCLIENTE, CKPROSPECT, ATPROSPECT, INSERTNAMECLI
+                   FROM FN_FORNECEDORES
+                  WHERE CODIGO = ?",
+                [$erpClientCode]
+            );
+        } catch (\Exception $e) {
+            $this->logger->warning(
+                '[B2B Registration] Native promotion lookup failed: ' . $e->getMessage()
+            );
+            return false;
+        }
+
+        if (!is_array($row) || strtoupper(trim((string) ($row['CKCLIENTE'] ?? ''))) !== 'S') {
+            return false;
+        }
+
+        $isProspect = strtoupper(trim((string) ($row['CKPROSPECT'] ?? ''))) === 'S'
+            || strtoupper(trim((string) ($row['ATPROSPECT'] ?? ''))) === 'S';
+        $ownedByMagento = strtoupper(trim((string) ($row['INSERTNAMECLI'] ?? ''))) === 'MAGENTO_AWA';
+        if (!$ownedByMagento) {
+            if (!$isProspect) {
+                return true;
+            }
+            $this->logger->warning(sprintf(
+                '[B2B Registration] Refusing to promote ERP prospect %d — not owned by MAGENTO_AWA',
+                $erpClientCode
+            ));
+            return false;
+        }
+
+        $pdo = $this->getWriteConnection();
+        if (!$pdo) {
+            return false;
+        }
+
+        try {
+            if ($isProspect) {
+                $statement = $pdo->prepare(
+                    "UPDATE FN_FORNECEDORES
+                        SET CKPROSPECT = 'N',
+                            ATPROSPECT = 'N',
+                            USUARIOCLI = 'MAGENTO_AWA',
+                            DTALTERACAOCLI = GETDATE()
+                      WHERE CODIGO = :codigo
+                        AND CKCLIENTE = 'S'
+                        AND CKPROSPECT = 'S'
+                        AND INSERTNAMECLI = 'MAGENTO_AWA'"
+                );
+                $statement->execute([':codigo' => $erpClientCode]);
+
+                if ($statement->rowCount() !== 1) {
+                    $this->logger->warning(sprintf(
+                        '[B2B Registration] ERP prospect %d was not promoted — guarded UPDATE matched no row',
+                        $erpClientCode
+                    ));
+                    return false;
+                }
+            }
+
+            $promoted = $this->isExistingErpNativeClient($erpClientCode);
+            $companyRowsReady = $this->ensureClientCompanyRows($pdo, $erpClientCode);
+            $this->logger->info(sprintf(
+                '[B2B Registration] ERP prospect %d native promotion: %s; company rows: %s',
+                $erpClientCode,
+                $promoted ? 'success' : 'verification failed',
+                $companyRowsReady ? 'complete' : 'incomplete'
+            ));
+            return $promoted && $companyRowsReady;
+        } catch (\Exception $e) {
+            $this->logger->error(sprintf(
+                '[B2B Registration] Failed to promote ERP prospect %d: %s',
+                $erpClientCode,
+                $e->getMessage()
+            ));
+            return false;
+        }
+    }
+
+    public function getClientCompanyRowCount(int $erpClientCode): int
+    {
+        if ($erpClientCode <= 0) {
+            return 0;
+        }
+
+        try {
+            return (int) $this->readConnection->fetchColumn(
+                'SELECT COUNT(*) FROM FN_FORNECEDORESCOMP WHERE FORNECEDOR = ?',
+                [$erpClientCode]
+            );
+        } catch (\Exception $e) {
+            $this->logger->warning(
+                '[B2B Registration] Client company row count failed: ' . $e->getMessage()
+            );
+            return 0;
+        }
+    }
+
+    public function getExpectedClientCompanyRowCount(): int
+    {
+        try {
+            return (int) $this->readConnection->fetchColumn('SELECT COUNT(*) FROM GR_FILIAL');
+        } catch (\Exception $e) {
+            $this->logger->warning(
+                '[B2B Registration] Expected company row count failed: ' . $e->getMessage()
+            );
+            return 0;
+        }
+    }
+
+    private function ensureClientCompanyRows(\PDO $pdo, int $erpClientCode): bool
+    {
+        $statement = $pdo->prepare(
+            'INSERT INTO FN_FORNECEDORESCOMP (FORNECEDOR, FILIAL, PERCFRETE)
+             SELECT ?, filial.CODIGO, 0
+               FROM GR_FILIAL filial
+              WHERE NOT EXISTS (
+                    SELECT 1
+                      FROM FN_FORNECEDORESCOMP existing
+                     WHERE existing.FORNECEDOR = ?
+                       AND existing.FILIAL = filial.CODIGO
+              )'
+        );
+        $statement->execute([$erpClientCode, $erpClientCode]);
+
+        $expected = $this->getExpectedClientCompanyRowCount();
+        return $expected > 0 && $this->getClientCompanyRowCount($erpClientCode) === $expected;
+    }
+
+    /**
      * @return int|null FN_FORNECEDORES.CODIGO when CNPJ already exists as CKCLIENTE
      */
     public function findErpCodigoByCnpjDigits(string $cnpjDigits): ?int
@@ -937,6 +1079,7 @@ class B2BClientRegistration
                     ];
                 }
             } catch (\Exception $e) {
+                $this->logger->warning('[B2BClientRegistration::getUnregisteredClients] Exceção ignorada: ' . $e->getMessage());
                 // Skip this client
             }
         }
@@ -1044,8 +1187,7 @@ class B2BClientRegistration
             return null;
         }
 
-        if (
-            $this->isSameSqlServerUser($writeUser, $readUser)
+        if ($this->isSameSqlServerUser($writeUser, $readUser)
             && $this->shouldLogWarningWithCooldown('b2b_write_user_matches_read')
         ) {
             $this->logger->warning(

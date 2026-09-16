@@ -56,6 +56,9 @@ class SyncImagesCommand extends Command
     {
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // Area code already set
         }
@@ -183,7 +186,7 @@ class SyncImagesCommand extends Command
                 $codInternoMap[$row['CODIGO']] = $row['CODINTERNO'];
             }
         } catch (\Exception $e) {
-            // ERP unavailable — skip CODINTERNO column
+            $output->writeln('<comment>ERP indisponível, pulando coluna CODINTERNO: ' . $e->getMessage() . '</comment>');
         }
 
         $output->writeln(sprintf('Total de produtos: %d', $total));

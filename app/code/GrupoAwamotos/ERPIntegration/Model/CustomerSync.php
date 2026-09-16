@@ -152,6 +152,9 @@ class CustomerSync implements CustomerSyncInterface
         // Set area code for CLI execution
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // Area code already set, ignore
         }
@@ -577,6 +580,7 @@ class CustomerSync implements CustomerSyncInterface
             try {
                 return $this->customerRepository->getById($mappedId);
             } catch (NoSuchEntityException $e) {
+                $this->logger->warning('[CustomerSync::findExistingCustomer] Exceção ignorada: ' . $e->getMessage());
                 // Mapeamento antigo, limpar
             }
         }
@@ -644,6 +648,9 @@ class CustomerSync implements CustomerSyncInterface
             $customer->setCustomAttribute('b2b_carrier_code', $carrierCode);
         }
 
+        // Keep fiscal/company names separate from the buyer's personal name.
+        $this->applyCompanyNameAttributes($customer, $erpData);
+
         // Salva cliente
         $savedCustomer = $this->customerRepository->save($customer);
 
@@ -662,7 +669,7 @@ class CustomerSync implements CustomerSyncInterface
 
     private function updateExistingCustomer(CustomerInterface $customer, array $erpData): CustomerInterface
     {
-        $updated = false;
+        $updated = $this->applyCompanyNameAttributes($customer, $erpData);
 
         // Atualiza telefone se mudou
         $phone = $erpData['WHATSAPP'] ?? $erpData['FONECEL'] ?? '';
@@ -732,6 +739,74 @@ class CustomerSync implements CustomerSyncInterface
         }
 
         return $customer;
+    }
+
+    /**
+     * Apply ERP company names without changing personal names or persisting the customer.
+     *
+     * Existing customers must have matching fiscal identification; an email-only
+     * match is not sufficient to replace the legal identity of a business.
+     * Blank ERP fields never erase an already populated Magento attribute.
+     *
+     * @param CustomerInterface $customer
+     * @param array $erpData
+     * @return bool Whether a company-name attribute changed
+     */
+    public function applyCompanyNameAttributes(CustomerInterface $customer, array $erpData): bool
+    {
+        if (strtoupper(trim((string) ($erpData['CKPESSOA'] ?? ''))) !== 'J') {
+            return false;
+        }
+
+        $erpCnpj = $this->cleanTaxvat((string) ($erpData['CGC'] ?? ''));
+        $erpCode = trim((string) ($erpData['CODIGO'] ?? ''));
+        if (strlen($erpCnpj) !== 14 || !ctype_digit($erpCode) || (int) $erpCode <= 0) {
+            return false;
+        }
+
+        $codeAttribute = $customer->getCustomAttribute('erp_code');
+        $customerErpCode = trim((string) ($codeAttribute ? $codeAttribute->getValue() : ''));
+        if ($customerErpCode !== ''
+            && (!ctype_digit($customerErpCode) || (int) $customerErpCode !== (int) $erpCode)
+        ) {
+            return false;
+        }
+
+        $cnpjAttribute = $customer->getCustomAttribute('b2b_cnpj');
+        $documents = [
+            trim((string) ($cnpjAttribute ? $cnpjAttribute->getValue() : '')),
+            trim((string) $customer->getTaxvat()),
+        ];
+        $hasMatchingDocument = false;
+        foreach ($documents as $document) {
+            if ($document === '') {
+                continue;
+            }
+            if ($this->cleanTaxvat($document) !== $erpCnpj) {
+                return false;
+            }
+            $hasMatchingDocument = true;
+        }
+        if ((int) $customer->getId() > 0 && !$hasMatchingDocument) {
+            return false;
+        }
+
+        $updated = false;
+        foreach (['b2b_razao_social' => 'RAZAO', 'b2b_nome_fantasia' => 'FANTASIA'] as $attributeCode => $erpField) {
+            $value = trim((string) ($erpData[$erpField] ?? ''));
+            if ($value === '') {
+                continue;
+            }
+            $value = mb_substr($value, 0, 255);
+            $attribute = $customer->getCustomAttribute($attributeCode);
+            $currentValue = (string) ($attribute ? $attribute->getValue() : '');
+            if ($currentValue !== $value) {
+                $customer->setCustomAttribute($attributeCode, $value);
+                $updated = true;
+            }
+        }
+
+        return $updated;
     }
 
     /**
@@ -1033,6 +1108,7 @@ class CustomerSync implements CustomerSyncInterface
                 return $regionInterface;
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[CustomerSync::getRegionByCode] Exceção ignorada: ' . $e->getMessage());
             // Região não encontrada
         }
 

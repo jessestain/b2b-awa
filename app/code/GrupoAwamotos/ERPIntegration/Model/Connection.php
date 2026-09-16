@@ -50,6 +50,18 @@ class Connection implements ConnectionInterface
     private const QUERY_WALL_TIMEOUT = 45;
 
     /**
+     * Login/connect timeout for PDO. 30s × 3 drivers × 3 retries estourava o
+     * request_terminate_timeout do FPM (90s) → 502 no dashboard B2B logado
+     * depois de cache Redis sem lista de preço (slow log: Connection.php:419).
+     */
+    private const PDO_CONNECT_TIMEOUT = 5;
+
+    /**
+     * Probe TCP before new PDO(). Porta filtrada/fechada não deve bloquear o FPM.
+     */
+    private const TCP_PROBE_TIMEOUT = 5;
+
+    /**
      * Transient error codes that should be retried
      */
     private const TRANSIENT_ERROR_CODES = [
@@ -169,6 +181,13 @@ class Connection implements ConnectionInterface
         $username = $this->helper->getUsername();
         $password = $this->helper->getPassword();
 
+        try {
+            $this->assertTcpReachable((string) $host, (int) $port);
+        } catch (\RuntimeException $e) {
+            $this->circuitBreaker->recordFailure($e);
+            throw $e;
+        }
+
         // Get preferred driver from config or use auto-detection
         $preferredDriver = $this->helper->getDriver();
         $driversToTry = $this->getDriversToTry($preferredDriver);
@@ -208,6 +227,51 @@ class Connection implements ConnectionInterface
         ]);
 
         throw $lastException ?? new \RuntimeException('Connection failed with all available drivers after retries');
+    }
+
+    /**
+     * Fail-fast if SQL Server TCP is closed/filtered. new PDO() at connectWithDriver
+     * hung PHP-FPM ~90s (CDP 502 on B2B account after Redis cache flush).
+     */
+    private function assertTcpReachable(string $host, int $port): void
+    {
+        if ($host === '' || $port <= 0) {
+            throw new \RuntimeException('ERP host/port missing');
+        }
+
+        $errno = 0;
+        $errstr = '';
+        $fp = @fsockopen($host, $port, $errno, $errstr, self::TCP_PROBE_TIMEOUT);
+        $ok = is_resource($fp);
+        if ($ok) {
+            fclose($fp);
+        }
+
+        // #region agent log
+        $payload = json_encode([
+            'sessionId' => '864284',
+            'runId' => 'post-fix-erp-tcp-failfast',
+            'hypothesisId' => 'AG',
+            'location' => 'Connection.php:assertTcpReachable',
+            'message' => 'erp-tcp-probe',
+            'data' => ['ok' => $ok, 'errno' => $errno, 'timeout' => self::TCP_PROBE_TIMEOUT],
+            'timestamp' => (int) round(microtime(true) * 1000),
+        ]);
+        if (is_string($payload)) {
+            @file_put_contents(
+                '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-864284.log',
+                $payload . "\n",
+                FILE_APPEND | LOCK_EX
+            );
+        }
+        // #endregion
+
+        if (!$ok) {
+            $this->logger->error('[ERP] TCP probe failed before PDO connect', [
+                'errno' => $errno,
+            ]);
+            throw new \RuntimeException('ERP TCP unreachable');
+        }
     }
 
     /**
@@ -516,7 +580,7 @@ class Connection implements ConnectionInterface
         $options = [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            \PDO::ATTR_TIMEOUT => 30,
+            \PDO::ATTR_TIMEOUT => self::PDO_CONNECT_TIMEOUT,
         ];
 
         // Driver-specific options

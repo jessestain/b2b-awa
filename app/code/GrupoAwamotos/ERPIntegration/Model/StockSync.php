@@ -1158,8 +1158,7 @@ class StockSync implements StockSyncInterface
         $currentQty = (float) $stockItem->getQty();
 
         // Pula somente se qty igual E já configurado como infinite stock
-        if (
-            abs($currentQty - $qty) < 0.001
+        if (abs($currentQty - $qty) < 0.001
             && !$stockItem->getManageStock()
             && !$stockItem->getUseConfigManageStock()
             && (bool) $stockItem->getIsInStock()

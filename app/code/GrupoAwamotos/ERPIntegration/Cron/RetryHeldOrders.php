@@ -74,6 +74,9 @@ class RetryHeldOrders
 
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception $e) {
             // Area already set
         }
@@ -124,6 +127,7 @@ class RetryHeldOrders
                             $customer = $this->customerRepository->getById($customerId);
                             $taxvat = $customer->getTaxvat();
                         } catch (\Exception $e) {
+                            $this->logger->warning('[RetryHeldOrders::execute] Exceção ignorada: ' . $e->getMessage());
                             // Customer may have been deleted
                         }
                     }
@@ -271,6 +275,7 @@ class RetryHeldOrders
                 return (int) $attr->getValue();
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[RetryHeldOrders::getResolvedErpCode] Exceção ignorada: ' . $e->getMessage());
             // Customer may not exist
         }
 

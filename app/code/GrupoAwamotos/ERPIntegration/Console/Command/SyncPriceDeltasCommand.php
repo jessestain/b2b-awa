@@ -51,8 +51,7 @@ class SyncPriceDeltasCommand extends Command
 
         if ((bool) $input->getOption(self::OPTION_STATUS)) {
             $this->renderState($output);
-            if (
-                !(bool) $input->getOption(self::OPTION_DIAGNOSE_MISSING)
+            if (!(bool) $input->getOption(self::OPTION_DIAGNOSE_MISSING)
                 && !(bool) $input->getOption(self::OPTION_UNTIL_IDLE)
                 && (int) $input->getOption(self::OPTION_CYCLES) === 1
             ) {
@@ -107,8 +106,7 @@ class SyncPriceDeltasCommand extends Command
                 $completedCursorKeys[$cursorKey] = true;
             }
 
-            if (
-                $untilIdle
+            if ($untilIdle
                 && $cycle > 1
                 && $trackedCursorKeys !== []
                 && count($completedCursorKeys) >= count($trackedCursorKeys)
@@ -117,8 +115,7 @@ class SyncPriceDeltasCommand extends Command
                 break;
             }
 
-            if (
-                $untilIdle
+            if ($untilIdle
                 && (int) ($lastResult['customers_scanned'] ?? 0) === 0
                 && (int) ($lastResult['price_rows_scanned'] ?? 0) === 0
             ) {
@@ -187,6 +184,9 @@ class SyncPriceDeltasCommand extends Command
     {
         try {
             $this->appState->setAreaCode(Area::AREA_CRONTAB);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (LocalizedException) {
             // Area code já definido pelo bootstrap do CLI — seguro ignorar.
         }

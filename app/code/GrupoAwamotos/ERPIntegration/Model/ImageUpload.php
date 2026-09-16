@@ -160,6 +160,7 @@ class ImageUpload implements ImageUploadInterface
                 $codInternoMap[$row['CODIGO']] = (string) $row['CODINTERNO'];
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[ImageUpload::getPendingProducts] Exceção ignorada: ' . $e->getMessage());
             // ERP unavailable
         }
 

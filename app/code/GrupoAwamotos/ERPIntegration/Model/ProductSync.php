@@ -188,6 +188,9 @@ class ProductSync implements ProductSyncInterface
         // Set area code for CLI execution
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // Area code already set, ignore
         }
@@ -504,6 +507,7 @@ class ProductSync implements ProductSyncInterface
             $product = $this->productRepository->get($sku);
             $this->assignProductToErpCategory($product, (string) $grupoComercial);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->logger->warning('[ProductSync::ensureCategoryAssignment] Exceção ignorada: ' . $e->getMessage());
             // Product doesn't exist in Magento
         } catch (\Exception $e) {
             // Non-critical, just log
@@ -1011,6 +1015,7 @@ class ProductSync implements ProductSyncInterface
                     'sku' => $product->getSku(),
                 ]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->logger->warning('[ProductSync::deactivateMissingProducts] Exceção ignorada: ' . $e->getMessage());
                 // Product was removed manually from Magento.
             } catch (\Exception $e) {
                 $this->logger->warning('[ERP] Failed to deactivate missing product', [
@@ -1062,6 +1067,7 @@ class ProductSync implements ProductSyncInterface
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->logger->warning('[ProductSync::syncDelta] Exceção ignorada: ' . $e->getMessage());
             // Already set
         }
 
@@ -1201,6 +1207,9 @@ class ProductSync implements ProductSyncInterface
         try {
             try {
                 $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+            // Area code already set by CLI bootstrap or a previous call in this
+            // same request; safe to ignore.
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 // Area code already set, ignore
             }

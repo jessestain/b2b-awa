@@ -108,8 +108,7 @@ class SyncOpenCartBridge
             $registered = $this->registerPendingOrderClients();
             $viewPatched = $this->ensureOcOrderViewUsesConfirmedCustomers();
 
-            if (
-                $mapped > 0
+            if ($mapped > 0
                 || $confirmed > 0
                 || $synced > 0
                 || $priceGroups > 0
@@ -847,7 +846,7 @@ class SyncOpenCartBridge
                 '' AS user_agent,
                 '' AS accept_language,
                 so.created_at AS date_added,
-                so.updated_at AS date_modified
+                so.created_at AS date_modified
             FROM sales_order so
             LEFT JOIN sales_order_address ba
                 ON ba.parent_id = so.entity_id
@@ -899,14 +898,18 @@ class SyncOpenCartBridge
               )
         ";
 
-        // VIEW está atualizada quando: tem todas as cláusulas obrigatórias
-        // E usa subquery dinâmica para attribute_id (contém eav_attribute).
+        // VIEW está atualizada quando: tem todas as cláusulas obrigatórias,
+        // subquery dinâmica de attribute_id, e date_modified = created_at
+        // (OpenCardB2B filtra date_modified BETWEEN; updated_at desloca o
+        // pedido para o dia UTC seguinte ao liberar sectra_import_status).
         $hasRequiredClauses = str_contains($viewSql, 'oc_customer_b2b_confirmed')
             && str_contains($viewSql, 'sectra_import_status')
             && str_contains($viewSql, 'erp_attr');
         $usesDynamicAttrId = str_contains($viewSql, 'eav_attribute');
+        $usesCreatedAtAsDateModified = str_contains($viewSql, 'created_at` as `date_modified')
+            || str_contains($viewSql, 'created_at as date_modified');
 
-        if ($hasRequiredClauses && $usesDynamicAttrId) {
+        if ($hasRequiredClauses && $usesDynamicAttrId && $usesCreatedAtAsDateModified) {
             return false;
         }
 
@@ -987,6 +990,4 @@ class SyncOpenCartBridge
 
         return array_values(array_unique(array_map('intval', $ids)));
     }
-
-
 }

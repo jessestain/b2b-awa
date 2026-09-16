@@ -274,7 +274,14 @@ class PriceDeltaSync
 
             $state = $existingStates[$erpCodeKey] ?? null;
             if ($state === null) {
+                // First time this customer is tracked here: a Redis entry may already
+                // exist from a lazy storefront lookup (CustomerPriceProvider) and could
+                // be stale relative to this list. Invalidate defensively so the next
+                // request resolves the price list live instead of trusting a possibly
+                // outdated cached value.
                 $this->upsertCustomerPriceState($customerId, $erpCodeKey, $nextList);
+                $this->customerPriceProvider->invalidateCustomerPriceList($erpCode, null, $nextList);
+                $stats['changed_lists'][$nextList] = $nextList;
                 continue;
             }
 

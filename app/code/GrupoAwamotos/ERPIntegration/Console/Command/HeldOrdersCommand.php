@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
+use Psr\Log\LoggerInterface;
 
 /**
  * CLI command to manage orders held by the ERP pull system.
@@ -36,6 +37,7 @@ class HeldOrdersCommand extends Command
     private B2BClientRegistration $b2bRegistration;
     private SyncLogResource $syncLogResource;
     private ResourceConnection $resourceConnection;
+    private LoggerInterface $logger;
 
     public function __construct(
         OrderCollectionFactory $orderCollectionFactory,
@@ -43,7 +45,8 @@ class HeldOrdersCommand extends Command
         CustomerSyncInterface $customerSync,
         B2BClientRegistration $b2bRegistration,
         SyncLogResource $syncLogResource,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        LoggerInterface $logger
     ) {
         parent::__construct();
         $this->orderCollectionFactory = $orderCollectionFactory;
@@ -52,6 +55,7 @@ class HeldOrdersCommand extends Command
         $this->b2bRegistration = $b2bRegistration;
         $this->syncLogResource = $syncLogResource;
         $this->resourceConnection = $resourceConnection;
+        $this->logger = $logger;
     }
 
     protected function configure(): void
@@ -510,7 +514,10 @@ class HeldOrdersCommand extends Command
                         continue; // Not held — will be pulled by Sectra normally
                     }
                 } catch (\Exception $e) {
-                    // If check fails, include in list for safety
+                    $this->logger->debug(
+                        '[HeldOrdersCommand::getHeldOrders] Falha ao checar registro Sectra, '
+                        . 'incluindo pedido na lista por segurança: ' . $e->getMessage()
+                    );
                 }
             }
 
@@ -536,7 +543,9 @@ class HeldOrdersCommand extends Command
                         }
                     }
                 } catch (\Exception $e) {
-                    // Customer may not exist
+                    $this->logger->debug(
+                        '[HeldOrdersCommand::getHeldOrders] Cliente pode não existir mais: ' . $e->getMessage()
+                    );
                 }
             }
 
@@ -587,7 +596,10 @@ class HeldOrdersCommand extends Command
                 $order->save();
             }
         } catch (\Exception $e) {
-            // Non-critical, log and continue
+            $this->logger->warning(
+                '[HeldOrdersCommand::stampErpCodeOnOrder] Falha ao vincular erp_code ao pedido: '
+                . $e->getMessage()
+            );
         }
     }
 }

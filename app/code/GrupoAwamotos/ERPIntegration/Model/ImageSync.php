@@ -1046,8 +1046,7 @@ class ImageSync implements ImageSyncInterface
             }
 
             $filename = pathinfo($file, PATHINFO_FILENAME);
-            if (
-                strcasecmp($filename, $identifier) !== 0
+            if (strcasecmp($filename, $identifier) !== 0
                 && !preg_match('/^' . $quotedIdentifier . '_\d+$/i', $filename)
             ) {
                 continue;

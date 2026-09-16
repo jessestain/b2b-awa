@@ -11,6 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,6 +29,7 @@ class PreloadCustomerPrices implements ObserverInterface
     private CustomerPriceProvider $customerPriceProvider;
     private CustomerRepositoryInterface $customerRepository;
     private LoggerInterface $logger;
+    private PhpCookieManager $cookieManager;
 
     /** Prevent multiple loads within a single request */
     private bool $loaded = false;
@@ -39,7 +41,8 @@ class PreloadCustomerPrices implements ObserverInterface
         SyncLogResource $syncLogResource,
         CustomerPriceProvider $customerPriceProvider,
         CustomerRepositoryInterface $customerRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        PhpCookieManager $cookieManager
     ) {
         $this->customerSession = $customerSession;
         $this->b2bConfig = $b2bConfig;
@@ -47,13 +50,13 @@ class PreloadCustomerPrices implements ObserverInterface
         $this->customerPriceProvider = $customerPriceProvider;
         $this->customerRepository = $customerRepository;
         $this->logger = $logger;
+        $this->cookieManager = $cookieManager;
     }
 
     public function execute(Observer $observer): void
     {
-        if (
-            !$this->b2bConfig->isEnabled()
-            || !isset($_COOKIE[session_name()])
+        if (!$this->b2bConfig->isEnabled()
+            || $this->cookieManager->getCookie(session_name()) === null
             || !$this->customerSession->isLoggedIn()
         ) {
             return;

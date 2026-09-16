@@ -74,6 +74,24 @@ class CustomerPriceProvider
     }
 
     /**
+     * Resolve a unit price from an ERP list code without a customer ERP code.
+     *
+     * Used by storefront price plugins when Magento has already depersonalized
+     * the customer session (FPC) but HttpContext still carries the list token.
+     * Returns null for the default NACIONAL list so Magento catalog remains
+     * the authority there.
+     */
+    public function getAuthorizedListPrice(int $priceListCode, string $sku): ?float
+    {
+        $defaultList = $this->helper->getDefaultPriceList();
+        if ($priceListCode <= 0 || $priceListCode === $defaultList) {
+            return null;
+        }
+
+        return $this->getPriceFromList($priceListCode, $sku);
+    }
+
+    /**
      * Get prices for multiple SKUs for a specific customer
      *
      * @return array SKU → price map (only includes SKUs with customer-specific prices)
@@ -131,6 +149,8 @@ class CustomerPriceProvider
             return $listCode;
         } catch (\Throwable $e) {
             $this->logger->error('[ERP] Error getting customer price list: ' . $e->getMessage());
+            $this->customerListCache[$erpCustomerCode] = null;
+            $this->cache->save('', $cacheKey, [], 60);
             return null;
         }
     }

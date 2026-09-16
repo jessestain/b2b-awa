@@ -196,6 +196,7 @@ class StockValidator
                 $result->setField('previous_quantity', $currentQty);
             }
         } catch (\Exception $e) {
+            $this->logger->warning('[StockValidator::detectAnomaly] Exceção ignorada: ' . $e->getMessage());
             // Product doesn't exist in Magento - no anomaly detection possible
         }
 

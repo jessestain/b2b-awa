@@ -79,6 +79,9 @@ class BackfillProductAttributesCommand extends Command
         try {
             $this->appState->getAreaCode();
             return;
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (LocalizedException) {
             // Area code already set — safe to continue
         }

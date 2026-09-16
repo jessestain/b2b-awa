@@ -322,7 +322,7 @@ class Grid extends Template
                 }
             }
         } catch (\Exception $e) {
-            // Log error but don't break the page
+            $this->_logger->warning('[Grid::getMagentoCustomersByCnpj] Exceção ignorada: ' . $e->getMessage());
         }
 
         return $this->magentoCustomersByCnpj;

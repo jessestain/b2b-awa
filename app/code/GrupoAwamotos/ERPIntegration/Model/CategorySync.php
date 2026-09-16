@@ -60,6 +60,9 @@ class CategorySync implements CategorySyncInterface
         // Set area code for CLI execution
         try {
             $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        // Area code already set by CLI bootstrap or a previous call in this
+        // same request; safe to ignore.
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // Area code already set
         }
@@ -195,6 +198,7 @@ class CategorySync implements CategorySyncInterface
                 $this->categoryRepository->get($existingId);
                 return $existingId;
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->logger->warning('[CategorySync::getOrCreateErpRootCategory] Exceção ignorada: ' . $e->getMessage());
                 // Root was deleted, recreate below
             }
         }
@@ -367,6 +371,7 @@ class CategorySync implements CategorySyncInterface
                     ]);
                 }
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->logger->warning('[CategorySync::deactivateMissingCategories] Exceção ignorada: ' . $e->getMessage());
                 // Already gone
             } catch (\Exception $e) {
                 $this->logger->warning('[ERP] Failed to deactivate category', [

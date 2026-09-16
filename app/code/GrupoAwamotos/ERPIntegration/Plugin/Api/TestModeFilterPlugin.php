@@ -165,8 +165,7 @@ class TestModeFilterPlugin
             $normalizedAllowed = $this->normalizePhone($allowedPhone);
             $allowedWithoutCountry = $this->stripBrazilCountryCode($normalizedAllowed);
 
-            if (
-                $normalizedInput === $normalizedAllowed
+            if ($normalizedInput === $normalizedAllowed
                 || $inputWithoutCountry === $allowedWithoutCountry
             ) {
                 return true;

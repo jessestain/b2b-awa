@@ -76,8 +76,7 @@ class OrderPullManagement implements OrderPullInterface
             try {
                 // Skip orders that are explicitly blocked — they need manual resolution
                 $importStatus = $order->getData('sectra_import_status');
-                if (
-                    in_array($importStatus, [
+                if (in_array($importStatus, [
                     'order_blocked_product_not_registered',
                     'order_cancelled_before_erp_import',
                     'imported',
@@ -210,8 +209,7 @@ class OrderPullManagement implements OrderPullInterface
 
         // Update order status to 'processing' if still pending/new
         $currentState = $order->getState();
-        if (
-            in_array($currentState, [
+        if (in_array($currentState, [
             \Magento\Sales\Model\Order::STATE_NEW,
             \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
             ], true)
@@ -354,6 +352,7 @@ class OrderPullManagement implements OrderPullInterface
                     );
                 }
             } catch (\Exception $e) {
+                $this->logger->warning('[OrderPullManagement::getHeldOrders] Exceção ignorada: ' . $e->getMessage());
                 // skip
             }
         }
