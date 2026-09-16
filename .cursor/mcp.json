@@ -13,6 +13,13 @@
       "env": {
         "NODE_OPTIONS": "--max-old-space-size=128"
       }
+    },
+    "codacy": {
+      "command": "/home/deploy/.cursor/bin/codacy-mcp.sh",
+      "args": [],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=192"
+      }
     }
   }
 }

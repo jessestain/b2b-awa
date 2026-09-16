@@ -104,6 +104,13 @@ class ResponsePlugin
 
     private function setLogCookie(int $logId): void
     {
+        // AWA 2026-09-02: do not Set-Cookie on cacheable GET/HEAD.
+        // Magento FPC + Varnish mark catalogsearch UNCACHEABLE if searchReport-log is set.
+        $method = strtoupper((string) $this->request->getMethod());
+        if ($method === 'GET' || $method === 'HEAD') {
+            return;
+        }
+
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata([
             'path' => '/',
         ]);

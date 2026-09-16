@@ -113,8 +113,10 @@ DB_URLS=$(mysql -u "$DB_USER" -p"$DB_PASS" \
      FROM url_rewrite ur
      JOIN catalog_category_entity cce ON cce.entity_id = ur.entity_id AND cce.level >= 2
      JOIN catalog_category_entity_int cce_active ON cce_active.entity_id = cce.entity_id AND cce_active.attribute_id = (SELECT attribute_id FROM eav_attribute WHERE attribute_code='is_active' AND entity_type_id=3 LIMIT 1) AND cce_active.store_id = 0 AND cce_active.value = 1
+     LEFT JOIN catalog_category_entity_int cce_store_active ON cce_store_active.entity_id = cce.entity_id AND cce_store_active.attribute_id = (SELECT attribute_id FROM eav_attribute WHERE attribute_code='is_active' AND entity_type_id=3 LIMIT 1) AND cce_store_active.store_id = 1
      WHERE ur.entity_type='category'
      AND ur.store_id=1 AND ur.redirect_type=0
+     AND (cce_store_active.value IS NULL OR cce_store_active.value = 1)
      AND ur.request_path NOT LIKE '%-erp-%'
      AND (LENGTH(ur.request_path) - LENGTH(REPLACE(ur.request_path, '/', ''))) <= 1
      ORDER BY cce.level ASC, ur.request_path ASC LIMIT 80)

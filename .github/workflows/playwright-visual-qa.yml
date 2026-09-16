@@ -40,6 +40,7 @@ jobs:
     name: Validar BASE_URL
     runs-on: ubuntu-latest
     outputs:
+      skip: ${{ steps.resolve.outputs.skip }}
       base_url: ${{ steps.resolve.outputs.base_url }}
       allow_production: ${{ steps.resolve.outputs.allow_production }}
       suite: ${{ steps.resolve.outputs.suite }}
@@ -73,7 +74,15 @@ jobs:
               sys.exit(1)
 
           if not raw:
-              print("::error::BASE_URL ausente. Configure vars/secrets BASE_URL para pull_request ou informe base_url no workflow_dispatch.")
+              if event == "pull_request":
+                  print("::notice::PLAYWRIGHT_BASE_URL_PR ausente — Visual QA ignorado. Produção não é o alvo padrão; configure staging/HML.")
+                  with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                      output.write("skip=true\n")
+                      output.write("base_url=\n")
+                      output.write("allow_production=false\n")
+                      output.write(f"suite={suite}\n")
+                  sys.exit(0)
+              print("::error::BASE_URL ausente. Informe base_url no workflow_dispatch.")
               sys.exit(1)
 
           if not re.match(r"^https?://", raw):
@@ -91,6 +100,7 @@ jobs:
               print(f"::warning::QA visual contra producao permitido explicitamente: {parsed.scheme}://{host}")
 
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write("skip=false\n")
               output.write(f"base_url={normalized}\n")
               output.write(f"allow_production={'true' if allow_prod else 'false'}\n")
               output.write(f"suite={suite}\n")
@@ -102,6 +112,7 @@ jobs:
   visual-qa:
     name: Playwright visual QA
     needs: resolve-url
+    if: needs.resolve-url.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:

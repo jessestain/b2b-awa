@@ -23,7 +23,7 @@ Auditoria de origem: 2026-08-18. Host `awamotos.com`. Branch
 | Timeout | 45 s (JS 60 s) |
 | Rate limit efetivo | 30 msgs/h/IP (XML default era 20) |
 | Uso auditado | 104 turnos (10–17/ago), ~97% `ok` |
-| Git | módulo **100% untracked** |
+| Git | módulo rastreado (`6c685e6b4` + P0 `d4ba93e52`); hotfix UX e Fase 2 ainda dirty |
 | Maturidade | piloto real, não plataforma madura |
 
 Já existe: canais storefront/B2B/Admin; tool calling (até 3 rounds); catálogo e
@@ -231,9 +231,25 @@ Pendente nesta fase: limite Nginx `/aiassistant/`; testes automatizados.
 - Revisar retenção, treinamento, região e subprocessadores do OpenRouter.
 - Rotação/revogação de chaves; base legal documentada.
 
-Nota: o logger hoje hasheia IP, mas grava texto integral de pergunta e
-resposta. `var/log/ai_assistant.log` está vazio; o histórico real está em
-`grupoawamotos_ai_conversation_log`.
+Nota: o logger hasheia IP. A partir de 2026-08-18 a persistência e o envio
+ao LLM passam por `PiiRedactor` (e-mail, CPF, CNPJ, telefone, cartão e
+segredos). `error_detail` no banco guarda só classe/código, não stack.
+
+### Progresso (2026-08-18)
+
+Código aplicado (autorização “continue melhorando”):
+
+- `PiiRedactor` antes do LLM e do `ConversationLogger`.
+- Payload com senha/cartão/token é bloqueado (`status=blocked`).
+- Cron `grupoawamotos_aiassistant_purge_conversation_log` (03:20 UTC):
+  guest 30d apaga; cliente 90d anonimiza; `error_detail` 14d.
+- DSR exclusão: observer `customer_delete_commit_after`.
+- Widget: “Assistente com IA”, aviso, Privacidade e “Falar com atendente”.
+- Config Admin: grupo Privacidade e retenção.
+- Testes unitários: `Test/Unit/Model/PiiRedactorTest.php`.
+
+Pendente nesta fase: consentimento cookies, DSR exportação, revisão
+contratual OpenRouter, documentação de base legal.
 
 ### Testes e aceite
 
@@ -658,7 +674,8 @@ autorizado. HTTP, logs e fluxos adjacentes validados. Rollback confirmado.
 - [ ] Fase 0 staging/CI e `config.php` isolado
 - [x] Fase 1 código P0 (CSRF, IDOR, nonce B2B, checkout) — 2026-08-18
 - [ ] Fase 1 testes automatizados + Nginx rate limit
-- [ ] Fase 2 concluída
+- [x] Fase 2 fatia 1 (PII, retenção, DSR delete, aviso IA + handoff) — 2026-08-18
+- [ ] Fase 2 completa (cookies, DSR export, OpenRouter/base legal)
 - [ ] Fase 3 concluída
 - [ ] Fase 4 concluída
 - [ ] Fase 5 concluída
@@ -666,7 +683,7 @@ autorizado. HTTP, logs e fluxos adjacentes validados. Rollback confirmado.
 - [ ] Fase 7 concluída
 - [ ] Fase 8 concluída
 
-Próximo passo recomendado: **Fase 2** (LGPD/retenção/DSR). Nginx
-`/aiassistant/` e testes automatizados da Fase 1 ainda pendentes.
+Próximo passo recomendado: fechar residual da Fase 1 (Nginx `/aiassistant/`
++ testes de autorização) e o restante da Fase 2 (cookies, DSR export).
 `app/etc/config.php` e `GrupoAwamotos_HelpCenter` continuam fora do
 commit do módulo.

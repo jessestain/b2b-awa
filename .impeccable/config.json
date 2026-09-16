@@ -20,7 +20,38 @@
       "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-align-grid-terminal-2026-06-11.css",
       "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-align-grid-terminal-2026-06-11.min.css",
       "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-visual-fixes-2026-06-29-final.css",
-      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-defer-global-bundle.css"
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-defer-global-bundle.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-impeccable-layout-2026-06-16.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-super-global-20260611m.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-super-global-20260611m.min.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-interaction-widgets.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-head-tail-bundle.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-visual-bugfix.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-head-preload-critical-home.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Email/email/header.html",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Email/email/footer.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/registration_confirmation.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/customer_approved.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/customer_rejected.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/quote_response.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/quote_replied.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/quote_rejected.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/b2b_cotacao_quoted.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/email/b2b_cotacao_received.html",
+      "app/code/GrupoAwamotos/AbandonedCart/view/frontend/email/abandoned_cart_email_1_b.html",
+      "app/code/GrupoAwamotos/B2B/view/frontend/web/css/header/status-panel.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-focus-visible.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-focus-visible.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-skip-link.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-newsletter-popup.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-dark-mode-toggle.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-whatsapp-microcopy.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Catalog/templates/product/view/awa-pdp-qa.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Catalog/templates/product/view/awa-quick-order.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Cms/templates/no-route.phtml",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-cart-stack.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-cart-shell-final.css",
+      "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-commerce-impeccable-refine.css"
     ],
     "ignoreValues": [
       {
@@ -224,6 +255,269 @@
         "value": "#0f172a",
         "createdAt": "2026-08-05T15:19:22.918Z",
         "reason": "Pre-existing fallback value in var(--awa-text-primary, #0f172a) — AWA dark text token hardcoded fallback, already in production"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/AiAssistant/view/frontend/web/css/ai-assistant.less",
+          "app/code/GrupoAwamotos/AiAssistant/view/frontend/web/css/ai-assistant.css"
+        ],
+        "createdAt": "2026-08-09T04:08:33.821Z",
+        "reason": "Módulo de chat usa var(--awa-radius-*) com fallbacks que já existem no design system; detector falso positivo em valores dentro de var()"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/AiAssistant/view/frontend/web/css/ai-assistant.less",
+          "app/code/GrupoAwamotos/AiAssistant/view/frontend/web/css/ai-assistant.css"
+        ],
+        "createdAt": "2026-08-09T04:08:40.804Z",
+        "reason": "Módulo de chat usa var(--awa-*) com fallbacks do design system (mesmos valores de awa-commerce-impeccable-refine.css); falso positivo em valores de fallback dentro de var()"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/js/awa-css-gate.js"
+        ],
+        "createdAt": "2026-08-13T21:41:00.000Z",
+        "reason": "User GO 2026-08-13: cores hex/oklch pré-existentes no lock do CSS gate são intencionais (incl. #111827 = @awa-color-slate-900); não recolorir header/footer nesta onda"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-b2b-auth-shell-final.css"
+        ],
+        "createdAt": "2026-08-19T00:40:24.504Z",
+        "reason": "A7 fatia 2 GO: B2B auth empty layout lock usa superfície slate #111827 (@awa-color-slate-900) e rampa Tailwind intencional; não recolorir para --awa-ink #333"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-b2b-account-shell-final.css"
+        ],
+        "createdAt": "2026-08-19T01:11:20.471Z",
+        "reason": "A7 fatia 3: lock B2B conta 2columns-left; hex de superfície pré-existentes intencionais; SSOT marca via --awa-brand"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/product/login-to-cart.css"
+        ],
+        "createdAt": "2026-08-19T01:12:15.597Z",
+        "reason": "A7 fatia 3: raio 20px do modal B2B login-to-cart pré-existente; não redesenhar o modal nesta fatia de tokens"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-impeccable-layout-2026-06-16.css"
+        ],
+        "createdAt": "2026-08-19T01:12:15.649Z",
+        "reason": "A7 fatia 3: dump :root do layout impeccable; só alias --awa-primary para --awa-brand"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-super-global-20260611m.css"
+        ],
+        "createdAt": "2026-08-19T01:12:15.711Z",
+        "reason": "A7 fatia 3: bundle datado; corrigir alias circular --awa-sg-c26 sem recolorir o dump"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-checkout-shell-final.css"
+        ],
+        "createdAt": "2026-08-19T01:32:17.272Z",
+        "reason": "A7 fatia 4: lock Magento checkout; hex de superfície pré-existentes; SSOT marca via --awa-brand"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/checkout/premium-blocks.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.439Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/checkout/premium-blocks.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.491Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/marketing/landing.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.539Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/marketing/landing.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.593Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/marketing/suggestion.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.642Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/marketing/suggestion.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.691Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/b2b-marketing.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.743Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/b2b-marketing.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.792Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "app/code/GrupoAwamotos/B2B/view/frontend/web/css/marketing/landing.css"
+        ],
+        "createdAt": "2026-08-19T01:33:41.838Z",
+        "reason": "A7 fatia 4: leftovers B2B token; hex/radius/fonte pré-existentes da superfície Magento; só fallback #A33B3B → marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-cms-shell-final.css"
+        ],
+        "createdAt": "2026-08-19T01:38:34.343Z",
+        "reason": "A7 fatia 4: lock Magento CMS; hex de superfície pré-existentes; SSOT marca via --awa-brand"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-cms-shell-final.css"
+        ],
+        "createdAt": "2026-08-19T01:38:43.053Z",
+        "reason": "A7 fatia 4: lock Magento CMS; radius pré-existente da superfície; só token de marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/CookieConsent/view/frontend/web/css/cookie-consent.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.500Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/CookieConsent/view/frontend/web/css/cookie-consent.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.545Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/SocialProof/view/frontend/web/css/social-proof.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.590Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/SocialProof/view/frontend/web/css/social-proof.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.636Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/FakePurchase/view/frontend/web/css/fake-purchase.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.680Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/FakePurchase/view/frontend/web/css/fake-purchase.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.734Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/ProductIntelligence/view/frontend/web/css/rexis-recommendations.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.785Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/ProductIntelligence/view/frontend/web/css/rexis-recommendations.css"
+        ],
+        "createdAt": "2026-08-19T02:29:42.836Z",
+        "reason": "A7 fatia 5: leftovers Magento/B2B token; hex/radius pré-existentes; só fallback de marca"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "app/code/GrupoAwamotos/FakePurchase/view/frontend/web/css/fake-purchase.css"
+        ],
+        "createdAt": "2026-08-19T02:30:21.206Z",
+        "reason": "A7 fatia 5: toast Magento pré-existente; só token --aw-primary → --awa-brand"
       }
     ]
   }

@@ -21,7 +21,7 @@ status() {
   local ps_data chrome_mb mcp_mb cursor_mb chrome_count ext_hosts
   ps_data=$(ps aux 2>/dev/null)
   chrome_mb=$(ps -C chrome -o rss= 2>/dev/null | awk '{s+=$1} END {printf "%.0f", s/1024+0}')
-  mcp_mb=$(echo "$ps_data" | grep -E 'playwright-mcp|chrome-devtools-mcp|testsprite|run-test-mcp|mcp-server-filesystem|mcp-server|hostinger-api-mcp' | grep -v grep | awk '{s+=$6} END {printf "%.0f", s/1024+0}')
+  mcp_mb=$(echo "$ps_data" | grep -E 'playwright-mcp|chrome-devtools-mcp|testsprite|run-test-mcp|mcp-server-filesystem|mcp-server|hostinger-api-mcp|codacy-mcp' | grep -v grep | awk '{s+=$6} END {printf "%.0f", s/1024+0}')
   cursor_mb=$(echo "$ps_data" | grep -E 'cursor-server|vscode-server' | grep -v grep | awk '{s+=$6} END {printf "%.0f", s/1024+0}')
   chrome_count=$(echo "$ps_data" | grep -c '[c]hrome' 2>/dev/null || true)
   chrome_count=${chrome_count:-0}
@@ -33,10 +33,10 @@ status() {
   echo "Cursor/VS Code:      ${cursor_mb:-0} MB"
   echo "Extension hosts:     ${ext_hosts}"
   echo
-  echo "Perfil ativo:        Cursor + Hostinger MCP (serial)"
+  echo "Perfil ativo:        Cursor + Hostinger + Codacy MCP (serial)"
   echo "Config projeto:      $CURSOR_MCP"
   echo "MCP nativo:          cursor-ide-browser (sob demanda, 1 instância)"
-  echo "MCP externo:         hostinger-mcp (~128 MB Node)"
+  echo "MCP externo:         hostinger-mcp (~128 MB) + codacy (~192 MB)"
   if [[ -f "$CURSOR_MCP" ]]; then
     python3 - "$CURSOR_MCP" <<'PY' 2>/dev/null || true
 import json, sys
@@ -81,6 +81,13 @@ apply_hostinger_mcp() {
       "args": [],
       "env": {
         "NODE_OPTIONS": "--max-old-space-size=128"
+      }
+    },
+    "codacy": {
+      "command": "/home/deploy/.cursor/bin/codacy-mcp.sh",
+      "args": [],
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=192"
       }
     }
   }
@@ -132,7 +139,7 @@ cleanup() {
   cleanup_quiet
   apply_hostinger_mcp
   sudo systemctl stop "$CDP_SERVICE" 2>/dev/null || true
-  echo "Perfil Hostinger MCP aplicado. Recarregue: Settings → MCP → Reload"
+  echo "Perfil Hostinger + Codacy MCP aplicado. Recarregue: Settings → MCP → Reload"
   echo "Feito. Rode 'status' para confirmar."
 }
 
@@ -141,7 +148,7 @@ case "${1:-status}" in
   heavy-on|on|heavy-off|off|light|hostinger)
     apply_hostinger_mcp
     cleanup_quiet
-    echo "Perfil Cursor + Hostinger MCP. Recarregue: Settings → MCP → Reload"
+    echo "Perfil Cursor + Hostinger + Codacy MCP. Recarregue: Settings → MCP → Reload"
     ;;
   cleanup|clean) cleanup ;;
   *)

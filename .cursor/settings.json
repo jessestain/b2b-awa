@@ -1,9 +1,9 @@
 {
   "plugins": {
-    "app-builder": {
+    "ui-ux-pro-max-skill/ui-ux-pro-max": {
       "enabled": true
     },
-    "ui-ux-pro-max-skill/ui-ux-pro-max": {
+    "computer-use": {
       "enabled": true
     }
   }

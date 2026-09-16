@@ -39,6 +39,7 @@ jobs:
     name: Validate BASE_URL
     runs-on: ubuntu-latest
     outputs:
+      skip: ${{ steps.resolve.outputs.skip }}
       base_url: ${{ steps.resolve.outputs.resolved_base_url }}
       safe_url: ${{ steps.resolve.outputs.safe_base_url }}
     steps:
@@ -49,7 +50,7 @@ jobs:
           import os, sys, re
 
           event = os.environ.get("GITHUB_EVENT_NAME", "")
-          allow_prod = os.environ.get("DISPATCH_ALLOW_PROD", "false").lower() == "true" or event in ("push", "schedule")
+          allow_prod = os.environ.get("DISPATCH_ALLOW_PROD", "false").lower() == "true"
 
           # Resolve URL por evento
           if event == "workflow_dispatch":
@@ -64,7 +65,14 @@ jobs:
               raw = os.environ.get("DISPATCH_BASE_URL", "").strip()
 
           if not raw:
-              print("::error::BASE_URL ausente para o evento '" + event + "'. Configure a variável correspondente ou forneça a URL no dispatch manual.")
+              if event == "pull_request":
+                  print("::notice::PLAYWRIGHT_BASE_URL_PR ausente — Visual QA/Lighthouse ignorado. Produção não é o alvo padrão; configure staging/HML.")
+                  with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                      f.write("skip=true\n")
+                      f.write("resolved_base_url=\n")
+                      f.write("safe_base_url=\n")
+                  sys.exit(0)
+              print("::error::BASE_URL ausente para o evento '" + event + "'. Informe base_url no dispatch manual.")
               sys.exit(1)
 
           if not re.match(r"^https?://", raw):
@@ -81,6 +89,7 @@ jobs:
               print("::warning::Produção permitida explicitamente. URL: " + safe)
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("skip=false\n")
               f.write("resolved_base_url=" + raw.rstrip("/") + "\n")
               f.write("safe_base_url=" + safe + "\n")
 
@@ -96,6 +105,7 @@ jobs:
   playwright:
     name: Playwright Visual QA
     needs: resolve-url
+    if: needs.resolve-url.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
@@ -156,6 +166,7 @@ jobs:
   lighthouse:
     name: Lighthouse Performance Gate
     needs: resolve-url
+    if: needs.resolve-url.outputs.skip != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

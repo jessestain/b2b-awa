@@ -1,6 +1,10 @@
 # Modernização Visual — AWA_Custom/ayo_home5_child
 **Auditoria de arquitetura frontend · 2026-08-10 · Autor: análise assistida (Kimi Code) · Status: PROPOSTA — nenhuma mudança de código executada por este documento**
 
+> **Índice de padronização:** [`PADRONIZACAO_LAYOUT.md`](PADRONIZACAO_LAYOUT.md).
+> Este arquivo é a **arquitetura-alvo** (proposta). O estado publicado está em
+> `app/design/frontend/AWA_Custom/ayo_home5_child/CSS_INVENTORY.md`.
+
 > Alinhamento de referência: práticas oficiais Adobe Commerce Frontend Developer Guide —
 > herança de temas (extensão via `_extend.less`/`_theme.less`, não override de arquivos do pai),
 > Magento UI Library, mobile-first (`styles-m` mobile base + `styles-l` ≥768px via mixin `.media-width()`),
