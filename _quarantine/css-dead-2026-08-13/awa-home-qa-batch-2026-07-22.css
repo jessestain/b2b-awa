@@ -1,0 +1,476 @@
+/**
+ * AWA Home QA batch 2026-07-22 (debug d5387e)
+ * Fixes: category peek/arrow overlap, sticky cover, carousel arrows,
+ * newsletter rhythm, mobile header/hero, ver todos clip, shelf arrows,
+ * footer accordion icons, categorias CTA border, back-to-top offset.
+ */
+
+/* ── D1/D2: category carousel — clip before arrow gutter ─────────────────── */
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .top-home-content--category-carousel
+  .awa-category-carousel {
+  position: relative !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .top-home-content--category-carousel
+  .awa-category-carousel__viewport {
+  overflow: hidden !important;
+  overflow-x: clip !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__viewport {
+    /* arrows live in outer gutter; track must not paint under them */
+    padding-inline: 0 !important;
+    overflow: visible !important;
+  }
+
+  html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__track {
+    box-sizing: border-box !important;
+    max-width: calc(100% - 104px) !important;
+    width: calc(100% - 104px) !important;
+    margin-inline: 52px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    scroll-padding-inline: 0 !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__track::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    :is(.awa-category-carousel__prev, .awa-category-carousel__next) {
+    background: var(--awa-bg, #fff) !important;
+    border: 1px solid var(--awa-border, #e2e8f0) !important;
+    box-shadow: 0 1px 2px rgb(15 23 42 / 6%) !important;
+    z-index: 4 !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__prev {
+    inset-inline-start: 4px !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .top-home-content--category-carousel
+    .awa-category-carousel__next {
+    inset-inline-end: 4px !important;
+  }
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .top-home-content--category-carousel
+  :is(.awa-category-carousel__item, .awa-category-carousel__item--compact) {
+  max-width: 144px !important;
+  min-width: 120px !important;
+  width: 144px !important;
+  overflow: hidden !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .top-home-content--category-carousel
+  .awa-category-carousel__label {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  hyphens: none !important;
+  max-width: 100% !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .top-home-content--category-carousel
+  .awa-category-carousel__count {
+  display: block !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
+}
+
+/* ── D3: sticky header — drop promo when sticky; shorter cover ───────────── */
+html body#html-body#html-body#html-body#html-body#html-body:not(.onepagecheckout-index-index):not(.checkout-index-index)
+  .page-wrapper
+  .awa-site-header
+  .header-wrapper-sticky.is-sticky
+  :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar, .top-header.awa-b2b-promo-bar) {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+html body#html-body#html-body#html-body.awa-header-is-sticky {
+  scroll-padding-top: 72px !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  :is(.awa-carousel-section, .awa-home-section, .top-home-content) {
+  scroll-margin-top: 80px !important;
+}
+
+/* ── D4: product carousel arrows — keep inside shell, consistent height ──── */
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel {
+  position: relative !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  > .awa-owl-nav:not(.awa-owl-nav--header-mounted) {
+  position: absolute !important;
+  inset-inline: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  height: 0 !important;
+  width: 100% !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  > .awa-owl-nav:not(.awa-owl-nav--header-mounted)
+  .awa-owl-nav__btn {
+  pointer-events: auto !important;
+  position: absolute !important;
+  top: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  > .awa-owl-nav:not(.awa-owl-nav--header-mounted)
+  .awa-carousel__arrow--prev {
+  inset-inline-start: 8px !important;
+}
+
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  > .awa-owl-nav:not(.awa-owl-nav--header-mounted)
+  .awa-carousel__arrow--next,
+html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+  .page-wrapper
+  .content-top-home
+  .awa-shelf--carousel
+  > .awa-owl-nav:not(.awa-owl-nav--header-mounted)
+  .awa-carousel__toggle {
+  inset-inline-end: 8px !important;
+}
+
+/* ── D5: newsletter — equal control heights + disclaimer clearance ───────── */
+html body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  .awa-footer-newsletter
+  :is(input#newsletter, input[type='email'], .action.subscribe) {
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+html body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  .awa-footer-newsletter
+  :is(.awa-newsletter-note, .note, small, .awa-newsletter-disclaimer, p) {
+  margin-block-start: 10px !important;
+  clear: both !important;
+  max-width: 100% !important;
+  line-height: 1.4 !important;
+}
+
+/* ── D6: footer AWA logo — colored, no mono filter ───────────────────────── */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  .awa-footer-bottom__logo-img {
+  filter: none !important;
+  opacity: 1 !important;
+  -webkit-filter: none !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  .footer-bottom
+  .awa-footer-bottom__logo-col
+  > a {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ── M7: mobile header — compact promo + fold budget ─────────────────────── */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) {
+    height: 44px !important;
+    max-height: 44px !important;
+    min-height: 44px !important;
+  }
+
+  html body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
+    .awa-b2b-promo-close,
+  html body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)
+    button.awa-b2b-promo-close {
+    top: 0 !important;
+    inset-block-start: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
+    box-sizing: border-box !important;
+  }
+
+  html body#html-body#html-body#html-body
+    .page-wrapper
+    .awa-site-header
+    .header-content {
+    min-height: 0 !important;
+  }
+}
+
+/* ── M8/M9: mobile hero — softer nav; prefer cover focus ─────────────────── */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper
+    img,
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .swiper-slide
+    img {
+    object-fit: cover !important;
+    object-position: center 35% !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    :is(.awa-hero-swiper__nav, .swiper-button-prev, .swiper-button-next) {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    opacity: 0.72 !important;
+    background: rgb(15 23 42 / 45%) !important;
+    color: #fff !important;
+    border: 0 !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper__nav--prev,
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .swiper-button-prev {
+    inset-inline-start: 12px !important;
+    left: 12px !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .awa-hero-swiper__nav--next,
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .wrapper_slider.visible-xs
+    .swiper-button-next {
+    inset-inline-end: 12px !important;
+    right: 12px !important;
+  }
+}
+
+/* ── M10–M13: mobile shelves — Ver todos + hide overlapping arrows ───────── */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    :is(.awa-section-header, .awa-shelf__header, .awa-category-carousel__header) {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    :is(.awa-section-header__left, .awa-shelf__header-left) {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    :is(.awa-section-header__link, .awa-shelf__view-all, .awa-category-carousel__cta-link) {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    max-width: none !important;
+    margin-inline-start: auto !important;
+    padding-inline: 4px 0 !important;
+    font-size: 13px !important;
+  }
+
+  /* Touch: swipe instead of on-card arrows */
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    > .awa-owl-nav,
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    .awa-carousel__toggle {
+    display: none !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    :is(.owl-stage-outer, .awa-carousel__viewport, .awa-reel) {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-padding-inline: 16px !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
+    .page-wrapper
+    .content-top-home
+    .awa-shelf--carousel
+    :is(.owl-item, .awa-carousel__slide, .item) {
+    scroll-snap-align: start !important;
+  }
+}
+
+/* ── M14: footer accordion icons — explicit + / − (not ×) ────────────────── */
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(.page_footer, .page-footer)
+    button.awa-footer-section__toggle::after {
+    content: '+' !important;
+    font-family: Rubik, system-ui, sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    color: var(--awa-text, #333) !important;
+    speak: never;
+  }
+
+  html body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(.page_footer, .page-footer)
+    button.awa-footer-section__toggle[aria-expanded='true']::after,
+  html body#html-body#html-body#html-body#html-body
+    .page-wrapper
+    :is(.page_footer, .page-footer)
+    .velaFooterTitle.active
+    button.awa-footer-section__toggle::after {
+    content: '\2212' !important; /* minus sign, not x/× */
+  }
+}
+
+/* ── M15: VER TODAS AS CATEGORIAS — single clean border ──────────────────── */
+html body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  .awa-footer-categories-expand__toggle {
+  border: 1px solid var(--awa-border, #e2e8f0) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: var(--awa-bg, #fff) !important;
+  margin-block-start: 8px !important;
+}
+
+html body#html-body#html-body#html-body
+  .page-wrapper
+  :is(.page_footer, .page-footer)
+  section.awa-footer-categories-expand
+  .awa-footer-categories-expand__inner {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── M16: back-to-top — clear mobile bottom nav + footer ─────────────────── */
+html body#html-body#html-body#html-body .awa-back-to-top {
+  z-index: 900 !important;
+}
+
+@media (max-width: 767px) {
+  html body#html-body#html-body#html-body .awa-back-to-top {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    inset-inline-end: 12px !important;
+    right: 12px !important;
+  }
+}

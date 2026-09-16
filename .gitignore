@@ -242,7 +242,14 @@ tests/e2e/.auth-state.json
 
 # Relatórios e screenshots de UX audit (gerados automaticamente)
 tests/e2e/reports/
-tests/e2e/screenshots/ux-audit/
+tests/e2e/screenshots/
+tests/e2e/audit/
+tests/e2e/click-probe-*.mjs
+
+# Sondas/scratch temporários de debug do editor
+.cursor/tmp-click-probe-*.mjs
+.dbg/
+debug-*.md
 
 # Backups versionados de CSS (*.v10bak, *.v9bak, etc.)
 *.v*bak
