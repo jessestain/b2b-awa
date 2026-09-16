@@ -57,7 +57,7 @@ class SessionFpcGuardPlugin
 
     private function hasSessionCookie(): bool
     {
-        return ($_COOKIE[session_name()] ?? null) !== null;
+        return $this->request->getCookie(session_name()) !== null;
     }
 
     /**

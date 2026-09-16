@@ -105,10 +105,7 @@ class GuestFpcSessionStartCheckerPlugin
     private function hasSessionCookie(): bool
     {
         $cookie = $this->request->getCookie(session_name());
-        if ($cookie !== null && $cookie !== '') {
-            return true;
-        }
 
-        return ($_COOKIE[session_name()] ?? null) !== null;
+        return $cookie !== null && $cookie !== '';
     }
 }

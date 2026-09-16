@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\CatalogFix\Plugin\Mirasvit;
 
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Mirasvit\SearchAutocomplete\Model\ConfigProvider;
 
 /**
@@ -14,12 +15,17 @@ use Mirasvit\SearchAutocomplete\Model\ConfigProvider;
  */
 class SearchAutocompleteConfigProviderPlugin
 {
+    public function __construct(
+        private readonly PhpCookieManager $cookieManager
+    ) {
+    }
+
     /**
      * @param callable(): int $proceed
      */
     public function aroundGetCustomerGroupId(ConfigProvider $subject, callable $proceed): int
     {
-        if (($_COOKIE[session_name()] ?? null) === null) {
+        if ($this->cookieManager->getCookie(session_name()) === null) {
             return 0;
         }
 

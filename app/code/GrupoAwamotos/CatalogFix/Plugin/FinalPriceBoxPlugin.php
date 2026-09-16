@@ -46,8 +46,7 @@ class FinalPriceBoxPlugin
             return (bool)$proceed();
         } catch (\Throwable $e) {
             // Fallback caso ainda ocorra algum erro
-            if (
-                str_contains($e->getMessage(), 'Undefined array key') ||
+            if (str_contains($e->getMessage(), 'Undefined array key') ||
                 str_contains($e->getMessage(), 'Undefined index')
             ) {
                 return $this->calculateHasSpecialPrice($subject);

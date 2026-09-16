@@ -8,6 +8,7 @@ use Magento\Catalog\Block\Category\Plugin\PriceBoxTags;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -18,7 +19,8 @@ class PriceBoxTagsFpcPlugin
     public function __construct(
         private readonly PriceCurrencyInterface $priceCurrency,
         private readonly TimezoneInterface $dateTime,
-        private readonly ScopeResolverInterface $scopeResolver
+        private readonly ScopeResolverInterface $scopeResolver,
+        private readonly PhpCookieManager $cookieManager
     ) {
     }
 
@@ -31,7 +33,7 @@ class PriceBoxTagsFpcPlugin
         PriceBox $priceBox,
         string $result
     ): string {
-        if (($_COOKIE[session_name()] ?? null) !== null) {
+        if ($this->cookieManager->getCookie(session_name()) !== null) {
             return $proceed($priceBox, $result);
         }
 

@@ -11,12 +11,12 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\PageCache\Model\App\Response\HttpPlugin;
 
 /**
- * Evita setNoCacheHeaders() do HttpPlugin core em primeira visita de convidados cacheáveis.
+ * Evita setNoCacheHeaders() do HttpPlugin core quando X-Magento-Vary ainda não existe.
  *
- * O HttpPlugin compara getVaryString() com o cookie X-Magento-Vary. Quando o cookie ainda não
- * existe, o core chama setNoCacheHeaders() mesmo com layout público — PDP/PLP ficam UNCACHEABLE
- * no Varnish (~200–500 ms TTFB em todo hit). Mantemos no-store apenas quando o cookie existe e
- * diverge do contexto atual (troca de login / lista ERP).
+ * O HttpPlugin compara getVaryString() com o cookie. Sem cookie, o core marca no-store
+ * mesmo com layout público — guest e B2B logado ficam UNCACHEABLE no Varnish.
+ * sendVary() grava o cookie; o no-store só permanece se o cookie existir e divergir
+ * (troca de login / lista ERP).
  */
 class HttpPluginFpcGuardPlugin
 {
@@ -34,8 +34,7 @@ class HttpPluginFpcGuardPlugin
         callable $proceed,
         HttpResponse $response
     ): void {
-        if (
-            $response instanceof NotCacheableInterface
+        if ($response instanceof NotCacheableInterface
             || $response->headersSent()
             || $response->getMetadata('NotCacheable')
         ) {
@@ -45,7 +44,31 @@ class HttpPluginFpcGuardPlugin
 
         $varyCookie = $this->request->get(HttpResponse::COOKIE_VARY_STRING);
 
-        if ($this->isMissingVaryCookie($varyCookie) && $this->isAnonymousGuest()) {
+        // Magento sends/deletes a host-only X-Magento-Vary. An older domain-wide
+        // copy can survive logout and keep selecting authenticated Varnish pages.
+        // Expire only that legacy scope; never change the current host-only value.
+        if (!$this->isMissingVaryCookie($varyCookie)) {
+            $host = strtolower((string) $this->request->getHttpHost());
+            if (preg_match('/^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/D', $host)
+                && str_contains($host, '.')
+                && filter_var($host, FILTER_VALIDATE_IP) === false
+            ) {
+                $response->setHeader(
+                    'Set-Cookie',
+                    HttpResponse::COOKIE_VARY_STRING . '=; Max-Age=0; '
+                    . 'Expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/; Domain=' . $host
+                    . '; Secure; HttpOnly; SameSite=Lax',
+                    false
+                );
+            }
+        }
+
+        // Missing X-Magento-Vary: send the cookie and keep Magento public TTL.
+        // Core HttpPlugin would setNoCacheHeaders() here (guest and B2B), which
+        // forces PHP on every hit until the cookie exists. Varnish still refuses
+        // to store this first object under the empty-vary hash; the next request
+        // hashes the new cookie and can HIT.
+        if ($this->isMissingVaryCookie($varyCookie)) {
             $response->sendVary();
             return;
         }
@@ -59,17 +82,5 @@ class HttpPluginFpcGuardPlugin
     private function isMissingVaryCookie($varyCookie): bool
     {
         return $varyCookie === null || $varyCookie === false || $varyCookie === '';
-    }
-
-    private function isAnonymousGuest(): bool
-    {
-        $sessionName = session_name();
-        $cookie = $this->request->getCookie($sessionName);
-
-        if ($cookie !== null && $cookie !== '') {
-            return false;
-        }
-
-        return ($_COOKIE[$sessionName] ?? null) === null;
     }
 }

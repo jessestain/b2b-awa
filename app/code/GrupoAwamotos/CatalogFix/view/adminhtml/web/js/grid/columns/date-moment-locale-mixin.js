@@ -1,11 +1,13 @@
 /**
- * Evita moment.defineLocale em locale já existente (warning no console do admin).
- * @see vendor/magento/module-ui/view/base/web/js/grid/columns/date.js
+ * Evita moment.defineLocale em locale já existente (warning no console do admin)
+ * e formata a data a partir do valor cru da linha — não do texto já formatado
+ * pelo Magento_Ui/js/grid/columns/date (moment.utc('24/08/2026 20:17') é inválido em pt_BR).
  */
 define([
     'moment',
     'mageUtils',
-    'underscore'
+    'underscore',
+    'moment-timezone-with-data'
 ], function (moment, utils, _) {
     'use strict';
 
@@ -14,12 +16,15 @@ define([
     return function (DateColumn) {
         return DateColumn.extend({
             /**
-             * @inheritdoc
+             * @param {Object} value
+             * @param {String} [format]
+             * @returns {String}
              */
             getLabel: function (value, format) {
                 var date,
                     locale,
-                    config;
+                    config,
+                    raw;
 
                 if (this.storeLocale !== undefined) {
                     locale = this.storeLocale;
@@ -36,13 +41,21 @@ define([
                     moment.locale(locale);
                 }
 
-                date = moment.utc(this._super());
+                raw = value && value[this.index] !== undefined && value[this.index] !== null
+                    ? value[this.index]
+                    : '';
+
+                if (raw === '' || raw === '0000-00-00 00:00:00') {
+                    return '';
+                }
+
+                date = moment.utc(raw);
 
                 if (!_.isUndefined(this.timezone) && moment.tz.zone(this.timezone) !== null) {
                     date = date.tz(this.timezone);
                 }
 
-                return date.isValid() && value[this.index] ?
+                return date.isValid() ?
                     date.format(format || this.dateFormat) :
                     '';
             }

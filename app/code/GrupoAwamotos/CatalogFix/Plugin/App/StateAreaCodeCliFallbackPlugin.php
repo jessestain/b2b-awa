@@ -55,8 +55,13 @@ class StateAreaCodeCliFallbackPlugin
             return true;
         }
 
+        // Uso direto de $_SERVER é intencional aqui: ver docblock da classe (bootstrap
+        // precoce, sem Request disponível no DI Container).
+        // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
         $scriptName     = (string) ($_SERVER['SCRIPT_NAME'] ?? '');
+        // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
         $scriptFilename = (string) ($_SERVER['SCRIPT_FILENAME'] ?? '');
+        // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
         $requestUri     = (string) ($_SERVER['REQUEST_URI'] ?? '');
 
         if (str_ends_with($scriptName, '/pub/static.php') || str_ends_with($scriptName, '/static.php')) {

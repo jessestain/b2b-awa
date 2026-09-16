@@ -11,4 +11,9 @@
                 type="Awa\CatalogFix\Plugin\Mirasvit\MisspellSkipExactPlugin"
                 sortOrder="10"/>
     </type>
+    <type name="Magento\AdvancedSearch\Block\SearchData">
+        <plugin name="awa_catalogfix_skip_didyoumean_existing_sku"
+                type="Awa\CatalogFix\Plugin\AdvancedSearch\SkipDidYouMeanExistingSkuPlugin"
+                sortOrder="10"/>
+    </type>
 </config>

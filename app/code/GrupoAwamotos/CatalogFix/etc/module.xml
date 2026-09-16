@@ -4,6 +4,7 @@
     <module name="GrupoAwamotos_CatalogFix" setup_version="1.0.1">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Awa_CatalogFix"/>
             <module name="Magento_Elasticsearch"/>
             <module name="GrupoAwamotos_Theme"/>
             <module name="Rokanthemes_VerticalMenu"/>

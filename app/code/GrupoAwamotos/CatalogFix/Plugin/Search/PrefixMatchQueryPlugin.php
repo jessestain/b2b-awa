@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\CatalogFix\Plugin\Search;
 
+use Awa\CatalogFix\Model\Search\SkuQueryClassifier;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
@@ -21,6 +22,17 @@ class PrefixMatchQueryPlugin
 {
     private const MAX_EXPANSIONS = 50;
     private const PREFIX_BOOST_FACTOR = 0.5;
+
+    public function __construct(
+        private readonly ?SkuQueryClassifier $skuQueryClassifier = null
+    ) {
+    }
+
+    private function classifier(): SkuQueryClassifier
+    {
+        return $this->skuQueryClassifier
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(SkuQueryClassifier::class);
+    }
 
     /**
      * After the default match query is built, inject a match_phrase_prefix clause
@@ -45,7 +57,23 @@ class PrefixMatchQueryPlugin
         }
         $queryValue = trim($requestQuery->getValue());
 
-        // Only apply for single-word queries (no spaces) shorter than 12 chars.
+        // Existing catalog SKUs must outrank prefix/substring hits (e.g. 3022 vs LS3022).
+        // Text tokens such as "bagageiro" must not receive a fake SKU term boost.
+        if ($queryValue !== '' && $this->classifier()->isExistingExactSkuQuery($queryValue)) {
+            if (!isset($result['bool']['should']) || !is_array($result['bool']['should'])) {
+                $result['bool']['should'] = [];
+            }
+            $result['bool']['should'][] = [
+                'term' => [
+                    'sku' => [
+                        'value' => $queryValue,
+                        'boost' => 50.0,
+                    ],
+                ],
+            ];
+        }
+
+        // Only apply prefix matching for single-word queries (no spaces) shorter than 12 chars.
         if (str_contains($queryValue, ' ') || strlen($queryValue) >= 12) {
             return $result;
         }
