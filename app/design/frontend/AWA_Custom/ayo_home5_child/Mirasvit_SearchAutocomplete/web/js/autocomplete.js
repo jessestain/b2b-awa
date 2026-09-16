@@ -17,6 +17,23 @@ define([
     var awaResultCacheTtl = 30000;
     var awaLastAppliedQuery = null;
 
+    function awaSoftTitleCase(str) {
+        if (!str || typeof str !== 'string') {
+            return str;
+        }
+        var letters = str.replace(/[^A-Za-zÀ-ÿ]/g, '');
+        if (!letters.length) {
+            return str;
+        }
+        var upper = (letters.match(/[A-ZÀ-Ý]/g) || []).length;
+        if (upper / letters.length < 0.72) {
+            return str;
+        }
+        return str.toLowerCase().replace(/(^|[\s\/\-_.])(\S)/g, function (m, sep, ch) {
+            return sep + ch.toUpperCase();
+        });
+    }
+
     var Autocomplete = function (input) {
         this.$input = $(input);
         this.$cat = $('[name=cat]', this.$input.closest('form'));
@@ -62,6 +79,18 @@ define([
 
             ko.bindingHandlers.highlight = {
                 init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                    var skipCase = element.classList && element.classList.contains('sku');
+                    var before = String(element.textContent || '');
+                    var display = skipCase ? before : awaSoftTitleCase(before);
+                    if (display !== before) {
+                        element.textContent = display;
+                        ['title', 'aria-label'].forEach(function (attr) {
+                            var cur = element.getAttribute(attr);
+                            if (cur) {
+                                element.setAttribute(attr, awaSoftTitleCase(cur));
+                            }
+                        });
+                    }
                     highlight(element, bindingContext.$parents[2].result().query, 'mst-searchautocomplete__highlight');
                 }
             };
@@ -133,10 +162,32 @@ define([
             }
         },
 
+        syncSearchAria: function (isActive) {
+            var panel = this.$placeholder()[0];
+            var input = this.$input[0];
+            if (panel) {
+                panel.id = 'mst-searchautocomplete-results';
+                panel.setAttribute('role', 'listbox');
+                panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+            }
+            if (input) {
+                input.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+                if (panel && panel.id) {
+                    input.setAttribute('aria-controls', panel.id);
+                }
+            }
+            return { panel: panel, input: input };
+        },
+
         setActiveState: function (isActive) {
             if (!isActive && awaPositionTimer) {
                 clearInterval(awaPositionTimer);
                 awaPositionTimer = null;
+            }
+            if (isActive && !awaPositionTimer) {
+                awaPositionTimer = setInterval(function () {
+                    this.ensurePosition();
+                }.bind(this), 100);
             }
             $('body').toggleClass('searchautocomplete__active', isActive);
             this.$input.toggleClass('searchautocomplete__active', isActive);
@@ -147,19 +198,17 @@ define([
             $(this.$input[0].labels).each(function (key, label) {
                 $(label).toggleClass('active', isActive);
             });
+
+            this.syncSearchAria(isActive);
         },
 
         inputHandler: function () {
-            $('body').addClass('searchautocomplete__active');
-
             this.result = this.search();
 
             setTimeout(function () {
+                this.setActiveState(!!this.result);
                 if (this.result) {
-                    this.$placeholder().addClass('_active');
                     this.ensurePosition();
-                } else {
-                    this.$placeholder().removeClass('_active');
                 }
             }.bind(this), 200);
 
@@ -291,11 +340,17 @@ define([
 
                     onClick: function (item, event) {
                         if (event.button === 0) { // left click
-                            event.preventDefault();
-
                             if ($(event.target).closest('.tocart').length || $(event.target).closest('.mst__add_to_cart').length) {
+                                event.preventDefault();
                                 return this.processAddToCart(event);
                             }
+
+                            if ($(event.currentTarget).hasClass('popular')
+                                || $(event.target).closest('a.awa-search-chip').length) {
+                                return true;
+                            }
+
+                            event.preventDefault();
 
                             if (event.target.nodeName === 'A'
                                 || event.target.nodeName === 'IMG'
@@ -401,6 +456,7 @@ define([
                 }
 
                 self.ensurePosition();
+                self.bindPopularChipHrefs();
             };
 
             // Atualização subsequente — só observables (padrão Magento/KO)
@@ -477,10 +533,13 @@ define([
             let items = [];
             let item;
             let result, index;
+            var formAction = (self.$input.closest('form').attr('action') || '/catalogsearch/result/')
+                .replace(/\/+$/, '');
 
-            _.each(queries, function (query, idx) {
+            _.each(queries, function (query) {
                 item = {};
                 item.query = query;
+                item.url = formAction + '/?q=' + encodeURIComponent(query);
                 item.enter = function () {
                     self.query = query;
                 };
@@ -547,16 +606,52 @@ define([
             });
         },
 
-        ensurePosition: function () {
-            var position = this.$input.position();
-            var width = this.$placeholder().outerWidth();
-            var left = position.left + parseInt(this.$input.css('marginLeft'), 10) + this.$input.outerWidth() - width;
-            var top = position.top + parseInt(this.$input.css('marginTop'), 10);
+        bindPopularChipHrefs: function () {
+            var self = this;
+            var formAction = (self.$input.closest('form').attr('action') || '/catalogsearch/result/')
+                .replace(/\/+$/, '');
 
-            this.$placeholder()
-                .css('top', this.$input.outerHeight() - 1 + top)
-                .css('left', left)
-                .css('width', this.$input.outerWidth());
+            self.$placeholder().find('.mst-searchautocomplete__item.popular a.awa-search-chip').each(function () {
+                var ctx = ko.dataFor(this);
+                var query = String((ctx && ctx.query) || this.textContent || '').trim();
+                var url = (ctx && ctx.url) || (formAction + '/?q=' + encodeURIComponent(query));
+
+                if (ctx && !ctx.url && query) {
+                    ctx.url = url;
+                }
+
+                if (url) {
+                    this.setAttribute('href', url);
+                }
+
+                if (query) {
+                    this.setAttribute('title', query);
+                }
+            });
+        },
+
+        ensurePosition: function () {
+            var $input = this.$input;
+            var el = this.$placeholder()[0];
+            if (!el) {
+                return;
+            }
+            var position = $input.position();
+            var marginLeft = parseInt($input.css('marginLeft'), 10) || 0;
+            var marginTop = parseInt($input.css('marginTop'), 10) || 0;
+            var gap = 8;
+            var topPx = $input.outerHeight() + gap + position.top + marginTop;
+            var leftPx = position.left + marginLeft;
+            // top/left with !important: super-global usa top: calc(100% + 12px) !important
+            // no form (offsetParent), o que na PLP cola o painel (gap 6 vs 8).
+            el.style.setProperty('top', topPx + 'px', 'important');
+            el.style.setProperty('left', leftPx + 'px', 'important');
+            // width fica no CSS (100% + border-box). Pixel width + content-box
+            // estourava 18px além do input.
+            el.style.removeProperty('width');
+            if (el.classList.contains('_active')) {
+                this.syncSearchAria(true);
+            }
         }
     };
 

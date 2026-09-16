@@ -13,7 +13,7 @@ $isCheckoutFocusPage = in_array('checkout_cart_index', $layoutHandles, true)
 $deferAutocompleteBootstrap = $isHomePageLayout || $isCheckoutFocusPage;
 $deferMirasvitTemplates = $isHomePageLayout || (bool) $block->getData('defer_templates');
 $mirasvitTemplatesUrl = $deferMirasvitTemplates
-    ? $block->getViewFileUrl('html/mirasvit-ac-templates.pt_BR.html') . '?v=20260806-no-rating-r1'
+    ? $block->getViewFileUrl('html/mirasvit-ac-templates.pt_BR.html') . '?v=20260821-popular-chips-r4'
     : '';
 $isInPageLayout = $block->getAutocompleteLayout() == ConfigProvider::LAYOUT_IN_PAGE;
 ?>
@@ -57,7 +57,7 @@ $awaMirasvitBootstrapConfig = [
 ];
 ?>
 <script id="awa-mirasvit-ac-bootstrap-config" type="application/json"><?= /* @noEscape */ json_encode($awaMirasvitBootstrapConfig, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?></script>
-<script src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-mirasvit-autocomplete-init.min.js')) ?>?v=20260722-ko-fast-r1" defer></script>
+<script src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-mirasvit-autocomplete-init.min.js')) ?>?v=20260821-popular-r12" defer></script>
 
 <?php if ($block->getCssStyles() != ''): ?>
     <style<?php if ($nonce): ?> nonce="<?= $block->escapeHtml($nonce) ?>"<?php endif; ?>><?= $block->escapeHtml($block->getCssStyles()) ?></style>

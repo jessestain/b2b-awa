@@ -24,17 +24,22 @@
                 <div data-bind="visible: index.totalItems, attr: {class: 'mst-searchautocomplete__index ' + index.identifier}">
                     <div class="mst-searchautocomplete__index-title">
                         <span data-bind="text: index.title"></span>
-                        <span data-bind="visible: index.isShowTotals">
+                        <span data-bind="visible: index.isShowTotals" style="display: none;">
                             (<span data-bind="text: index.totalItems"></span>)
                         </span>
                     </div>
 
                     <ul data-bind="foreach: { data: index.items, as: 'item' }">
                         <li data-bind="
-                            template: { name: index.identifier, data: item },
                             attr: {class: 'mst-searchautocomplete__item ' + index.identifier},
                             event: { mouseover: $parents[1].onMouseOver, mouseout: $parents[1].onMouseOut, mousedown: $parents[1].onClick },
                             css: {_active: $data.isActive}">
+                            <!-- ko if: index.identifier == 'popular' -->
+                            <a class="awa-search-chip" data-bind="text: query, attr: { title: query, href: url }"></a>
+                            <!-- /ko -->
+                            <!-- ko ifnot: index.identifier == 'popular' -->
+                            <!-- ko template: { name: index.identifier, data: item } --><!-- /ko -->
+                            <!-- /ko -->
                         </li>
                     </ul>
                 </div>
@@ -54,7 +59,7 @@
 </script>
 
 <script id="popular" type="text/x-custom-template">
-    <a class="title" data-bind="text: query"></a>
+    <a class="awa-search-chip" data-bind="text: query, attr: { title: query, href: url }"></a>
 </script>
 
 <script id="magento_search_query" type="text/x-custom-template">
