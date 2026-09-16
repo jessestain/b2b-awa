@@ -61,34 +61,10 @@ $pdo->exec(
 
 $pin = strtoupper(substr(bin2hex(random_bytes(6)), 0, 12));
 $remote = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
-$userAgent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
-$queryString = (string) ($_SERVER['QUERY_STRING'] ?? '');
 $forwardedFor = (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '');
 $cfConnectingIp = (string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? '');
 $runtimeNonce = bin2hex(random_bytes(4));
 
-// #region agent log
-$pdo->exec(
-    'CREATE TABLE IF NOT EXISTS sectra_http_probe_hit (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        endpoint VARCHAR(64) NOT NULL,
-        remote_addr VARCHAR(45) NOT NULL,
-        user_agent VARCHAR(255) DEFAULT NULL,
-        query_string VARCHAR(255) DEFAULT NULL,
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
-);
-$probeStmt = $pdo->prepare(
-    'INSERT INTO sectra_http_probe_hit (endpoint, remote_addr, user_agent, query_string)
-     VALUES (:endpoint, :remote, :ua, :qs)'
-);
-$probeStmt->execute([
-    ':endpoint' => 'sectra-mysql-pin',
-    ':remote' => $remote,
-    ':ua' => mb_substr($userAgent, 0, 255),
-    ':qs' => mb_substr($queryString, 0, 255),
-]);
-// #endregion
 
 $stmt = $pdo->prepare(
     'INSERT INTO sectra_bridge_ping (id, pin, updated_at, last_remote)
@@ -129,46 +105,6 @@ $response = [
     ],
 ];
 
-// #region agent log
-$logPath = dirname(__DIR__) . '/.cursor/debug-fc1127.log';
-@file_put_contents($logPath, json_encode([
-    'sessionId' => 'fc1127',
-    'runId' => 'mysql-pin',
-    'hypothesisId' => 'AK',
-    'location' => 'sectra-mysql-pin.php',
-    'message' => 'MySQL pin generated',
-    'data' => [
-        'remote_addr' => $remote,
-        'pin' => $pin,
-        'export_count' => $exportCount,
-        'oc_order' => $ocOrder,
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-], JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-// #endregion
 
-// #region agent log
-$agentLogPath = '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-608fd0.log';
-@file_put_contents($agentLogPath, json_encode([
-    'sessionId' => '608fd0',
-    'runId' => 'sectra-pc-mysql-pin',
-    'hypothesisId' => 'H8',
-    'location' => 'sectra-mysql-pin.php',
-    'message' => 'Sectra mysql pin endpoint accessed',
-    'data' => [
-        'remote_addr' => $remote,
-        'http_host' => $_SERVER['HTTP_HOST'] ?? '',
-        'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
-        'forwarded_for' => $forwardedFor,
-        'cf_connecting_ip' => $cfConnectingIp,
-        'runtime_nonce' => $runtimeNonce,
-        'export_queue_count' => $exportCount,
-        'oc_order_count' => $ocOrder,
-        'expected_pin' => $pin,
-        'code_version' => 'sectra-mysql-pin-v2',
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-], JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-// #endregion
 
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

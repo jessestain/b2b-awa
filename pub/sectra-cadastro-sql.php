@@ -46,20 +46,6 @@ $sql = "-- PREFERENCIA: use Exportar Clientes no Sectra desktop (calcula VALIDAD
     . "-- Este SQL usa hash Magento que pode diferir do Sectra. Use so se Exportar Clientes falhar.\n\n"
     . $sql;
 
-$logPath = dirname(__DIR__) . '/.cursor/debug-fc1127.log';
-$payload = [
-    'sessionId' => 'fc1127',
-    'runId' => 'sql-download',
-    'hypothesisId' => 'H',
-    'location' => 'sectra-cadastro-sql.php',
-    'message' => 'Cadastro SQL downloaded',
-    'data' => [
-        'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? '',
-        'bytes' => strlen($sql),
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-];
-@file_put_contents($logPath, json_encode($payload, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
 
 header('Content-Type: application/sql; charset=utf-8');
 header('Content-Disposition: attachment; filename="sectra-export-order-clients.sql"');

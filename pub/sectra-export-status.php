@@ -57,31 +57,6 @@ try {
     exit;
 }
 
-$remoteAddr = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
-$userAgent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
-$queryString = (string) ($_SERVER['QUERY_STRING'] ?? '');
-// #region agent log
-$pdo->exec(
-    'CREATE TABLE IF NOT EXISTS sectra_http_probe_hit (
-        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        endpoint VARCHAR(64) NOT NULL,
-        remote_addr VARCHAR(45) NOT NULL,
-        user_agent VARCHAR(255) DEFAULT NULL,
-        query_string VARCHAR(255) DEFAULT NULL,
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
-);
-$probeStmt = $pdo->prepare(
-    'INSERT INTO sectra_http_probe_hit (endpoint, remote_addr, user_agent, query_string)
-     VALUES (:endpoint, :remote, :ua, :qs)'
-);
-$probeStmt->execute([
-    ':endpoint' => 'sectra-export-status',
-    ':remote' => $remoteAddr,
-    ':ua' => mb_substr($userAgent, 0, 255),
-    ':qs' => mb_substr($queryString, 0, 255),
-]);
-// #endregion
 
 $exportIds = $pdo->query(
     "SELECT customer_id FROM oc_customer WHERE code = '' AND status = 1 ORDER BY customer_id"
@@ -168,44 +143,6 @@ $response = [
     'mysql_check_hint' => 'No PC Sectra: abra sectra_export_query_url — deve listar exatamente os 6 IDs nativos acima',
 ];
 
-// #region agent log
-$logPath = dirname(__DIR__) . '/.cursor/debug-fc1127.log';
-$payload = [
-    'sessionId' => 'fc1127',
-    'runId' => 'export-status',
-    'hypothesisId' => 'H',
-    'location' => 'sectra-export-status.php',
-    'message' => 'Export status probe',
-    'data' => [
-        'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? '',
-        'magento_ready' => $allMagentoReady,
-        'export_ids' => array_map('intval', $exportIds),
-        'codes_empty' => array_column($clients, 'code'),
-        'export_completed' => $exportCompleted,
-        'blocker' => $response['blocker'] ?? null,
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-];
-@file_put_contents($logPath, json_encode($payload, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-// #endregion
 
-// #region agent log
-$agentLogPath = '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-608fd0.log';
-@file_put_contents($agentLogPath, json_encode([
-    'sessionId' => '608fd0',
-    'runId' => 'sectra-pc-export-status',
-    'hypothesisId' => 'H8',
-    'location' => 'sectra-export-status.php',
-    'message' => 'Sectra export status endpoint accessed',
-    'data' => [
-        'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? '',
-        'export_count' => count($exportIds),
-        'actual_export_ids' => $actualIds,
-        'oc_order' => $ocOrder,
-        'export_completed' => $exportCompleted,
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-], JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-// #endregion
 
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

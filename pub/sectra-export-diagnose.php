@@ -113,23 +113,5 @@ $response = [
     'after_export_check' => 'https://awamotos.com/sectra-export-status.php',
 ];
 
-// #region agent log
-$logPath = dirname(__DIR__) . '/.cursor/debug-fc1127.log';
-@file_put_contents($logPath, json_encode([
-    'sessionId' => 'fc1127',
-    'runId' => 'export-diagnose',
-    'hypothesisId' => 'AP',
-    'location' => 'sectra-export-diagnose.php',
-    'message' => 'Silent export diagnosis',
-    'data' => [
-        'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? '',
-        'queue' => count($exportQueue),
-        'audit_count' => count($auditRows),
-        'export_completed' => $exportCompleted,
-        'why_silent' => $whySilent,
-    ],
-    'timestamp' => (int) (microtime(true) * 1000),
-], JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-// #endregion
 
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
