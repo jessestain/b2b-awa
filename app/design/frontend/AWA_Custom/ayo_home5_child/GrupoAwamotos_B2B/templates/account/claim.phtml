@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
+<?= $block->fetchView($block->getTemplateFile('GrupoAwamotos_B2B::html/awa-b2b-auth-cta-lock.phtml')) ?>
 <div id="b2b-claim-shell" class="b2b-login-page" aria-labelledby="b2b-claim-heading">
     <?= $block->getChildHtml('auth_logo') ?>
 
@@ -39,11 +40,11 @@ declare(strict_types=1);
                        autocomplete="username"
                        autocapitalize="none"
                        spellcheck="false"
-                       inputmode="email"
+                       inputmode="text"
                        required
                        aria-required="true"
                        data-validate="{required:true}"
-                       placeholder="<?= $escaper->escapeHtmlAttr(__('seu@email.com ou 00.000.000/0000-00')) ?>"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('E-mail ou CNPJ')) ?>"
                        aria-describedby="b2b-claim-user-note" />
                 <p id="b2b-claim-user-note" class="b2b-field-note">
                     <?= $escaper->escapeHtml(__('Use os mesmos dados informados nas compras anteriores.')) ?>
@@ -74,12 +75,12 @@ declare(strict_types=1);
 
     <footer class="b2b-login-footer">
         <a href="https://wa.me/5516997367588?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20para%20ativar%20meu%20acesso%20B2B"
-           class="b2b-login-whatsapp"
+           class="b2b-login-whatsapp b2b-btn-whatsapp"
            data-b2b-contact-track="claim_help_whatsapp"
            data-b2b-contact-channel="whatsapp"
            target="_blank"
            rel="noopener noreferrer"
-           aria-label="<?= $escaper->escapeHtmlAttr(__('Precisa de ajuda? Falar no WhatsApp')) ?>">
+           aria-label="<?= $escaper->escapeHtmlAttr(__('Precisa de ajuda? Falar no WhatsApp (abre em nova aba)')) ?>">
             <?= $escaper->escapeHtml(__('Precisa de ajuda?')) ?> <span class="b2b-login-whatsapp__brand"><?= $escaper->escapeHtml(__('WhatsApp')) ?></span>
         </a>
     </footer>

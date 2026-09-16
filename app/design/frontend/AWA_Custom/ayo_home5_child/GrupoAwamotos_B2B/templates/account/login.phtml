@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
+<?= $block->fetchView($block->getTemplateFile('GrupoAwamotos_B2B::html/awa-b2b-auth-cta-lock.phtml')) ?>
 <div id="b2b-login-shell" class="b2b-login-page" aria-labelledby="b2b-login-heading">
     <?= $block->getChildHtml('auth_logo') ?>
 
@@ -39,11 +40,11 @@ declare(strict_types=1);
                        autocomplete="username"
                        autocapitalize="none"
                        spellcheck="false"
-                       inputmode="email"
+                       inputmode="text"
                        required
                        aria-required="true"
                        data-validate="{required:true}"
-                       placeholder="<?= $escaper->escapeHtmlAttr(__('seu@email.com ou 00.000.000/0000-00')) ?>"
+                       placeholder="<?= $escaper->escapeHtmlAttr(__('E-mail ou CNPJ')) ?>"
                        aria-describedby="b2b-login-user-note" />
                 <p id="b2b-login-user-note" class="b2b-field-note">
                     <?= $escaper->escapeHtml(__('Use o e-mail cadastrado ou o CNPJ da empresa.')) ?>
@@ -69,18 +70,33 @@ declare(strict_types=1);
                             aria-pressed="false"
                             aria-label="<?= $escaper->escapeHtmlAttr(__('Mostrar senha')) ?>">
                         <span class="b2b-sr-only" data-password-toggle-label aria-hidden="true"><?= $escaper->escapeHtml(__('Mostrar')) ?></span>
+                        <img class="b2b-password-toggle__raster" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqCBwDASkIWybWAAAB20lEQVQ4y+3UT2jPcRgH8Ndv/zJmaTHDlhzQUHKakj+X4apYlH+J4igHysHNhZKTi5sLBxfJZYkDZXNZihm1rJFa05qYzcwcfu9ffv0SLrvtXd/L53m+7+f9vJ/P82Eec43CvxJWt3eU8qpz9DOfof6e/yMOCdRiDTZjA1qxPOSf8B5v0YcBTFQWKlSQ1mEHTmAXmjGNcfxIahUaUY/PeI5buJc8Q/09ReKQLsVFnEyrj9GNF/iAxajBGJrQnuK7080DXEA/FELagOs4moQrUTKV2Gl0ReWjxIdjzVqcwalYcxiD1UuWtcI+XMLtkLzBTFo/i8toizUdWBkB3zGKh5jEkfzXXRWf92YA1zBWNoQm7I8F5ejMUEsDm8bNKO5Ec1WGUZ/g1wqCmsQqUYcFFWeT+Jbz2qpIfxp1B1FTdu1G42kl+kpDKsvdgy3oxUjJ4+F41xU1/fiCWbxCC1ZFRG+mPxDCBhzC1ag+j6FCWcVNuRk78RJ3onYwNq1Pm69zW9qwFQewHe9wDvdlcOXtNOM4jmFdCD4qbtpEcmqxQnEbGxO/ixsp+ntBSih7F1qiZhs2Ki5Ak+K9HceI4ko/w5N0NfPHla5EWRd1WISFyZ+M/1OY/dtDNI+5xS/3C4Nn25BTowAAAABJRU5ErkJggg==" width="22" height="22" alt="" aria-hidden="true" style="display:block;width:22px;height:22px;min-width:22px;min-height:22px;">
+                        <svg class="b2b-password-toggle__icon b2b-password-toggle__icon--show" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" style="display:block;width:22px;height:22px;min-width:22px;min-height:22px;flex-shrink:0;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#1f2937" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="12" r="3" stroke="#1f2937" stroke-width="2.25"/>
+                        </svg>
+                        <svg class="b2b-password-toggle__icon b2b-password-toggle__icon--hide" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" style="display:none;width:22px;height:22px;min-width:22px;min-height:22px;flex-shrink:0;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="#1f2937" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="1" y1="1" x2="23" y2="23" stroke="#1f2937" stroke-width="2.25" stroke-linecap="round"/>
+                        </svg>
                     </button>
                 </div>
             </div>
 
             <div class="b2b-login-forgot">
-                <span class="b2b-login-forgot__text" id="b2b-login-forgot-label"><?= $escaper->escapeHtml(__('Esqueceu sua senha?')) ?></span>
+                <span class="b2b-login-forgot__text"><?= $escaper->escapeHtml(__('Esqueceu sua senha?')) ?></span>
                 <a class="b2b-login-forgot__link"
-                   href="<?= $escaper->escapeUrl($block->getForgotPasswordUrl()) ?>"
-                   aria-labelledby="b2b-login-forgot-label">
-                    <?= $escaper->escapeHtml(__('Recuperar')) ?>
+                   href="<?= $escaper->escapeUrl($block->getForgotPasswordUrl()) ?>">
+                    <?= $escaper->escapeHtml(__('Recuperar senha')) ?>
                 </a>
             </div>
+
+            <?php $b2bCaptchaHtml = $block->getChildHtml('captcha'); ?>
+            <?php if (trim((string)$b2bCaptchaHtml) !== ''): ?>
+            <div class="b2b-field b2b-field-captcha">
+                <?= $b2bCaptchaHtml ?>
+            </div>
+            <?php endif; ?>
 
             <div class="b2b-login-actions">
                 <button type="submit" class="b2b-btn-entrar">
@@ -106,12 +122,12 @@ declare(strict_types=1);
 
     <footer class="b2b-login-footer">
         <a href="https://wa.me/5516997367588?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20para%20acessar%20minha%20conta%20B2B"
-           class="b2b-login-whatsapp"
+           class="b2b-login-whatsapp b2b-btn-whatsapp"
            data-b2b-contact-track="login_help_whatsapp"
            data-b2b-contact-channel="whatsapp"
            target="_blank"
            rel="noopener noreferrer"
-           aria-label="<?= $escaper->escapeHtmlAttr(__('Precisa de ajuda? Falar no WhatsApp')) ?>">
+           aria-label="<?= $escaper->escapeHtmlAttr(__('Precisa de ajuda? Falar no WhatsApp (abre em nova aba)')) ?>">
             <?= $escaper->escapeHtml(__('Precisa de ajuda?')) ?> <span class="b2b-login-whatsapp__brand"><?= $escaper->escapeHtml(__('WhatsApp')) ?></span>
         </a>
     </footer>
@@ -141,3 +157,185 @@ declare(strict_types=1);
     }
     </script>
 </div>
+
+<style id="awa-lote10-pass-eye">
+/* awa-lote10-20260827 */
+
+/* awa-lote10-20260827: olho visivel a 390px — NAO sobrepor o input[type=password] (Chrome mobile descarta overlay). Overlay 44px sem caixa dupla. */
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-wrap {
+  position: relative !important;
+  overflow: visible !important;
+  isolation: auto !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass {
+  background-image: none !important;
+  background-color: #fff !important;
+  padding-right: 12px !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  inset: 0 0 auto auto !important;
+  inset-block-start: 0 !important;
+  inset-inline-end: 0 !important;
+  inset-block-end: auto !important;
+  inset-inline-start: auto !important;
+  transform: none !important;
+  z-index: 12 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  color: #1f2937 !important;
+  font-size: 18px !important;
+  line-height: 22px !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::before {
+  content: "" !important;
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex-shrink: 0 !important;
+  background-color: transparent !important;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqCBwDASkIWybWAAAB20lEQVQ4y+3UT2jPcRgH8Ndv/zJmaTHDlhzQUHKakj+X4apYlH+J4igHysHNhZKTi5sLBxfJZYkDZXNZihm1rJFa05qYzcwcfu9ffv0SLrvtXd/L53m+7+f9vJ/P82Eec43CvxJWt3eU8qpz9DOfof6e/yMOCdRiDTZjA1qxPOSf8B5v0YcBTFQWKlSQ1mEHTmAXmjGNcfxIahUaUY/PeI5buJc8Q/09ReKQLsVFnEyrj9GNF/iAxajBGJrQnuK7080DXEA/FELagOs4moQrUTKV2Gl0ReWjxIdjzVqcwalYcxiD1UuWtcI+XMLtkLzBTFo/i8toizUdWBkB3zGKh5jEkfzXXRWf92YA1zBWNoQm7I8F5ejMUEsDm8bNKO5Ec1WGUZ/g1wqCmsQqUYcFFWeT+Jbz2qpIfxp1B1FTdu1G42kl+kpDKsvdgy3oxUjJ4+F41xU1/fiCWbxCC1ZFRG+mPxDCBhzC1ag+j6FCWcVNuRk78RJ3onYwNq1Pm69zW9qwFQewHe9wDvdlcOXtNOM4jmFdCD4qbtpEcmqxQnEbGxO/ixsp+ntBSih7F1qiZhs2Ki5Ak+K9HceI4ko/w5N0NfPHla5EWRd1WISFyZ+M/1OY/dtDNI+5xS/3C4Nn25BTowAAAABJRU5ErkJggg==") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 22px 22px !important;
+  color: #1f2937 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 13 !important;
+  pointer-events: none !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle[aria-pressed="true"]::before {
+  content: "\25CE" !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__raster,
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__icon {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  opacity: 0 !important;
+}
+@media (max-width: 767px) {
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-wrap {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding-right: 12px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    flex: 0 0 44px !important;
+    z-index: 12 !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::before {
+    content: "" !important;
+    display: block !important;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqCBwDASkIWybWAAAB20lEQVQ4y+3UT2jPcRgH8Ndv/zJmaTHDlhzQUHKakj+X4apYlH+J4igHysHNhZKTi5sLBxfJZYkDZXNZihm1rJFa05qYzcwcfu9ffv0SLrvtXd/L53m+7+f9vJ/P82Eec43CvxJWt3eU8qpz9DOfof6e/yMOCdRiDTZjA1qxPOSf8B5v0YcBTFQWKlSQ1mEHTmAXmjGNcfxIahUaUY/PeI5buJc8Q/09ReKQLsVFnEyrj9GNF/iAxajBGJrQnuK7080DXEA/FELagOs4moQrUTKV2Gl0ReWjxIdjzVqcwalYcxiD1UuWtcI+XMLtkLzBTFo/i8toizUdWBkB3zGKh5jEkfzXXRWf92YA1zBWNoQm7I8F5ejMUEsDm8bNKO5Ec1WGUZ/g1wqCmsQqUYcFFWeT+Jbz2qpIfxp1B1FTdu1G42kl+kpDKsvdgy3oxUjJ4+F41xU1/fiCWbxCC1ZFRG+mPxDCBhzC1ag+j6FCWcVNuRk78RJ3onYwNq1Pm69zW9qwFQewHe9wDvdlcOXtNOM4jmFdCD4qbtpEcmqxQnEbGxO/ixsp+ntBSih7F1qiZhs2Ki5Ak+K9HceI4ko/w5N0NfPHla5EWRd1WISFyZ+M/1OY/dtDNI+5xS/3C4Nn25BTowAAAABJRU5ErkJggg==") !important;
+    background-size: 22px 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__raster {
+    position: static !important;
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    clip: auto !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+  }
+}
+
+/* AWA 51.63 — um único ícone no controle de visibilidade da senha. */
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::before {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: none !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__raster {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__icon {
+  position: static !important;
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__icon--hide,
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle[aria-pressed="true"] .b2b-password-toggle__icon--show {
+  display: none !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle[aria-pressed="true"] .b2b-password-toggle__icon--hide {
+  display: block !important;
+}
+
+</style>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!--
+  Handle compartilhado (update em múltiplas rotas).
+  SSOT: NÃO adicionar body class / CSS aqui — polui home/PLP/cart/checkout.
+  Contrato visual fica no handle da página (checkout_*, catalog_*, cms_*).
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+</page>

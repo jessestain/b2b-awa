@@ -4,7 +4,10 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <meta name="description"
-              content="Cadastro B2B recebido na AWA Motos. Sua solicitação está em análise — retorno por e-mail em até 1 dia útil."/>
+              content="Cadastro B2B na AWA Motos. Confirme o e-mail e acompanhe a liberação do acesso comercial."/>
         <css src="css/b2b/register-success-override.css" order="9999"/>
     </head>
+    <body>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
+    </body>
 </page>

@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 
 
-$cookieFixUrl = $block->getViewFileUrl('css/awa-cookie-consent-fix.min.css') . '?v=20260809-onda6b2-cookie';
+$cookieFixUrl = $block->getViewFileUrl('css/awa-cookie-consent-fix.min.css') . '?v=20260907-global-fixed-r19c';
 $cookieFixUrlJson = json_encode($block->escapeUrl($cookieFixUrl), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 ?>
 <style id="awa-b2b-auth-critical-inline">
@@ -42,6 +42,19 @@ body#html-body.b2b-auth-shell {
   --awa-border: #e5e7eb;
   --awa-border-strong: #d1d5db;
   --awa-border-subtle: #eee;
+  /* Layout empty não carrega _tokens.less; sem estes valores var(--awa-primary)
+     fica inválido e o CTA Entrar pinta texto branco em fundo transparente. */
+  --awa-brand: #b73337;
+  --awa-brand-dark: #8e2629;
+  --awa-primary: #b73337;
+  --awa-primary-hover: #8e2629;
+  --awa-primary-dark: #8e2629;
+  --awa-red: #b73337;
+  --awa-brand-primary: #b73337;
+  --awa-brand-hover: #8e2629;
+  --awa-auth-primary: #b73337;
+  --awa-auth-primary-hover: #8e2629;
+  --awa-text-inverse: #ffffff;
   background: #ffffff !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -79,10 +92,9 @@ body#html-body.b2b-auth-shell::before {
   pointer-events: none !important;
   z-index: -1 !important;
 }
-/* Cookie compacto no auth — evita full-bleed sobre o formulário */
-#awa-cookie-banner,
-.awa-cookie-banner,
-#html-body .awa-cookie-banner--visible {
+/* Cookie compacto no auth — vence design-system full-bleed (12x #html-body) */
+html body#html-body.b2b-auth-shell#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-cookie-banner,
+html body#html-body.b2b-auth-shell#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-cookie-banner.awa-cookie-banner--visible {
   position: fixed !important;
   inset: auto 12px 12px auto !important;
   left: auto !important;
@@ -90,6 +102,7 @@ body#html-body.b2b-auth-shell::before {
   bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
   width: min(calc(100% - 24px), 360px) !important;
   max-width: min(calc(100% - 24px), 360px) !important;
+  max-height: min(28vh, 160px) !important;
   z-index: 850 !important;
   box-sizing: border-box !important;
   border-radius: 8px !important;
@@ -375,21 +388,22 @@ body#html-body.b2b-auth-shell #b2b-pass {
   box-sizing: border-box !important;
   font-size: var(--b2b-auth-font-body) !important;
   line-height: 1.35 !important;
-  border-radius: 8px !important;
+  border-radius: var(--b2b-auth-radius-control, var(--awa-radius-sm, 8px)) !important;
 }
 body#html-body.b2b-auth-shell #b2b-pass {
   padding-right: 52px !important;
 }
-body#html-body.b2b-auth-shell .b2b-field input:focus-visible,
-body#html-body.b2b-auth-shell .b2b-password-toggle:focus-visible,
-body#html-body.b2b-auth-shell :is(.b2b-btn-entrar, .b2b-btn-register, .b2b-btn-claim, .b2b-login-forgot__link):focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+body#html-body.b2b-auth-shell .b2b-field input:is(:focus, :focus-visible),
+body#html-body.b2b-auth-shell .b2b-password-toggle:is(:focus, :focus-visible),
+body#html-body.b2b-auth-shell :is(.b2b-btn-entrar, .b2b-btn-register, .b2b-btn-claim, .b2b-login-forgot__link):is(:focus, :focus-visible) {
+  outline: 2px solid var(--awa-primary, #b73337) !important; /* Magento *:focus { outline:none } — WCAG 2.4.7 */
   outline-offset: 2px !important;
 }
 body#html-body.b2b-auth-shell .b2b-password-toggle {
   position: absolute !important;
   top: 0 !important;
   right: 0 !important;
+  z-index: 6 !important;
   transform: none !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -402,10 +416,48 @@ body#html-body.b2b-auth-shell .b2b-password-toggle {
   max-height: 44px !important;
   margin: 0 !important;
   padding: 0 !important;
-  border: 1px solid var(--awa-color-border, #d1d5db) !important;
+  border: 0 !important;
   border-radius: 8px !important;
-  background: var(--awa-bg-surface, #fff) !important;
+  background: transparent !important;
   box-sizing: border-box !important;
+  overflow: visible !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle::before {
+  content: "" !important;
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  flex-shrink: 0 !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") center/contain no-repeat !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle:has(.b2b-password-toggle__icon)::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle .b2b-password-toggle__icon {
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle .b2b-password-toggle__icon--hide {
+  display: none !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle[aria-pressed="true"] .b2b-password-toggle__icon--show {
+  display: none !important;
+}
+body#html-body.b2b-auth-shell .b2b-password-toggle[aria-pressed="true"] .b2b-password-toggle__icon--hide {
+  display: block !important;
 }
 body#html-body.b2b-auth-shell .b2b-login-forgot {
   display: flex;
@@ -522,18 +574,25 @@ body#html-body.b2b-auth-shell .b2b-login-whatsapp {
   justify-content: center !important;
   min-height: 44px !important;
   padding: var(--b2b-auth-gap-sm) var(--b2b-auth-gap-lg) !important;
-  background: #117a6f !important;
-  border: 1px solid #117a6f !important;
-  color: #fff !important;
+  background: var(--awa-whatsapp-dark, #117a6f) !important; /* #25D366 falha contraste AA com texto branco */
+  border: 1px solid var(--awa-whatsapp-dark, #117a6f) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   border-radius: var(--b2b-auth-radius-control, 8px) !important;
   font-size: var(--b2b-auth-font-body) !important;
   text-decoration: none !important;
 }
 body#html-body.b2b-auth-shell .b2b-login-whatsapp:hover,
 body#html-body.b2b-auth-shell .b2b-login-whatsapp:focus-visible {
-  background: #075e54 !important;
-  border-color: #075e54 !important;
-  color: #fff !important;
+  background: color-mix(in srgb, var(--awa-whatsapp-dark, #117a6f) 82%, #000) !important;
+  border-color: color-mix(in srgb, var(--awa-whatsapp-dark, #117a6f) 82%, #000) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp,
+html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp :is(strong, span) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 body#html-body.b2b-auth-shell.b2b-register-index .form-section[data-step] {
   margin: 0 !important;
@@ -715,7 +774,7 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-password-toggle {
   min-width: 44px !important;
   min-height: 44px !important;
 }
-body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-form :is(input, select, button, a):focus-visible {
+body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-form :is(input, select, button, a):is(:focus, :focus-visible) {
   outline: 2px solid var(--awa-primary, #b73337) !important;
   outline-offset: 2px !important;
 }
@@ -814,6 +873,173 @@ body#html-body.b2b-auth-shell:not(.b2b-register-index) :is(
     min-inline-size: 20px !important;
   }
 }
+
+/* awa-lote9-20260827 critical eye */
+
+/* awa-lote9-20260827-b: olho pintado no INPUT (sempre visivel no 390px) + hit 44px */
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 22px 22px !important;
+  background-color: #fff !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass[type="text"] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f2937' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-wrap {
+  overflow: visible !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-toggle {
+  z-index: 8 !important;
+  right: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+
+
+/* awa-lote10-20260827: olho visivel a 390px — NAO sobrepor o input[type=password] (Chrome mobile descarta overlay). Overlay 44px sem caixa dupla. */
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-wrap {
+  position: relative !important;
+  overflow: visible !important;
+  isolation: auto !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass {
+  background-image: none !important;
+  background-color: #fff !important;
+  padding-right: 12px !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  inset: 0 0 auto auto !important;
+  inset-block-start: 0 !important;
+  inset-inline-end: 0 !important;
+  inset-block-end: auto !important;
+  inset-inline-start: auto !important;
+  transform: none !important;
+  z-index: 12 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  color: #1f2937 !important;
+  font-size: 18px !important;
+  line-height: 22px !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::before {
+  content: "" !important;
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  flex-shrink: 0 !important;
+  background-color: transparent !important;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqCBwDASkIWybWAAAB20lEQVQ4y+3UT2jPcRgH8Ndv/zJmaTHDlhzQUHKakj+X4apYlH+J4igHysHNhZKTi5sLBxfJZYkDZXNZihm1rJFa05qYzcwcfu9ffv0SLrvtXd/L53m+7+f9vJ/P82Eec43CvxJWt3eU8qpz9DOfof6e/yMOCdRiDTZjA1qxPOSf8B5v0YcBTFQWKlSQ1mEHTmAXmjGNcfxIahUaUY/PeI5buJc8Q/09ReKQLsVFnEyrj9GNF/iAxajBGJrQnuK7080DXEA/FELagOs4moQrUTKV2Gl0ReWjxIdjzVqcwalYcxiD1UuWtcI+XMLtkLzBTFo/i8toizUdWBkB3zGKh5jEkfzXXRWf92YA1zBWNoQm7I8F5ejMUEsDm8bNKO5Ec1WGUZ/g1wqCmsQqUYcFFWeT+Jbz2qpIfxp1B1FTdu1G42kl+kpDKsvdgy3oxUjJ4+F41xU1/fiCWbxCC1ZFRG+mPxDCBhzC1ag+j6FCWcVNuRk78RJ3onYwNq1Pm69zW9qwFQewHe9wDvdlcOXtNOM4jmFdCD4qbtpEcmqxQnEbGxO/ixsp+ntBSih7F1qiZhs2Ki5Ak+K9HceI4ko/w5N0NfPHla5EWRd1WISFyZ+M/1OY/dtDNI+5xS/3C4Nn25BTowAAAABJRU5ErkJggg==") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 22px 22px !important;
+  color: #1f2937 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 13 !important;
+  pointer-events: none !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle[aria-pressed="true"]::before {
+  content: "\25CE" !important;
+}
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__raster,
+html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__icon {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  opacity: 0 !important;
+}
+@media (max-width: 767px) {
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper .b2b-password-wrap {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper #b2b-pass {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    padding-right: 12px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle {
+    position: static !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    flex: 0 0 44px !important;
+    z-index: 12 !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle::before {
+    content: "" !important;
+    display: block !important;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfqCBwDASkIWybWAAAB20lEQVQ4y+3UT2jPcRgH8Ndv/zJmaTHDlhzQUHKakj+X4apYlH+J4igHysHNhZKTi5sLBxfJZYkDZXNZihm1rJFa05qYzcwcfu9ffv0SLrvtXd/L53m+7+f9vJ/P82Eec43CvxJWt3eU8qpz9DOfof6e/yMOCdRiDTZjA1qxPOSf8B5v0YcBTFQWKlSQ1mEHTmAXmjGNcfxIahUaUY/PeI5buJc8Q/09ReKQLsVFnEyrj9GNF/iAxajBGJrQnuK7080DXEA/FELagOs4moQrUTKV2Gl0ReWjxIdjzVqcwalYcxiD1UuWtcI+XMLtkLzBTFo/i8toizUdWBkB3zGKh5jEkfzXXRWf92YA1zBWNoQm7I8F5ejMUEsDm8bNKO5Ec1WGUZ/g1wqCmsQqUYcFFWeT+Jbz2qpIfxp1B1FTdu1G42kl+kpDKsvdgy3oxUjJ4+F41xU1/fiCWbxCC1ZFRG+mPxDCBhzC1ag+j6FCWcVNuRk78RJ3onYwNq1Pm69zW9qwFQewHe9wDvdlcOXtNOM4jmFdCD4qbtpEcmqxQnEbGxO/ixsp+ntBSih7F1qiZhs2Ki5Ak+K9HceI4ko/w5N0NfPHla5EWRd1WISFyZ+M/1OY/dtDNI+5xS/3C4Nn25BTowAAAABJRU5ErkJggg==") !important;
+    background-size: 22px 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-password-toggle .b2b-password-toggle__raster {
+    position: static !important;
+    display: block !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    clip: auto !important;
+    clip-path: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    left: auto !important;
+    top: auto !important;
+  }
+}
+
 </style>
 <script>
 (function (d) {

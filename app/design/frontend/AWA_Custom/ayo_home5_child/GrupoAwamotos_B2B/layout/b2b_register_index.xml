@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <!--
     AWA B2B Register — Layout Override
-    Injeta register-override.css APÓS todos os bundles existentes (order 9999),
-    garantindo que as correções de seletor e UX sobrescrevam register.css.
     Handle: b2b_register_index  (rota: /b2b/register/index/)
+
+    SSOT 2026-08-10: shell auth + CNPJ autofill vivem apenas em b2b_auth_shell.xml
+    (update handle do módulo). Não redeclarar aqui para evitar dupla autoridade CSS.
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       layout="empty"
@@ -11,8 +12,17 @@
     <head>
         <meta name="description"
               content="Cadastre sua empresa no portal B2B da AWA Motos. Acesso a preços de atacado, crédito e cotações para revendas de peças para motos."/>
-        <!-- register-override.css retirado 2026-06-12: regras em _b2b-register.less + _awa-visual-consolidation -->
-        <css src="css/awa-b2b-auth-shell-final.css" order="10000"/>
-        <css src="css/awa-cnpj-autofill.css" order="10001"/>
+        <css src="css/awa-ai-assistant-auth.css" order="10050"/>
     </head>
+    <body>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
+        <!-- r4d: light auth — storage/pageCache/home widgets; keep AI coach for register -->
+        <referenceBlock name="frontend-storage-manager" remove="true"/>
+        <referenceBlock name="customer.data.invalidation.rules" remove="true"/>
+        <referenceBlock name="pageCache" remove="true"/>
+        <referenceBlock name="pagebuilder.widget.initializer" remove="true"/>
+        <referenceBlock name="awa.shelf.carousel" remove="true"/>
+        <!-- Coach de cadastro: o shell auth remove o FAB global; restaura só nesta rota. -->
+        <referenceBlock name="grupoawamotos.ai.chat.widget" remove="false"/>
+    </body>
 </page>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+    Dashboard B2B — herda shell de customer_account (align-grid + account-shell-final).
+    Mantém remove de widgets B2C para paridade com b2b_account_index.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="rexisml.recommendations" remove="true"/>
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+    </body>
+</page>

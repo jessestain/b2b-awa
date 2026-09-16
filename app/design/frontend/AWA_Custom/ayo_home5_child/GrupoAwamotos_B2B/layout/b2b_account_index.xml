@@ -6,6 +6,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <!-- Evita H1 duplicado: título vem do template account/dashboard.phtml -->
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="rexisml.recommendations" remove="true"/>
         <referenceBlock name="sale.reorder.sidebar" remove="true"/>
     </body>

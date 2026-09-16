@@ -50,6 +50,16 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
             <!-- Form -->
             <form class="b2b-register-form" action="<?= $block->escapeUrl($block->getFormAction()) ?>" method="post" id="b2b-register-form" aria-labelledby="b2b-register-title" novalidate>
                 <?= $block->getChildHtml('b2b_form_key') ?>
+                <input type="hidden" name="b2b_idempotency" value="<?= $escaper->escapeHtmlAttr($block->getIdempotencyToken()) ?>">
+                <?php $attribution = $block->getAttributionFieldValues(); ?>
+                <input type="hidden" name="utm_source" value="<?= $escaper->escapeHtmlAttr($attribution['utm_source']) ?>">
+                <input type="hidden" name="utm_medium" value="<?= $escaper->escapeHtmlAttr($attribution['utm_medium']) ?>">
+                <input type="hidden" name="utm_campaign" value="<?= $escaper->escapeHtmlAttr($attribution['utm_campaign']) ?>">
+                <input type="hidden" name="utm_content" value="<?= $escaper->escapeHtmlAttr($attribution['utm_content']) ?>">
+                <input type="hidden" name="utm_term" value="<?= $escaper->escapeHtmlAttr($attribution['utm_term']) ?>">
+                <input type="hidden" name="cname" value="<?= $escaper->escapeHtmlAttr($attribution['cname']) ?>">
+                <input type="hidden" name="attendant" value="<?= $escaper->escapeHtmlAttr($attribution['attendant']) ?>">
+                <input type="hidden" name="vendedor" value="<?= $escaper->escapeHtmlAttr($attribution['vendedor']) ?>">
                 <div id="b2b-register-form-status" class="b2b-register-form-status" role="status" aria-live="polite" aria-atomic="true"></div>
                 <input type="text" name="b2b_website" id="b2b_website" class="b2b-ht" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -210,7 +220,7 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                             <div class="control">
                                 <input type="text" name="numero" id="numero" title="<?= $block->escapeHtmlAttr(__('Número')) ?>"
                                        class="input-text" data-validate="{required:true}" required aria-required="true" placeholder="<?= $block->escapeHtmlAttr(__('Nº')) ?>"
-                                       autocomplete="address-line2"
+                                       autocomplete="off"
                                        value="<?= $escaper->escapeHtmlAttr($block->getFormValue('numero')) ?>">
                             </div>
                         </div>
@@ -221,6 +231,7 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                         <div class="control">
                             <input type="text" name="complemento" id="complemento" title="<?= $block->escapeHtmlAttr(__('Complemento')) ?>"
                                    class="input-text" placeholder="<?= $block->escapeHtmlAttr(__('Sala, Andar, Bloco...')) ?>"
+                                   autocomplete="address-line2"
                                    value="<?= $escaper->escapeHtmlAttr($block->getFormValue('complemento')) ?>">
                         </div>
                     </div>
@@ -381,7 +392,21 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                         <input type="checkbox" name="terms" id="terms" value="1" class="checkbox" data-validate="{required:true}" required aria-required="true"
                             <?= $block->getFormValue('terms') === '1' ? ' checked="checked"' : '' ?>>
                         <label for="terms" class="label">
-                            <span><?= /* @noEscape */ __('Li e aceito os <a href="%1" target="_blank" rel="noopener noreferrer">Termos de Uso</a> e <a href="%2" target="_blank" rel="noopener noreferrer">Política de Privacidade</a>', $termsUrl, $privacyPolicyUrl) ?></span>
+                            <span><?= /* @noEscape */ __('Li e aceito os <a href="%1" target="_blank" rel="noopener noreferrer">Termos de Uso</a>.', $termsUrl) ?></span>
+                        </label>
+                    </div>
+                    <div class="field choice required b2b-register-privacy">
+                        <input type="checkbox" name="privacy" id="privacy" value="1" class="checkbox" data-validate="{required:true}" required aria-required="true"
+                            <?= $block->getFormValue('privacy') === '1' ? ' checked="checked"' : '' ?>>
+                        <label for="privacy" class="label">
+                            <span><?= /* @noEscape */ __('Li e aceito a <a href="%1" target="_blank" rel="noopener noreferrer">Política de Privacidade</a>.', $privacyPolicyUrl) ?></span>
+                        </label>
+                    </div>
+                    <div class="field choice b2b-register-whatsapp-consent">
+                        <input type="checkbox" name="whatsapp_consent" id="whatsapp_consent" value="1" class="checkbox"
+                            <?= $block->getFormValue('whatsapp_consent') === '1' ? ' checked="checked"' : '' ?>>
+                        <label for="whatsapp_consent" class="label">
+                            <span><?= $block->escapeHtml(__('Autorizo contato comercial pelo WhatsApp (opcional).')) ?></span>
                         </label>
                     </div>
                 </div>

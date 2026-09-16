@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+    AWA Motos — B2B Shopping List VIEW
+    SSOT visual: GrupoAwamotos_B2B::css/account/pages-shoppinglist.css
+    (módulo). css/b2b/shoppinglist.css não é carregado: seletores
+    .b2b-shopping-lists não existem no markup vigente.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+</page>

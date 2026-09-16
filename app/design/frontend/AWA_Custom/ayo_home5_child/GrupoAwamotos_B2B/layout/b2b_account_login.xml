@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
+<!--
+    SSOT auth B2B: page layout="empty" (contrato visual shell).
+    Shell CSS vem de b2b_auth_shell.xml — não redeclarar folhas aqui.
+-->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       layout="empty"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -6,4 +10,14 @@
         <meta name="description"
               content="Acesse o portal B2B da AWA Motos com e-mail ou CNPJ. Área exclusiva para empresas e revendas de peças para motos."/>
     </head>
+    <body>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
+        <!-- r4d: light auth — home widgets / Magento_Ui storage -->
+        <referenceBlock name="frontend-storage-manager" remove="true"/>
+        <referenceBlock name="customer.data.invalidation.rules" remove="true"/>
+        <referenceBlock name="pageCache" remove="true"/>
+        <referenceBlock name="grupoawamotos.ai.chat.widget" remove="true"/>
+        <referenceBlock name="pagebuilder.widget.initializer" remove="true"/>
+        <referenceBlock name="awa.shelf.carousel" remove="true"/>
+    </body>
 </page>

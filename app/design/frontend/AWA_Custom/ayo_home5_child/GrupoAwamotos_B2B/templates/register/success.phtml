@@ -7,9 +7,19 @@ declare(strict_types=1);
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
+
+$b2bHelper = $block->getData('b2b_helper');
+$isApproved = $b2bHelper instanceof \GrupoAwamotos\B2B\Helper\Data
+    && $b2bHelper->isCurrentCustomerApproved();
+$shellClass = 'b2b-login-page b2b-register-success-shell' . ($isApproved ? ' is-approved' : ' is-pending');
+$whatsappText = $isApproved
+    ? 'Olá, preciso de ajuda com minha conta B2B recém-aprovada'
+    : 'Olá, preciso de ajuda com meu cadastro B2B';
+$whatsappHref = 'https://wa.me/5516997367588?text=' . rawurlencode($whatsappText);
 ?>
+<?= $block->fetchView($block->getTemplateFile('GrupoAwamotos_B2B::html/awa-b2b-auth-cta-lock.phtml')) ?>
 <div id="b2b-register-success-shell"
-     class="b2b-login-page b2b-register-success-shell"
+     class="<?= $escaper->escapeHtmlAttr($shellClass) ?>"
      aria-labelledby="b2b-success-title">
     <?= $block->getChildHtml('auth_logo') ?>
 
@@ -26,14 +36,29 @@ declare(strict_types=1);
 
             <header class="b2b-auth-card-head">
                 <h1 id="b2b-success-title" class="success-title b2b-login-title">
-                    <?= $escaper->escapeHtml(__('Sua jornada B2B começa aqui!')) ?>
+                    <?php if ($isApproved): ?>
+                        <?= $escaper->escapeHtml(__('Sua conta B2B já está ativa')) ?>
+                    <?php else: ?>
+                        <?= $escaper->escapeHtml(__('Sua jornada B2B começa aqui!')) ?>
+                    <?php endif; ?>
                 </h1>
                 <p class="success-subtitle b2b-login-subtitle">
-                    <?= $escaper->escapeHtml(__('Recebemos sua solicitação de cadastro com sucesso.')) ?>
+                    <?php if ($isApproved): ?>
+                        <?= $escaper->escapeHtml(__('Cadastro aprovado. Você já pode consultar preços e condições comerciais.')) ?>
+                    <?php else: ?>
+                        <?= $escaper->escapeHtml(__('Recebemos sua solicitação de cadastro com sucesso.')) ?>
+                    <?php endif; ?>
                 </p>
+                <?php $protocol = $block instanceof \GrupoAwamotos\B2B\Block\Register\Success ? $block->getProtocol() : ''; ?>
+                <?php if ($protocol !== ''): ?>
+                    <p class="b2b-register-protocol" data-awa-register-protocol="1">
+                        <?= $escaper->escapeHtml(__('Protocolo:')) ?>
+                        <strong><?= $escaper->escapeHtml($protocol) ?></strong>
+                    </p>
+                <?php endif; ?>
             </header>
 
-            <ol class="success-steps" aria-label="<?= $escaper->escapeHtmlAttr(__('Próximos passos do cadastro B2B')) ?>">
+            <ol class="success-steps" aria-label="<?= $escaper->escapeHtmlAttr($isApproved ? __('Status do cadastro B2B') : __('Próximos passos do cadastro B2B')) ?>">
                 <li class="step-item completed">
                     <div class="step-dot" aria-hidden="true"></div>
                     <div class="step-content">
@@ -41,38 +66,68 @@ declare(strict_types=1);
                         <p><?= $escaper->escapeHtml(__('Seus dados foram registrados com segurança em nossa base.')) ?></p>
                     </div>
                 </li>
-                <li class="step-item active" aria-current="step">
-                    <div class="step-dot" aria-hidden="true"></div>
-                    <div class="step-content">
-                        <h2 class="step-heading"><?= $escaper->escapeHtml(__('Análise de Perfil')) ?></h2>
-                        <p><?= $escaper->escapeHtml(__('Nossa equipe comercial está validando seu CNPJ e dados de empresa. Prazo médio: 24h úteis.')) ?></p>
-                    </div>
-                </li>
-                <li class="step-item">
-                    <div class="step-dot" aria-hidden="true"></div>
-                    <div class="step-content">
-                        <h2 class="step-heading"><?= $escaper->escapeHtml(__('Liberação de Acesso')) ?></h2>
-                        <p><?= $escaper->escapeHtml(__('Você receberá um e-mail de confirmação e poderá acessar tabelas de preços exclusivas.')) ?></p>
-                    </div>
-                </li>
+                <?php if ($isApproved): ?>
+                    <li class="step-item completed">
+                        <div class="step-dot" aria-hidden="true"></div>
+                        <div class="step-content">
+                            <h2 class="step-heading"><?= $escaper->escapeHtml(__('Perfil Validado')) ?></h2>
+                            <p><?= $escaper->escapeHtml(__('O ramo da sua empresa combina com o atacado de motopeças, então o acesso foi liberado agora.')) ?></p>
+                        </div>
+                    </li>
+                    <li class="step-item completed">
+                        <div class="step-dot" aria-hidden="true"></div>
+                        <div class="step-content">
+                            <h2 class="step-heading"><?= $escaper->escapeHtml(__('Acesso Liberado')) ?></h2>
+                            <p><?= $escaper->escapeHtml(__('Enviamos um e-mail de confirmação. Preços e condições B2B já estão visíveis na loja.')) ?></p>
+                        </div>
+                    </li>
+                <?php else: ?>
+                    <li class="step-item active" aria-current="step">
+                        <div class="step-dot" aria-hidden="true"></div>
+                        <div class="step-content">
+                            <h2 class="step-heading"><?= $escaper->escapeHtml(__('Análise de Perfil')) ?></h2>
+                            <p><?= $escaper->escapeHtml(__('Nossa equipe comercial está validando seu CNPJ e dados de empresa. Prazo médio: 24h úteis.')) ?></p>
+                        </div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-dot" aria-hidden="true"></div>
+                        <div class="step-content">
+                            <h2 class="step-heading"><?= $escaper->escapeHtml(__('Liberação de Acesso')) ?></h2>
+                            <p><?= $escaper->escapeHtml(__('Você receberá um e-mail de confirmação e poderá acessar tabelas de preços exclusivas.')) ?></p>
+                        </div>
+                    </li>
+                <?php endif; ?>
             </ol>
 
             <div class="success-actions">
-                <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/dashboard')) ?>"
-                   class="action primary b2b-btn-entrar">
-                    <span><?= $escaper->escapeHtml(__('Acessar Meu Painel')) ?></span>
-                </a>
-                <p class="login-note">
-                    <?= $escaper->escapeHtml(__('Enquanto isso, você já pode explorar o painel e gerenciar seu perfil.')) ?>
-                </p>
+                <?php if ($isApproved): ?>
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
+                       class="action primary b2b-btn-entrar">
+                        <span><?= $escaper->escapeHtml(__('Ver preços na loja')) ?></span>
+                    </a>
+                    <p class="login-note">
+                        <?= $escaper->escapeHtml(__('Seu painel B2B também já está disponível para acompanhar pedidos e cotações.')) ?>
+                        <a class="success-panel-link" href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/dashboard')) ?>">
+                            <?= $escaper->escapeHtml(__('Abrir painel')) ?>
+                        </a>
+                    </p>
+                <?php else: ?>
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/dashboard')) ?>"
+                       class="action primary b2b-btn-entrar">
+                        <span><?= $escaper->escapeHtml(__('Acessar Meu Painel')) ?></span>
+                    </a>
+                    <p class="login-note">
+                        <?= $escaper->escapeHtml(__('Enquanto isso, você já pode explorar o painel e gerenciar seu perfil.')) ?>
+                    </p>
+                <?php endif; ?>
             </div>
 
             <footer class="success-support b2b-login-footer">
                 <p id="b2b-success-support-label"><?= $escaper->escapeHtml(__('Dúvidas? Fale com nosso suporte B2B:')) ?></p>
-                <a href="https://wa.me/5516997367588?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20meu%20cadastro%20B2B"
+                <a href="<?= $escaper->escapeHtmlAttr($whatsappHref) ?>"
                    target="_blank"
                    rel="noopener noreferrer"
-                   class="b2b-login-whatsapp whatsapp-link"
+                   class="b2b-login-whatsapp b2b-btn-whatsapp whatsapp-link"
                    aria-labelledby="b2b-success-support-label"
                    aria-label="<?= $escaper->escapeHtmlAttr(__('Falar no WhatsApp — (16) 99736-7588')) ?>">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>

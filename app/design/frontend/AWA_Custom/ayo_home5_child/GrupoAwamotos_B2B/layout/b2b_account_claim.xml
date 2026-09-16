@@ -6,4 +6,7 @@
         <meta name="description"
               content="Ative sua conta B2B na AWA Motos. Informe e-mail ou CNPJ para receber o link de acesso ao portal corporativo."/>
     </head>
+    <body>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
+    </body>
 </page>
