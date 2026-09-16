@@ -1,0 +1,45 @@
+<?php
+/**
+ * Popular search terms — hide SKU/audit noise.
+ *
+ * @var \Magento\Search\Block\Term $block
+ */
+declare(strict_types=1);
+
+$quality = $block->getData('term_quality');
+$terms = $block->getTerms();
+$kept = 0;
+$visible = [];
+
+if (is_array($terms) || $terms instanceof \Traversable) {
+    foreach ($terms as $term) {
+        $label = trim((string) $term->getQueryText());
+        $numResults = method_exists($term, 'getNumResults') ? (int) $term->getNumResults() : null;
+        $ok = !($quality instanceof \GrupoAwamotos\Theme\Model\Search\PopularSearchTermQuality)
+            || $quality->isDisplayable($label, $numResults);
+        if (!$ok) {
+            continue;
+        }
+        $kept++;
+        $visible[] = $term;
+    }
+}
+
+?>
+<?php if ($kept > 0): ?>
+    <ul class="search-terms">
+        <?php foreach ($visible as $_term): ?>
+            <?php $fontSize = (float) $_term->getRatio() * 70 + 75; ?>
+            <li id="term-<?= $block->escapeHtmlAttr((string) $_term->getId()) ?>" class="item">
+                <a href="<?= $block->escapeUrl($block->getSearchUrl($_term)) ?>"
+                   style="font-size: <?= $block->escapeHtmlAttr((string) $fontSize) ?>%;">
+                    <?= $block->escapeHtml($_term->getQueryText()) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <div class="message info empty">
+        <div><?= $block->escapeHtml(__('Ainda não temos termos populares suficientes para exibir aqui.')) ?></div>
+    </div>
+<?php endif; ?>

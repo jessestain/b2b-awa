@@ -20,5 +20,17 @@
                    after="-"/>
         </referenceBlock>
         <referenceBlock name="awa.institutional.h1" remove="true"/>
+        <!-- Magento way: PHTML + ViewModel no lugar do CMS awa_contact_header (span sem tel:). -->
+        <referenceBlock name="awa.contact.header" remove="true"/>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.contact.header.ssot"
+                   template="Magento_Contact::awa-contact-header.phtml"
+                   before="contactForm">
+                <arguments>
+                    <argument name="contact_info" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ContactInfo</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
     </body>
 </page>

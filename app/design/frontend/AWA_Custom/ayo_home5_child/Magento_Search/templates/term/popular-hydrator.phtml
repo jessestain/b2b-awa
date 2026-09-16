@@ -1,0 +1,39 @@
+<script>
+(function () {
+    'use strict';
+
+    function decodeSearchLabel(href) {
+        try {
+            var url = new URL(href, window.location.origin);
+            var term = (url.searchParams.get('q') || '').trim();
+            return term;
+        } catch (error) {
+            return '';
+        }
+    }
+
+    function hydratePopularAnchors() {
+        var anchors = document.querySelectorAll('.search-terms a[href]');
+        anchors.forEach(function (anchor) {
+            if (anchor.textContent.trim() !== '') {
+                return;
+            }
+
+            var label = decodeSearchLabel(anchor.getAttribute('href') || '');
+            if (!label) {
+                return;
+            }
+
+            anchor.textContent = label;
+            anchor.setAttribute('aria-label', label);
+            anchor.setAttribute('title', label);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', hydratePopularAnchors, { once: true });
+    } else {
+        hydratePopularAnchors();
+    }
+}());
+</script>

@@ -2,14 +2,28 @@
 declare(strict_types=1);
 
 /**
- * QuickView bootstrap — home adia mage-init até interação (TBT/DCL).
+ * QuickView bootstrap — home skips mage-init; PLP/search defer until pointerdown/idle 1s.
  *
  * @var \Magento\Framework\View\Element\Template $block
  */
 $layoutHandles = $block->getLayout() ? $block->getLayout()->getUpdate()->getHandles() : [];
 $isHomePage = in_array('cms_index_index', $layoutHandles, true);
+$isCatalogPlp = in_array('catalog_category_view', $layoutHandles, true)
+    || in_array('catalogsearch_result_index', $layoutHandles, true);
 ?>
-<?php if (!$isHomePage): ?>
+<?php if ($isHomePage): ?>
+<?php elseif ($isCatalogPlp): ?>
+<script type="text/plain" data-awa-catalog-defer-init="1">
+{
+	".quickview-product [data-role=quickview-button]": {
+		"productQuickview": {}
+	},
+	"*": {
+		"js/quickview-deps-init": {}
+	}
+}
+</script>
+<?php else: ?>
 <script type="text/x-magento-init">
 {
 	".quickview-product [data-role=quickview-button]": {

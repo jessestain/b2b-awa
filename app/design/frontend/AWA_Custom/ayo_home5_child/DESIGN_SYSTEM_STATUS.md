@@ -1,5 +1,10 @@
 # AWA Motos — Design System: COMPLETO ✅
 
+> **SUPERSEDED (2026-08-18).** Não usar como autoridade da cascata nem como
+> prova de “100% completo”. Índice: [`_documentacao/PADRONIZACAO_LAYOUT.md`](../../../../../_documentacao/PADRONIZACAO_LAYOUT.md).
+> Contrato vigente: [`CSS_INVENTORY.md`](CSS_INVENTORY.md).
+> Este arquivo permanece só como histórico de cobertura 2026-06.
+
 > **Atualizado (nota de governança):** 2026-06-28 — **CSS authority não é apenas `_extend.less`**.
 >
 > **Fontes canônicas do projeto visual:**

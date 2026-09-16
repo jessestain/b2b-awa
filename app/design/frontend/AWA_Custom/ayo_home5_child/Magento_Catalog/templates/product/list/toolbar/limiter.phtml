@@ -1,14 +1,19 @@
 <?php
 /**
  * AWA override — limiter com rótulo acessível.
- * Mantém a marcação enxuta do tema (sem label visível) e adiciona
- * aria-label ao select, que estava sem nome acessível (auditoria UX).
+ * O label permanece visualmente oculto no desktop e é exibido no mobile,
+ * onde o controle volta a fazer parte da toolbar (auditoria UX).
+ * O display inline neutraliza apenas os locks legados com !important;
+ * dimensões e composição responsiva continuam na folha PLP.
  *
  * @var \Magento\Catalog\Block\Product\ProductList\Toolbar $block
  * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<div class="field limiter">
+<div class="field limiter" style="display: flex !important;">
+    <label class="label limiter-label" for="limiter">
+        <span><?= $escaper->escapeHtml(__('Itens por página')) ?></span>
+    </label>
     <div class="control">
         <select id="limiter"
                 data-role="limiter"

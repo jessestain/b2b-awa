@@ -17,6 +17,11 @@
     <head>
         <!-- SEO: página transacional — fora do índice -->
         <meta name="robots" content="NOINDEX,NOFOLLOW"/>
+        <!-- Fase 6 fatia 5 — shell SSOT permanece; cortar folhas do cart/auth strip. -->
+        <remove src="css/awa-ui-promax-bundle.min.css"/>
+        <remove src="css/awa-commerce-impeccable-refine.min.css"/>
+        <remove src="css/awa-focus-visible.min.css"/>
+        <remove src="css/awa-plp-final-polish.css"/>
         <css src="css/awa-checkout-layout-lock.css" order="200"/>
         <css src="css/awa-checkout-shell-final.css" order="10000"/>
     </head>
@@ -68,6 +73,7 @@
             </arguments>
         </referenceBlock>
         <referenceBlock name="awa.checkout.polish.async" remove="true"/>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
         <referenceBlock name="head.additional">
             <block class="Magento\Framework\View\Element\Template"
                    name="awa.opc.checkout.critical"

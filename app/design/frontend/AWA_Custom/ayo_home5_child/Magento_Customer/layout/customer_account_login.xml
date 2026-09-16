@@ -13,5 +13,6 @@
                    template="Magento_Theme::html/awa-b2b-login-info.phtml"
                    before="-"/>
         </referenceContainer>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
     </body>
 </page>

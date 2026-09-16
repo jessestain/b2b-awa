@@ -13,20 +13,43 @@ $height = (int) $block->getHeight();
 $productId = (string) $block->getProductId();
 $uniqueId = $escaper->escapeHtmlAttr($productId !== '' ? $productId : 'no-product');
 $aspectRatio = ($width > 0 && $height > 0) ? sprintf('%d / %d', $width, $height) : '1 / 1';
+$rawAttrs = $block->getCustomAttributes();
+if ($rawAttrs instanceof \Traversable) {
+    $customAttrs = iterator_to_array($rawAttrs);
+} elseif (is_array($rawAttrs)) {
+    $customAttrs = $rawAttrs;
+} else {
+    $customAttrs = [];
+}
+$reservedAttrs = ['srcset', 'sizes', 'loading', 'decoding', 'fetchpriority'];
+$loading = isset($customAttrs['loading']) ? (string) $customAttrs['loading'] : 'lazy';
+$decoding = isset($customAttrs['decoding']) ? (string) $customAttrs['decoding'] : 'async';
+$srcset = isset($customAttrs['srcset']) ? (string) $customAttrs['srcset'] : '';
+$sizes = isset($customAttrs['sizes']) ? (string) $customAttrs['sizes'] : '';
+$fetchpriority = isset($customAttrs['fetchpriority']) ? (string) $customAttrs['fetchpriority'] : '';
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $uniqueId ?> awa-image-container--fluid"
       style="--awa-image-aspect: <?= $escaper->escapeHtmlAttr($aspectRatio) ?>;">
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-            <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
-                <?php if (in_array((string) $name, ['srcset', 'sizes', 'loading', 'decoding', 'fetchpriority'], true)): ?>
+            <?php foreach ($customAttrs as $name => $value): ?>
+                <?php if (in_array((string) $name, $reservedAttrs, true)): ?>
                     <?php continue; ?>
                 <?php endif; ?>
                 <?= $escaper->escapeHtmlAttr((string) $name) ?>="<?= $escaper->escapeHtmlAttr((string) $value) ?>"
             <?php endforeach; ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
-            loading="lazy"
-            decoding="async"
+            <?php if ($srcset !== ''): ?>
+                srcset="<?= $escaper->escapeHtmlAttr($srcset) ?>"
+            <?php endif; ?>
+            <?php if ($sizes !== ''): ?>
+                sizes="<?= $escaper->escapeHtmlAttr($sizes) ?>"
+            <?php endif; ?>
+            loading="<?= $escaper->escapeHtmlAttr($loading) ?>"
+            decoding="<?= $escaper->escapeHtmlAttr($decoding) ?>"
+            <?php if ($fetchpriority !== ''): ?>
+                fetchpriority="<?= $escaper->escapeHtmlAttr($fetchpriority) ?>"
+            <?php endif; ?>
             width="<?= /* @noEscape */ $width ?>"
             height="<?= /* @noEscape */ $height ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/>

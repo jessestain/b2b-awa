@@ -30,14 +30,23 @@ $showReview = (bool) $this->getConfig('review');
 $isHomePage = $block->getRequest()->getFullActionName() === 'cms_index_index';
 $sectionTitle = trim((string) $this->getConfig('title'));
 $carouselLabel = $sectionTitle !== '' ? $sectionTitle : (string) __('Lançamentos');
-$b2bPriceGate = $this->helper(\GrupoAwamotos\B2B\Helper\Data::class);
+/** @var \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel|null $cardVm */
+$cardVm = $block->getData('bestseller_card_view_model');
+$hasCardVm = $cardVm instanceof \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel;
+$b2bPriceGate = $hasCardVm ? $cardVm : $this->helper(\GrupoAwamotos\B2B\Helper\Data::class);
+$canViewPrices = $b2bPriceGate->canViewPrices();
+$priceGateHeadline = $b2bPriceGate->getPriceGateHeadline();
+$priceGateCardMessage = $b2bPriceGate->getPriceGateCardMessage();
+$priceGatePrimaryUrl = $b2bPriceGate->getPriceGatePrimaryUrl();
+$wishlistAllowed = $hasCardVm
+    ? $cardVm->isWishlistAllowed()
+    : (bool) $this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow();
 
 /** @var \GrupoAwamotos\Theme\ViewModel\HomeShelfDisplay|null $homeShelfDisplay */
 $homeShelfDisplay = $block->getData('home_shelf_display_view_model');
 $renderAddToCart = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeShelfDisplay
     ? $homeShelfDisplay->shouldRenderAddToCart($showCart, $isHomePage)
     : $showCart;
-$pricingHelper = $this->helper(\Magento\Framework\Pricing\Helper\Data::class);
 
 $shelfViewportKey = (string) ($block->getData('awa_shelf_viewport_key') ?: '');
 if ($shelfViewportKey === '') {
@@ -64,19 +73,19 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
             ) ?></p>
         </div>
     <?php else: ?>
-        <div class="awa-carousel">
+        <div class="awa-carousel awa-carousel--common awa-carousel--product awa-carousel--contained">
             <div class="awa-carousel__viewport awa-cq-card-wrapper"
                  id="<?= $block->escapeHtmlAttr($viewportId) ?>"
                  tabindex="0"
                  role="region"
                  aria-roledescription="<?= $block->escapeHtmlAttr(__('carrossel')) ?>"
                  aria-label="<?= $block->escapeHtmlAttr($carouselLabel) ?>">
-            <ul class="owl awa-carousel__track" aria-live="polite">
+            <ul class="owl awa-carousel__track">
                 <?php
                 $i = 0;
                 foreach ($_productCollection as $_product):
                     if ($i % $rows === 0) {
-                        echo "<li class='item newproductslider-item'>";
+                        echo '<li class="item newproductslider-item awa-carousel__slide">';
                     }
 
                     $productImage = $block->getImage($_product, $image);
@@ -125,6 +134,7 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                             <div class="product-thumb">
                                 <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
                                    class="product-thumb-link"
+                                   <?= $isHomePage ? 'tabindex="-1"' : '' ?>
                                    aria-label="<?= $block->escapeHtmlAttr($productDisplayName) ?>">
                                     <span class="first-thumb">
                                         <?= /* @noEscape */ $productImageHtml ?>
@@ -146,7 +156,7 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                 <div class="actions-secondary">
                                     <ul class="product-extra-link add-to-links">
                                         <li class="wishlist-product">
-                                            <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
+                                            <?php if ($wishlistAllowed): ?>
                                             <a href="#"
                                                class="wishlist-link action towishlist"
                                                data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_product) ?>'
@@ -169,10 +179,9 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                             </a>
                                         </li>
                                         <li class="compare-product">
-                                            <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare'); ?>
                                             <a href="#"
                                                class="compare-link action tocompare"
-                                               data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_product) ?>'
+                                               data-post='<?= /* @noEscape */ ($hasCardVm ? $cardVm->comparePostData($_product) : $this->helper(\Magento\Catalog\Helper\Product\Compare::class)->getPostDataParams($_product)) ?>'
                                                title="<?= $block->escapeHtmlAttr(__('Adicionar ao Comparador')) ?>"
                                                aria-label="<?= $block->escapeHtmlAttr(__('Adicionar ao Comparador')) ?>">
                                                 <i class="fa fa-retweet" aria-hidden="true"></i>
@@ -220,6 +229,7 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                 <h3 class="product-name">
                                     <a class="product-item-link"
                                        title="<?= $block->escapeHtmlAttr($productDisplayName) ?>"
+                                       <?= $isHomePage ? 'tabindex="-1"' : '' ?>
                                        href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
                                         <?= $block->escapeHtml($productDisplayName) ?>
                                     </a>
@@ -247,14 +257,20 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                 <?php endif; ?>
 
                                 <?php
-                                // show_price=1 deve renderizar preço OU gate B2B (mesmo contrato do bestseller).
+                                // show_price=1 renderiza preço OU gate B2B fora da home.
+                                // Na home, guest sem acesso a preço NÃO recebe o gate B2B
+                                // (decisão 2026-08-09, mesmo contrato do bestseller.phtml):
+                                // .info-price fica vazio e é colapsado por CSS
+                                // (.content-top-home .awa-product-card .info-price:not(:has(*))).
                                 $showPriceBlock = (bool) $this->getConfig('show_price');
                                 ?>
                                 <?php if ($showPriceBlock): ?>
                                     <div class="info-price">
-                                    <?php if ($b2bPriceGate->canViewPrices()): ?>
-                                        <?= /* @noEscape */ $this->helper('Rokanthemes\Themeoption\Helper\Data')->getPriceDisplayCustom($block->getProductPrice($_product)) ?>
-                                    <?php else: ?>
+                                    <?php if ($canViewPrices): ?>
+                                        <?= /* @noEscape */ ($hasCardVm
+                                            ? $cardVm->priceDisplayHtml((string) $block->getProductPrice($_product))
+                                            : $this->helper(\Rokanthemes\Themeoption\Helper\Data::class)->getPriceDisplayCustom($block->getProductPrice($_product))) ?>
+                                    <?php elseif (!$isHomePage): ?>
                                         <div class="b2b-login-to-see-price">
                                             <span class="b2b-login-to-see-price__title"><?= $block->escapeHtml($b2bPriceGate->getPriceGateHeadline()) ?></span>
                                             <span class="b2b-login-to-see-price__message"><?= $block->escapeHtml($b2bPriceGate->getPriceGateDescription()) ?></span>
@@ -263,7 +279,16 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                     </div>
                                 <?php endif; ?>
 
-                                <?php if ($isHomePage): ?>
+                                <?php if ($isHomePage && !$canViewPrices): ?>
+                                    <div class="awa-home-price-gate" role="note">
+                                        <span class="awa-home-price-gate__title"><?= $block->escapeHtml($priceGateHeadline) ?></span>
+                                        <a class="awa-card-view-product action secondary"
+                                           href="<?= $block->escapeUrl($priceGatePrimaryUrl) ?>"
+                                           aria-label="<?= $block->escapeHtmlAttr(__('%1: %2', $priceGateCardMessage, $productDisplayName)) ?>">
+                                            <?= $block->escapeHtml($priceGateCardMessage) ?>
+                                        </a>
+                                    </div>
+                                <?php elseif ($isHomePage): ?>
                                     <a class="awa-card-view-product action secondary"
                                        href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
                                        aria-label="<?= $block->escapeHtmlAttr(__('Ver produto: %1', $productDisplayName)) ?>">
@@ -290,6 +315,7 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
         <?= /* @noEscape */ $block->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)
             ->setTemplate('Magento_Theme::html/awa-shelf-carousel-chrome.phtml')
             ->setData('viewport_id', $viewportId)
+            ->setData('progress_label', (string) __('Progresso do carrossel %1', $carouselLabel))
             ->toHtml() ?>
 
     <?php endif; ?>

@@ -25,6 +25,16 @@ $directUrl = static fn (string $path): string => $block->getUrl('', ['_direct' =
             <?= $block->escapeHtml(__('O endereço que você acessou não existe ou foi movido.')) ?><br>
             <?= $block->escapeHtml(__('Verifique a URL ou use a busca no topo da página.')) ?>
         </p>
+        <script>
+        (function () {
+            'use strict';
+            var currentPath = (window.location.pathname || '').replace(/\/+$/, '') || '/';
+            if (currentPath !== '/ofertas.html') {
+                return;
+            }
+            window.location.replace('<?= $block->escapeJs($directUrl('super-ofertas.html')) ?>');
+        }());
+        </script>
         <nav class="awa-404-page__links" aria-label="<?= $block->escapeHtmlAttr(__('Links úteis')) ?>">
             <a href="<?= $block->escapeUrl($block->getUrl('')) ?>"><?= $block->escapeHtml(__('Ir para o início')) ?></a>
             <a href="<?= $block->escapeUrl($directUrl('bauletos.html')) ?>"><?= $block->escapeHtml(__('Bauletos')) ?></a>

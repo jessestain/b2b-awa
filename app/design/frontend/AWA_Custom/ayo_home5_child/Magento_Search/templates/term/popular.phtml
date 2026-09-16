@@ -1,0 +1,66 @@
+<?php
+/**
+ * AWA - Popular searches fallback template
+ * Corrige links de termos populares sem texto visível.
+ *
+ * @var \Magento\Search\Block\Term $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+declare(strict_types=1);
+
+$terms = $block->getSearchTerms();
+$hasTerms = $terms && (is_countable($terms) ? count($terms) > 0 : true);
+
+$getUrlMethod = method_exists($block, 'getSearchTermUrl')
+    ? 'getSearchTermUrl'
+    : (method_exists($block, 'getSearchTermURL') ? 'getSearchTermURL' : null);
+$getWeightMethod = method_exists($block, 'getSearchTermWeight')
+    ? 'getSearchTermWeight'
+    : null;
+?>
+
+<?php if (!$hasTerms) : ?>
+    <div class="message info empty">
+        <div><?= $escaper->escapeHtml(__('Ainda não temos termos populares suficientes para exibir aqui.')) ?></div>
+    </div>
+<?php else : ?>
+    <ul class="search-terms">
+        <?php foreach ($terms as $term) : ?>
+            <?php
+            $url = $getUrlMethod !== null ? (string) $block->{$getUrlMethod}($term) : '';
+            $weight = $getWeightMethod !== null ? (float) $block->{$getWeightMethod}($term) : 100.0;
+
+            $label = '';
+            if (is_object($term)) {
+                foreach (['getName', 'getQueryText', 'getDisplayQuery'] as $getter) {
+                    if (method_exists($term, $getter)) {
+                        $candidate = trim((string) $term->{$getter}());
+                        if ($candidate !== '') {
+                            $label = $candidate;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if ($label === '' && $url !== '') {
+                $query = parse_url($url, PHP_URL_QUERY);
+                if (is_string($query)) {
+                    parse_str($query, $queryParams);
+                    $label = trim((string) ($queryParams['q'] ?? ''));
+                }
+            }
+
+            if ($label === '') {
+                continue;
+            }
+            ?>
+            <li class="item">
+                <a href="<?= $escaper->escapeUrl($url) ?>"
+                   style="font-size:<?= $escaper->escapeHtmlAttr((string) $weight) ?>%;">
+                    <?= $escaper->escapeHtml($label) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

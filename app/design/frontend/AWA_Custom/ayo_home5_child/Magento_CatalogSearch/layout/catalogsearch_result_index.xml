@@ -43,6 +43,8 @@
         <attribute name="class" value="awa-plp-page-contract"/>
         <referenceBlock name="awa.header.impeccable.critical.global" remove="true"/>
         <referenceBlock name="awa.shelf.carousel" remove="true"/>
+        <!-- Paridade PLP: o widget nativo de recompra não pertence à busca. -->
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
         <!-- Performance: stack busca = PLP (plp-promax + §89/91/93) -->
         <referenceBlock name="awa.head.preload">
             <arguments>

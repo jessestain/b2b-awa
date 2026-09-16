@@ -7,4 +7,7 @@
     <head>
         <css src="css/awa-cnpj-autofill.css"/>
     </head>
+    <body>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
+    </body>
 </page>

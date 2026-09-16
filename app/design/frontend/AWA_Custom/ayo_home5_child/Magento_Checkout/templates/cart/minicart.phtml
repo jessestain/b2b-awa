@@ -6,6 +6,8 @@ declare(strict_types=1);
  * - Preserve AWA visual markup
  * - Remove ObjectManager usage
  * - Harden JSON/static URLs against control characters
+ * - Home defers Magento_Ui/js/core/app; dropdownDialog mage-init stays
+ *   (Magento mage/dropdown is independent of the KO UI Component).
  *
  * @var \Magento\Checkout\Block\Cart\Sidebar $block
  */
@@ -19,6 +21,7 @@ $sanitizeUrl = static function (?string $value): string {
 
 $request = $block->getRequest();
 $isHomeUiDefer = $request && (string) $request->getFullActionName() === 'cms_index_index';
+$isCartPage = $request && (string) $request->getFullActionName() === 'checkout_cart_index';
 $serializedCheckoutConfig = method_exists($block, 'getSerializedConfig')
     ? (string) $block->getSerializedConfig()
     : (string) json_encode($block->getConfig(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -26,14 +29,19 @@ $serializedCheckoutConfig = method_exists($block, 'getSerializedConfig')
 $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
 ?>
 
-<div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart header-mini-cart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
+<div <?= $isCartPage ? 'data-awa-cart-page-link="true"' : 'data-block="minicart"' ?> class="minicart-wrapper<?= $isCartPage ? ' awa-cart-page-link-wrapper' : '' ?>">
+    <a class="action header-mini-cart<?= $isCartPage ? ' awa-cart-page-link' : ' showcart' ?>" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
+       <?php if (!$isCartPage): ?>
        aria-haspopup="dialog"
+       <?php endif; ?>
        title="<?= $block->escapeHtmlAttr(__('Ver carrinho de compras')) ?>"
        aria-label="<?= $block->escapeHtmlAttr(__('Ver carrinho de compras')) ?>"
+       <?= $isCartPage ? 'aria-current="page"' : '' ?>
+       <?php if (!$isCartPage): ?>
        aria-expanded="false"
        aria-controls="minicart-content-wrapper"
-       <?= $isHomeUiDefer ? 'data-awa-minicart-defer="trigger"' : 'data-bind="scope: \'minicart_content\'"' ?>>
+       <?= $isHomeUiDefer ? 'data-awa-minicart-defer="trigger"' : 'data-bind="scope: \'minicart_content\'"' ?>
+       <?php endif; ?>>
         <span class="awa-sr-only"><?= $block->escapeHtml(__('Carrinho de compras')) ?> </span>
         <svg class="awa-minicart-icon" width="20" height="20" viewBox="-0.25 0.5 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="20" r="1"></circle>
@@ -43,8 +51,8 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
         <span class="counter qty empty"
               aria-live="polite"
               aria-atomic="true"
-              <?= $isHomeUiDefer ? '' : 'data-bind="css: { empty: !!getCartParam(\'summary_count\') == false }, blockLoader: isLoading"' ?>>
-            <span class="total-mini-cart-item"><?php if ($isHomeUiDefer): ?>0<?php else: ?>
+              <?= ($isHomeUiDefer || $isCartPage) ? '' : 'data-bind="css: { empty: !!getCartParam(\'summary_count\') == false }, blockLoader: isLoading"' ?>>
+            <span class="total-mini-cart-item"><?php if ($isHomeUiDefer || $isCartPage): ?>0<?php else: ?>
             <!-- ko if: getCartParam('summary_count') -->
                 <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
             <!-- /ko -->
@@ -54,10 +62,9 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
             <?php endif; ?></span>
         </span>
     </a>
-    <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart"
+    <?php if (!$isCartPage && $block->getIsNeedToDisplaySideBar()): ?>
+        <div class="block block-minicart<?= $isHomeUiDefer ? ' empty' : '' ?>"
                  data-role="dropdownDialog"
-                 <?php if (!$isHomeUiDefer): ?>
                  data-mage-init='{"dropdownDialog":{
                     "appendTo":"[data-block=minicart]",
                     "triggerTarget":".showcart",
@@ -66,9 +73,54 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
                     "closeOnEscape": true,
                     "triggerClass":"is-open",
                     "parentClass":"is-open",
-                    "buttons":[]}}'
-                 <?php endif; ?>>
-            <?php /* Título visível vem do KO (.block-title). aria-label evita "Meu Carrinho" duplicado no DOM. */ ?>
+                    "buttons":[]}}'>
+            <?php /* Shell home fica FORA do root Knockout (#minicart-content-wrapper). */ ?>
+            <?php if ($isHomeUiDefer): ?>
+                <?php
+                /**
+                 * Home adia Magento_Ui. Markup estático irmão do wrapper KO
+                 * até #btn-minicart-close existir. Não usar o wrapper como
+                 * container do shell — applyBindings caminharia esse DOM.
+                 */
+                ?>
+                <div class="awa-minicart-defer-shell" data-awa-minicart-defer-shell="true">
+                    <div class="block-title">
+                        <div class="awa-minicart-title-wrap">
+                            <strong>
+                                <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+                            </strong>
+                        </div>
+                        <button type="button"
+                                class="action close"
+                                data-action="close"
+                                data-awa-minicart-close="true"
+                                title="<?= $block->escapeHtmlAttr(__('Close')) ?>">
+                            <span><?= $block->escapeHtml(__('Close')) ?></span>
+                        </button>
+                    </div>
+                    <div class="block-content">
+                        <div class="awa-minicart-empty" role="status" aria-live="polite">
+                            <div class="awa-minicart-empty__icon" aria-hidden="true">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                                    <circle cx="9" cy="20" r="1"></circle>
+                                    <circle cx="18" cy="20" r="1"></circle>
+                                    <path d="M3.5 4h2l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 7H7.1"></path>
+                                </svg>
+                            </div>
+                            <strong class="subtitle empty"><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></strong>
+                            <p class="awa-minicart-empty__hint"><?= $block->escapeHtml(__('Browse the catalog or use search to find parts.')) ?></p>
+                            <div class="actions awa-minicart-empty__actions">
+                                <div class="primary">
+                                    <a class="action primary awa-minicart-browse"
+                                       href="<?= $block->escapeUrl($block->getUrl('catalogo')) ?>">
+                                        <span><?= $block->escapeHtml(__('Browse our catalog')) ?></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
             <div id="minicart-content-wrapper"
                  role="dialog"
                  aria-modal="true"
@@ -85,6 +137,7 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
             <div class="awa-minicart-footer">
                 <button type="button"
                         class="awa-minicart-continue"
+                        data-action="close"
                         data-awa-minicart-close="true"
                         aria-label="<?= $block->escapeHtmlAttr(__('Continue Shopping')) ?>">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
@@ -129,7 +182,7 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
             );
         }());
     </script>
-    <?php if (!$isHomeUiDefer): ?>
+    <?php if (!$isHomeUiDefer && !$isCartPage): ?>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {

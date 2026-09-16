@@ -1,0 +1,86 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Canais de contato da rota nativa Magento_Contact.
+ * Substitui o CMS awa_contact_header para emitir tel:/mailto:/wa.me via ViewModel.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \GrupoAwamotos\Theme\ViewModel\ContactInfo $contactInfo
+ */
+
+$contactInfo = $block->getData('contact_info');
+if (!$contactInfo instanceof \GrupoAwamotos\Theme\ViewModel\ContactInfo) {
+    return;
+}
+
+$phoneUrl = $contactInfo->getPhoneUrl();
+$phoneLabel = $contactInfo->getPhone();
+$whatsAppUrl = $contactInfo->getWhatsAppUrl();
+$whatsAppLabel = $contactInfo->getWhatsAppDisplay();
+$emailUrl = $contactInfo->getEmailUrl();
+$emailLabel = $contactInfo->getEmail();
+$hours = $contactInfo->getHours();
+$canonical = $block->getUrl('contact', ['_secure' => true]);
+?>
+<div class="awa-contact-header">
+    <p>
+        <?= $block->escapeHtml(__('Preencha o formulário abaixo e responderemos em até')) ?>
+        <strong><?= $block->escapeHtml(__('1 dia útil')) ?></strong>.
+        <?= $block->escapeHtml(__('Se preferir, use um dos nossos canais diretos:')) ?>
+    </p>
+    <div class="awa-contact-channels">
+        <?php if ($phoneLabel !== ''): ?>
+            <div class="awa-contact-channel">
+                <strong><?= $block->escapeHtml(__('Telefone')) ?></strong>
+                <?php if ($phoneUrl !== ''): ?>
+                    <a href="<?= $block->escapeUrl($phoneUrl) ?>"><?= $block->escapeHtml($phoneLabel) ?></a>
+                <?php else: ?>
+                    <span><?= $block->escapeHtml($phoneLabel) ?></span>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+        <?php if ($whatsAppUrl !== '' && $whatsAppLabel !== ''): ?>
+            <div class="awa-contact-channel">
+                <strong><?= $block->escapeHtml(__('WhatsApp')) ?></strong>
+                <a href="<?= $block->escapeUrl($whatsAppUrl) ?>"
+                   target="_blank"
+                   rel="noopener noreferrer"><?= $block->escapeHtml($whatsAppLabel) ?></a>
+            </div>
+        <?php endif; ?>
+        <?php if ($emailUrl !== '' && $emailLabel !== ''): ?>
+            <div class="awa-contact-channel">
+                <strong><?= $block->escapeHtml(__('E-mail')) ?></strong>
+                <a href="<?= $block->escapeUrl($emailUrl) ?>"><?= $block->escapeHtml($emailLabel) ?></a>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php if ($hours !== ''): ?>
+        <p>
+            <small>
+                <?= $block->escapeHtml(__('Horário de atendimento: %1. E-mails e formulários enviados fora do expediente serão respondidos no próximo dia útil.', $hours)) ?>
+            </small>
+        </p>
+    <?php endif; ?>
+</div>
+<?php
+$schema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'ContactPage',
+    'name' => (string) __('Fale Conosco — AWA Motos'),
+    'url' => $canonical,
+    'mainEntity' => [
+        '@type' => 'Organization',
+        'name' => 'Grupo Awamotos',
+        'telephone' => $phoneUrl !== '' ? preg_replace('/^tel:/', '', $phoneUrl) : '+55-16-3301-1890',
+        'email' => $emailLabel !== '' ? $emailLabel : 'awamotos@awamotos.com.br',
+    ],
+];
+$schemaJson = json_encode(
+    $schema,
+    JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS
+);
+?>
+<?php if (is_string($schemaJson) && $schemaJson !== ''): ?>
+<script type="application/ld+json"><?= /* @noEscape */ $schemaJson ?></script>
+<?php endif; ?>

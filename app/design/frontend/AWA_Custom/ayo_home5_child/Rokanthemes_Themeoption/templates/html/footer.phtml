@@ -24,6 +24,14 @@ $logoSrc   = $logoBlock && method_exists($logoBlock, 'getLogoSrc')
 if ($logoSrc === '') {
     $logoSrc = $mediaUrl . '/logo/websites/1/logo_161x92_1.png';
 }
+/** @var \GrupoAwamotos\Theme\ViewModel\FooterData|null $footerData */
+$footerData = $block->getData('view_model');
+$merchantVatNumber = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
+    ? trim($footerData->getMerchantVatNumber())
+    : '';
+if ($merchantVatNumber === '') {
+    $merchantVatNumber = '51.274.901/0001-02';
+}
 $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' => ltrim($path, '/')]);
 ?>
 <div class="page_footer" role="contentinfo">
@@ -86,35 +94,6 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
     <div id="footer" class="footer-container layout2 footer">
         <?= /* @noEscape */ $block->getChildHtml('footer_static5') ?>
     </div>
-    <style id="awa-footer-categories-terminal-20260719">
-    @media (min-width:768px){
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__inner{
-        display:grid!important;grid-template-columns:minmax(96px,max-content) minmax(0,1fr)!important;
-        align-items:center!important;column-gap:clamp(14px,2vw,28px)!important;row-gap:10px!important;height:auto!important;min-height:0!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__toggle{
-        display:none!important;visibility:hidden!important;pointer-events:none!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__heading{
-        grid-column:1!important;grid-row:1!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__panel,
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__panel[hidden]{
-        grid-column:2!important;grid-row:1!important;display:block!important;max-height:none!important;height:auto!important;visibility:visible!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) ul.awa-footer-categories-list{
-        display:flex!important;flex-wrap:wrap!important;grid-template-columns:none!important;gap:6px 8px!important;width:auto!important;height:auto!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) ul.awa-footer-categories-list>li{
-        display:block!important;width:auto!important;min-width:0!important;flex:0 0 auto!important;
-      }
-      html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) ul.awa-footer-categories-list>li>a{
-        box-sizing:border-box!important;display:inline-flex!important;justify-content:center!important;align-items:center!important;
-        width:auto!important;max-width:none!important;min-width:0!important;min-height:28px!important;height:auto!important;padding:4px 10px!important;
-        background:#fff!important;border:1px solid #e5e5e5!important;border-radius:6px!important;
-      }
-    }
-    </style>
     <section class="awa-footer-categories-expand" aria-labelledby="awa-footer-categories-heading">
         <div class="container">
             <div class="awa-footer-categories-expand__inner">
@@ -135,10 +114,7 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                     </span>
                 </button>
                 <div id="awa-footer-categories-panel"
-                     class="awa-footer-categories-expand__panel"
-                     aria-hidden="true"
-                     inert
-                     hidden>
+                     class="awa-footer-categories-expand__panel">
                     <?php
                     $categoriesBlock = $block->getLayout()
                         ? $block->getLayout()->getBlock('catalog.topnav')
@@ -180,20 +156,11 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                         </a>
                     </div>
 
-                    <!-- Pague com -->
+                    <!-- Condição comercial comum a todos os pedidos -->
                     <div class="col-md-5 col-sm-12 col-xs-12">
                         <section class="awa-footer-pay-sec" aria-label="<?= $escaper->escapeHtmlAttr(__('Pagamentos')) ?>">
-                            <h3 class="awa-footer-pay-sec__label awa-footer-muted-label"><?= $escaper->escapeHtml(__('Pague com')) ?></h3>
-                            <ul class="awa-footer-pay-logos" aria-label="<?= $escaper->escapeHtmlAttr(__('Formas de pagamento aceitas')) ?>">
-                                <li class="awa-pay-logo">
-                                    <img src="<?= $escaper->escapeUrl($mediaUrl . '/img/pix.png') ?>"
-                                         alt="PIX" width="46" height="28" loading="lazy" decoding="async">
-                                </li>
-                                <li class="awa-pay-logo">
-                                    <img src="<?= $escaper->escapeUrl($mediaUrl . '/img/boleto.png') ?>"
-                                         alt="Boleto Bancário" width="46" height="28" loading="lazy" decoding="async">
-                                </li>
-                            </ul>
+                            <h3 class="awa-footer-pay-sec__label awa-footer-muted-label"><?= $escaper->escapeHtml(__('Pagamento a combinar')) ?></h3>
+                            <p><?= $escaper->escapeHtml(__('Forma e condições acordadas com nossa equipe comercial.')) ?></p>
                         </section>
                     </div>
 
@@ -214,7 +181,7 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                                          alt=""
                                          width="70"
                                          height="40"
-                                         loading="lazy"
+                                         loading="eager"
                                          decoding="async"
                                          aria-hidden="true">
                                 </a>
@@ -230,7 +197,7 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                                          alt=""
                                          width="89"
                                          height="32"
-                                         loading="lazy"
+                                         loading="eager"
                                          decoding="async"
                                          aria-hidden="true">
                                 </a>
@@ -250,7 +217,7 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                         ) ?>
                         <span class="awa-footer-cnpj-badge"
                               aria-label="<?= $escaper->escapeHtmlAttr(__('CNPJ da empresa')) ?>">
-                            <span class="awa-footer-cnpj-badge__text">CNPJ 51.274.901/0001-02</span>
+                            <span class="awa-footer-cnpj-badge__text"><?= $escaper->escapeHtml('CNPJ ' . $merchantVatNumber) ?></span>
                         </span>
                     </p>
                     <p class="awa-footer-copyright__disclaimer">
@@ -275,11 +242,11 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
                    class="awa-footer-devby__link"
                    aria-label="<?= $escaper->escapeHtmlAttr(__('Bluu Consulting, desenvolvimento do site')) ?>"
                    title="<?= $escaper->escapeHtmlAttr(__('Bluu Consulting')) ?>">
-                    <img src="<?= $escaper->escapeUrl($mediaUrl . '/img/logo_bluu.png') ?>"
+                    <img src="<?= $escaper->escapeUrl($mediaUrl . '/img/logo_bluu.png?v=20260902-bluu-dark') ?>"
                          alt="Bluu Consulting"
                          class="awa-footer-devby__logo"
                          width="80" height="30"
-                         loading="lazy" decoding="async">
+                         loading="eager" decoding="async">
                 </a>
             </div>
         </div>
@@ -307,235 +274,13 @@ $awaFooterInteractionsConfigJson = json_encode(
 ?>
 <script type="application/json" id="awa-footer-interactions-config-json"><?= /* @noEscape */ $awaFooterInteractionsConfigJson ?></script>
 <?php
-$awaFooterBootUrl = $block->getViewFileUrl('js/awa-footer-boot-r16d.min.js') . '?v=1';
+$awaFooterBootUrl = $block->getViewFileUrl('js/awa-footer-boot-r16d.min.js') . '?v=20260827-axis-bp';
 $awaFooterBootIsHome = in_array('cms_index_index', $block->getLayout()->getUpdate()->getHandles(), true);
 ?>
 <?php if ($awaFooterBootIsHome): ?>
 <script>
 (function (w, d) {
     'use strict';
-    function applyFooterCategoriesDesktopState() {
-        if (!w.matchMedia || w.matchMedia('(max-width: 767px)').matches) {
-            return;
-        }
-        d.querySelectorAll('.awa-footer-categories-expand__inner').forEach(function (inner) {
-            inner.style.setProperty('display', 'grid', 'important');
-            inner.style.setProperty('grid-template-columns', 'minmax(96px,max-content) minmax(0,1fr)', 'important');
-            inner.style.setProperty('align-items', 'center', 'important');
-            inner.style.setProperty('height', 'auto', 'important');
-            inner.style.setProperty('min-height', '0', 'important');
-        });
-        d.querySelectorAll('[data-awa-categories-toggle], .awa-footer-categories-expand__toggle').forEach(function (toggle) {
-            toggle.style.setProperty('display', 'none', 'important');
-            toggle.style.setProperty('visibility', 'hidden', 'important');
-            toggle.style.setProperty('pointer-events', 'none', 'important');
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.classList.add('is-expanded');
-        });
-        d.querySelectorAll('.awa-footer-categories-expand__heading').forEach(function (heading) {
-            heading.style.setProperty('grid-column', '1', 'important');
-            heading.style.setProperty('grid-row', '1', 'important');
-        });
-        d.querySelectorAll('.awa-footer-categories-expand__panel, #awa-footer-categories-panel').forEach(function (panel) {
-            panel.style.setProperty('grid-column', '2', 'important');
-            panel.style.setProperty('grid-row', '1', 'important');
-            panel.style.setProperty('display', 'block', 'important');
-            panel.style.setProperty('max-height', 'none', 'important');
-            panel.style.setProperty('height', 'auto', 'important');
-            panel.style.setProperty('visibility', 'visible', 'important');
-            panel.hidden = false;
-            panel.removeAttribute('hidden');
-            panel.removeAttribute('inert');
-            panel.setAttribute('aria-hidden', 'false');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list').forEach(function (list) {
-            list.style.setProperty('display', 'flex', 'important');
-            list.style.setProperty('flex-wrap', 'wrap', 'important');
-            list.style.setProperty('grid-template-columns', 'none', 'important');
-            list.style.setProperty('gap', '6px 8px', 'important');
-            list.style.setProperty('width', 'auto', 'important');
-            list.style.setProperty('height', 'auto', 'important');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list > li').forEach(function (item) {
-            item.style.setProperty('display', 'block', 'important');
-            item.style.setProperty('width', 'auto', 'important');
-            item.style.setProperty('min-width', '0', 'important');
-            item.style.setProperty('flex', '0 0 auto', 'important');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list > li > a').forEach(function (link) {
-            link.style.setProperty('box-sizing', 'border-box', 'important');
-            link.style.setProperty('display', 'inline-flex', 'important');
-            link.style.setProperty('justify-content', 'center', 'important');
-            link.style.setProperty('align-items', 'center', 'important');
-            link.style.setProperty('width', 'auto', 'important');
-            link.style.setProperty('max-width', 'none', 'important');
-            link.style.setProperty('flex', '0 0 auto', 'important');
-            link.style.setProperty('background', '#fff', 'important');
-            link.style.setProperty('border', '1px solid #e5e5e5', 'important');
-            link.style.setProperty('border-radius', '6px', 'important');
-            link.style.setProperty('min-height', '28px', 'important');
-            link.style.setProperty('height', 'auto', 'important');
-            link.style.setProperty('padding', '4px 10px', 'important');
-        });
-    }
-    function clearFooterDesktopDenseInline() {
-        var props=['margin-top','margin-bottom','padding','padding-top','padding-bottom','padding-block','min-height','height','max-height','line-height','font-size','overflow','display','white-space','text-overflow','gap','width','max-width'];
-        var sel='.page_footer, .page_footer .velaFooterLinks a, .page_footer .awa-footer-atendimento__actions a, .page_footer .awa-footer-atendimento__phone a, .page_footer .awa-footer-atendimento__email a, .page_footer .awa-footer-copyright__disclaimer, .page_footer .awa-footer-atendimento__store-badge, .page_footer .awa-footer-atendimento__store-address, .page_footer .velaFooterTitle, .page_footer .awa-footer-section__toggle, .page_footer .vela-content.velaFooterMenu, .page_footer ul.awa-footer-categories-list, .page_footer ul.awa-footer-categories-list > li > a, .page_footer .awa-newsletter-icon, .page_footer #newsletter-validate-detail input[type=email], .page_footer #newsletter-validate-detail button.action.subscribe, .page_footer #newsletter-validate-detail .field.newsletter, .page_footer .awa-footer-pro__social-link, .page_footer .awa-footer-cnpj-badge, .page_footer .footer-bottom, .page_footer .awa-footer-devby, .page_footer .awa-footer-devby__inner, .page_footer section.awa-footer-categories-expand';
-        d.querySelectorAll(sel).forEach(function(el){ props.forEach(function(prop){ el.style.removeProperty(prop); }); });
-    }
-    function applyFooterDesktopDenseInline() {
-        if (!w.matchMedia || !w.matchMedia('(min-width: 992px)').matches) { clearFooterDesktopDenseInline(); return; }
-        d.querySelectorAll('.page_footer').forEach(function(f){
-            ['margin-top','margin-bottom','padding-block','overflow','overflow-x','overflow-y','max-width'].forEach(function(prop){
-                f.style.removeProperty(prop);
-            });
-        });
-        (function applyFooterAxis1280() {
-            var desktop = w.matchMedia && w.matchMedia('(min-width: 768px)').matches;
-            var padInline = desktop ? '24px' : '16px';
-            d.querySelectorAll('.page_footer .footer-container > .container, .page_footer .awa-footer-newsletter > .container, .page_footer .footer-bottom > .container, .page_footer .awa-footer-trust-bar > .container').forEach(function(el){
-                el.style.setProperty('max-width','min(100%, 1280px)','important');
-                el.style.setProperty('width','100%','important');
-                el.style.setProperty('margin-left','auto','important');
-                el.style.setProperty('margin-right','auto','important');
-                el.style.setProperty('margin-inline','auto','important');
-                el.style.setProperty('padding-left',padInline,'important');
-                el.style.setProperty('padding-right',padInline,'important');
-                el.style.setProperty('padding-inline',padInline,'important');
-                el.style.setProperty('box-sizing','border-box','important');
-            });
-            d.querySelectorAll('.page_footer .footer-container > .container').forEach(function(el){
-                el.style.setProperty('padding-top','16px','important');
-                el.style.setProperty('padding-bottom','16px','important');
-                el.style.setProperty('padding-block','16px','important');
-            });
-            d.querySelectorAll('.page_footer .awa-footer-newsletter').forEach(function(el){
-                el.style.setProperty('padding-top','14px','important');
-                el.style.setProperty('padding-bottom','14px','important');
-                el.style.setProperty('padding-block','14px','important');
-                el.style.setProperty('padding-left','0','important');
-                el.style.setProperty('padding-right','0','important');
-                el.style.setProperty('padding-inline','0','important');
-                el.style.setProperty('margin-bottom','0','important');
-            });
-            d.querySelectorAll('.page_footer .awa-footer-newsletter > .container').forEach(function(el){
-                el.style.setProperty('padding-top','0','important');
-                el.style.setProperty('padding-bottom','0','important');
-                el.style.setProperty('padding-block','0','important');
-            });
-        })();
-        d.querySelectorAll('.page_footer .awa-newsletter-info').forEach(function(el){
-            el.style.removeProperty('max-height'); el.style.removeProperty('overflow');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-trust-bar').forEach(function(el){
-            ['padding-block','margin-bottom','background','background-color','background-image','color','display'].forEach(function(prop){
-                el.style.removeProperty(prop);
-            });
-        });
-        d.querySelectorAll('.page_footer .awa-footer-bottom__copyright').forEach(function(el){
-            el.style.setProperty('padding','0','important'); el.style.setProperty('margin','0','important');
-        });
-
-        d.querySelectorAll('.page_footer .velaFooterLinks a, .page_footer .awa-footer-atendimento__actions a, .page_footer .awa-footer-atendimento__phone a, .page_footer .awa-footer-atendimento__email a').forEach(function(link){
-            link.style.setProperty('display','inline-flex','important'); link.style.setProperty('align-items','center','important');
-            link.style.setProperty('padding-top','10px','important'); link.style.setProperty('padding-bottom','10px','important');
-            link.style.setProperty('padding-block','10px','important'); link.style.setProperty('min-height','44px','important'); link.style.setProperty('height','auto','important'); link.style.setProperty('line-height','1.25','important');
-        });
-        d.querySelectorAll('.page_footer .velaFooterTitle, .page_footer .awa-footer-section__toggle').forEach(function(el){
-            el.style.setProperty('margin-bottom','2px','important'); el.style.setProperty('padding-bottom','0','important'); el.style.setProperty('min-height','0','important');
-        });
-        d.querySelectorAll('.page_footer .vela-content.velaFooterMenu').forEach(function(el){ el.style.setProperty('padding','2px 4px','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-copyright__disclaimer').forEach(function(el){
-            el.style.setProperty('font-size','10px','important'); el.style.setProperty('line-height','1.4','important');
-            el.style.setProperty('max-height','none','important'); el.style.setProperty('overflow','visible','important');
-            el.style.setProperty('white-space','normal','important'); el.style.setProperty('max-width','min(72ch, 100%)','important');
-            el.style.removeProperty('text-overflow');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-cnpj-badge').forEach(function(el){
-            el.style.setProperty('font-size','10px','important'); el.style.setProperty('padding','0 5px','important'); el.style.setProperty('min-height','0','important');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-atendimento__store-badge').forEach(function(el){ el.style.setProperty('display','none','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-atendimento__store-address').forEach(function(el){
-            el.style.setProperty('white-space','nowrap','important'); el.style.setProperty('overflow','hidden','important'); el.style.setProperty('text-overflow','ellipsis','important');
-        });
-        d.querySelectorAll('.page_footer ul.awa-footer-categories-list').forEach(function(el){
-            el.style.setProperty('display','flex','important'); el.style.setProperty('flex-wrap','wrap','important');
-            el.style.setProperty('grid-template-columns','none','important'); el.style.setProperty('gap','6px 8px','important');
-            el.style.setProperty('width','auto','important');
-        });
-        d.querySelectorAll('.page_footer ul.awa-footer-categories-list > li > a').forEach(function(link){
-            link.style.setProperty('width','auto','important'); link.style.setProperty('max-width','none','important');
-            link.style.setProperty('min-height','28px','important'); link.style.setProperty('height','auto','important');
-            link.style.setProperty('padding','4px 10px','important'); link.style.setProperty('font-size','12px','important');
-            link.style.setProperty('border','1px solid #e5e5e5','important'); link.style.setProperty('border-radius','6px','important');
-            link.style.setProperty('background','#fff','important');
-        });
-        d.querySelectorAll('.page_footer section.awa-footer-categories-expand').forEach(function(el){
-            el.style.setProperty('padding','2px 0','important'); el.style.setProperty('margin-top','0','important');
-        });
-        d.querySelectorAll('.page_footer .awa-newsletter-icon').forEach(function(el){
-            el.style.setProperty('width','24px','important'); el.style.setProperty('height','24px','important');
-            el.style.setProperty('min-height','24px','important'); el.style.setProperty('max-height','24px','important');
-        });
-        d.querySelectorAll('.page_footer #newsletter-validate-detail input[type=email], .page_footer #newsletter-validate-detail button.action.subscribe, .page_footer #newsletter-validate-detail .field.newsletter').forEach(function(el){
-            el.style.setProperty('height','44px','important'); el.style.setProperty('min-height','44px','important');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-pro__social-link').forEach(function(el){
-            el.style.setProperty('width','44px','important'); el.style.setProperty('height','44px','important');
-            el.style.setProperty('min-width','44px','important'); el.style.setProperty('min-height','44px','important'); el.style.setProperty('box-sizing','border-box','important'); el.style.setProperty('display','inline-flex','important'); el.style.setProperty('align-items','center','important'); el.style.setProperty('justify-content','center','important');
-        });
-        d.querySelectorAll('.page_footer .footer-bottom').forEach(function(el){ el.style.setProperty('padding','2px 0','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-devby').forEach(function(el){ el.style.setProperty('padding-block','0','important'); el.style.setProperty('max-height','32px','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-devby__inner').forEach(function(el){ el.style.setProperty('min-height','28px','important'); el.style.setProperty('height','28px','important'); });
-    }
-    function applyFooterDesktopLayout() {
-        applyFooterCategoriesDesktopState();
-        applyFooterDesktopDenseInline();
-    }
-    if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', applyFooterDesktopLayout, { once: true });
-    } else {
-        applyFooterDesktopLayout();
-    }
-    w.addEventListener('resize', applyFooterDesktopLayout, { passive: true });
-    w.addEventListener('load', applyFooterDesktopLayout, { once: true });
-    /* PIXEL-QA D: reaplica 44px após boot/async (race com locks antigos). */
-    function lockNewsletterTouchTarget() {
-        if (!w.matchMedia || !w.matchMedia('(min-width: 992px)').matches) {
-            return;
-        }
-        d.querySelectorAll(
-            '.page_footer #newsletter-validate-detail input[type=email], ' +
-            '.page_footer #newsletter-validate-detail button.action.subscribe, ' +
-            '.page_footer #newsletter-validate-detail .field.newsletter'
-        ).forEach(function (el) {
-            el.style.setProperty('height', '44px', 'important');
-            el.style.setProperty('min-height', '44px', 'important');
-        });
-    }
-    function guardNewsletterTouchTarget() {
-        lockNewsletterTouchTarget();
-        if (w.__awaNewsletterTouchGuard) {
-            return;
-        }
-        w.__awaNewsletterTouchGuard = true;
-        var mo = new MutationObserver(function () {
-            var btn = d.querySelector('.page_footer #newsletter-validate-detail button.action.subscribe');
-            if (!btn) {
-                return;
-            }
-            var st = btn.getAttribute('style') || '';
-            if (/height:\s*32px/i.test(st) || /min-height:\s*32px/i.test(st)) {
-                lockNewsletterTouchTarget();
-            }
-        });
-        mo.observe(d.documentElement, { subtree: true, attributes: true, attributeFilter: ['style'], childList: true });
-    }
-    guardNewsletterTouchTarget();
-    w.addEventListener('load', lockNewsletterTouchTarget, { once: true });
-    [100, 500, 1500, 3000].forEach(function (ms) {
-        w.setTimeout(lockNewsletterTouchTarget, ms);
-    });
     var src = <?= /* @noEscape */ json_encode($awaFooterBootUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     var loaded = false;
     function load() {
@@ -567,196 +312,6 @@ $awaFooterBootIsHome = in_array('cms_index_index', $block->getLayout()->getUpdat
 })(window, document);
 </script>
 <?php else: ?>
-<script>
-(function (w, d) {
-    'use strict';
-    function applyFooterCategoriesDesktopState() {
-        if (!w.matchMedia || w.matchMedia('(max-width: 767px)').matches) {
-            return;
-        }
-        d.querySelectorAll('.awa-footer-categories-expand__inner').forEach(function (inner) {
-            inner.style.setProperty('display', 'grid', 'important');
-            inner.style.setProperty('grid-template-columns', 'minmax(96px,max-content) minmax(0,1fr)', 'important');
-            inner.style.setProperty('align-items', 'center', 'important');
-            inner.style.setProperty('height', 'auto', 'important');
-            inner.style.setProperty('min-height', '0', 'important');
-        });
-        d.querySelectorAll('[data-awa-categories-toggle], .awa-footer-categories-expand__toggle').forEach(function (toggle) {
-            toggle.style.setProperty('display', 'none', 'important');
-            toggle.style.setProperty('visibility', 'hidden', 'important');
-            toggle.style.setProperty('pointer-events', 'none', 'important');
-            toggle.setAttribute('aria-expanded', 'true');
-            toggle.classList.add('is-expanded');
-        });
-        d.querySelectorAll('.awa-footer-categories-expand__heading').forEach(function (heading) {
-            heading.style.setProperty('grid-column', '1', 'important');
-            heading.style.setProperty('grid-row', '1', 'important');
-        });
-        d.querySelectorAll('.awa-footer-categories-expand__panel, #awa-footer-categories-panel').forEach(function (panel) {
-            panel.style.setProperty('grid-column', '2', 'important');
-            panel.style.setProperty('grid-row', '1', 'important');
-            panel.style.setProperty('display', 'block', 'important');
-            panel.style.setProperty('max-height', 'none', 'important');
-            panel.style.setProperty('height', 'auto', 'important');
-            panel.style.setProperty('visibility', 'visible', 'important');
-            panel.hidden = false;
-            panel.removeAttribute('hidden');
-            panel.removeAttribute('inert');
-            panel.setAttribute('aria-hidden', 'false');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list').forEach(function (list) {
-            list.style.setProperty('display', 'flex', 'important');
-            list.style.setProperty('flex-wrap', 'wrap', 'important');
-            list.style.setProperty('grid-template-columns', 'none', 'important');
-            list.style.setProperty('gap', '6px 8px', 'important');
-            list.style.setProperty('width', 'auto', 'important');
-            list.style.setProperty('height', 'auto', 'important');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list > li').forEach(function (item) {
-            item.style.setProperty('display', 'block', 'important');
-            item.style.setProperty('width', 'auto', 'important');
-            item.style.setProperty('min-width', '0', 'important');
-            item.style.setProperty('flex', '0 0 auto', 'important');
-        });
-        d.querySelectorAll('ul.awa-footer-categories-list > li > a').forEach(function (link) {
-            link.style.setProperty('box-sizing', 'border-box', 'important');
-            link.style.setProperty('display', 'inline-flex', 'important');
-            link.style.setProperty('justify-content', 'center', 'important');
-            link.style.setProperty('align-items', 'center', 'important');
-            link.style.setProperty('width', 'auto', 'important');
-            link.style.setProperty('max-width', 'none', 'important');
-            link.style.setProperty('flex', '0 0 auto', 'important');
-            link.style.setProperty('background', '#fff', 'important');
-            link.style.setProperty('border', '1px solid #e5e5e5', 'important');
-            link.style.setProperty('border-radius', '6px', 'important');
-            link.style.setProperty('min-height', '28px', 'important');
-            link.style.setProperty('height', 'auto', 'important');
-            link.style.setProperty('padding', '4px 10px', 'important');
-        });
-    }
-    function clearFooterDesktopDenseInline() {
-        var props=['margin-top','margin-bottom','padding','padding-top','padding-bottom','padding-block','min-height','height','max-height','line-height','font-size','overflow','display','white-space','text-overflow','gap','width','max-width'];
-        var sel='.page_footer, .page_footer .velaFooterLinks a, .page_footer .awa-footer-atendimento__actions a, .page_footer .awa-footer-atendimento__phone a, .page_footer .awa-footer-atendimento__email a, .page_footer .awa-footer-copyright__disclaimer, .page_footer .awa-footer-atendimento__store-badge, .page_footer .awa-footer-atendimento__store-address, .page_footer .velaFooterTitle, .page_footer .awa-footer-section__toggle, .page_footer .vela-content.velaFooterMenu, .page_footer ul.awa-footer-categories-list, .page_footer ul.awa-footer-categories-list > li > a, .page_footer .awa-newsletter-icon, .page_footer #newsletter-validate-detail input[type=email], .page_footer #newsletter-validate-detail button.action.subscribe, .page_footer #newsletter-validate-detail .field.newsletter, .page_footer .awa-footer-pro__social-link, .page_footer .awa-footer-cnpj-badge, .page_footer .footer-bottom, .page_footer .awa-footer-devby, .page_footer .awa-footer-devby__inner, .page_footer section.awa-footer-categories-expand';
-        d.querySelectorAll(sel).forEach(function(el){ props.forEach(function(prop){ el.style.removeProperty(prop); }); });
-    }
-    function applyFooterDesktopDenseInline() {
-        if (!w.matchMedia || !w.matchMedia('(min-width: 992px)').matches) { clearFooterDesktopDenseInline(); return; }
-        d.querySelectorAll('.page_footer').forEach(function(f){
-            ['margin-top','margin-bottom','padding-block','overflow','overflow-x','overflow-y','max-width'].forEach(function(prop){
-                f.style.removeProperty(prop);
-            });
-        });
-        (function applyFooterAxis1280() {
-            var desktop = w.matchMedia && w.matchMedia('(min-width: 768px)').matches;
-            var padInline = desktop ? '24px' : '16px';
-            d.querySelectorAll('.page_footer .footer-container > .container, .page_footer .awa-footer-newsletter > .container, .page_footer .footer-bottom > .container, .page_footer .awa-footer-trust-bar > .container').forEach(function(el){
-                el.style.setProperty('max-width','min(100%, 1280px)','important');
-                el.style.setProperty('width','100%','important');
-                el.style.setProperty('margin-left','auto','important');
-                el.style.setProperty('margin-right','auto','important');
-                el.style.setProperty('margin-inline','auto','important');
-                el.style.setProperty('padding-left',padInline,'important');
-                el.style.setProperty('padding-right',padInline,'important');
-                el.style.setProperty('padding-inline',padInline,'important');
-                el.style.setProperty('box-sizing','border-box','important');
-            });
-            d.querySelectorAll('.page_footer .footer-container > .container').forEach(function(el){
-                el.style.setProperty('padding-top','16px','important');
-                el.style.setProperty('padding-bottom','16px','important');
-                el.style.setProperty('padding-block','16px','important');
-            });
-            d.querySelectorAll('.page_footer .awa-footer-newsletter').forEach(function(el){
-                el.style.setProperty('padding-top','14px','important');
-                el.style.setProperty('padding-bottom','14px','important');
-                el.style.setProperty('padding-block','14px','important');
-                el.style.setProperty('padding-left','0','important');
-                el.style.setProperty('padding-right','0','important');
-                el.style.setProperty('padding-inline','0','important');
-                el.style.setProperty('margin-bottom','0','important');
-            });
-            d.querySelectorAll('.page_footer .awa-footer-newsletter > .container').forEach(function(el){
-                el.style.setProperty('padding-top','0','important');
-                el.style.setProperty('padding-bottom','0','important');
-                el.style.setProperty('padding-block','0','important');
-            });
-        })();
-        d.querySelectorAll('.page_footer .awa-newsletter-info').forEach(function(el){
-            el.style.removeProperty('max-height'); el.style.removeProperty('overflow');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-trust-bar').forEach(function(el){
-            ['padding-block','margin-bottom','background','background-color','background-image','color','display'].forEach(function(prop){
-                el.style.removeProperty(prop);
-            });
-        });
-        d.querySelectorAll('.page_footer .awa-footer-bottom__copyright').forEach(function(el){
-            el.style.setProperty('padding','0','important'); el.style.setProperty('margin','0','important');
-        });
-
-        d.querySelectorAll('.page_footer .velaFooterLinks a, .page_footer .awa-footer-atendimento__actions a, .page_footer .awa-footer-atendimento__phone a, .page_footer .awa-footer-atendimento__email a').forEach(function(link){
-            link.style.setProperty('display','inline-flex','important'); link.style.setProperty('align-items','center','important');
-            link.style.setProperty('padding-top','10px','important'); link.style.setProperty('padding-bottom','10px','important');
-            link.style.setProperty('padding-block','10px','important'); link.style.setProperty('min-height','44px','important'); link.style.setProperty('height','auto','important'); link.style.setProperty('line-height','1.25','important');
-        });
-        d.querySelectorAll('.page_footer .velaFooterTitle, .page_footer .awa-footer-section__toggle').forEach(function(el){
-            el.style.setProperty('margin-bottom','2px','important'); el.style.setProperty('padding-bottom','0','important'); el.style.setProperty('min-height','0','important');
-        });
-        d.querySelectorAll('.page_footer .vela-content.velaFooterMenu').forEach(function(el){ el.style.setProperty('padding','2px 4px','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-copyright__disclaimer').forEach(function(el){
-            el.style.setProperty('font-size','10px','important'); el.style.setProperty('line-height','1.4','important');
-            el.style.setProperty('max-height','none','important'); el.style.setProperty('overflow','visible','important');
-            el.style.setProperty('white-space','normal','important'); el.style.setProperty('max-width','min(72ch, 100%)','important');
-            el.style.removeProperty('text-overflow');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-cnpj-badge').forEach(function(el){
-            el.style.setProperty('font-size','10px','important'); el.style.setProperty('padding','0 5px','important'); el.style.setProperty('min-height','0','important');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-atendimento__store-badge').forEach(function(el){ el.style.setProperty('display','none','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-atendimento__store-address').forEach(function(el){
-            el.style.setProperty('white-space','nowrap','important'); el.style.setProperty('overflow','hidden','important'); el.style.setProperty('text-overflow','ellipsis','important');
-        });
-        d.querySelectorAll('.page_footer ul.awa-footer-categories-list').forEach(function(el){
-            el.style.setProperty('display','flex','important'); el.style.setProperty('flex-wrap','wrap','important');
-            el.style.setProperty('grid-template-columns','none','important'); el.style.setProperty('gap','6px 8px','important');
-            el.style.setProperty('width','auto','important');
-        });
-        d.querySelectorAll('.page_footer ul.awa-footer-categories-list > li > a').forEach(function(link){
-            link.style.setProperty('width','auto','important'); link.style.setProperty('max-width','none','important');
-            link.style.setProperty('min-height','28px','important'); link.style.setProperty('height','auto','important');
-            link.style.setProperty('padding','4px 10px','important'); link.style.setProperty('font-size','12px','important');
-            link.style.setProperty('border','1px solid #e5e5e5','important'); link.style.setProperty('border-radius','6px','important');
-            link.style.setProperty('background','#fff','important');
-        });
-        d.querySelectorAll('.page_footer section.awa-footer-categories-expand').forEach(function(el){
-            el.style.setProperty('padding','2px 0','important'); el.style.setProperty('margin-top','0','important');
-        });
-        d.querySelectorAll('.page_footer .awa-newsletter-icon').forEach(function(el){
-            el.style.setProperty('width','24px','important'); el.style.setProperty('height','24px','important');
-            el.style.setProperty('min-height','24px','important'); el.style.setProperty('max-height','24px','important');
-        });
-        d.querySelectorAll('.page_footer #newsletter-validate-detail input[type=email], .page_footer #newsletter-validate-detail button.action.subscribe, .page_footer #newsletter-validate-detail .field.newsletter').forEach(function(el){
-            el.style.setProperty('height','44px','important'); el.style.setProperty('min-height','44px','important');
-        });
-        d.querySelectorAll('.page_footer .awa-footer-pro__social-link').forEach(function(el){
-            el.style.setProperty('width','44px','important'); el.style.setProperty('height','44px','important');
-            el.style.setProperty('min-width','44px','important'); el.style.setProperty('min-height','44px','important'); el.style.setProperty('box-sizing','border-box','important'); el.style.setProperty('display','inline-flex','important'); el.style.setProperty('align-items','center','important'); el.style.setProperty('justify-content','center','important');
-        });
-        d.querySelectorAll('.page_footer .footer-bottom').forEach(function(el){ el.style.setProperty('padding','2px 0','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-devby').forEach(function(el){ el.style.setProperty('padding-block','0','important'); el.style.setProperty('max-height','32px','important'); });
-        d.querySelectorAll('.page_footer .awa-footer-devby__inner').forEach(function(el){ el.style.setProperty('min-height','28px','important'); el.style.setProperty('height','28px','important'); });
-    }
-    function applyFooterDesktopLayout() {
-        applyFooterCategoriesDesktopState();
-        applyFooterDesktopDenseInline();
-    }
-    if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', applyFooterDesktopLayout, { once: true });
-    } else {
-        applyFooterDesktopLayout();
-    }
-    w.addEventListener('resize', applyFooterDesktopLayout, { passive: true });
-    w.addEventListener('load', applyFooterDesktopLayout, { once: true });
-})(window, document);
-</script>
 <script defer src="<?= $escaper->escapeUrl($awaFooterBootUrl) ?>"></script>
 <?php endif; ?>
 <?= $block->getChildHtml('organization_schema') ?>

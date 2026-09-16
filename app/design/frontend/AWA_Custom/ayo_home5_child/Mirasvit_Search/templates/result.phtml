@@ -141,21 +141,17 @@ $tabIndex           = 0;
 <?php endif ?>
 
 <?php if ($totalCnt == 0): ?>
-    <?php
-    $awaQuery = trim((string) $block->getRequest()->getParam('q'));
-    ?>
     <div class="awa-search-empty" role="status" aria-live="polite">
         <h2 class="awa-search-empty__title">
-            <?= $block->escapeHtml(__('Nenhum resultado para "%1"', $awaQuery !== '' ? $awaQuery : (string)__('sua busca'))) ?>
+            <?= $block->escapeHtml(__('No results found')) ?>
         </h2>
         <p class="awa-search-empty__desc">
-            <?= $block->escapeHtml(__('Verifique a ortografia ou use termos mais genéricos. Você também pode navegar por todas as categorias abaixo.')) ?>
+            <?= $block->escapeHtml(__('Check the tips below or return to the home page to browse the categories.')) ?>
         </p>
         <a href="<?= $block->escapeUrl($block->getUrl('')) ?>" class="awa-search-empty__cta">
             <?= $block->escapeHtml(__('Voltar ao início')) ?>
         </a>
     </div>
-    <?= $block->getContentBlock($productIndex)->toHtml(); ?>
     <?= $block->getLayout()->getBlock("mst.search.no_results")->toHtml(); ?>
 <?php endif ?>
 

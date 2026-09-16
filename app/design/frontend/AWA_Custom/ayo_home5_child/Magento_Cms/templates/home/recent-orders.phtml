@@ -52,7 +52,11 @@ if ($isGuest) {
 
         <ul class="awa-home-recent-orders__list" hidden data-awa-home-recent-list aria-label="<?= $block->escapeHtmlAttr(__('Itens do último pedido')) ?>"></ul>
 
-        <div class="awa-home-recent-orders__empty" role="status" data-awa-home-recent-empty>
+        <p class="awa-home-recent-orders__pending" data-awa-home-recent-pending role="status">
+            <?= $block->escapeHtml(__('Carregando seus pedidos…')) ?>
+        </p>
+
+        <div class="awa-home-recent-orders__empty" role="status" data-awa-home-recent-empty hidden>
             <div class="awa-home-recent-orders__empty-icon" aria-hidden="true">
                 <svg class="awa-icon--lg"
                      width="48"
@@ -114,7 +118,7 @@ if ($isGuest) {
                 </div>
             </div>
 
-            <div data-awa-home-recent-empty-logged<?php if ($isGuest): ?> hidden<?php endif; ?>>
+            <div data-awa-home-recent-empty-logged hidden>
                 <p class="awa-home-recent-orders__empty-message">
                     <?= $block->escapeHtml(__('Você ainda não fez pedidos. Comece pelos mais pedidos por lojistas.')) ?>
                 </p>
@@ -129,4 +133,103 @@ if ($isGuest) {
             </div>
         </div>
     </div>
+    <script>
+    (function () {
+        'use strict';
+        var root = document.querySelector('[data-awa-home-recent-hydrate="1"]');
+        if (!root || root.getAttribute('data-awa-home-recent-early') === '1') {
+            return;
+        }
+        root.setAttribute('data-awa-home-recent-early', '1');
+
+        function sameOrigin(url) {
+            if (!url || typeof url !== 'string') {
+                return '';
+            }
+            if (url.charAt(0) === '/' && url.charAt(1) !== '/') {
+                return url;
+            }
+            try {
+                var parsed = new URL(url, document.baseURI);
+                return parsed.origin === window.location.origin ? parsed.href : '';
+            } catch (e) {
+                return '';
+            }
+        }
+
+        function readItems() {
+            try {
+                var store = JSON.parse(window.localStorage.getItem('mage-cache-storage') || 'null');
+                var section = store && store['last-ordered-items'];
+                if (!section || !Array.isArray(section.items)) {
+                    return null;
+                }
+                return section.items;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function paint(items) {
+            var list = root.querySelector('[data-awa-home-recent-list]');
+            var empty = root.querySelector('[data-awa-home-recent-empty]');
+            var emptyLogged = root.querySelector('[data-awa-home-recent-empty-logged]');
+            var emptyGuest = root.querySelector('[data-awa-home-recent-empty-guest]');
+            var pending = root.querySelector('[data-awa-home-recent-pending]');
+            var link = root.querySelector('[data-awa-home-recent-orders-link]');
+            if (!list || !empty) {
+                return;
+            }
+            if (pending) {
+                pending.hidden = true;
+            }
+            if (!items || !items.length) {
+                list.hidden = true;
+                empty.hidden = false;
+                if (emptyLogged) {
+                    emptyLogged.hidden = false;
+                }
+                if (emptyGuest) {
+                    emptyGuest.hidden = true;
+                }
+                if (link) {
+                    link.hidden = true;
+                }
+                root.setAttribute('data-awa-home-recent-state', 'logged_empty');
+                return;
+            }
+            list.textContent = '';
+            items.forEach(function (item) {
+                var li = document.createElement('li');
+                var name = item && item.name != null ? String(item.name) : '';
+                var href = sameOrigin(item && item.url);
+                li.className = 'awa-home-recent-orders__item';
+                if (href) {
+                    var a = document.createElement('a');
+                    a.className = 'awa-home-recent-orders__item-link';
+                    a.href = href;
+                    a.textContent = name;
+                    li.appendChild(a);
+                } else {
+                    var span = document.createElement('span');
+                    span.className = 'awa-home-recent-orders__item-name';
+                    span.textContent = name;
+                    li.appendChild(span);
+                }
+                list.appendChild(li);
+            });
+            list.hidden = false;
+            empty.hidden = true;
+            if (link) {
+                link.hidden = false;
+            }
+            root.setAttribute('data-awa-home-recent-state', 'has_items');
+        }
+
+        var cached = readItems();
+        if (cached && cached.length) {
+            paint(cached);
+        }
+    }());
+    </script>
 </section>

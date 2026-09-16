@@ -170,14 +170,15 @@ $buildCarouselImage = function (string $asset, string $alt, int $idx = 0) use ($
 	$webpAsset = str_replace('.png', '.webp', $asset);
 	// Sprint perf (2026-06-28): eager APENAS na 1a imagem (LCP). Demais lazy.
 	$loadingAttr = ($idx === 0) ? 'eager' : 'lazy';
-        $altText = trim($alt) !== '' ? $alt : (string) __('Categoria');
+        // O nome e a quantidade da categoria ja estao no mesmo link.
+        // A imagem e decorativa para evitar nomes acessiveis duplicados.
         return '<picture>'
 		. '<source srcset="'
 		. $block->escapeUrl($block->getViewFileUrl('images/category-carousel/' . $webpAsset))
 		. '" type="image/webp" />'
 		. '<img src="'
 		. $block->escapeUrl($block->getViewFileUrl('images/category-carousel/' . $asset))
-        . '" alt="' . $block->escapeHtmlAttr($altText) . '" class="awa-loaded" loading="' . $loadingAttr . '" decoding="async" width="'
+        . '" alt="" class="awa-loaded" loading="' . $loadingAttr . '" decoding="async" width="'
 		. $carouselIconSize
 		. '" height="'
 		. $carouselIconSize
@@ -317,14 +318,14 @@ $renderNicheShelves = static function (
 	<?php echo /* @noEscape */ $schemaOrgHtml; ?>
 <?php endif; ?>
 
-<!-- ① Hero Slider (above-the-fold) — AWA 51.55 grid: inline !important on .banner-slider (head-preload/DS full-bleed defeats stylesheet pad/margin) -->
+<!-- ① Hero Slider (above-the-fold) — sizing is owned by the responsive theme stylesheet. -->
 <div class="top-home-content top-home-content--above-fold awa-section awa-hero" id="awa-main-content" tabindex="-1">
 	<?php if ($heroSliderHtml !== ''): ?>
-		<div class="banner-slider banner-slider2 slidebanner rokanthemes-slidebanner awa-hero__viewport" style="box-sizing:border-box!important;width:calc(100% - 48px)!important;max-width:calc(100% - 48px)!important;margin-inline:24px!important;margin-left:24px!important;margin-right:24px!important;border-radius:12px!important;overflow:hidden!important">
+		<div class="banner-slider banner-slider2 slidebanner rokanthemes-slidebanner awa-hero__viewport">
 			<?php echo /* @noEscape */ $heroSliderHtml; ?>
 		</div>
 	<?php elseif ($heroFallbackHtml !== ''): ?>
-		<div class="banner-slider banner-slider2 banner-slider2--fallback awa-hero__viewport" style="box-sizing:border-box!important;width:calc(100% - 48px)!important;max-width:calc(100% - 48px)!important;margin-inline:24px!important;margin-left:24px!important;margin-right:24px!important;border-radius:12px!important;overflow:hidden!important">
+		<div class="banner-slider banner-slider2 banner-slider2--fallback awa-hero__viewport">
 			<?php echo /* @noEscape */ $heroFallbackHtml; ?>
 		</div>
 	<?php endif; ?>

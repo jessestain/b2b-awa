@@ -1,6 +1,10 @@
 # Plano de Correção de Layout por Fases — Home AWA
 
-> **Atualizado:** 2026-06-23 · Tema `AWA_Custom/ayo_home5_child`  
+> **SUPERSEDED (2026-08-18).** Plano mestre de fases: [`_documentacao/PLANO_CORRECAO_CASCATA_CSS_FASES.md`](../../../../../_documentacao/PLANO_CORRECAO_CASCATA_CSS_FASES.md).
+> Índice: [`_documentacao/PADRONIZACAO_LAYOUT.md`](../../../../../_documentacao/PADRONIZACAO_LAYOUT.md).
+> Este arquivo permanece só como histórico das fases 1–5 da home (2026-06).
+
+> **Atualizado:** 2026-06-23 · Tema `AWA_Custom/ayo_home5_child`
 > **Viewports QA:** 390 · 768 · 1366 · 1920
 
 ---

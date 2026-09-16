@@ -21,5 +21,10 @@
                    template="Magento_Theme::html/awa-align-grid-terminal-loader.phtml"
                    after="awa.cms.shell.final"/>
         </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.cms.contact.canonical.redirect"
+                   template="Magento_Cms::contact-canonical-redirect-v2.phtml"/>
+        </referenceContainer>
     </body>
 </page>

@@ -30,6 +30,7 @@
         <referenceBlock name="awa.audit.bundle.css" remove="true"/>
         <referenceBlock name="awa.header.impeccable.critical.global" remove="true"/>
         <referenceBlock name="awa.shelf.carousel" remove="true"/>
+        <referenceBlock name="awa.minicart.open.terminal" remove="true"/>
         <referenceBlock name="checkout.success.print.button" remove="true"/>
         <referenceBlock name="grupoawamotos_whatsapp_btn" remove="true"/>
 

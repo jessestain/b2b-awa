@@ -51,6 +51,8 @@
                 <argument name="visible_product_count_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\CategoryVisibleProductCount</argument>
             </arguments>
         </referenceBlock>
+        <!-- Trilho vazio sob o menu (ul 1280×23). Crumbs vão para o hero, junto do H1. -->
+        <move element="breadcrumbs" destination="category.image"/>
         <referenceBlock name="category.products.list">
             <arguments>
                 <argument name="bestseller_card_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel</argument>

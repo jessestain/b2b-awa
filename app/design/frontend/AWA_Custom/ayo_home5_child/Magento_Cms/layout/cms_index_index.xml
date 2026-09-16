@@ -14,7 +14,6 @@
         <remove src="css/awa-home-final-polish.css"/>
         <!--
             awa-round2-home-owl-tabs.css — Owl tab CSS homepage-only.
-            awa-home-carousel-standard.css + awa-carousel-modern.css — carousel CSS.
             GrupoAwamotos_B2B::marketing/suggestion.css — B2B suggestions (below-fold).
             Todos removidos do merged bundle 2026-05-09. Asyncados via awa-head-preload.phtml.
         -->
@@ -22,32 +21,24 @@
         <remove src="css/awa-consistency-home5.css"/>
         <remove src="css/awa-category-carousel.css"/>
         <!-- <css src="css/awa-plp-final-polish.css"/> Removido por TICKET-002: PLP em Home -->
-        <remove src="css/awa-home-carousel-standard.css"/>
-        <remove src="css/awa-carousel-modern.css"/>
+        <!-- awa-home-carousel-standard + awa-carousel-modern: removes retirados 2026-08-11
+             (arquivos inexistentes — <remove> órfão). -->
         <remove src="GrupoAwamotos_B2B::css/marketing/suggestion.css"/>
-        <!-- awa-visual-qa-home.css: movido para async via awa-head-preload.phtml ($__qaCssByAction) 2026-05-08 -->
-        <!-- Homepage terminal CSS servido: awa-home-terminal-bundle.min.css (fonte: .css; build: scripts/build-awa-home-terminal-bundle.sh) -->
-        <remove src="css/awa-home-premium.css"/>
-        <!-- awa-homepage-bento.css → _awa-layout-grid-card-unified.less (2026-05-15) -->
-        <remove src="css/awa-homepage-bento.css"/>
-        <remove src="css/awa-homepage-sidebar.css"/>
-        <remove src="css/awa-homepage-ux.css"/>
-        <remove src="css/awa-homepage-polish.css"/>
-        <!-- awa-phase1-bugfixes.css → unified hero + grid (2026-05-15) -->
-        <remove src="css/awa-phase1-bugfixes.css"/>
+        <!-- awa-visual-qa-home: consolidado; async via awa-head-preload.phtml ($__qaCssByAction) 2026-05-08 -->
+        <!-- Homepage terminal CSS: bundle retirado 2026-08-11 (arquivo inexistente). -->
+        <!-- Removes órfãos retirados 2026-08-11 (arquivos inexistentes): awa-home-premium,
+             awa-homepage-bento (regras migraram para _awa-layout-grid-card-unified.less, 2026-05-15),
+             awa-homepage-sidebar, awa-homepage-ux, awa-homepage-polish,
+             awa-phase1-bugfixes (migrado para unified hero + grid, 2026-05-15),
+             awa-home-initial-fix, awa-home-cascade-final, awa-home-visual-fix-2026-05-15,
+             awa-home-polish-2026-05-16, awa-homepage-container-fix. -->
         <!-- B2B UX: já async em default_head_blocks.xml (evita duplicate blocking na home) -->
-        <remove src="css/awa-home-initial-fix.css"/>
-        <remove src="css/awa-home-cascade-final.css"/>
-        <remove src="css/awa-home-visual-fix-2026-05-15.css"/>
-        <remove src="css/awa-home-polish-2026-05-16.css"/>
-        <remove src="css/awa-homepage-container-fix.css"/>
         <!-- flex-grid-flow: global async em default_head_blocks + awa-head-preload -->
         <remove src="css/awa-flex-grid-flow.min.css"/>
-        <remove src="css/awa-touch-final.min.css"/>
         <!-- login-to-cart.css: async na home (awa-login-to-cart-home-async) + hide inline anti-FOUC -->
         <remove src="GrupoAwamotos_B2B::css/product/login-to-cart.css"/>
-        <!-- S3-01 home: header-stack (58KB) async via awa-head-preload — critical-home cobre 1º paint -->
-        <remove src="css/awa-header-stack-2026-05-28.min.css"/>
+        <!-- S3-01 home: header-stack migrado para _awa-header-stack.less (43.01) — remove órfão
+             (awa-touch-final idem) retirado 2026-08-11. -->
         <!-- CMS shell (cms_page_view.xml) não se aplica à home: o Magento adiciona o handle
              cms_page_view à homepage CMS, então removemos aqui o CSS + loader (regras escopadas
              a body.cms-page-view — só desperdiçavam requests na home) -->
@@ -62,15 +53,11 @@
         -->
         <remove src="css/awa-home-hover-lock.min.css"/>
         <remove src="css/awa-home-hover-lock.css"/>
-        <remove src="css/awa-visual-audit-2026-05-18.min.css"/>
-        <remove src="css/awa-visual-audit-2026-05-18.css"/>
         <remove src="css/awa-impeccable-audit-2026-05-28.min.css"/>
         <remove src="css/awa-impeccable-audit-2026-05-28.css"/>
         <remove src="css/awa-home-flex-grid-flow.min.css"/>
         <remove src="css/awa-head-tail-bundle.min.css"/>
         <remove src="css/awa-defer-global-bundle.min.css"/>
-        <remove src="css/awa-bundle-refinements.min.css"/>
-        <remove src="css/awa-home-gate-visual-bundle.min.css"/>
         <remove src="css/awa-ui-simplify-terminal.min.css"/>
         <remove src="css/awa-home-standardize-terminal-wins-2026-06-09.min.css"/>
         <remove src="css/awa-footer-terminal-lock-v1.min.css"/>
@@ -79,6 +66,9 @@
         <remove src="GrupoAwamotos_B2B::css/header/status-panel.css"/>
         <remove src="css/awa-b2b-status-panel.min.css"/>
         <remove src="css/awa-b2b-status-panel.css"/>
+        <!-- Home freeze 2026-09-02: do not load css-gate JS / QUEUE_HOME_LOAD_LAST. -->
+        <remove src="js/awa-css-gate.js"/>
+        <remove src="js/awa-css-gate.min.js"/>
     </head>
     <body>
         <attribute name="data-mage-init">{}</attribute>

@@ -2,14 +2,30 @@
 declare(strict_types=1);
 
 /**
- * AWA Motos – H1 SEO da homepage (visually hidden no 1º paint).
+ * AWA Motos – título principal visível da homepage.
  *
- * Override no tema filho: inline style garante ocultação antes do CSS async.
+ * Reutiliza o único H1 existente, com estilo restrito à homepage.
  * Incluído apenas em cms_index_index via layout XML.
  *
  * @var \Magento\Framework\View\Element\Template $block
  */
 ?>
-<h1 class="awa-sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">
+<style>
+body.cms-index-index h1.awa-home-title {
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+    max-width: 1232px;
+    margin: 16px auto;
+    padding: 0;
+    color: #1f2937;
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+</style>
+<h1 class="awa-home-title">
     <?= $block->escapeHtml(__('AWA Motos — Peças e Acessórios para Motos')) ?>
 </h1>

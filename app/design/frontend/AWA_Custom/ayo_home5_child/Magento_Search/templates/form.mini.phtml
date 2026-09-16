@@ -8,8 +8,12 @@ declare(strict_types=1);
  */
 
 // @codingStandardsIgnoreFile
+/** @var \Magento\Search\ViewModel\ConfigProvider|null $configProvider */
+$configProvider = $block->getData('configProvider');
 /** @var \Magento\Search\Helper\Data $searchHelper */
-$searchHelper = $this->helper('Magento\Search\Helper\Data');
+$searchHelper = $configProvider instanceof \Magento\Search\ViewModel\ConfigProvider
+    ? $configProvider->getSearchHelperData()
+    : $this->helper(\Magento\Search\Helper\Data::class);
 $fallbackSuggestUrl = $block->getUrl('search/ajax/suggest');
 $searchQueryText = (string) $searchHelper->getEscapedQueryText();
 $searchFormClass = 'form minisearch search-content is-ready';

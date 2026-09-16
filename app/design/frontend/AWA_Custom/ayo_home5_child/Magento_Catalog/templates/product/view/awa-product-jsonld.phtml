@@ -16,6 +16,21 @@ if ($schema === []) {
     return;
 }
 
+$pdpGate = $block->getData('pdp_gate');
+if ($pdpGate instanceof \GrupoAwamotos\B2B\ViewModel\PdpGate
+    && !$pdpGate->canViewPrices()
+    && isset($schema['offers'])
+    && is_array($schema['offers'])
+) {
+    unset(
+        $schema['offers']['price'],
+        $schema['offers']['lowPrice'],
+        $schema['offers']['highPrice'],
+        $schema['offers']['priceCurrency'],
+        $schema['offers']['priceSpecification']
+    );
+}
+
 $breadcrumb = $viewModel->getBreadcrumbStructuredData();
 ?>
 <script type="application/ld+json">

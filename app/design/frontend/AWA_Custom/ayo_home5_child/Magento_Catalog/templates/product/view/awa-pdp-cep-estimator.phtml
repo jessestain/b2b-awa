@@ -14,10 +14,10 @@ declare(strict_types=1);
 $_product = $block->getProduct();
 $_productId = (int) $_product->getId();
 $_isLoggedIn = false;
-try {
-    $_isLoggedIn = $this->helper('Magento\Customer\Model\Session')->isLoggedIn();
-} catch (\Exception $e) {
-    // Ignore - show default state
+/** @var \Magento\Customer\ViewModel\Customer\Auth|null $auth */
+$auth = $block->getData('auth');
+if ($auth instanceof \Magento\Customer\ViewModel\Customer\Auth) {
+    $_isLoggedIn = $auth->isLoggedIn();
 }
 ?>
 <div class="awa-pdp-cep-estimator"

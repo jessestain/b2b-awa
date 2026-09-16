@@ -1,0 +1,19 @@
+<script>
+(function () {
+    'use strict';
+
+    var redirectMap = {
+        '/contato': '/contact',
+        '/contact-us': '/contact',
+        '/ofertas.html': '/super-ofertas.html'
+    };
+    var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    var destination = redirectMap[currentPath];
+
+    if (!destination || currentPath === destination) {
+        return;
+    }
+
+    window.location.replace(destination + window.location.search + window.location.hash);
+}());
+</script>

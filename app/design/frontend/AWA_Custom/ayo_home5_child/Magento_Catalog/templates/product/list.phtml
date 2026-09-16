@@ -225,7 +225,7 @@ if ($_b2bActive) {
 						<div class="actions-secondary">
 							<ul class="product-extra-link add-to-links">
 								<li class="quickview-product">
-									<a class="quickview-link" data-role="quickview-button" data-id="<?php echo $block->escapeHtmlAttr($_product->getId()); ?>" href="<?php echo $block->escapeUrl($block->getUrl('quickview/product/quickview/id/' . $_product->getId())); ?>" data-href="<?php echo $block->escapeUrl($block->getUrl('quickview/product/quickview/id/' . $_product->getId())); ?>" role="button" aria-label="<?php echo $block->escapeHtml(__('Visualização rápida de %1', $_product->getName())); ?>" title="<?php echo $block->escapeHtml(__('Quick view')); ?>"></a>
+									<a class="quickview-link" data-role="quickview-button" data-id="<?php echo $block->escapeHtmlAttr($_product->getId()); ?>" href="<?php echo $block->escapeUrl($block->getUrl('quickview/product/quickview/id/' . $_product->getId())); ?>" data-href="<?php echo $block->escapeUrl($block->getUrl('quickview/product/quickview/id/' . $_product->getId())); ?>" role="button" aria-haspopup="dialog" aria-controls="quick-window" aria-expanded="false" aria-label="<?php echo $block->escapeHtml(__('Visualização rápida de %1', $_product->getName())); ?>" title="<?php echo $block->escapeHtml(__('Quick view')); ?>"></a>
 								</li>
 							</ul>
 						</div>
@@ -252,10 +252,17 @@ if ($_b2bActive) {
                         <?php else: ?>
                             <div class="b2b-login-to-see-price price-box">
                                 <span class="b2b-login-to-see-price__title"><?= $block->escapeHtml($b2bGateHeadline) ?></span>
-                                <span class="b2b-login-to-see-price__message"><?= $block->escapeHtml($b2bGateCardMessage) ?></span>
+                                <?php if ($b2bPrimaryUrl !== ''): ?>
+                                    <a class="b2b-login-to-see-price__message b2b-login-to-see-price__message--action"
+                                       href="<?= /* @noEscape */ $b2bPrimaryUrl ?>"
+                                       aria-label="<?= $block->escapeHtmlAttr(__('Cadastre-se para ver o preço de %1', $productName)) ?>"><?= $block->escapeHtml($b2bGateCardMessage) ?></a>
+                                <?php else: ?>
+                                    <span class="b2b-login-to-see-price__message"><?= $block->escapeHtml($b2bGateCardMessage) ?></span>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 						</div>
+						<?php if ($b2bCanAddToCart): ?>
 						<div class="product-info-cart">
 							<div class="actions-primary addcart-link">
 								<?php if ($b2bCanAddToCart && $_product->isSaleable()): ?>
@@ -278,6 +285,7 @@ if ($_b2bActive) {
 								<?php endif; ?>
 							</div>
 						</div>
+						<?php endif; ?>
 					</div>
                 </li>
             <?php $iterator++; endforeach; ?>
@@ -353,12 +361,19 @@ if ($_b2bActive) {
                         <?php else: ?>
                             <div class="b2b-login-to-see-price price-box">
                                 <span class="b2b-login-to-see-price__title"><?= $block->escapeHtml($b2bGateHeadline) ?></span>
-                                <span class="b2b-login-to-see-price__message"><?= $block->escapeHtml($b2bGateCardMessage) ?></span>
+                                <?php if ($b2bPrimaryUrl !== ''): ?>
+                                    <a class="b2b-login-to-see-price__message b2b-login-to-see-price__message--action"
+                                       href="<?= /* @noEscape */ $b2bPrimaryUrl ?>"
+                                       aria-label="<?= $block->escapeHtmlAttr(__('Cadastre-se para ver o preço de %1', $_product->getName())) ?>"><?= $block->escapeHtml($b2bGateCardMessage) ?></a>
+                                <?php else: ?>
+                                    <span class="b2b-login-to-see-price__message"><?= $block->escapeHtml($b2bGateCardMessage) ?></span>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 						</div>
 						<div class="product-desc"><?php echo $block->escapeHtml($_product->getShortDescription()); ?>
 						</div>
+						<?php if ($b2bCanAddToCart): ?>
 						<div class="product-info-cart">
 							<div class="actions-primary">
 								<?php if ($b2bCanAddToCart && $_product->isSaleable()): ?>
@@ -392,6 +407,7 @@ if ($_b2bActive) {
 								<?php /* B2B: wishlist/compare desativados */ ?>
 							</div>
 						</div>
+						<?php endif; ?>
 					</div>
 				</li>
 			<?php endforeach; ?>

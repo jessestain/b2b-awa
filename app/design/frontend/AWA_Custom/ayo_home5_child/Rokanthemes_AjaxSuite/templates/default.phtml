@@ -28,6 +28,9 @@ if ($logoConfig !== '') {
 }
 
 $logoLink = $sanitize($logoLink);
+$layoutHandles = $block->getLayout() ? $block->getLayout()->getUpdate()->getHandles() : [];
+$isCatalogPlp = in_array('catalog_category_view', $layoutHandles, true)
+    || in_array('catalogsearch_result_index', $layoutHandles, true);
 ?>
 <script>
     window.logoUrl = <?= /* @noEscape */ json_encode($logoLink, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
@@ -55,7 +58,7 @@ $ajaxSuiteConfig = [
     ],
 ];
 ?>
-<script type="text/x-magento-init">
+<script type="<?= $isCatalogPlp ? 'text/plain' : 'text/x-magento-init' ?>"<?php if ($isCatalogPlp): ?> data-awa-catalog-defer-init="1"<?php endif; ?>>
 <?= /* @noEscape */ json_encode($ajaxSuiteConfig, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
 </script>
 <?php endif; ?>

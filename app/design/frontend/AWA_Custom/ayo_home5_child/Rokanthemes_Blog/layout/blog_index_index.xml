@@ -2,6 +2,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <!-- AWA Blog — CSS de polimento para a listagem do blog -->
+    <head>
+        <meta name="robots" content="NOINDEX,FOLLOW"/>
+    </head>
     <body>
         <!-- H1 para a página índice do blog (blog_default.xml remove page.main.title).
              Usa template personalizado que chama getPageTitle() em vez de getPageHeading()

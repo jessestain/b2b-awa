@@ -187,6 +187,8 @@
                 <arguments>
                     <argument name="product_structured_data_view_model"
                               xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductStructuredData</argument>
+                    <argument name="pdp_gate"
+                              xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
                 </arguments>
             </block>
             <!-- F1-04 (2026-06-27): FAQPage JSON-LD para rich results do Google -->

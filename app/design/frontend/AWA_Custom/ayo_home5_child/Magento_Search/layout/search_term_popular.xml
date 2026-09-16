@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <meta name="robots" content="NOINDEX,FOLLOW"/>
+    </head>
+    <body>
+        <referenceBlock name="seo.searchterm">
+            <arguments>
+                <argument name="term_quality" xsi:type="object">GrupoAwamotos\Theme\Model\Search\PopularSearchTermQuality</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.search.popular.anchor.hydrator"
+                   template="Magento_Search::term/popular-hydrator.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

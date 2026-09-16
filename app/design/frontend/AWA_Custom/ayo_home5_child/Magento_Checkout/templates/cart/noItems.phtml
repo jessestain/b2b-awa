@@ -9,7 +9,7 @@ declare(strict_types=1);
 $viewModel = $block->getData('view_model');
 $catalogUrl = $viewModel instanceof \GrupoAwamotos\B2B\ViewModel\Cart\EmptyCartContext
     ? $viewModel->getCatalogUrl()
-    : $block->getUrl('', ['_direct' => 'catalogo']);
+    : $block->getUrl('catalogo');
 $allCategoriesUrl = $viewModel instanceof \GrupoAwamotos\B2B\ViewModel\Cart\EmptyCartContext
     ? $viewModel->getAllCategoriesUrl()
     : $catalogUrl;

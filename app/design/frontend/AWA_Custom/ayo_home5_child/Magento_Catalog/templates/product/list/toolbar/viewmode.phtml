@@ -15,7 +15,7 @@ if (!in_array($toolbarSlot, ['top', 'bottom'], true)) {
 $modesLabelId = 'modes-label-' . $toolbarSlot;
 ?>
 <?php if ($block->isEnabledViewSwitcher()): ?>
-<div class="modes">
+<div class="modes" role="group" aria-label="<?= $block->escapeHtmlAttr(__('Modo de exibição dos produtos')) ?>">
     <?php $_modes = $block->getModes(); ?>
     <?php if ($_modes && count($_modes) > 1): ?>
     <strong class="modes-label" id="<?= /* @noEscape */ $modesLabelId ?>"><?= $block->escapeHtml(__('Hide Sidebar')) ?></strong>
@@ -23,7 +23,10 @@ $modesLabelId = 'modes-label-' . $toolbarSlot;
         <?php if ($block->isModeActive($_code)): ?>
             <strong title="<?= $block->escapeHtmlAttr((string) $_label) ?>"
                 class="modes-mode active mode-<?= $block->escapeHtmlAttr(strtolower((string) $_code)) ?>"
-                data-value="<?= $block->escapeHtmlAttr(strtolower((string) $_code)) ?>">
+                data-value="<?= $block->escapeHtmlAttr(strtolower((string) $_code)) ?>"
+                role="button"
+                aria-pressed="true"
+                aria-disabled="true">
                 <span><?= $block->escapeHtml((string) $_label) ?></span>
             </strong>
         <?php else: ?>
@@ -40,6 +43,8 @@ $modesLabelId = 'modes-label-' . $toolbarSlot;
                data-role="mode-switcher"
                data-value="<?= $block->escapeHtmlAttr(strtolower((string) $_code)) ?>"
                id="<?= $block->escapeHtmlAttr($modeId) ?>"
+               role="button"
+               aria-pressed="false"
                aria-label="<?= $block->escapeHtmlAttr($modeAriaLabel) ?>">
                 <span><?= $block->escapeHtml((string) $_label) ?></span>
             </a>

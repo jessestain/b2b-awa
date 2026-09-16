@@ -14,7 +14,7 @@ if (!is_array($presentation) || ($presentation['incrementId'] ?? '') === '') {
 $itemsCountLabel = (int) ($presentation['itemsCount'] ?? 0) === 1
     ? (string) __('1 peça')
     : (string) __('%1 peças', (int) ($presentation['itemsCount'] ?? 0));
-$catalogUrl = (string) ($block->getData('catalog_url') ?: $block->getUrl('', ['_direct' => 'catalogo']));
+$catalogUrl = (string) ($block->getData('catalog_url') ?: $block->getUrl('catalogo'));
 $whatsappUrl = (string) ($block->getData('whatsapp_url') ?: '');
 $showCategories = (bool) $block->getData('show_categories');
 $featuredCategories = is_array($block->getData('featured_categories')) ? $block->getData('featured_categories') : [];

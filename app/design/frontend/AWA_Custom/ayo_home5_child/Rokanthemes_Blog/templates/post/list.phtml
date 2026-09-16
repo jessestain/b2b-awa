@@ -1,0 +1,55 @@
+<?php
+/**
+ * Blog post list — Portuguese empty state. Do not edit Rokanthemes source.
+ *
+ * @var \Rokanthemes\Blog\Block\Post\PostList $block
+ */
+declare(strict_types=1);
+
+$postCollection = $block->getPostCollection();
+$postCount = (int) $postCollection->count();
+
+// #region agent log
+$payload = json_encode([
+    'sessionId' => '419192',
+    'runId' => 'post-fix',
+    'hypothesisId' => 'BLOG',
+    'location' => 'Rokanthemes_Blog/templates/post/list.phtml',
+    'message' => 'blog-list',
+    'data' => ['postCount' => $postCount],
+    'timestamp' => (int) round(microtime(true) * 1000),
+], JSON_UNESCAPED_UNICODE);
+if (is_string($payload)) {
+    @file_put_contents(
+        '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-419192.log',
+        $payload . "\n",
+        FILE_APPEND
+    );
+}
+// #endregion
+?>
+<?php if ($postCount === 0): ?>
+    <div class="message info empty awa-blog-empty">
+        <div>
+            <p><?= $block->escapeHtml(__('Ainda não publicamos artigos no blog.')) ?></p>
+            <p>
+                <?= $block->escapeHtml(__('Enquanto isso, confira o catálogo de peças ou a Central de Ajuda.')) ?>
+            </p>
+            <p>
+                <a href="<?= $block->escapeUrl($block->getUrl('')) ?>"><?= $block->escapeHtml(__('Ver catálogo')) ?></a>
+                ·
+                <a href="<?= $block->escapeUrl($block->getUrl('ajuda')) ?>"><?= $block->escapeHtml(__('Central de Ajuda')) ?></a>
+            </p>
+        </div>
+    </div>
+<?php else: ?>
+    <?= $block->getAdditionalHtml() ?>
+    <div class="post-list-wrapper">
+        <div class="blog-list-post">
+            <?php foreach ($postCollection as $post): ?>
+                <?= $block->getPostHtml($post) ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?= $block->getToolbarHtml() ?>
+<?php endif; ?>

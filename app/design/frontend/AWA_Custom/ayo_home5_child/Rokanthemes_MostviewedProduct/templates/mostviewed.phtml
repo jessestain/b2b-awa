@@ -1,7 +1,10 @@
 <?php
 use Magento\Framework\App\Action\Action;
 $isHomePage = $block->getRequest()->getFullActionName() === 'cms_index_index';
-$b2bPriceGate = $this->helper(\GrupoAwamotos\B2B\Helper\Data::class);
+/** @var \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel|null $cardVm */
+$cardVm = $block->getData('bestseller_card_view_model');
+$hasCardVm = $cardVm instanceof \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel;
+$b2bPriceGate = $hasCardVm ? $cardVm : $this->helper(\GrupoAwamotos\B2B\Helper\Data::class);
 if($this->getConfig('enabled')){ // start enable module?>
 	<?php $_productCollection = $this->getProducts();
 	?>
@@ -94,7 +97,7 @@ if($this->getConfig('enabled')){ // start enable module?>
 								<?php if($_product->getSku()): ?><span class="awa-b2b-sku"><?= $block->escapeHtml($_product->getSku()) ?></span><?php endif; ?>
 								<?php if( $this->getConfig('show_price') ): ?>
 									 <?php if ($b2bPriceGate->canViewPrices()): ?>
-										 <?php /* @escapeNotVerified */ echo $this->helper('Rokanthemes\Themeoption\Helper\Data')->getPriceDisplayCustom($block->getProductPrice($_product)) ?>
+										 <?php /* @escapeNotVerified */ echo ($hasCardVm ? $cardVm->priceDisplayHtml((string) $block->getProductPrice($_product)) : $this->helper('Rokanthemes\Themeoption\Helper\Data')->getPriceDisplayCustom($block->getProductPrice($_product))) ?>
 									 <?php else: ?>
 										<div class="b2b-login-to-see-price">
 											<span class="b2b-login-to-see-price__title"><?= $block->escapeHtml($b2bPriceGate->getPriceGateHeadline()) ?></span>

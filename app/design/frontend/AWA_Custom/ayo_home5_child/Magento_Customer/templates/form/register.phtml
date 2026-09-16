@@ -1,8 +1,3 @@
-:root {
-    /* ── cust-reg — design tokens ─── */
-    --cust-reg-c1: #A33B3B;
-}
-
 <?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -12,12 +7,7 @@
 use Magento\Customer\Helper\Address;
 
 /** @var \Magento\Customer\Block\Form\Register $block */
-if (!$block->getButtonLockManager()) {
-    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    $block->setButtonLockManager(
-        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-    );
-}
+/** ButtonLockManager is injected by GrupoAwamotos\Theme\Plugin\Customer\Form\RegisterButtonLockManagerPlugin */
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 

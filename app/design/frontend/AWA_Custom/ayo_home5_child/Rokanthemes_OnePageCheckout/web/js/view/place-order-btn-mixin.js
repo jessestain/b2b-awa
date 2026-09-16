@@ -306,7 +306,19 @@ define([
             }
         });
 
-        component._placeOrderAjaxTimeout = window.setTimeout(finish, PLACE_ORDER_AJAX_TIMEOUT_MS);
+        component._placeOrderAjaxTimeout = window.setTimeout(function () {
+            if (completed) {
+                return;
+            }
+
+            // Elapsed time is not proof that the server rejected the order.
+            // Keep the submission lock and listener until the request completes.
+            component._placeOrderAjaxTimeout = null;
+            fullScreenLoader.stopLoader();
+            showInlinePlaceOrderError(
+                $t('A confirmação do pedido está demorando. Não envie novamente. Confira Meus Pedidos ou fale com nossa equipe antes de tentar outra vez.')
+            );
+        }, PLACE_ORDER_AJAX_TIMEOUT_MS);
     }
 
     /**

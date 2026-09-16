@@ -4,11 +4,19 @@
     <head>
         <!-- SEO: área logada — fora do índice -->
         <meta name="robots" content="NOINDEX,NOFOLLOW"/>
+        <!-- Fase 6 fatia 5 — b2bAccountStrip. Shell via loader em GrupoAwamotos_B2B. -->
+        <remove src="css/awa-plp-final-polish.css"/>
+        <remove src="css/awa-audit-bundle.min.css"/>
+        <remove src="css/awa-audit-bundle.css"/>
+        <remove src="css/awa-carousel-bundle.min.css"/>
         <css src="css/layers/pages/account-b2b.css"/>
-        <css src="css/awa-b2b-account-shell-final.css" order="10000"/>
+        <css src="css/layers/pages/account-order-total.css"/>
+        <!-- SSOT 2026-08-10: awa-b2b-account-shell-final.css só via
+             awa-b2b-account-shell-final-loader.phtml (critical + link versionado). -->
         <!-- AWA Design System — Customer pages styling -->
     </head>
     <body>
+        <attribute name="class" value="awa-b2b-page-contract"/>
         <!-- Header auth prompt: render per-request on account surfaces (no block_html guest cache).
              A re-declaração precisa repetir class/as/template/argumentos: o layout reseta os
              dados do bloco ao re-declarar (_overrideElementWorkaround) e uma tag <block> "nua"
@@ -21,11 +29,15 @@
                    cacheable="false">
                 <arguments>
                     <argument name="view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ContactInfo</argument>
+                    <argument name="account_prompt_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\HeaderAccountPrompt</argument>
                 </arguments>
             </block>
         </referenceBlock>
         <!-- Remove B2C-specific links from the customer account sidebar navigation -->
         <referenceBlock name="customer-account-navigation-wish-list-link" remove="true"/>
+        <!-- Meus Pedidos / detalhe: o sidebar "Pedidos feitos recentemente" duplica
+             o CTA de recompra e pode adicionar SKU ao carrinho junto de um pedido real. -->
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
         <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true"/>
         <referenceBlock name="customer-account-navigation-product-reviews-link" remove="true"/>
         <referenceBlock name="customer-account-navigation-newsletter-subscriptions-link" remove="true"/>

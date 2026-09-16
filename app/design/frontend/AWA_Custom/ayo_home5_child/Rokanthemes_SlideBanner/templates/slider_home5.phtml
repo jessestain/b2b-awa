@@ -118,6 +118,12 @@ if ($banners = $block->getBannerCollection()):
             . $block->escapeHtml(__('Cadastrar no B2B'))
             . '</a>';
     };
+    $activeBannerCount = 0;
+    foreach ($banners as $banner) {
+        if ($banner->getSlideStatus() != '2') {
+            $activeBannerCount++;
+        }
+    }
 ?>
 <div class="wrapper_slider hidden-xs slider_<?php echo (int) $sliderId; ?>" data-awa-hero-variant="desktop">
     <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais')) ?>">
@@ -127,11 +133,18 @@ if ($banners = $block->getBannerCollection()):
             $__isCb300 = (stripos((string) $banner->getSlideImage(), 'slider_guidao_cb_300') !== false)
                 || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
         ?>
-            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300 ? ' awa-hero__slide--cb300' : '' ?>">
+            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300 ? ' awa-hero__slide--cb300' : '' ?>"
+                 role="group"
+                 aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
+                 aria-label="<?= $block->escapeHtmlAttr(__('Slide %1 de %2', $__deskIdx, $activeBannerCount)) ?>"
+                 aria-hidden="<?= $__isFirst ? 'false' : 'true' ?>">
                 <div class="banner_item_bg">
                     <?php
                     $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
                     $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
+                    if ($__isCb300 && strcasecmp($slideAlt, 'AWA Motos') === 0) {
+                        $slideAlt = (string) __('Guidão CB 300 texturizado');
+                    }
                     if ($heroResponsive) {
                         $html = $heroResponsive->buildLcpPictureHtml(
                             (string) $banner->getSlideImage(),
@@ -191,12 +204,22 @@ if ($banners = $block->getBannerCollection()):
     <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais mobile')) ?>">
         <div class="swiper-wrapper awa-hero__track">
         <?php $__mobIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirstMob = ($__mobIdx === 0); $__mobIdx++; ?>
-            <div class="banner_item swiper-slide awa-hero__slide">
+            <div class="banner_item swiper-slide awa-hero__slide"
+                 role="group"
+                 aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
+                 aria-label="<?= $block->escapeHtmlAttr(__('Slide %1 de %2', $__mobIdx, $activeBannerCount)) ?>"
+                 aria-hidden="<?= $__isFirstMob ? 'false' : 'true' ?>">
                 <div class="banner_item_bg">
                     <?php
                     $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
                     $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
                     $_mobSrc = $banner->getSlideImageMobile() ?: $banner->getSlideImage();
+                    $link = $resolveSlideLink($banner->getSlideLink());
+                    $__isCb300Mob = (stripos((string) $_mobSrc, 'slider_guidao_cb_300') !== false)
+                        || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
+                    if ($__isCb300Mob && strcasecmp($slideAlt, 'AWA Motos') === 0) {
+                        $slideAlt = (string) __('Guidão CB 300 texturizado');
+                    }
                     if ($heroResponsive) {
                         // r44b: no desktop o slider mobile fica em display:none, mas eager+high
                         // ainda baixa 1920w. LCP mobile fica no preload (media max-width:767).
@@ -216,7 +239,6 @@ if ($banners = $block->getBannerCollection()):
                                 . '</picture>';
                         }
                     }
-                    $link = $resolveSlideLink($banner->getSlideLink());
                     if ($link !== '') {
                         $slideLinkLabel = trim(strip_tags((string) $slideAlt)) ?: (string) __('Destaque AWA Motos');
                         $html = '<a href="' . $block->escapeUrl($link) . '" aria-label="'
@@ -301,6 +323,123 @@ if ($banners = $block->getBannerCollection()):
         w.setTimeout(fn, 0);
     }
 
+    function setSlideFocus(slide, active) {
+        slide.querySelectorAll('a[href], button, input, select, textarea, [tabindex]').forEach(function (control) {
+            if (active) {
+                if (control.hasAttribute('data-awa-hero-original-tabindex')) {
+                    var original = control.getAttribute('data-awa-hero-original-tabindex');
+                    if (original === '__none__') {
+                        control.removeAttribute('tabindex');
+                    } else {
+                        control.setAttribute('tabindex', original);
+                    }
+                    control.removeAttribute('data-awa-hero-original-tabindex');
+                }
+                return;
+            }
+
+            if (!control.hasAttribute('data-awa-hero-original-tabindex')) {
+                control.setAttribute(
+                    'data-awa-hero-original-tabindex',
+                    control.hasAttribute('tabindex') ? control.getAttribute('tabindex') : '__none__'
+                );
+            }
+            control.setAttribute('tabindex', '-1');
+        });
+    }
+
+    function initNativeFallback(node) {
+        if (!node || node.getAttribute('data-awa-hero-native-fallback') === '1') {
+            return;
+        }
+
+        d.querySelectorAll('[data-awa-hero-variant] .awa-hero__viewport').forEach(function (viewport) {
+            var slides = Array.prototype.slice.call(viewport.querySelectorAll('.awa-hero__slide'));
+            var pagination = viewport.querySelector('.awa-hero__pagination');
+            var prev = viewport.querySelector('.awa-hero__button--prev');
+            var next = viewport.querySelector('.awa-hero__button--next');
+            var pause = viewport.querySelector('.awa-hero__pause');
+            var activeDisplay;
+            var index = 0;
+
+            if (!slides.length) {
+                return;
+            }
+
+            activeDisplay = w.getComputedStyle(slides[0]).display;
+            if (!activeDisplay || activeDisplay === 'none') {
+                activeDisplay = viewport.closest('[data-awa-hero-variant="mobile"]') ? 'flex' : 'block';
+            }
+
+            function show(nextIndex) {
+                index = (nextIndex + slides.length) % slides.length;
+                slides.forEach(function (slide, slideIndex) {
+                    var active = slideIndex === index;
+                    slide.style.setProperty('display', active ? activeDisplay : 'none', 'important');
+                    slide.classList.toggle('swiper-slide-active', active);
+                    slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+                    setSlideFocus(slide, active);
+                });
+                if (pagination) {
+                    pagination.querySelectorAll('.swiper-pagination-bullet').forEach(function (button, buttonIndex) {
+                        var active = buttonIndex === index;
+                        button.classList.toggle('swiper-pagination-bullet-active', active);
+                        if (active) {
+                            button.setAttribute('aria-current', 'true');
+                        } else {
+                            button.removeAttribute('aria-current');
+                        }
+                    });
+                }
+            }
+
+            if (pagination) {
+                pagination.innerHTML = '';
+                pagination.setAttribute('role', 'group');
+                pagination.setAttribute(
+                    'aria-label',
+                    <?= /* @noEscape */ json_encode((string) __('Selecionar destaque'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+                );
+                slides.forEach(function (slide, slideIndex) {
+                    var button = d.createElement('button');
+                    button.type = 'button';
+                    button.className = 'swiper-pagination-bullet';
+                    button.setAttribute(
+                        'aria-label',
+                        <?= /* @noEscape */ json_encode((string) __('Ir para o slide'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?> +
+                        ' ' + (slideIndex + 1) + ' ' +
+                        <?= /* @noEscape */ json_encode((string) __('de'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?> +
+                        ' ' + slides.length
+                    );
+                    button.addEventListener('click', function () {
+                        show(slideIndex);
+                    });
+                    pagination.appendChild(button);
+                });
+                pagination.hidden = slides.length < 2;
+            }
+
+            if (prev) {
+                prev.hidden = slides.length < 2;
+                prev.addEventListener('click', function () { show(index - 1); });
+            }
+            if (next) {
+                next.hidden = slides.length < 2;
+                next.addEventListener('click', function () { show(index + 1); });
+            }
+            if (pause) {
+                pause.hidden = true;
+                pause.setAttribute('aria-hidden', 'true');
+            }
+
+            viewport.setAttribute('data-awa-hero-engine', 'native');
+            show(0);
+        });
+
+        node.setAttribute('data-awa-hero-native-fallback', '1');
+        node.setAttribute('data-awa-hero-inline-bootstrap', '1');
+    }
+
     function tryInit(attempt) {
         var node = d.getElementById(configId);
         var payload;
@@ -319,6 +458,10 @@ if ($banners = $block->getBannerCollection()):
         }
 
         if (typeof w.require !== 'function' || (w.require && w.require._awaStub) || !hasMagentoHeroMap()) {
+            if (attempt >= 12) {
+                initNativeFallback(node);
+                return;
+            }
             if (attempt < maxAttempts) {
                 w.setTimeout(function () {
                     tryInit(attempt + 1);

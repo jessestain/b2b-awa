@@ -48,6 +48,12 @@
                 <width>600</width>
                 <height>600</height>
             </image>
+            <!-- Home Mais Vendidos / shelves: card visível ~150–280px, 2x ≈ 400px.
+                 Evita baixar JPEG 600px (category_page_list) em prateleira abaixo do fold. -->
+            <image id="awa_home_shelf" type="small_image">
+                <width>400</width>
+                <height>400</height>
+            </image>
         </images>
     </media>
     <vars module="Magento_Catalog">

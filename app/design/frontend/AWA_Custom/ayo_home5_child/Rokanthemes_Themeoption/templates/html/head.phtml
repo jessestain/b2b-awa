@@ -2,7 +2,6 @@
     /** @var mixed $themeOptionBlock */
     $themeOptionBlock = $block;
     $data = $themeOptionBlock->getConfig();
-    $_helper = $this->helper('Rokanthemes\Themeoption\Helper\Themeconfig');
 ?>
 <?php
     $charSubset = ",latin-ext";
@@ -60,13 +59,15 @@
 <!-- calendar, uppy, chosen, fancybox, quickview: gerenciados em awa-deferred-interaction-css  -->
 <!-- (movidos para bloco dedicado via head.additional em default.xml — sem duplicatas)         -->
 <!-- ===== Fim CSS de Interação ===== -->
-<!-- Rokanthemes theme option CSS: carregado de forma não-bloqueante (AWA_Custom 2026-03-17) -->
-<link rel="stylesheet" type="text/css" media="all"
-      href="<?= $this->escapeUrl($_helper->getThemeOption()) ?>"/>
+<!-- Rokanthemes theme option CSS (custom_default.css): NÃO emitir na home/storefront.
+     O ficheiro força html,body{font-family:Montserrat;font-size:14px} e a/button vermelhos.
+     O plugin metia-o na fila do CSS gate — no clique ou aos ~20s o visual inteiro saltava
+     (FOUC). Paleta e tipografia ficam nos tokens --awa-* / design system. -->
 <?php
 /* AWA Brand Palette Bridge: Admin config → CSS Custom Properties
    Injected into custom_default.css (external file) to bypass CSP inline-style restrictions.
-   Run: bin/magento awa:theme:regenerate-css or save ThemeOption in admin to regenerate. */
+   Run: bin/magento awa:theme:regenerate-css or save ThemeOption in admin to regenerate.
+   Storefront: o <link> de custom_default.css não é emitido (FOUC/tipografia). */
 ?>
 
 <script id="awa-web-vitals-rum">

@@ -21,7 +21,10 @@ use Magento\Framework\App\Action\Action;
 	if ($scopeSuffix === '') {
 		$scopeSuffix = 'widget';
 	}
-	$b2bPriceGate = $this->helper('GrupoAwamotos\B2B\Helper\Data');
+	/** @var \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel|null $cardVm */
+	$cardVm = $block->getData('bestseller_card_view_model');
+	$hasCardVm = $cardVm instanceof \GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel;
+	$b2bPriceGate = $hasCardVm ? $cardVm : $this->helper('GrupoAwamotos\B2B\Helper\Data');
 	?>
 <div class="list-tab-product common-tab-system-fixed producttab-<?php echo $scopeSuffix; ?>">
 	<div class="rokan-product-heading clearfix">
@@ -141,7 +144,9 @@ use Magento\Framework\App\Action\Action;
 									</div>
 									<div class="info-price">
 										<?php if ($b2bPriceGate->canViewPrices()): ?>
-											<?php /* @noEscape */ echo $this->helper('Rokanthemes\Themeoption\Helper\Data')->getPriceDisplayCustom($block->getProductPrice($_item)) ?>
+											<?php /* @noEscape */ echo $hasCardVm
+												? $cardVm->priceDisplayHtml((string) $block->getProductPrice($_item))
+												: $this->helper('Rokanthemes\Themeoption\Helper\Data')->getPriceDisplayCustom($block->getProductPrice($_item)) ?>
 										<?php else: ?>
 											<div class="b2b-login-to-see-price">
 												<span class="b2b-login-to-see-price__title"><?php echo $block->escapeHtml($b2bPriceGate->getPriceGateHeadline()); ?></span>
@@ -152,11 +157,15 @@ use Magento\Framework\App\Action\Action;
 									<div class="product-info-cart">
 						                <?php if ($showCart): ?>
 						                    <div class="actions-primary addcart-link">
-						                      <?php if ($_item->isSaleable()): ?>
+						                        <?php if ($_item->isSaleable()): ?>
 						                        <?php
-						                          $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
-						                          $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()]);
-						                          $postParams = json_decode($postData, true);
+						                          if (method_exists($block, 'getAddToCartPostParams')) {
+						                              $postParams = $block->getAddToCartPostParams($_item);
+						                          } else {
+						                              $postDataHelper = $this->helper('Magento\Framework\Data\Helper\PostHelper');
+						                              $postData = $postDataHelper->getPostData($block->getAddToCartUrl($_item), ['product' => $_item->getEntityId()]);
+						                              $postParams = json_decode($postData, true);
+						                          }
 						                          ?>
 						                        <form data-role="tocart-form" action="<?php echo $block->escapeUrl($postParams['action']); ?>" method="post">
 						                          <input type="hidden" name="product" value="<?php echo $block->escapeHtmlAttr($postParams['data']['product']); ?>">

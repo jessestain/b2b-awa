@@ -9,10 +9,17 @@
  */
 declare(strict_types=1);
 
-/** @var \GrupoAwamotos\B2B\Helper\Config $b2bConfig */
-$b2bConfig = $this->helper('GrupoAwamotos\\B2B\\Helper\\Config');
-$isB2bEnabled = $b2bConfig->isEnabled();
-$isStrictB2b   = $isB2bEnabled && $b2bConfig->isStrictB2B();
+/** @var \GrupoAwamotos\B2B\ViewModel\RegisterBar|null $b2bRegisterBar */
+$b2bRegisterBar = $block->getData('b2b_register_bar');
+if ($b2bRegisterBar instanceof \GrupoAwamotos\B2B\ViewModel\RegisterBar) {
+    $isB2bEnabled = $b2bRegisterBar->isEnabled();
+    $isStrictB2b  = $b2bRegisterBar->isStrictB2B();
+} else {
+    /** @var \GrupoAwamotos\B2B\Helper\Config $b2bConfig */
+    $b2bConfig = $this->helper(\GrupoAwamotos\B2B\Helper\Config::class);
+    $isB2bEnabled = $b2bConfig->isEnabled();
+    $isStrictB2b  = $isB2bEnabled && $b2bConfig->isStrictB2B();
+}
 $footerData    = $block->getData('view_model');
 
 $phoneLabel = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
@@ -60,6 +67,28 @@ $storeName    = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
 $addressLabel = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
     ? $footerData->getFormattedAddress()
     : 'Araraquara - SP';
+/* SEÇÃO 51.8: two-line store address so CEP cannot be ellipsed away. */
+$addressStreet = $addressLabel;
+$addressCityCep = '';
+if ($footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData) {
+    $street = trim($footerData->getStreetLine1());
+    $city = trim($footerData->getCityLabel());
+    $postcode = trim($footerData->getPostcode());
+    $cityCepParts = array_filter(
+        [
+            $city,
+            $postcode !== '' ? 'CEP: ' . $postcode : '',
+        ],
+        static fn(string $part): bool => $part !== ''
+    );
+    if ($street !== '' && $cityCepParts !== []) {
+        $addressStreet = $street;
+        $addressCityCep = implode(' - ', $cityCepParts);
+    }
+} elseif (preg_match('/^(.*?)\s+-\s+(.*\bCEP:.*)$/u', $addressLabel, $addressParts) === 1) {
+    $addressStreet = $addressParts[1];
+    $addressCityCep = $addressParts[2];
+}
 
 $socialLinks = [
     [
@@ -225,11 +254,19 @@ $socialLinks = [
                                 <?php /* P1A-A11Y (2026-07-27): aria-label removido (WCAG 2.5.3) — não continha
                                      o endereço visível; o texto + span sr-only "(abre em nova aba)" já formam
                                      o nome acessível (mesmo padrão do A11Y-001). */ ?>
-                                <span class="awa-footer-atendimento__store-address"><?= $escaper->escapeHtml($addressLabel) ?></span>
+                                <span class="awa-footer-atendimento__store-address"><?= $escaper->escapeHtml($addressStreet) ?></span>
+                                <?php if ($addressCityCep !== ''): ?>
+                                <span class="awa-footer-atendimento__store-address awa-footer-atendimento__store-address--cep"><?= $escaper->escapeHtml($addressCityCep) ?></span>
+                                <?php endif; ?>
                                 <span class="sr-only"><?= $escaper->escapeHtml(__('(abre em nova aba)')) ?></span>
                             </a>
                             <?php else: ?>
-                            <p class="awa-footer-atendimento__store-address"><?= $escaper->escapeHtml($addressLabel) ?></p>
+                            <p class="awa-footer-atendimento__store-address-wrap">
+                                <span class="awa-footer-atendimento__store-address"><?= $escaper->escapeHtml($addressStreet) ?></span>
+                                <?php if ($addressCityCep !== ''): ?>
+                                <span class="awa-footer-atendimento__store-address awa-footer-atendimento__store-address--cep"><?= $escaper->escapeHtml($addressCityCep) ?></span>
+                                <?php endif; ?>
+                            </p>
                             <?php endif; ?>
                             <?php endif; ?>
                             <?php if ($isStrictB2b): ?>
