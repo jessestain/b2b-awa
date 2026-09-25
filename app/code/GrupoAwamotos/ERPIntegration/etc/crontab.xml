@@ -2,6 +2,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
+        <!-- Rede de seguranca: fecha pedidos que ja existem no Sectra mas
+             seguem pendentes no Magento porque o ACK nao voltou.
+             Roda 7 min apos o horario tipico do script do Sectra (:00/:30),
+             para dar chance ao ACK normal antes de reconciliar. -->
+        <job name="grupoawamotos_erp_reconcile_orders"
+             instance="GrupoAwamotos\ERPIntegration\Cron\ReconcileOrders"
+             method="execute">
+            <schedule>7,37 * * * *</schedule>
+        </job>
         <!-- category; Sync: runs 15 min before product sync to ensure tree is current -->
         <job name="grupoawamotos_erp_sync_categories"
              instance="GrupoAwamotos\ERPIntegration\Cron\SyncCategories"
