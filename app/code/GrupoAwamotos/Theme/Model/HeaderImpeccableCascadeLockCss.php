@@ -262,7 +262,7 @@ final class HeaderImpeccableCascadeLockCss
             . ' :is(.action.showcart,a.showcart.header-mini-cart,.awa-minicart-trigger)';
         $search = $root . ' :is(.block-search,.awa-professional-search,form#search_mini_form)'
             . ' :is(button.action.search,.action.search)';
-        $primary = 'var(--awa-primary,var(--awa-red,#b73337))';
+        $primary = 'var(--awa-primary,var(--awa-brand,#b73337))';
         $inverse = 'var(--awa-text-inverse,var(--awa-white,#fff))';
 
         return $cart . '{'
@@ -1423,24 +1423,24 @@ final class HeaderImpeccableCascadeLockCss
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs,'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs,'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs .items{'
-            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
-            . 'padding-block:0!important;margin-block:0!important;line-height:24px!important;'
-            . 'font-size:14px!important;background:transparent!important;border:0!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important;'
+            . 'padding-block:0!important;margin-block:0!important;line-height:1.25!important;'
+            . 'font-size:12px!important;background:transparent!important;border:0!important;'
             . 'box-shadow:none!important;overflow:hidden!important}'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .nav-breadcrumbs{'
             . 'padding-inline:var(--awa-shell-pad,clamp(16px,3vw,24px))!important;'
             . 'margin-block:0!important;margin-inline:auto!important;width:100%!important;'
             . 'max-width:min(100%,1280px)!important}'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs .items{'
-            . 'display:inline-flex!important;flex-wrap:nowrap!important;gap:0 8px!important;align-items:center!important;'
+            . 'display:flex!important;flex-wrap:wrap!important;gap:4px 8px!important;align-items:center!important;'
             . 'width:max-content!important;max-width:100%!important;flex:0 0 auto!important}'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs '
             . ':is(.item,.item:last-child){'
             . 'flex:0 1 auto!important;width:auto!important;max-width:none!important;min-width:0!important}'
             . 'html body#html-body#html-body.catalog-category-view .page-wrapper .breadcrumbs '
             . ':is(.item,a,strong,span){'
-            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
-            . 'padding:0!important;margin:0!important;font-size:14px!important;line-height:24px!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important;'
+            . 'padding:0!important;margin:0!important;font-size:inherit!important;line-height:1.25!important;'
             . 'display:inline-flex!important;align-items:center!important}'
             . '}'
             . '@media(max-width:767px){'
@@ -2627,10 +2627,18 @@ final class HeaderImpeccableCascadeLockCss
      */
     public static function footerCrossPageSurfaceRules(): string
     {
-        $scope = 'html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body '
-            . '.page-wrapper :is(footer.page-footer,.page_footer,.page-footer)';
+        /* FIX 12/10/2026 (FASE 2 + BYTES): o escopo era um HACK DE ESPECIFICIDADE com o
+         * MESMO id repetido 8x (`html body#html-body#html-body#html-body#html-body#html-body
+         * #html-body#html-body .page-wrapper ...`) — 160 caracteres REUSADOS em cada regra,
+         * o que inflava este bloco para ~59KB de CSS INLINE no HTML (medido: o CSS inline
+         * e 474KB dos 779KB da pagina).
+         * O hack existia porque, SEM camadas, so a especificidade decidia entre os !important.
+         * Com a ordem de @layer agora UNIFORME em todas as paginas (awa-layer-order.css), a
+         * declaracao vai para `awa-cta-green` — a camada MAIS FORTE para !important — e o
+         * escopo pode ser o seletor natural. MESMAS declaracoes, mesma intencao, ~4x menos bytes. */
+        $scope = ':is(footer.page-footer,.page_footer,.page-footer)';
 
-        return '/*awa-footer-crosspage-surface-r63*/'
+        return '@layer awa-cta-green{/*awa-footer-crosspage-surface-r63*/'
             . $scope . '{'
             . 'background:#fff!important;'
             . 'background-color:#fff!important;'
@@ -2660,7 +2668,7 @@ final class HeaderImpeccableCascadeLockCss
             . 'color:color-mix(in srgb,#fff 88%,transparent)!important}'
             . $scope . ' .awa-footer-trust-bar .awa-footer-trust-icon,'
             . $scope . ' .awa-footer-trust-bar .awa-footer-trust-icon svg{'
-            . 'color:#fff!important;fill:currentColor!important}';
+            . 'color:#fff!important;fill:currentColor!important}}';
     }
 
     public static function footerTerminalRules(): string
@@ -3034,7 +3042,7 @@ final class HeaderImpeccableCascadeLockCss
             . $scope . ' section.awa-footer-categories-expand ul.awa-footer-categories-list>li>a{'
             . 'display:inline-flex!important;align-items:center!important;justify-content:center!important;'
             . 'width:auto!important;min-width:0!important;max-width:none!important;flex:0 0 auto!important;'
-            . 'box-sizing:border-box!important;min-height:28px!important;height:auto!important;'
+            . 'box-sizing:border-box!important;min-height:44px!important;height:44px!important;'
             . 'padding:4px 10px!important;margin:0!important;'
             . 'background:#fff!important;background-color:#fff!important;'
             . 'border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:999px!important;'
@@ -3208,7 +3216,7 @@ final class HeaderImpeccableCascadeLockCss
             . 'box-shadow:none!important;transform:none!important}'
             . $dot . ':is(.active,[aria-current="page"])::before{'
             . 'width:22px!important;height:8px!important;'
-            . 'background:var(--awa-primary,var(--awa-red,#b73337))!important}'
+            . 'background:var(--awa-primary,var(--awa-brand,#b73337))!important}'
             . '}'
             . '}'
             . '@media (min-width:768px){'
@@ -3263,7 +3271,7 @@ final class HeaderImpeccableCascadeLockCss
             . 'box-shadow:none!important;transform:none!important}'
             . $dot . ':is(.active,[aria-current="page"])::before{'
             . 'width:22px!important;height:8px!important;'
-            . 'background:var(--awa-primary,var(--awa-red,#b73337))!important}';
+            . 'background:var(--awa-primary,var(--awa-brand,#b73337))!important}';
 
         return '/*§cat-dots-r24b-inline*/'
             . '@media (max-width:767px){'
@@ -3753,15 +3761,15 @@ final class HeaderImpeccableCascadeLockCss
             . 'background:transparent!important;background-color:transparent!important;background-image:none!important;'
             . 'border:0!important;border-width:0!important;border-color:transparent!important;'
             . 'border-radius:0!important;box-shadow:none!important;outline:0!important;'
-            . 'color:var(--awa-primary,var(--awa-red,#b73337))!important;'
+            . 'color:var(--awa-primary,var(--awa-brand,#b73337))!important;'
             . 'width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;'
             . 'padding:0!important}'
             . $toggle . ' :is(svg,i,span,::before,::after){'
             . 'background:transparent!important;border:0!important;box-shadow:none!important;'
             . 'color:inherit!important}'
             . $toggle . '[aria-expanded="true"]{'
-            . 'background:var(--awa-primary,var(--awa-red,#b73337))!important;'
-            . 'background-color:var(--awa-primary,var(--awa-red,#b73337))!important;'
+            . 'background:var(--awa-primary,var(--awa-brand,#b73337))!important;'
+            . 'background-color:var(--awa-primary,var(--awa-brand,#b73337))!important;'
             . 'color:#fff!important;border-radius:var(--awa-radius,8px)!important}'
             . $toggle . '[aria-expanded="true"] :is(svg,i,span,::before,::after){'
             . 'color:#fff!important}'
@@ -3919,7 +3927,7 @@ final class HeaderImpeccableCascadeLockCss
         $deptClosedIcon = $deptClosed . ' :is(.icon,i,svg)';
         /* Literal slate — --awa-text-secondary resolves to #475569 and splits Conta vs Deptos. */
         $muted = '#64748b';
-        $brand = 'var(--awa-primary,var(--awa-red,#b73337))';
+        $brand = 'var(--awa-primary,var(--awa-brand,#b73337))';
 
         $core = $hit . '{color:' . $muted . '!important;'
             . 'background:transparent!important;background-color:transparent!important;'
@@ -8485,7 +8493,17 @@ JS;
             . 'document.addEventListener("DOMContentLoaded",function(){capture();apply();applyMobileGrid();},{once:true});'
             . 'window.addEventListener("load",function(){applyMobileGrid();},{once:true,passive:true});'
             . 'if(typeof MutationObserver!=="undefined"&&document.body){'
-            . 'new MutationObserver(function(){if(!document.getElementById(id)){apply();}})'
+            . 'new MutationObserver(function(muts){'
+            /* CORRECAO 07/10/2026 — medido pelo long-animation-frame: este callback acumulava
+               *** 25.675ms *** em /catalogo, o maior ofensor da pagina (6x o segundo colocado).
+               Causa: o observer observa TODO filho direto do body, e o documento adiciona/remove
+               filhos o tempo todo (minicart, scroll-lock, banners). Em cada mutacao rodava
+               `getElementById`, mesmo quando nada tinha sido removido — e o estilo so pode
+               desaparecer por REMOCAO. Agora o callback sai cedo quando nao houve remocao,
+               o que cobre a esmagadora maioria das mutacoes. */
+            . 'var removeu=false;for(var i=0;i<muts.length;i++){if(muts[i].removedNodes&&muts[i].removedNodes.length){removeu=true;break;}}'
+            . 'if(!removeu){return;}'
+            . 'if(!document.getElementById(id)){apply();}})'
             . '.observe(document.body,{childList:true,subtree:false});}'
             . '})();</script>';
     }
