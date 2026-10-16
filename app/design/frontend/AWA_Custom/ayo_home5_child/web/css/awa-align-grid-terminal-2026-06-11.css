@@ -26626,12 +26626,9 @@ body.contact-index-index .column.main h2.awa-contact-form__title {
 }
 
 
-/* ── DS 2026-10-16: normalização final de toques/tipografia (inventário) ──
-   Anexado ao FINAL desta folha: mesma origem, posição posterior e
-   especificidade máxima (cadeia 12x) para vencer regras anteriores. */
+/* ── DS 2026-10-16 v2: cadeia de 44 ids — vence qualquer regra anterior ── */
 @media (max-width: 1023px) {
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper :is(.page_footer, .page-footer) a {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer, .page-footer) a {
     min-height: 44px !important;
     height: auto !important;
     display: inline-flex !important;
@@ -26640,7 +26637,6 @@ body.contact-index-index .column.main h2.awa-contact-form__title {
     padding-bottom: 0 !important;
   }
 }
-html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-  .page-wrapper :is(.product-item, .item-product, .awa-product-card) .sale-text :is(label, span) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card) .sale-text :is(label, span) {
   font-size: 12px !important;
 }
