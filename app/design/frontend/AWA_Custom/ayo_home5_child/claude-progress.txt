@@ -340,3 +340,19 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 2. Novo/Assistente/price-notice 12px (probe por elemento para achar o vencedor).
 3. close do chat (container fora do root).
 4. Alts dos carrosséis (templates).
+
+## ATUALIZAÇÃO — 2026-10-16 ~13:35 BRT (campanha, round 9)
+
+### Progresso: 264 -> 76 (-188, 71%!). clip 12->6 (teaser do chat corrigido).
+- CAUSA RAIZ DO DEPLOY: setup:static-content:deploy copia de var/view_preprocessed (obsoleto)
+  e sobrescreve o pub/static que o pair-script acabou de sincronizar. PROTOCOLO NOVO:
+  mover var/view_preprocessed ANTES de todo deploy (batch12e ja fazia; os deploys
+  seguintes re-envenenaram). Incluido no fluxo padrão a partir de agora.
+- 4e1e793c0: max-width anti-overflow no :is(a,button) do chat (clean-css descartava a
+  regra separada do toggle-label — consolidada no bloco existente).
+- Probes: fone/email do header = tel:/mailto: reais (fora de .awa-site-header — achar o
+  container exato no próximo round); "Novo" = regra .awa-shelf .onsale .sale-text 11px
+  no align-grid (fonte identificada, fix pendente); PDP price-notice ja 12px (ids=120!).
+
+### Estado: toque44=41, tipografia=26 (Novo x6 fonte conhecida, Assistente x6, misc),
+  clip=6 (carrossel intencional), alts=3 (templates).
