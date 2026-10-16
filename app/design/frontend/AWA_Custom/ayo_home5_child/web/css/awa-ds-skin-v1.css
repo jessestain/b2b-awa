@@ -1,0 +1,1236 @@
+/*
+ * AWA Motos — Design System skin v1 (13/10/2026)
+ * ===============================================
+ * Camada ÚNICA de padronização visual que carrega por último no <head>
+ * (default_head_blocks.xml, depois de awa-design-system.css) e NÃO é
+ * removida por nenhum layout de página (home, auth B2B, carrinho, checkout).
+ *
+ * PALETA DO DESIGN SYSTEM
+ *   Laranja (marca) : #B73337   hover #8E2629   ativo #CC5200
+ *   Preto (tinta)   : #111111
+ *   Verde (sucesso) : #22C55E   texto-sobre-branco #15803D
+ *   Vermelho (erro) : #DC2626   (cor SEMÂNTICA, única exceção da paleta)
+ *
+ * REGRAS DE CONTRASTE
+ *   Texto sobre laranja: PRETO #111 (6.6:1) — nunca branco (2.85:1 falha AA).
+ *   Links: preto #111, hover laranja-escuro #8E2629 (5.4:1 sobre branco).
+ *
+ * POR QUE `html:root` e não `:root`
+ *   Os bundles async (themes.min, super-global, deferred 1of3/2of3/3of3)
+ *   redefinem tokens em `:root` DEPOIS deste arquivo. `html:root` tem
+ *   especificidade (0,1,1) > (0,1,0), então estes tokens vencem por
+ *   especificidade, independentemente da ordem de carregamento.
+ *
+ * POR QUE `html body` nos componentes
+ *   As camadas legadas usam `body` ou seletor inflado com `!important`.
+ *   `html body` (0,0,2) vence regras `body` (0,0,1) de mesmo peso e, com
+ *   `!important` pontual, desarma os `!important` legados de especificidade menor.
+ */
+
+/* ==========================================================================
+   1. TOKENS — redefinição canônica da paleta
+   ========================================================================== */
+html:root {
+  /* ---- marca (laranja) ---- */
+  --awa-brand:        #b73337;
+  --awa-brand-dark:   #8e2629;   /* hover */
+  --awa-action:       #0f7a3d;   /* RODADA C 2A: cor de AÇÃO (≠ --awa-success status) */
+  --awa-action-dark:  #0b5c2e;   /* hover da ação */
+  --awa-brand-active: #a33b3b;   /* pressionado */
+  --awa-brand-soft:   #f9eeee;   /* tint de fundo */
+  --awa-brand-tint-5: color-mix(in srgb, #b73337 5%, transparent);
+
+  /* ---- tinta (preto) ---- */
+  --awa-ink:          #111111;
+  --awa-ink-soft:     #555555;
+  --awa-neutral-900:  #111111;
+
+  /* ---- texto ---- */
+  --awa-text:         #111111;
+  --awa-text-soft:    #555555;
+  --awa-text-strong:  #111111;
+  --awa-text-hint:    #6b7280;
+
+  /* ---- verde (sucesso) ---- */
+  --awa-success:        #22c55e;
+  --awa-success-strong: #15803d;   /* texto de sucesso sobre branco (4.5:1) */
+  --awa-success-soft:   #f0fdf4;
+  --awa-success-border: #86efac;
+
+  /* ---- erro (semântico) ---- */
+  --awa-error:          #dc2626;
+  --awa-error-strong:   #991b1b;
+  --awa-error-soft:     #fef2f2;
+  --awa-error-border:   #fecaca;
+  --awa-red:            #dc2626;   /* .awa-text-red passa a ser erro, não marca */
+  --awa-red-dark:       #b91c1c;
+  --awa-red-strong:     #991b1b;
+
+  /* ---- foco / sombras da marca ---- */
+  --awa-focus-ring:        rgba(255, 107, 0, .35);
+  --awa-cc-focus:          rgba(255, 107, 0, .32);
+  --awa-cc-shadow-cta:        0 8px 24px rgb(255 107 0 / 18%);
+  --awa-cc-shadow-cta-hover:  0 14px 30px rgb(232 93 0 / 22%);
+  --awa-cc-status-error-bg:   #fef2f2;
+
+  /* ---- texto sobre a marca: PRETO (contraste 6.6:1) ---- */
+  --awa-on-brand:        #111111;
+  --awa-on-primary:      #111111;
+  --awa-text-on-primary: #ffffff;
+  --awa-text-on-dark:    #ffffff;   /* sobre preto/dark */
+
+  /* ---- aliases legados → laranja (a cascata antiga era vermelha) ---- */
+  --awa-primary:           var(--awa-brand);
+  --awa-primary-dark:      var(--awa-brand-dark);
+  --awa-primary-hover:     var(--awa-brand-dark);
+  --awa-primary-light:     #f9eeee;
+  --awa-primary-subtle:    rgba(255, 107, 0, .08);
+  --primary-color:         var(--awa-brand);
+  --awa-cons-c29:          var(--awa-brand);
+  --awa-oklch-primary:     var(--awa-brand);
+  --awa-border-focus:      var(--awa-brand);
+  --awa-focus-ring-color:  var(--awa-brand);
+  --awa-link-hover:        var(--awa-brand-dark);
+  --awa-status-success:    #15803d;
+  --awa-status-error:      #dc2626;
+  --awa-accent-hover:        var(--awa-brand-dark);
+  --awa-b2b-accent-current:  var(--awa-brand);
+  --awa-color-primary-dark:  var(--awa-brand-dark);
+  --awa-focus-outline:       2px solid var(--awa-brand);
+  --awa-cc-focus-ring:       var(--awa-brand);
+  --awa-shadow-brand:        0 4px 16px rgba(255, 107, 0, .25);
+  --awa-home-carousel-shadow-cta: 0 4px 16px rgba(255, 107, 0, .32);
+  --awa-home-final-border:       rgba(255, 107, 0, .2);
+  --awa-home-final-surface:      rgba(255, 107, 0, .04);
+  --awa-ft-border-accent:        rgba(255, 107, 0, .4);
+
+  /* ---- superfícies dark canônicas ---- */
+  --awa-b2b-promo-bg:    #111111;
+  --awa-bg-dark:         #111111;
+
+  /* ---- neutros que mudam de tom com a paleta ---- */
+  --awa-whatsapp-bg:        #117a6f;   /* verde WhatsApp: semântico, mantido */
+  --awa-whatsapp-bg-hover:  #075e54;
+  --awa-rating-star:        #f59e0b;   /* âmbar de avaliação: semântico, mantido */
+}
+
+/* ==========================================================================
+   2. BOTÕES — 3 padrões oficiais: primário, secundário e circular
+   ========================================================================== */
+
+/* 2a. Primário: laranja + texto preto (contraste AA) */
+html body .action.primary,
+html body button.action.primary,
+html body a.action.primary,
+html body .actions-primary button.action.primary,
+html body button.tocart,
+html body .tocart,
+html body #product-addtocart-button,
+html body .awa-minicart-browse,
+html body .awa-minicart-coupon__btn--apply,
+html body .awa-catalogo-page__cta,
+html body .awa-pwa-install-prompt__cta,
+html body .awa-push-prompt__cta,
+html body .mst__add_to_cart,
+html body .awa-plp-b2b-gate-banner__action--primary {
+  background: var(--awa-brand) !important;
+  color: var(--awa-on-brand) !important;
+  border: 1px solid var(--awa-brand) !important;
+  border-radius: var(--awa-radius-ctl, 8px);
+  font-family: var(--awa-font-display, 'Rubik', sans-serif);
+  font-weight: 600;
+  text-shadow: none;
+  box-shadow: none;
+  transition: background .2s ease, border-color .2s ease;
+}
+html body .action.primary:hover,
+html body button.action.primary:hover,
+html body a.action.primary:hover,
+html body button.tocart:hover,
+html body .tocart:hover,
+html body #product-addtocart-button:hover,
+html body .awa-minicart-browse:hover,
+html body .awa-minicart-coupon__btn--apply:hover,
+html body .awa-catalogo-page__cta:hover,
+html body .awa-pwa-install-prompt__cta:hover,
+html body .awa-push-prompt__cta:hover,
+html body .mst__add_to_cart:hover,
+html body .awa-plp-b2b-gate-banner__action--primary:hover {
+  background: var(--awa-brand-dark) !important;
+  color: var(--awa-on-brand) !important;
+  border-color: var(--awa-brand-dark) !important;
+}
+html body .action.primary:active,
+html body button.action.primary:active,
+html body a.action.primary:active,
+html body button.tocart:active,
+html body #product-addtocart-button:active {
+  background: var(--awa-brand-active) !important;
+  border-color: var(--awa-brand-active) !important;
+}
+html body .action.primary:focus-visible,
+html body button.tocart:focus-visible,
+html body #product-addtocart-button:focus-visible {
+  outline: 2px solid var(--awa-ink) !important;
+  outline-offset: 2px;
+}
+
+/* CTA pill da promo bar mantém a forma pílula (só troca a cor) */
+html body .awa-b2b-promo-bar__cta {
+  background: var(--awa-brand) !important;
+  color: var(--awa-on-brand) !important;
+  border: 1px solid var(--awa-brand) !important;
+  border-radius: var(--awa-radius-pill, 999px);
+}
+html body .awa-b2b-promo-bar__cta:hover {
+  background: var(--awa-brand-dark) !important;
+  color: var(--awa-on-brand) !important;
+  border-color: var(--awa-brand-dark) !important;
+}
+html body .awa-b2b-promo-bar__cta:focus-visible {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px;
+}
+html body .action.primary:disabled,
+html body .action.primary[disabled],
+html body button.tocart:disabled {
+  background: #e5e7eb !important;
+  color: #9ca3af !important;
+  border-color: #e5e7eb !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* 2b. Secundário: contorno preto, hover inverte para preto */
+html body .action.secondary,
+html body button.action.secondary,
+html body a.action.secondary,
+html body .awa-card-view-product.action.secondary {
+  background: transparent !important;
+  color: var(--awa-ink) !important;
+  border: 1px solid var(--awa-ink) !important;
+  border-radius: var(--awa-radius-ctl, 8px);
+  font-family: var(--awa-font-display, 'Rubik', sans-serif);
+  font-weight: 600;
+  transition: background .2s ease, color .2s ease;
+}
+html body .action.secondary:hover,
+html body button.action.secondary:hover,
+html body a.action.secondary:hover,
+html body .awa-card-view-product.action.secondary:hover {
+  background: var(--awa-ink) !important;
+  color: #fff !important;
+}
+html body .action.secondary:focus-visible {
+  outline: 2px solid var(--awa-brand) !important;
+  outline-offset: 2px;
+}
+
+/* 2c. Circulares (setas de carrossel, pause): branco + borda, hover laranja */
+html body .awa-category-carousel__prev,
+html body .awa-category-carousel__next,
+html body .awa-hero-pause-btn {
+  background: var(--awa-surface, #fff);
+  color: var(--awa-ink);
+  border-color: var(--awa-line, #e5e7eb);
+}
+html body .awa-category-carousel__prev:hover,
+html body .awa-category-carousel__next:hover,
+html body .awa-hero-pause-btn:hover {
+  border-color: var(--awa-brand);
+  color: var(--awa-brand);
+}
+
+/* ==========================================================================
+   3. LINKS — preto #111, hover laranja-escuro
+   ========================================================================== */
+html body a {
+  color: var(--awa-ink);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+html body a:hover {
+  color: var(--awa-brand-dark);
+}
+html body a:focus-visible {
+  outline: 2px solid var(--awa-brand);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+html body .product-item-link,
+html body .level-top.navigation__link,
+html body .awa-account-dropdown__item,
+html body .page-footer a,
+html body .footer-container a {
+  color: #fff;
+}
+html body .product-item-link:hover,
+html body .level-top.navigation__link:hover,
+html body .awa-account-dropdown__item:hover,
+html body .page-footer a:hover,
+html body .footer-container a:hover {
+  color: #ffd9d9;
+}
+/* Texto sobre superfícies escuras (promo bar, hero) permanece claro */
+html body .awa-b2b-promo-bar a:not(.awa-b2b-promo-bar__cta) {
+  color: #fff;
+}
+html body .awa-b2b-promo-bar a:not(.awa-b2b-promo-bar__cta):hover {
+  color: #ffb37a;
+}
+
+/* ==========================================================================
+   4. PREÇOS — preto normal, laranja especial, cinza riscado antigo
+   ========================================================================== */
+html body .price,
+html body .price-box .price {
+  color: var(--awa-ink) !important;
+  font-weight: 700;
+}
+html body .special-price .price {
+  color: var(--awa-brand) !important;
+}
+html body .old-price .price {
+  color: var(--awa-ink-soft) !important;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+/* ==========================================================================
+   5. BADGES — venda/quente laranja, novo verde; texto preto em ambos
+   ========================================================================== */
+html body .hot-onsale,
+html body .onsale:not(.new-lable) .sale-bg,
+html body .onsale:not(.new-lable) .sale-text label,
+html body .product-item .hot-onsale {
+  background: var(--awa-brand) !important;
+  color: var(--awa-on-brand) !important;
+  border: none;
+}
+html body .onsale.new-lable .sale-text label,
+html body .product-item .new-lable .sale-text label {
+  background: var(--awa-success) !important;
+  color: #111 !important;
+  border: none;
+}
+
+/* ==========================================================================
+   6. FORMULÁRIOS — 44px, borda cinza, foco laranja com anel
+   ========================================================================== */
+html body input[type="text"],
+html body input[type="email"],
+html body input[type="password"],
+html body input[type="tel"],
+html body input[type="number"],
+html body input[type="search"],
+html body select,
+html body textarea {
+  min-height: var(--awa-input-h, 44px);
+  border: 1px solid #d1d5db;
+  border-radius: var(--awa-radius-ctl, 8px);
+  background: #fff;
+  color: var(--awa-ink);
+  font-family: var(--awa-font-body, 'Source Sans 3', sans-serif);
+  font-size: 16px;
+  box-shadow: none;
+}
+html body input[type="text"]:focus,
+html body input[type="email"]:focus,
+html body input[type="password"]:focus,
+html body input[type="tel"]:focus,
+html body input[type="number"]:focus,
+html body input[type="search"]:focus,
+html body select:focus,
+html body textarea:focus {
+  border-color: var(--awa-brand);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--awa-focus-ring);
+}
+html body .field .label,
+html body label.label,
+html body .field label {
+  color: var(--awa-ink);
+  font-weight: 600;
+}
+html body .field.required > .label:after,
+html body .field._required > .label:after,
+html body .field.required label:after,
+html body .field._required label:after,
+html body label.required em,
+html body .required em {
+  color: var(--awa-brand);
+}
+html body select {
+  appearance: auto;
+}
+
+/* ==========================================================================
+   7. MENSAGENS — sucesso verde, erro vermelho (semântico), aviso neutro
+   ========================================================================== */
+html body .messages .message.success,
+html body .message-success,
+html body .page.messages .success {
+  background: var(--awa-success-soft) !important;
+  border-color: var(--awa-success-border) !important;
+  color: var(--awa-success-strong) !important;
+}
+html body .messages .message.error,
+html body .message-error,
+html body .page.messages .error {
+  background: var(--awa-error-soft) !important;
+  border-color: var(--awa-error-border) !important;
+  color: var(--awa-error-strong) !important;
+}
+html body .awa-text-success { color: var(--awa-success-strong); }
+html body .awa-text-red    { color: var(--awa-error); }
+
+/* ==========================================================================
+   8. FOCO VISÍVEL GLOBAL — anel laranja em qualquer elemento
+   ========================================================================== */
+html body :focus-visible {
+  outline: 2px solid var(--awa-brand);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   9. BARRAS PROMOCIONAIS / TOPBAR — marca laranja, texto preto
+   ========================================================================== */
+html body .awa-benefits-bar,
+html body .page-wrapper .awa-benefits-bar {
+  background: var(--awa-brand) !important;
+  color: var(--awa-on-brand) !important;
+}
+html body .awa-benefits-bar a {
+  color: var(--awa-on-brand);
+}
+html body .awa-benefits-bar a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+/* .nav-sections NÃO é recolorida aqui: o design system (seção 9) fixou a barra
+   de navegação desktop como branca e a gaveta mobile já usa a marca via
+   anti-FOUC — mexer aqui reabriria o bug das "asas vermelhas". */
+html body .page-wrapper .awa-b2b-promo-bar {
+  background: var(--awa-b2b-promo-bg, #111) !important;
+  color: #fff;
+}
+
+/* ==========================================================================
+   10. FOOTER — claro, filete preto #111, links pretos hover laranja
+   ========================================================================== */
+html body .page-wrapper .page-footer,
+html body .page-wrapper .page_footer {
+  background: var(--awa-brand) !important;
+  border-top: none !important;
+  color: #fff !important;
+}
+html body .page-wrapper .page-footer h4,
+html body .page-wrapper .page-footer .block-title,
+html body .page-wrapper .page-footer .velaFooterTitle,
+html body .page-wrapper .page_footer h4 {
+  color: #fff !important;
+}
+html body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-atendimento__store-badge,
+html body .page-wrapper :is(.page_footer, .page-footer) .awa-newsletter-icon {
+  background-color: rgba(255, 107, 0, .08) !important;
+  color: var(--awa-brand-dark) !important;
+}
+html body .page-wrapper .page-footer .block-title::after,
+html body .page-wrapper .page-footer h4::after {
+  background: var(--awa-brand) !important;
+}
+
+/* ==========================================================================
+   11. CARD DE PRODUTO — borda/hover únicos (não mexe em grade)
+   ========================================================================== */
+html body .product-item .product-item-info,
+html body .item-product,
+html body .awa-product-card {
+  border-color: var(--awa-line, #e5e7eb);
+  border-radius: var(--awa-radius-m, 12px);
+  background: var(--awa-surface, #fff);
+}
+html body .product-item .product-item-info:hover,
+html body .awa-product-card:hover {
+  border-color: var(--awa-brand);
+  box-shadow: var(--awa-shadow-card, 0 1px 2px rgba(16,24,40,.06), 0 2px 8px rgba(16,24,40,.08));
+}
+html body .product-item .product-item-link,
+html body .awa-product-card .product-item-link {
+  color: var(--awa-ink);
+  font-family: var(--awa-font-body, 'Source Sans 3', sans-serif);
+  font-size: 14px;
+  line-height: 1.35;
+}
+html body .product-item .product-item-link:hover,
+html body .awa-product-card .product-item-link:hover {
+  color: var(--awa-brand-dark);
+}
+
+/* ==========================================================================
+   15. LIGHTBOX DA GALERIA (fotorama fullscreen) — redesign 14/10/2026
+   Antes: fundo "preto cru" (#020617 88%) sem blur, X padrão do fotorama.
+   Agora: overlay escuro SUTIL com blur + fade suave, X pequeno e discreto,
+   setas/thumbnails em superfície translúcida, acentos na marca (vermelho).
+   ========================================================================== */
+@keyframes awa-fs-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+/* As regras abaixo vivem em @layer awa-pixel-qa (última camada declarada):
+   o preto sólido legado (#020617) mora em @layer awa-visual-priority com
+   !important — layered !important vence unlayered; a última camada vence. */
+@layer awa-pixel-qa {
+html body#html-body.catalog-product-view .fotorama--fullscreen {
+  background: color-mix(in srgb, #0f172a 55%, transparent) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+  animation: awa-fs-in .28s ease both;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__stage {
+  background: transparent !important;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__stage__frame .fotorama__img {
+  object-fit: contain !important;
+  transition: transform .25s ease;
+}
+/* RODADA B (14/10): fundo BRANCO SÓLIDO atrás da imagem do produto no
+   fullscreen — o blur/overlay fica só na área AO REDOR da imagem.
+   No fullscreen o fotorama renderiza a imagem como <img> cuja caixa é
+   exatamente a área exibida (fit contain + margin auto), então o branco
+   cobre apenas a imagem; o resto do stage continua mostrando o blur. */
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__stage__frame img {
+  background-color: #fff !important;
+}
+/* X discreto no canto superior direito */
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__fullscreen-icon {
+  top: max(14px, env(safe-area-inset-top, 0px)) !important;
+  right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  width: 38px !important;
+  height: 38px !important;
+  background: rgba(255, 255, 255, .92) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 12px rgba(2, 6, 23, .28) !important;
+  color: var(--awa-ink) !important;
+  opacity: .85;
+  transition: opacity .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__fullscreen-icon:hover,
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__fullscreen-icon:focus-visible {
+  background: var(--awa-brand) !important;
+  color: #fff !important;
+  opacity: 1;
+  transform: none !important;
+  outline: 2px solid #fff !important;
+  outline-offset: 2px;
+}
+/* Setas em pílula translúcida, acento vermelho no hover */
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__arr {
+  background: rgba(255, 255, 255, .9) !important;
+  color: var(--awa-ink) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 12px rgba(2, 6, 23, .22) !important;
+  opacity: .85;
+  transition: opacity .2s ease, background .2s ease, color .2s ease;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__arr:hover,
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__arr:focus-visible {
+  background: var(--awa-brand) !important;
+  color: #fff !important;
+  opacity: 1;
+  transform: none !important;
+}
+/* Thumbnails em superfície translúcida, ativo com borda da marca */
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__nav-wrap {
+  background: rgba(255, 255, 255, .12) !important;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__thumb {
+  border-radius: 8px !important;
+  border: 2px solid transparent !important;
+  transition: border-color .2s ease;
+}
+html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__nav__frame.fotorama__active .fotorama__thumb {
+  border-color: var(--awa-brand) !important;
+}
+/* Mobile: X menor, setas mais compactas, thumbnails sem cortes */
+@media (max-width: 767px) {
+  html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__fullscreen-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  html body#html-body.catalog-product-view .fotorama--fullscreen .fotorama__arr {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
+}
+/* ==========================================================================
+   16. DENSIDADE B2B (14/10/2026) — estoque por item + CTA Pedido Rápido
+   ========================================================================== */
+html body .awa-stock-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--awa-sp-1, 4px);
+  margin-top: var(--awa-sp-1, 4px);
+  font-family: var(--awa-font-body, 'Source Sans 3', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--awa-success-strong, #15803d);
+}
+html body .awa-stock-qty::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--awa-success, #22c55e);
+}
+html body .awa-stock-qty--pdp {
+  font-size: 13px;
+  margin: 0 0 var(--awa-sp-3, 12px);
+}
+html body .awa-quickorder-cta {
+  margin: var(--awa-sp-6, 32px) 0;
+}
+html body .awa-quickorder-cta__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--awa-sp-4, 16px);
+  flex-wrap: wrap;
+  padding: var(--awa-sp-4, 16px) var(--awa-sp-5, 24px);
+  background: var(--awa-surface, #fff);
+  border: 1px solid var(--awa-line, #e5e7eb);
+  border-radius: var(--awa-radius-m, 12px);
+  box-shadow: var(--awa-shadow-card, 0 1px 2px rgba(16,24,40,.06), 0 2px 8px rgba(16,24,40,.08));
+}
+html body .awa-quickorder-cta__head {
+  display: flex;
+  align-items: center;
+  gap: var(--awa-sp-2, 8px);
+  flex: 1 1 320px;
+  min-width: 0;
+}
+html body .awa-quickorder-cta__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: var(--awa-radius-ctl, 8px);
+  background: var(--awa-brand-soft, #f9eeee);
+  color: var(--awa-brand, #b73337);
+}
+html body .awa-quickorder-cta__title {
+  margin: 0;
+  font-family: var(--awa-font-display, 'Rubik', sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--awa-ink, #111);
+}
+html body .awa-quickorder-cta__sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--awa-ink-soft, #555);
+  flex-basis: 100%;
+}
+html body .awa-quickorder-cta__demo {
+  display: flex;
+  gap: var(--awa-sp-2, 8px);
+}
+html body .awa-quickorder-cta__demo span {
+  padding: 6px 10px;
+  border: 1px dashed var(--awa-line, #e5e7eb);
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  color: var(--awa-ink-soft, #555);
+  background: var(--awa-surface-alt, #f7f7f8);
+}
+html body .awa-quickorder-cta__btn {
+  flex: 0 0 auto;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--awa-sp-4, 16px);
+}
+@media (max-width: 767px) {
+  html body .awa-quickorder-cta__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  html body .awa-quickorder-cta__demo {
+    order: 2;
+  }
+  html body .awa-quickorder-cta__btn {
+    order: 3;
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   12. SELEÇÃO DE TEXTO — marca
+   ========================================================================== */
+::selection {
+  background: var(--awa-brand);
+  color: #fff;
+}
+
+/* ==========================================================================
+   13. FIXES R2 (14/10/2026) — medidos por CDP headless em 4 viewports
+   - body caía para ~14.9px em 768–1024 (regra legada .93rem)
+   - preço na PDP ficava oklch escuro no desktop (styles-l async)
+   - input de busca do header media 42px (DS exige 44px)
+   ========================================================================== */
+html body#html-body#html-body {
+  font-size: 16px !important;
+}
+html body#html-body .page-wrapper :is(.price, .price-box .price, .product-info-price .price, .product-info-main .price) {
+  color: var(--awa-ink) !important;
+  font-weight: 700;
+}
+html body#html-body .page-wrapper .special-price .price {
+  color: var(--awa-brand) !important;
+}
+html body#html-body .page-wrapper .old-price .price {
+  color: var(--awa-ink-soft) !important;
+  font-weight: 400;
+}
+html body#html-body .awa-site-header input#search {
+  min-height: 44px !important;
+  height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* Ritmo vertical da home: `--awa-home-section-gap` era 12px (align-grid em
+   @layer, com fallback --awa-space-3). Regras NÃO-camadas vencem camadas,
+   então redefinir o TOKEN aqui (escopos body + wrapper, que é o escopo que
+   as seções herdam) restaura o canônico: 32px desktop / 16px mobile. */
+html body#html-body .page-wrapper .content-top-home {
+  --awa-home-section-gap: 32px;
+  --section-py: 32px;
+}
+html body#html-body .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven {
+  --awa-home-section-gap: 32px;
+  --section-py: 32px;
+}
+@media (max-width: 767px) {
+  html body#html-body .page-wrapper .content-top-home,
+  html body#html-body .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven {
+    --awa-home-section-gap: 16px;
+    --section-py: 16px;
+  }
+}
+
+/* ==========================================================================
+   14. FIXES SMOKE AUTENTICADO (14/10/2026) — medidos via CDP logado
+   Em @layer awa-pixel-qa (ÚLTIMA camada de awa-layer-order.css): um
+   !important em camada vence !important não-camada e camadas anteriores.
+   ========================================================================== */
+@layer awa-pixel-qa {
+  /* 14a. ATC da PDP e botões do login B2B: texto branco sobre laranja
+     (2,85:1) -> preto #111 (6,6:1). Fontes do branco: regra legada do
+     auth-shell (b2b-btn-entrar) e camada antiga do ATC. */
+  html body#html-body .page-wrapper
+    :is(#product-addtocart-button, .box-tocart .action.tocart,
+        .b2b-btn-entrar, .b2b-btn-register, .b2b-btn-claim) {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+  /* 14b. Preço de cliente logado: regra legada pintava TODO preço de
+     laranja (body.customer-logged-in ... .info-price .price-box .price).
+     Canônico: preço regular preto #111; só o preço especial é laranja. */
+  html body#html-body.customer-logged-in .page-wrapper
+    :is(.item-product, .product-item)
+    .info-price
+    .price-box
+    .price:not(.special-price .price) {
+    color: var(--awa-ink) !important;
+  }
+  /* 14c. Total geral do carrinho: laranja -> preto bold (ênfase por peso). */
+  html body#html-body .page-wrapper .cart-totals .totals.grand .amount .price {
+    color: var(--awa-ink) !important;
+  }
+}
+
+/* ==========================================================================
+   17. POLIMENTO FINO (14/10/2026) — espaçamento, hierarquia, floats
+   ========================================================================== */
+/* 17.0 Tokens de painel flutuante (padrão único — pontos 6, 7, 8, 9) */
+@layer awa-pixel-qa {
+html body#html-body {
+  --awa-float-shadow: 0 12px 32px rgba(15, 23, 42, .16), 0 2px 8px rgba(15, 23, 42, .08);
+  --awa-float-radius: 12px;
+  /*
+   * Z-INDEX DOCUMENTADO POR CAMADA (14/10/2026, atualizado após achar o
+   * empate menu/busca na rodada de fechamento).
+   *
+   * Família "dropdown/overlay de navegação e comércio" (maior número = na
+   * frente; cada nível é estritamente maior que o anterior — nunca reusar
+   * um valor já atribuído a outro componente):
+   *   1. --awa-z-menu     100150  menu "Departamentos" (painel vertical)
+   *   2. --awa-z-search   100160  sugestão de SKU (busca) — ativa por cima
+   *                                do menu pois é o painel que o usuário
+   *                                está usando no momento (ex.: menu aberto
+   *                                + foco na busca)
+   *   3. --awa-z-account  100200  dropdown de conta (.b2b-status-dropdown
+   *                                e .awa-account-dropdown)
+   *   4. --awa-z-minicart 100300  minicarrinho
+   *
+   * Família separada "elementos fixos de página" (números baixos de
+   * propósito — sempre abaixo de QUALQUER dropdown da família acima, pois
+   * nunca devem cobrir um menu/painel aberto; a ordem relativa entre os
+   * dois só importa entre si, não é comparável aos valores 100xxx acima):
+   *   --awa-z-cookies 850  banner de cookies
+   *   --awa-z-corner  900  botões fixos do canto (voltar ao topo, chat)
+   */
+  --awa-z-menu: 100150;
+  --awa-z-search: 100160;
+  --awa-z-account: 100200;
+  --awa-z-minicart: 100300;
+  --awa-z-cookies: 850;
+  --awa-z-corner: 900;
+}
+
+
+/* 1.1 Botão ATC nos cards: respiro interno (escala 8-12px) */
+html body#html-body :is(.item-product, .product-item, .awa-product-card) .product-info-cart {
+  padding: 8px 12px 12px !important;
+  margin: 0 8px 8px !important;
+}
+html body#html-body :is(.item-product, .product-item, .awa-product-card) .actions-primary {
+  padding: 0 8px !important;
+}
+html body#html-body :is(.item-product, .product-item, .awa-product-card) .btn-add-to-cart {
+  margin: 4px 0 8px !important;
+  width: auto !important;
+}
+html body#html-body :is(.item-product, .product-item, .awa-product-card) .product-info {
+  padding-inline: 8px !important;
+}
+
+/* 1.2 Busca do header: espaçamento padronizado (8px/12px) */
+html body#html-body .awa-site-header :is(.awa-header-search-col, .awa-professional-search, #search_mini_form) {
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+html body#html-body .awa-site-header .field.search :is(label, .control) {
+  margin: 0 !important;
+}
+html body#html-body .awa-site-header .field.search .control input#search {
+  margin: 0 !important;
+}
+
+/* 1.3 Bloco Pedido Rápido: mesmo container dos demais blocos da home */
+html body#html-body .awa-quickorder-cta {
+  max-width: min(1280px, calc(100% - 32px)) !important;
+  margin-inline: auto !important;
+  padding-inline: 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* 2.1 Badge "Novo": padrão de badge do DS (raio 6px, padding 3px 8px) */
+html body#html-body :is(.new-lable, .onsale.new-lable, .hot-onsale .onsale) {
+  padding: 3px 8px !important;
+  border-radius: var(--awa-radius-badge, 6px) !important;
+  line-height: 1.3 !important;
+}
+html body#html-body .hot-onsale .sale-text :is(label, span) {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* 2.2 Títulos de seção: padrão único (20px/700, linha 1.25) */
+html body#html-body .page-wrapper :is(.awa-section-header__title, .awa-shelf__title, .slide-title, .awa-category-carousel__title) {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.01em !important;
+  margin-block: 0 !important;
+}
+
+/* 2.3 Pesos de botões/labels/textos de apoio consistentes */
+html body#html-body .page-wrapper :is(button, .action, .tocart) {
+  font-weight: 600 !important;
+}
+html body#html-body .page-wrapper :is(.awa-section-header__subtitle, .awa-shelf__subtitle) {
+  font-weight: 400 !important;
+}
+
+/* 3.1 Border-radius padronizado (tokens do DS) */
+html body#html-body .page-wrapper :is(.item-product, .product-item, .awa-product-card, .block-category-link, .card) {
+  border-radius: var(--awa-radius-m, 12px) !important;
+}
+html body#html-body .page-wrapper :is(button, .action, .tocart, input[type="text"], input[type="search"], input[type="email"], input[type="password"], select, textarea) {
+  border-radius: var(--awa-radius-ctl, 8px) !important;
+}
+html body#html-body .page-wrapper :is(.product-label, .onsale, .new-lable, [class*="badge"], .stock) {
+  border-radius: var(--awa-radius-badge, 6px) !important;
+}
+
+/* 4.1 Faixa de benefícios do rodapé: texto BRANCO sobre vermelho (AA 5.93:1) */
+html body#html-body .page-wrapper :is(.awa-footer-trust-bar, .awa-footer-trust-bar .awa-footer-trust-item, .awa-footer-trust-copy) {
+  color: #fff !important;
+}
+html body#html-body .page-wrapper .awa-footer-trust-bar :is(strong, span, svg) {
+  color: #fff !important;
+  fill: currentColor !important;
+}
+
+/* 5.1 Tagline da logo: centralizada sob o wordmark */
+html body#html-body .page-wrapper .awa-logo-lockup__tagline {
+  text-align: center !important;
+  margin-inline: auto !important;
+  width: 100% !important;
+  justify-content: center !important;
+  justify-items: center !important;
+}
+
+/* 6.1 Submenu: remove caixa preta duplicada (pseudo-elementos de rótulo) */
+html body#html-body .page-wrapper .navigation :is(.navigation__label, a.level-top, .ui-menu-item > a)::after,
+html body#html-body .page-wrapper .navigation :is(.navigation__label, a.level-top, .ui-menu-item > a)::before {
+  content: none !important;
+}
+
+/* 6.2 Submenu: hover/foco com tratamento único (fundo + anel de foco simples) */
+html body#html-body .page-wrapper .navigation .ui-menu-item :is(a, span):hover {
+  border: none !important;
+  outline: none !important;
+  background: var(--awa-surface-alt, #f7f7f8) !important;
+  color: var(--awa-brand-dark, #8e2629) !important;
+}
+html body#html-body .page-wrapper .navigation .ui-menu-item :is(a, span):focus-visible {
+  outline: 2px solid var(--awa-brand) !important;
+  outline-offset: -2px !important;
+  border: none !important;
+  background: var(--awa-surface-alt, #f7f7f8) !important;
+}
+
+/* 6.3 Painel do submenu: fundo opaco + sombra padronizada */
+html body#html-body .page-wrapper .navigation .level0 .submenu,
+html body#html-body .page-wrapper .navigation .submenu {
+  background: #fff !important;
+  box-shadow: var(--awa-float-shadow) !important;
+  border-radius: 0 0 var(--awa-float-radius) var(--awa-float-radius) !important;
+}
+
+/* 7.1 Dropdown de conta: sombra + z-index de camada + raio padrão */
+html body#html-body .page-wrapper .awa-account-dropdown,
+html body#html-body .page-wrapper [class*="account"][class*="dropdown"] {
+  background: #fff !important;
+  box-shadow: var(--awa-float-shadow) !important;
+  border-radius: var(--awa-float-radius) !important;
+  z-index: var(--awa-z-account) !important;
+  overflow: hidden !important;
+}
+
+/* 8.1 Minicart: altura dinâmica pelo conteúdo (sem vão vazio) */
+html body#html-body .page-wrapper :is(#minicart-content-wrapper, .block-minicart, .minicart-wrapper .block-minicart) {
+  height: auto !important;
+  max-height: min(70vh, 520px) !important;
+}
+html body#html-body .page-wrapper .minicart-wrapper .block-minicart {
+  box-shadow: var(--awa-float-shadow) !important;
+  border-radius: var(--awa-float-radius) !important;
+  z-index: var(--awa-z-minicart) !important;
+  background: #fff !important;
+}
+
+/* 9.1 Elementos fixos do canto inferior direito: pilha com espaçamento e z-index */
+html body#html-body .page-wrapper .fixed-right {
+  gap: 12px !important;
+  z-index: var(--awa-z-corner) !important;
+}
+html body#html-body .page-wrapper :is(.awa-back-to-top, #awa-back-to-top) {
+  z-index: var(--awa-z-corner) !important;
+}
+html body#html-body .page-wrapper .awa-cookie-banner--visible {
+  z-index: var(--awa-z-cookies) !important;
+  bottom: 16px !important;
+  right: 96px !important;
+  box-shadow: var(--awa-float-shadow) !important;
+  border-radius: var(--awa-float-radius) !important;
+}
+@media (max-width: 767px) {
+  html body#html-body .page-wrapper .awa-cookie-banner--visible {
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+  html body#html-body .page-wrapper .fixed-right {
+    bottom: 16px !important;
+  }
+}
+}
+
+/* ==========================================================================
+   18. CORREÇÃO — Painéis flutuantes transparentes (14/10/2026, 2ª tentativa)
+   Causa raiz real (achada com computed style + CSSOM, não suposição):
+   1) O painel REAL do cliente B2B logado é GrupoAwamotos_B2B/status-panel.phtml
+      (classes .b2b-status-panel / .b2b-status-trigger / .b2b-status-dropdown),
+      NÃO o .awa-account-dropdown que a correção anterior mirou (esse é só
+      usado por clientes NÃO-B2B; para B2B ele fica oculto via CSS :has()).
+      O .b2b-status-dropdown usa "background: var(--b2b-panel-bg)" SEM
+      !important — e a cadeia de tokens (--b2b-panel-bg -> --awa-bg-surface)
+      tem 6 definições conflitantes em arquivos diferentes, uma delas
+      encadeando para --awa-sg-c35 (não garantidamente definida), resultando
+      em background computado transparente (rgba(0,0,0,0) comprovado via
+      getComputedStyle em produção).
+   2) O painel de sugestão de SKU (.awa-sku-suggest, criado numa rodada
+      anterior) NUNCA teve CSS de fato publicado no servidor (ausente mesmo
+      no backup pré-polimento) — sem position/background/z-index nenhum.
+   Fix: valores de fundo FIXOS (não dependentes de custom property), a
+   mesma estratégia já comprovada para minicart/conta simples nesta seção.
+   Observação: o JS do status-panel aplica position/z-index/inset via
+   style inline com !important (posicionamento tipo popover) — isso é
+   intencional e NÃO deve ser sobrescrito aqui (perderíamos o
+   anti-recorte); só corrigimos o que falta: fundo opaco + raio + sombra.
+   ========================================================================== */
+@layer awa-pixel-qa {
+
+/* 18.1 — Painel real de conta B2B (.b2b-status-dropdown) */
+html body#html-body .page-wrapper :is(#b2b-status-dropdown, .b2b-status-dropdown) {
+  background: #fff !important;
+  border-radius: var(--awa-float-radius, 12px) !important;
+  box-shadow: var(--awa-float-shadow) !important;
+}
+html body#html-body .page-wrapper .b2b-status-dropdown .user-section {
+  background: #f8fafc !important;
+}
+html body#html-body .page-wrapper .b2b-status-dropdown .quick-action-link:hover,
+html body#html-body .page-wrapper .b2b-status-dropdown .footer-link:hover {
+  background: #f1f5f9 !important;
+}
+
+/* 18.2 — Painel de sugestão de SKU (.awa-sku-suggest) — nunca teve CSS */
+html body#html-body .awa-site-header :is(.field.search, .minisearch, .block-search, .header-search, .awa-header-search-col, .awa-professional-search) {
+  position: relative !important;
+}
+html body#html-body .awa-sku-suggest {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  /* 14/10/2026 (fechamento): estava empatado com --awa-z-menu (100150),
+     sem hierarquia garantida quando o menu Departamentos já estava aberto
+     e o usuário focava a busca. A busca é o painel ATIVO no momento — deve
+     sempre ficar por cima do menu (ver tabela de camadas no §17.0). */
+  z-index: var(--awa-z-search, 100160) !important;
+  background: #fff !important;
+  border: 1px solid var(--awa-line, #e5e7eb) !important;
+  border-radius: var(--awa-float-radius, 12px) !important;
+  box-shadow: var(--awa-float-shadow) !important;
+  max-height: min(60vh, 420px) !important;
+  overflow-y: auto !important;
+  padding: 6px !important;
+}
+html body#html-body .awa-sku-suggest[hidden] {
+  display: none !important;
+}
+html body#html-body .awa-sku-suggest__item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  color: var(--awa-ink, #111) !important;
+}
+html body#html-body .awa-sku-suggest__item:hover,
+html body#html-body .awa-sku-suggest__item:focus-visible {
+  background: #f7f7f8 !important;
+  outline: none !important;
+}
+html body#html-body .awa-sku-suggest__sku {
+  flex: 0 0 auto !important;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  background: var(--awa-brand, #b73337) !important;
+  color: #fff !important;
+}
+html body#html-body .awa-sku-suggest__item--sku .awa-sku-suggest__sku {
+  background: var(--awa-brand-dark, #8e2629) !important;
+}
+html body#html-body .awa-sku-suggest__name {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  font-size: 13px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* 18.3 — Garante que o painel de sugestão fique ACIMA do menu Departamentos
+   quando ambos abertos ao mesmo tempo (cenário 1 do bug) — ambos opacos
+   agora, então a sobreposição deixa de esconder/corromper texto. */
+html body#html-body ul.togge-menu.list-category-dropdown,
+html body#html-body [data-role="awa-vertical-menu-panel"] {
+  z-index: var(--awa-z-menu, 100150) !important;
+}
+
+/* 18.4 — Tipografia uniforme dos itens do dropdown de conta B2B (14/10/2026)
+   Medido antes: itens de ação 12px/500 com line-height 15px vs 18px entre
+   seções (inconsistência visual), título de seção 11px. Agora: um único
+   tamanho/peso para TODOS os itens navegáveis ("Painel B2B", "Meus Pedidos",
+   "Listas de Compras", "Minha conta", "Sair"). */
+html body#html-body .page-wrapper .b2b-status-dropdown :is(.quick-action-link, .footer-link, .awa-account-dropdown__item) {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+html body#html-body .page-wrapper .b2b-status-dropdown :is(.quick-action-link, .footer-link, .awa-account-dropdown__item) :is(span, .quick-action-label, svg) {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+}
+}
+
+
+/* ==========================================================================
+   18. AÇÃO — VERDE (RODADA C FASE 2A, 14/10/2026)
+   Token dedicado de AÇÃO: --awa-action/#0f7a3d (hover --awa-action-dark).
+   NÃO reutiliza --awa-success/--awa-success-strong (reservados p/ status).
+   Camada awa-action-green declarada PRIMEIRA em awa-layer-order.css:
+   para !important, a primeira camada declarada vence.
+   Vermelhos de marca/navegação NÃO migram (footer, barra de departamentos,
+   badges, preços, paginação, tabs, labels "Ver preço", foco, ::selection,
+   favoritos, --awa-error).
+   ========================================================================== */
+@layer awa-action-green {
+  :is(
+    body.catalog-product-view #product-addtocart-button,
+    body.catalog-product-view .box-tocart .action.tocart,
+    body.catalog-product-view .product-add-form button.tocart,
+    body .page-wrapper .item-product :is(.action.tocart, button.tocart, .btn-add-to-cart),
+    body .page-wrapper .product-item .action.tocart,
+    body .page-wrapper .product-item-actions .action.tocart,
+    .awa-pdp-sticky-atc__atc.action.primary,
+    .awa-pdp-buy-now__button.action.primary,
+    .awa-pdp-cep-estimator__button.action.primary,
+    .awa-quick-order__submit.action.primary,
+    .awa-quick-order__csv-import-btn.action.primary,
+    .awa-pdp-qa__submit.action.primary,
+    body.catalog-product-view #review-form .action.submit.primary,
+    body.checkout-cart-index .cart-summary .checkout-methods-items :is(.action.primary.checkout, .action.checkout),
+    body.checkout-cart-index .page-wrapper .action.checkout.primary,
+    body.checkout-index-index :is(.action.primary.checkout.btn-placeorder, #place-order-trigger),
+    body.rokanthemes-onepagecheckout .action.primary.checkout,
+    .awa-place-order-toolbar .btn-placeorder,
+    body .page-wrapper .block-minicart .actions .action.primary.checkout,
+    .minicart-wrapper .block-minicart .actions .action.primary.checkout,
+    #top-cart-btn-checkout,
+    a.awa-cart-empty__cta,
+    html body .awa-quickorder-cta__btn.action.primary,
+    .b2b-quickorder .quickorder-actions :is(.action.primary, button.action.primary),
+    body .page-wrapper .block.newsletter .action.subscribe.primary,
+    body .page-wrapper :is(.action.subscribe.primary, button.action.subscribe.primary),
+    body .ayo-newsletter-popup .action.subscribe,
+    body .newsletterpopup .action.subscribe,
+    body #newsletter_pop_up .nl-popup-form .action.subscribe,
+    body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #newsletter-validate-detail button.action.subscribe,
+    .form-login .action.login.primary,
+    .awa-header-account-prompt__link--register,
+    body[class*="b2b-"] .page-wrapper .action.primary,
+    body.account .page-wrapper .action.primary,
+    body.b2b-auth-shell .page-wrapper :is(.action.primary, button.action.primary),
+    #awa-cookie-banner .awa-cookie-banner__btn--accept,
+    #awa-ai-chat-root .awa-ai-chat__chip--primary,
+    #awa-ai-chat-root .awa-ai-coach__btn--primary,
+    #awa-ai-chat-root .awa-ai-chat__send,
+    .mst-searchautocomplete__autocomplete .action.primary.mst__add_to_cart,
+    .awa-minicart-browse,
+    .awa-catalogo-page__cta,
+    .awa-pwa-install-prompt__cta,
+    .awa-push-prompt__cta,
+    body .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(a.awa-b2b-promo-bar__cta, .awa-b2b-promo-bar__cta)
+  ):not(:disabled):not([disabled]) {
+    background: var(--awa-action) !important;
+    background-color: var(--awa-action) !important;
+    border-color: var(--awa-action) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(15, 122, 61, .18) !important;
+  }
+  :is(
+    body.catalog-product-view #product-addtocart-button,
+    body.catalog-product-view .box-tocart .action.tocart,
+    body.catalog-product-view .product-add-form button.tocart,
+    body .page-wrapper .item-product :is(.action.tocart, button.tocart, .btn-add-to-cart),
+    body .page-wrapper .product-item .action.tocart,
+    body .page-wrapper .product-item-actions .action.tocart,
+    .awa-pdp-sticky-atc__atc.action.primary,
+    .awa-pdp-buy-now__button.action.primary,
+    .awa-pdp-cep-estimator__button.action.primary,
+    .awa-quick-order__submit.action.primary,
+    .awa-quick-order__csv-import-btn.action.primary,
+    .awa-pdp-qa__submit.action.primary,
+    body.catalog-product-view #review-form .action.submit.primary,
+    body.checkout-cart-index .cart-summary .checkout-methods-items :is(.action.primary.checkout, .action.checkout),
+    body.checkout-cart-index .page-wrapper .action.checkout.primary,
+    body.checkout-index-index :is(.action.primary.checkout.btn-placeorder, #place-order-trigger),
+    body.rokanthemes-onepagecheckout .action.primary.checkout,
+    .awa-place-order-toolbar .btn-placeorder,
+    body .page-wrapper .block-minicart .actions .action.primary.checkout,
+    .minicart-wrapper .block-minicart .actions .action.primary.checkout,
+    #top-cart-btn-checkout,
+    a.awa-cart-empty__cta,
+    html body .awa-quickorder-cta__btn.action.primary,
+    .b2b-quickorder .quickorder-actions :is(.action.primary, button.action.primary),
+    body .page-wrapper .block.newsletter .action.subscribe.primary,
+    body .page-wrapper :is(.action.subscribe.primary, button.action.subscribe.primary),
+    body .ayo-newsletter-popup .action.subscribe,
+    body .newsletterpopup .action.subscribe,
+    body #newsletter_pop_up .nl-popup-form .action.subscribe,
+    body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #newsletter-validate-detail button.action.subscribe,
+    .form-login .action.login.primary,
+    .awa-header-account-prompt__link--register,
+    body[class*="b2b-"] .page-wrapper .action.primary,
+    body.account .page-wrapper .action.primary,
+    body.b2b-auth-shell .page-wrapper :is(.action.primary, button.action.primary),
+    #awa-cookie-banner .awa-cookie-banner__btn--accept,
+    #awa-ai-chat-root .awa-ai-chat__chip--primary,
+    #awa-ai-chat-root .awa-ai-coach__btn--primary,
+    #awa-ai-chat-root .awa-ai-chat__send,
+    .mst-searchautocomplete__autocomplete .action.primary.mst__add_to_cart,
+    .awa-minicart-browse,
+    .awa-catalogo-page__cta,
+    .awa-pwa-install-prompt__cta,
+    .awa-push-prompt__cta,
+    body .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(a.awa-b2b-promo-bar__cta, .awa-b2b-promo-bar__cta)
+  ):not(:disabled):not([disabled]):is(:hover, :focus-visible) {
+    background: var(--awa-action-dark) !important;
+    background-color: var(--awa-action-dark) !important;
+    border-color: var(--awa-action-dark) !important;
+    color: #fff !important;
+  }
+}
+
+/* ==========================================================================
+   19. ESPAÇAMENTO — RODADA C FASE 2A (escala --awa-sp-1..6: 4/8/12/16/24/32)
+   ========================================================================== */
+@layer awa-spacing-normalize {
+  /* carrosséis da home: piso de 8px entre controles */
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel__nav, .awa-owl-nav) {
+    gap: var(--awa-sp-2, 8px) !important;
+  }
+  /* seções da home: 32px entre seções (exceto hero acima da dobra) */
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home > .awa-home-section:not(.top-home-content--above-fold) {
+    margin-block-end: var(--awa-sp-6, 32px) !important;
+  }
+  /* cabeçalhos de seção: 24px até o conteúdo */
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-section-header {
+    margin-block-end: var(--awa-sp-5, 24px) !important;
+  }
+  /* rodapé: 32px de respiro acima */
+  html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
+    margin-block-start: var(--awa-sp-6, 32px) !important;
+  }
+  /* Pedido Rápido: dropzone na escala (vence o polish legado 20px/16px) */
+  html body#html-body .page-wrapper .b2b-quickorder .csv-dropzone {
+    padding: var(--awa-sp-5, 24px) var(--awa-sp-5, 24px) !important;
+  }
+}
