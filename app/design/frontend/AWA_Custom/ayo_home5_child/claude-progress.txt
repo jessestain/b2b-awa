@@ -203,3 +203,29 @@
 ### Backups
 ds-normalize-20261016-133143 · ds-tagline2-20261016-134630 · ds-vpp-20261016-134938 ·
 ds-b13-20261016-135547
+
+## ATUALIZAÇÃO — 2026-10-16 ~12:00 BRT (campanha, round 2)
+
+### Progresso medido (detector com perfil Chrome fresco)
+- Baseline 264 → 159 (-105). tipografia 130→49; clip 8→6 (só carrossel intencional);
+  overflow da busca ELIMINADO; detector refinado: toques <44px só ≤768px, exclui
+  texto-links (product-item-link/breadcrumb).
+- Commits: 46a8a7458 (badge/SKU/sorter 12px) · 564acd343 (footer/tabs/form/ai-chat 44px) ·
+  96159dd7e (labels 12px) · 88b2e5025 (overflow busca) · 6e579ace1 (regras 12x para vencer cascata).
+
+### Estado dos remanescentes (próximos batches)
+- MOTO COMPONENTES x18: taglines ainda <12px computado — provável style="" inline no span
+  (vencedor absoluto). Checar o atributo inline e corrigir no template.
+- Footer links mobile (Cavaletes/Bagageiros/Guidões/Bauletos/fone/email x70): o 44px em
+  max-width:1023px não vence — verificar se o vencedor é o defer-global (injetado DEPOIS
+  do core bundle) e mover a regra para lá ou replicar com 12x lá.
+- Novo x6: idem badge — checar inline.
+- h1 carrinho x3 + alts x3: trabalho de template (próximo round).
+
+### Incidente de processo
+- .git/objects com subdirs root:root (um sudo/cron tocou o repo) → chown corrigido,
+  commits normalizados. Atenção a comandos sudo dentro do repo.
+
+### Backups
+ds-b14-20261016-140504 · ds-b15-20261016-141424/143255 · ds-b16-20261016-142052 ·
+ds-b17-20261016-143550 · ds-b18-20261016-144635
