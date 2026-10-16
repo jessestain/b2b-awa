@@ -508,3 +508,16 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 - PHP valido, opcache resetado (19002/19003/19004), HTML servido sem os marcadores.
 - Regressao: rc=0, 0 falhas.
 - Economia: ~6KB brutos de HTML + 13 regras a menos por pagina (menos parse/ambiguidade).
+
+## ATUALIZAÇÃO — 2026-10-16 ~16:35 BRT (performance: footer critical movido p/ externo)
+
+### Migracao do bloco inline awa-footer-critical-stability-v1 (58KB)
+- As regras do footer (variante full, PDP) foram movidas para o externo
+  awa-footer-terminal-lock-v1.min.css (ja render-blocking no head).
+- No inline ficou apenas o stub `@layer awa-cta-green;` (preserva a ordem das layers —
+  a declaracao antecipada dessa layer e intencional e mantem a prioridade de !important).
+- Medido: CSS inline 463 -> 383 KB (-80KB); HTML total 787 -> 689 KB (-98KB).
+- Verificado: footer computado identico (transparent/border 0/radius 0), regressao
+  rc=0, inventario limpo nos 3 breakpoints.
+- Licao: para mover blocos inline que DECLARAM layer, manter um stub com a declaracao
+  da layer no lugar original (cascade layers: a ordem da primeira declaracao decide).
