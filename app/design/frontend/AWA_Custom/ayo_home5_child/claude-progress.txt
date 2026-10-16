@@ -601,3 +601,13 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   ja mapeados: abas da PDP + hidratacao).
 - A HOME continua no proprio branch; catalogo permanece com o bloco full (proximo ciclo
   pode replicar o branch se a cobertura das regras de catalogo for verificada).
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:25 BRT (ciclo 4: slim do align-grid inline no CATALOGO)
+
+### PLP + busca: HTML -88KB cada (bloco 89KB movido p/ core-bundle render-blocking)
+- Mesmo padrao do PDP (c2a564af5): branch para CATALOG_HEADER_ACTIONS
+  (catalog_category_view + catalogsearch_result_index) emitindo so o shell first-paint
+  (~1KB) + bloco completo no awa-core-bundle.min.css (marcador ...-LOCK-CAT).
+- Verificado: plp/busca/pdp 200; regressao rc=0; inventario completo ok.
+- Agora TODAS as acoes principais usam o shell: HOME (branch proprio), PDP (c2a564af5),
+  PLP/busca (este commit). HTML total de catalogo: 776 -> 688KB.

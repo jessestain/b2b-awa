@@ -2914,6 +2914,45 @@ class OptimizeHeadStylesPlugin
             return is_string($injected) ? $injected : $html;
         }
 
+        if (in_array($fullAction, self::CATALOG_HEADER_ACTIONS, true)) {
+            /* PLP/busca: shell first-paint enxuto; detalhes via awa-core-bundle
+             * (render-blocking) — marcador AWA-MOVED-ALIGN-INLINE-LOCK-CAT. */
+            $slimCat = '<style id="awa-align-grid-inline-lock-20260626-phase3d22b">'
+                . 'html body#html-body#html-body{--awa-grid-shell-max:min(100%,1280px);--awa-grid-container-pad:clamp(16px,3vw,24px);'
+                . '--awa-grid-card-gap:12px;--awa-grid-col-gap:12px;--awa-grid-section-gap:16px}'
+                . 'html body#html-body#html-body .page-wrapper .awa-site-header'
+                . ' :is(.header-main,.header_main)>.container,html body#html-body#html-body .page-wrapper #header'
+                . ' :is(.header-main,.header_main)>.container{padding-inline:0!important;max-width:100%!important;'
+                . 'width:100%!important;margin-inline:0!important;box-sizing:border-box!important}'
+                . 'html body#html-body#html-body .page-wrapper .awa-site-header'
+                . ' :is(.awa-main-header__inner,.awa-header-inner,.header-content){box-sizing:border-box!important;'
+                . 'margin-inline:auto!important;max-width:min(100%,1280px)!important;'
+                . 'padding-inline:16px!important;width:100%!important}'
+                . 'html body#html-body#html-body#html-body#html-body#html-body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.rokanthemes-onepagecheckout)'
+                . ' .page-wrapper :is(.page-main.container,#maincontent.page-main.container,#maincontent#maincontent.page-main.container){'
+                . 'box-sizing:border-box!important;margin-inline:auto!important;'
+                . 'max-width:100%!important;padding-inline:16px!important;width:min(100%,1280px)!important}'
+                . 'html body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer)'
+                . ' :is(#footer.footer-container,#footer .footer-container,.footer-bottom,'
+                . '.awa-footer-newsletter,section.awa-footer-trust-bar){'
+                . 'box-sizing:border-box!important;margin-inline:0!important;margin-left:0!important;'
+                . 'margin-right:0!important;max-width:none!important;padding-inline:0!important;'
+                . 'padding-left:0!important;padding-right:0!important;width:100%!important}'
+                . 'html body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper '
+                . 'footer.page-footer .page_footer>#footer.footer-container{'
+                . 'box-sizing:border-box!important;margin-inline:0!important;margin-left:0!important;'
+                . 'margin-right:0!important;max-width:none!important;padding-left:0!important;'
+                . 'padding-right:0!important;width:100%!important}'
+                . 'html body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer)'
+                . ' :is(#footer.footer-container>.container,.awa-footer-newsletter>.container,'
+                . '.footer-bottom>.container,.awa-footer-trust-bar>.container){'
+                . 'box-sizing:border-box!important;margin-inline:auto!important;'
+                . 'max-width:min(100%,1280px)!important;padding-inline:16px!important;width:100%!important}'
+                . '</style>';
+            $injected = preg_replace('/<\/body>/i', $slimCat . "\n</body>", $html, 1);
+            return is_string($injected) ? $injected : $html;
+        }
+
 $css = '<style id="awa-align-grid-inline-lock-20260626-phase3d22b">'
             . 'html body#html-body#html-body{--awa-grid-shell-max:min(100%,1280px);--awa-grid-container-pad:clamp(16px,3vw,24px);'
             . '--awa-grid-card-gap:12px;--awa-grid-col-gap:12px;--awa-grid-section-gap:16px}'
