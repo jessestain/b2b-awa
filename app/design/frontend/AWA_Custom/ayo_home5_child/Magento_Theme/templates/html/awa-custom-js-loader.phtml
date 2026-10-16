@@ -399,6 +399,9 @@ HTML;
     }
 
     function appendDeferScript() {
+        if (!src) {
+            return;
+        }
         if (w.__awaMinicartDeferClaim || w.__awaMinicartDeferInit || d.querySelector('script[src="' + src + '"], script[data-awa-defer-init="' + src + '"]')) {
             return;
         }

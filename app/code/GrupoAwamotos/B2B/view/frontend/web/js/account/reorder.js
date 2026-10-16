@@ -84,7 +84,7 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
                 .addClass('is-prices-pending')
                 .removeClass('is-prices-degraded')
                 .attr('aria-disabled', 'true')
-                .text($t('Carregando preços…'));
+                .text(defaultLabel);
             updatePricesStatus($card, $t('Buscando preços da sua tabela…'));
             $card.removeClass('reorder-card--prices-failed');
             return;
@@ -320,7 +320,12 @@ define(['jquery', 'mage/translate', 'mage/cookies'], function ($, $t, _cookies) 
         });
 
         $root.find('.reorder-card').each(function (index) {
-            scheduleCardPrices($root, this, pricesUrl, index === 0);
+            // HOTFIX 2026-10-16 (QA responsivo): eager-load dos 2 primeiros cards.
+            // Motivo: nas viewports reais testadas (1440x900 e 768x1024), 2 cards
+            // ficam visíveis acima da dobra sem rolagem; no 375x812, o 2º fica logo
+            // abaixo da dobra (custo de 1 request leve). O restante segue lazy via
+            // IntersectionObserver (fila MAX_CONCURRENT_PRICE_REQUESTS = 2).
+            scheduleCardPrices($root, this, pricesUrl, index < 2);
         });
 
         $root.on('submit', '.js-reorder-form', function (event) {

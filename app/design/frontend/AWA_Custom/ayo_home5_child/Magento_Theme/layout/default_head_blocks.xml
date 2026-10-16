@@ -178,6 +178,12 @@
             pathinfo()). Ver AWA_VISUAL_FIXES_QUERY em
             HeaderImpeccableCascadeLockCss.php.
         -->
+        <!-- AWA 2026-10-12 (FASE 2): ORDEM DAS CAMADAS declarada ANTES de tudo.
+             Sem isto, a ordem das @layer era decidida por "qual folha carrega primeiro"
+             e DIFERIA entre paginas (medido: PLP/PDP x HOME/LOGIN). Ver o cabecalho do
+             arquivo awa-layer-order.css (ele NAO e minificado de proposito: o cleancss
+             5.6.3 descarta a declaracao @layer e os blocos vazios). -->
+        <css src="css/awa-layer-order.css"/>
         <css src="css/awa-visual-fixes-2026-06-29-final.css"/>
         <!--
             AWA 2026-07-16: tokens + superfícies do modo escuro (classe body.awa-dark-mode).
@@ -211,6 +217,19 @@
             Deve permanecer como ÚLTIMO <css> deste <head>.
         -->
         <css src="css/awa-design-system.css"/>
+            <!-- Tokens base: valem em TODAS as paginas. Os recortes por pagina
+             (cms_index_index remove o design system, b2b_auth_shell remove no login)
+             deixavam tokens sem definicao conforme a pagina. Ver tools/gerar-tokens-base.php -->
+        <css src="css/awa-tokens-base.css"/>
+        <!-- Contraste em blocos de fundo colorido (.awa-cta). Ver o cabecalho do arquivo. -->
+        <css src="css/awa-contrast-on-color.css"/>
+        <!-- Area de toque minima WCAG 2.5.8. Ver o cabecalho do arquivo. -->
+        <css src="css/awa-touch-targets.css"/>
+        <!-- Design System skin v1 (13/10/2026): camada única de padronização — NÃO remover em nenhum layout. -->
+        <css src="css/awa-ds-skin-v1.css"/>
+        <!-- HOTFIX B2B 2026-10-15 (QA responsivo): camada temporária acima do DS.
+             Reverter = remover esta linha + web/css/awa-hotfix-b2b-2026-10-15.css. -->
+        <css src="css/awa-hotfix-b2b-2026-10-15.css"/>
     </head>
     <body>
         <referenceBlock name="head.additional">
@@ -231,5 +250,15 @@
                 </arguments>
             </block>
         </referenceBlock>
+            <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.sku.suggest"
+                   template="GrupoAwamotos_B2B::html/awa-sku-suggest.phtml"/>
+            <!-- B2B Densidade 14/10/2026: exclusao mutua de paineis flutuantes
+                 (abrir um painel fecha os outros; nunca dois abertos). -->
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.panel.exclusive"
+                   template="GrupoAwamotos_B2B::html/awa-panel-exclusive.phtml"/>
+        </referenceContainer>
     </body>
 </page>

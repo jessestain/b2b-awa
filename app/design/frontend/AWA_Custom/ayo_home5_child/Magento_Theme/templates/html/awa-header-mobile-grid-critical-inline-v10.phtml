@@ -38,6 +38,9 @@ $__isCatalogListRoute = in_array($__fullActionName, ['catalog_category_view', 'c
     var attempts = 0;
 
     function appendDeferScript() {
+        if (!src) {
+            return;
+        }
         if (w.__awaMinicartDeferClaim || d.querySelector('script[src="' + src + '"], script[data-awa-defer-init="' + src + '"]')) {
             return;
         }
