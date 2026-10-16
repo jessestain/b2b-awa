@@ -412,3 +412,38 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
    "absorver e remover arquivos de rodadas antigas" segue como trabalho estrutural futuro.
 2. view_preprocessed precisa ser limpo antes de cada deploy (protocolo documentado).
 3. nginx open_file_cache: recarregar apos alterar CSS servido.
+
+## ATUALIZAÇÃO — 2026-10-16 ~15:15 BRT (round 12 — FECHAMENTO DEFINITIVO)
+
+### Causa raiz do invariante do botao verde (resolvida)
+- O vermelho vencia porque estava em @layer awa-cta-green — e para !important a PRIMEIRA
+  layer declarada vence, independente de especificidade. Minhas regras v9/v10 estavam em
+  awa-visual-priority e awa-fixes (perdiam).
+- 85ae6c4ae (v11): regra do verde de acao TAMBEM em @layer awa-cta-green com cadeia de 128
+  ids -> verde venceu (computed rgb(15,122,61) confirmado por probe).
+- Regressao: rc=0, 0 DS-FAIL apos o fix.
+
+### Causa do falso "site quebrado" (26-39 falhas seguidas)
+- 41 processos Chrome ORFAOS acumulados dos meus probes CDP consumiam recursos; o navegador
+  da regressao passou a renderizar paginas SEM CSS (Times New Roman, overflow 818).
+- Limpeza: pkill -f "awa-cdp-profile" (apenas perfis de teste) -> 2 processos, 24 GB livres.
+- LICAO: limpar chromes orfaos apos sessoes de probe; se a regressao acusar "pagina sem CSS",
+  checar recursos/chromes antes de suspeitar do tema.
+
+### ESTADO FINAL VERIFICADO
+- Inventario CDP (14 paginas x 390/768/1440): 17 flags, TODOS nao-tickets documentados
+  (6 peek de carrossel intencional + 3 alt="" decorativo + 8 widget de chat com CSS 44px e
+  rect 42.68 por escala de ancestral).
+- Regressao DS: rc=0, 0 falhas (200s, zero laranja legado, botao acao VERDE 44px,
+  body 16px, preco PDP #111, overflow=0, skin no head).
+- Commits do fechamento: 0e3b20a42 (v9) · d2a2db1e5 (docs) · 85ae6c4ae (v11).
+
+### Protocolo consolidado (4 camadas de cache + 3 licoes)
+1. var/view_preprocessed: limpar ANTES de cada deploy.
+2. clean-css: descarta cadeias longas em @media -> anexar direto no .min.
+3. nginx open_file_cache: reload apos alterar CSS servido.
+4. Varnish: ban apos cada mudanca.
+5. CASCADE LAYERS: para !important a primeira layer declarada vence — usar awa-cta-green
+   para CTA/acao e awa-visual-priority para o resto.
+6. opcache FPM: reset 19002/19003/19004 e CONFERIR o efeito no HTML/computed.
+7. Limpar chromes orfaos dos probes.
