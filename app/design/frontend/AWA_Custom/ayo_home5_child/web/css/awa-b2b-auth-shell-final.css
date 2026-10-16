@@ -724,7 +724,7 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progres
         #b2b-register-shell
         .b2b-register-progress
         .progress-step {
-        font-size: 10px !important;
+        font-size: 12px !important;
         gap: 2px !important;
         min-width: 0 !important;
         overflow: hidden !important;
