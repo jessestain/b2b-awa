@@ -763,6 +763,26 @@ define(['jquery'], function ($) {
      * inert (remove do tab + da arvore de acessibilidade) e sincroniza via
      * MutationObserver — padrao recomendado (inert e nativo nos navegadores).
      */
+    /* Lighthouse a11y: (1) tabs legados desabilitados mantem role=tablist + tabs
+       focaveis de 3px; (2) jQuery UI cria .ui-dialog sem nome acessivel no minicart. */
+    var fixLegacyA11y = function () {
+        document.querySelectorAll('.product.data.items.mage-tabs-disabled[role="tablist"]').forEach(function (el) {
+            el.removeAttribute('role');
+        });
+        document.querySelectorAll('.product.data.items.mage-tabs-disabled [role="tab"]').forEach(function (t) {
+            t.removeAttribute('role');
+            t.removeAttribute('tabindex');
+        });
+        document.querySelectorAll('.minicart-wrapper .ui-dialog, .awa-header-cart .ui-dialog').forEach(function (d) {
+            if (!d.getAttribute('aria-label')) {
+                d.setAttribute('aria-label', 'Meu Carrinho');
+            }
+        });
+    };
+    fixLegacyA11y();
+    window.setTimeout(fixLegacyA11y, 1500);
+    window.setTimeout(fixLegacyA11y, 3500);
+
     var syncInert = function () {
         document.querySelectorAll('[aria-hidden="true"]').forEach(function (el) {
             if (el.closest('[inert]')) { return; }

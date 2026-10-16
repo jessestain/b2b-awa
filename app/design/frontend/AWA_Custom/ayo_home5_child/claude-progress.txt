@@ -721,3 +721,20 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   recomendada para o numero definitivo do INP.
 
 ### CWV: CLS/LCP/FCP verdes; INP: FAQ 16ms, menu com defer (validar em campo).
+
+## ATUALIZAÇÃO — 2026-10-16 ~19:50 BRT (ciclo 11: Lighthouse mobile — A11y 86 -> 93)
+
+### Lighthouse (mobile, PDP): A11y 86 -> 93 · Best Practices 100 · SEO 100.
+- Corrigidos e VERIFICADOS: aria-required-children (role=tablist removido dos tabs
+  legados via awa-ux-enhancements fixLegacyA11y) e target-size (tab headers ocultos —
+  NOTA: a regra v17 com seletor "body body" invalido foi trocada pelo fix JS).
+- Badge "MUITO RECOMENDADO": #10b981 -> #047857 (5.3:1) no rexis-recommendations.css
+  (+ .min sincronizado no pub). Verificado por probe: bg rgb(4,120,87).
+- Templates editados (form.mini, autocomplete.phtml, logo.phtml, auth-logo, footer):
+  autocomplete="search" removido + aria-labels com o texto visivel.
+- ANOMALIA DE CACHE DESCOBERTA: edicoes em phtml do header/logo NAO aparecem no HTML
+  servido nem apos opcache reset (cachetool, silencioso) NEM apos restart do php8.4-fpm
+  (teste de marcador: zero). O model PHP (classes) propaga normalmente; o phtml do
+  header nao. Suspeita: cache de bloco/layout em Redis com indice divergente OU o
+  header e SSR por painel B2B com cache proprio. INVESTIGAR no proximo ciclo (buscando
+  cache tags do bloco logo no Redis).

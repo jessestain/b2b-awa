@@ -1010,3 +1010,9 @@
         transform: none;
     }
 }
+
+/* WCAG 2.1 AA: badge "high" com branco sobre #10b981 = 2.53:1 — usa verde escuro (5.3:1) */
+.rx-pdp-badge.rx-badge-high {
+    background: #047857 !important;
+    background-color: #047857 !important;
+}
