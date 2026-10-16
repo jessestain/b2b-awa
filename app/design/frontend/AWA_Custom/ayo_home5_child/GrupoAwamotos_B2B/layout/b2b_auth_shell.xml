@@ -25,11 +25,8 @@
         <remove src="css/custom_default.css"/>
         <remove src="css/styles-m.css"/>
         <remove src="css/styles-l.css"/>
-        <css src="css/awa-b2b-auth-shell-final.css" order="10000"/>
-        <css src="css/awa-cnpj-autofill.css" order="10001"/>
-        <css src="css/awa-ux-b2b-auth-polish-20260804.css" order="10010"/>
         <!-- AWA vfix scope: B2B auth shell only -->
-        <css src="css/awa-vfix-b2b-auth.css"/>
+        <css src="css/awa-auth-bundle.css"/>
         <!-- CTA lock: filename novo vence cache immutable de login.min.css -->
         <css src="GrupoAwamotos_B2B::css/account/cta-lock-20260815.css" order="10020"/>
     </head>

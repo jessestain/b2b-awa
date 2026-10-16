@@ -29,9 +29,8 @@
         <remove src="css/awa-plp-distill.min.css"/>
         <remove src="css/awa-plp-distill.css"/>
         <!-- AWA vfix scope: PLP/category only -->
-        <css src="css/awa-vfix-plp-search.css"/>
+        <css src="css/awa-catalog-bundle.css"/>
         <!-- Reabilitado: arquivo existe em pub/static; trava altura #mst_categorySearch em 44px. -->
-        <css src="css/awa-plp-shell-final.css"/>
     </head>
     <body>
         <attribute name="class" value="awa-plp-page-contract"/>
@@ -84,6 +83,17 @@
                    template="Magento_Catalog::product/awa-plp-suggestions.phtml"
                    after="category.products.list"/>
         </referenceContainer>
+
+        <!--
+            ACHADO SEO-001: o JSON-LD ItemList da PLP (GrupoAwamotos\\SchemaOrg\\Block\\CategoryItemList)
+            monta offers.price sem consultar o gate B2B. Passamos o gate por argumento de layout
+            (sem construtor novo => sem setup:di:compile) para o bloco parar de publicar preço.
+        -->
+        <referenceBlock name="grupoawamotos.schema.category.itemlist">
+            <arguments>
+                <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+            </arguments>
+        </referenceBlock>
 
     </body>
 </page>

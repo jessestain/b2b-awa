@@ -220,16 +220,12 @@
             <!-- Tokens base: valem em TODAS as paginas. Os recortes por pagina
              (cms_index_index remove o design system, b2b_auth_shell remove no login)
              deixavam tokens sem definicao conforme a pagina. Ver tools/gerar-tokens-base.php -->
-        <css src="css/awa-tokens-base.css"/>
+        <css src="css/awa-core-bundle.css"/>
         <!-- Contraste em blocos de fundo colorido (.awa-cta). Ver o cabecalho do arquivo. -->
-        <css src="css/awa-contrast-on-color.css"/>
         <!-- Area de toque minima WCAG 2.5.8. Ver o cabecalho do arquivo. -->
-        <css src="css/awa-touch-targets.css"/>
         <!-- Design System skin v1 (13/10/2026): camada única de padronização — NÃO remover em nenhum layout. -->
-        <css src="css/awa-ds-skin-v1.css"/>
         <!-- HOTFIX B2B 2026-10-15 (QA responsivo): camada temporária acima do DS.
              Reverter = remover esta linha + web/css/awa-hotfix-b2b-2026-10-15.css. -->
-        <css src="css/awa-hotfix-b2b-2026-10-15.css"/>
     </head>
     <body>
         <referenceBlock name="head.additional">

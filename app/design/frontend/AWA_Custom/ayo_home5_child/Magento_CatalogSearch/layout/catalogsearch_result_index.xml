@@ -33,9 +33,8 @@
         <remove src="css/awa-home-shell-final.css"/>
         <remove src="css/awa-page-b2b-cart-checkout-premium.css"/>
         <!-- AWA vfix scope: search results only -->
-        <css src="css/awa-vfix-plp-search.css"/>
+        <css src="css/awa-catalog-bundle.css"/>
         <!-- Reabilitado: arquivo existe em pub/static; trava altura #mst_categorySearch em 44px. -->
-        <css src="css/awa-plp-shell-final.css"/>
         <!-- B2B: esconde tocart original quando login-to-cart.js injeta CTA (mesmo CSS da PDP/PLP) -->
         <css src="GrupoAwamotos_B2B::css/product/login-to-cart.css"/>
     </head>

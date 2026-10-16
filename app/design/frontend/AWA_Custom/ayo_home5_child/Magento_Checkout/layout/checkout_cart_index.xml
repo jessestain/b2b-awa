@@ -23,9 +23,8 @@
         <remove src="css/awa-focus-visible.css"/>
         <!-- header-stack migrado para _awa-header-stack.less (43.01) — remove órfão retirado 2026-08-11 -->
         <!-- Stack único: polish + layout-terminal (~70KB, 1 request bloqueante) -->
-        <css src="css/awa-cart-stack.min.css"/>
+        <css src="css/awa-cart-bundle.css"/>
         <!-- Repõe apenas os estados ocultos do header omitidos pelo bundle global. -->
-        <css src="css/awa-cart-accessibility.min.css"/>
         <!-- awa-cart-shell-final.css removido: referência órfã (404 em produção). -->
         <!-- refine: carregado async via awa-checkout-polish-async.phtml (evita duplicata síncrona) -->
     </head>
