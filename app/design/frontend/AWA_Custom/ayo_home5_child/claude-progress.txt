@@ -356,3 +356,25 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Estado: toque44=41, tipografia=26 (Novo x6 fonte conhecida, Assistente x6, misc),
   clip=6 (carrossel intencional), alts=3 (templates).
+
+## ATUALIZAÇÃO — 2026-10-16 ~14:00 BRT (campanha, round 10 — INSIGHT DECISIVO)
+
+### Progresso: 264 -> 53 (-211, 80%!)
+- DESCOBERTA CENTRAL: o codebase usa CSS CASCADE LAYERS. Para declaracoes !important,
+  regras DENTRO de uma layer vencem regras FORA de layer INDEPENDENTE de especificidade.
+  Era por isso que regras com 128 ids perdiam para regras de 1 id.
+  SOLUCAO: envolver as regras de override em @layer awa-visual-priority (a PRIMEIRA layer
+  declarada no documento — para !important a prioridade das layers e INVERTIDA, ou seja,
+  a primeira declarada vence). Dentro da layer, a especificidade volta a decidir.
+- f293c2784: fone/email 44px + Novo/sorter/rx-pdp 12px todos em @layer awa-visual-priority.
+- toque44: 45 -> 24 (fone/email zerados). Total: 74 -> 53.
+
+### Aprendizados de infraestrutura (documentados)
+1. Para !important, layered > unlayered (cascade layers, ordem invertida).
+2. clean-css descarta regras com cadeias muito longas em @media — anexar direto no .min.
+3. nginx tem open_file_cache: apos alterar CSS no pub/static, recarregar nginx
+   (sudo systemctl reload nginx) senao o arquivo antigo continua servido (5 min de delay).
+4. setup:static-content:deploy copia de var/view_preprocessed (limpar antes).
+
+### Remanescentes: toque44=24 (close x3, ✕ x2, termos de busca x6, Início x3 nao-ticket),
+  tipografia=20, clip=6 (carrossel intencional), alts=3.
