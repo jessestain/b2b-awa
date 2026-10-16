@@ -93,3 +93,28 @@
 - ds-bundles-recover-20261016-110844 (recuperação wave 1), ds-spacing2-20261016-111535 (2ª passada),
   ds-bundles-20261016-110101 (pré-wave1: 16 css + 6 xml), ds-pagination2-20261016-091109.
 - Quarentena: _quarantine/css-dead-20261016/ (2 órfãos).
+
+## ATUALIZAÇÃO — 2026-10-16 ~08:38 BRT (wave 2 + OpenSearch)
+
+### Concluído
+- OpenSearch: systemctl enable (is-enabled=enabled, is-active=active) — sobrevive a reboot.
+- Wave 2 bundles (COMMIT ef1a7048b):
+  - awa-pdp-bundle.css = round3-pdp-conversion + pdp-final-polish + pdp-premium + pdp-faq (4→1),
+    carregado pelo awa-pdp-conversion-async.phtml (print-trick preservado, data-awa-pdp-css="bundle").
+  - awa-themeoption-bundle.css = round9 + components-b2b-foundation + compat-b2b-nav +
+    page-home-category-premium (4→1, deferred $linkMedia); page-b2b-cart-checkout-premium fica
+    SÍNCRONO separado (anti-FOUC do checkout, por design).
+  - Pegadinha: awa-page-home-category-premium vive no TEMA PAI (ayo/ayo_home5/web/css/) via
+    fallback — bundles com fallback de tema na construção.
+- Validação: smoke 5×200, regressão DS verde, 15/15 cenários (3 breakpoints × 5 páginas) sem
+  overflow/quebras; bundles 200 no backend.
+
+### Wave 3 (documentado, não consolidado — lazy-load intencional)
+- awa-head-preload.phtml (4.395 linhas): 26 URLs de CSS com lógica condicional critical-fold/
+  lazy-load por página (home/PLP/PDP/checkout) — consolidar quebraria o desenho de performance;
+  documentado como intencional.
+- awa-css-gate.js / awa-home-bootstrap-defer.js: gates condicionais (sem URLs estáticas) — intencional.
+- awa-visual-qa-fixes-css.phtml: loader de 1 arquivo só — nada a consolidar.
+
+### Backups
+- ds-wave2-20261016-113119 + ds-wave2fix-20261016-113445 (wave 2, inclui fallback do tema pai).
