@@ -50,7 +50,7 @@ body .page-wrapper .awa-site-header .awa-nav-bar {
           align-items: center;
           height: 100%;
           white-space: nowrap;
-          color: var(--awa-text-inverse);
+          color: var(--awa-text-inverse, @awa-color-white);
           font-weight: 500;
           font-size: var(--awa-font-sm);
           padding-inline: var(--awa-page-pad-mobile, 16px); padding-block: 0;
@@ -244,7 +244,7 @@ body.catalog-category-view .pages .items .item.current a,
 body.catalogsearch-result-index .pages .items .item.current .page,
 body.catalogsearch-result-index .pages .items .item.current a {
   background: var(--awa-primary, @awa-color-primary-mid);
-  color: var(--awa-text-inverse);
+  color: var(--awa-text-inverse, @awa-color-white);
   border-color: var(--awa-primary, @awa-color-primary-mid);
 }
 
@@ -271,7 +271,7 @@ body.catalogsearch-result-index .product-item .action.primary,
   height: @awa-control-height-sm;
   width: 100%;
   border: none;
-  color: var(--awa-text-inverse);
+  color: var(--awa-text-inverse, @awa-color-white);
   border-radius: var(--awa-radius-md, 8px);
 }
 
@@ -317,7 +317,7 @@ body.catalogsearch-result-index .breadcrumbs a {
 .catalog-product-view .box-tocart .action.tocart {
   min-height: 48px;
   background: var(--awa-primary, @awa-color-primary-mid);
-  color: var(--awa-text-inverse);
+  color: var(--awa-text-inverse, @awa-color-white);
   border: none;
   border-radius: var(--awa-radius-md, 8px);
   font-weight: 600;
@@ -378,7 +378,7 @@ body.catalogsearch-result-index .breadcrumbs a {
 .customer-account-login .action.login {
   height: @awa-control-height;
   background: var(--awa-primary, @awa-color-primary-mid);
-  color: var(--awa-text-inverse);
+  color: var(--awa-text-inverse, @awa-color-white);
   width: 100%;
   border: none;
   border-radius: var(--awa-radius-md, 8px);
@@ -622,7 +622,7 @@ table,
 
   &:hover {
     background: var(--awa-success, #2d7a3a);
-    color: var(--awa-text-inverse);
+    color: var(--awa-text-inverse, @awa-color-white);
   }
 }
 
@@ -635,4 +635,15 @@ body {
 
 .page-wrapper {
   background: var(--awa-bg, @awa-color-white);
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// FIX 2026-10-16: numero da pagina atual invisivel na paginacao (vermelho
+// sobre vermelho). Multiplas regras legadas conflitantes competem pelo
+// mesmo seletor em bundles diferentes (ver auditoria); esta regra vence
+// de proposito com !important + alta especificidade.
+// ──────────────────────────────────────────────────────────────────────────
+html body#html-body .page-wrapper .pages .item.current strong.page,
+html body#html-body .page-wrapper .pages .item.current .page {
+  color: @awa-color-white !important;
 }
