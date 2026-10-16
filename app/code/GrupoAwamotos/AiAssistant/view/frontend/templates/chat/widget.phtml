@@ -170,12 +170,16 @@ $deferAi = $isHome || $isCatalogPlp;
                        target="_blank"
                        rel="noopener noreferrer">
                         <!-- ko if: $data.image_url -->
+                        <!-- HOTFIX 2026-10-16 (C2): placeholder 1x1 evita request com URL
+                             vazia (net::ERR_INVALID_URL) no intervalo anterior à aplicação
+                             do binding Knockout. O attr binding sobrescreve este src. -->
                         <img class="awa-ai-chat__product-thumb"
                              width="48"
                              height="48"
                              loading="lazy"
                              decoding="async"
                              alt=""
+                             src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA="
                              data-bind="attr: { src: $data.image_url }">
                         <!-- /ko -->
                         <span class="awa-ai-chat__product-body">
@@ -294,7 +298,8 @@ $deferAi = $isHome || $isCatalogPlp;
     w.__awaAiAssistantDeferInstalled = true;
     var cfg = <?= /* @noEscape */ $widgetConfig ?>;
     var loaded = false;
-    function apply(fromClick) {
+    var intencaoDoUsuario = false;
+    function apply() {
         if (loaded) {
             return;
         }
@@ -315,6 +320,10 @@ $deferAi = $isHome || $isCatalogPlp;
                         }
                     });
                 } catch (e) { /* ignore */ }
+                if (intencaoDoUsuario) {
+                    intencaoDoUsuario = false;
+                    reencaminharIntencao();
+                }
             }, function () { loaded = false; });
         }
         if (typeof w.awaRunWhenRequire === 'function') {
@@ -323,12 +332,48 @@ $deferAi = $isHome || $isCatalogPlp;
             run();
         }
     }
+    /* CONT-001 (v2) — o clique que "acorda" o modulo e consumido: o ko so ganha binding DEPOIS do
+     * app(). A intencao do usuario e marcada em onFab (sem depender do tipo do argumento) e o
+     * reenvio e AUTO-VERIFICAVEL: clica e confere se o painel abriu; se nao abriu, tenta de novo.
+     *
+     * MEDIDO na home (1 clique real, depois esta logica): 6 tentativas de 150ms (aprox. 900ms)
+     * ate o painel abrir — UM UNICO reenvio NAO basta. E `window.ko` NAO existe nesta loja
+     * (temKo=false), entao ko.dataFor NAO serve de condicao de prontidao. */
+    function reencaminharIntencao() {
+        var alvo = d.getElementById('assistente')
+            || d.querySelector('#awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
+        if (!alvo) {
+            return;
+        }
+        var tentativas = 0;
+        function abriu() {
+            return !!d.querySelector('.awa-ai-chat__panel--open');
+        }
+        function tentar() {
+            tentativas += 1;
+            if (abriu()) {
+                return;
+            }
+            alvo.click();
+            w.setTimeout(function () {
+                if (abriu()) {
+                    return;
+                }
+                if (tentativas < 12) {
+                    tentar();
+                }
+            }, 150);
+        }
+        tentar();
+    }
+
     function onFab(evt) {
         var t = evt.target && evt.target.closest && evt.target.closest('#assistente, #awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
         if (!t) {
             return;
         }
-        apply(true);
+        intencaoDoUsuario = true;
+        apply();
     }
     d.addEventListener('click', onFab, true);
     function idleLoad() {
@@ -353,6 +398,7 @@ $deferAi = $isHome || $isCatalogPlp;
     w.__awaAiAssistantDeferInstalled = true;
     var cfg = <?= /* @noEscape */ $widgetConfig ?>;
     var loaded = false;
+    var intencaoDoUsuario = false;
     function apply() {
         if (loaded) {
             return;
@@ -374,6 +420,10 @@ $deferAi = $isHome || $isCatalogPlp;
                         }
                     });
                 } catch (e) { /* ignore */ }
+                if (intencaoDoUsuario) {
+                    intencaoDoUsuario = false;
+                    reencaminharIntencao();
+                }
             }, function () { loaded = false; });
         }
         if (typeof w.awaRunWhenRequire === 'function') {
@@ -382,11 +432,47 @@ $deferAi = $isHome || $isCatalogPlp;
             run();
         }
     }
+    /* CONT-001 (v2) — o clique que "acorda" o modulo e consumido: o ko so ganha binding DEPOIS do
+     * app(). A intencao do usuario e marcada em onFab (sem depender do tipo do argumento) e o
+     * reenvio e AUTO-VERIFICAVEL: clica e confere se o painel abriu; se nao abriu, tenta de novo.
+     *
+     * MEDIDO na home (1 clique real, depois esta logica): 6 tentativas de 150ms (aprox. 900ms)
+     * ate o painel abrir — UM UNICO reenvio NAO basta. E `window.ko` NAO existe nesta loja
+     * (temKo=false), entao ko.dataFor NAO serve de condicao de prontidao. */
+    function reencaminharIntencao() {
+        var alvo = d.getElementById('assistente')
+            || d.querySelector('#awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
+        if (!alvo) {
+            return;
+        }
+        var tentativas = 0;
+        function abriu() {
+            return !!d.querySelector('.awa-ai-chat__panel--open');
+        }
+        function tentar() {
+            tentativas += 1;
+            if (abriu()) {
+                return;
+            }
+            alvo.click();
+            w.setTimeout(function () {
+                if (abriu()) {
+                    return;
+                }
+                if (tentativas < 12) {
+                    tentar();
+                }
+            }, 150);
+        }
+        tentar();
+    }
+
     function onFab(evt) {
         var t = evt.target && evt.target.closest && evt.target.closest('#assistente, #awa-ai-chat-root .awa-ai-chat__toggle, #awa-ai-chat-root .awa-ai-chat__launcher');
         if (!t) {
             return;
         }
+        intencaoDoUsuario = true;
         apply();
     }
     d.addEventListener('click', onFab, true);
@@ -419,4 +505,5 @@ $deferAi = $isHome || $isCatalogPlp;
 }
 </script>
 <?php endif; ?>
+
 

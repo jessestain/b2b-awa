@@ -203,7 +203,15 @@ if ($banners = $block->getBannerCollection()):
 <div class="wrapper_slider visible-xs slider_<?php echo (int) $sliderId; ?>_mobile" data-awa-hero-variant="mobile">
     <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais mobile')) ?>">
         <div class="swiper-wrapper awa-hero__track">
-        <?php $__mobIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirstMob = ($__mobIdx === 0); $__mobIdx++; ?>
+        <?php $__mobIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirstMob = ($__mobIdx === 0);
+        /* CORRECAO 08/10/2026 (LCP mobile): o autoplay mobile CUSTOMIZADO
+           (startMobileAutoplay no awa-hero-slider.js) rotaciona mesmo com o
+           autoplay do Swiper desligado, entao o SLIDE 2 tambem e pintado e vira
+           candidato a LCP. Medido com throttle do PSI: LCP continuava sendo
+           slider_005_mobile.jpg.webp (52,9s). Logo os DOIS primeiros slides do
+           mobile precisam ser eager. Variavel SEPARADA de $__isFirstMob, que
+           controla aria-hidden e deve seguir marcando so o slide ativo. */
+        $__eagerMob = ($__mobIdx <= 1); $__mobIdx++; ?>
             <div class="banner_item swiper-slide awa-hero__slide"
                  role="group"
                  aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
@@ -223,14 +231,24 @@ if ($banners = $block->getBannerCollection()):
                     if ($heroResponsive) {
                         // r44b: no desktop o slider mobile fica em display:none, mas eager+high
                         // ainda baixa 1920w. LCP mobile fica no preload (media max-width:767).
+                        /* CORRECAO 08/10/2026 (LCP mobile) — o 3o parametro ($isLcpCandidate)
+                           era `false` HARDCODED, entao NENHUM slide do hero mobile era tratado
+                           como candidato LCP: todos saiam loading="lazy" e SEM fetchpriority,
+                           inclusive o PRIMEIRO. Medido com throttle do PSI (4x CPU + 1,6 Mbps):
+                           o LCP mobile era o SLIDE 2 (`slider_005_mobile.jpg.webp`), DESCOBERTO
+                           aos 50,2s e pintado aos 57,9s — porque o Swiper usa effect:fade com
+                           loop, entao o slide 2 fica empilhado no viewport e, sendo lazy, so e
+                           revelado tarde. Com o slide 1 marcado como candidato LCP ele recebe
+                           eager + fetchpriority=high (e ja tem <link rel=preload> no head), e o
+                           LCP deixa de ser um slide tardio. */
                         $html = $heroResponsive->buildLcpPictureHtml(
                             (string) $_mobSrc,
                             $slideAlt,
-                            false,
+                            $__eagerMob,
                             true
                         );
                     } else {
-                        $html = $block->getImageElementMobile($_mobSrc, $slideAlt, $__isFirstMob);
+                        $html = $block->getImageElementMobile($_mobSrc, $slideAlt, $__eagerMob);
                         if (preg_match('/src="([^"]+)"/', $html, $_wmm)) {
                             $_webpm = $_wmm[1] . '.webp';
                             $html = '<picture>'
@@ -245,7 +263,17 @@ if ($banners = $block->getBannerCollection()):
                             . $block->escapeHtmlAttr(__('Abrir destaque: %1', $slideLinkLabel))
                             . '">' . $html . '</a>';
                     }
-                    echo $html;
+                                        /* 13/10/2026 — hero desktop skip (48KB): no DESKTOP o wrapper mobile fica
+                       display:none, mas o <img> eager+high baixava as variantes mobile
+                       inutilmente. O <source media=(min-width:768px) srcset=<gif 1x1>>
+                       faz o PRÓPRIO navegador pular o download no desktop; no mobile a
+                       media nao casa e o <source> webp normal aplica (LCP intacto,
+                       reforcado pelo <link rel=preload media=max-width:767px> do head).
+                       16/10/2026 (C2): "data:," (data URI vazio) gerava
+                       net::ERR_INVALID_URL no console do Chrome; trocado por GIF 1x1
+                       transparente válido — mesmo efeito de skip, zero erro. */
+                    $html = str_replace('<picture>', '<picture><source media="(min-width:768px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=">', $html);
+echo $html;
                     ?>
                 </div>
                 <?php if ($text = $banner->getSlideText()): ?>
