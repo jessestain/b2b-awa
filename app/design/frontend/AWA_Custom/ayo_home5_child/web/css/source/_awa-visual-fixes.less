@@ -391,3 +391,19 @@ body.catalogsearch-result-index .mst-search__misc-recommendations dd.item a {
   overflow: visible !important;
   text-overflow: unset !important;
 }
+
+// ----------------------------------------------------------------------
+// FIX 2026-10-16: cards da listagem/busca com altura desalinhada --
+// titulos de produto sem clamp real (line-clamp efetivo = 6, ou seja,
+// sem limite pratico). Forca 2 linhas + altura minima fixa.
+// ----------------------------------------------------------------------
+body.catalog-category-view .product-item .product-item-name,
+body.catalogsearch-result-index .product-item .product-item-name,
+body.catalog-category-view .product-item .product-item-link,
+body.catalogsearch-result-index .product-item .product-item-link {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  min-height: 2.8em !important;
+}
