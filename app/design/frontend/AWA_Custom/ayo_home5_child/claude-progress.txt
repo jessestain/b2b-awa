@@ -144,3 +144,13 @@
 
 ### Backups
 - ds-reconcile-20261016-120505 (pré-patch; rollback automático da 1ª tentativa).
+
+## ATUALIZAÇÃO — 2026-10-16 ~09:40 BRT (ACKs aprovados pelo dono)
+
+- b2b:sectra:manual-ack executado nos 3 pedidos (autorização "aprovado"):
+  000000116<->196568, 000000118<->196590, 000000119<->196731.
+  Vínculos em grupoawamotos_erp_entity_map: map 46032/46033/46034 (12:12 UTC).
+  Loop "Existing ERP order differs" ENCERRADO para os 3 (marcados importados).
+- PENDENTE (follow-up comercial): alinhamento FINAL de itens por pedido com o time
+  (ERP tratado como verdade); Magento mantém snapshot web para histórico.
+- #117 (200105) segue nunca-importado no Sectra — falha distinta, documentada.
