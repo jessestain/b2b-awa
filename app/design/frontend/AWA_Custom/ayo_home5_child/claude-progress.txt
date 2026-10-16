@@ -166,3 +166,40 @@
   HTML da busca = 0 referências a r3.
 - Nota de processo: smoke com query malformada (&dsreg sem ?) gerou falso 404 no lote —
   corrigido na verificação final; site nunca esteve fora.
+
+## ATUALIZAÇÃO — 2026-10-16 ~11:00 BRT (campanha de padronização visual — em andamento)
+
+### Inventário (INVENTARIO-VISUAL-20261016.md + cdp_inventory.js)
+- 14 páginas × 390/768/1440, CDP headless. Linha de base: 264 ocorrências.
+- Pós batches 11-13: 215 (-49). Categorias restantes: tipografia 95, toque44 106,
+  clip 8 (5 = peek de carrossel intencional; 3 = overflow real da busca), h1 3, alt 3.
+
+### Commits da campanha
+- a90bcc353: partial _awa-ds-normalize-2026-10.less (styles-l; derrotado na cascata em parte)
+- 0967a5fa1: taglines lockups 9-10px->12px (logo.phtml, auth-logo.phtml, auth-critical-css)
+- dbda6b514: touch-targets cookie 44px + account prompt 24px desktop + rebuild core bundle
+- 60f8ffb80: commit com churn de CRLF (superado pelo 0967a5fa1 — histórico apenas)
+
+### Aprendizados críticos (documentados p/ próximos batches)
+1. var/view_preprocessed tinha cópias OBSOLETAS que o deploy copiava (styles-m sem o
+   partial, deferred-stack com 10px) — movido p/ backup e regenerado. Sempre limpar
+   view_preprocessed quando CSS "não pega".
+2. Regras inline do head-preload/fragments vencem styles-l/m (especificidade 12x +
+   !important). Correção na FONTE autoritativa (template/membro do bundle).
+3. footer-section__toggle desktop 16px é FALSO POSITIVO: hit-area 44px via
+   pseudo-elemento (::after inset -14px) no touch-targets. Carrosséis com peek =
+   intencional. product-item-link 38px = texto, não botão.
+4. Bundles = concatenação de membros .min com headers /* ==== */; rebuild via
+   concatenação + build-awa-css-min-pair.sh --write <stem>.
+
+### Próximos alvos (ordem)
+1. Badge "Novo" 11px (skin: .hot-onsale .sale-text label/span -> 12px)
+2. SKU label/value + b2b-login-to-see-price 11px (fonte do inherit no card)
+3. Links de resultado de busca mobile 16-26px -> 44px
+4. form-section__toggle 19px, ai-chat chips/close/legal
+5. Overflow real da busca (toolbar 14px)
+6. h1 duplo no carrinho + alts (templates)
+
+### Backups
+ds-normalize-20261016-133143 · ds-tagline2-20261016-134630 · ds-vpp-20261016-134938 ·
+ds-b13-20261016-135547
