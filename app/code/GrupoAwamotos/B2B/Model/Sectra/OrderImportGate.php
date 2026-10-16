@@ -328,9 +328,11 @@ class OrderImportGate
         );
 
         $updated = 0;
+        $importedOrderIds = [];
         foreach ($rows as $row) {
             $orderId = (int) $row['entity_id'];
             $this->setOrderImportStatus($orderId, SectraImportStatus::IMPORTED);
+            $importedOrderIds[] = $orderId;
             $this->syncLogger->log(
                 ProspectEvent::ORDER_IMPORTED_SUCCESS,
                 sprintf('Pedido #%s importado com sucesso no ERP Sectra.', $row['increment_id']),
@@ -343,7 +345,114 @@ class OrderImportGate
             $updated++;
         }
 
+        /* task-55 (11/10/2026) — CORRECAO DE RAIZ.
+           Este laco marcava sectra_import_status='imported' e NAO escrevia o mapa
+           grupoawamotos_erp_entity_map. Resultado medido: 29 pedidos 'imported' e apenas
+           6 com linha no mapa (23 sem). Como o OrderSync::getPendingOrdersForSync() le
+           SOMENTE o mapa, esses pedidos nunca entravam no sync de status - o log repetia
+           "Syncing status for 0 orders" (82x) e eles ficavam presos em 'processing'.
+           Agora o mapa e gravado JUNTO com o flag, no mesmo caminho (produtor). */
+        if ($importedOrderIds !== []) {
+            $this->syncOrderEntityMap($importedOrderIds);
+        }
+
         return $reconciled + $updated;
+    }
+
+    /**
+     * Grava o mapa de pedido (entity_type='order') dos pedidos marcados como importados.
+     *
+     * Le o CODIGO do ERP pela CONEXAO DE LEITURA (nenhuma escrita no ERP) e faz upsert
+     * em grupoawamotos_erp_entity_map, com a mesma semantica de SyncLog::setEntityMap().
+     * Nunca lanca: o flag 'imported' e a obrigacao principal deste caminho, e uma falha
+     * do ERP nao pode derrubar o sync de status.
+     *
+     * @param int[] $orderIds
+     * @return int quantos pedidos ficaram mapeados
+     */
+    private function syncOrderEntityMap(array $orderIds): int
+    {
+        $orderIds = array_values(array_unique(array_filter(array_map('intval', $orderIds))));
+        if ($orderIds === []) {
+            return 0;
+        }
+
+        try {
+            $webIds = array_map(
+                static fn (int $id): string => (string) ($id + self::OC_ORDER_ID_OFFSET),
+                $orderIds
+            );
+            $placeholders = implode(',', array_fill(0, count($webIds), '?'));
+            $erpRows = $this->erpConnection->query(
+                "SELECT p.CODIGO, p.PEDIDOWEB FROM VE_PEDIDO p WHERE p.PEDIDOWEB IN ({$placeholders})",
+                $webIds
+            );
+
+            $erpCodeByWebId = [];
+            foreach ($erpRows as $erpRow) {
+                $webId = trim((string) ($erpRow['PEDIDOWEB'] ?? ''));
+                $codigo = trim((string) ($erpRow['CODIGO'] ?? ''));
+                if ($webId !== '' && $codigo !== '' && ctype_digit($codigo) && (int) $codigo > 0) {
+                    $erpCodeByWebId[$webId] = $codigo;
+                }
+            }
+
+            if ($erpCodeByWebId === []) {
+                $this->logger->warning(
+                    '[B2B-Sectra] Nenhum CODIGO devolvido pelo ERP; mapa de pedidos nao gravado',
+                    ['orders' => $orderIds]
+                );
+                return 0;
+            }
+
+            $connection = $this->resourceConnection->getConnection();
+            $now = (new \DateTime())->format('Y-m-d H:i:s');
+            $mapped = 0;
+
+            foreach ($orderIds as $orderId) {
+                $webId = (string) ($orderId + self::OC_ORDER_ID_OFFSET);
+                if (!isset($erpCodeByWebId[$webId])) {
+                    continue;
+                }
+                $erpCode = $erpCodeByWebId[$webId];
+
+                $existing = $connection->fetchOne(
+                    $connection->select()
+                        ->from('grupoawamotos_erp_entity_map', 'map_id')
+                        ->where('entity_type = ?', 'order')
+                        ->where('erp_code = ?', $erpCode)
+                );
+
+                if ($existing) {
+                    $connection->update(
+                        'grupoawamotos_erp_entity_map',
+                        ['magento_entity_id' => $orderId, 'last_sync_at' => $now],
+                        ['entity_type = ?' => 'order', 'erp_code = ?' => $erpCode]
+                    );
+                } else {
+                    $connection->insert('grupoawamotos_erp_entity_map', [
+                        'entity_type' => 'order',
+                        'erp_code' => $erpCode,
+                        'magento_entity_id' => $orderId,
+                        'last_sync_at' => $now,
+                        'sync_hash' => null,
+                    ]);
+                }
+                $mapped++;
+            }
+
+            $this->logger->info('[B2B-Sectra] Mapa de pedidos gravado no caminho de reconciliacao (task-55)', [
+                'mapeados' => $mapped,
+                'sem_codigo_no_erp' => count($orderIds) - $mapped,
+            ]);
+
+            return $mapped;
+        } catch (\Throwable $e) {
+            $this->logger->warning(
+                '[B2B-Sectra] Falha ao gravar o mapa de pedidos importados: ' . $e->getMessage()
+            );
+            return 0;
+        }
     }
 
     /**
@@ -377,6 +486,25 @@ class OrderImportGate
             return 0;
         }
 
+        $candidateOrderIds = array_map(
+            static fn (array $row): int => (int) $row['entity_id'],
+            $candidates
+        );
+        $candidatePlaceholders = implode(',', array_fill(0, count($candidateOrderIds), '?'));
+        $magentoItemRows = $connection->fetchAll(
+            "SELECT soi.order_id, soi.sku, SUM(soi.qty_ordered) AS qty
+             FROM sales_order_item soi
+             WHERE soi.order_id IN ({$candidatePlaceholders})
+               AND soi.parent_item_id IS NULL
+             GROUP BY soi.order_id, soi.sku",
+            $candidateOrderIds
+        );
+        $magentoLinesByOrder = [];
+        foreach ($magentoItemRows as $itemRow) {
+            $magentoLinesByOrder[(int) $itemRow['order_id']][trim((string) $itemRow['sku'])] =
+                (float) $itemRow['qty'];
+        }
+
         $webOrderIds = array_map(
             static fn (array $row): string => (string) (int) $row['order_id'],
             $candidates
@@ -393,6 +521,21 @@ class OrderImportGate
              GROUP BY p.CODIGO, p.PEDIDOWEB, p.CLIENTE, p.VLRTOTAL",
             $webOrderIds
         );
+
+        $erpItemRows = $this->erpConnection->query(
+            "SELECT i.PEDIDO, i.MATERIAL, SUM(i.QTDE) AS qty
+             FROM VE_PEDIDOITENS i
+             WHERE i.PEDIDO IN (
+                 SELECT CODIGO FROM VE_PEDIDO WHERE PEDIDOWEB IN ({$placeholders})
+             )
+             GROUP BY i.PEDIDO, i.MATERIAL",
+            $webOrderIds
+        );
+        $erpLinesByCodigo = [];
+        foreach ($erpItemRows as $erpItemRow) {
+            $erpLinesByCodigo[(int) $erpItemRow['PEDIDO']][trim((string) $erpItemRow['MATERIAL'])] =
+                (float) $erpItemRow['qty'];
+        }
 
         /** @var array<string, array<int, array<string, mixed>>> $erpRowsByWebOrder */
         $erpRowsByWebOrder = [];
@@ -425,12 +568,24 @@ class OrderImportGate
             }
 
             $erpRow = $matches[0];
-            $isExactMatch =
-                (int) ($erpRow['CLIENTE'] ?? 0) === (int) $candidate['customer_id']
-                && abs((float) ($erpRow['VLRTOTAL'] ?? 0) - (float) $candidate['total']) <= 0.01
-                && (int) ($erpRow['item_count'] ?? 0) === (int) $candidate['item_count']
-                && abs((float) ($erpRow['qty_total'] ?? 0) - (float) $candidate['qty_total']) <= 0.0001
-                && abs((float) ($erpRow['items_total'] ?? 0) - (float) $candidate['items_total']) <= 0.01;
+            $customerMatches = (int) ($erpRow['CLIENTE'] ?? 0) === (int) $candidate['customer_id'];
+            $magentoLines = $magentoLinesByOrder[(int) $candidate['entity_id']] ?? [];
+            $erpLines = $erpLinesByCodigo[(int) $erpRow['CODIGO']] ?? [];
+            $itemsMatch = $this->compareItemLines($magentoLines, $erpLines);
+            $totalDelta = abs((float) ($erpRow['VLRTOTAL'] ?? 0) - (float) $candidate['total']);
+            $isExactMatch = $customerMatches && $itemsMatch;
+
+            if ($customerMatches && $itemsMatch && $totalDelta > 0.01) {
+                $this->logger->info(
+                    '[B2B-Sectra] Itens conferem; totais divergem (imposto/lista de preço) — ACK prossegue',
+                    [
+                        'oc_order_id' => $webOrderId,
+                        'erp_order_id' => (int) ($erpRow['CODIGO'] ?? 0),
+                        'magento_total' => (float) $candidate['total'],
+                        'erp_total' => (float) ($erpRow['VLRTOTAL'] ?? 0),
+                    ]
+                );
+            }
 
             if (!$isExactMatch) {
                 $mismatches++;
@@ -462,6 +617,32 @@ class OrderImportGate
         }
 
         return $reconciled;
+    }
+
+    /**
+     * Compara as linhas de itens como multiset SKU => quantidade (tolerância 1e-4).
+     *
+     * @param array<string, float> $magentoLines
+     * @param array<string, float> $erpLines
+     */
+    private function compareItemLines(array $magentoLines, array $erpLines): bool
+    {
+        $magentoLines = array_map('floatval', $magentoLines);
+        $erpLines = array_map('floatval', $erpLines);
+        ksort($magentoLines);
+        ksort($erpLines);
+
+        if (array_keys($magentoLines) !== array_keys($erpLines)) {
+            return false;
+        }
+
+        foreach ($magentoLines as $sku => $qty) {
+            if (abs($qty - $erpLines[$sku]) > 0.0001) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function isB2bCustomer(int $customerId): bool

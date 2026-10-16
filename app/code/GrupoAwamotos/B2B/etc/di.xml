@@ -75,6 +75,7 @@
                 <item name="b2b_whatsapp_test" xsi:type="object">GrupoAwamotos\B2B\Console\Command\TestWhatsAppCommand</item>
                 <item name="b2b_attendant_repair_erp" xsi:type="object">GrupoAwamotos\B2B\Console\Command\RepairAttendantsFromErpCommand</item>
                 <item name="b2b_registration_audit_health" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditRegistrationHealthCommand</item>
+                <item name="b2b_audit_erp_readiness" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditErpReadinessCommand</item>
                 <item name="b2b_registration_audit_missing" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditMissingDataCommand</item>
                 <item name="b2b_registration_backfill_phone" xsi:type="object">GrupoAwamotos\B2B\Console\Command\BackfillPhoneFromAddressCommand</item>
                 <item name="b2b_registration_backfill_razao_cnpj" xsi:type="object">GrupoAwamotos\B2B\Console\Command\BackfillRazaoSocialFromCnpjCacheCommand</item>
@@ -89,6 +90,7 @@
                 <item name="b2b_sectra_validate_flow" xsi:type="object">GrupoAwamotos\B2B\Console\Command\ValidateSectraFlowCommand</item>
                 <item name="b2b_sectra_validate_order_import" xsi:type="object">GrupoAwamotos\B2B\Console\Command\ValidateSectraOrderImportCommand</item>
                 <item name="b2b_sectra_cancel_stuck_orders" xsi:type="object">GrupoAwamotos\B2B\Console\Command\CancelStuckOrdersCommand</item>
+                <item name="b2b_sectra_manual_ack" xsi:type="object">GrupoAwamotos\B2B\Console\Command\ManualOrderAckCommand</item>
             </argument>
         </arguments>
     </type>
@@ -132,4 +134,15 @@
                 sortOrder="10"/>
     </type>
 
+    <!-- HOTFIX B2B-AUTH (13/10): gate REST registrado no di GLOBAL (o frontend/di nao cobre webapi_rest) -->
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="grupoawamotos_b2b_block_guest_cart_item_save"
+                type="GrupoAwamotos\B2B\Plugin\Checkout\BlockGuestCartItemSavePlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Pricing\Price\TierPrice">
+        <plugin name="awa_customer_tier_price_list"
+                type="GrupoAwamotos\B2B\Plugin\Pricing\CustomerTierPrice"
+                sortOrder="10"/>
+    </type>
 </config>
