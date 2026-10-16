@@ -1,0 +1,76 @@
+// _awa-ds-normalize-2026-10.less
+// Normalização de componentes — INVENTARIO-VISUAL-20261016.md (CDP 14 páginas × 3 larguras)
+// Governança: apenas tokens DS existentes; sem !important novo; importado por último no _extend.less.
+
+// ── T1 — lockups: tagline 9-10px -> 12px ────────────────────────────────
+.awa-logo-lockup__tagline,
+.awa-footer-lockup__tagline,
+.awa-auth-lockup__tagline {
+    font-size: @awa-font-size-12;
+    line-height: @awa-line-height-tight;
+}
+
+// ── T2 — labels de produto/misc: 11px -> 12px ───────────────────────────
+.awa-b2b-sku__label,
+.awa-b2b-sku__value,
+.b2b-login-to-see-price__title,
+.awa-related-price-notice__suffix,
+.awa-plp-b2b-gate-banner__badge,
+.awa-footer-atendimento__store-address,
+.awa-b2b-promo-bar__cta-short,
+.toolbar-products .sorter-label,
+.awa-header-account-prompt__separator,
+.product-item .product-label {
+    font-size: @awa-font-size-12;
+}
+
+// ── T10 — cadastro: progress steps 10px -> 12px ─────────────────────────
+.progress-step__num,
+.progress-step__label {
+    font-size: @awa-font-size-12;
+}
+
+// ── T3 — header conta: aplica o token 44px já existente no DS ───────────
+.awa-header-account-prompt__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--awa-top-account-link-min-height, 44px);
+}
+
+// ── T4 — footer: toques 44px ────────────────────────────────────────────
+.awa-footer-section__toggle {
+    min-height: var(--awa-main-nav-link-min-h, 44px);
+}
+
+@media (pointer: coarse) {
+    .awa-footer a[href^="tel"],
+    .awa-footer a[href^="mailto"],
+    .awa-footer .awa-footer-section__body a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+    }
+}
+
+// ── T6 — AI chat: tipografia + toques ───────────────────────────────────
+.awa-ai-chat__toggle-label {
+    font-size: @awa-font-size-12;
+}
+
+.awa-ai-chat__chip,
+.awa-ai-chat__close,
+.awa-ai-chat__legal-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--awa-main-nav-link-min-h, 44px);
+}
+
+// ── T9 — cookie banner: link 44px ───────────────────────────────────────
+.awa-cookie-banner__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--awa-main-nav-link-min-h, 44px);
+}
+
