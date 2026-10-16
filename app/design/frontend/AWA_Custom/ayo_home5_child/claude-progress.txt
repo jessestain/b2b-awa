@@ -757,3 +757,27 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   restart php8.4-fpm. Regressao: rc=0, 0 falhas apos a recuperacao.
 - LICAO: apos qualquer deploy que mexa em generated/, conferir
   ls generated/metadata/ | grep -c plugin-list (>=7) e smoke imediato.
+
+## ATUALIZAÇÃO — 2026-10-16 ~20:35 BRT (ciclo 13: auditoria visual 50 itens — Fase 1)
+
+### v18 aplicado (align-grid append + servido):
+- Paginacao universal (qualquer toolbar): links + current strong 44x40 inline-flex,
+  numero da pagina visivel 14px branco. VERIFICADO no pager visivel (bottom-slim):
+  current 44x44, numero "1" visivel.
+- Busca: regra de foco unica (outline 2px primaria) em input:focus + :focus-visible.
+
+### Estado real medido dos 50 itens (probes CDP, desktop 1440):
+- #11-13 (menu "Buscar categoria" sobrepondo "Originais"): NAO REPRODUZ no build atual —
+  a busca ja e um <li> em fluxo com 44px (o overlap medido era o search contra ele mesmo).
+- #36 (paginacao bloco vermelho sem numero): o pager do TOP e oculto (0x0) — o VISIVEL
+  (bottom-slim) mostra o numero corretamente. v18 uniformiza ambos.
+- #04/05 (contornos sobrepostos da busca): nenhum outline no foco programatico atual;
+  teclado tem o guard global. v18 adiciona o tratamento unico.
+- #41-44 (popups): cookie banner em (916,724)-(1336,884) — regiao inferior direita;
+  notificacao/flutuantes aparecem com timer (probe de 10s nao capturou) — validar com
+  espera maior no proximo ciclo.
+- #01-03 (tooltip "3014"): nao encontrado no DOM inicial (so em hover) — precisa do
+  contexto da captura (hover simulado) para localizar.
+
+### Proximos ciclos: tooltip 3014 (hover simulado), popups (#41-44, espera estendida),
+  Fase 2 (grid 1600px #21, densidade #16/17/32/40) e Fase 3 (tokens/contraste/rodape).
