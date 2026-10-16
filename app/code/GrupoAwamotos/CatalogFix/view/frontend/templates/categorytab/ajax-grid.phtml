@@ -78,6 +78,11 @@ $i = 0;
                 <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
                 <span class="awa-b2b-sku__value"><?php echo $block->escapeHtml($_item->getSku()); ?></span>
             </div>
+            <?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
+            <?php if ($awaStockVm): $awaStock = $awaStockVm->getStockInfo($_item); ?>
+                <?php if ($awaStock['in_stock'] && $awaStock['qty'] > 0): ?>
+                <?php endif; ?>
+            <?php endif; ?>
             <?php if ($templateType): ?>
                 <div class="product-rating"><?php echo $block->getReviewsSummaryHtml($_item, $templateType, true); ?></div>
             <?php endif; ?>

@@ -637,13 +637,3 @@ body {
   background: var(--awa-bg, @awa-color-white);
 }
 
-// ──────────────────────────────────────────────────────────────────────────
-// FIX 2026-10-16: numero da pagina atual invisivel na paginacao (vermelho
-// sobre vermelho). Multiplas regras legadas conflitantes competem pelo
-// mesmo seletor em bundles diferentes (ver auditoria); esta regra vence
-// de proposito com !important + alta especificidade.
-// ──────────────────────────────────────────────────────────────────────────
-html body#html-body .page-wrapper .pages .item.current strong.page,
-html body#html-body .page-wrapper .pages .item.current .page {
-  color: @awa-color-white !important;
-}

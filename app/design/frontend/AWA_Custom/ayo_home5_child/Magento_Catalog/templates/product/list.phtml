@@ -241,6 +241,11 @@ if ($_b2bActive) {
             <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
             <span class="awa-b2b-sku__value"><?php echo $block->escapeHtml($_product->getSku()); ?></span>
         </div>
+        <?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
+        <?php if ($awaStockVm): $awaStock = $awaStockVm->getStockInfo($_product); ?>
+            <?php if ($awaStock['in_stock'] && $awaStock['qty'] > 0): ?>
+            <?php endif; ?>
+        <?php endif; ?>
 						<?php if (!$_b2bActive): ?>
 						<div class="product-rating">
 							<?php echo $block->getReviewsSummaryHtml($_product, $templateType, true); ?>
@@ -350,6 +355,11 @@ if ($_b2bActive) {
 							<span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
 							<span class="awa-b2b-sku__value"><?php echo $block->escapeHtml($_product->getSku()); ?></span>
 						</div>
+						<?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
+						<?php if ($awaStockVm): $awaStock = $awaStockVm->getStockInfo($_product); ?>
+							<?php if ($awaStock['in_stock'] && $awaStock['qty'] > 0): ?>
+							<?php endif; ?>
+						<?php endif; ?>
 						<?php if (!$_b2bActive): ?>
 						<div class="product-rating">
 							<?php echo $block->getReviewsSummaryHtml($_product, $templateType, true); ?>
@@ -398,6 +408,11 @@ if ($_b2bActive) {
 								<?php elseif ($b2bCanAddToCart): ?>
 									<?php if ($_product->getIsSalable()): ?>
 										<div class="stock available"><span><?php echo $block->escapeHtml(__('In stock')); ?></span></div>
+                                        <?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
+                                        <?php if ($awaStockVm): $awaStock = $awaStockVm->getStockInfo($_product); ?>
+                                            <?php if ($awaStock['in_stock'] && $awaStock['qty'] > 0): ?>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
 									<?php else: ?>
 										<div class="stock unavailable"><span><?php echo $block->escapeHtml(__('Out of stock')); ?></span></div>
 									<?php endif; ?>

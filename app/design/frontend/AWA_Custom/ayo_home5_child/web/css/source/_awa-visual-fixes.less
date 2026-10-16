@@ -356,3 +356,38 @@ body.cms-index-index .top-home-content--trust-and-offers .top-home-content__trus
         }
     }
 }
+
+// ──────────────────────────────────────────────────────────────────────────
+// FIX 2026-10-16: numero da pagina atual invisivel na paginacao (vermelho
+// sobre vermelho). Multiplas regras legadas conflitantes competem pelo
+// mesmo seletor em bundles diferentes (ver auditoria); esta regra vence
+// de proposito com !important + alta especificidade.
+// ──────────────────────────────────────────────────────────────────────────
+html body#html-body .page-wrapper .pages .item.current strong.page,
+html body#html-body .page-wrapper .pages .item.current .page {
+  color: @awa-color-white !important;
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// FIX 2026-10-16: remove texto duplicado "Precos exclusivos para
+// revendedores" em cada card da listagem/busca (ja aparece no banner
+// B2B do topo da pagina). Mantem o link "Cadastre-se para ver o preco".
+// ──────────────────────────────────────────────────────────────────────────
+body.catalog-category-view .product-item .b2b-login-to-see-price__title,
+body.catalogsearch-result-index .product-item .b2b-login-to-see-price__title {
+  display: none !important;
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// FIX 2026-10-16: tags de "termos de pesquisa relacionados" cortando no
+// meio da palavra. Confirmado via DOM: o texto completo ja existe no link
+// (ex: "cavalete lateral borracha cg 160"), mas o <a> tinha width fixa de
+// ~80px dentro de um <dd> flex de ~180px -- corta sem necessidade.
+// ──────────────────────────────────────────────────────────────────────────
+body.catalogsearch-result-index .mst-search__misc-recommendations dd.item a {
+  width: auto !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
