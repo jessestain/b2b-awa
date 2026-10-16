@@ -12,38 +12,38 @@
 
 body .page-wrapper .awa-b2b-mode-badge {
     color: #1f2937 !important;
-    border-color: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) 22%, white) !important;
-    background: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) 8%, white) !important;
+    border-color: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) 22%, white) !important;
+    background: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) 8%, white) !important;
 }
 
 body .page-wrapper .awa-b2b-mode-badge:hover,
 body .page-wrapper .awa-b2b-mode-badge:focus-visible {
     color: #111827 !important;
-    border-color: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) 35%, white) !important;
-    background: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) 14%, white) !important;
+    border-color: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) 35%, white) !important;
+    background: color-mix(in srgb, var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) 14%, white) !important;
     outline: 0;
     box-shadow: var(--awa-post-themeoption-focus) !important;
 }
 
 body .page-wrapper .awa-b2b-mode-badge__dot {
-    background: var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) !important;
+    background: var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) !important;
 }
 
 body .page-wrapper .awa-b2b-mode-badge__tier {
-    color: var(--awa-b2b-mode-accent, var(--primary-color, #b73337)) !important;
+    color: var(--awa-b2b-mode-accent, var(--primary-color, var(--awa-brand))) !important;
 }
 
 body .page-wrapper .block-search .block-content button.action.search {
-    background: var(--primary-color, #b73337) !important;
-    border-color: var(--primary-color, #b73337) !important;
+    background: var(--primary-color, var(--awa-brand)) !important;
+    border-color: var(--primary-color, var(--awa-brand)) !important;
     color: #fff !important;
     min-height: 44px !important;
 }
 
 body .page-wrapper .block-search .block-content button.action.search:hover,
 body .page-wrapper .block-search .block-content button.action.search:focus-visible {
-    background: var(--primary-hover, #8e2629) !important;
-    border-color: var(--primary-hover, #8e2629) !important;
+    background: var(--primary-hover, var(--awa-brand-dark)) !important;
+    border-color: var(--primary-hover, var(--awa-brand-dark)) !important;
     color: #fff !important;
     outline: 0;
     box-shadow: var(--awa-post-themeoption-focus) !important;
@@ -51,7 +51,7 @@ body .page-wrapper .block-search .block-content button.action.search:focus-visib
 
 body .page-wrapper .minicart-wrapper .action.showcart .counter.qty,
 body .page-wrapper .minicart-wrapper .counter.qty {
-    background: var(--primary-color, #b73337) !important;
+    background: var(--primary-color, var(--awa-brand)) !important;
     color: #fff !important;
 }
 
@@ -63,7 +63,7 @@ body .page-wrapper .page_footer .velaFooterTitle {
 
 body .page-wrapper .page_footer .velaFooterTitle:hover,
 body .page-wrapper .page_footer .velaFooterTitle:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     box-shadow: var(--awa-post-themeoption-focus) !important;
     outline: 0;
 }
@@ -83,7 +83,7 @@ body .page-wrapper .page_footer .aw-footer-b2b-contact a:hover,
 body .page-wrapper .page_footer .aw-footer-b2b-contact a:focus-visible,
 body .page-wrapper .page_footer .aw-footer-social a:hover,
 body .page-wrapper .page_footer .aw-footer-social a:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     outline: 0;
 }
 
@@ -97,7 +97,7 @@ body .page-wrapper .awa-footer-trust-icon,
 body .page-wrapper .awa-payment-chip svg,
 body .page-wrapper .awa-footer-security-badge svg,
 body .page-wrapper .aw-footer-trust-b2b .trust-number {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
 }
 
 body .page-wrapper .awa-payment-chip {
@@ -107,7 +107,7 @@ body .page-wrapper .awa-payment-chip {
 }
 
 body .page-wrapper .awa-payment-chip--priority {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     background: rgb(183 51 55 / 6%) !important;
     border-color: rgb(183 51 55 / 16%) !important;
 }
@@ -161,7 +161,7 @@ body .page-wrapper .awa-payment-chip--priority {
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-btn-register:focus-visible,
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-btn-claim:hover,
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-btn-claim:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     border-color: rgb(183 51 55 / 24%) !important;
     box-shadow: var(--awa-post-themeoption-focus) !important;
     outline: 0;
@@ -169,8 +169,8 @@ body .page-wrapper .awa-payment-chip--priority {
 
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-btn-entrar,
 :is(body.b2b-auth-shell, body.b2b-register-index) .create-b2b-account {
-    background: var(--primary-color, #b73337) !important;
-    border-color: var(--primary-color, #b73337) !important;
+    background: var(--primary-color, var(--awa-brand)) !important;
+    border-color: var(--primary-color, var(--awa-brand)) !important;
     color: #fff !important;
 }
 
@@ -178,8 +178,8 @@ body .page-wrapper .awa-payment-chip--priority {
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-btn-entrar:focus-visible,
 :is(body.b2b-auth-shell, body.b2b-register-index) .create-b2b-account:hover,
 :is(body.b2b-auth-shell, body.b2b-register-index) .create-b2b-account:focus-visible {
-    background: var(--primary-hover, #8e2629) !important;
-    border-color: var(--primary-hover, #8e2629) !important;
+    background: var(--primary-hover, var(--awa-brand-dark)) !important;
+    border-color: var(--primary-hover, var(--awa-brand-dark)) !important;
     color: #fff !important;
     box-shadow: 0 0 0 3px rgb(183 51 55 / 18%) !important;
     outline: 0;
@@ -216,7 +216,7 @@ body .page-wrapper .awa-payment-chip--priority {
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-register-form select:focus-visible,
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-register-form textarea:focus,
 :is(body.b2b-auth-shell, body.b2b-register-index) .b2b-register-form textarea:focus-visible {
-    border-color: var(--primary-color, #b73337) !important;
+    border-color: var(--primary-color, var(--awa-brand)) !important;
     box-shadow: var(--awa-post-themeoption-focus) !important;
     outline: 0;
 }
@@ -245,9 +245,9 @@ body .page-wrapper .awa-payment-chip--priority {
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .grid-mode-show-type-products a.actived,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .pages .item.current strong {
-    background: rgb(183 51 55 / 7%) !important;
-    border-color: rgb(183 51 55 / 30%) !important;
-    color: var(--primary-color, #b73337) !important;
+    background: rgb(183 51 55) !important;
+    border-color: rgb(183 51 55) !important;
+    color: #fff !important;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .toolbar .modes .modes-mode:hover,
@@ -256,7 +256,7 @@ body .page-wrapper .awa-payment-chip--priority {
 :is(body.catalog-category-view, body.catalogsearch-result-index) .grid-mode-show-type-products a:focus-visible,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .pages .item .page:hover,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .pages .item .page:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     border-color: rgb(183 51 55 / 24%) !important;
     box-shadow: var(--awa-post-themeoption-focus) !important;
     outline: 0;
@@ -276,13 +276,13 @@ body .page-wrapper .awa-payment-chip--priority {
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .filter-options-title:hover,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .filter-options-title:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     background: rgb(183 51 55 / 4%) !important;
     outline: 0;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .filter-options .count {
-    color: #475569 !important;
+    color: var(--awa-text-soft, #475569) !important;
     background: #f1f5f9 !important;
     border-radius: 999px;
     padding-inline: 6px;
@@ -300,7 +300,7 @@ body .page-wrapper .awa-payment-chip--priority {
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .wrapper.grid.products-grid .item-product .product-item-link:hover,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .wrapper.grid.products-grid .item-product .product-item-link:focus-visible {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     outline: 0;
 }
 
@@ -318,7 +318,7 @@ body .page-wrapper .awa-payment-chip--priority {
 
 :is(body.catalog-category-view, body.catalogsearch-result-index) .b2b-login-to-see-price,
 .searchsuite-autocomplete .b2b-login-to-see-price {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     background: rgb(183 51 55 / 7%) !important;
     border: 1px solid rgb(183 51 55 / 14%) !important;
 }
@@ -340,14 +340,14 @@ body .page-wrapper .awa-payment-chip--priority {
 
 .searchsuite-autocomplete .title .see-all,
 .searchsuite-autocomplete .qs-option-title a {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
 }
 
 .searchsuite-autocomplete .title .see-all:hover,
 .searchsuite-autocomplete .title .see-all:focus-visible,
 .searchsuite-autocomplete .qs-option-title a:hover,
 .searchsuite-autocomplete .qs-option-title a:focus-visible {
-    color: var(--primary-hover, #8e2629) !important;
+    color: var(--primary-hover, var(--awa-brand-dark)) !important;
     outline: 0;
 }
 
@@ -363,7 +363,7 @@ body .page-wrapper .awa-payment-chip--priority {
 .searchsuite-autocomplete .product ul li:hover,
 .searchsuite-autocomplete .product ul li.selected {
     background: rgb(183 51 55 / 4%) !important;
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     outline: 0;
 }
 
@@ -379,12 +379,12 @@ body.checkout-cart-index .cart-empty p:first-child {
 }
 
 body.checkout-cart-index .cart-empty a {
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
 }
 
 body.checkout-cart-index .cart-empty a:hover,
 body.checkout-cart-index .cart-empty a:focus-visible {
-    color: var(--primary-hover, #8e2629) !important;
+    color: var(--primary-hover, var(--awa-brand-dark)) !important;
     outline: 0;
 }
 
@@ -477,7 +477,7 @@ body.checkout-cart-index .cart-summary input[type='text'] {
     border-radius: 999px !important;
     border: 1px solid rgb(183 51 55 / 18%) !important;
     background: rgb(255 255 255 / 96%) !important;
-    color: var(--primary-color, #b73337) !important;
+    color: var(--primary-color, var(--awa-brand)) !important;
     box-shadow: 0 6px 18px rgb(0 0 0 / 10%) !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -495,8 +495,8 @@ body.checkout-cart-index .cart-summary input[type='text'] {
 
 .modal-popup.ajaxsuite-popup-wrapper._show .modal-header .action-close:hover,
 .modal-popup.ajaxsuite-popup-wrapper._show .modal-header .action-close:focus-visible {
-    background: var(--primary-color, #b73337) !important;
-    border-color: var(--primary-color, #b73337) !important;
+    background: var(--primary-color, var(--awa-brand)) !important;
+    border-color: var(--primary-color, var(--awa-brand)) !important;
     color: #fff !important;
     transform: translateY(-1px) !important;
     outline: none !important;
