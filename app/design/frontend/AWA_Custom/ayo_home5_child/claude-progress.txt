@@ -611,3 +611,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 - Verificado: plp/busca/pdp 200; regressao rc=0; inventario completo ok.
 - Agora TODAS as acoes principais usam o shell: HOME (branch proprio), PDP (c2a564af5),
   PLP/busca (este commit). HTML total de catalogo: 776 -> 688KB.
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:35 BRT (ciclo 5: auditoria WCAG 2.1 AA + SEO)
+
+### SEO tecnico: EXCELENTE (nenhuma acao)
+- Title 41-60 chars, meta description 121-139, canonical ok, robots INDEX,FOLLOW,
+  OG title/image ok, JSON-LD: Product + BreadcrumbList + FAQPage + Organization/
+  LocalBusiness/AutoPartsStore/WebSite, lang pt-BR, imagens com dimensoes.
+
+### WCAG — achados e correcoes
+- FALHA real: 15 links focaveis dentro de [aria-hidden=true] (slides ocultos do
+  carrossel de relacionados + price-box do gate B2B) — WCAG 2.4.3/4.1.2.
+  FIX: guard global de inert no awa-ux-enhancements.js (MutationObserver +
+  checagem de suporte) — padrao nativo moderno. Verificado: 106 containers inert,
+  0 links focaveis em aria-hidden (teste real de focus()).
+- NAO-violacoes: inputs "sem rotulo" sao todos type=hidden (isentos); foco visivel
+  ja existe (outline 2px var(--awa-primary) no guard global); heading hierarchy ok
+  (h1=1, h2=8, h3=27); contrastes: tagline 3.54:1 e a unica abaixo de 4.5 (12px
+  vermelho da marca — decorativo do lockup; registrar para decisao de design).
+- Regressao DS: rc=0 apos o fix.
