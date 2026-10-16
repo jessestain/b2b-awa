@@ -316,9 +316,9 @@ body.curriculo-index-index .form.curriculo .field:not(.choice):not(.consent) :is
   font-size: var(--awa-text-sm, 13px);
   font-weight: var(--awa-weight-normal, 400);
   color: var(--awa-gray-700, #374151);
-  transition: border-color var(--awa-transition-fast, 150ms ease),
-    box-shadow var(--awa-transition-fast, 150ms ease),
-    background-color var(--awa-transition-fast, 150ms ease);
+  transition: border-color var(--awa-transition-fast, 0.15s ease),
+    box-shadow var(--awa-transition-fast, 0.15s ease),
+    background-color var(--awa-transition-fast, 0.15s ease);
 }
 
 body.curriculo-index-index .form.curriculo .field:not(.choice):not(.consent) select {
@@ -337,9 +337,9 @@ body.curriculo-index-index .form.curriculo .field.message textarea {
   line-height: 1.5;
   color: var(--awa-gray-700, #374151);
   resize: vertical;
-  transition: border-color var(--awa-transition-fast, 150ms ease),
-    box-shadow var(--awa-transition-fast, 150ms ease),
-    background-color var(--awa-transition-fast, 150ms ease);
+  transition: border-color var(--awa-transition-fast, 0.15s ease),
+    box-shadow var(--awa-transition-fast, 0.15s ease),
+    background-color var(--awa-transition-fast, 0.15s ease);
 }
 
 body.curriculo-index-index .form.curriculo .field:not(.choice):not(.consent) :is(
@@ -371,10 +371,10 @@ body.curriculo-index-index .form.curriculo a:focus-visible {
 body.curriculo-index-index .form.curriculo .form-error-summary:not(:empty) {
   margin-bottom: var(--awa-space-4, 16px);
   padding: var(--awa-space-3, 12px) var(--awa-space-4, 16px);
-  border: 1px solid var(--awa-red-20, rgb(183 51 55 / 20%));
+  border: 1px solid var(--awa-red-20, rgb(183 51 55 / 20%)));
   border-left: 4px solid var(--awa-red, var(--awa-primary));
   border-radius: var(--awa-radius-md, 12px);
-  background: var(--awa-red-4, rgb(183 51 55 / 4%));
+  background: var(--awa-red-4, rgb(183 51 55 / 4%)));
   color: var(--awa-error-color, #b91c1c);
 }
 
@@ -405,12 +405,12 @@ body.curriculo-index-index .form.curriculo .mage-error.select {
 body.curriculo-index-index .form.curriculo .actions-toolbar .action.submit.primary {
   min-height: 52px;
   border-radius: var(--awa-radius-md, 12px);
-  font-size: var(--awa-text-base, 15px);
+  font-size: var(--awa-text-base, 14px);
   font-weight: var(--awa-weight-bold, 700);
   letter-spacing: 0.01em;
   transition: background-color var(--awa-transition-base, 200ms ease),
     box-shadow var(--awa-transition-base, 200ms ease),
-    transform var(--awa-transition-fast, 150ms ease);
+    transform var(--awa-transition-fast, 0.15s ease);
   box-shadow: 0 10px 24px rgb(183 51 55 / 16%);
 }
 
@@ -489,7 +489,7 @@ body.curriculo-index-index .page-wrapper .curriculo-wrapper .form.curriculo .fie
 body.curriculo-index-index .page-wrapper .curriculo-wrapper .form.curriculo .form-error-summary:not(:empty) {
   border-left: 4px solid var(--awa-red, var(--awa-primary)) !important;
   border-radius: var(--awa-radius-md, 12px) !important;
-  background: var(--awa-red-4, rgb(183 51 55 / 4%)) !important;
+  background: var(--awa-red-4, rgb(183 51 55 / 4%))) !important;
 }
 
 body.curriculo-index-index .page-wrapper .curriculo-wrapper .form.curriculo .actions-toolbar .action.submit.primary {

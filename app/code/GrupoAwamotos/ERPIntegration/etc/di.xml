@@ -373,6 +373,7 @@
                 <item name="erp_client_register" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\RegisterB2BClientCommand</item>
                 <item name="erp_orders_held" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\HeldOrdersCommand</item>
                 <item name="erp_orders_reconcile" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\ReconcileOrdersCommand</item>
+                <item name="erp_order_repair_transport" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\RepairOrderTransportCommand</item>
                 <item name="erp_sectra_status" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\SectraStatusCommand</item>
             </argument>
         </arguments>

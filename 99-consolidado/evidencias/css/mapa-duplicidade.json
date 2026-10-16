@@ -1,0 +1,821 @@
+{
+ "arquivos": 78,
+ "regras": 19415,
+ "bytes": 6317108,
+ "seletores_distintos": 15738,
+ "seletores_em_3mais": 160,
+ "conflitos": 358,
+ "tokens": 1702,
+ "tokens_com_varios_valores": 204,
+ "top_conflitos": [
+  {
+   "seletor": "html body#html-body.checkout-cart-index .page-wrapper .cart-container",
+   "prop": "gap",
+   "valores": [
+    "12px !important",
+    "16px !important",
+    "var(--awa-cart-gap-lg) !important",
+    "var(--awa-cart-gap-md) !important",
+    "var(--awa-grid-card-gap) !important",
+    "var(--awa-grid-section-gap) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-cart-shell-final.css"
+   ]
+  },
+  {
+   "seletor": "html",
+   "prop": "scroll-padding-top",
+   "valores": [
+    "112px !important",
+    "128px !important",
+    "96px !important",
+    "var(--awa-header-height, 100px) !important",
+    "var(--awa-header-scroll-offset, 116px)",
+    "var(--awa-header-scroll-offset, 116px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-defer-global-bundle.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-standardization-20261004.css"
+   ]
+  },
+  {
+   "seletor": ":is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .page-wrapper .header .header_main :is(.awa-main-h",
+   "prop": "grid-template-columns",
+   "valores": [
+    "var(--awa-gtc-1-minmax, minmax(0, 1fr))",
+    "var(--awa-gtc-60-1fr, 60px minmax(0, 1fr))",
+    "var(--awa-gtc-66-1fr, 66px minmax(0, 1fr))",
+    "var(--awa-gtc-68-1fr, 68px minmax(0, 1fr))",
+    "var(--awa-gtc-clamp-md, clamp(74px, 22vw, 96px) minmax(0, 1fr))",
+    "var(--awa-gtc-clamp-sm, clamp(72px, 22vw, 94px) minmax(0, 1fr))"
+   ],
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-benefits-bar .awa-benefi",
+   "prop": "gap",
+   "valores": [
+    "0 !important",
+    "10px !important",
+    "12px !important",
+    "6px !important",
+    "8px !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-c",
+   "prop": "min-width",
+   "valores": [
+    "120px !important",
+    "88px !important",
+    "96px !important",
+    "clamp(112px, 10vw, 148px) !important",
+    "clamp(118px, 10vw, 144px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf-",
+   "prop": "background",
+   "valores": [
+    "transparent !important",
+    "var(--awa-bg-muted, var(--awa-bg-subtle)) !important",
+    "var(--awa-bg-soft) !important",
+    "var(--awa-home-quiet-surface) !important",
+    "var(--awa-home-quiet-surface, var(--awa-bg-soft, var(--awa-bg-subtle))) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body.catalog-product-view .page-wrapper .main-detail > .row",
+   "prop": "gap",
+   "valores": [
+    "0 !important",
+    "12px !important",
+    "8px !important",
+    "var(--awa-grid-rhythm-md, 12px) !important",
+    "var(--awa-space-4, 16px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body.checkout-cart-index .page-wrapper .cart-container",
+   "prop": "grid-template-columns",
+   "valores": [
+    "minmax(0, 1fr) !important",
+    "minmax(0, 1fr) minmax(280px, 320px) !important",
+    "minmax(0, 1fr) minmax(280px, 360px) !important",
+    "minmax(0, 1fr) minmax(296px, 340px) !important",
+    "minmax(0, 1fr) minmax(312px, 352px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-cart-shell-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-",
+   "prop": "gap",
+   "valores": [
+    "12px !important",
+    "var(--awa-density-3) !important",
+    "var(--awa-grid-rhythm-md, 12px) !important",
+    "var(--awa-home-section-gap) !important",
+    "var(--awa-home-section-gap, 12px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-",
+   "prop": "row-gap",
+   "valores": [
+    "12px !important",
+    "var(--awa-density-3) !important",
+    "var(--awa-grid-rhythm-md, 12px) !important",
+    "var(--awa-home-section-gap) !important",
+    "var(--awa-home-section-gap, 12px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-hero-benefits",
+   "prop": "gap",
+   "valores": [
+    "12px !important",
+    "16px !important",
+    "8px !important",
+    "var(--awa-density-2) !important",
+    "var(--awa-density-3) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-header-mobile-grid-critical.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body #awa-cookie-banner .awa-cookie-banner__inner",
+   "prop": "padding",
+   "valores": [
+    "10px 20px !important",
+    "12px !important",
+    "12px 16px !important",
+    "8px 12px !important",
+    "var(--awa-space-3, 12px) var(--awa-container-pad, 24px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css"
+   ]
+  },
+  {
+   "seletor": "html",
+   "prop": "overflow-x",
+   "valores": [
+    "clip",
+    "clip !important",
+    "clip!important",
+    "hidden",
+    "hidden !important"
+   ],
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-structural-fix-2026-05-20.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": ":root",
+   "prop": "--awa-text",
+   "valores": [
+    "#333333",
+    "#3f454d",
+    "var(--awa-ink)",
+    "var(--awa-sg-c54, #333333)",
+    "var(--awa-text-main)"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ]
+  },
+  {
+   "seletor": ":root",
+   "prop": "--awa-gap",
+   "valores": [
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ],
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ]
+  },
+  {
+   "seletor": ":root",
+   "prop": "--awa-grid-gap",
+   "valores": [
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ],
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home",
+   "prop": "padding-inline",
+   "valores": [
+    "0 !important",
+    "16px !important",
+    "24px !important",
+    "var(--awa-home-shell-gutter, 16px) !important",
+    "var(--awa-home-shell-gutter, 24px) !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css"
+   ]
+  },
+  {
+   "seletor": "body.catalog-product-view .awa-pdp-trust-bar",
+   "prop": "grid-template-columns",
+   "valores": [
+    "repeat(2, 1fr)",
+    "repeat(2, minmax(0, 1fr)) !important",
+    "repeat(4, 1fr)",
+    "repeat(4, minmax(0, 1fr)) !important",
+    "repeat(auto-fit, minmax(min(7.5rem, 100%), 1fr)) !important"
+   ],
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-pdp-premium.css"
+   ]
+  },
+  {
+   "seletor": "#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .awa-shelf--carousel .awa-carousel__track>:is(.awa-car",
+   "prop": "max-width",
+   "valores": [
+    "20%!important",
+    "25%!important",
+    "33.333%!important",
+    "50%!important",
+    "87%!important"
+   ],
+   "arquivos": [
+    "awa-head-preload-critical-home.css"
+   ]
+  },
+  {
+   "seletor": "body .page-wrapper .cat_special",
+   "prop": "grid-template-columns",
+   "valores": [
+    "repeat(7, 1fr)",
+    "var(--awa-gtc-2, repeat(2, 1fr))",
+    "var(--awa-gtc-3, repeat(3, 1fr))",
+    "var(--awa-gtc-4, repeat(4, 1fr))",
+    "var(--awa-gtc-5, repeat(5, 1fr))"
+   ],
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ]
+  }
+ ],
+ "top_repetidos": [
+  {
+   "seletor": ":root",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-audit-bundle.css",
+    "awa-carousel-contract.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-cookie-consent-fix.css",
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-head-tail-bundle.css",
+    "awa-home-visual-bugfixes-2026-06-28.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-interaction-widgets.css",
+    "awa-round9-post-themeoption-overrides.css",
+    "awa-structural-fix-2026-05-20.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css",
+    "awa-ui-ux-pro-max-header-2026-05-19.css",
+    "awa-vfix-b2b-auth.css",
+    "awa-vfix-cms-b2b.css",
+    "awa-vfix-pdp.css",
+    "awa-vfix-plp-search.css"
+   ]
+  },
+  {
+   "seletor": "html",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-audit-bundle.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-standardization-20261004.css",
+    "awa-structural-fix-2026-05-20.css",
+    "awa-super-global-20260611m.css",
+    "awa-third-party-bundle.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "body",
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-head-tail-bundle.css",
+    "awa-structural-fix-2026-05-20.css",
+    "awa-super-global-20260611m.css",
+    "awa-third-party-bundle.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body",
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-m2-visual-ssot.css",
+    "awa-standardization-20261004.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body .page-wrapper",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-m2-visual-ssot.css",
+    "awa-visual-fixes-2026-06-29-final.css",
+    "awa-visual-qa-fixes-2026-06-17.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body #awa-cookie-banner .awa-cookie-banner__link",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-cookie-consent-fix.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-m2-visual-ssot.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-c",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-carousel-bundle.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .awa-plp-b2b-gate-banner",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-plp-shell-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-header-mobile-grid-critical.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-m2-visual-ssot.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-home-b2b-ops-density-20260805.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html, body",
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body #awa-cookie-banner :is(p#awa-cookie-desc, .awa-cookie-banner__text)",
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-cookie-consent-fix.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-m2-visual-ssot.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__i",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-m2-visual-ssot.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-c",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body.checkout-cart-index .page-wrapper .cart-summary",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-cart-shell-final.css",
+    "awa-cart-stack.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-home-density-grid-20260611.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body .page-wrapper .awa-site-header .awa-header-search-col",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-home-visual-bugfixes-2026-06-28.css",
+    "awa-m2-visual-ssot.css"
+   ]
+  },
+  {
+   "seletor": "html body#html-body.checkout-cart-index",
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-cart-shell-final.css",
+    "awa-cart-stack.css",
+    "awa-design-system.css"
+   ]
+  }
+ ],
+ "poluidores": [
+  {
+   "arquivo": "awa-super-global-20260611m.css",
+   "declaracoes_em_conflito": 352
+  },
+  {
+   "arquivo": "awa-align-grid-terminal-2026-06-11.css",
+   "declaracoes_em_conflito": 269
+  },
+  {
+   "arquivo": "awa-design-system.css",
+   "declaracoes_em_conflito": 165
+  },
+  {
+   "arquivo": "awa-defer-global-bundle.css",
+   "declaracoes_em_conflito": 98
+  },
+  {
+   "arquivo": "awa-header-contract-grid-20260626.css",
+   "declaracoes_em_conflito": 48
+  },
+  {
+   "arquivo": "awa-visual-fixes-2026-06-29-final.css",
+   "declaracoes_em_conflito": 45
+  },
+  {
+   "arquivo": "awa-commerce-impeccable-refine.css",
+   "declaracoes_em_conflito": 43
+  },
+  {
+   "arquivo": "awa-third-party-bundle.css",
+   "declaracoes_em_conflito": 38
+  },
+  {
+   "arquivo": "awa-audit-bundle.css",
+   "declaracoes_em_conflito": 30
+  },
+  {
+   "arquivo": "awa-head-tail-bundle.css",
+   "declaracoes_em_conflito": 26
+  }
+ ],
+ "tokens_conflitantes": [
+  {
+   "token": "--awa-header-stack-h",
+   "valores": [
+    "112px !important",
+    "112px!important",
+    "116px!important",
+    "128px",
+    "140px !important",
+    "140px!important",
+    "156px !important",
+    "156px!important"
+   ]
+  },
+  {
+   "token": "--awa-header-scroll-offset",
+   "valores": [
+    "112px",
+    "112px !important",
+    "116px",
+    "116px !important",
+    "116px!important",
+    "128px !important",
+    "128px!important",
+    "160px!important"
+   ]
+  },
+  {
+   "token": "--awa-header-main-row-h",
+   "valores": [
+    "56px",
+    "56px!important",
+    "64px",
+    "64px !important",
+    "68px",
+    "68px !important",
+    "68px!important",
+    "72px"
+   ]
+  },
+  {
+   "token": "--awa-header-sticky-h",
+   "valores": [
+    "112px !important",
+    "112px!important",
+    "116px",
+    "116px!important",
+    "68px !important",
+    "96px !important",
+    "96px!important",
+    "calc(56px + var(--awa-header-nav-h,48px))!important"
+   ]
+  },
+  {
+   "token": "--awa-header-nav-h",
+   "valores": [
+    "0px !important",
+    "40px",
+    "44px",
+    "44px !important",
+    "46px",
+    "48px",
+    "48px !important",
+    "48px!important"
+   ]
+  },
+  {
+   "token": "--awa-header-promo-h",
+   "valores": [
+    "0px",
+    "0px !important",
+    "0px!important",
+    "32px",
+    "36px",
+    "44px",
+    "44px !important",
+    "44px!important"
+   ]
+  },
+  {
+   "token": "--awa-bg-surface",
+   "valores": [
+    "#1e293b!important",
+    "#fff",
+    "#ffffff",
+    "var(--awa-bg)",
+    "var(--awa-gray-50,var(--awa-bg-subtle))",
+    "var(--awa-sg-c35)",
+    "var(--awa-white, #fff)",
+    "var(--awa-white, var(--audit-white))"
+   ]
+  },
+  {
+   "token": "--awa-grid-gap",
+   "valores": [
+    "12px",
+    "12px !important",
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ]
+  },
+  {
+   "token": "--awa-home-section-gap",
+   "valores": [
+    "12px",
+    "8px",
+    "8px). */\n@media (max-width: 767px) {\n  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)\n    .page-wrapper\n    .content-top-home,\n  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)\n    .page-wrapper\n    .content-top-home\n    .ayo-home5-wrapper--template-driven {\n    --awa-home-section-gap: 12px !important",
+    "clamp(32px, 5vw, 56px)",
+    "var(--awa-stack-tight, 12px)",
+    "var(--awa-stack-tight, var(--awa-space-3, 12px))",
+    "var(--awa-stack-tight,var(--awa-space-3,12px))"
+   ]
+  },
+  {
+   "token": "--awa-text-primary",
+   "valores": [
+    "#111827",
+    "#f1f5f9!important",
+    "var(--awa-bg)",
+    "var(--awa-color-text-primary, var(--awa-text))",
+    "var(--awa-ink)",
+    "var(--awa-text)",
+    "var(--awa-text, #0f172a)"
+   ]
+  },
+  {
+   "token": "--awa-page-pad",
+   "valores": [
+    "16px",
+    "16px !important",
+    "16px!important",
+    "24px !important",
+    "24px!important",
+    "var(--awa-acct-shell-pad)"
+   ]
+  },
+  {
+   "token": "--awa-text-muted",
+   "valores": [
+    "#6b7280",
+    "#94a3b8!important",
+    "rgba(255, 255, 255, 0.85)",
+    "var(--awa-ink-soft)",
+    "var(--awa-sg-c53, var(--awa-text-secondary))",
+    "var(--awa-text-secondary)"
+   ]
+  },
+  {
+   "token": "--awa-border",
+   "valores": [
+    "#334155!important",
+    "#e2e8f0",
+    "#e5e7eb",
+    "var(--awa-line)",
+    "var(--awa-sg-c19)",
+    "var(--awa-sg-c27, #e5e5e5)"
+   ]
+  },
+  {
+   "token": "--awa-grid-container-pad",
+   "valores": [
+    "16px",
+    "16px !important",
+    "24px",
+    "24px !important",
+    "24px!important"
+   ]
+  },
+  {
+   "token": "--awa-header-shell-pad",
+   "valores": [
+    "12px",
+    "16px",
+    "16px!important",
+    "24px !important",
+    "24px!important"
+   ]
+  },
+  {
+   "token": "--awa-header-col-gap",
+   "valores": [
+    "12px",
+    "16px",
+    "18px",
+    "28px !important",
+    "28px!important"
+   ]
+  },
+  {
+   "token": "--awa-radius-md",
+   "valores": [
+    "12px",
+    "14px",
+    "8px",
+    "8px !important",
+    "var(--awa-radius-m)"
+   ]
+  },
+  {
+   "token": "--awa-bg",
+   "valores": [
+    "#fff",
+    "#ffffff",
+    "var(--awa-sg-c35, #ffffff)",
+    "var(--awa-surface)",
+    "var(--awa-white, #fff)"
+   ]
+  },
+  {
+   "token": "--awa-text",
+   "valores": [
+    "#333333",
+    "#3f454d",
+    "var(--awa-ink)",
+    "var(--awa-sg-c54, #333333)",
+    "var(--awa-text-main)"
+   ]
+  },
+  {
+   "token": "--awa-gap",
+   "valores": [
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ]
+  }
+ ]
+}

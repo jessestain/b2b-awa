@@ -186,4 +186,30 @@ class AlertRepository implements AlertRepositoryInterface
 
         return $collection->getItems();
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * IMPORTANTE (task-49): nao altera notified_at — a coluna pertence ao cooldown do
+     * consumidor (Cron/AlertProcessor.php). O save() grava o valor carregado, sem reabrir o flood.
+     */
+    public function getLatestOpenAlert(string $alertType, string $severity, string $source): ?AlertInterface
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('alert_type', $alertType)
+            ->addFieldToFilter('severity', $severity)
+            ->addFieldToFilter('source', $source)
+            ->addFieldToFilter('status', AlertInterface::STATUS_OPEN)
+            ->setOrder('last_occurrence', 'DESC')
+            ->setOrder('entity_id', 'DESC')
+            ->setPageSize(1);
+
+        $alert = $collection->getFirstItem();
+
+        if (!$alert || !$alert->getEntityId()) {
+            return null;
+        }
+
+        return $alert;
+    }
 }

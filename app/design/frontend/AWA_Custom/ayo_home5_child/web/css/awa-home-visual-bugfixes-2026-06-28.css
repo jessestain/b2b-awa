@@ -617,7 +617,7 @@ html body#html-body.cms-index-index {
     --awa-home-surface: var(--awa-bg, Canvas);
     --awa-home-surface-soft: var(--awa-surface-subtle, color-mix(in srgb, CanvasText 3%, Canvas));
     --awa-home-ink: var(--awa-text, CanvasText);
-    --awa-home-muted: var(--awa-muted, color-mix(in srgb, CanvasText 62%, Canvas));
+    --awa-home-muted: var(--awa-muted, color-mix(in srgb, canvastext 62%, canvas)));
     --awa-home-line: var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas));
     --awa-home-brand: var(--awa-primary, currentColor);
     --awa-home-footer-bg: color-mix(in srgb, var(--awa-home-brand) 82%, black);
@@ -633,7 +633,7 @@ html body#html-body.cms-index-index .page-wrapper .awa-home-pricing-notice {
 
 html body#html-body.cms-index-index .page-wrapper .awa-home-pricing-notice .container {
     max-width: var(--awa-home-shell-max, 1280px);
-    padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px));
+    padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px)));
 }
 
 html body#html-body.cms-index-index .page-wrapper .awa-home-pricing-notice__inner {
@@ -710,7 +710,7 @@ html body#html-body.cms-index-index .page-wrapper .awa-home-pricing-notice__hint
 html body#html-body.cms-index-index .page-wrapper .awa-category-carousel__track,
 html body#html-body.cms-index-index .page-wrapper .awa-reel {
     gap: clamp(10px, 2vw, 16px);
-    scroll-padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px));
+    scroll-padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px)));
     scroll-snap-type: x proximity;
 }
 
@@ -723,7 +723,7 @@ html body#html-body.cms-index-index .page-wrapper .awa-category-carousel__track:
 html body#html-body.cms-index-index .page-wrapper .awa-reel::after {
     content: "";
     display: block;
-    flex: 0 0 var(--awa-home-pad, 16px);
+    flex: 0 0 var(--awa-home-pad, clamp(16px, 3.5vw, 32px));
 }
 
 html body#html-body.cms-index-index .page-wrapper :is(.awa-carousel-shell, .awa-shelf--carousel, .swiper, .owl-carousel) {
@@ -787,7 +787,7 @@ html body#html-body.cms-index-index .page-wrapper :is(.page_footer, .page-footer
 
 html body#html-body.cms-index-index .page-wrapper :is(.page_footer, .page-footer) .awa-footer-newsletter > .container {
     max-width: var(--awa-home-shell-max, 1280px);
-    padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px));
+    padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px)));
 }
 
 /* Terminal layout override: parent CMS grid compressed the newsletter copy column. */

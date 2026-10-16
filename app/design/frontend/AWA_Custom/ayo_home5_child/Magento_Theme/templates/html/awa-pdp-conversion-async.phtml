@@ -488,10 +488,17 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related :is(
 
     function localizeFotoramaLabels(root) {
         var scope = root && root.querySelectorAll ? root : d;
+        var stage = scope.querySelector ? scope.querySelector('.fotorama__stage') : null;
+        if (stage && !stage.getAttribute('aria-label')) {
+            stage.setAttribute('role', 'region');
+            stage.setAttribute('aria-roledescription', <?= json_encode((string) __('galeria de imagens'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>);
+            stage.setAttribute('aria-label', <?= json_encode((string) __('Imagens do produto'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>);
+        }
         var labels = {
             'Previous': 'Imagem anterior',
             'Next': 'Próxima imagem',
             'Exit fullscreen': 'Sair da tela cheia',
+            'Fullscreen': 'Tela cheia',
             'Zoom in': 'Ampliar imagem',
             'Zoom out': 'Reduzir imagem'
         };
@@ -507,7 +514,12 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related :is(
         });
     }
 
-    var galleryRoot = d.querySelector('.product.media, .gallery-placeholder');
+    // A galeria é montada pelo RequireJS DEPOIS do DOMContentLoaded: resolve a raiz
+    // na hora da chamada (capturar no parse dava null e o observer nem era criado).
+    function fotoramaScope() {
+        return d.querySelector('.product.media, .gallery-placeholder') || d;
+    }
+    var galleryRoot = fotoramaScope();
     var localizeTimer = null;
 
     function scheduleFotoramaLabelLocalization(root) {
@@ -521,43 +533,60 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related :is(
         }, 80);
     }
 
-    localizeFotoramaLabels(galleryRoot || d);
+    localizeFotoramaLabels(fotoramaScope());
     d.addEventListener('DOMContentLoaded', function () {
-        scheduleFotoramaLabelLocalization(galleryRoot || d);
+        scheduleFotoramaLabelLocalization(fotoramaScope());
     }, { once: true });
     d.addEventListener('fotorama:ready', function () {
-        scheduleFotoramaLabelLocalization(galleryRoot || d);
+        scheduleFotoramaLabelLocalization(fotoramaScope());
     });
     d.addEventListener('fotorama:show', function () {
-        scheduleFotoramaLabelLocalization(galleryRoot || d);
+        scheduleFotoramaLabelLocalization(fotoramaScope());
     });
 
-    if (w.MutationObserver && galleryRoot) {
+    // O script roda no HEAD: `d.body` ainda não existe no parse. Observar o
+    // documentElement (que existe) — sem isso o observer nunca era criado.
+    if (w.MutationObserver) {
         var observer = new MutationObserver(function (mutations) {
             var shouldLocalize = false;
 
             for (var i = 0; i < mutations.length; i++) {
-                if (mutations[i].type === 'childList') {
+                if (mutations[i].type === 'childList' || mutations[i].type === 'attributes') {
                     shouldLocalize = true;
                     break;
                 }
             }
 
             if (shouldLocalize) {
-                scheduleFotoramaLabelLocalization(galleryRoot);
+                scheduleFotoramaLabelLocalization(fotoramaScope());
             }
         });
 
-        observer.observe(galleryRoot, {
+        observer.observe(d.documentElement, {
             subtree: true,
-            childList: true
+            childList: true,
+            attributes: true,
+            attributeFilter: ['aria-label', 'title']
         });
 
         // Evita observer permanente na PDP apos a galeria estabilizar.
         w.setTimeout(function () {
             observer.disconnect();
-        }, 15000);
+        }, 60000);
     }
 
+    // O rótulo do botão de tela cheia ALTERNA (Fullscreen <-> Exit fullscreen) e muda
+    // depois que o observer se desconecta aos 15s: re-localiza no clique (captura).
+    // Medido 12/10/2026: sem isto o rótulo voltava ao inglês.
+    d.addEventListener('click', function () {
+        scheduleFotoramaLabelLocalization(fotoramaScope());
+    }, true);
+
+    // Rede de segurança: a galeria aparece em momentos diferentes conforme o cache/3G.
+    [300, 1000, 2500, 5000, 8000, 12000].forEach(function (atraso) {
+        w.setTimeout(function () {
+            localizeFotoramaLabels(fotoramaScope());
+        }, atraso);
+    });
 })(window, document);
 </script>

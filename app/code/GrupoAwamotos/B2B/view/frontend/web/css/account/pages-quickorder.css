@@ -125,7 +125,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: var(--awa-sp-2, 8px);
     cursor: pointer;
     text-align: left;
     padding: 10px 12px;
@@ -168,9 +168,9 @@
 
 .b2b-quickorder .quickorder-actions {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    padding-top: 20px;
+    gap: var(--awa-sp-3, 12px);
+    margin-top: var(--awa-sp-5, 24px);
+    padding-top: var(--awa-sp-5, 24px);
     border-top: 1px solid var(--awa-border);
 }
 
@@ -221,7 +221,7 @@
     position: relative;
     border: 2px dashed var(--awa-border);
     border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
-    padding: 28px 20px;
+    padding: var(--awa-sp-5, 24px) var(--awa-sp-5, 24px);
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s, background-color 0.2s;

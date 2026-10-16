@@ -51,7 +51,7 @@ body.catalog-product-view .fotorama__fullscreen-icon {
 
 /* --- 2. PRODUCT TITLE (SSOT — alinhado ao cascade/align-grid) --- */
 body.catalog-product-view .page-title-wrapper .page-title .base {
-  font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif);
+  font-family: var(--awa-font-heading, 'rubik', arial, sans-serif);
   font-size: clamp(1.125rem, 1.05rem + 0.45vw, 1.375rem);
   font-weight: 700;
   line-height: 1.3;

@@ -99,6 +99,16 @@
                     <comment>Exibida ao cliente após cadastro</comment>
                 </field>
 
+                <field id="rejected_message" translate="label comment" type="textarea" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mensagem para Cadastro Rejeitado</label>
+                    <comment>Exibida quando o cadastro B2B é recusado. Aceita HTML (ex.: link do WhatsApp).</comment>
+                </field>
+
+                <field id="suspended_message" translate="label comment" type="textarea" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mensagem para Conta Suspensa</label>
+                    <comment>Exibida quando a conta B2B está suspensa/bloqueada. Aceita HTML (ex.: link do WhatsApp).</comment>
+                </field>
+
                 <field id="send_approval_email" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enviar E-mail de Aprovação</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

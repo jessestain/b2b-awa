@@ -1,0 +1,28 @@
+BUG: alvo de toque do breadcrumb no mobile (WCAG 2.5.8) — 05/10/2026
+====================================================================
+MEDIDO ANTES:  <a> "Inicio" = 28x17px  (minimo WCAG 2.5.8 = 24x24)
+MEDIDO DEPOIS: <a> "Inicio" = 44x44px  ✓
+DESKTOP:       <a> 44x24px, inline style VAZIO (zero regressao)
+
+CAUSA RAIZ (3 camadas se anulando):
+  a) awa-head-preload.phtml:1590 @media <=767px  min-height:0!important no .nav-breadcrumbs
+  b) awa-design-system.css e awa-align-grid-terminal  min-height:0!important (6x/12x #html-body)
+  c) <a> era display:inline — min-height NAO se aplica pela spec
+  d) awa-ux-enhancements.js escreve style INLINE com !important (forceTouch44)
+     -> vence qualquer CSS, inclusive !important dentro de @layer
+
+PROVA DE QUE ERA JS: 7 variacoes de CSS testadas (incluindo 16x #html-body e @layer novo)
+  — NENHUMA venceu. Teste manual aplicando as props: 17px -> 44px.
+
+DESCOBERTA COLATERAL: o tema BUNDLA o JS (js/bundle/bundle7.min.js, bundle8.min.js)
+  e ha DUAS copias por locale (pt_BR e en_US), sendo en_US a servida.
+  Editar o arquivo avulso NAO tem efeito.
+
+CORRECAO: script inline no awa-head-preload.phtml, mesmo mecanismo (setProperty !important),
+  so em mobile, com limpeza ao cruzar o breakpoint e reaplicacao em rAF/timeout.
+  + padding-block:4px no link do cookie banner (18px -> >=24px).
+
+ALVOS PEQUENOS NO MOBILE: 6 -> 0
+GATE DE REGRESSAO: 26/26 PASS
+BACKUPS: _backups/alvo-preload-* / alvo-inline-* / alvo-cookie-* / alvo-js-*
+PENDENTE: desktop ainda tem 5 alvos pequenos (mouse; WCAG 2.5.8 tem excecao)

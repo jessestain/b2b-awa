@@ -1394,7 +1394,7 @@
                     setImportantStyle(link, 'display', 'inline-flex');
                     setImportantStyle(link, 'align-items', 'center');
                     setImportantStyle(link, 'height', 'auto');
-                    setImportantStyle(link, 'min-height', '0');
+                    setImportantStyle(link, 'min-height', '32px');
                     setImportantStyle(link, 'max-height', 'none');
                     setImportantStyle(link, 'font-size', '13px');
                     setImportantStyle(link, 'line-height', '1.2');
@@ -1402,7 +1402,7 @@
                     setImportantStyle(link, 'background', 'transparent');
                     setImportantStyle(link, 'background-color', 'transparent');
                     setImportantStyle(link, 'color', 'var(--awa-primary)');
-                    setImportantStyle(link, 'padding', '0 2px');
+                    setImportantStyle(link, 'padding', '4px 6px');
                     setImportantStyle(link, 'margin', '0');
                     setImportantStyle(link, 'border', '0');
                     setImportantStyle(link, 'box-shadow', 'none');

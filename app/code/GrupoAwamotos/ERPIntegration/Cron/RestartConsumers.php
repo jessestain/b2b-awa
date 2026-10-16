@@ -16,6 +16,7 @@ class RestartConsumers
         'erp.order.sync.consumer',
         'erp.order.sync.retry.consumer',
         'grupoawamotos.b2b.whatsapp.consumer',
+        'product_alert',
     ];
 
     public function __construct(

@@ -413,9 +413,9 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   > .top-home-content--above-fold
   .wrapper_slider.hidden-xs
   :is(.awa-hero-swiper, .swiper-wrapper, .swiper-slide, .banner_item, .banner_item_bg) {
-  height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px)) !important;
-  min-height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px)) !important;
-  max-height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px)) !important;
+  height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px))) !important;
+  min-height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px))) !important;
+  max-height: var(--awa-b2b-ops-hero-h, clamp(176px, 24.5vw, 472px))) !important;
   aspect-ratio: auto !important;
 }
 }

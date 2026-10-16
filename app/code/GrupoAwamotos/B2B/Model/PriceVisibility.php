@@ -232,7 +232,26 @@ class PriceVisibility implements PriceVisibilityInterface
                 return !empty($msg) ? $msg : 'Sua tabela de preços está sendo definida. Consulte o departamento de vendas.';
             }
 
-            // Pendente, rejeitado ou suspenso
+            // FIX F-02 (2026-10-14): rejeitado/suspenso recebem mensagem própria com canal
+            // de contato. Antes caíam na mensagem genérica de "conta em análise/será aprovada",
+            // o que é falso para quem foi recusado ou bloqueado.
+            if ($approvalStatus === ApprovalStatus::STATUS_REJECTED) {
+                $rejectedMsg = $this->config->getRejectedMessage();
+                if (!empty($rejectedMsg)) {
+                    return $rejectedMsg;
+                }
+                return 'Seu cadastro B2B não foi aprovado. Fale com nosso time pelo WhatsApp (16) 99736-7588 para revisar seu caso.';
+            }
+
+            if ($approvalStatus === ApprovalStatus::STATUS_SUSPENDED) {
+                $suspendedMsg = $this->config->getSuspendedMessage();
+                if (!empty($suspendedMsg)) {
+                    return $suspendedMsg;
+                }
+                return 'Sua conta B2B está suspensa. Fale com nosso time pelo WhatsApp (16) 99736-7588 para regularizar o acesso.';
+            }
+
+            // Pendente / revisão de cadastro
             if ($approvalStatus && $approvalStatus !== ApprovalStatus::STATUS_APPROVED) {
                 $pendingMsg = $this->config->getPendingMessage();
                 if (!empty($pendingMsg)) {
@@ -274,7 +293,7 @@ class PriceVisibility implements PriceVisibilityInterface
                 'UTF-8'
             );
             $message .= sprintf(
-                ' <a href="%s" class="b2b-register-cta">%s</a>',
+                ' <a href="%s" class="b2b-register-cta" style="background:transparent!important;color:var(--awa-primary,#b73337)!important;-webkit-text-fill-color:var(--awa-primary,#b73337)!important;text-decoration:underline!important">%s</a>',
                 $safeRegisterUrl,
                 $registerLabel
             );
@@ -521,6 +540,38 @@ class PriceVisibility implements PriceVisibilityInterface
         }
 
         return $this->httpContext->getValue(self::CONTEXT_PRICE_LIST) === 'logged_in';
+    }
+
+    /**
+     * HOTFIX B2B-AUTH (13/10): regra explicita por cliente (REST/GraphQL).
+     * Replica canAddToCart() sem depender da sessao/contexto do frontend.
+     */
+    public function canAddToCartForCustomer(int $customerId): bool
+    {
+        if ($customerId <= 0) {
+            return false;
+        }
+        if (!$this->config->isEnabled()) {
+            return true;
+        }
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+            $status = $customer->getCustomAttribute('b2b_approval_status');
+            $status = $status ? (string) $status->getValue() : '';
+            if ($status !== ApprovalStatus::STATUS_APPROVED) {
+                return false;
+            }
+            if ($this->config->hidePriceForNoErp()
+                && $this->erpCodeResolver !== null
+                && $this->erpCodeResolver->resolveForCustomerId($customerId, $customer) === null
+            ) {
+                return false;
+            }
+            return true;
+        } catch (\Throwable $e) {
+            $this->logDebug('canAddToCartForCustomer', 'error_' . $e->getMessage());
+            return false;
+        }
     }
 
     private function isApprovedCustomerMissingErp(): bool

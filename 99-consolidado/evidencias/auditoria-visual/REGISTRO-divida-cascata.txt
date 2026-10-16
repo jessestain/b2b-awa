@@ -1,0 +1,54 @@
+DIVIDA DE CASCATA — mapa e metrica (05/10/2026)
+================================================
+3 METODOS TESTADOS, 2 REFUTADOS:
+
+1) Parser CSS em Node (tools/awa-css-morto.mjs)
+   -> FATAL ERROR: Reached heap limit (4 GB). DESCARTA DO.
+
+2) CSSOM do navegador (probe-css-morto.js)
+   -> 85 folhas · 20.709 regras · 179.565 declaracoes · 61.143 "mortas" = 34,1%
+   -> INFLADO. 2 defeitos: (a) split(',') quebra :is()/:where() com virgula
+      interna (saida tinha seletor com parentese solto = invalido);
+      (b) CSSOM resolve var(), entao comparava "var(--awa-ink)" com
+      "rgb(255,255,255)" = A MESMA declaracao; e contava 'position: static'
+      (valor inicial) como override. DESCARTA DO.
+
+3) Texto cru conservador (tools/awa-css-morto2.mjs)
+   -> design system: 1.536 regras · 12.053 declaracoes · 10.706 grupos
+      · 40 mortas = 0,3%
+   -> e as "mortas" sao quase todas EVOLUCAO DE TOKEN:
+      --awa-h-control 40px -> 44px · --awa-h-cta 34px -> 44px
+      --awa-text #3f454d -> var(--awa-ink)
+   -> CONCLUSAO: o design system esta LIMPO (0,3%), nao 34%.
+
+4) "Densidade de cascata" (probe-densidade-cascata.js)
+   -> v1 tinha bug: cacheava el.matches(sel) por SELETOR, mas depende do
+      ELEMENTO -> o primeiro envenenava o cache e todos os 630 elementos
+      reportavam "23 regras / 142 disputas" (identico para todos = impossivel)
+   -> v2 (indice por token): media 46 regras/elemento, max 349, max 6.952
+   -> MAS o controle do breadcrumb (17 regras medidas a mao) deu 52 = 3x inflado
+      porque conta regras DESCENDENTES que casam em ancestrais
+      (body "casa 1333 regras" — verdade inutil). NAO CONFIAVEL.
+
+A METRICA QUE SE DEFENDE — VALORES DISTINTOS POR PROPRIEDADE:
+  <a> do breadcrumb .......... 6 valores de line-height
+                               (1.25 | 24px | 36px | 1.4 | 1.35 | 1.45)
+                               *** e o EFETIVO era 15px — NENHUM deles ***
+                               (vinha de font-size x normal)
+  a.product-item-link ........ 27 regras definem min-height, 8 valores distintos
+  div#awa-b2b-promo-bar ...... 124 regras definem min-height, 10 valores distintos
+
+FOLHAS QUE CONVERGEM NO MESMO ELEMENTO (8-12):
+  awa-visual-fixes-2026-06-29-final · awa-design-system · awa-defer-global-bundle
+  awa-layout-bundle-20260611m · awa-align-grid-terminal-2026-06-11
+  awa-plp-critical-fixes · awa-plp-ui-promax-2026-05-22 · (inline)
+
+NAO QUANTIFICADO (declarado):
+  nao existe numero confiavel de "quanto CSS e desperdicio" neste tema.
+
+CAMINHO RECOMENDADO (com evidencia):
+  1. escolher UM elemento por vez pelo criterio "nº de valores distintos"
+     (nao por nº de regras)
+  2. usar o METODO DO JUIZ (desabilitar a regra na CSSOM e medir) — foi o
+     unico que achou o vencedor real no breadcrumb
+  3. publicar e medir antes/depois, um por vez

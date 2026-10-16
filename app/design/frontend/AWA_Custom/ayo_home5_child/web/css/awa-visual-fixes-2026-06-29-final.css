@@ -49,7 +49,7 @@
     height: 44px !important;
     padding: 0 24px !important;
     border-radius: 8px !important;
-    background: #b73337 !important;
+    background: var(--awa-brand) !important;
     color: #fff !important;
     font-weight: 700 !important;
 }
@@ -93,7 +93,7 @@
     padding: 12px !important;
 }
 .b2b-login-to-see-price .b2b-login-to-see-price__title {
-    color: #b73337 !important;
+    color: var(--awa-brand) !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
 }
@@ -1149,7 +1149,7 @@ html body#html-body .awa-home-section:not(.top-home-content--above-fold),
 html body#html-body .top-home-content:not(.top-home-content--above-fold),
 html body#html-body .ayo-home5-section:not(.top-home-content--above-fold) {
     padding-block: var(--awa-home-section-gap, 16px) !important;
-    padding-inline: var(--awa-home-pad, 16px) !important;
+    padding-inline: var(--awa-home-pad, clamp(16px, 3.5vw, 32px)) !important;
 }
 
 /*
@@ -1542,8 +1542,8 @@ body .page-wrapper .block-search input.input-text#search {
 :root,
 html,
 body {
-    --awa-input-height: 44px !important;
-    --awa-control-height: 44px !important;
+    --awa-input-height: 44px!important;
+    --awa-control-height: 44px!important;
 }
 html body#html-body #search,
 html body#html-body input#search {
@@ -2128,7 +2128,7 @@ html body#html-body#html-body#html-body input.input-text#search {
         html body#html-body .page-wrapper [class*="back-to-top"]:not([hidden]).is-visible {
             position: fixed !important;
             /* Acima do bottom-nav (72px) + folga — evita cobrir copyright do footer */
-            bottom: calc(var(--awa-mobile-bottom-nav-h, 72px) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+            bottom: calc(var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 16px + env(safe-area-inset-bottom, 0px)) !important;
             right: 12px !important;
             z-index: 998 !important;
             width: 44px !important;
@@ -2338,8 +2338,8 @@ html body#html-body#html-body#html-body input.input-text#search {
     }
 
     /* Links do footer — denso no desktop; touch 44px só no mobile */
-    html body#html-body .page-wrapper .page-footer a,
-    html body#html-body .page-wrapper footer a {
+    html body#html-body .page-wrapper .page-footer a:not(.awa-footer-pro__social-link),
+    html body#html-body .page-wrapper footer a:not(.awa-footer-pro__social-link) {
         display: inline-flex !important;
         align-items: center !important;
         min-height: 0 !important;
@@ -2412,7 +2412,7 @@ html body#html-body#html-body#html-body input.input-text#search {
 
     html body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold .wrapper_slider.hidden-xs .awa-hero-swiper > .awa-hero-pause-btn {
         align-items: center !important;
-        background: color-mix(in srgb, var(--awa-primary, #b73337) 78%, white 22%) !important;
+        background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 78%, white 22%) !important;
         border-radius: 999px !important;
         box-shadow: none !important;
         display: inline-flex !important;
@@ -2805,10 +2805,15 @@ html body#html-body#html-body#html-body input.input-text#search {
     }
 
     /* Product card image alt + lazy loading indicator */
-    html body#html-body .page-wrapper img[loading="lazy"] {
+    /* CORRIGIDO 10/10/2026: o seletor casava TODAS as img[loading="lazy"] — inclusive as JA
+   CARREGADAS (o JS marca com .awa-loaded) e as fora da viewport (0x0). Medido: PDP 17/17 e
+   PLP 29/29 animando, sendo 20 ja com .awa-loaded. O @keyframes anima `background-position`
+   (propriedade NAO-COMPOSTA) => repaint continuo a 60fps em dezenas de elementos invisiveis.
+   Com :not(.awa-loaded) o shimmer vale SO enquanto a imagem carrega — a intencao original. */
+    html body#html-body .page-wrapper img[loading="lazy"]:not(.awa-loaded) {
         background: linear-gradient(90deg, var(--awa-bg-muted) 0%, var(--awa-bg-subtle) 50%, var(--awa-bg-muted) 100%) !important;
         background-size: 200% 100% !important;
-        animation: awa-skeleton 1.5s ease-in-out infinite !important;
+        animation: awa-skeleton 1.5s ease-in-out 20 !important;
     }
     @keyframes awa-skeleton {
         0% { background-position: 100% 0; }
@@ -3142,7 +3147,7 @@ html body#html-body#html-body#html-body input.input-text#search {
     /* PDP - price box destaquem (somente buy-box; cards related usam contrato 18/700) */
     html body#html-body.catalog-product-view .page-wrapper .product-info-main .price-box .price,
     html body#html-body.catalog-product-view .page-wrapper .product-info-main .info-price .price {
-        color: var(--awa-primary, var(--awa-primary)) !important;
+        color: var(--awa-ink) !important;
         font-size: clamp(24px, 3vw, 32px) !important;
         font-weight: 800 !important;
         line-height: 1.2 !important;
@@ -4940,7 +4945,7 @@ html body#html-body .page-wrapper .awa-skip-link:focus {
     padding: 10px 14px !important;
     display: inline-flex !important;
     align-items: center !important;
-    background: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary, var(--awa-brand)) !important;
     color: #fff !important;
     border-radius: 8px !important;
     font-weight: 600 !important;
@@ -5262,7 +5267,7 @@ html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-hom
    várias regras legadas (awa-align-grid-terminal §20.4b "Footer claro",
    awa-audit-bundle FM-3, awa-head-preload-critical-home) foram escritas
    assumindo um footer CLARO/branco, aplicando var(--awa-text-secondary,
-   var(--awa-text-secondary)) — que resolve para #475569 (slate-600) neste contexto — em:
+   var(--awa-text-secondary)) — que resolve para var(--awa-text-soft, #475569) (slate-600) neste contexto — em:
      • .velaFooterLinks a (links das 3 colunas: Quem somos/Suporte/Atendimento)
      • .awa-newsletter-desc (subtítulo "Reposição, lançamentos...")
      • .awa-footer-atendimento p (telefone/e-mail da coluna Atendimento)
@@ -5348,7 +5353,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrap
 }
 html body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper
     nav.fixed-bottom .mobile-bottom-link > li > button.toggle-nav-footer[aria-expanded="true"] {
-    background: var(--awa-red-10, rgba(183, 51, 55, 0.1)) !important;
+    background: var(--awa-red-10, rgb(183 51 55 / 10%))) !important;
     color: var(--awa-primary, var(--awa-primary)) !important;
     font-weight: 600 !important;
 }
@@ -6214,8 +6219,8 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-pr
 
 html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-pro__social-link:hover,
 html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-pro__social-link:focus-visible {
-    background: var(--awa-primary, #b73337) !important;
-    border-color: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary, var(--awa-brand)) !important;
+    border-color: var(--awa-primary, var(--awa-brand)) !important;
     color: #fff !important;
 }
 
@@ -6242,7 +6247,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-at
 }
 
 html body#html-body .page-wrapper .awa-footer-trust-bar {
-    background: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary, var(--awa-brand)) !important;
 }
 
 html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-icon {
@@ -6411,7 +6416,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .pag
     font-size: 12px !important;
     font-weight: 600 !important;
     line-height: 1.35 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 1 !important;
@@ -6532,7 +6537,7 @@ html body#html-body.awa-dark-mode.checkout-cart-index .page-wrapper :is(h1.page-
     /* Deptos. — não herdar color branco de button { color: #fff } do theme_option */
     html body#html-body#html-body#html-body#html-body .page-wrapper
         nav.fixed-bottom .mobile-bottom-link > li > button.toggle-nav-footer {
-        color: var(--awa-text-secondary, #475569) !important;
+        color: var(--awa-text-secondary, var(--awa-text-soft, #475569)) !important;
         background: transparent !important;
     }
 }
@@ -6872,7 +6877,7 @@ html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-hom
         transform: none !important;
     }
 }
-/*awa-footer-density-desktop-r9e*/@media (min-width:768px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer,.page-footer,.page_footer) :is(a,.velaFooterLinks a,ul.velaFooterLinks a,ul.velaFooterLinks li>a){min-height:0!important;height:auto!important;padding-block:4px!important;padding-inline:0!important;line-height:1.35!important}}
+/*awa-footer-density-desktop-r9e*/@media (min-width:768px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer,.page-footer,.page_footer) :is(a,.velaFooterLinks a,ul.velaFooterLinks a,ul.velaFooterLinks li>a):not(.awa-footer-pro__social-link){min-height:0!important;height:auto!important;padding-block:4px!important;padding-inline:0!important;line-height:1.35!important}}
 
 /* PIXEL-QA 2026-07-25: eixo footer/catalogo — desktop 24 / mobile 16 (contrato).
    Vence awa-footer-terminal-lock (7×#html-body + padding 16 hardcoded). */
@@ -7059,7 +7064,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
     .b2b-login-to-see-price__message {
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 1 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     display: -webkit-box !important;
     font-size: 12px !important;
     font-weight: 600 !important;
@@ -7070,7 +7075,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
 
 /* Minicart conflict guard (mobile + desktop): avoid transparent panel over hero/carousel */
 html body#html-body .page-wrapper .minicart-wrapper:is(.active, .show, .is-open) .block-minicart:is(._active, .active, .is-open),
-html body#html-body .page-wrapper .block-minicart#awa-minicart-panel:is(._active, .active, .is-open) {
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel,#awa-minicart-dialog:is(._active, .active, .is-open) {
     background-color: var(--awa-bg) !important;
     background-image: none !important;
     z-index: 10040 !important;
@@ -7079,9 +7084,9 @@ html body#html-body .page-wrapper .block-minicart#awa-minicart-panel:is(._active
     -webkit-backdrop-filter: none !important;
 }
 
-html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .block-content,
-html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .minicart-items-wrapper,
-html body#html-body .page-wrapper .block-minicart#awa-minicart-panel .awa-minicart-footer {
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel,#awa-minicart-dialog .block-content,
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel,#awa-minicart-dialog .minicart-items-wrapper,
+html body#html-body .page-wrapper .block-minicart#awa-minicart-panel,#awa-minicart-dialog .awa-minicart-footer {
     background-color: var(--awa-bg) !important;
     background-image: none !important;
 }
@@ -7831,7 +7836,7 @@ html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view
     .awa-hero-swiper
     > .awa-hero-pause-btn {
     align-items: center !important;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 78%, white 22%) !important;
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 78%, white 22%) !important;
     border-radius: 999px !important;
     box-shadow: none !important;
     display: inline-flex !important;
@@ -7946,7 +7951,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
     .b2b-login-to-see-price__message {
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 1 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     display: -webkit-box !important;
     font-size: 12px !important;
     font-weight: 600 !important;

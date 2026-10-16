@@ -19,6 +19,7 @@ class ErpPendingQueueResolver
         ErpCustomerSyncStatus::AWAITING_ERP_VALIDATION,
         ErpCustomerSyncStatus::PROSPECT_MAGENTO,
         ErpCustomerSyncStatus::PROSPECT_SENT_SECTRA,
+        ErpCustomerSyncStatus::PROSPECT_FEED_FAILED,
         'pending_erp_validation',
     ];
 

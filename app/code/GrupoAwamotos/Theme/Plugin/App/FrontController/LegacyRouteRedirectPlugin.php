@@ -6,7 +6,7 @@ namespace GrupoAwamotos\Theme\Plugin\App\FrontController;
 
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\HTTP\PhpEnvironment\Response as ResponseHttp;
 
 /**
  * Canonicaliza rotas legadas públicas com redirecionamento permanente.

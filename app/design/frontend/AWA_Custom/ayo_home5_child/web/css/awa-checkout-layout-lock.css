@@ -88,7 +88,7 @@ html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagechecko
     html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
     .page-wrapper .checkout-container {
         display: grid !important;
-        grid-template-columns: minmax(0, 1fr) minmax(var(--awa-checkout-sidebar-min, 300px), var(--awa-checkout-sidebar-max, 340px)) !important;
+        grid-template-columns: minmax(0, 1fr) minmax(var(--awa-checkout-sidebar-min, 280px), var(--awa-checkout-sidebar-max, 320px)) !important;
         gap: var(--awa-checkout-gap, 24px) !important;
         align-items: start !important;
     }

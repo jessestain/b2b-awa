@@ -6,5 +6,9 @@
                  topic="grupoawamotos.b2b.whatsapp.send"
                  destinationType="queue"
                  destination="grupoawamotos.b2b.whatsapp.send"/>
+        <binding id="grupoawamotos-product-alert-binding"
+                 topic="product_alert"
+                 destinationType="queue"
+                 destination="product_alert.queue"/>
     </exchange>
 </config>

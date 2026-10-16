@@ -16,6 +16,7 @@ class ProductAttributeBackfill
     private ProductRepositoryInterface $productRepository;
     private LoggerInterface $logger;
     private ColorNormalizationInterface $colorNormalization;
+    private ?\GrupoAwamotos\ERPIntegration\Helper\Data $helper = null;
 
     public function __construct(
         ConnectionInterface $connection,
@@ -27,6 +28,15 @@ class ProductAttributeBackfill
         $this->productRepository = $productRepository;
         $this->logger = $logger;
         $this->colorNormalization = $colorNormalization;
+    }
+
+    private function getHelper(): \GrupoAwamotos\ERPIntegration\Helper\Data
+    {
+        if (!isset($this->helper)) {
+            $this->helper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\GrupoAwamotos\ERPIntegration\Helper\Data::class);
+        }
+        return $this->helper;
     }
 
     /**
@@ -59,8 +69,12 @@ class ProductAttributeBackfill
                 continue;
             }
 
+            // B2B Densidade: mesma chave do PriceSync — "1119 RS" -> "1119"
+            // (SKU da loja = base numérica do MATERIAL do ERP).
+            $catalogSku = $this->normalizeErpSku($targetSku);
+
             try {
-                $product = $this->productRepository->get($targetSku, false, 0);
+                $product = $this->productRepository->get($catalogSku, false, 0);
             } catch (NoSuchEntityException $exception) {
                 $result['not_found']++;
                 continue;
@@ -104,26 +118,27 @@ class ProductAttributeBackfill
         $params = [];
         $topClause = $limit > 0 ? 'TOP ' . (int) $limit . ' ' : '';
 
+        $filial = (int) $this->getHelper()->getStockFilial();
         $sql = "SELECT {$topClause}
-                    m.CODIGO,
+                    l.MATERIAL AS CODIGO,
                     CAST(m.CODINTERNO AS VARCHAR(255)) AS CODINTERNO,
                     CAST(m.NCM AS VARCHAR(255)) AS NCM,
                     CAST(m.COR AS VARCHAR(255)) AS COR
-                FROM MT_MATERIAL m
-                WHERE m.CODIGO IS NOT NULL
-                  AND LTRIM(RTRIM(CAST(m.CODIGO AS VARCHAR(255)))) != ''
-                  AND (
-                        (m.CODINTERNO IS NOT NULL AND m.CODINTERNO != 0)
-                        OR (m.NCM IS NOT NULL AND LTRIM(RTRIM(CAST(m.NCM AS VARCHAR(255)))) != '')
-                        OR (m.COR IS NOT NULL AND LTRIM(RTRIM(CAST(m.COR AS VARCHAR(255)))) != '')
-                  )";
+                FROM MT_MATERIALLISTA l
+                INNER JOIN MT_MATERIAL m ON m.CODIGO = l.MATERIAL
+                WHERE l.MATERIAL IS NOT NULL
+                  AND LTRIM(RTRIM(CAST(l.MATERIAL AS VARCHAR(255)))) != ''
+                  AND l.VLRVDSUG > 0
+                  AND l.FILIAL = :filial";
+
+        $params[':filial'] = $filial;
 
         if ($sku !== null && $sku !== '') {
-            $sql .= ' AND m.CODIGO = :sku';
+            $sql .= ' AND l.MATERIAL = :sku';
             $params[':sku'] = $sku;
         }
 
-        $sql .= ' ORDER BY m.CODIGO';
+        $sql .= ' GROUP BY l.MATERIAL, m.CODINTERNO, m.NCM, m.COR ORDER BY l.MATERIAL';
 
         return $this->connection->query($sql, $params);
     }
@@ -169,4 +184,25 @@ class ProductAttributeBackfill
 
         return $normalized;
     }
+
+
+    /**
+     * B2B Densidade — normaliza o MATERIAL do ERP para o SKU da loja
+     * (mesma regra do PriceSync::getBaseSku).
+     */
+    private function normalizeErpSku(string $sku): string
+    {
+        $sku = trim($sku);
+        if (str_contains($sku, ' ')) {
+            return trim(explode(' ', $sku)[0]);
+        }
+        if (preg_match('/^(\d{3,})\.\d+$/', $sku, $m)) {
+            return $m[1];
+        }
+        if (preg_match('/^(\d{3,})[A-Z]{2,3}$/i', $sku, $m)) {
+            return $m[1];
+        }
+        return $sku;
+    }
+
 }

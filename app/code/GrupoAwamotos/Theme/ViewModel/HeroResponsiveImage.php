@@ -117,9 +117,13 @@ class HeroResponsiveImage implements ArgumentInterface
     public function getSizesAttribute(bool $mobileSlider): string
     {
         // r44: tipico desktop PSI (~1350) → 1200px; sem 100vw (evita 1340→1920).
+        // PERF/LCP: o sizes do desktop era '(min-width: 1600px) 1920px, 1200px' — sem clausula
+        // para mobile. Medido: em viewport de 390px o browser resolvia 1200px e baixava o
+        // -1200w.webp, quando existem 480w/768w. Ambos agora sao AUTO-SUFICIENTES (cobrem
+        // mobile), entao mesmo se o <img> do mobile receber o sizes de desktop ele acerta 100vw.
         return $mobileSlider
-            ? '100vw'
-            : '(min-width: 1600px) 1920px, 1200px';
+            ? '(max-width: 1599px) 100vw, 1200px'
+            : '(max-width: 767px) 100vw, (max-width: 1599px) 1200px, 1920px';
     }
 
     /**

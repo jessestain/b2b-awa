@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\Theme\Plugin\Response;
 
-use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\HTTP\PhpEnvironment\Response as ResponseHttp;
 use Magento\Framework\App\State;
 
 /**

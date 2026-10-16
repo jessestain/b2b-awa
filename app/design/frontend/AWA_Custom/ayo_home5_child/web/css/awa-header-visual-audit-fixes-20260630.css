@@ -91,8 +91,20 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   height: auto !important;
   min-height: 0 !important;
   max-height: none !important;
-  --awa-header-promo-h: 0px !important;
-  --awa-header-stack-h: var(--awa-header-sticky-h, 116px) !important;
+  --awa-header-promo-h: 0px!important;
+  /* CONSOLIDACAO 07/10/2026 — o token tinha DUAS formas para o MESMO significado:
+       aqui:      var(--awa-header-sticky-h, 116px)              => 116px
+       contract:  calc(44px + var(--awa-header-sticky-h))        => 160px
+     As duas competiam com `!important` e quem vencia dependia do `:has()` do
+     contract-grid — ou seja, da presenca da barra de promo no DOM. Medido: home
+     desktop dava 160px (com promo) e a intencao desta regra era 116px (promo=0).
+
+     A expressao abaixo cobre OS DOIS casos, sem depender de quem vence:
+       promo=0px  => 0  + sticky = 116px  (desktop)  ou 96px (mobile)
+       promo=44px => 44 + sticky = 160px  (desktop)  ou 140px (mobile)
+     E sao exatamente os 4 valores medidos em producao: 160/140 no desk e mob da
+     home, e calc() nas outras paginas. Nenhum valor efetivo muda. */
+  --awa-header-stack-h: calc(var(--awa-header-promo-h, 0px) + var(--awa-header-sticky-h, 116px))!important;
 }
 }
 
@@ -137,7 +149,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   min-height: 44px !important;
   height: 44px !important;
   max-height: 44px !important;
-  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-size: var(--awa-font-size-sm, 13px) !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   background: var(--awa-primary) !important;
@@ -155,7 +167,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   padding-block: 0 !important;
   padding-inline: var(--awa-space-5, 20px) !important;
   white-space: nowrap !important;
-  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-size: var(--awa-font-size-sm, 13px) !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
 }
@@ -182,7 +194,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   min-height: 44px !important;
   height: 44px !important;
   max-height: 44px !important;
-  font-size: var(--awa-font-size-sm, 14px) !important;
+  font-size: var(--awa-font-size-sm, 13px) !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   background: var(--awa-primary) !important;

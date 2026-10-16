@@ -58,7 +58,7 @@ $_parentName = ($_parentCategory && (int) $_parentCategory->getLevel() >= 2)
     : null;
 ?>
 <div class="awa-category-hero<?= $_imgUrl ? ' awa-category-hero--has-image' : '' ?>"
-     role="banner"
+     role="region"
      aria-label="<?= $block->escapeHtmlAttr(__('Categoria: %1', $_categoryName)) ?>">
 
     <?php if ($_imgUrl): ?>
@@ -90,7 +90,7 @@ $_parentName = ($_parentCategory && (int) $_parentCategory->getLevel() >= 2)
         $crumbHtml = trim($block->getChildHtml('breadcrumbs'));
         ?>
         <?php if ($crumbHtml !== ''): ?>
-            <div class="awa-category-hero__crumbs">
+            <div class="awa-category-hero__crumbs" style="text-shadow:0 1px 3px rgba(255,255,255,.9),0 0 6px rgba(255,255,255,.7)!important">
                 <?= /* @noEscape */ $crumbHtml ?>
             </div>
         <?php elseif ($_parentName): ?>

@@ -197,12 +197,7 @@ if ($shouldRenderErpPanel) {
                         <span class="value b2b-price-list-name"><?= $block->escapeHtml($customerPriceListName) ?></span>
                     </div>
                 <?php endif; ?>
-                <?php if ($erpRfm && !empty($erpRfm['suggested_action'])): ?>
-                    <div class="detail-item">
-                        <span class="label"><?= $block->escapeHtml(__('Recomendação:')) ?></span>
-                        <span class="value erp-recommendation"><?= $block->escapeHtml($erpRfm['suggested_action']) ?></span>
-                    </div>
-                <?php endif; ?>
+
             </div>
         </div>
 

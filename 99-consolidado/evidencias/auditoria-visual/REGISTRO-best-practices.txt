@@ -1,0 +1,63 @@
+AUDITORIA CONTRA AS CONVENCOES DE FRONTEND DO MAGENTO 2 (05/10/2026)
+====================================================================
+Pergunta do dono: "e realmente esta ficando de acordo com as melhores praticas?"
+Resposta medida: NAO.
+
+O QUE ESTA CERTO
+  theme.xml + registration.php + composer.json presentes
+  child theme real, com heranca correta
+  ZERO modificacao em vendor/ ou core
+  PHP com DI e service contracts (ProductSync, Helper::getDefaultTaxClassId)
+  as correcoes funcionam e estao verificadas
+
+O QUE ESTA ERRADO
+  web/css/source/_module.less ........ NAO EXISTE  <- arquivo principal do padrao M2
+  web/css/source/_extends.less ....... NAO EXISTE
+  _theme.less ........................ 34 bytes (praticamente vazio)
+  _extend.less ....................... 86 KB (existe)
+  _variables.less .................... 2,1 KB (existe)
+  CSS hand-maintained ................ 6,0 MB em 75 arquivos .css planos
+     maiores: 916 + 868 + 752 + 513 + 398 + 330 KB
+  !important ......................... 129.145 em .css + 25.197 em .less = 154.342
+     so no awa-design-system.css: 10.289
+  #html-body ......................... 93.015 ocorrencias
+     pior caso: #html-body repetido 24x NUMA LINHA
+  <style> inline em .phtml ........... 53 templates
+  <script> inline em .phtml .......... 125 templates
+  awa-head-preload.phtml ............. 365 KB com 18 <style> e 12 <script> DENTRO
+
+CUSTO REAL MEDIDO (probe-custo-css.js)
+  HOME 1440px:  14 arquivos · 344 KB baixados (brotli 92%) · 4.264 KB decodificados
+                13 <link> bloqueantes · 11 <style> inline (23 KB)
+                13.821 regras · 11.133 seletores unicos
+                5.701 usados · 8.120 NAO usados = *** 59% ***
+                DCL 2.513 ms · load 7.057 ms
+  PLP 390px:    29 arquivos · 157 KB baixados · 3.501 KB decodificados
+                *** 29 <link> BLOQUEANTES *** · 54 <style> inline = *** 637 KB ***
+                13.254 regras · *** 61% nao usados ***
+                DCL 2.567 ms · load 6.281 ms
+
+E O PONTO DESCONFORTAVEL: EU PIOREI
+  ao corrigir os 2 bugs reais (itens 175 e 177) eu ADICIONEI a pilha:
+    - SECAO 63 entrou num arquivo de 888 KB que ja tem 10.289 !important
+    - o fix do breadcrumb e um <script> inline no awa-head-preload (365 KB)
+      que escreve style.setProperty(prop, val, 'important')
+      = exatamente a tecnica que eu mesmo documentei como "vence tudo"
+  Eu tratei o SINTOMA, nao a DOENCA.
+
+POR QUE (contexto, nao desculpa)
+  o item 136 ja provou por medicao que a reescrita falha:
+  "unificar transicoes moveu 11->10 variantes enquanto o arquivo cresceu 1,9 KB; revertido"
+  entao escolhi a correcao cirurgica que funciona, com rollback e verificacao.
+  Mas eu NAO deixei claro que a divida aumentou.
+
+CAMINHO REAL PARA BEST PRACTICES (nao e "consertar o CSS" — e reconstruir a apresentacao)
+  (a) CONGELAR: novo CSS so em _extend.less como LESS; proibir !important novo;
+      proibir <style>/<script> inline novo
+  (b) PODAR o 100% morto: tools/awa-css-morto2.mjs (0,3% estrito = baixo risco)
+      + metrica de valores distintos por propriedade
+  (c) MIGRAR por componente: um por vez, CSS plano -> _extend.less,
+      medindo antes/depois com o metodo do juiz
+  (d) SO ENTAO remover as camadas antigas
+
+PLACAR OBJETIVO PARA O FUTURO: 99-consolidado/verificacoes/probe-custo-css.js

@@ -1,0 +1,20 @@
+/**
+ * AWA DS R3 (14/10/2026) — styles-m DESATIVADO.
+ *
+ * O storefront NÃO carrega styles-m: removido em default_head_blocks.xml,
+ * removido em b2b_auth_shell.xml, e nenhum loader async/phtml/js o referência
+ * (verificado por varredura completa + curl em home/PLP/PDP/cart/checkout/auth).
+ *
+ * Antes deste arquivo, o entry era herdado do Magento/blank e compilava
+ * 2.358.869 bytes de CSS morto a cada static deploy. Com este override,
+ * o artefato publicado passa a ~150 bytes e o LESS compile fica mais
+ * rápido. O desktop continua via styles-l (entry herdado, compila o
+ * source/ normalmente).
+ *
+ * Obs.: o compilador LESS rejeita arquivo só-comentário ("LESS file is
+ * empty"), por isso a regra mínima abaixo.
+ */
+
+.awa-ds-r3-styles-m-disabled {
+    display: none;
+}

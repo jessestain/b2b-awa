@@ -130,7 +130,7 @@ html body#html-body.catalog-category-view h1.page-title {
 }
 
 html body#html-body :is(h2, .awa-section-header__title) {
-  font-size: var(--awa-text-lg, 1.125rem);
+  font-size: var(--awa-text-lg, 18px);
   line-height: 1.3;
 }
 
@@ -198,7 +198,7 @@ html body#html-body.b2b-auth-shell :is(
 html body#html-body.checkout-cart-index .page-main .columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--awa-gap-lg, 24px);
+  gap: var(--awa-gap-lg, 16px);
   align-items: start;
   width: 100%;
 }
@@ -421,7 +421,7 @@ html body#html-body.catalog-category-view .awa-category-hero__content {
 html body#html-body.checkout-cart-index .page-main.container {
   display: flex;
   flex-direction: column;
-  gap: var(--awa-gap-md, 16px);
+  gap: var(--awa-gap-md, 12px);
 }
 
 html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
@@ -487,7 +487,7 @@ html body#html-body#html-body#html-body#html-body.catalog-product-view
   .product-info-main
   .page-title-wrapper
   :is(h1.page-title, .page-title, .page-title .base) {
-  font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+  font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
   font-size: clamp(1.125rem, 1.05rem + 0.45vw, 1.375rem) !important;
   font-weight: 700 !important;
   line-height: 1.3 !important;
@@ -506,7 +506,7 @@ html body#html-body#html-body#html-body.catalog-product-view
 html body#html-body.checkout-cart-index .page-main.container {
   display: flex !important;
   flex-direction: column !important;
-  gap: var(--awa-gap-md, 16px) !important;
+  gap: var(--awa-gap-md, 12px) !important;
 }
 
 html body#html-body.checkout-cart-index
@@ -585,7 +585,7 @@ html body#html-body.catalog-product-view .product.media .fotorama__fullscreen-ic
 }
 
 html body#html-body.catalog-product-view .product-info-main :is(h1.page-title, .page-title) + h2 {
-  font-size: var(--awa-text-base, 1rem) !important;
+  font-size: var(--awa-text-base, 14px) !important;
   line-height: 1.35 !important;
   font-weight: var(--awa-weight-semibold, 600) !important;
   margin-block: 0.35rem 0 !important;
@@ -666,7 +666,7 @@ html body#html-body .awa-hero-benefits {
 
 html body#html-body.catalog-product-view .product-info-main h1 + h2,
 html body#html-body.catalog-product-view :is(.product-info-main, .product-info-main .product-info-main) h1 + h2 {
-  font-size: var(--awa-text-lg, 1.125rem) !important;
+  font-size: var(--awa-text-lg, 18px) !important;
   line-height: 1.35 !important;
   font-weight: var(--awa-weight-semibold, 600) !important;
   margin-block: 0.35rem 0.5rem !important;
@@ -774,7 +774,7 @@ html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-l
     .mobile-bottom-link
     > li.active
     > a {
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     font-weight: 600 !important;
   }
 
@@ -784,7 +784,7 @@ html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-l
     > li.active
     > a
     .icon {
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
   }
 
   html body#html-body .page-wrapper
@@ -1118,7 +1118,7 @@ html body#html-body .page-wrapper :is(
 html body#html-body .page-wrapper :is(a, a:visited, a:hover, a:focus, a:focus-visible) {
   transition-property: color, background-color, border-color, opacity, text-decoration-color !important;
   transition-duration: var(--awa-duration-fast, 150ms) !important;
-  transition-timing-function: var(--awa-ease, ease) !important;
+  transition-timing-function: var(--awa-ease, cubic-bezier(0.4, 0, 0.2, 1)) !important;
   transition-delay: 0s !important;
 }
 
@@ -1143,7 +1143,7 @@ html body#html-body .page-wrapper :is(
 ) :is(a, button, .action, .btn, [role="button"], input[type="submit"], input[type="button"]) {
   transition-property: color, background-color, border-color, opacity, box-shadow, text-decoration-color !important;
   transition-duration: var(--awa-duration-fast, 150ms) !important;
-  transition-timing-function: var(--awa-ease, ease) !important;
+  transition-timing-function: var(--awa-ease, cubic-bezier(0.4, 0, 0.2, 1)) !important;
   transition-delay: 0s !important;
 }
 

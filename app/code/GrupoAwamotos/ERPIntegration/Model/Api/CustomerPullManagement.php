@@ -335,9 +335,12 @@ class CustomerPullManagement implements CustomerPullInterface
 
         // 4. Pending orders
         try {
+            /* task-55 (11/10/2026): a metrica era "nao tem linha no mapa". O mapa e o VINCULO DE
+               SYNC de status, nao a marca de importacao — quem diz "esta no ERP" e
+               sectra_import_status, e os dois divergiam (medido: mapa=8 x status=7). */
             $pendingOrders = (int) $db->fetchOne(
                 "SELECT COUNT(*) FROM sales_order WHERE state IN ('new','pending_payment','processing')
-                 AND entity_id NOT IN (SELECT magento_entity_id FROM grupoawamotos_erp_entity_map WHERE entity_type='order')"
+                 AND COALESCE(sectra_import_status, '') <> 'imported'"
             );
 
             $health['checks']['pending_orders'] = [

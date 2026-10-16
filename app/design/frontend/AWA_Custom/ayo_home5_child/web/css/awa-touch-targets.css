@@ -1,0 +1,355 @@
+/*
+ * AWA — area de toque minima (WCAG 2.5.8, nivel AA)
+ * ================================================
+ *
+ * A NORMA
+ *   WCAG 2.5.8 (AA, WCAG 2.2): alvo de toque >= *** 24x24 CSS px ***.
+ *   WCAG 2.5.5 (AAA) pede 44x44 — foi o que usei por engano na 1a medicao, gerando
+ *   54 "falhas" das quais a maioria era falsa:
+ *     - `a.action.skip` (skip-link) mede *** 1x1 DE PROPOSITO *** (aparece so no foco)
+ *     - `a.product-item-link` mede 137x38 => passa em 24x24
+ *
+ * O QUE MEDI COM O PROBE CALIBRADO (06/10/2026)
+ *   /faq .... 12x `a` sem classe «Central de Atendimento»  146x17
+ *              1x `a.awa-cookie-banner__link`              144x23
+ *   /plp .... 12x `a.b2b-login-to-see-price__message`      147x16
+ *   home .... desktop: `a.awa-header-account-prompt__link`  41x16 e 73x16
+ *
+ * TRES TENTATIVAS, E O QUE CADA MEDICAO ENSINOU
+ *
+ *   1) `padding-block: 5px` sozinho — NAO FUNCIONOU NA MEDICAO
+ *      `padding-block` em elemento INLINE aumenta a area de clique REAL, mas NAO
+ *      entra no `getBoundingClientRect`: a caixa de um inline mede so o conteudo.
+ *      Resultado: o cookie banner continuou marcando 144x23 mesmo com o padding
+ *      aplicado. *** Uma correcao que o teste nao consegue verificar nao serve. ***
+ *      => passou a usar `display:inline-block` + `min-height`, que medem de verdade.
+ *
+ *   2) `inline-block` com 5 a 10 repeticoes de `#html-body` — funcionou na PLP
+ *      (`12x a.b2b-login-to-see-price__message` => 0) mas nao no cookie banner nem
+ *      no cabecalho. O probe de CSSOM mostrou por que:
+ *        cookie banner: 4 arquivos concorrentes com ***18 ids*** cada, declarando
+ *          `display:inline !important; min-height:0 !important; padding:0 !important`
+ *          (awa-design-system, awa-cookie-consent-fix, awa-m2-visual-ssot,
+ *           awa-header-contract-grid-20260626)
+ *        cabecalho: `awa-design-system` com ***24 ids*** declarando
+ *          `min-height:0 !important; padding:0 2px !important; line-height:1.2 !important`
+ *
+ *   3) 28 repeticoes de `#html-body` — acima do campeao medido (24). ESTA.
+ *
+ * O PADRAO SE REPETE NO TEMA INTEIRO
+ *   O mesmo problema apareceu no clamp do nome do produto (campeao com 24 ids) e no
+ *   contraste do `.awa-cta` (campeao com 18 ids). *** Tres bugs visuais diferentes,
+ *   uma unica causa: regras duplicadas em 5+ arquivos, competindo por `!important`,
+ *   com o vencedor decidido por contagem de `#id`. *** A correcao real e consolidar;
+ *   este arquivo e o paliativo que resolve agora, e reverter e so apagar esta linha
+ *   do `default_head_blocks.xml`.
+ *
+ * O IMPACTO NO LAYOUT
+ *   `inline-block` de 24px de altura num paragrafo: o link ocupa a linha do texto
+ *   com area maior. O fundo e transparente, entao visualmente nao muda nada.
+ */
+
+/* Links de texto do conteudo institucional (FAQ, formas de pagamento, etc.) */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  :is(.awa-inst, .awa-cta) :is(p, li) > a:not(.awa-btn):not(.action) {
+  display: inline-block !important;
+  min-height: 24px !important;
+  padding-block: 3px !important;
+  vertical-align: baseline !important;
+}
+
+/* Link da politica no banner de cookie */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
+  a.awa-cookie-banner__link {
+  display: inline-block !important;
+  min-height: 24px !important;
+  padding-block: 3px !important;
+  vertical-align: baseline !important;
+}
+
+/* "Cadastre-se para ver o preco" nos cards B2B (PLP) */
+html body#html-body
+  a.b2b-login-to-see-price__message {
+  display: inline-block !important;
+  min-height: 24px !important;
+  padding-block: 4px !important;
+  vertical-align: baseline !important;
+}
+
+/* Cabecalho de conta: "Entrar" e "cadastre-se" */
+html body#html-body
+  a.awa-header-account-prompt__link {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 24px !important;
+  padding-block: 3px !important;
+  line-height: 1.5 !important;
+}
+
+
+/*
+ * LINKS DE CONTATO EM CONTEUDO CMS (08/10/2026)
+ *
+ * CAUSA RAIZ: a regra que da `min-height: 44px` para `tel:`/`mailto:`/`wa.me` existe em
+ * `awa-align-grid-terminal-2026-06-11.css` L15520, mas esta escopada em
+ * `body#html-body...contact-index-index` — ou seja, SO a pagina de contato. Medido com o
+ * detector v12 em `/politica-de-privacidade` mobile:
+ *     a  109x19px  "(16) 3301-1890"       (min 24)
+ *     a  118x19px  "(16) 99736-7588"      (min 24)
+ * Os numeros de telefone do rodape da politica sao links de 19px de altura — abaixo do
+ * minimo WCAG 2.5.8 (24x24). E o MESMO erro de escopo que o `.awa-cta` teve
+ * (preso em `body.cms-formas-pagamento`): a correcao foi feita para UMA pagina.
+ *
+ * Esta regra cobre o conteudo CMS em geral, sem exigir a classe da pagina.
+ */
+#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .column.main a:is([href^="tel:"], [href^="mailto:"], [href*="wa.me"], [href*="whatsapp"], [href*="api.whatsapp"]) {
+  align-items: center !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  line-height: 1.35 !important;
+  max-width: 100% !important;
+  min-height: 44px !important;
+}
+
+/*
+ * FORA DO ESCOPO, de proposito:
+ *   a.product-item-link ......... 137x38, ja passa em 24x24
+ *   a.action.skip ............... 1x1 e o estado CORRETO (skip-link)
+ *   .awa-btn / .action-primary ... ja tem 40px+ de altura
+ */
+
+/* LINK "Entrar"/"cadastre-se" GUEST — alvo de toque 32px, NA CAMADA VENCEDORA (awa-visual-priority).
+ * O link guest computava min-height:0 porque TODAS as regras min-height:0 do tema estao em
+ * camadas ANTERIORES (awa-header-first-paint-lock, awa-fixes), que VENCEM as regras unlayered
+ * por inversao de @layer+!important. A ordem e @layer awa-fixes, awa-visual-priority; — entao
+ * awa-visual-priority e a ULTIMA e vence tudo com !important. Aqui entra na camada certa. */
+@layer awa-visual-priority {
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--login,
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--register {
+    min-height: 32px !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* 11/10/2026 (task-77): alvo de toque do acordeao do rodape (footer-section__toggle = 383x15,59px).
+ * ::after fora do fluxo (position:absolute) NAO muda a altura do botao => nao afeta CLS.
+ * A task-77 provou que min-height:44px custava +0,04 de CLS na home desktop; esta tecnica nao custa. */
+@layer awa-visual-priority {
+  button.awa-footer-section__toggle {
+    position: relative !important;
+  }
+  button.awa-footer-section__toggle::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: -14px !important;
+    bottom: -14px !important;
+  }
+}
+
+/* 11/10/2026 (task-77 lote 2): alvos de toque <44px via ::after (fora do fluxo => nao muda geometria). */
+@layer awa-visual-priority {
+  button.awa-hero-swiper__nav {
+    position: relative !important;
+  }
+  button.awa-hero-swiper__nav::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: -2px !important;
+  }
+  a.data.switch {
+    position: relative !important;
+  }
+  a.data.switch::after {
+    content: "" !important;
+    position: absolute !important;
+    inset-inline: 0 !important;
+    inset-block: -2px !important;
+  }
+  a.awa-footer-atendimento__store-link,
+  a.awa-footer-devby__link {
+    position: relative !important;
+  }
+  a.awa-footer-atendimento__store-link::after,
+  a.awa-footer-devby__link::after {
+    content: "" !important;
+    position: absolute !important;
+    inset-inline: 0 !important;
+    inset-block: -3px !important;
+  }
+}
+
+/* 11/10/2026 (task-79 R1): os 6 dots do carrossel da home estavam COBERTOS pelo card
+ * (position:static pintava ABAIXO do a.awa-category-carousel__item posicionado). Sem
+ * stacking context no caminho => position:relative + z-index:1 pinta acima. Nao muda geometria. */
+@layer awa-visual-priority {
+  button.awa-category-carousel__dot {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+}
+
+/* 11/10/2026 (task-77): nome de produto relacionado (rx-pdp-name) tinha 18px de altura clicavel.
+ * A secao .awa-pdp-related fica ABAIXO da dobra => min-height nao afeta o CLS do 1o paint.
+ * display:flex + align-items:center centraliza o texto no alvo de 44px (WCAG 2.5.8). */
+@layer awa-visual-priority {
+  html body#html-body .rx-pdp-card .rx-pdp-name {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 44px !important;
+  }
+}
+
+/* 12/10/2026: os 2 links do header (Entrar/cadastre-se) tem 32px; o min-height:44px estava em
+ * disputa (outra regra vence). ::after fora do fluxo estende a HIT AREA para 44px SEM mudar a
+ * altura (a tecnica da task-77/rodada 143, que o rodape provou ser segura: zero CLS). */
+@layer awa-visual-priority {
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--login,
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--register {
+    position: relative !important;
+  }
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--login::after,
+  html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] a.awa-header-account-prompt__link--register::after {
+    content: "" !important;
+    position: absolute !important;
+    inset-inline: 0 !important;
+    inset-block: -6px !important;
+  }
+}
+
+/* 12/10/2026: consistencia/responsividade — (1) cards do PLP com alturas desiguais
+ * (nomes de 1 a 6 linhas): line-clamp 2 + min-height de 2 linhas iguala os cards;
+ * (2) promo bar B2B com texto CORTADO (nowrap+hidden): quebra no breakpoint medio;
+ * (3) toolbar/shop-tab com texto estourando: quebra permitida. */
+@layer awa-visual-priority {
+  @media (max-width: 1023px) {
+    html body#html-body .page-wrapper .awa-b2b-promo-bar__lead,
+    html body#html-body .page-wrapper .awa-b2b-promo-bar__lead-long,
+    html body#html-body .page-wrapper .awa-b2b-promo-bar__lead-short {
+      white-space: normal !important;
+      overflow: hidden !important;
+    }
+  }
+  
+  /* max-height + min-height = 2 linhas (a tecnica que vence sem depender do -webkit-box,
+   * que a guerra de especificidade derrotou). 18 IDs = o mesmo peso que as regras monstro. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .products-grid :is(.product-name, .product-name a, a.product-item-link),
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .product-items :is(.product-name, .product-name a, a.product-item-link) {
+    min-height: 2.9em !important;
+    max-height: 2.9em !important;
+    overflow: hidden !important;
+  }
+
+  /* 12/10/2026: cards do PLP com alturas desiguais — o ul e GRID com align-items:stretch,
+   * mas uma regra do tema põe align-self:start nos li (cancelando o stretch). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .products-grid ul.row.product-grid > li.item-product,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .products-grid ul.row.product-grid > li.item {
+    align-self: stretch !important;
+  }
+
+  /* 12/10/2026: problemas REAIS de consistencia — (1) rodape trust-grid com itens de
+   * alturas desiguais (81-118px @390): o grid precisa esticar os itens; (2) textos
+   * CORTADOS por nowrap+hidden ("Ocultar Filtros" cw44/sw75; subtitulo da secao). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-footer-trust-grid {
+    align-items: stretch !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-footer-trust-grid > .awa-footer-trust-item {
+    align-self: stretch !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper strong.modes-label,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .modes-label {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-section-header__subtitle,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-section-header__subtitle * {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  /* 12/10/2026 (2): trust-grid com LINHAS iguais; modes-label sem .page-wrapper (nao venceu antes). */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .awa-footer-trust-grid,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-footer-trust-grid {
+    grid-auto-rows: 1fr !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body strong.modes-label,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .modes .modes-label,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .modes-label {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none !important;
+  }
+
+  /* 12/10/2026 (3): o nome do produto no BREADCRUMB do PDP estava clipado a 40px
+   * (cw40/sw152 — mostrava ~3 caracteres). Deixa o item dimensioar pelo conteudo. */
+
+  /* 12/10/2026 (3b): o ultimo item do breadcrumb do PDP encolhia para 40px (flex:0 1 auto
+   * num ul flex nowrap) e mostrava ~3 caracteres. Da um minimo legivel + ellipsis. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .breadcrumbs li.item.product {
+    flex-shrink: 0 !important;
+    min-width: 14ch !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .breadcrumbs li.item.product > span,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .breadcrumbs li.item.product > a {
+    display: block !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+@media (max-width: 1023px) {
+    html body#html-body .page-wrapper .toolbar.toolbar-products .shop-tab-title,
+    html body#html-body .page-wrapper .toolbar.toolbar-products .shop-tab-select {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+    }
+  }
+}
+
+/* 12/10/2026 (TESTE DE MECANISMO): a ordem efetiva das camadas e
+ * awa-cta-green > awa-fixes > awa-visual-priority. Para !important a PRIMEIRA vence.
+ * Estas 3 correcoes vao na camada MAIS FORTE para provar o mecanismo (a fase 2 vai
+ * formalizar isso com uma ordem uniforme). */
+@layer awa-cta-green {
+  html body#html-body .breadcrumbs li.item.product {
+    flex-shrink: 0 !important;
+    min-width: 14ch !important;
+    overflow: hidden !important;
+  }
+  html body#html-body .breadcrumbs li.item.product > span,
+  html body#html-body .breadcrumbs li.item.product > a {
+    display: block !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+@layer awa-cta-green {
+  /* cards da PLP: nome com 1 a 6 linhas ⇒ reserva 2 linhas (a guerra de camadas exigia a camada mais forte) */
+  html body#html-body .page-wrapper .products-grid :is(.product-name, .product-name a, a.product-item-link),
+  html body#html-body .page-wrapper .product-items :is(.product-name, .product-name a, a.product-item-link) {
+    min-height: 2.9em !important;
+    max-height: 2.9em !important;
+    overflow: hidden !important;
+  }
+  /* modes-label: "Ocultar Filtros" cortado numa pill de 44px */
+  html body#html-body strong.modes-label,
+  html body#html-body .modes .modes-label,
+  html body#html-body .modes-label {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none !important;
+  }
+}

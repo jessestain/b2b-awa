@@ -328,9 +328,11 @@ class OrderImportGate
         );
 
         $updated = 0;
+        $importedOrderIds = [];
         foreach ($rows as $row) {
             $orderId = (int) $row['entity_id'];
             $this->setOrderImportStatus($orderId, SectraImportStatus::IMPORTED);
+            $importedOrderIds[] = $orderId;
             $this->syncLogger->log(
                 ProspectEvent::ORDER_IMPORTED_SUCCESS,
                 sprintf('Pedido #%s importado com sucesso no ERP Sectra.', $row['increment_id']),
@@ -343,7 +345,114 @@ class OrderImportGate
             $updated++;
         }
 
+        /* task-55 (11/10/2026) — CORRECAO DE RAIZ.
+           Este laco marcava sectra_import_status='imported' e NAO escrevia o mapa
+           grupoawamotos_erp_entity_map. Resultado medido: 29 pedidos 'imported' e apenas
+           6 com linha no mapa (23 sem). Como o OrderSync::getPendingOrdersForSync() le
+           SOMENTE o mapa, esses pedidos nunca entravam no sync de status - o log repetia
+           "Syncing status for 0 orders" (82x) e eles ficavam presos em 'processing'.
+           Agora o mapa e gravado JUNTO com o flag, no mesmo caminho (produtor). */
+        if ($importedOrderIds !== []) {
+            $this->syncOrderEntityMap($importedOrderIds);
+        }
+
         return $reconciled + $updated;
+    }
+
+    /**
+     * Grava o mapa de pedido (entity_type='order') dos pedidos marcados como importados.
+     *
+     * Le o CODIGO do ERP pela CONEXAO DE LEITURA (nenhuma escrita no ERP) e faz upsert
+     * em grupoawamotos_erp_entity_map, com a mesma semantica de SyncLog::setEntityMap().
+     * Nunca lanca: o flag 'imported' e a obrigacao principal deste caminho, e uma falha
+     * do ERP nao pode derrubar o sync de status.
+     *
+     * @param int[] $orderIds
+     * @return int quantos pedidos ficaram mapeados
+     */
+    private function syncOrderEntityMap(array $orderIds): int
+    {
+        $orderIds = array_values(array_unique(array_filter(array_map('intval', $orderIds))));
+        if ($orderIds === []) {
+            return 0;
+        }
+
+        try {
+            $webIds = array_map(
+                static fn (int $id): string => (string) ($id + self::OC_ORDER_ID_OFFSET),
+                $orderIds
+            );
+            $placeholders = implode(',', array_fill(0, count($webIds), '?'));
+            $erpRows = $this->erpConnection->query(
+                "SELECT p.CODIGO, p.PEDIDOWEB FROM VE_PEDIDO p WHERE p.PEDIDOWEB IN ({$placeholders})",
+                $webIds
+            );
+
+            $erpCodeByWebId = [];
+            foreach ($erpRows as $erpRow) {
+                $webId = trim((string) ($erpRow['PEDIDOWEB'] ?? ''));
+                $codigo = trim((string) ($erpRow['CODIGO'] ?? ''));
+                if ($webId !== '' && $codigo !== '' && ctype_digit($codigo) && (int) $codigo > 0) {
+                    $erpCodeByWebId[$webId] = $codigo;
+                }
+            }
+
+            if ($erpCodeByWebId === []) {
+                $this->logger->warning(
+                    '[B2B-Sectra] Nenhum CODIGO devolvido pelo ERP; mapa de pedidos nao gravado',
+                    ['orders' => $orderIds]
+                );
+                return 0;
+            }
+
+            $connection = $this->resourceConnection->getConnection();
+            $now = (new \DateTime())->format('Y-m-d H:i:s');
+            $mapped = 0;
+
+            foreach ($orderIds as $orderId) {
+                $webId = (string) ($orderId + self::OC_ORDER_ID_OFFSET);
+                if (!isset($erpCodeByWebId[$webId])) {
+                    continue;
+                }
+                $erpCode = $erpCodeByWebId[$webId];
+
+                $existing = $connection->fetchOne(
+                    $connection->select()
+                        ->from('grupoawamotos_erp_entity_map', 'map_id')
+                        ->where('entity_type = ?', 'order')
+                        ->where('erp_code = ?', $erpCode)
+                );
+
+                if ($existing) {
+                    $connection->update(
+                        'grupoawamotos_erp_entity_map',
+                        ['magento_entity_id' => $orderId, 'last_sync_at' => $now],
+                        ['entity_type = ?' => 'order', 'erp_code = ?' => $erpCode]
+                    );
+                } else {
+                    $connection->insert('grupoawamotos_erp_entity_map', [
+                        'entity_type' => 'order',
+                        'erp_code' => $erpCode,
+                        'magento_entity_id' => $orderId,
+                        'last_sync_at' => $now,
+                        'sync_hash' => null,
+                    ]);
+                }
+                $mapped++;
+            }
+
+            $this->logger->info('[B2B-Sectra] Mapa de pedidos gravado no caminho de reconciliacao (task-55)', [
+                'mapeados' => $mapped,
+                'sem_codigo_no_erp' => count($orderIds) - $mapped,
+            ]);
+
+            return $mapped;
+        } catch (\Throwable $e) {
+            $this->logger->warning(
+                '[B2B-Sectra] Falha ao gravar o mapa de pedidos importados: ' . $e->getMessage()
+            );
+            return 0;
+        }
     }
 
     /**

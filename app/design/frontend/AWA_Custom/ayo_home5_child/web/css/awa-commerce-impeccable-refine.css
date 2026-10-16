@@ -12,6 +12,10 @@
 /* ── Token de focus ring (não definido nos bundles LESS, precisa de fallback) */
 :root {
     --awa-cc-focus-ring: 0 0 0 3px rgb(183 51 55 / 16%);
+    --awa-font-size-10: 10px;
+    --awa-font-size-11: 11px;
+    --awa-font-size-13: 13px;
+    --awa-home-gutter-align: clamp(16px, 3vw, 48px);
 }
 
 /* §H16B: promo home CLARA (BUG-PROMO-001). 2026-08-01: refine vermelho
@@ -93,7 +97,7 @@ html
   background-color: transparent !important;
   border: 0 !important;
   border-color: transparent !important;
-  color: var(--awa-primary, #b73337) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   opacity: 1 !important;
 }
 
@@ -106,7 +110,7 @@ html
   :is(.action.showcart, a.showcart.header-mini-cart) {
   background:transparent!important;background-color:transparent!important;
   border-color: var(--awa-primary) !important;
-  color:var(--awa-primary,#b73337)) !important;
+  color:var(--awa-primary,var(--awa-brand))) !important;
   opacity: 1 !important;
 }
 
@@ -208,22 +212,22 @@ html body.checkout-cart-index .page-wrapper .cart-summary .checkout-methods-item
     width: 100% !important;
     min-height: var(--awa-btn-height, 48px) !important;
     border-radius: var(--awa-radius-md, 12px) !important;
-    font-size: var(--awa-text-md, 15px) !important;
+    font-size: var(--awa-text-md, 16px) !important;
     font-weight: var(--awa-weight-bold, 700) !important;
     letter-spacing: 0.01em !important;
     text-transform: none !important;
-    box-shadow: var(--awa-cc-shadow-cta, 0 8px 24px rgb(183 51 55 / 18%)) !important;
+    box-shadow: var(--awa-cc-shadow-cta, 0 8px 24px rgb(183 51 55 / 18%))) !important;
     transition:
-        background-color var(--awa-cc-transition, 200ms cubic-bezier(0.25, 1, 0.5, 1)),
-        border-color var(--awa-cc-transition, 200ms cubic-bezier(0.25, 1, 0.5, 1)),
-        box-shadow var(--awa-cc-transition, 200ms cubic-bezier(0.25, 1, 0.5, 1)),
+        background-color var(--awa-cc-transition, 0.2s ease-out)),
+        border-color var(--awa-cc-transition, 0.2s ease-out)),
+        box-shadow var(--awa-cc-transition, 0.2s ease-out)),
         transform 120ms cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
     html body.checkout-cart-index .page-wrapper .cart-summary .checkout-methods-items .action.checkout:hover,
     html body.checkout-cart-index .page-wrapper .cart-summary .checkout-methods-items .action.primary.checkout:hover {
-        box-shadow: var(--awa-cc-shadow-cta-hover, 0 14px 30px rgb(142 38 41 / 20%)) !important;
+        box-shadow: var(--awa-cc-shadow-cta-hover, 0 14px 30px rgb(142 38 41 / 20%))) !important;
     }
 }
 
@@ -471,7 +475,7 @@ html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) #billing_a
     border: 1px solid var(--awa-cc-border-strong) !important;
     background: var(--awa-cc-surface-1) !important;
     color: var(--awa-cc-text-1) !important;
-    font-size: var(--awa-text-md, 15px) !important;
+    font-size: var(--awa-text-md, 16px) !important;
 }
 
 html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .opc-wrapper input:focus-visible,
@@ -516,7 +520,7 @@ html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .action.ch
 html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .action.primary.checkout {
     text-transform: none !important;
     letter-spacing: 0.01em !important;
-    box-shadow: var(--awa-cc-shadow-cta, 0 8px 24px rgb(183 51 55 / 18%)) !important;
+    box-shadow: var(--awa-cc-shadow-cta, 0 8px 24px rgb(183 51 55 / 18%))) !important;
 }
 
 html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .action.update,
@@ -557,7 +561,7 @@ html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .action-sh
 
 html body.checkout-cart-index .page-wrapper .cart-summary .checkout-methods-items .action.checkout:focus-visible,
 html body.checkout-cart-index .page-wrapper .cart-summary .checkout-methods-items .action.primary.checkout:focus-visible {
-    box-shadow: var(--awa-cc-shadow-cta-hover, 0 14px 30px rgb(142 38 41 / 20%)),
+    box-shadow: var(--awa-cc-shadow-cta-hover, 0 14px 30px rgb(142 38 41 / 20%))),
         var(--awa-cc-focus-ring, 0 0 0 3px rgb(183 51 55 / 16%)) !important;
     outline: none !important;
 }
@@ -660,7 +664,7 @@ html :is(body.checkout-index-index, body.rokanthemes-onepagecheckout) .awa-check
     border-radius: var(--awa-radius-md, 10px) !important;
     background: var(--awa-cc-surface-1) !important;
     color: var(--awa-cc-text-1) !important;
-    font-size: var(--awa-text-sm, 14px) !important;
+    font-size: var(--awa-text-sm, 13px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     text-decoration: none !important;
     white-space: nowrap !important;
@@ -829,7 +833,7 @@ html body.checkout-cart-index .awa-cart-empty__notice {
     border: 1px solid var(--awa-cc-border, var(--awa-border-subtle)) !important;
     border-radius: var(--awa-radius-md, 10px) !important;
     background: color-mix(in oklch, var(--awa-brand-primary, oklch(47% 0.164 21)) 6%, var(--awa-cc-surface-1, var(--awa-bg))) !important;
-    font-size: var(--awa-text-sm, 14px) !important;
+    font-size: var(--awa-text-sm, 13px) !important;
     line-height: 1.45 !important;
     text-align: center !important;
 }
@@ -1577,7 +1581,7 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
     overflow: hidden !important;
     border: 1px solid var(--awa-border-subtle, #eee) !important;
     border-radius: 8px !important;
-    background: var(--awa-bg-muted, #f8f8f8) !important;
+    background: var(--awa-bg-muted, #f1f5f9) !important;
 }
 
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
@@ -1683,7 +1687,7 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
     padding: 6px 12px !important;
     border: 1px solid var(--awa-border-subtle, #eee) !important;
     border-radius: var(--awa-radius-pill, 9999px) !important;
-    background: var(--awa-bg-muted, #f7f7f7) !important;
+    background: var(--awa-bg-muted, #f1f5f9) !important;
     color: var(--awa-text, #333) !important;
     font-size: 13px !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
@@ -1699,9 +1703,9 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__item.popular:is(:hover, ._active) a,
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular a.awa-search-chip:hover {
-    border-color: color-mix(in srgb, var(--awa-primary, #b73337) 35%, var(--awa-border, #e5e7eb)) !important;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, var(--awa-bg, #fff)) !important;
-    color: var(--awa-primary-hover, #8e2629) !important;
+    border-color: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 35%, var(--awa-border, #e5e7eb)) !important;
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 8%, var(--awa-bg, #fff)) !important;
+    color: var(--awa-primary-hover, var(--awa-brand-dark)) !important;
 }
 
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
@@ -1709,7 +1713,7 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__item.popular a:focus-visible,
 html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete
 .mst-searchautocomplete__index.popular a.awa-search-chip:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337) !important;
+    outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
     outline-offset: 2px !important;
 }
 
@@ -1789,7 +1793,7 @@ html body#html-body .page-wrapper :is(
     border-radius: var(--awa-radius-md, 8px) !important;
     text-transform: none !important;
     letter-spacing: normal !important;
-    box-shadow: var(--awa-shadow-brand, 0 2px 6px rgb(183 51 55 / 20%)) !important;
+    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgba(183, 51, 55, 0.30))) !important;
     cursor: pointer !important;
 }
 
@@ -1898,7 +1902,7 @@ html body#html-body .page-wrapper :is(
 
 html body#html-body .page-wrapper .fieldset .field .label,
 html body#html-body .page-wrapper .field .label {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
     margin-bottom: var(--awa-space-1, 4px) !important;
@@ -1941,7 +1945,7 @@ html body#html-body .page-wrapper .message-warning {
 
 html body#html-body .page-wrapper .message-info,
 html body#html-body .page-wrapper .message-notice {
-    background: var(--awa-info-bg, #f0f9ff) !important;
+    background: var(--awa-info-bg, #eff6ff) !important;
     border-color: color-mix(in srgb, var(--awa-info, #0ea5e9) 35%, var(--awa-border, var(--awa-border))) !important;
     color: color-mix(in srgb, var(--awa-info, #0ea5e9) 65%, #111827) !important;
 }
@@ -1957,7 +1961,7 @@ html body#html-body .page-wrapper .fieldset .field :is(div.mage-error, .field-er
 
 /* ── Breadcrumbs ──────────────────────────────────────────────────────────── */
 html body#html-body .page-wrapper .breadcrumbs {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     color: var(--awa-text-muted, #888888) !important;
     padding-block: var(--awa-space-2-5, 10px) !important;
     margin-bottom: var(--awa-space-2, 8px) !important;
@@ -2124,7 +2128,7 @@ html body#html-body .page-wrapper .toolbar :is(select, .sorter-action) {
     min-height: 36px !important;
     border-radius: var(--awa-radius-sm) !important;
     border-color: var(--awa-border, var(--awa-border)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
 }
 
 /* =============================================================================
@@ -2193,18 +2197,18 @@ html body#html-body:is(.b2b-auth-shell, .b2b-register-index) .page-wrapper :is(
     .b2b-btn-entrar,
     .action.submit.primary.create-b2b-account
 ) {
-    min-height: var(--awa-btn-h, 48px) !important;
+    min-height: var(--awa-btn-h, 44px) !important;
     border-radius: var(--awa-radius-md, 8px) !important;
     background: var(--awa-primary, var(--awa-primary)) !important;
     border: 1px solid var(--awa-primary, var(--awa-primary)) !important;
     color: var(--awa-text-inverse, var(--awa-bg)) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     text-transform: none !important;
-    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgb(183 51 55 / 25%)) !important;
+    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgba(183, 51, 55, 0.30))) !important;
 }
 
 html body#html-body:is(.b2b-auth-shell, .b2b-register-index) .page-wrapper .b2b-btn-register {
-    min-height: var(--awa-btn-h, 48px) !important;
+    min-height: var(--awa-btn-h, 44px) !important;
     border-radius: var(--awa-radius-md, 8px) !important;
     background: transparent !important;
     border: 1px solid var(--awa-primary, var(--awa-primary)) !important;
@@ -2214,7 +2218,7 @@ html body#html-body:is(.b2b-auth-shell, .b2b-register-index) .page-wrapper .b2b-
 }
 
 html body#html-body:is(.b2b-auth-shell, .b2b-register-index) .page-wrapper .b2b-btn-claim {
-    min-height: var(--awa-btn-h, 48px) !important;
+    min-height: var(--awa-btn-h, 44px) !important;
     border-radius: var(--awa-radius-md, 8px) !important;
     background: var(--awa-bg, var(--awa-bg)) !important;
     border: 1px solid var(--awa-border-strong, #d0d0d0) !important;
@@ -2268,7 +2272,7 @@ html body#html-body .page-wrapper .block-minicart :is(.action.primary.checkout, 
 
 html body#html-body .page-wrapper .block-minicart .subtitle,
 html body#html-body .page-wrapper .block-minicart .items-total {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
 }
 
@@ -2294,7 +2298,7 @@ html body#html-body .page-wrapper .mst-searchautocomplete__autocomplete .action.
     min-height: 36px !important;
     padding-inline: var(--awa-space-3, 12px) !important;
     border-radius: var(--awa-radius-sm) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     text-transform: none !important;
 }
@@ -2362,7 +2366,7 @@ html body#html-body.checkout-cart-index .page-wrapper .awa-cart-empty__category-
     border-radius: var(--awa-radius-pill, 9999px) !important;
     background: var(--awa-bg, var(--awa-bg)) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
     padding: var(--awa-space-1, 4px) var(--awa-space-3, 12px) !important;
 }
@@ -2396,7 +2400,7 @@ html body#html-body .page-wrapper #b2b-login-modal {
 }
 
 html body#html-body .b2b-login-modal-overlay.active {
-    background: var(--awa-bg-overlay, rgb(15 23 42 / 50%)) !important;
+    background: var(--awa-bg-overlay, rgb(15 23 42 / 50%))) !important;
 }
 
 html body#html-body .page-wrapper #b2b-login-modal .b2b-login-modal {
@@ -2423,7 +2427,7 @@ html body#html-body .page-wrapper #b2b-login-modal #b2b-login-title {
     grid-column: 1 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: var(--awa-font-xl, 1.125rem) !important;
+    font-size: var(--awa-font-xl, 22px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     line-height: 1.3 !important;
     color: var(--awa-text) !important;
@@ -2434,7 +2438,7 @@ html body#html-body .page-wrapper #b2b-login-modal #b2b-login-desc {
     grid-column: 1 !important;
     margin: 0 !important;
     max-width: 36ch !important;
-    font-size: var(--awa-font-sm, 0.875rem) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     line-height: 1.45 !important;
     color: var(--awa-text-muted) !important;
 }
@@ -2478,8 +2482,8 @@ html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option {
     background: var(--awa-bg) !important;
     min-height: 48px !important;
     text-transform: none !important;
-    transition: border-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, ease),
-        background-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, ease) !important;
+    transition: border-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, cubic-bezier(0.22, 1, 0.36, 1)),
+        background-color var(--awa-duration-fast, 0.2s) var(--awa-ease-out-quint, cubic-bezier(0.22, 1, 0.36, 1)) !important;
 }
 
 html body#html-body .page-wrapper #b2b-login-modal .b2b-login-option.b2b-primary,
@@ -2563,7 +2567,7 @@ html body#html-body.b2b-account-dashboard .page-wrapper .b2b-summary-card :is(.v
 
 html body#html-body.b2b-account-dashboard .page-wrapper .b2b-summary-card :is(.label, .title) {
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
 }
 
@@ -2574,7 +2578,7 @@ html body#html-body.account .page-wrapper :is(
 ) {
     min-height: 36px !important;
     border-radius: var(--awa-radius-sm) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     text-transform: none !important;
 }
@@ -2646,7 +2650,7 @@ html body#html-body:is(.curriculo-index-index, .ayo-curriculo-index-index) .page
     background: var(--awa-primary, var(--awa-primary)) !important;
     border: 1px solid var(--awa-primary, var(--awa-primary)) !important;
     text-transform: none !important;
-    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgb(183 51 55 / 25%)) !important;
+    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgba(183, 51, 55, 0.30))) !important;
 }
 
 html body#html-body:is(.curriculo-index-index, .ayo-curriculo-index-index) .page-wrapper .form.curriculo .form-error-summary:not(:empty) {
@@ -2685,7 +2689,7 @@ html body#html-body .modal-popup .modal-header {
 
 html body#html-body .modal-popup .modal-inner-wrap {
     border-radius: var(--awa-radius-lg, 16px) !important;
-    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%)) !important;
+    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%))) !important;
 }
 
 /* =============================================================================
@@ -2709,7 +2713,7 @@ html body#html-body #awa-cookie-banner .awa-cookie-banner__inner {
 }
 
 html body#html-body #awa-cookie-banner :is(p#awa-cookie-desc, .awa-cookie-banner__text) {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     line-height: 1.45 !important;
     color: rgba(255, 255, 255, 0.85) !important;
 }
@@ -2813,7 +2817,7 @@ html body#html-body.catalogsearch-result-index .page-wrapper .page-title-wrapper
 }
 
 html body#html-body.catalogsearch-result-index .page-wrapper .search.results > .toolbar-amount {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
 }
 
@@ -2837,7 +2841,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) :is(
 ) {
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
     text-decoration: none !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     line-height: 1.45 !important;
 }
 
@@ -2873,7 +2877,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .pag
     border-radius: var(--awa-radius-pill, 9999px) !important;
     background: var(--awa-primary-subtle, rgb(183 51 55 / 8%)) !important;
     padding: var(--awa-space-1, 4px) var(--awa-space-3, 12px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     color: var(--awa-text, var(--awa-text)) !important;
 }
 
@@ -2913,7 +2917,7 @@ html body#html-body.b2b-register-index .page-wrapper .progress-step {
     border-radius: var(--awa-radius-md, 8px) !important;
     background: var(--awa-bg-subtle, var(--awa-bg-subtle)) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
 }
 
@@ -2946,7 +2950,7 @@ html body#html-body.b2b-register-index .page-wrapper .progress-step.is-active .p
 /* Ações secundárias de produto — wishlist / compare */
 html body#html-body .page-wrapper .product-item-actions .actions-secondary :is(a, button),
 html body#html-body .page-wrapper .product-info-main .product-addto-links :is(a, button) {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
     text-decoration: none !important;
@@ -4106,7 +4110,7 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .pa
     .awa-shelf__header h2,
     .awa-carousel-section .section-title h2
 ) {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
 }
 
 /* =============================================================================
@@ -5397,7 +5401,7 @@ html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-header p 
     grid-row: 2 !important;
     max-width: 36ch !important;
     color: var(--awa-text-muted) !important;
-    font-size: var(--awa-font-sm, 0.875rem) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
 }
 
 html body#html-body#html-body #b2b-login-modal.active .b2b-login-modal-close {
@@ -5892,6 +5896,47 @@ html body#html-body .page-wrapper .awa-section-header__subtitle {
         background: var(--awa-bg) !important;
         padding: 16px 8px !important;
     }
+
+    /* CONTRASTE — medido em 06/10/2026 em /faq, /contact e /formas-pagamento (390x844):
+       "Envio para todo o Brasil", "Entrega para lojistas", "Certificado digital",
+       "Garantia de fabrica", "Pecas originais com nota fiscal" e "Conexao criptografada"
+       apareciam em *** branco sobre rgb(232,227,226) = 1,27:1 *** (minimo 4,5).
+
+       CAUSA: neste breakpoint o container e os itens ganham fundo CLARO (acima), mas o
+       texto continua branco, herdado de `.awa-footer-trust-bar { color: #fff }` — e as
+       regras de `.awa-footer-trust-copy strong/span` forcam `#fff !important`.
+
+       A intencao original da FIX-HOME-5 era criar divisoria de 1px entre os cards
+       (container cinza + itens claros). Isso continua valendo; o que faltava era
+       escurecer o TEXTO, que agora passa a usar o token de texto do tema.
+
+       No desktop (>= 600px) nada muda: la o fundo e o vermelho da marca e o branco
+       da 5,85:1, que passa. */
+    /* CAMADA OBRIGATORIA — e ela e `awa-fixes` DE PROPOSITO.
+       A regra que forca o branco vive em `@layer awa-visual-priority`:
+         :is(footer.page-footer,...) .awa-footer-trust-bar .awa-footer-trust-copy strong{color:#fff!important}
+       Com `!important`, regras Nao-camadas perdem para qualquer camada, e dentro das
+       camadas a ORDEM INVERTE: vence a declarada PRIMEIRO.
+       A ordem do documento e `@layer awa-cta-green; @layer awa-fixes, awa-visual-priority;`
+       => awa-cta-green > *** awa-fixes *** > awa-visual-priority.
+       Primeira tentativa: usei `awa-header-first-paint-lock`, que NAO esta nessa lista
+       => por isso ela vai para o FIM da ordem => perdia, mesmo com especificidade maior
+       (3,11,8 contra 1,7,5). Trocado para `awa-fixes`, que ja existe e vem ANTES de
+       `awa-visual-priority` => dentro da camada, a minha especificidade ganha.
+       Nao reordena nada: usar uma camada existente nao muda a ordem dela. */
+    @layer awa-fixes {
+        html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-item,
+        html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-item .awa-footer-trust-copy strong,
+        html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-item .awa-footer-trust-copy span {
+            color: var(--awa-text, oklch(0.32 0.012 27)) !important;
+        }
+
+        html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-icon,
+        html body#html-body .page-wrapper .awa-footer-trust-bar .awa-footer-trust-icon svg {
+            color: var(--awa-primary, #b73337) !important;
+            fill: currentColor !important;
+        }
+    }
 }
 
 @media (min-width: 600px) and (max-width: 899px) {
@@ -6127,10 +6172,7 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .pa
 
 /* ─── BUG-FONTSIZE-ONSALE: badge NOVO/PROMOÇÃO usa --awa-font-size-11 (6.875px) ──
    O badge de desconto/novidade dentro do .hot-onsale usa font-size de 6.875px
-   (de --awa-font-size-11: 0.6875rem com root=10px). Após correção da variável
-   no :root, o valor deve ser 11px. Este override garante mínimo legível. */
-html body#html-body .page-wrapper
-:is(.content-item-product, .item-product) .hot-onsale .onsale {
+   (de --awa-font-size-11: 0.6875rem com root=10px). Após correção da variável no :root, o valor deve ser 11px. Este override garante mínimo legível. */ html body#html-body .page-wrapper :is(.content-item-product, .item-product) .hot-onsale .onsale{
     font-size: 11px !important;
 }
 html body#html-body .page-wrapper
@@ -7081,27 +7123,27 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
 
 /* ─── Header scroll offset SSOT (BUG-SHELL-RESIDUAL-GEOM-002) ─────────────── */
 html body#html-body {
-    --awa-header-scroll-offset: 116px !important;
+    --awa-header-scroll-offset: 116px!important;
 }
 
 /* Home desktop ≡ geom SSOT 116; mobile sticky = main 96 */
 html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
-    --awa-header-scroll-offset: 116px !important;
+    --awa-header-scroll-offset: 116px!important;
 }
 
 @media (max-width: 767px) {
   html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
-      --awa-header-scroll-offset: 96px !important;
+      --awa-header-scroll-offset: 96px!important;
   }
 }
 
 html body#html-body:is(.awa-account-operational, .b2b-account-shell, .b2b-account-dashboard, .account) {
-    --awa-header-scroll-offset: 56px !important;
+    --awa-header-scroll-offset: 56px!important;
 }
 
 /* ─── v11.7 DISTILL — conta B2B operacional (2026-06-08) ───────────────── */
 html body#html-body:is(.awa-account-operational, .b2b-account-shell, .b2b-account-dashboard) {
-    --awa-header-scroll-offset: 56px !important;
+    --awa-header-scroll-offset: 56px!important;
 }
 
 html body#html-body:is(.awa-account-operational, .b2b-account-shell, .account) .page-wrapper :is(
@@ -7665,7 +7707,7 @@ html body#html-body:not(#__awa-no-match):is(.account, [class*="b2b-"])
   .block-minicart
   .action.viewcart {
   border: 1px solid var(--awa-border-strong, #d0d0d0) !important;
-  background: var(--awa-bg-muted, #f8fafc) !important;
+  background: var(--awa-bg-muted, #f1f5f9) !important;
   color: var(--awa-text, var(--awa-text-primary)) !important;
   font-weight: 600 !important;
   border-radius: 4px !important;
@@ -7944,7 +7986,7 @@ html body#html-body:not(#__awa-no-match).b2b-account-dashboard
   margin-top: auto !important;
   border-radius: 4px !important;
   border: 1px solid var(--awa-border, var(--awa-border)) !important;
-  background: var(--awa-bg-muted, #f8fafc) !important;
+  background: var(--awa-bg-muted, #f1f5f9) !important;
   color: var(--awa-text, var(--awa-text-primary)) !important;
   font-size: 13px !important;
   font-weight: 600 !important;
@@ -7970,7 +8012,7 @@ html body#html-body:not(#__awa-no-match).b2b-account-dashboard
   font-weight: 600 !important;
   text-transform: none !important;
   letter-spacing: normal !important;
-  background: var(--awa-bg-muted, #f8fafc) !important;
+  background: var(--awa-bg-muted, #f1f5f9) !important;
   border-bottom: 1px solid var(--awa-border-subtle, #eeeeee) !important;
 }
 
@@ -8233,7 +8275,7 @@ html body#html-body:not(#__awa-no-match):is(.account, [class*="b2b-"])
   :is(.data.table th, table thead th) {
   text-transform: none !important;
   letter-spacing: normal !important;
-  background: var(--awa-bg-muted, #f8fafc) !important;
+  background: var(--awa-bg-muted, #f1f5f9) !important;
 }
 
 @media (min-width: 769px) {
@@ -8279,7 +8321,7 @@ html body#html-body:not(#__awa-no-match):is(.account, [class*="b2b-"])
   th {
   text-transform: none !important;
   letter-spacing: normal !important;
-  background: var(--awa-bg-muted, #f8fafc) !important;
+  background: var(--awa-bg-muted, #f1f5f9) !important;
 }
 
 html body#html-body:not(#__awa-no-match)
@@ -8640,7 +8682,7 @@ html body#html-body#html-body#html-body#html-body
         .awa-shelf__title,
         .velaFooterTitle
     ) {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
 }
 
 /* ── PDP Impeccable fixes — 2026-06-17 ─────────────────────────────────────
@@ -9358,7 +9400,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     background-color: transparent !important;
     border: 0 !important;
     border-radius: 0 var(--awa-radius-sm) var(--awa-radius-sm) 0 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
   }
 
   html
@@ -9371,7 +9413,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     background:transparent!important;background-color:transparent!important;
     border-color: var(--awa-primary) !important;
     border-radius: var(--awa-radius-sm) !important;
-    color:var(--awa-primary,#b73337)) !important;
+    color:var(--awa-primary,var(--awa-brand))) !important;
   }
 }
 
@@ -9385,7 +9427,7 @@ html
   :is(.minicart-wrapper .action.showcart, .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart) {
   background:transparent!important;background-color:transparent!important;
   border-color: var(--awa-primary) !important;
-  color:var(--awa-primary,#b73337)) !important;
+  color:var(--awa-primary,var(--awa-brand))) !important;
   opacity: 1 !important;
 }
 
@@ -9619,7 +9661,7 @@ html
     button.action.search {
     background: transparent !important;
     background-color: transparent !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     height: 40px !important;
     max-height: 40px !important;
     min-height: 40px !important;
@@ -9722,7 +9764,7 @@ html
     background-color: transparent !important;
     border: 0 !important;
     border-radius: 0 var(--awa-radius-sm) var(--awa-radius-sm) 0 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     display: flex !important;
     height: 40px !important;
     justify-content: center !important;
@@ -9860,7 +9902,7 @@ html body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-s
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
-  color: var(--awa-primary, #b73337) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   border: 0 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
@@ -9873,7 +9915,7 @@ html body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-s
   display: block !important;
   stroke: currentColor !important;
   fill: none !important;
-  color: var(--awa-primary, #b73337) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   opacity: 1 !important;
   visibility: visible !important;
 }

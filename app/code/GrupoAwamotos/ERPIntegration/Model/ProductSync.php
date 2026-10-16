@@ -8,6 +8,9 @@ use GrupoAwamotos\ERPIntegration\Api\ProductSyncInterface;
 use GrupoAwamotos\ERPIntegration\Api\ConnectionInterface;
 use GrupoAwamotos\ERPIntegration\Helper\Data as Helper;
 use GrupoAwamotos\ERPIntegration\Model\ResourceModel\SyncLog as SyncLogResource;
+use GrupoAwamotos\ERPIntegration\Model\Product\InactiveProductDeactivationGuard;
+use GrupoAwamotos\ERPIntegration\Model\Product\InactiveProductReactivationGuard;
+use GrupoAwamotos\ERPIntegration\Model\Product\NonCatalogProductList;
 use GrupoAwamotos\ERPIntegration\Model\Validator\ProductValidator;
 use GrupoAwamotos\ERPIntegration\Api\ColorNormalizationInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -117,11 +120,32 @@ class ProductSync implements ProductSyncInterface
      */
     public function getErpProductCount(): int
     {
+        $scope = $this->helper->getProductScope();
+
+        if ($scope === 'uniao' || $scope === 'com_preco') {
+            // precisa do JOIN para saber se o produto tem preço na lista padrão
+            $sql = "SELECT COUNT(*) as total
+                    FROM MT_MATERIAL m
+                    LEFT JOIN MT_MATERIALLISTA p
+                        ON p.MATERIAL = m.CODIGO
+                        AND p.FILIAL = :filial
+                        AND p.FATORPRECO = :priceList
+                    WHERE m.CCKATIVO = 'S'
+                      AND " . ($scope === 'uniao'
+                            ? "(m.CKCOMERCIALIZA = 'S' OR p.VLRVDSUG > 0)"
+                            : "p.VLRVDSUG > 0");
+            $result = $this->connection->fetchOne($sql, [
+                ':filial' => $this->helper->getStockFilial(),
+                ':priceList' => $this->helper->getDefaultPriceList(),
+            ]);
+            return $result ? (int) ($result['total'] ?? 0) : 0;
+        }
+
         $sql = "SELECT COUNT(*) as total
                 FROM MT_MATERIAL m
                 WHERE m.CCKATIVO = 'S'";
 
-        if ($this->helper->filterComercializa()) {
+        if ($scope === 'comercializa') {
             $sql .= " AND m.CKCOMERCIALIZA = 'S'";
         }
 
@@ -147,8 +171,15 @@ class ProductSync implements ProductSyncInterface
                     AND p.FATORPRECO = :priceList
                 WHERE m.CCKATIVO = 'S'";
 
-        if ($this->helper->filterComercializa()) {
+        $scope = $this->helper->getProductScope();
+        if ($scope === 'comercializa') {
             $sql .= " AND m.CKCOMERCIALIZA = 'S'";
+        } elseif ($scope === 'uniao') {
+            // soma: comercializável OU com preço — NUNCA remove o que já estava
+            $sql .= " AND (m.CKCOMERCIALIZA = 'S' OR p.VLRVDSUG > 0)";
+        } elseif ($scope === 'com_preco') {
+            // SUBSTITUI o critério: só com preço (pode remover comercializáveis sem preço)
+            $sql .= " AND p.VLRVDSUG > 0";
         }
 
         $sql .= " ORDER BY m.CODIGO";
@@ -247,9 +278,7 @@ class ProductSync implements ProductSyncInterface
                 }
             }
 
-            $result['deactivated'] = $this->deactivateMissingProducts(
-                array_values(array_unique($activeErpCodes))
-            );
+            $result['deactivated'] = (int) $this->reconcileInactiveProducts()['deactivated'];
             $result['execution_time'] = round((microtime(true) - $startTime) * 1000, 2);
 
             $this->syncLogResource->addLog(
@@ -408,13 +437,30 @@ class ProductSync implements ProductSyncInterface
             $product = $this->productRepository->get($sku);
             $isNew = false;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $product = $this->productFactory->create();
-            $product->setSku($sku);
+            // B2B Densidade: tenta a base numérica ("1119 RS" -> "1119"),
+            // que é o SKU real da loja para a maioria dos produtos.
+            $baseSku = $this->getBaseSku($sku);
+            if ($baseSku !== $sku) {
+                try {
+                    $product = $this->productRepository->get($baseSku);
+                    $isNew = false;
+                    $sku = $baseSku;
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e2) {
+                    $product = $this->productFactory->create();
+                    $product->setSku($sku);
+                    $isNew = true;
+                }
+            } else {
+                $product = $this->productFactory->create();
+                $product->setSku($sku);
+                $isNew = true;
+            }
+        }
+        if ($isNew) {
             $product->setTypeId(Type::TYPE_SIMPLE);
             $product->setAttributeSetId($this->getDefaultAttributeSetId());
             $product->setWebsiteIds($websiteIds);
             $product->setVisibility(Visibility::VISIBILITY_BOTH);
-            $isNew = true;
         }
 
         $product->setName($name);
@@ -447,6 +493,17 @@ class ProductSync implements ProductSyncInterface
 
         if ($weight > 0) {
             $product->setWeight($weight);
+        }
+
+        // Classe fiscal do produto. O sync nao definia isto e 498 produtos ficaram
+        // com tax_class_id=0 (None) enquanto 678 tinham 2 (Taxable Goods) — medido
+        // em 05/10/2026. Sem regra de imposto configurada isso nao muda o preco hoje,
+        // mas se um dia houver regra, os produtos sem classe ficariam de fora.
+        // Idempotente: so grava quando o valor atual e 0/ausente.
+        $taxClassId = $this->helper->getDefaultTaxClassId();
+        $currentTaxClass = $product->getTaxClassId();
+        if ($currentTaxClass === null || (int) $currentTaxClass <= 0) {
+            $product->setTaxClassId($taxClassId);
         }
 
         $product->setStatus($isActive ? Status::STATUS_ENABLED : Status::STATUS_DISABLED);
@@ -977,62 +1034,527 @@ class ProductSync implements ProductSyncInterface
     }
 
     /**
-     * Disable mapped Magento products that are no longer part of the current ERP scope.
+     * Disable Magento products that exist in Sectra but are outside the active scope.
      *
-     * @param string[] $activeErpCodes
+     * Active scope is CCKATIVO = S, plus CKCOMERCIALIZA = S when filter_comercializa is on.
+     * SKUs that do not exist in MT_MATERIAL are left untouched.
+     * An empty Sectra result never disables the catalog.
+     *
+     * @return array{
+     *     deactivated:int,
+     *     candidates:int,
+     *     active_erp:int,
+     *     all_erp:int,
+     *     skipped:bool,
+     *     skip_reason:?string,
+     *     candidate_skus:string[]
+     * }
      */
-    private function deactivateMissingProducts(array $activeErpCodes): int
+    public function reconcileInactiveProducts(bool $dryRun = false): array
     {
+        $result = [
+            'deactivated' => 0,
+            'candidates' => 0,
+            'active_erp' => 0,
+            'all_erp' => 0,
+            'skipped' => true,
+            'skip_reason' => null,
+            'candidate_skus' => [],
+        ];
+
+        try {
+            $scope = $this->getErpMaterialScope();
+        } catch (\Exception $e) {
+            $this->logger->error('[ERP] Unable to load Sectra material scope for deactivation', [
+                'error' => $e->getMessage(),
+            ]);
+            $result['skip_reason'] = 'erp_scope_query_failed';
+            return $result;
+        }
+
+        $result['all_erp'] = count($scope['all']);
+        $result['active_erp'] = count($scope['active']);
+
+        if (!InactiveProductDeactivationGuard::shouldDeactivate($result['all_erp'], $result['active_erp'])) {
+            $reason = $result['all_erp'] === 0
+                ? 'erp_returned_zero_materials'
+                : 'erp_returned_zero_active_materials';
+            $this->logger->warning('[ERP] Skipping product deactivation', [
+                'reason' => $reason,
+                'all_erp' => $result['all_erp'],
+                'active_erp' => $result['active_erp'],
+            ]);
+            $result['skip_reason'] = $reason;
+            return $result;
+        }
+
+        $candidates = $this->findOutOfScopeEnabledProducts($scope);
+        $result['skipped'] = false;
+        $result['candidates'] = count($candidates);
+        $result['candidate_skus'] = array_slice(array_column($candidates, 'sku'), 0, 50);
+
+        if ($candidates === []) {
+            return $result;
+        }
+
+        if ($dryRun) {
+            $this->logger->info('[ERP] Dry-run: products outside Sectra active scope', [
+                'candidates' => $result['candidates'],
+                'sample' => $result['candidate_skus'],
+            ]);
+            return $result;
+        }
+
         $deactivated = 0;
-        $activeCodeMap = array_fill_keys($activeErpCodes, true);
-
-        $connection = $this->syncLogResource->getConnection();
-        $select = $connection->select()
-            ->from('grupoawamotos_erp_entity_map', ['erp_code', 'magento_entity_id'])
-            ->where('entity_type = ?', 'product');
-
-        $allMapped = $connection->fetchPairs($select);
-
-        foreach ($allMapped as $erpCode => $magentoId) {
-            $erpCode = trim((string) $erpCode);
-            if (isset($activeCodeMap[$erpCode])) {
-                continue;
-            }
-
+        foreach ($candidates as $candidate) {
+            $entityId = (int) $candidate['entity_id'];
             try {
-                $product = $this->productRepository->getById((int) $magentoId);
-                if ((int) $product->getStatus() === Status::STATUS_DISABLED) {
-                    continue;
-                }
-
+                $product = $this->productRepository->getById($entityId, true, 0, true);
+                $product->setStoreId(0);
                 $product->setStatus(Status::STATUS_DISABLED);
                 $this->productRepository->save($product);
+                $this->persistGlobalDisabledStatus($entityId);
                 $deactivated++;
 
-                $this->logger->info('[ERP] Product deactivated (missing from current ERP scope)', [
-                    'erp_code' => $erpCode,
-                    'magento_id' => (int) $magentoId,
-                    'sku' => $product->getSku(),
+                $this->logger->info('[ERP] Product deactivated (outside current Sectra active scope)', [
+                    'sku' => $candidate['sku'],
+                    'erp_code' => $candidate['erp_code'],
+                    'magento_id' => $entityId,
                 ]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->logger->warning('[ProductSync::deactivateMissingProducts] Exceção ignorada: ' . $e->getMessage());
-                // Product was removed manually from Magento.
+                $this->logger->warning(
+                    '[ProductSync::reconcileInactiveProducts] Exceção ignorada: ' . $e->getMessage()
+                );
             } catch (\Exception $e) {
-                $this->logger->warning('[ERP] Failed to deactivate missing product', [
-                    'erp_code' => $erpCode,
-                    'magento_id' => (int) $magentoId,
+                $this->logger->warning('[ERP] Failed to deactivate out-of-scope product', [
+                    'sku' => $candidate['sku'],
+                    'magento_id' => $entityId,
                     'error' => $e->getMessage(),
                 ]);
             }
         }
 
+
+        $result['deactivated'] = $deactivated;
         if ($deactivated > 0) {
-            $this->logger->info('[ERP] Missing mapped products were disabled', [
+            $this->logger->info('[ERP] Out-of-scope Magento products were disabled', [
                 'deactivated' => $deactivated,
+                'candidates' => $result['candidates'],
             ]);
         }
 
-        return $deactivated;
+        return $result;
+    }
+
+    /**
+     * Lado espelhado de reconcileInactiveProducts: o Sectra diz que o produto deve
+     * ser vendido, mas ele esta inativo na loja. Sem isto, produto que sai do escopo
+     * e depois volta NUNCA volta a venda — foi o que criou os 27 casos de 06/10/2026.
+     *
+     * E mais estrita que a desativacao, porque reativar coloca coisa a venda:
+     *   - mesma guarda de conectividade (Sectra vazio => nao faz nada)
+     *   - exige preco utilizavel (ver InactiveProductReactivationGuard)
+     *   - NAO decide se o item e do ramo da loja; isso e julgamento a parte
+     *
+     * @return array{reactivated:int, candidates:int, blocked_by_price:int,
+     *               blocked_skus:list<string>, blocked_not_catalog:int,
+     *               blocked_not_catalog_skus:list<string>, all_erp:int, active_erp:int,
+     *               skipped:bool, skip_reason:?string, candidate_skus:list<string>}
+     */
+    public function reconcileReactivation(bool $dryRun = false): array
+    {
+        $result = [
+            'reactivated' => 0,
+            'candidates' => 0,
+            'blocked_by_price' => 0,
+            'blocked_skus' => [],
+            'blocked_not_catalog' => 0,
+            'blocked_not_catalog_skus' => [],
+            'all_erp' => 0,
+            'active_erp' => 0,
+            'skipped' => true,
+            'skip_reason' => null,
+            'candidate_skus' => [],
+        ];
+
+        try {
+            $scope = $this->getErpMaterialScope();
+        } catch (\Exception $e) {
+            $this->logger->error('[ERP] Unable to load Sectra material scope for reactivation', [
+                'error' => $e->getMessage(),
+            ]);
+            $result['skip_reason'] = 'erp_scope_query_failed';
+            return $result;
+        }
+
+        $result['all_erp'] = count($scope['all']);
+        $result['active_erp'] = count($scope['active']);
+
+        if (!InactiveProductReactivationGuard::shouldReactivate($result['all_erp'], $result['active_erp'])) {
+            $reason = $result['all_erp'] === 0
+                ? 'erp_returned_zero_materials'
+                : 'erp_returned_zero_active_materials';
+            $this->logger->warning('[ERP] Skipping product reactivation', [
+                'reason' => $reason,
+                'all_erp' => $result['all_erp'],
+                'active_erp' => $result['active_erp'],
+            ]);
+            $result['skip_reason'] = $reason;
+            return $result;
+        }
+
+        $candidates = $this->findInScopeDisabledProducts($scope);
+        $result['skipped'] = false;
+        $result['candidates'] = count($candidates);
+        $result['candidate_skus'] = array_slice(array_column($candidates, 'sku'), 0, 50);
+
+        if ($candidates === []) {
+            return $result;
+        }
+
+        // Preco e checado SEMPRE, inclusive no dry-run: e o que separa os 3 reativaveis
+        // dos 21 com R$ 0,01 medidos em 06/10/2026.
+        // A lista de itens fora do ramo e checada antes: o Sectra marca "MESA DE CORTE
+        // PARA VIDRO" e "MANETE DE TITAN" do mesmo jeito, e preco certo num item errado
+        // nao o torna vendavel.
+        $liberados = [];
+        foreach ($candidates as $candidate) {
+            if (NonCatalogProductList::isExcluded((string) $candidate['sku'])) {
+                $result['blocked_not_catalog']++;
+                if (count($result['blocked_not_catalog_skus']) < 50) {
+                    $result['blocked_not_catalog_skus'][] = $candidate['sku'];
+                }
+                continue;
+            }
+            if (!InactiveProductReactivationGuard::hasUsablePrice($candidate['price'])) {
+                $result['blocked_by_price']++;
+                if (count($result['blocked_skus']) < 50) {
+                    $result['blocked_skus'][] = $candidate['sku'];
+                }
+                continue;
+            }
+            $liberados[] = $candidate;
+        }
+
+        if ($result['blocked_not_catalog'] > 0) {
+            $this->logger->warning('[ERP] Products in Sectra scope but outside the store catalogue', [
+                'blocked' => $result['blocked_not_catalog'],
+                'skus' => $result['blocked_not_catalog_skus'],
+                'why' => 'cadastro do Sectra marca como ativo+comercializa; ver NonCatalogProductList',
+            ]);
+        }
+
+        if ($result['blocked_by_price'] > 0) {
+            $this->logger->warning('[ERP] Products in Sectra scope held back by unusable price', [
+                'blocked' => $result['blocked_by_price'],
+                'floor' => InactiveProductReactivationGuard::PRICE_FLOOR,
+                'sample' => array_slice($result['blocked_skus'], 0, 20),
+            ]);
+        }
+
+        if ($dryRun) {
+            $this->logger->info('[ERP] Dry-run: products inside Sectra active scope but disabled', [
+                'candidates' => $result['candidates'],
+                'reactivatable' => count($liberados),
+                'blocked_by_price' => $result['blocked_by_price'],
+                'sample' => array_slice(array_column($liberados, 'sku'), 0, 50),
+            ]);
+            $result['reactivatable'] = count($liberados);
+            return $result;
+        }
+
+        $reactivated = 0;
+        foreach ($liberados as $candidate) {
+            $entityId = (int) $candidate['entity_id'];
+            try {
+                $product = $this->productRepository->getById($entityId, true, 0, true);
+                $product->setStoreId(0);
+                $product->setStatus(Status::STATUS_ENABLED);
+                $this->productRepository->save($product);
+                $this->persistGlobalEnabledStatus($entityId);
+                $reactivated++;
+
+                $this->logger->info('[ERP] Product reactivated (back inside Sectra active scope)', [
+                    'sku' => $candidate['sku'],
+                    'erp_code' => $candidate['erp_code'],
+                    'magento_id' => $entityId,
+                    'price' => $candidate['price'],
+                ]);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->logger->warning(
+                    '[ProductSync::reconcileReactivation] Excecao ignorada: ' . $e->getMessage()
+                );
+            } catch (\Exception $e) {
+                $this->logger->warning('[ERP] Failed to reactivate in-scope product', [
+                    'sku' => $candidate['sku'],
+                    'magento_id' => $entityId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $result['reactivated'] = $reactivated;
+        $result['reactivatable'] = count($liberados);
+        if ($reactivated > 0) {
+            $this->logger->info('[ERP] In-scope Magento products were enabled', [
+                'reactivated' => $reactivated,
+                'candidates' => $result['candidates'],
+                'blocked_by_price' => $result['blocked_by_price'],
+                'blocked_not_catalog' => $result['blocked_not_catalog'],
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Espelho de findOutOfScopeEnabledProducts: produtos INATIVOS cujo SKU (ou
+     * erp_code mapeado) esta no escopo ATIVO do Sectra.
+     *
+     * @param array{all: array<string, true>, active: array<string, true>} $scope
+     * @return list<array{entity_id:int, sku:string, erp_code:?string, price:?float}>
+     */
+    private function findInScopeDisabledProducts(array $scope): array
+    {
+        $connection = $this->syncLogResource->getConnection();
+        $statusAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('eav_attribute'), ['attribute_id'])
+                ->where('attribute_code = ?', 'status')
+                ->where('entity_type_id = ?', 4)
+        );
+
+        if ($statusAttrId <= 0) {
+            $this->logger->error('[ERP] Product status attribute not found; skipping reactivation');
+            return [];
+        }
+
+        $priceAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('eav_attribute'), ['attribute_id'])
+                ->where('attribute_code = ?', 'price')
+                ->where('entity_type_id = ?', 4)
+        );
+
+        $select = $connection->select()
+            ->from(['cpe' => $connection->getTableName('catalog_product_entity')], ['entity_id', 'sku'])
+            ->joinInner(
+                ['st' => $connection->getTableName('catalog_product_entity_int')],
+                'st.entity_id = cpe.entity_id AND st.attribute_id = ' . $statusAttrId
+                . ' AND st.store_id = 0',
+                []
+            )
+            ->joinLeft(
+                ['map' => $connection->getTableName('grupoawamotos_erp_entity_map')],
+                "map.magento_entity_id = cpe.entity_id AND map.entity_type = 'product'",
+                ['erp_code']
+            )
+            ->where('st.value = ?', Status::STATUS_DISABLED);
+
+        if ($priceAttrId > 0) {
+            /* A coluna de valor em EAV e `value`, nao o nome do atributo. Nomear o
+             * alias de 'price' gerou "Unknown column 'pr.price'" no primeiro dry-run. */
+            $select->joinLeft(
+                ['pr' => $connection->getTableName('catalog_product_entity_decimal')],
+                'pr.entity_id = cpe.entity_id AND pr.attribute_id = ' . $priceAttrId
+                . ' AND pr.store_id = 0',
+                ['price' => 'value']
+            );
+        }
+
+        $rows = $connection->fetchAll($select);
+        $candidates = [];
+
+        foreach ($rows as $row) {
+            $sku = trim((string) ($row['sku'] ?? ''));
+            $erpCode = trim((string) ($row['erp_code'] ?? ''));
+            $keys = [];
+            if ($sku !== '') {
+                $keys[] = $sku;
+            }
+            if ($erpCode !== '' && $erpCode !== $sku) {
+                $keys[] = $erpCode;
+            }
+
+            $isActive = false;
+            foreach ($keys as $key) {
+                if (isset($scope['active'][$key])) {
+                    $isActive = true;
+                    break;
+                }
+            }
+            if (!$isActive) {
+                continue;
+            }
+
+            $candidates[] = [
+                'entity_id' => (int) $row['entity_id'],
+                'sku' => $sku,
+                'erp_code' => $erpCode !== '' ? $erpCode : null,
+                'price' => isset($row['price']) && $row['price'] !== null ? (float) $row['price'] : null,
+            ];
+        }
+
+        return $candidates;
+    }
+
+    /**
+     * Espelho de persistGlobalDisabledStatus. Usa insertOnDuplicate pelo mesmo
+     * motivo corrigido em 06/10/2026: `update()` devolve 0 tambem quando o valor
+     * JA E o desejado, e tratar isso como "linha nao existe" estoura 1062.
+     */
+    private function persistGlobalEnabledStatus(int $entityId): void
+    {
+        $connection = $this->syncLogResource->getConnection();
+        $statusAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('eav_attribute'), ['attribute_id'])
+                ->where('attribute_code = ?', 'status')
+                ->where('entity_type_id = ?', 4)
+        );
+        if ($statusAttrId <= 0) {
+            return;
+        }
+
+        $connection->insertOnDuplicate(
+            $connection->getTableName('catalog_product_entity_int'),
+            [
+                'attribute_id' => $statusAttrId,
+                'store_id' => 0,
+                'entity_id' => $entityId,
+                'value' => Status::STATUS_ENABLED,
+            ],
+            ['value']
+        );
+    }
+
+    /**
+     * @return array{all: array<string, true>, active: array<string, true>}
+     */
+    private function getErpMaterialScope(): array
+    {
+        $scope = $this->helper->getProductScope();
+
+        if ($scope === 'uniao' || $scope === 'com_preco') {
+            // nestes modos o preco faz parte do escopo, entao a query precisa dele
+            $rows = $this->connection->query(
+                'SELECT m.CODIGO, m.CCKATIVO, m.CKCOMERCIALIZA, p.VLRVDSUG
+                 FROM MT_MATERIAL m
+                 LEFT JOIN MT_MATERIALLISTA p
+                     ON p.MATERIAL = m.CODIGO
+                     AND p.FILIAL = :filial
+                     AND p.FATORPRECO = :priceList',
+                [
+                    ':filial' => $this->helper->getStockFilial(),
+                    ':priceList' => $this->helper->getDefaultPriceList(),
+                ]
+            );
+        } else {
+            $rows = $this->connection->query(
+                'SELECT m.CODIGO, m.CCKATIVO, m.CKCOMERCIALIZA FROM MT_MATERIAL m'
+            );
+        }
+
+        $all = [];
+        $active = [];
+
+        foreach ($rows as $row) {
+            $sku = trim((string) ($row['CODIGO'] ?? ''));
+            if ($sku === '') {
+                continue;
+            }
+
+            $all[$sku] = true;
+            $isActive = (($row['CCKATIVO'] ?? 'N') === 'S');
+            if ($scope === 'comercializa') {
+                $isActive = $isActive && (($row['CKCOMERCIALIZA'] ?? 'N') === 'S');
+            } elseif ($scope === 'uniao') {
+                $isActive = $isActive
+                    && ((($row['CKCOMERCIALIZA'] ?? 'N') === 'S') || ((float) ($row['VLRVDSUG'] ?? 0) > 0));
+            } elseif ($scope === 'com_preco') {
+                $isActive = $isActive && ((float) ($row['VLRVDSUG'] ?? 0) > 0);
+            }
+            if ($isActive) {
+                $active[$sku] = true;
+            }
+        }
+
+        return ['all' => $all, 'active' => $active];
+    }
+
+    /**
+     * @param array{all: array<string, true>, active: array<string, true>} $scope
+     * @return list<array{entity_id:int, sku:string, erp_code:?string}>
+     */
+    private function findOutOfScopeEnabledProducts(array $scope): array
+    {
+        $connection = $this->syncLogResource->getConnection();
+        $statusAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('eav_attribute'), ['attribute_id'])
+                ->where('attribute_code = ?', 'status')
+                ->where('entity_type_id = ?', 4)
+        );
+
+        if ($statusAttrId <= 0) {
+            $this->logger->error('[ERP] Product status attribute not found; skipping deactivation');
+            return [];
+        }
+
+        $productTable = $connection->getTableName('catalog_product_entity');
+        $intTable = $connection->getTableName('catalog_product_entity_int');
+        $mapTable = $connection->getTableName('grupoawamotos_erp_entity_map');
+
+        $select = $connection->select()
+            ->from(['cpe' => $productTable], ['entity_id', 'sku'])
+            ->joinInner(
+                ['st' => $intTable],
+                'st.entity_id = cpe.entity_id AND st.attribute_id = ' . $statusAttrId
+                . ' AND st.store_id = 0',
+                []
+            )
+            ->joinLeft(
+                ['map' => $mapTable],
+                "map.magento_entity_id = cpe.entity_id AND map.entity_type = 'product'",
+                ['erp_code']
+            )
+            ->where('st.value = ?', Status::STATUS_ENABLED);
+
+        $rows = $connection->fetchAll($select);
+        $candidates = [];
+
+        foreach ($rows as $row) {
+            $sku = trim((string) ($row['sku'] ?? ''));
+            $erpCode = trim((string) ($row['erp_code'] ?? ''));
+            $keys = [];
+            if ($sku !== '') {
+                $keys[] = $sku;
+            }
+            if ($erpCode !== '' && $erpCode !== $sku) {
+                $keys[] = $erpCode;
+            }
+
+            $existsInErp = false;
+            $isActive = false;
+            foreach ($keys as $key) {
+                if (isset($scope['all'][$key])) {
+                    $existsInErp = true;
+                }
+                if (isset($scope['active'][$key])) {
+                    $isActive = true;
+                }
+            }
+
+            if ($existsInErp && !$isActive) {
+                $candidates[] = [
+                    'entity_id' => (int) $row['entity_id'],
+                    'sku' => $sku,
+                    'erp_code' => $erpCode !== '' ? $erpCode : null,
+                ];
+            }
+        }
+
+        return $candidates;
     }
 
     /**
@@ -1077,40 +1599,44 @@ class ProductSync implements ProductSyncInterface
 
             if ($result['total_products'] === 0) {
                 $this->logger->info('[ERP] Delta product sync: no changes since ' . $lastSync);
-                $result['execution_time'] = round((microtime(true) - $startTime) * 1000, 2);
-                return $result;
+            } else {
+                $this->logger->info('[ERP] Starting delta product sync', [
+                    'modified_since' => $lastSync,
+                    'total_products' => $result['total_products'],
+                ]);
+
+                $websiteIds = [$this->storeManager->getDefaultStoreView()->getWebsiteId()];
+
+                foreach ($deltaProducts as $erpProduct) {
+                    $sku = trim((string) ($erpProduct['CODIGO'] ?? ''));
+
+                    try {
+                        $validationResult = $this->productValidator->validate($erpProduct);
+                        if (!$validationResult->isValid()) {
+                            $result['validation_failed']++;
+                            continue;
+                        }
+
+                        $syncResult = $this->syncSingleProduct($erpProduct, $websiteIds, $validationResult);
+                        match ($syncResult) {
+                            'created' => $result['created']++,
+                            'updated' => $result['updated']++,
+                            default => $result['skipped']++,
+                        };
+                    } catch (\Exception $e) {
+                        $result['errors']++;
+                        $this->logger->error('[ERP] Delta product sync error', [
+                            'sku' => $sku,
+                            'error' => $e->getMessage(),
+                        ]);
+                    }
+                }
             }
 
-            $this->logger->info('[ERP] Starting delta product sync', [
-                'modified_since' => $lastSync,
-                'total_products' => $result['total_products'],
-            ]);
-
-            $websiteIds = [$this->storeManager->getDefaultStoreView()->getWebsiteId()];
-
-            foreach ($deltaProducts as $erpProduct) {
-                $sku = trim((string) ($erpProduct['CODIGO'] ?? ''));
-
-                try {
-                    $validationResult = $this->productValidator->validate($erpProduct);
-                    if (!$validationResult->isValid()) {
-                        $result['validation_failed']++;
-                        continue;
-                    }
-
-                    $syncResult = $this->syncSingleProduct($erpProduct, $websiteIds, $validationResult);
-                    match ($syncResult) {
-                        'created' => $result['created']++,
-                        'updated' => $result['updated']++,
-                        default => $result['skipped']++,
-                    };
-                } catch (\Exception $e) {
-                    $result['errors']++;
-                    $this->logger->error('[ERP] Delta product sync error', [
-                        'sku' => $sku,
-                        'error' => $e->getMessage(),
-                    ]);
-                }
+            $reconcile = $this->reconcileInactiveProducts();
+            $result['deactivated'] = (int) $reconcile['deactivated'];
+            if (!empty($reconcile['skip_reason'])) {
+                $result['deactivation_skipped'] = $reconcile['skip_reason'];
             }
 
             $result['execution_time'] = round((microtime(true) - $startTime) * 1000, 2);
@@ -1120,9 +1646,10 @@ class ProductSync implements ProductSyncInterface
                 'import',
                 $result['errors'] > 0 ? 'partial' : 'success',
                 sprintf(
-                    '[Delta] Criados: %d, Atualizados: %d, Erros: %d, Ignorados: %d | Tempo: %dms | Desde: %s',
+                    '[Delta] Criados: %d, Atualizados: %d, Desativados: %d, Erros: %d, Ignorados: %d | Tempo: %dms | Desde: %s',
                     $result['created'],
                     $result['updated'],
+                    $result['deactivated'],
                     $result['errors'],
                     $result['skipped'],
                     $result['execution_time'],
@@ -1130,7 +1657,7 @@ class ProductSync implements ProductSyncInterface
                 ),
                 null,
                 null,
-                $result['created'] + $result['updated']
+                $result['created'] + $result['updated'] + $result['deactivated']
             );
 
             $this->logger->info('[ERP] Delta product sync completed', $result);
@@ -1144,6 +1671,50 @@ class ProductSync implements ProductSyncInterface
         }
 
         return $result;
+    }
+
+    private function persistGlobalDisabledStatus(int $entityId): void
+    {
+        $connection = $this->syncLogResource->getConnection();
+        $statusAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($connection->getTableName('eav_attribute'), ['attribute_id'])
+                ->where('attribute_code = ?', 'status')
+                ->where('entity_type_id = ?', 4)
+        );
+        if ($statusAttrId <= 0) {
+            return;
+        }
+
+        $intTable = $connection->getTableName('catalog_product_entity_int');
+        $updated = $connection->update(
+            $intTable,
+            ['value' => Status::STATUS_DISABLED],
+            [
+                'attribute_id = ?' => $statusAttrId,
+                'store_id = ?' => 0,
+                'entity_id = ?' => $entityId,
+            ]
+        );
+
+        /* BUG-STATUS-DUP (corrigido 06/10/2026): `update()` devolve 0 tambem quando
+         * a linha JA EXISTE e o valor JA E o desejado — e era o caso aqui, porque o
+         * `productRepository->save()` imediatamente antes ja gravou status=2. O codigo
+         * tratava isso como "linha nao existe", tentava INSERT e estourava
+         * "1062 Duplicate entry". Consequencia: o produto ERA desativado, mas o catch
+         * registrava "Failed to deactivate" e `$deactivated` nunca incrementava —
+         * o comando imprimia "Desativados: 0" depois de desativar 432 produtos.
+         * INSERT ... ON DUPLICATE KEY UPDATE e idempotente e resolve os dois casos. */
+        $connection->insertOnDuplicate(
+            $intTable,
+            [
+                'attribute_id' => $statusAttrId,
+                'store_id' => 0,
+                'entity_id' => $entityId,
+                'value' => Status::STATUS_DISABLED,
+            ],
+            ['value']
+        );
     }
 
     /**
@@ -1167,8 +1738,13 @@ class ProductSync implements ProductSyncInterface
                 WHERE m.CCKATIVO = 'S'
                 AND m.EDITDATE > :since";
 
-        if ($this->helper->filterComercializa()) {
+        $scope = $this->helper->getProductScope();
+        if ($scope === 'comercializa') {
             $sql .= " AND m.CKCOMERCIALIZA = 'S'";
+        } elseif ($scope === 'uniao') {
+            $sql .= " AND (m.CKCOMERCIALIZA = 'S' OR p.VLRVDSUG > 0)";
+        } elseif ($scope === 'com_preco') {
+            $sql .= " AND p.VLRVDSUG > 0";
         }
 
         $sql .= " ORDER BY m.EDITDATE ASC";

@@ -798,7 +798,7 @@ body#html-body.catalog-product-view .awa-pdp-sticky-bar__btn {
 @media (max-width: 991px) {
   body#html-body.catalog-product-view .awa-pdp-sticky-bar.awa-pdp-sticky-bar--visible,
   body#html-body.catalog-product-view .awa-pdp-sticky-bar.is-visible {
-    bottom: calc(var(--awa-mobile-bottom-nav-h, 84px) + 12px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 12px + env(safe-area-inset-bottom, 0px)) !important;
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
@@ -818,13 +818,13 @@ body#html-body.catalog-product-view .awa-pdp-sticky-bar__btn {
 
   body#html-body.catalog-product-view:has(.awa-pdp-sticky-bar.awa-pdp-sticky-bar--visible),
   body#html-body.catalog-product-view:has(.awa-pdp-sticky-bar.is-visible) {
-    padding-bottom: calc(76px + var(--awa-mobile-bottom-nav-h, 84px) + 24px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(76px + var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 24px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* Keep the scroll shortcut out of the sticky buy area on mobile PDP. */
   body#html-body.catalog-product-view:has(.awa-pdp-sticky-bar.awa-pdp-sticky-bar--visible) :is(#awa-back-to-top, .awa-back-to-top),
   body#html-body.catalog-product-view:has(.awa-pdp-sticky-bar.is-visible) :is(#awa-back-to-top, .awa-back-to-top) {
-    bottom: calc(var(--awa-mobile-bottom-nav-h, 84px) + 108px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 108px + env(safe-area-inset-bottom, 0px)) !important;
     right: 12px !important;
     z-index: 1001 !important;
   }
@@ -1037,7 +1037,7 @@ body#html-body.b2b-account-dashboard .block-collapsible-nav .item a.current {
 
 #html-body .page-wrapper .awa-site-header .awa-top-utility-bar .topbar-info--hours,
 #html-body .page-wrapper .awa-site-header .awa-top-utility-bar .topbar-info--hours .info-text {
-  color: #475569 !important;
+  color: var(--awa-text-soft, #475569) !important;
   font-weight: 500 !important;
 }
 

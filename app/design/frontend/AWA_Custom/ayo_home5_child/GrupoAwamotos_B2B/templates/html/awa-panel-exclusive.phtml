@@ -1,0 +1,8 @@
+<?php
+/**
+ * B2B Densidade — Coordenação de painéis flutuantes (14/10/2026).
+ * Renderiza apenas a tag <script> do awa-panel-exclusive.js em todas as páginas.
+ * A regra: abrir um painel fecha todos os outros (exclusão mútua).
+ */
+?>
+<script type="text/javascript" src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-panel-exclusive.js')) ?>" defer></script>

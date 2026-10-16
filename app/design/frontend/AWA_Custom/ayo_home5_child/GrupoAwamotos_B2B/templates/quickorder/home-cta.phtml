@@ -1,0 +1,30 @@
+<?php
+/**
+ * B2B Densidade — CTA de Pedido Rápido na home (Uline/Grainger style).
+ * Bloco compacto: SKU + QTD + CTA para /b2b/quickorder/.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+$quickOrderUrl = $block->getUrl('b2b/quickorder');
+?>
+<section class="awa-quickorder-cta" aria-labelledby="awa-quickorder-cta-title">
+    <div class="awa-quickorder-cta__inner">
+        <div class="awa-quickorder-cta__head">
+            <span class="awa-quickorder-cta__icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+            </span>
+            <h2 class="awa-quickorder-cta__title" id="awa-quickorder-cta-title"><?= $block->escapeHtml(__('Pedido Rápido')) ?></h2>
+            <p class="awa-quickorder-cta__sub"><?= $block->escapeHtml(__('Cole os SKUs, informe as quantidades e feche o pedido sem abrir página por página.')) ?></p>
+        </div>
+        <div class="awa-quickorder-cta__demo" aria-hidden="true">
+            <span class="awa-quickorder-cta__demo-sku">SKU 6001</span>
+            <span class="awa-quickorder-cta__demo-qty">Qtd 10</span>
+        </div>
+        <a class="awa-quickorder-cta__btn action primary" href="<?= $block->escapeUrl($quickOrderUrl) ?>">
+            <?= $block->escapeHtml(__('Montar pedido por SKU')) ?>
+        </a>
+    </div>
+</section>

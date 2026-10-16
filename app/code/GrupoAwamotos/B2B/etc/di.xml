@@ -132,4 +132,15 @@
                 sortOrder="10"/>
     </type>
 
+    <!-- HOTFIX B2B-AUTH (13/10): gate REST registrado no di GLOBAL (o frontend/di nao cobre webapi_rest) -->
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="grupoawamotos_b2b_block_guest_cart_item_save"
+                type="GrupoAwamotos\B2B\Plugin\Checkout\BlockGuestCartItemSavePlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Pricing\Price\TierPrice">
+        <plugin name="awa_customer_tier_price_list"
+                type="GrupoAwamotos\B2B\Plugin\Pricing\CustomerTierPrice"
+                sortOrder="10"/>
+    </type>
 </config>

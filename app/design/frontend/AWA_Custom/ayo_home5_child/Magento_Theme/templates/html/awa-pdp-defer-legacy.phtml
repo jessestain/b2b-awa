@@ -1,0 +1,38 @@
+<?php declare(strict_types=1);
+/**
+ * AWA Motos — PDP: defer de CSS legado validado por probe (13/10/2026).
+ *
+ * Estilos adiados nesta PDP (media=print + swap onload):
+ *  - css/styles-l.min.css (2,0 MB) — probe CDP (bloqueado) mostrou delta
+ *    geométrico de 1 px nas âncoras acima da dobra: o sistema AWA (inline
+ *    locks + themes + align-grid) cobre o layout da PDP. Mantém o swap
+ *    restaurando a media ORIGINAL (screen and (min-width: 768px)) para
+ *    nunca aplicar CSS de desktop em mobile.
+ *  - css/awa-vfix-pdp.min.css — delta 0 no mesmo probe (fixes cobertos
+ *    pelos locks inline da PDP).
+ *
+ * O fallback <noscript> preserva o carregamento bloqueante para quem não
+ * executa JS (mesmo padrão do awa-shelf-carousel-loader.phtml).
+ *
+ * Escopo: somente catalog_product_view (catalog_product_view.xml).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+$stylesLUrl = $block->getViewFileUrl('css/styles-l.min.css');
+$vfixPdpUrl = $block->getViewFileUrl('css/awa-vfix-pdp.min.css');
+?>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($stylesLUrl) ?>"
+      media="print"
+      data-awa-pdp-defer="styles-l"
+      data-awa-styles-l="pdp"
+      onload="this.media='screen and (min-width: 768px)'"/>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($vfixPdpUrl) ?>"
+      media="print"
+      data-awa-pdp-defer="vfix-pdp"
+      onload="this.media='all'"/>
+<noscript>
+    <link rel="stylesheet" href="<?= $block->escapeUrl($stylesLUrl) ?>" media="screen and (min-width: 768px)"/>
+    <link rel="stylesheet" href="<?= $block->escapeUrl($vfixPdpUrl) ?>"/>
+</noscript>

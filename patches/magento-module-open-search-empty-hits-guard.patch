@@ -1,0 +1,17 @@
+--- a/SearchAdapter/Adapter.php	2025-04-02 22:58:42.000000000 +0000
++++ b/SearchAdapter/Adapter.php	2026-10-04 01:27:16.314212933 +0000
+@@ -136,6 +136,14 @@
+                     $processed += $query['body']['size'];
+                     $rawResponse = $client->query($query);
+                     $lastHit = end($rawResponse['hits']['hits']);
++                    // Guard: em paginacao profunda (Point-in-Time) o OpenSearch pode devolver uma
++                    // pagina sem hits. Sem esta guarda, $lastHit e false e $lastHit['sort'] dispara
++                    // "Trying to access array offset on false" (20x em 03/10/2026), e o catch de
++                    // query() transforma a busca inteira em resultado VAZIO.
++                    // Patch aplicado 2026-10 via cweagans/composer-patches.
++                    if ($lastHit === false) {
++                        break;
++                    }
+                     $query['body']['search_after'] = $lastHit['sort'];
+                 }
+                 $query['body']['size'] = $request->getSize();

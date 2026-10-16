@@ -36,7 +36,7 @@
 #html-body select:focus-visible,
 #html-body details:focus-visible,
 #html-body summary:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337) !important;
+    outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
     outline-offset: 3px !important;
     border-radius: 3px;
     /* Do not remove box-shadow — forms may use it as the focus indicator */
@@ -45,7 +45,7 @@
 /* ── 3. Form inputs: keep border-color pattern but add backup ring ────── */
 #html-body input:focus-visible,
 #html-body textarea:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337) !important;
+    outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
     outline-offset: 0 !important;
     border-radius: 3px;
 }
@@ -60,7 +60,7 @@
     left: 8px !important;
     z-index: 99999 !important;
     padding: 8px 16px !important;
-    background: var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary, var(--awa-brand)) !important;
     color: var(--awa-bg) !important;
     font-weight: 700 !important;
     border-radius: 4px !important;

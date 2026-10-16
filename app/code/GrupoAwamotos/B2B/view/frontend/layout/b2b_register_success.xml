@@ -13,9 +13,6 @@
                    name="b2b.register.success"
                    template="GrupoAwamotos_B2B::register/success.phtml"
                    cacheable="false">
-                <arguments>
-                    <argument name="b2b_helper" xsi:type="object">GrupoAwamotos\B2B\Helper\Data</argument>
-                </arguments>
                 <block class="GrupoAwamotos\B2B\Block\Account\AuthLogo"
                        name="auth.logo"
                        as="auth_logo"

@@ -902,7 +902,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
     #awa-cookie-banner.awa-cookie-banner--visible {
     left: 12px !important;
     right: 12px !important;
-    inset: auto 12px calc(var(--awa-mobile-bottom-nav-h, 64px) + 72px + env(safe-area-inset-bottom, 0px)) 12px !important;
+    inset: auto 12px calc(var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 72px + env(safe-area-inset-bottom, 0px)) 12px !important;
     width: auto !important;
     max-width: none !important;
   }
@@ -1647,7 +1647,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   align-items: center !important;
   justify-content: center !important;
   padding-inline: var(--awa-space-2, 8px) !important;
-  font-size: var(--awa-font-size-xs, 12px) !important;
+  font-size: var(--awa-font-size-xs, 11px) !important;
   font-weight: 600 !important;
   line-height: 1.2 !important;
   letter-spacing: 0 !important;
@@ -1770,8 +1770,8 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
    One gutter, one control height, one card price size.
    Token overrides here because _tokens.less is not redeployed via SCD in this wave. */
 :root, html, html body#html-body {
-  --awa-hover-lift: 0px !important;
-  --awa-hover-scale: 1 !important;
+  --awa-hover-lift: 0px!important;
+  --awa-hover-scale: 1!important;
   --awa-control-height: 44px;
   --awa-search-height: 44px;
   --awa-button-height: 44px;
@@ -1925,6 +1925,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
     }
   }
   @layer awa-fixes {
+    @media (min-width: 768px) {
     html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart {
       display: flex !important;
       flex-direction: row !important;
@@ -1990,6 +1991,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
       font-weight: 700 !important;
       transform: none !important;
     }
+    }
     html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-product-view,.catalog-category-view,.checkout-cart-index,.customer-account-index) .page-wrapper :is(footer.page-footer,.page_footer) .footer-bottom {
       padding-block: var(--awa-space-4, 16px) !important;
       box-sizing: border-box !important;
@@ -2033,6 +2035,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
     box-sizing: border-box !important;
   }
 }
+@media (min-width: 768px) {
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart {
   display: flex !important;
   flex-direction: row !important;
@@ -2065,6 +2068,24 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
   max-height: var(--awa-control-height, 44px) !important;
   font-size: var(--awa-font-size-14, 14px) !important;
   font-weight: 700 !important;
+}
+}
+@media (max-width: 767px) {
+  /* Magento/ssot forçam row+nowrap com 20× #html-body; align-grid já põe qty 100% em ≤767. !important só para empatar essa especificidade. */
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .fieldset {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .field.qty,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart .actions,
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .box-tocart :is(.action.tocart,.action.primary.tocart,#product-addtocart-button) {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: var(--awa-control-height, 44px) !important;
+  }
 }
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(footer.page-footer,.page_footer) .footer-bottom {
   padding-block: var(--awa-space-4, 16px) !important;

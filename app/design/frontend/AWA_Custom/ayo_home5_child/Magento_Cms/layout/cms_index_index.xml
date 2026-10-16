@@ -282,5 +282,11 @@
                    template="Magento_Theme::html/awa-minicart-ui-defer.phtml"
                    after="awa.home.customer.defer.loader"/>
         </referenceContainer>
+            <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.quickorder.home.cta"
+                   template="GrupoAwamotos_B2B::quickorder/home-cta.phtml"
+                   before="-"/>
+        </referenceContainer>
     </body>
 </page>

@@ -21,6 +21,19 @@ $isHomePage = $request && $request->getFullActionName() === 'cms_index_index';
 if ($isHomePage) {
     return;
 }
+/* ESCOPO PROVADO (04/10/2026): as rotas INSTITUCIONAIS nao tem carrossel de shelf.
+   Este loader injeta awa-shelf-carousel.min.css (49 KB) + awa-carousel-contract.min.css
+   (15 KB). MEDIDO com probe-dependencia-folhas.js em /contact/: desabilitar as duas
+   nao altera NENHUM valor computado de 25 componentes-ancora — confirmado nas 4
+   combinacoes (desktop+mobile x anonimo+logado), restauracao integra em todas.
+   E o proprio tema ja faz o equivalente: b2b_auth_shell.xml remove print.css e outras,
+   e este arquivo ja se exclui da home. Estendo a mesma condicao que ele ja usa. */
+$rotaInstitucional = in_array($request ? $request->getFullActionName() : '', [
+    'contact_index_index',
+], true);
+if ($rotaInstitucional) {
+    return;
+}
 
 $assetVersion = '20260902-home-idle-carousel-r4';
 $cssUrl = $block->getViewFileUrl('css/awa-shelf-carousel.min.css') . '?v=' . $assetVersion;

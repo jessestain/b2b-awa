@@ -70,7 +70,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     border: 1px solid var(--awa-vfix-border, var(--awa-border, rgba(15, 23, 42, 0.12))) !important;
     background: var(--awa-vfix-surface, var(--awa-bg, #fff)) !important;
     background-color: var(--awa-vfix-surface, var(--awa-bg, #fff)) !important;
-    color: var(--awa-text-secondary, #475569) !important;
+    color: var(--awa-text-secondary, var(--awa-text-soft, #475569)) !important;
     box-shadow: 0 1px 8px rgba(15, 23, 42, 0.10) !important;
     transform: none !important;
     z-index: 5 !important;
@@ -124,8 +124,8 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
 .page-wrapper .content-top-home
 .rokan-newproduct[data-awa-shelf="newproduct"]
 .awa-carousel > .awa-owl-nav.awa-carousel__nav .awa-carousel__toggle:not([hidden]):hover {
-    border-color: var(--awa-primary, #b73337) !important;
-    color: var(--awa-primary, #b73337) !important;
+    border-color: var(--awa-primary, var(--awa-brand)) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     background: #ffffff !important;
     background-color: #ffffff !important;
     transform: none !important;
@@ -182,7 +182,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     font-size: max(13px, 0.8125rem) !important;
     font-weight: 400 !important;
     line-height: 1.4 !important;
-    color: var(--awa-text-secondary, #475569) !important;
+    color: var(--awa-text-secondary, var(--awa-text-soft, #475569)) !important;
     text-wrap: pretty !important;
 }
 
@@ -194,7 +194,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     align-self: center !important;
     font-size: max(13px, 0.8125rem) !important;
     font-weight: 600 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     text-decoration: none !important;
 }
 
@@ -222,7 +222,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     font-weight: 600 !important;
     letter-spacing: 0.02em !important;
     font-variant-numeric: tabular-nums !important;
-    color: var(--awa-text-secondary, #475569) !important;
+    color: var(--awa-text-secondary, var(--awa-text-soft, #475569)) !important;
 }
 
 /* H20: micro-hierarchy dentro do card (nome → REF → rating → CTA) */
@@ -314,7 +314,7 @@ html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,
     .awa-shelf--carousel
     .awa-carousel {
         padding-inline: 0 !important;
-        --awa-home-carousel-cols: 2 !important;
+        --awa-home-carousel-cols: 2!important;
     }
 
     html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)

@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * AWA Motos — SEO-013: self-canonical para páginas CMS e para a rota custom /catalogo/.
+ *
+ * Medido (02/10/2026): `canonical_qtd = 0` em /about-us, /faq, /catalogo/, /shipping,
+ * /politica-* etc. O único emissor de canonical para CMS no tema é
+ * Magento_Cms::awa-seo-head.phtml, que está registrado APENAS no handle cms_index_index
+ * (Magento_Cms/layout/cms_index_index.xml:168) e emite sempre `$baseUrl . '/'` — ou seja,
+ * só a home tem canonical de CMS.
+ *
+ * Este template cobre o buraco SEM tocar no core e SEM duplicar tag:
+ * só emite para os handles da whitelist (páginas que hoje não têm canonical nenhum).
+ * Produtos, categorias, /contact e a home ficam de fora de propósito — todos já têm
+ * o seu canonical (core ou os templates awa-contact-seo-head / awa-seo-head).
+ *
+ * Requer <argument>? NÃO. Requer publish-phtml? SIM (é .phtml de app/design).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+
+$awaAction = (string) $block->getRequest()->getFullActionName();
+
+/** Handles que NÃO têm canonical em nenhum outro lugar do tema/core. */
+$awaAllowedActions = [
+    'cms_page_view',        // about-us, faq, shipping, politicas, seja-revendedor, ...
+    'catalogo_index_index', // rota custom do módulo GrupoAwamotos\Theme (/catalogo/)
+];
+
+if (!in_array($awaAction, $awaAllowedActions, true)) {
+    return;
+}
+
+$awaBase = rtrim((string) $block->getBaseUrl(), '/');
+$awaPath = (string) $block->getRequest()->getOriginalPathInfo();
+$awaCanonical = $awaBase . '/' . ltrim($awaPath, '/');
+?>
+<link rel="canonical" href="<?= $block->escapeUrl($awaCanonical) ?>"/>

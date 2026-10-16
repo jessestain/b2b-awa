@@ -601,7 +601,7 @@
         fsItem.style.setProperty('height', '100vh', 'important');
         fsItem.style.setProperty('max-height', '100dvh', 'important');
         fsItem.style.setProperty('overflow', 'hidden', 'important');
-        fsItem.style.setProperty('background', '#020617', 'important');
+        fsItem.style.setProperty('background', 'color-mix(in srgb, #0f172a 55%, transparent)', 'important');
 
         [wrap, stage].forEach(function (el) {
             el.style.setProperty('width', contentW + 'px', 'important');

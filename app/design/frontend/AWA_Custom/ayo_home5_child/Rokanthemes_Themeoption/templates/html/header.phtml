@@ -158,9 +158,9 @@ $headerMode = $isPasswordAuthHeader
 						   ambos como substrings literais. */ ?>
 						<?php /* UX 2026-08-04: CTA no fim da frase (chip terminal), sem quebrar
 						   a sentença no meio — conversão B2B + hierarquia visual. */ ?>
-						<a href="<?= $escaper->escapeUrl($block->getUrl('b2b/register')) ?>" class="awa-b2b-promo-bar__cta" aria-label="<?= $escaper->escapeHtmlAttr(__('Cadastre agora — Cadastre-se no Cadastro B2B')) ?>">
+						<a href="<?= $escaper->escapeUrl($block->getUrl('b2b/register')) ?>" class="awa-b2b-promo-bar__cta" style="width:auto!important;min-width:fit-content!important;padding-inline:6px!important;overflow:visible!important" aria-label="<?= $escaper->escapeHtmlAttr(__('Cadastre agora — Cadastre-se no Cadastro B2B')) ?>">
 						<strong class="awa-b2b-promo-bar__cta-long" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre agora')) ?></strong>
-						<strong class="awa-b2b-promo-bar__cta-short" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
+						<strong class="awa-b2b-promo-bar__cta-short" style="width:auto!important;max-width:none!important" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
 					</a>
 				</p>
 				<button type="button" id="awa-b2b-promo-close" class="awa-b2b-promo-close" aria-label="<?= $escaper->escapeHtmlAttr(__('Fechar')) ?>">&times;</button>

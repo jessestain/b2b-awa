@@ -329,11 +329,11 @@ html body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_
    ════════════════════════════════════════════════════════════════════════ */
 
 html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
-  --awa-f-gap: 8px !important;
-  --awa-home-section-pad: 12px !important;
-  --awa-home-section-pad-tight: 8px !important;
-  --awa-home-carousel-gutter-inline: 16px !important;
-  --awa-home-carousel-header-gap: 8px !important;
+  --awa-f-gap: 8px!important;
+  --awa-home-section-pad: 12px!important;
+  --awa-home-section-pad-tight: 8px!important;
+  --awa-home-carousel-gutter-inline: 16px!important;
+  --awa-home-carousel-header-gap: 8px!important;
 }
 
 /* Título featured — corporativo, não display 900/2.25rem */
@@ -342,7 +342,7 @@ html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-hom
   .content-top-home
   :is(.awa-carousel-section--featured, .awa-shelf--featured)
   :is(.awa-section-header__title, .awa-shelf__title, h2) {
-  font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+  font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
   font-size: clamp(17px, 16px + 0.35vw, 20px) !important;
   font-weight: 600 !important;
   letter-spacing: -0.01em !important;
@@ -916,7 +916,7 @@ html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-hom
   box-sizing: border-box !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: var(--awa-density-2, 8px) !important;
+  gap: var(--awa-density-2, 4px) !important;
   height: 100% !important;
   min-height: 100% !important;
   overflow: hidden !important;

@@ -145,7 +145,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) :is(
 
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .awa-b2b-promo-bar__cta,
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .awa-b2b-promo-bar__cta strong {
-  color: var(--awa-primary-dark, #8e2629) !important;
+  color: var(--awa-primary-dark, var(--awa-brand-dark)) !important;
 }
 
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .awa-plp-b2b-gate-banner__title {
@@ -196,7 +196,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .pag
   .awa-b2b-promo-bar__cta,
   .awa-b2b-promo-bar__cta strong
 ) {
-  color: var(--awa-primary-dark, #8e2629) !important;
+  color: var(--awa-primary-dark, var(--awa-brand-dark)) !important;
   background: transparent !important;
 }
 
@@ -327,7 +327,7 @@ html body#html-body .page-wrapper .block-minicart .action.viewcart {
 }
 
 html body#html-body .page-wrapper .block-minicart :is(.action.viewcart, .action.delete, .product-item-name a):focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+  outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
   outline-offset: 2px !important;
   border-radius: 6px !important;
 }
@@ -412,15 +412,15 @@ html body#html-body.catalog-product-view .page-wrapper .rx-pdp-addtocart {
   min-height: 44px !important;
   border-radius: 8px !important;
   background: transparent !important;
-  border: 1px solid var(--awa-primary, #b73337) !important;
-  color: var(--awa-primary, #b73337) !important;
+  border: 1px solid var(--awa-primary, var(--awa-brand)) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   box-shadow: none !important;
   text-transform: none !important;
   font-weight: 600 !important;
 }
 
 html body#html-body.catalog-product-view .page-wrapper .rx-pdp-addtocart:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #fff) !important;
+  background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 8%, #fff) !important;
 }
 
 html body#html-body.catalog-product-view .page-wrapper .additional-attributes :is(th, td) {
@@ -499,15 +499,15 @@ html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .related
   min-height: 44px !important;
   border-radius: 8px !important;
   background: transparent !important;
-  border: 1px solid var(--awa-primary, #b73337) !important;
-  color: var(--awa-primary, #b73337) !important;
+  border: 1px solid var(--awa-primary, var(--awa-brand)) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   box-shadow: none !important;
   font-weight: 600 !important;
   text-transform: none !important;
 }
 
 html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related .related-addtocart:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--awa-primary, #b73337) 8%, #fff) !important;
+  background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 8%, #fff) !important;
   box-shadow: none !important;
 }
 
@@ -542,7 +542,7 @@ html body#html-body.catalog-product-view .page-wrapper .page-title-wrapper .page
 
 html body#html-body.catalog-product-view .page-wrapper .breadcrumbs a:focus-visible,
 html body#html-body.catalog-product-view .page-wrapper .breadcrumbs strong:focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+  outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
   outline-offset: 2px !important;
   border-radius: 4px !important;
 }
@@ -561,7 +561,7 @@ html body#html-body.catalog-product-view .page-wrapper .box-tocart .awa-qty-step
 
 html body#html-body.catalog-product-view .page-wrapper .box-tocart .awa-qty-stepper .awa-qty-btn:focus-visible,
 html body#html-body.catalog-product-view .page-wrapper .box-tocart .actions .action.tocart.primary:focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+  outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
   outline-offset: 2px !important;
 }
 
@@ -583,7 +583,7 @@ html body#html-body.catalog-product-view .page-wrapper :is(
 }
 
 html body#html-body.catalog-product-view .page-wrapper .awa-pdp-related :is(.product-item-link, .related-addtocart):focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+  outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
   outline-offset: 2px !important;
   border-radius: 4px !important;
 }
@@ -634,7 +634,7 @@ html body#html-body:is(.cms-noroute-index, .cms-no-route) .page-wrapper .awa-404
   min-width: 44px !important;
   min-height: 44px !important;
   border-radius: 10px !important;
-  background: var(--awa-primary, #b73337) !important;
+  background: var(--awa-primary, var(--awa-brand)) !important;
   color: var(--awa-text-inverse, #fff) !important;
   border: 0 !important;
 }
@@ -653,12 +653,12 @@ html body#html-body:is(.cms-noroute-index, .cms-no-route) .page-wrapper .awa-404
   padding-inline: 12px !important;
   font-size: max(14px, 0.875rem) !important;
   font-weight: 600 !important;
-  color: var(--awa-primary, #b73337) !important;
+  color: var(--awa-primary, var(--awa-brand)) !important;
   text-decoration: none !important;
 }
 
 html body#html-body:is(.cms-noroute-index, .cms-no-route) .page-wrapper .awa-404-page :is(input, button, a):focus-visible {
-  outline: 2px solid var(--awa-primary, #b73337) !important;
+  outline: 2px solid var(--awa-primary, var(--awa-brand)) !important;
   outline-offset: 2px !important;
 }
 

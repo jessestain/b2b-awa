@@ -44,4 +44,13 @@ interface PriceVisibilityInterface
      * @return bool
      */
     public function isApprovedPendingErp(): bool;
+
+    /**
+     * HOTFIX B2B-AUTH (13/10): mesma regra comercial, para um cliente EXPLICITO
+     * (canais REST/GraphQL onde nao ha sessao de frontend).
+     *
+     * @param int $customerId
+     * @return bool
+     */
+    public function canAddToCartForCustomer(int $customerId): bool;
 }

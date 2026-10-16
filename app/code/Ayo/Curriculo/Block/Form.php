@@ -215,7 +215,22 @@ class Form extends Template
             $this->dataPersistor->clear('ayo_curriculo');
         }
 
-        return isset($this->postData[$key]) ? (string)$this->postData[$key] : '';
+        if (!isset($this->postData[$key])) {
+            return '';
+        }
+
+        $value = $this->postData[$key];
+
+        // Campos multiplos (ex.: name="specialties[]") chegam como array.
+        // O cast direto (string) gerava "Array to string conversion" -> CRITICAL no log.
+        if (is_array($value)) {
+            return implode(', ', array_map(
+                static fn($item): string => is_scalar($item) ? (string)$item : '',
+                $value
+            ));
+        }
+
+        return is_scalar($value) ? (string)$value : '';
     }
 
     public function isPostValueChecked(string $key): bool

@@ -1,0 +1,59 @@
+/*
+ * AWA — contraste em blocos de fundo colorido
+ * ==========================================
+ *
+ * O PROBLEMA (medido em 06/10/2026 em /faq)
+ *   <div class="awa-cta"> com fundo #b23c34 (vermelho da marca):
+ *     h3 ......... #201918  => contraste *** 2.96:1 *** (minimo 4.5)
+ *     p .......... #393130  => contraste *** 2.17:1 ***
+ *   Texto quase preto sobre vermelho medio: ilegivel.
+ *
+ * A CAUSA
+ *   Ja existe uma correcao que forca #fff em .awa-cta — mas ela esta travada em
+ *   `.cms-formas-pagamento` (ver awa-design-system, secao 51.44). O /faq tambem
+ *   usa .awa-cta e nao e essa pagina, entao a regra nao o alcanca.
+ *
+ *   Alem disso o CSS depende de `var(--awa-text-on-primary)`, que resolve para
+ *   `var(--awa-white, var(--awa-sg-c61))` — e esses dois tokens estavam VAZIOS
+ *   nessas paginas. Declaracao com var() inexistente e DESCARTADA, e uma regra
+ *   escura acabava vencendo. Os tokens agora estao em awa-tokens-base.css.
+ *
+ * O ESCOPO DESTE ARQUIVO
+ *   `.awa-cta` em QUALQUER pagina, nao so em /formas-pagamento. E o bloco de
+ *   chamada para acao do conteudo institucional (FAQ, formas de pagamento, etc.).
+ *
+ * COMO CARREGA
+ *   <css src="css/awa-contrast-on-color.css"/> no default_head_blocks.xml,
+ *   depois do awa-tokens-base.css.
+ */
+
+/* Texto branco em qualquer bloco de fundo colorido da marca.
+   Especificidade alta DE PROPOSITO: a regra que deixa o texto escuro aqui usa
+   `html body#html-body...` repetido, e perde para o conteudo institucional. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta),
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta) :is(h1, h2, h3, h4, h5, h6, p, strong, span, li, em, b) {
+  color: #fff !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta) a:not(.awa-btn) {
+  color: #fff !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta) a:not(.awa-btn):is(:hover, :focus-visible) {
+  color: #fff !important;
+  opacity: .92 !important;
+}
+
+/* O botao dentro do bloco tem fundo proprio: contraste com ELE, nao com o bloco */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta) a.awa-btn {
+  background: #fff !important;
+  color: var(--awa-brand, #b73337) !important;
+  border: 1px solid transparent !important;
+}
+
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-cta, .awa-inst .awa-cta) a.awa-btn:is(:hover, :focus-visible) {
+  background: var(--awa-surface-alt, #f7f7f8) !important;
+  color: var(--awa-brand-dark, #8e2629) !important;
+}

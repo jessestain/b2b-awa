@@ -421,7 +421,23 @@ define([], function () {
         syncNavChrome();
         updateNavState();
 
+        // PERF: remountChrome era chamado 4x no load (2x rAF + 300ms + 1200ms + load),
+        // e cada execucao custa ~130ms => ~520ms de TBT medidos no Lighthouse/LoAF.
+        // O guard abaixo mantem a funcionalidade (resize e mudanca de slides ainda remontam)
+        // mas evita reexecucao quando NADA mudou: nº de itens, largura do viewport,
+        // largura rolavel do track (captura assentamento de fontes/imagens) e reduced-motion.
+        let remountSig = '';
         function remountChrome() {
+            const sig = [
+                track.children.length,
+                window.innerWidth,
+                Math.round(track.scrollWidth),
+                prefersReducedMotion() ? '1' : '0',
+            ].join('|');
+            if (sig === remountSig) {
+                return;
+            }
+            remountSig = sig;
             buildDots();
             updateDots();
             syncNavChrome();

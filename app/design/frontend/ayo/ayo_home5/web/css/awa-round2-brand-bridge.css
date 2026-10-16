@@ -1,7 +1,7 @@
 /* AWA Round2 (dual-write hotfix)
    Bridge tokens for brand consistency in round scope (header/minicart/owl tabs). */
 :root {
-    --primary-color: var(--awa-red, #b73337);
+    --primary-color: var(--awa-brand, #b73337);
     --primary-hover: var(--awa-red-dark, #8e2629);
     --text-color: var(--awa-dark, #333);
     --bg-white: var(--awa-bg-surface, #fff);

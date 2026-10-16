@@ -32,5 +32,27 @@
                 </arguments>
             </block>
         </referenceContainer>
+    
+
+        
+        <referenceBlock name="customer.section.config"
+                        template="Magento_Theme::html/awa-customer-sections-defer.phtml">
+            <arguments>
+                <argument name="sectionNamesProvider" xsi:type="object">Magento\Customer\Block\SectionNamesProvider</argument>
+                <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+                <argument name="cookie_settings" xsi:type="object">Magento\Customer\ViewModel\CookieSettings</argument>
+                <argument name="boot_immediate" xsi:type="boolean">true</argument>
+            </arguments>
+        </referenceBlock>
+
+        
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.contact.customer.defer.loader"
+                   template="Magento_Theme::html/awa-contact-customer-defer-loader.phtml"
+                   after="-"/>
+        </referenceContainer>
+
+    
     </body>
 </page>

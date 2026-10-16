@@ -60,6 +60,7 @@ class OperationalHealthService
             $this->checkDisk(),
             $this->checkExceptionLog(),
             $this->checkDbLogger(),
+            $this->checkTransactionalEmail(),
         ];
 
         $failed = 0;
@@ -504,6 +505,125 @@ class OperationalHealthService
     /**
      * @return array<string, mixed>
      */
+    /**
+     * Falhas de e-mail transacional que passariam em silencio.
+     *
+     * Um e-mail transacional que nao sai deixa o cliente sem confirmacao de pedido,
+     * sem senha e sem aviso de aprovacao B2B. Ate 05/10/2026 isso acontecia sem
+     * nenhum alerta: o chamador captura a excecao, escreve no log e devolve false.
+     * Este check le o exception.log e trata a excecao de template do Magento como
+     * FALHA, para o alerta sair pelo canal de notificacao do LogMonitoring.
+     *
+     * Janela de 3h: cobre a rotacao diaria do log (23:58) e mantem o volume de
+     * alertas limitado (o cron de saude roda a cada 30 min).
+     *
+     * @return array<string, mixed>
+     */
+    private function checkTransactionalEmail(): array
+    {
+        $files = [
+            BP . "/var/log/exception.log",
+            BP . "/var/log/exception.log.1",
+        ];
+
+        $total = 0;
+        $samples = [];
+
+        foreach ($files as $file) {
+            [$count, $found] = $this->countEmailTemplateFailures($file, 10800);
+            $total += $count;
+            foreach ($found as $f) {
+                if (count($samples) < 3 && !in_array($f, $samples, true)) {
+                    $samples[] = $f;
+                }
+            }
+        }
+
+        if ($total === 0) {
+            return [
+                "id" => "transactional_email",
+                "label" => "E-mail transacional",
+                "status" => "ok",
+                "message" => "nenhuma falha de template de e-mail nas ultimas 3h",
+                "data" => ["failures" => 0],
+            ];
+        }
+
+        return [
+            "id" => "transactional_email",
+            "label" => "E-mail transacional",
+            "status" => "fail",
+            "message" => sprintf(
+                "%d falha(s) de template de e-mail nas ultimas 3h - e-mail transacional NAO esta saindo: %s",
+                $total,
+                implode(" | ", $samples)
+            ),
+            "data" => ["failures" => $total, "samples" => $samples],
+        ];
+    }
+
+    /**
+     * Conta entradas de log (linhas que comecam com timestamp) cuja mensagem e uma
+     * falha de template de e-mail, dentro da janela de tempo.
+     *
+     * Le para frente com fgets e limita a leitura aos ultimos 16 MB, para nao
+     * carregar o arquivo inteiro na memoria. Linhas de stack trace repetem a
+     * mensagem mas nao comecam com timestamp, entao nao entram na contagem.
+     *
+     * @return array{0:int,1:array<int,string>}
+     */
+    private function countEmailTemplateFailures(string $file, int $seconds): array
+    {
+        if (!is_readable($file)) {
+            return [0, []];
+        }
+
+        $handle = @fopen($file, "rb");
+        if ($handle === false) {
+            return [0, []];
+        }
+
+        $maxBytes = 16 * 1024 * 1024;
+        $size = (int)filesize($file);
+        $partial = false;
+        if ($size > $maxBytes) {
+            fseek($handle, -$maxBytes, SEEK_END);
+            $partial = true;
+        }
+
+        $pattern = "/^\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[^\]]*\]"
+            . ".*(?:Template file '[^']+' is not found"
+            . "|Email template is not defined"
+            . "|is not defined for email template)/";
+
+        $cutoff = time() - $seconds;
+        $count = 0;
+        $samples = [];
+
+        while (($line = fgets($handle)) !== false) {
+            if ($partial) {
+                $partial = false; // descarta a primeira linha, possivelmente truncada
+                continue;
+            }
+            if (!preg_match($pattern, $line)) {
+                continue;
+            }
+            if (preg_match("/^\[(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/", $line, $m)) {
+                $ts = strtotime($m[1]);
+                if ($ts === false || $ts < $cutoff) {
+                    continue;
+                }
+            }
+            $count++;
+            if (count($samples) < 3) {
+                $clean = preg_replace("/^\[[^\]]+\]\s*/", "", $line) ?? $line;
+                $samples[] = trim(substr($clean, 0, 110));
+            }
+        }
+
+        fclose($handle);
+        return [$count, $samples];
+    }
     private function checkDbLogger(): array
     {
         $output = (string)($this->deploymentConfig->get('db_logger/output') ?: 'unknown');

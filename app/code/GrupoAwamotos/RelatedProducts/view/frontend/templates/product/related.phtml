@@ -28,6 +28,9 @@ $loginUrl     = $block->escapeUrl($block->getUrl('b2b/account/login'));
     </header>
 
     <div class="rokan-mostviewed">
+        <?php /* Nome do carrossel para o motor: o q() do awa-scroll-carousel.js le o 1o
+                 titulo dentro da raiz normalizada; sem isto o rotulo virava "Produtos". */ ?>
+        <span class="awa-section-header__title visually-hidden"><?= $block->escapeHtml((string) __('Produtos Relacionados')) ?></span>
         <div class="awa-carousel">
             <div class="awa-carousel__viewport awa-cq-card-wrapper"
                  role="region"

@@ -12,9 +12,18 @@ Disallow: /review/
 Disallow: /sendfriend/
 Disallow: /tag/
 Disallow: /enable-cookies
+
+# SEO-012 — /atacado/condicoes e /atacado/tabela-descontos são CMS pages ativas (ids 42 e 45),
+# respondem 200 e ESTÃO no sitemap.xml, mas o Disallow: /atacado/ abaixo as bloqueava
+# (conflito robots.txt x sitemap). Na avaliação do Google, a regra mais específica vence:
+# estes Allow liberam exatamente as duas páginas públicas e mantêm o resto de /atacado/ bloqueado.
+Allow: /atacado/condicoes
+Allow: /atacado/tabela-descontos
 Disallow: /atacado/
 Disallow: /pub/static/
 Disallow: /var/
 
 # Sitemaps
 Sitemap: https://awamotos.com/sitemap.xml
+# SEO-011/SEO-019 — URLs que o gerador do Magento não expressa (/contact e /catalogo/):
+Sitemap: https://awamotos.com/sitemap-extra.xml

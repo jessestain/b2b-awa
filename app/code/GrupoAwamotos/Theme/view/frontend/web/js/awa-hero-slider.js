@@ -684,7 +684,7 @@ fn();
                 a11y: {
                     enabled: true,
                     prevSlideMessage: 'Slide anterior',
-                    nextSlideMessage: 'Proximo slide',
+                    nextSlideMessage: 'Próximo slide',
                     firstSlideMessage: 'Primeiro slide',
                     lastSlideMessage: 'Ultimo slide'
                 },

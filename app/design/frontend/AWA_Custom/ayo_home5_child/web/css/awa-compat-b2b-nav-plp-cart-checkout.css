@@ -70,7 +70,7 @@ body .page-wrapper .navigation.custommenu.main-nav .main-nav-list > li > a {
 
 body .page-wrapper .navigation.custommenu.main-nav li.is-open > a,
 body .page-wrapper .navigation.custommenu.main-nav li.awa-has-current-descendant > a {
-    color: var(--primary-color, #b73337);
+    color: var(--primary-color, var(--awa-brand));
 }
 
 body .page-wrapper .block.block-search[data-awa-component='search-autocomplete'] .form.minisearch.search-content {
@@ -181,14 +181,14 @@ body .page-wrapper .owl-controls .owl-buttons div {
     justify-content: center;
     border: 1px solid #e2e8f0;
     background: #fff;
-    color: #475569;
+    color: var(--awa-text-soft, #475569);
     transition: all 0.2s ease;
 }
 
 body .page-wrapper .owl-controls .owl-buttons div:hover,
 body .page-wrapper .owl-controls .owl-buttons div:focus-visible {
     border-color: rgb(183 51 55 / 28%);
-    color: var(--primary-color, #b73337);
+    color: var(--primary-color, var(--awa-brand));
     box-shadow: 0 0 0 3px rgb(183 51 55 / 12%);
     outline: none;
 }
@@ -200,7 +200,7 @@ body .page-wrapper .owl-controls .owl-page span {
 
 body .page-wrapper .owl-controls .owl-page.active span,
 body .page-wrapper .owl-controls .owl-page:hover span {
-    background: var(--primary-color, #b73337);
+    background: var(--primary-color, var(--awa-brand));
 }
 
 body .page-wrapper .products-grid .product-item-info {
@@ -236,7 +236,7 @@ body .page-wrapper .toolbar-products .pages-item strong {
 body .page-wrapper .toolbar-products .modes-mode.active,
 body .page-wrapper .toolbar-products .pages-item.current strong {
     background: rgb(183 51 55 / 8%);
-    color: var(--primary-color, #b73337);
+    color: var(--primary-color, var(--awa-brand));
 }
 
 body .page-wrapper .filter-options-title {
@@ -328,7 +328,7 @@ body.rokanthemes-onepagecheckout .page-wrapper .b2b-terms {
 body.checkout-index-index .page-wrapper .message-error,
 body.checkout-index-index .page-wrapper .message.error,
 body.rokanthemes-onepagecheckout .page-wrapper .message.error {
-    border-left: 4px solid var(--primary-color, #b73337);
+    border-left: 4px solid var(--primary-color, var(--awa-brand));
 }
 
 @media (width <= 991px) {

@@ -6,7 +6,6 @@
             <module name="Rokanthemes_Blog"/>
             <module name="Rokanthemes_SlideBanner"/>
             <module name="Rokanthemes_Testimonials"/>
-            <module name="Rokanthemes_Faq"/>
         </sequence>
     </module>
 </config>

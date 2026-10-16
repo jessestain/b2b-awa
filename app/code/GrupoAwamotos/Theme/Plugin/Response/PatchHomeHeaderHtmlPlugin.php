@@ -91,6 +91,7 @@ class PatchHomeHeaderHtmlPlugin
                 || HeaderImpeccableCascadeLockCss::isAuthShellHtml($html)
                 || HeaderImpeccableCascadeLockCss::isB2bAccountOperationalHtml($html)
                 || in_array($action, self::CATALOG_STACK_ACTIONS, true)
+                || in_array($action, ['cms_noroute_index', 'cms_page_view'], true) // HOTFIX PERF (hml): 404/CMS herdam o stack do catalogo
             ) {
                 $html = HeaderImpeccableCascadeLockCss::stripLegacyFromHtml($html);
             } elseif (!HeaderImpeccableCascadeLockCss::isPresentInHtml($html)

@@ -14,6 +14,105 @@ declare(strict_types=1);
 $viewModel = $block->getData('view_model');
 $enableMenu = $viewModel ? $viewModel->isMobileMenuEnabled() : false;
 
+?>
+<?php /* SHIM TEMPORARIO (task-28) — FE-001 (rotulos da barra), B2B-006 (link fora do viewport) por CSS e B2B-005 (foco do botao de menu) por JS. Emitido ANTES do guard por causa dos itens de header. SEM atributo id nos blocos de estilo: o OptimizeHeadStylesPlugin apaga na home os que comecam com awa-. */ ?>
+<style>
+/* fix-mobile-chrome (task-28) — SEM atributo id, de proposito:
+ * o `OptimizeHeadStylesPlugin::stripHomeAwaInlineStyleTags()` (linhas 571-580, chamado na 486)
+ * apaga na home todo bloco de estilo inline cujo id comeca com "awa-".
+ * Ver NOTA-FILTRO-CSS-HOME.md. */
+
+/* ---------------------------------------------------------------------------
+ * FE-001 — rotulos da barra inferior cortados e conteudo da pagina por tras da barra
+ *
+ * MEDIDO (390x844 e 320x720, sem injecao):
+ *   nav.fixed-bottom  -> position: fixed; bottom: 0; height: 44px  (caixa 800..844 = na borda)
+ *   conteudo (.link-on-bottom > ul.mobile-bottom-link) -> 62px de altura (800..862)
+ *   rotulos (box do NO DE TEXTO, via Range): Inicio/Conta/Carrinho bottom=850 (6px abaixo da
+ *   borda de 844) e Deptos. bottom=852 (8px abaixo).
+ *   A barra e TRANSPARENTE (background-color rgba(0,0,0,0) no nav, no ul, no li e no a) com
+ *   z-index:1000: o selo preto "NOVO" de um card de produto (div.onsale.new-lable, z-index:4)
+ *   fica atras e aparece POR TRANSFORMAR pela barra.
+ *
+ * REGUA: box do proprio no de texto (Range.selectNodeContents + getBoundingClientRect) vs
+ *        window.innerHeight. `scrollWidth > clientWidth` NAO mede este defeito.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+    nav.fixed-bottom {
+        /* o conteudo tem 62px: com 44px de caixa os rotulos caem fora da tela */
+        height: auto !important;
+        min-height: 62px !important;
+        /* barra opaca: nada da pagina pode aparecer por tras dela */
+        background: #fff !important;
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, .08) !important;
+    }
+
+    nav.fixed-bottom .link-on-bottom,
+    nav.fixed-bottom ul.mobile-bottom-link,
+    nav.fixed-bottom ul.mobile-bottom-link > li,
+    nav.fixed-bottom ul.mobile-bottom-link > li > a,
+    nav.fixed-bottom ul.mobile-bottom-link > li > button {
+        background-color: #fff !important;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * B2B-005 — botao do menu sem indicador de foco: NAO da para resolver por CSS.
+ *
+ * O tema zera o outline com !important (regra casando
+ * :is(.awa-header-mobile-toggle,.action.nav-toggle,[data-action="toggle-nav"])).
+ * Experimento medido nesta pagina (evidencias/exp-foco), as 3 receitas de CSS FALHARAM:
+ *   A) !important sem layer, 12x #html-body  -> outline continua none 0px
+ *   B) !important dentro de @layer awa-visual-priority, 12x #html-body -> none 0px
+ *   C) idem B com longhands (outline-width/style/color) -> none 0px
+ *   D) estilo INLINE com !important -> FUNCIONA (outline solid 3px)  <-- unica via
+ * Por isso o indicador de foco e aplicado por JS inline (ver o bloco de script neste template).
+ * ATENCAO (03/10/2026): NAO escrever a tag de script literal dentro de comentario PHP neste arquivo.
+ * O publish-phtml.sh corta o comentario naquele ponto e o resto VAZA para dentro da tag,
+ * gerando "SyntaxError: Unexpected identifier 'awa'" em TODAS as paginas (medido no HTML servido).
+ * ------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------
+ * B2B-006 — "cadastre-se" duplicado FORA do viewport, porem focavel (armadilha de teclado)
+ *
+ * MEDIDO: a.awa-header-account-prompt__link--register (href /b2b/register/) com caixa
+ *         x=420..488 num viewport de 390; sem overflow horizontal; alcancavel por teclado.
+ * O tema força `display:inline-flex !important` nesse link em varias regras (inclusive em layer),
+ * entao `display:none` unlayered perderia. `visibility` NAO e declarada pelo tema para esse link:
+ * escondendo por `visibility` a correcao vale sem disputa de layer — e resolve o que importa, que e
+ * tirar o link do foco e da arvore de acessibilidade. O cadastro continua alcancavel pelo CTA
+ * "Cadastre-se" da barra de promocao no topo.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+    .awa-header-account-prompt__link--register {
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+}
+</style>
+<script>
+/* B2B-005 — indicador de foco do botao de menu. Medido: o tema zera `outline` com !important e
+ * nem regra em layer nem especificidade ganham (ver mobile-fixes.css). Estilo INLINE com
+ * !important vence folha, layer e especificidade — e aplicado no focusin e removido no focusout. */
+(function (w, d) {
+    'use strict';
+    if (w.__awaHeaderFocusRing) { return; }
+    w.__awaHeaderFocusRing = true;
+    var SEL = 'button.awa-header-mobile-toggle, .awa-site-header .action.nav-toggle, .awa-site-header [data-action="toggle-nav"]';
+    function aplicar(el) {
+        if (!el || typeof el.matches !== 'function' || !el.matches(SEL)) { return; }
+        el.style.setProperty('outline', '3px solid #b73337', 'important');
+        el.style.setProperty('outline-offset', '2px', 'important');
+    }
+    function limpar(el) {
+        if (!el || typeof el.matches !== 'function' || !el.matches(SEL)) { return; }
+        el.style.removeProperty('outline');
+        el.style.removeProperty('outline-offset');
+    }
+    d.addEventListener('focusin', function (e) { aplicar(e.target); }, true);
+    d.addEventListener('focusout', function (e) { limpar(e.target); }, true);
+}(window, document));
+</script>
+<?php
 if (!$enableMenu) {
     return;
 }
@@ -59,3 +158,4 @@ $accountUrl = $block->getUrl('b2b/account/login');
         </ul>
     </div>
 </nav>
+

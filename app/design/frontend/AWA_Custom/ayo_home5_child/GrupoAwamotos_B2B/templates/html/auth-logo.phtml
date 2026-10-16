@@ -9,14 +9,44 @@ declare(strict_types=1);
  */
 ?>
 <div class="b2b-login-logo b2b-login-logo--compact">
-    <a href="<?= $escaper->escapeUrl($block->getHomeUrl()) ?>"
+    <a class="awa-auth-lockup"
+       href="<?= $escaper->escapeUrl($block->getHomeUrl()) ?>"
        aria-label="<?= $escaper->escapeHtmlAttr(__('Ir para a página inicial da AWA Motos')) ?>">
-        <img src="<?= $escaper->escapeUrl($block->getLogoSrc()) ?>"
+        <img class="awa-auth-lockup__mark"
+             src="<?= $escaper->escapeUrl($block->getLogoSrc()) ?>"
              alt="<?= $escaper->escapeHtmlAttr($block->getLogoAlt()) ?>"
              width="150" height="86"
              loading="eager"
              decoding="async" />
+        <span class="awa-auth-lockup__tagline" style="display:none"><?= $escaper->escapeHtml(__('MOTO COMPONENTES')) ?></span>
     </a>
+    <style>
+    /* AWA — assinatura do logo no shell B2B (pacote layout PDP · item 14 · 04/10/2026)
+       Mesmo tratamento do header/rodapé: a faixa embutida na arte (ilegível, ~6 px)
+       é escondida por clip-path e a assinatura vira texto. Fallback display:none. */
+    @layer awa-fixes {
+      html body#html-body .b2b-login-logo .awa-auth-lockup {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+      html body#html-body .b2b-login-logo img.awa-auth-lockup__mark {
+        clip-path: inset(0 0 7% 0) !important;
+      }
+      html body#html-body .b2b-login-logo .awa-auth-lockup__tagline {
+        display: block !important;
+        margin-top: 2px !important;
+        font-size: 9px !important;
+        line-height: 1 !important;
+        letter-spacing: .16em !important;
+        font-weight: 600 !important;
+        color: var(--awa-brand, #b73337) !important;
+        white-space: nowrap !important;
+      }
+    }
+    </style>
     <a href="<?= $escaper->escapeUrl($block->getHomeUrl()) ?>"
        class="b2b-auth-back-link"
        aria-label="<?= $escaper->escapeHtmlAttr(__('Voltar à loja')) ?>">

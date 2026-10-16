@@ -23,7 +23,7 @@
     .awa-hero-swiper
     > .awa-hero-pause-btn {
     align-items: center !important;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 78%, white 22%) !important;
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 78%, white 22%) !important;
     border-radius: 999px !important;
     box-shadow: none !important;
     display: inline-flex !important;

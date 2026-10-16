@@ -148,6 +148,14 @@
     const MINICART_UPDATE_MIN_INTERVAL_MS = 120;
     let minicartUpdateQueued = false;
     let minicartUpdateLastRunTs = 0;
+    /* CACHE DE ESTADO (07/10/2026) — medido com long-animation-frame: este update custa
+       *** 119ms *** por execucao e roda ~8x/segundo (o observer dispara a cada mudanca de
+       classe/aria-hidden no shell, e o proprio update muda classe). O resultado e a main
+       thread bloqueada ~92% do tempo: 64 long tasks de ~115ms em 8s de janela.
+       O update faz getComputedStyle + isVisible (que le offsetWidth => REFLOW) + ~5 mutacoes.
+       Mas quando nada mudou, ele reescreve exatamente o mesmo estado. Este cache guarda o
+       ultimo estado aplicado e sai ANTES de qualquer leitura de layout. */
+    let minicartLastState = null;
     function getHeaderMinicartShell() {
         return document.querySelector(HEADER_MINICART_SHELL_SELECTOR);
     }
@@ -322,16 +330,10 @@
             isVisible(dropdown)
         );
 
-        return !!(
-            isActuallyVisible ||
-            (dropdown.getAttribute('aria-hidden') === 'false' && isActuallyVisible) ||
-            ((dropdown.classList.contains('active') || dropdown.classList.contains('is-open')) && isActuallyVisible) ||
-            (wrapper && (
-                wrapper.classList.contains('active') ||
-                wrapper.classList.contains('is-open') ||
-                wrapper.classList.contains('show')
-            ) && isActuallyVisible)
-        );
+        /* FIX 12/10/2026: as 3 ramificacoes extras eram CODIGO MORTO — todas terminavam
+         * em `&& isActuallyVisible`, logo `X || (A && X) || (B && X) || (C && X)` e `X`.
+         * Removidas (e a variavel `wrapper` deixou de ser necessaria para o retorno). */
+        return isActuallyVisible;
     }
 
     function syncFallbackAccessibility(shell, hasRuntimeTrigger) {
@@ -1080,7 +1082,28 @@
         if (window.__awaMinicartStateSyncing) {
             return;
         }
+        /* Sai ANTES de qualquer leitura de layout se o estado nao mudou. */
+        /* FIX 12/10/2026 (TBT): a leitura CARA (isDropdownExpanded = getComputedStyle +
+         * offsetWidth, medidos em ~880ms por chamada) acontecia em TODA atualizacao, mesmo
+         * quando nada mudou. A chave agora usa so ATRIBUTOS (a mesma fonte que dispara o
+         * observer: class/aria-hidden) => a leitura so acontece quando o estado mudou de fato. */
+        let _quickTrigger = getMinicartParts().trigger;
+        let _quickDropdown = getMinicartParts().dropdown;
+        let _quickKey = (document.body ? document.body.className : '')
+            + '|' + (_quickTrigger ? _quickTrigger.className + '|' + _quickTrigger.getAttribute('aria-hidden') : '')
+            + '|' + (_quickDropdown ? _quickDropdown.className + '|' + _quickDropdown.getAttribute('aria-hidden') : '');
+        if (minicartLastState === _quickKey) { return; }
+        minicartLastState = _quickKey;
+
         window.__awaMinicartStateSyncing = true;
+        /* CORRECAO 07/10/2026 — o MutationObserver observa attributeFilter ['class','aria-hidden']
+           e este update MUDA classe no proprio target (trigger.classList.toggle('is-open'),
+           syncShellState, syncBodyScrollLock). O guard `__awaMinicartStateSyncing` NAO segura:
+           o observer entrega em MICROTASK, depois do `finally`, e quando o callback roda a flag
+           ja e false. Resultado medido: 119ms de update a cada 120ms, 4.088ms de main thread
+           bloqueada, load de 17,5s. Correcao: desconectar antes de mutar, descartar as
+           mutacoes proprias e reconectar depois. */
+        if (window.__awaMinicartStateObserver) { try { window.__awaMinicartStateObserver.takeRecords(); window.__awaMinicartStateObserver.disconnect(); } catch (e) {} }
         try {
         let updateStartedAt = Date.now();
 
@@ -1119,6 +1142,11 @@
         syncFloatingCtas(expanded || panelVisible);
 
         } finally {
+            // o cache acima ja guarda a chave; se o update falhar, invalida para nao travar o estado
+            if (window.__awaMinicartStateSyncing === 'erro') { minicartLastState = null; }
+            if (window.__awaMinicartStateObserver && window.__awaMinicartObserverTarget) {
+                try { window.__awaMinicartStateObserver.takeRecords(); window.__awaMinicartStateObserver.observe(window.__awaMinicartObserverTarget, { attributes: true, childList: true, subtree: true, attributeFilter: ['class', 'aria-hidden'] }); } catch (e) {}
+            }
             window.__awaMinicartStateSyncing = false;
         }
 
@@ -1207,8 +1235,9 @@
         }
 
         window.__awaMinicartStateObserverBound = true;
+        window.__awaMinicartObserverTarget = target;
 
-        new MutationObserver(function () {
+        window.__awaMinicartStateObserver = new MutationObserver(function () {
             if (!isDeferOwnerActive()) {
                 return;
             }

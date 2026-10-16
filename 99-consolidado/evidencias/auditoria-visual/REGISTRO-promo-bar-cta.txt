@@ -1,0 +1,45 @@
+BUG VISUAL: CTA "Cadastre-se" do B2B metade sob o logo no mobile (05/10/2026)
+==========================================================================
+SINTOMA MEDIDO (390px):
+  barra  390x49  overflow:visible
+  CTA    75x44  top=25  bottom=69   -> 20px ABAIXO do fim da barra (49)
+  sobreposicao 3.344px2 com img.awa-logo-lockup__mark
+  elementFromPoint no contato devolvia o LOGO -> o clique NAO chegava
+
+CAUSA RAIZ:
+  .awa-b2b-promo-bar__text  display:flex  flex-wrap:WRAP  largura 104px
+    __lead = 96x17   (ocupa 96 dos 104px)
+    __cta  = 75x44   (nao cabe nos 8px restantes) -> wrap joga para a linha de baixo
+    17 + gap 8 + 44 = 69px necessarios vs 48px disponiveis -> transborda 21px
+
+  E a largura de 104px vinha de:
+    awa-pdp-layout-r1-20261003.css (inline, @layer awa-fixes)
+      .awa-b2b-promo-bar__text{ flex:0 1 auto!imp; width:auto!imp;
+                                 max-width:calc(100% - 190px)!imp }
+    + min-width:0 (que EU adicionei na 1a tentativa) -> encolhia ate o min-content
+      = o __lead (96px) + padding = 104px
+
+CORRECAO (SEÇÃO 63 do awa-design-system.css, so <=767px):
+  .awa-b2b-promo-bar__text   flex:0 1 auto · min-width:max-content · flex-wrap:nowrap
+  :is(__lead,__lead-long,__tail)  flex-shrink:0 · white-space:nowrap
+  .awa-b2b-promo-bar__cta    flex:0 0 auto · align-self:center · max-height:100%
+  .awa-b2b-promo-bar         min-height:48px · align-items:center
+
+RESULTADO MEDIDO:
+  CTA top=25/bottom=69  ->  top=0/bottom=44    (cabe na barra de 45px)
+  clicavel: False       ->  True
+  cortado:  True        ->  False em toda a cadeia
+  .awa-b2b-promo-bar__text  104px -> 195px
+  barra 49px -> 45px
+  colisao com img.awa-logo-lockup__mark: ELIMINADA
+
+VERIFICADO POR SCREENSHOT:
+  toppo-depois.png  -> mostrou o efeito colateral ("Vi..." cortado)
+  toppo-final.png   -> "Vendas B2B · CNPJ" completo + "Cadastre-se" clicavel
+                       + logo intacto
+
+AUDITORIA 18 COMBINACOES:
+  MOBILE  2 -> 1  · TABLET 2-3 -> 1  · DESKTOP identico
+  resta so a "critica" do input#search = FALSO POSITIVO (botao dentro do campo, Luma)
+GATE DE REGRESSAO: 26/26 PASS
+ROLLBACK: _backups/promobar-20261005T171916Z/

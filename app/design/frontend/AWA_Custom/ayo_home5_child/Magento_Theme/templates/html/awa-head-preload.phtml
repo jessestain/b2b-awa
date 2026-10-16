@@ -261,7 +261,7 @@ width:max-content!important;
   }
 
   /* Bug 1 overlay: slider_005 (desktop+mobile) já traz QUALIDADE/INOVAÇÃO/TECNOLOGIA.
-     Esconde título+desc injetados; mantém o CTA vermelho. */
+     Esconde título+desc injetados; mantém o CTA laranja. */
   html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
     .page-wrapper
     .wrapper_slider
@@ -447,7 +447,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-search-col input#
 <style id="awa-b2b-operational-anti-fouc">
 html{overflow-x:clip;color-scheme:light}*,*::before,*::after{box-sizing:border-box}
 body{overflow-x:clip;background:var(--awa-white,#fff);margin:0}
-:root{--awa-primary:#b73337;--awa-text:#333;--awa-border:#e5e5e5;--awa-bg:#fff}
+:root{--awa-primary:#b73337;--awa-text:#111;--awa-border:#e5e5e5;--awa-bg:#fff}
 body .page-wrapper .header-content .header,.page-header,.header.content{background:var(--awa-white,#fff)}
 body .page-wrapper .awa-site-header .awa-b2b-promo-bar{display:none!important;height:0!important;overflow:hidden!important}
 body .page-wrapper .awa-site-header #header.header-container,body .page-wrapper .awa-site-header #header.header-container>.header-content{display:none!important;height:0!important;min-height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important}
@@ -458,12 +458,12 @@ body .page-wrapper .awa-site-header #header.header-container,body .page-wrapper 
 <style>
 :root {
     /* ── head-preload — design tokens ─── */
-    --head-preload-c1: #1a1a1a;
+    --head-preload-c1: #111111;
     --head-preload-c2: #ffffff;
     --head-preload-c3: #f7f7f7;
     --head-preload-c4: #b73337;
     --head-preload-c5: #fff;
-    --head-preload-c6: #333;
+    --head-preload-c6: #111;
     --head-preload-c7: #ccc;
     --head-preload-footer-surface: #f9fafb;
     --head-preload-footer-inner: var(--head-preload-c2);
@@ -490,7 +490,7 @@ body .page-wrapper .awa-utility-bar-legacy{display:none !important}
 body .page-wrapper .panel.wrapper{background:var(--head-preload-c1) !important;background-image:none !important;color:var(--head-preload-c7);border:none}
 body .page-wrapper .header-content .top-header .header,.page-header,.header.content{background:var(--head-preload-c5)}
 /* Footer: tema claro alinhado a _footer.less (anti-FOUC) */
-body .page-wrapper .page_footer,body .page-wrapper .page-footer{background:var(--head-preload-footer-surface,#f9fafb) !important;background-image:none !important;color:var(--head-preload-footer-text,var(--head-preload-c6)) !important;border-top:3px solid var(--awa-primary,var(--head-preload-c4)) !important}
+body .page-wrapper .page_footer,body .page-wrapper .page-footer{background:var(--head-preload-footer-surface,#f9fafb) !important;background-image:none !important;color:var(--head-preload-footer-text,var(--head-preload-c6)) !important;border-top:3px solid #111111 !important}
 body .page-wrapper .page_footer .footer-container,body .page-wrapper .page_footer #footer,body .page-wrapper .page_footer .footer-container.layout2,body .page-wrapper .page_footer .footer-static,body .page-wrapper .page_footer .velaBlock,body .page-wrapper .page-footer .footer-static,body .page-wrapper .page-footer .velaBlock{background:var(--head-preload-footer-inner,var(--head-preload-c2)) !important;background-image:none !important;color:var(--head-preload-footer-text,var(--head-preload-c6)) !important}
 .page_footer .footer-bottom,.footer-bottom{background:var(--head-preload-footer-inner,var(--head-preload-c2)) !important;color:var(--head-preload-footer-text,var(--head-preload-c6)) !important;border-top:1px solid var(--head-preload-footer-border,#e2e2e2) !important}
 .page_footer .footer-copyright,.footer-copyright,.page-footer .copyright,.page_footer .copyright,.page_footer .awa-footer-bottom__copyright{background:var(--head-preload-footer-copyright,#f1f5f9) !important;color:var(--head-preload-footer-muted,#666666) !important;border-top:1px solid var(--head-preload-footer-border,#e2e2e2) !important}
@@ -580,7 +580,7 @@ html body#html-body .page-wrapper :not(.awa-site-header) .logo img{display:block
 .awa-category-carousel__icon img,.awa-category-carousel__icon picture img{width:88px!important;height:88px!important;min-width:88px!important;min-height:88px!important;object-fit:contain!important}
 @media(max-width:991px){.awa-category-carousel__icon img,.awa-category-carousel__icon picture img{width:88px!important;height:88px!important;min-width:88px!important;min-height:88px!important}}
 /* Design tokens inline — elimina 1 HTTP request bloqueante (tokens + grid-system legados, inlinados 2026-04) */
-:root{--awa-primary:#b73337;--awa-red:#b73337;--awa-primary-hover:#8e2629;--awa-primary-dark:#8e2629;--awa-primary-light:#fef2f2;--awa-primary-subtle:rgba(183,51,55,0.08);--awa-text:#333333;--awa-text-secondary:#666666;--awa-text-muted:#666666;--awa-touch-target:44px;--awa-header-row-h:68px;--awa-header-main-row-h:68px;--awa-header-nav-h:48px;--awa-header-scroll-offset:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-site-shell-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-sticky-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-nav-bar-h:48px;--gap-tight:0.75rem;--gap-base:1rem;--surface-hover:color-mix(in srgb,currentColor 8%,transparent);--border-subtle:color-mix(in srgb,currentColor 8%,transparent);--awa-text-disabled:#bbb;--awa-text-inverse:var(--head-preload-c2);--awa-bg:var(--head-preload-c2);--awa-bg-subtle:#f7f7f7;--awa-bg-muted:#eeeeee;--awa-border:#e5e5e5;--awa-border-strong:#d0d0d0;--awa-radius-xs:4px;--awa-radius-sm:6px;--awa-radius-md:8px;--awa-radius-lg:12px;--awa-radius-xl:16px;--awa-radius-pill:9999px;--awa-shadow-xs:0 1px 2px rgba(0,0,0,0.05);--awa-shadow-sm:0 2px 8px rgba(0,0,0,0.08);--awa-shadow-md:0 4px 16px rgba(0,0,0,0.10);--awa-shadow-lg:0 8px 24px rgba(0,0,0,0.12);--awa-shadow-xl:0 16px 40px rgba(0,0,0,0.15);--awa-shadow-brand:0 4px 16px rgba(183,51,55,0.25);--awa-font-2xs:12px;--awa-font-xs:11px;--awa-font-sm:12px;--awa-font-base:14px;--awa-font-md:15px;--awa-font-lg:16px;--awa-font-xl:18px;--awa-font-2xl:20px;--awa-font-3xl:24px;--awa-font-4xl:28px;--awa-weight-normal:400;--awa-weight-medium:500;--awa-weight-semibold:600;--awa-weight-bold:700;--awa-weight-extrabold:800;--awa-space-1:4px;--awa-space-2:8px;--awa-space-3:12px;--awa-space-4:16px;--awa-space-5:20px;--awa-space-6:24px;--awa-space-8:32px;--awa-space-10:40px;--awa-space-12:48px;--awa-ease:cubic-bezier(0.4,0,0.2,1);--awa-ease-out:cubic-bezier(0,0,0.2,1);--awa-duration-fast:0.15s;--awa-duration:0.25s;--awa-duration-slow:0.4s;--awa-z-base:1;--awa-z-overlay:100;--awa-z-drawer:200;--awa-z-modal:300;--awa-z-toast:400;--awa-container-max:1440px;--awa-container-catalog:1440px;--awa-container:var(--awa-container-max);--awa-container-pad:20px;--awa-container-narrow:960px;--awa-container-wide:1440px;--awa-container-content:1400px;--awa-page-catalog:1440px;--awa-page-pad-catalog:20px;--awa-grid-gap:clamp(12px,2vw,24px);--awa-grid-gap-sm:clamp(8px,1.5vw,16px);--awa-grid-gap-lg:clamp(16px,3vw,32px);--awa-grid-item-min:240px;--awa-grid-item-min-sm:180px;--awa-grid-item-min-lg:320px;--awa-font-weight-bold:700;--awa-font-weight-semibold:600;--awa-font-weight-extrabold:800;--awa-font-size-10:0.625rem;--awa-font-size-11:0.6875rem;--awa-font-size-13:0.8125rem;--awa-font-size-3xl:1.5rem;--awa-accent-hover:#8e2629;--awa-b2b-accent-current:#b73337;--awa-color-bg-soft:#f7f7f7;--awa-color-border:#e5e5e5;--awa-color-primary-dark:#8e2629;--awa-color-text-primary:#333333;--awa-neutral-100:#f5f5f5;--awa-surface:#ffffff;--awa-text-1:#333333;--awa-text-2:#666666;--awa-text-main:#333333;--awa-text-on-dark-muted-solid:rgba(255,255,255,0.65);--awa-gap-2xs:0.25rem;--awa-size-11:0.6875rem;--awa-size-18:1.125rem;--awa-size-22:1.375rem;--awa-size-28:1.75rem;--awa-size-30:1.875rem;--awa-size-32:2rem;--awa-size-40:2.5rem;--awa-section-pad:clamp(1.5rem,1.2rem + 2vw,3rem);--awa-page-section-gap:2rem;--awa-page-section-gap-lg:3rem;--awa-shell-gap:1rem;--awa-shell-sidebar:280px;--awa-shell-checkout-sidebar:380px;--awa-cat-item-w:clamp(120px,20%,220px);--awa-focus-outline:2px solid #b73337;--awa-focus-offset:2px;--awa-home-transition:0.2s ease-out;--awa-round2-transition:0.2s ease-out;--awa-glass-blur:12px;--awa-cc-surface-1:#ffffff;--awa-cc-surface-2:#f9f9f9;--awa-cc-text-1:#1a1a1a;--awa-cc-text-2:#333333;--awa-cc-text-3:#666666;--awa-cc-border:#e5e5e5;--awa-cc-border-strong:#d0d0d0;--awa-cc-focus-ring:#b73337;--awa-cc-shadow-1:0 2px 8px rgba(0,0,0,0.08);--awa-cc-shadow-2:0 4px 16px rgba(0,0,0,0.12);--awa-cc-status-error-text:#c0392b;--awa-cc-transition:0.2s ease-out;--awa-footer-border-medium:rgba(255,255,255,0.2);--awa-footer-border-soft:rgba(255,255,255,0.1);--awa-footer-border-strong:rgba(255,255,255,0.3);--awa-footer-chip-bg:rgba(255,255,255,0.08);--awa-footer-chip-bg-hover:rgba(255,255,255,0.15);--awa-footer-chip-border:rgba(255,255,255,0.15);--awa-footer-chip-border-strong:rgba(255,255,255,0.30);--awa-footer-label-soft:rgba(255,255,255,0.6);--awa-footer-text-body:rgba(255,255,255,0.85);--awa-footer-text-high:#ffffff;--awa-footer-text-muted:rgba(255,255,255,0.55);--awa-footer-trust-bg:rgba(255,255,255,0.06);--awa-footer-trust-border:rgba(255,255,255,0.12);--awa-footer-trust-muted:rgba(255,255,255,0.6);--awa-ft-border:rgba(255,255,255,0.12);--awa-ft-border-accent:rgba(183,51,55,0.4);--awa-ft-grad-from:#1a1a1a;--awa-ft-grad-mid:#111111;--awa-ft-grad-to:#0a0a0a;--awa-ft-surface-2:rgba(255,255,255,0.04);--awa-ft-text-1:#ffffff;--awa-ft-text-2:rgba(255,255,255,0.85);--awa-ft-text-3:rgba(255,255,255,0.6);--awa-ft-transition:0.2s ease-out;--awa-hc-border-strong:#d0d0d0;--awa-hc-surface-2:#f9f9f9;--awa-hc-text-1:#333333;--awa-hc-text-2:#666666;--awa-header-gutter:1rem;--awa-header-search-gap-icon:0.5rem;--awa-header-search-gap-inner:0.5rem;--awa-header-search-gap-outer:0.75rem;--awa-header-search-padding-inline-end:0.75rem;--awa-header-search-padding-inline-start:1rem;--awa-home-carousel-radius-lg:12px;--awa-home-carousel-radius-sm:8px;--awa-home-carousel-shadow-cta:0 4px 16px rgba(183,51,55,0.32);--awa-home-final-border:rgba(183,51,55,0.2);--awa-home-final-gap:1.5rem;--awa-home-final-radius:12px;--awa-home-final-surface:rgba(183,51,55,0.04);--awa-home-product-gap-desktop:1.5rem;--awa-home-product-gap-mobile:1rem;--awa-home-product-gap-tablet:1.25rem;--awa-home-product-media-min:120px;--awa-main-nav-link-min-h:44px;--awa-main-nav-link-pad-x:1rem;--awa-main-nav-link-radius:6px;--awa-safe-chip-bg:rgba(255,255,255,0.08);--awa-safe-chip-border:rgba(255,255,255,0.15);--awa-safe-search-border:#e5e5e5;--awa-safe-search-button-size:44px;--awa-safe-search-control-height:44px;--awa-safe-search-gap-icon:0.5rem;--awa-safe-search-gap-inner:0.5rem;--awa-safe-search-gap-outer:0.75rem;--awa-safe-search-input-pad-end:0.75rem;--awa-safe-search-input-pad-start:1rem;--awa-safe-search-shell-height:44px;--awa-safe-search-shell-radius:22px;--awa-safe-topbar-bg:#1a1a1a;--awa-safe-topbar-border:rgba(255,255,255,0.1);--awa-safe-topbar-text:rgba(255,255,255,0.85);--awa-top-account-link-min-height:44px;--awa-top-account-link-padding-inline:0.5rem;--awa-top-account-links-gap:0.25rem;--awa-ui-border-width-default:1px;--awa-ui-border-width-medium:2px;--awa-ui-radius-input:8px;--awa-ui-radius-tag:4px}
+:root{--awa-primary:#b73337;--awa-red:#dc2626;--awa-primary-hover:#8e2629;--awa-primary-dark:#8e2629;--awa-primary-light:#f9eeee;--awa-primary-subtle:rgba(183,51,55,0.08);--awa-text:#111111;--awa-text-secondary:#555555;--awa-text-muted:#6b7280;--awa-touch-target:44px;--awa-header-row-h:68px;--awa-header-main-row-h:68px;--awa-header-nav-h:48px;--awa-header-scroll-offset:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-site-shell-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-sticky-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-nav-bar-h:48px;--gap-tight:0.75rem;--gap-base:1rem;--surface-hover:color-mix(in srgb,currentColor 8%,transparent);--border-subtle:color-mix(in srgb,currentColor 8%,transparent);--awa-text-disabled:#bbb;--awa-text-inverse:var(--head-preload-c2);--awa-bg:var(--head-preload-c2);--awa-bg-subtle:#f7f7f7;--awa-bg-muted:#eeeeee;--awa-border:#e5e5e5;--awa-border-strong:#d0d0d0;--awa-radius-xs:4px;--awa-radius-sm:6px;--awa-radius-md:8px;--awa-radius-lg:12px;--awa-radius-xl:16px;--awa-radius-pill:9999px;--awa-shadow-xs:0 1px 2px rgba(0,0,0,0.05);--awa-shadow-sm:0 2px 8px rgba(0,0,0,0.08);--awa-shadow-md:0 4px 16px rgba(0,0,0,0.10);--awa-shadow-lg:0 8px 24px rgba(0,0,0,0.12);--awa-shadow-xl:0 16px 40px rgba(0,0,0,0.15);--awa-shadow-brand:0 4px 16px rgba(183,51,55,0.25);--awa-font-2xs:12px;--awa-font-xs:11px;--awa-font-sm:12px;--awa-font-base:14px;--awa-font-md:15px;--awa-font-lg:16px;--awa-font-xl:18px;--awa-font-2xl:20px;--awa-font-3xl:24px;--awa-font-4xl:28px;--awa-weight-normal:400;--awa-weight-medium:500;--awa-weight-semibold:600;--awa-weight-bold:700;--awa-weight-extrabold:800;--awa-space-1:4px;--awa-space-2:8px;--awa-space-3:12px;--awa-space-4:16px;--awa-space-5:20px;--awa-space-6:24px;--awa-space-8:32px;--awa-space-10:40px;--awa-space-12:48px;--awa-ease:cubic-bezier(0.4,0,0.2,1);--awa-ease-out:cubic-bezier(0,0,0.2,1);--awa-duration-fast:0.15s;--awa-duration:0.25s;--awa-duration-slow:0.4s;--awa-z-base:1;--awa-z-overlay:100;--awa-z-drawer:200;--awa-z-modal:300;--awa-z-toast:400;--awa-container-max:1440px;--awa-container-catalog:1440px;--awa-container:var(--awa-container-max);--awa-container-pad:20px;--awa-container-narrow:960px;--awa-container-wide:1440px;--awa-container-content:1400px;--awa-page-catalog:1440px;--awa-page-pad-catalog:20px;--awa-grid-gap:clamp(12px,2vw,24px);--awa-grid-gap-sm:clamp(8px,1.5vw,16px);--awa-grid-gap-lg:clamp(16px,3vw,32px);--awa-grid-item-min:240px;--awa-grid-item-min-sm:180px;--awa-grid-item-min-lg:320px;--awa-font-weight-bold:700;--awa-font-weight-semibold:600;--awa-font-weight-extrabold:800;--awa-font-size-10:0.625rem;--awa-font-size-11:0.6875rem;--awa-font-size-13:0.8125rem;--awa-font-size-3xl:1.5rem;--awa-accent-hover:#8e2629;--awa-b2b-accent-current:#b73337;--awa-color-bg-soft:#f7f7f7;--awa-color-border:#e5e5e5;--awa-color-primary-dark:#8e2629;--awa-color-text-primary:#111111;--awa-neutral-100:#f5f5f5;--awa-surface:#ffffff;--awa-text-1:#111111;--awa-text-2:#666666;--awa-text-main:#111111;--awa-text-on-dark-muted-solid:rgba(255,255,255,0.65);--awa-gap-2xs:0.25rem;--awa-size-11:0.6875rem;--awa-size-18:1.125rem;--awa-size-22:1.375rem;--awa-size-28:1.75rem;--awa-size-30:1.875rem;--awa-size-32:2rem;--awa-size-40:2.5rem;--awa-section-pad:clamp(1.5rem,1.2rem + 2vw,3rem);--awa-page-section-gap:2rem;--awa-page-section-gap-lg:3rem;--awa-shell-gap:1rem;--awa-shell-sidebar:280px;--awa-shell-checkout-sidebar:380px;--awa-cat-item-w:clamp(120px,20%,220px);--awa-focus-outline:2px solid #b73337;--awa-focus-offset:2px;--awa-home-transition:0.2s ease-out;--awa-round2-transition:0.2s ease-out;--awa-glass-blur:12px;--awa-cc-surface-1:#ffffff;--awa-cc-surface-2:#f9f9f9;--awa-cc-text-1:#111111;--awa-cc-text-2:#555555;--awa-cc-text-3:#666666;--awa-cc-border:#e5e5e5;--awa-cc-border-strong:#d0d0d0;--awa-cc-focus-ring:#b73337;--awa-cc-shadow-1:0 2px 8px rgba(0,0,0,0.08);--awa-cc-shadow-2:0 4px 16px rgba(0,0,0,0.12);--awa-cc-status-error-text:#dc2626;--awa-cc-transition:0.2s ease-out;--awa-footer-border-medium:rgba(255,255,255,0.2);--awa-footer-border-soft:rgba(255,255,255,0.1);--awa-footer-border-strong:rgba(255,255,255,0.3);--awa-footer-chip-bg:rgba(255,255,255,0.08);--awa-footer-chip-bg-hover:rgba(255,255,255,0.15);--awa-footer-chip-border:rgba(255,255,255,0.15);--awa-footer-chip-border-strong:rgba(255,255,255,0.30);--awa-footer-label-soft:rgba(255,255,255,0.6);--awa-footer-text-body:rgba(255,255,255,0.85);--awa-footer-text-high:#ffffff;--awa-footer-text-muted:rgba(255,255,255,0.55);--awa-footer-trust-bg:rgba(255,255,255,0.06);--awa-footer-trust-border:rgba(255,255,255,0.12);--awa-footer-trust-muted:rgba(255,255,255,0.6);--awa-ft-border:rgba(255,255,255,0.12);--awa-ft-border-accent:rgba(183,51,55,0.4);--awa-ft-grad-from:#111111;--awa-ft-grad-mid:#111111;--awa-ft-grad-to:#0a0a0a;--awa-ft-surface-2:rgba(255,255,255,0.04);--awa-ft-text-1:#ffffff;--awa-ft-text-2:rgba(255,255,255,0.85);--awa-ft-text-3:rgba(255,255,255,0.6);--awa-ft-transition:0.2s ease-out;--awa-hc-border-strong:#d0d0d0;--awa-hc-surface-2:#f9f9f9;--awa-hc-text-1:#333333;--awa-hc-text-2:#666666;--awa-header-gutter:1rem;--awa-header-search-gap-icon:0.5rem;--awa-header-search-gap-inner:0.5rem;--awa-header-search-gap-outer:0.75rem;--awa-header-search-padding-inline-end:0.75rem;--awa-header-search-padding-inline-start:1rem;--awa-home-carousel-radius-lg:12px;--awa-home-carousel-radius-sm:8px;--awa-home-carousel-shadow-cta:0 4px 16px rgba(183,51,55,0.32);--awa-home-final-border:rgba(183,51,55,0.2);--awa-home-final-gap:1.5rem;--awa-home-final-radius:12px;--awa-home-final-surface:rgba(183,51,55,0.04);--awa-home-product-gap-desktop:1.5rem;--awa-home-product-gap-mobile:1rem;--awa-home-product-gap-tablet:1.25rem;--awa-home-product-media-min:120px;--awa-main-nav-link-min-h:44px;--awa-main-nav-link-pad-x:1rem;--awa-main-nav-link-radius:6px;--awa-safe-chip-bg:rgba(255,255,255,0.08);--awa-safe-chip-border:rgba(255,255,255,0.15);--awa-safe-search-border:#e5e5e5;--awa-safe-search-button-size:44px;--awa-safe-search-control-height:44px;--awa-safe-search-gap-icon:0.5rem;--awa-safe-search-gap-inner:0.5rem;--awa-safe-search-gap-outer:0.75rem;--awa-safe-search-input-pad-end:0.75rem;--awa-safe-search-input-pad-start:1rem;--awa-safe-search-shell-height:44px;--awa-safe-search-shell-radius:22px;--awa-safe-topbar-bg:#111111;--awa-safe-topbar-border:rgba(255,255,255,0.1);--awa-safe-topbar-text:rgba(255,255,255,0.85);--awa-top-account-link-min-height:44px;--awa-top-account-link-padding-inline:0.5rem;--awa-top-account-links-gap:0.25rem;--awa-ui-border-width-default:1px;--awa-ui-border-width-medium:2px;--awa-ui-radius-input:8px;--awa-ui-radius-tag:4px}
 @media(min-width:768px) and (max-width:991px){:root{--awa-header-row-h:56px;--awa-header-scroll-offset:128px;--awa-header-site-shell-h:128px;}}
 
 /* BUG-3/5/6/7 fix: rokan grid constraining swipers to 254px — force block before JS */
@@ -1587,7 +1587,15 @@ html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page
 html body#html-body .page-wrapper :is(.top-header,#awa-b2b-promo-bar,.header-content){min-height:44px!important}
 html body#html-body .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){min-height:112px!important}
 html body#html-body .page-wrapper .awa-site-header :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row],.header_main.awa-main-header-inner-wrap){min-height:58px!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper .nav-breadcrumbs{min-height:0!important}
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper .nav-breadcrumbs{box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important}
+/* Alvo de toque do breadcrumb no mobile (WCAG 2.5.8). Antes: min-height:0!important aqui
+   anulava a Onda 5F (SEÇÃO 22 do design system) — medido 28x17px em 05/10/2026.
+   O <a> é display:inline, onde min-height NÃO se aplica: precisa inline-flex.
+   A cadeia ul>li também trava por overflow:hidden + height fixo. */
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) :is(ul.items,.items){box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important;align-items:center!important}
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) .items>.item{box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important;display:flex!important;align-items:center!important}
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) a{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;min-height:44px!important;height:auto!important;max-height:none!important;min-block-size:44px!important;line-height:44px!important;padding-block:0!important;padding-top:0!important;padding-bottom:0!important;overflow:visible!important;flex-shrink:0!important}
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) a span{display:inline-block!important;line-height:44px!important;padding-block:0!important}
 html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder:not(:has(.fotorama-item)){box-sizing:border-box!important;min-height:min(374px,calc(100vw - 16px))!important}
 /* H-pdp-gallery-lcp (2026-08-02): nao esconder LCP enquanto _block-content-loading */
 html body#html-body.catalog-product-view .page-wrapper .product.media .gallery-placeholder._block-content-loading{min-height:clamp(300px,82vw,460px)!important;height:auto!important;overflow:hidden!important}
@@ -2221,7 +2229,7 @@ endif; ?>
 <?php
     $__awaSkipHomeSuperGlobal = true;
     if (!$isHomePage || !$__awaSkipHomeSuperGlobal) {
-        if ($isCatalogCssGate) {
+        if ($isCatalogCssGate || $isProductPage) {   /* FIX 12/10/2026: o PDP sofria o shift do header (CLS @1365 mediana 0,329); alinha ao padrao do PLP */
             // PLP/busca mobile: super-global (~500KB decode) só no desktop.
             ?>
 <script>
@@ -2413,13 +2421,14 @@ endif; ?>
     /* hover-lock + standardize-terminal: getViewFileUrl removido — arquivos fora de web/css (2026-08-13). */
     /* align-grid terminal — SSOT grid/alinhamento (2026-06-11) — sync final-wins (evita perder vs Phase 20) */
     /* distill-lock + menu: inclusos em awa-home-critical-stack.phtml (stack2) */
-    /* align-grid: única instância via OptimizeHeadStylesPlugin → </body> (final-wins) */
+    /* align-grid: única instância via OptimizeHeadStylesPlugin → 
+</body> (final-wins) */
     /* header-refine-terminal: só via css-gate (data-awa-terminal-href) — evita double-fetch */
     /* awa-focus-visible → inlinado abaixo (−1 HTTP request) */
     /* refine 2026-06-01: shelf-b2b, hover-lock, cat-align → critical-home.min.css */
 ?>
 <style id="awa-focus-visible-inline">
-#html-body a:focus:not(:focus-visible),#html-body button:focus:not(:focus-visible),#html-body [role="button"]:focus:not(:focus-visible),#html-body [tabindex]:focus:not(:focus-visible),#html-body .action:focus:not(:focus-visible),#html-body .btn:focus:not(:focus-visible),#html-body select:focus:not(:focus-visible),#html-body details:focus:not(:focus-visible),#html-body summary:focus:not(:focus-visible){outline:none}#html-body a:focus-visible,#html-body button:focus-visible,#html-body [role="button"]:focus-visible,#html-body [tabindex]:focus-visible,#html-body .action:focus-visible,#html-body .btn:focus-visible,#html-body select:focus-visible,#html-body details:focus-visible,#html-body summary:focus-visible{outline:2px solid var(--awa-primary,#b73337)!important;outline-offset:3px!important;border-radius:3px}#html-body input:focus-visible,#html-body textarea:focus-visible{outline:2px solid var(--awa-primary,#b73337)!important;outline-offset:0!important;border-radius:3px}#html-body .awa-skip-link:focus-visible,#html-body .skip-link:focus-visible,#html-body a[href="#main-content"]:focus-visible{position:fixed!important;top:8px!important;left:8px!important;z-index:99999!important;padding:8px 16px!important;background:var(--awa-primary,#b73337)!important;color:#fff!important;font-weight:700!important;border-radius:4px!important;outline:3px solid #fff!important;outline-offset:2px!important;text-decoration:none!important}
+#html-body a:focus:not(:focus-visible),#html-body button:focus:not(:focus-visible),#html-body [role="button"]:focus:not(:focus-visible),#html-body [tabindex]:focus:not(:focus-visible),#html-body .action:focus:not(:focus-visible),#html-body .btn:focus:not(:focus-visible),#html-body select:focus:not(:focus-visible),#html-body details:focus:not(:focus-visible),#html-body summary:focus:not(:focus-visible){outline:none}#html-body a:focus-visible,#html-body button:focus-visible,#html-body [role="button"]:focus-visible,#html-body [tabindex]:focus-visible,#html-body .action:focus-visible,#html-body .btn:focus-visible,#html-body select:focus-visible,#html-body details:focus-visible,#html-body summary:focus-visible{outline:2px solid var(--awa-primary,#b73337)!important;outline-offset:3px!important;border-radius:3px}#html-body input:focus-visible,#html-body textarea:focus-visible{outline:2px solid var(--awa-primary,#b73337)!important;outline-offset:0!important;border-radius:3px}#html-body .awa-skip-link:focus-visible,#html-body .skip-link:focus-visible,#html-body a[href="#main-content"]:focus-visible{position:fixed!important;top:8px!important;left:8px!important;z-index:99999!important;padding:8px 16px!important;background:var(--awa-primary,#b73337)!important;color:#111!important;font-weight:700!important;border-radius:4px!important;outline:3px solid #fff!important;outline-offset:2px!important;text-decoration:none!important}
 </style>
 <style id="awa-home-hero-fouc-final">
 /* FOUC hero final-wins 2026-05-24 — H1 oculto + slider contido no container 1320px */
@@ -2526,7 +2535,7 @@ h1.awa-sr-only,.page-top h1.awa-sr-only{
   }
   #html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .wrapper_slider .swiper-pagination .swiper-pagination-bullet-active::before,
   #html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .wrapper_slider .swiper-pagination .swiper-pagination-bullet:hover::before {
-    background: var(--awa-red, #b73337) !important;
+    background: var(--awa-brand, #b73337) !important;
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6) !important;
     transform: scale(1.25) !important;
   }
@@ -3521,7 +3530,7 @@ html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper 
 html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__customer,
 html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] .awa-header-account-prompt__customer{display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;max-height:0!important;min-height:0!important;overflow:hidden!important;pointer-events:none!important;position:absolute!important;width:0!important}
 html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"],
-html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header .our_categories.title-category-dropdown{background:var(--awa-primary,#b73337)!important;background-color:var(--awa-primary,#b73337)!important;border:0!important;border-color:transparent!important;box-shadow:none!important;color:#fff!important;outline:0!important;position:relative!important;top:auto!important;transform:none!important}
+html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header .our_categories.title-category-dropdown{background:var(--awa-primary,#b73337)!important;background-color:var(--awa-primary,#b73337)!important;border:0!important;border-color:transparent!important;box-shadow:none!important;color:#111!important;outline:0!important;position:relative!important;top:auto!important;transform:none!important}
 
 html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header button.title-category-dropdown.our_categories[data-role="awa-vertical-menu-trigger"]{width:206px!important;min-width:206px!important;max-width:206px!important;height:44px!important;min-height:44px!important;max-height:44px!important;border-radius:8px!important;background:var(--awa-primary)!important;color:var(--awa-text-on-primary,var(--awa-white,white))!important}
 html body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header .awa-nav-quick-links{height:44px!important;max-height:44px!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:none!important;margin-left:0!important;overflow:hidden!important}
@@ -4280,9 +4289,14 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 })(window,document);
 </script>
 <?php endif; ?>
-<?php $__hreflangUrl = $block->escapeUrl(rtrim($block->getBaseUrl(), '/') . ($block->getRequest()->getOriginalPathInfo() ?: '/')); ?>
-<link rel="alternate" hreflang="pt-BR" href="<?= $__hreflangUrl ?>"/>
-<link rel="alternate" hreflang="x-default" href="<?= $__hreflangUrl ?>"/>
+<?php
+/*
+ * ACHADO SEO-014: o hreflang era emitido incondicionalmente, inclusive em páginas NOINDEX
+ * (404, busca, carrinho) — onde declarar hreflang para a própria URL inexistente é dado inválido.
+ * Loja monolíngue (store 1, pt-BR) não precisa de hreflang: o Google trata pt-BR como o
+ * conteúdo único. Removido em 02/10/2026 a pedido da auditoria (SEO-014).
+ */
+?>
 
 <?php /* === PWA Meta Tags === */ ?>
 <meta name="theme-color" content="#b73337"/>
@@ -4295,3 +4309,87 @@ $awaIsHomePage = $block->getRequest()->getFullActionName() === 'cms_index_index'
 <?php /* VB-26: Departamentos menu — collapse on homepage by default.
    Handled entirely via CSS no bundle awa-visual-bugfix (consolidado)
    using opacity: 0 and visibility: hidden on the fixed-position .togge-menu. */ ?>
+
+<?php /* AWA-TAP-CRUMB-MOBILE (2026-10-05) — alvo de toque do breadcrumb (WCAG 2.5.8).
+   Por que em JS e nao so CSS: awa-ux-enhancements.js (forceTouch44) escreve
+   style inline com !important no <a> do breadcrumb — estilo inline !important
+   vence qualquer CSS, inclusive !important dentro de @layer (verificado: 7
+   variacoes de CSS, incluindo 16x #html-body, nao venceram). Naquele ramo o JS
+   so roda em >=768px, entao no mobile o CSS do align-grid/design-system deixa
+   min-height:0 e o <a> mede 28x17px. Aqui aplicamos as MESMAS props para mobile,
+   no mesmo mecanismo, e limpamos quando a viewport cruza o breakpoint. */ ?>
+<script>
+(function () {
+    'use strict';
+    var SEL = '.breadcrumbs a, .nav-breadcrumbs a';
+    var CHAIN = '.breadcrumbs ul.items, .nav-breadcrumbs ul.items, .breadcrumbs ul.items > .item, .nav-breadcrumbs ul.items > .item';
+    var PROPS_M = { 'display': 'inline-flex', 'align-items': 'center', 'min-height': '44px',
+        'min-block-size': '44px', 'height': 'auto', 'max-height': 'none',
+        'line-height': '44px', 'padding-block': '0', 'padding-top': '0', 'padding-bottom': '0',
+        'overflow': 'visible', 'box-sizing': 'border-box' };
+    var CHAIN_M = { 'min-height': '44px', 'height': 'auto', 'max-height': 'none',
+        'overflow': 'visible', 'align-items': 'center' };
+    var KEYS = ['display','align-items','min-height','min-block-size','height','max-height',
+        'line-height','padding-block','padding-top','padding-bottom','overflow','box-sizing'];
+    function mobile() {
+        try { return !window.matchMedia('(min-width: 768px)').matches; } catch (e) { return window.innerWidth < 768; }
+    }
+    function aplica() {
+        if (!mobile()) { return; }
+        var i, k;
+        var nos = document.querySelectorAll(SEL);
+        for (i = 0; i < nos.length; i++) {
+            for (k in PROPS_M) { if (Object.prototype.hasOwnProperty.call(PROPS_M, k)) {
+                nos[i].style.setProperty(k, PROPS_M[k], 'important'); } }
+        }
+        var cadeia = document.querySelectorAll(CHAIN);
+        for (i = 0; i < cadeia.length; i++) {
+            for (k in CHAIN_M) { if (Object.prototype.hasOwnProperty.call(CHAIN_M, k)) {
+                cadeia[i].style.setProperty(k, CHAIN_M[k], 'important'); } }
+        }
+    }
+    function limpa() {
+        var i, k;
+        var nos = document.querySelectorAll(SEL);
+        for (i = 0; i < nos.length; i++) { for (k = 0; k < KEYS.length; k++) { nos[i].style.removeProperty(KEYS[k]); } }
+        var cadeia = document.querySelectorAll(CHAIN);
+        for (i = 0; i < cadeia.length; i++) { for (k = 0; k < KEYS.length; k++) { cadeia[i].style.removeProperty(KEYS[k]); } }
+    }
+    function roda() { if (mobile()) { aplica(); } else { limpa(); } }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', roda);
+    } else { roda(); }
+    window.addEventListener('load', roda);
+    // reaplica depois dos writers tardios (o touch-44-terminal escreve no rAF)
+    setTimeout(roda, 300);
+    setTimeout(roda, 1200);
+    // e quando a viewport cruza o breakpoint
+    try {
+        var mq = window.matchMedia('(min-width: 768px)');
+        var h = function () { roda(); };
+        if (mq.addEventListener) { mq.addEventListener('change', h); } else if (mq.addListener) { mq.addListener(h); }
+    } catch (e) {}
+    // Alvo de toque do link do cookie banner (WCAG 2.5.8).
+    // A SEÇÃO 51.32 do design system zera padding/min-height dele para caber
+    // inline no paragrafo — mas isso deixa a area clicavel em 134x18px.
+    // padding-block em elemento inline ESTENDE a area clicavel sem quebrar o
+    // fluxo do texto (nao troca display, entao a quebra de linha continua igual).
+    // 4px em cima + 4px embaixo levam os 18px para >=24px.
+    function ajustaCookieLink() {
+        var links = document.querySelectorAll('#awa-cookie-banner .awa-cookie-banner__link, .awa-cookie-banner__link');
+        for (var i = 0; i < links.length; i++) {
+            links[i].style.setProperty('padding-block', '4px', 'important');
+            links[i].style.setProperty('padding-top', '4px', 'important');
+            links[i].style.setProperty('padding-bottom', '4px', 'important');
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ajustaCookieLink);
+    } else { ajustaCookieLink(); }
+    window.addEventListener('load', ajustaCookieLink);
+    setTimeout(ajustaCookieLink, 1500);
+
+    window.addEventListener('resize', roda, { passive: true });
+    window.addEventListener('orientationchange', roda, { passive: true });
+})();
+</script>

@@ -152,3 +152,93 @@
     }
 }(window, document));
 /*§boot-r16d*/
+
+
+/* ============================================================================
+   AWA footer toggle semantics 2026-10-12
+   Em >=768px o tema deixa o toggle do rodapé INERTE por CSS (min-height:0 +
+   pointer-events:none + cursor:default), mas o <button> continuava FOCÁVEL com
+   aria-expanded -> controle "morto" no teclado e no leitor de tela.
+   Aqui a semântica segue o comportamento: desktop = fora do fluxo de foco e sem
+   semântica de botão; mobile = restaura (acordeão funcional, alvo >=44px pelo CSS).
+   ============================================================================ */
+(function (w, d) {
+    'use strict';
+    if (w.__awaFooterToggleSemantics) { return; }
+    w.__awaFooterToggleSemantics = true;
+    var CORTE = 768;
+
+    function toggles() {
+        return Array.prototype.slice.call(d.querySelectorAll('.awa-footer-section__toggle'));
+    }
+    function guardar(el) {
+        if (el.hasAttribute('data-awa-desk')) { return; }
+        el.setAttribute('data-awa-desk', '1');
+        el.setAttribute('data-awa-prev-tab', el.hasAttribute('tabindex') ? el.getAttribute('tabindex') : '__none__');
+        el.setAttribute('data-awa-prev-exp', el.hasAttribute('aria-expanded') ? el.getAttribute('aria-expanded') : '__none__');
+        el.setAttribute('data-awa-prev-ctrl', el.hasAttribute('aria-controls') ? el.getAttribute('aria-controls') : '__none__');
+    }
+    function desktop(el) {
+        guardar(el);
+        el.setAttribute('tabindex', '-1');
+        el.setAttribute('disabled', 'disabled');
+        el.removeAttribute('aria-expanded');
+        el.removeAttribute('aria-controls');
+    }
+    function mobile(el) {
+        if (!el.hasAttribute('data-awa-desk')) { return; }
+        el.removeAttribute('data-awa-desk');
+        el.removeAttribute('disabled');
+        var t = el.getAttribute('data-awa-prev-tab');
+        if (t === null || t === '__none__') { el.removeAttribute('tabindex'); } else { el.setAttribute('tabindex', t); }
+        var e = el.getAttribute('data-awa-prev-exp');
+        if (e === null || e === '__none__') { el.removeAttribute('aria-expanded'); } else { el.setAttribute('aria-expanded', e); }
+        var c = el.getAttribute('data-awa-prev-ctrl');
+        if (c === null || c === '__none__') { el.removeAttribute('aria-controls'); } else { el.setAttribute('aria-controls', c); }
+        el.removeAttribute('data-awa-prev-tab');
+        el.removeAttribute('data-awa-prev-exp');
+        el.removeAttribute('data-awa-prev-ctrl');
+    }
+    function sync() {
+        var ehDesktop = w.innerWidth >= CORTE;
+        toggles().forEach(function (el) { if (ehDesktop) { desktop(el); } else { mobile(el); } });
+    }
+
+    sync();
+    if (w.matchMedia) {
+        var mq = w.matchMedia('(min-width: ' + CORTE + 'px)');
+        if (mq.addEventListener) { mq.addEventListener('change', sync); } else if (mq.addListener) { mq.addListener(sync); }
+    }
+    w.addEventListener('resize', sync, { passive: true });
+    if ('MutationObserver' in w && d.body) {
+        /* FIX 12/10/2026 (TBT): o observer no BODY inteiro (childList + subtree) chamava sync()
+         * DIRETO => cada insercao/remocao em QUALQUER lugar do body disparava um sync completo
+         * (innerWidth + querySelectorAll dos toggles + escritas). Perfil medido: 1.992ms numa
+         * unica carga do PDP (o maior custo de TEMA depois do parse).
+         * Agora o callback AGENDA um sync por frame (rAF): N mutacoes num quadro = 1 sync.
+         * O comportamento observavel nao muda — o sync continua reagindo a qualquer mudanca,
+         * so deixa de rodar N vezes para a mesma rajada. */
+        /* FIX 12/10/2026 (TBT): o observer no BODY inteiro (childList + subtree) chamava sync()
+         * DIRETO => cada insercao/remocao em QUALQUER lugar do body disparava um sync completo
+         * (innerWidth + querySelectorAll dos toggles + escritas). Perfil medido: 1.992-4.586ms
+         * numa unica carga do PDP.
+         * 1a tentativa: debounce por rAF => coalescia RAJADAS, mas mutacoes ESPALHADAS no tempo
+         * (o caso do PDP, que monta componentes ao longo de segundos) continuavam disparando um
+         * sync cada. Agora e um THROTTLE: no maximo 1 sync a cada 250ms, com o ultimo sempre
+         * executando (leading + trailing). O comportamento observavel nao muda. */
+        var syncAgendado = false;
+        var syncUltimo = 0;
+        var INTERVALO_MIN = 250;
+        var agendarSync = function () {
+            if (syncAgendado) { return; }
+            syncAgendado = true;
+            var espera = Math.max(0, INTERVALO_MIN - (Date.now() - syncUltimo));
+            w.setTimeout(function () {
+                syncAgendado = false;
+                syncUltimo = Date.now();
+                sync();
+            }, espera);
+        };
+        new w.MutationObserver(agendarSync).observe(d.body, { childList: true, subtree: true });
+    }
+}(window, document));

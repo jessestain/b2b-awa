@@ -21,6 +21,7 @@ class ErpCustomerSyncStatus extends AbstractSource
     public const VALIDATED_IN_ERP = 'validated_in_erp';
     public const CUSTOMER_PENDING_ERP_VALIDATION = 'customer_pending_erp_validation';
     public const CUSTOMER_VALIDATED_IN_ERP = 'customer_validated_in_erp';
+    public const PROSPECT_FEED_FAILED = 'prospect_feed_failed';
 
     /**
      * @return array<int, array{value: string, label: \Magento\Framework\Phrase}>
@@ -53,6 +54,10 @@ class ErpCustomerSyncStatus extends AbstractSource
                 [
                     'value' => self::PROSPECT_SENT_SECTRA,
                     'label' => __('Prospect enviado ao Sectra'),
+                ],
+                [
+                    'value' => self::PROSPECT_FEED_FAILED,
+                    'label' => __('Falha ao gravar o prospect no feed do ERP'),
                 ],
                 [
                     'value' => self::AWAITING_ERP_VALIDATION,

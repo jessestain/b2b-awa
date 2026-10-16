@@ -7,7 +7,7 @@
  */
 :root {
     /* ── cls-nav — design tokens ─── */
-    --cls-nav-c1: #b73337;
+    --cls-nav-c1: var(--awa-brand);
     /* BUG-SHELL-CLS-NAV-OFFSET-001: SSOT geom desktop sticky 116 / mobile 112 */
     --awa-header-scroll-offset: 116px;
 }
@@ -107,7 +107,7 @@ body#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wra
 body#html-body .page-wrapper .awa-site-header .awa-header-minicart .action.showcart{
 display:inline-flex!important;align-items:center!important;justify-content:center!important;
 width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
-background:transparent!important;background-color:transparent!important;color:var(--awa-primary,#b73337)!important;border-radius:8px!important;
+background:transparent!important;background-color:transparent!important;color:var(--awa-primary,var(--awa-brand))!important;border-radius:8px!important;
 border:0!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;cursor:pointer!important}
 html body .awa-site-header .header-wrapper-sticky :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row])>.top-search,
 html body .awa-site-header .header-wrapper-sticky :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row])>.awa-header-search-col,
@@ -222,7 +222,7 @@ button.action.search{position:static!important}
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt{padding:0!important;border:none!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;gap:8px!important}
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__icon{width:auto!important;height:auto!important;padding:0!important;border-radius:0!important;background:transparent!important;color:var(--awa-text-muted,#666)!important;text-decoration:none!important;cursor:pointer!important}
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link:not(.awa-header-account-prompt__link--register){color:var(--awa-text,#333)!important;background:transparent!important;border:none!important;border-radius:0!important;padding:0!important;box-shadow:none!important;font-size:13px!important;font-weight:600!important;text-decoration:none!important;cursor:pointer!important}
-#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register{color:var(--awa-primary,#b73337)!important;background:transparent!important;border:none!important;border-radius:0!important;padding:0!important;font-size:13px!important;font-weight:700!important;text-decoration:none!important;cursor:pointer!important;min-height:0!important;min-width:0!important;white-space:nowrap!important}
+#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register{color:var(--awa-primary,var(--awa-brand))!important;background:transparent!important;border:none!important;border-radius:0!important;padding:0!important;font-size:13px!important;font-weight:700!important;text-decoration:none!important;cursor:pointer!important;min-height:0!important;min-width:0!important;white-space:nowrap!important}
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line2::before,
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line2::after,
 #html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link::before,

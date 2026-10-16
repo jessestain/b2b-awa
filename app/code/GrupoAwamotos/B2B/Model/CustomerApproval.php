@@ -331,7 +331,7 @@ class CustomerApproval implements CustomerApprovalInterface
             $transport = $this->transportBuilder
                 ->setTemplateIdentifier('grupoawamotos_b2b_admin_new_customer')
                 ->setTemplateOptions([
-                    'area' => \Magento\Framework\App\Area::AREA_ADMINHTML,
+                    'area' => \Magento\Framework\App\Area::AREA_FRONTEND, // task-42: area=adminhtml nao resolve header.html/footer.html
                     'store' => $store->getId(),
                 ])
                 ->setTemplateVars([

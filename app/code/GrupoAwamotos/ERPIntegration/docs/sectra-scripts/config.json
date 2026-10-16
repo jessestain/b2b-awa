@@ -1,8 +1,0 @@
-{
-    "api_url": "https://awamotos.com",
-    "token": "COLE_AQUI_O_TOKEN_ROTACIONADO_DA_INTEGRACAO_SECTRA_ERP",
-    "sql_instance": "localhost",
-    "database": "INDUSTRIAL",
-    "log_dir": "C:\\SectraSync\\logs",
-    "limit": 500
-}

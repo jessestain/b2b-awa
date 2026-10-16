@@ -37,9 +37,9 @@
  * NÃO redeclarar :root aqui — usar os tokens oficiais diretamente.
  *
  * Mapeamento (valores locais antigos → tokens oficiais):
- *   --awa-red       → var(--awa-red)          (#b73337)
- *   --awa-red-dark  → var(--awa-red-dark)     (#8e2629)
- *   --awa-red-light → var(--awa-red-light)    (rgb(183 51 55 / 16%))
+ *   --awa-red       → var(--awa-red)          (#ff6b00)
+ *   --awa-red-dark  → var(--awa-red-dark)     (#e85d00)
+ *   --awa-red-light → var(--awa-red-light)    (rgb(255 107 0 / 16%))
  *   --awa-success   → var(--awa-success)      (#198754)
  *   --awa-warning   → var(--awa-warning)      (#e09100)
  *   --awa-info      → var(--awa-info)         (#0d6efd)
@@ -998,15 +998,15 @@
 
 .status-check-form input[type="text"]:focus,
 .status-check-form input[type="email"]:focus {
-    border-color: var(--awa-red, #b73337);
+    border-color: var(--awa-brand, #ff6b00);
     outline: none;
-    box-shadow: 0 0 0 3px rgb(183 51 55 / 10%);
+    box-shadow: 0 0 0 3px rgb(255 107 0 / 10%);
 }
 
 .status-check-form button {
     width: 100%;
     padding: 14px;
-    background: var(--awa-red, #b73337);
+    background: var(--awa-brand, #ff6b00);
     color: var(--curriculo-prog-c26);
     border: none;
     border-radius: 8px;
@@ -1017,7 +1017,7 @@
 }
 
 .status-check-form button:hover {
-    background: var(--awa-red-dark, #8e2629);
+    background: var(--awa-red-dark, #e85d00);
 }
 
 .status-check-form button:disabled {
@@ -1040,7 +1040,7 @@
     border-radius: 8px;
     padding: 20px;
     text-align: center;
-    color: var(--awa-red-dark, #8e2629);
+    color: var(--awa-red-dark, #e85d00);
 }
 
 .status-result.success {
@@ -1051,7 +1051,7 @@
 }
 
 .status-result-header {
-    background: linear-gradient(135deg, var(--awa-red, #b73337) 0%, var(--awa-red-dark, #8e2629) 100%);
+    background: linear-gradient(135deg, var(--awa-brand, #ff6b00) 0%, var(--awa-red-dark, #e85d00) 100%);
     color: var(--curriculo-prog-c26);
     padding: 20px;
     text-align: center;
@@ -1082,7 +1082,7 @@
 .status-badge.reviewing { background: var(--curriculo-prog-c13); color: var(--curriculo-prog-c6); }
 .status-badge.interview { background: var(--curriculo-prog-c1); color: var(--curriculo-prog-c10); }
 .status-badge.approved { background: var(--curriculo-prog-c18); color: var(--curriculo-prog-c11); }
-.status-badge.rejected { background: var(--curriculo-prog-c17); color: var(--awa-red-dark, #8e2629); }
+.status-badge.rejected { background: var(--curriculo-prog-c17); color: var(--awa-red-dark, #e85d00); }
 
 .status-result-body {
     padding: 25px;
@@ -1160,7 +1160,7 @@
 }
 
 .timeline-step.current .dot {
-    background: var(--awa-red, #b73337);
+    background: var(--awa-brand, #ff6b00);
     animation: status-pulse 1.5s infinite;
 }
 
@@ -1178,8 +1178,8 @@
 }
 
 @keyframes status-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgb(183 51 55 / 40%); }
-    50% { box-shadow: 0 0 0 10px rgb(183 51 55 / 0%); }
+    0%, 100% { box-shadow: 0 0 0 0 rgb(255 107 0 / 40%); }
+    50% { box-shadow: 0 0 0 10px rgb(255 107 0 / 0%); }
 }
 
 .back-link {
@@ -1188,7 +1188,7 @@
 }
 
 .back-link a {
-    color: var(--awa-red, #b73337);
+    color: var(--awa-brand, #ff6b00);
     text-decoration: none;
 }
 

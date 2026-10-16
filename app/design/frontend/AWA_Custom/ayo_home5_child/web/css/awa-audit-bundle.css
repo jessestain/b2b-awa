@@ -320,9 +320,7 @@ body.catalogsearch-result-index .loader-text {
    A4: escala da imagem só na hover da imagem, não do card inteiro
    ===================================================================== */
 
-/* Bug A2 — --awa-bg-muted: image container bg + SKU pill bg = transparent */
-/* Bug A3 — --awa-link-hover: CTA button hover background = transparent (button vanishes!) */
-:root {
+/* Bug A2 — --awa-bg-muted: image container bg + SKU pill bg = transparent */ /* Bug A3 — --awa-link-hover: CTA button hover background = transparent (button vanishes!) */ :root{
   --awa-bg-muted:   #f1f5f9;  /* neutral-100: fundo suave da área de imagem e pílula SKU */
   --awa-link-hover: var(--awa-primary-hover);  /* alias primary-dark: hover do botão CTA no card */
 }
@@ -446,9 +444,7 @@ body.b2b-auth-shell .b2b-login-page {
 /* =============================================================================
    Fix 2026-05-05: footer-bottom border-top invisible
    Root cause: --awa-ft-border = rgba(255 255 255 / 12%) (dark-theme token)
-   winning via awa-bundle-refinements.css var(--awa-ft-border, #e2e2e2).
-   DOM: FOOTER.page-footer > .footer-bottom (no .page_footer intermediate).
-   Fix: direct override with html+body prefix → specificity (0,3,2) > (0,3,1)
+   winning via awa-bundle-refinements.css var(--awa-ft-border, rgba(255, 255, 255, 0.12)) > (0,3,1)
    ============================================================================= */
 html body .page-wrapper .page-footer .footer-bottom {
   border-top: 1px solid var(--awa-border, var(--awa-border)) !important;
@@ -1486,7 +1482,7 @@ h3, .sidebar .block-title strong {
 }
 
 h4 {
-    font-size: var(--awa-font-xl, 18px) !important;
+    font-size: var(--awa-font-xl, 22px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     line-height: 1.4 !important;
 }
@@ -1502,7 +1498,7 @@ p, .std p, .cms-page-view .column.main p {
 a:not([class]) {
     color: var(--awa-primary, var(--awa-primary)) !important;
     text-decoration: none !important;
-    transition: color var(--awa-duration-fast, 0.15s) var(--awa-ease, cubic-bezier(0.4, 0, 0.2, 1)) !important;
+    transition: color var(--awa-duration-fast, 0.15s) var(--awa-ease, cubic-bezier(0.4, 0, 0.2, 1))) !important;
 }
 
 a:not([class]):hover {
@@ -1550,7 +1546,7 @@ body:not(.checkout-index-index):not(.rokanthemes-onepagecheckout):not(.ayo-curri
 body:not(.checkout-index-index):not(.rokanthemes-onepagecheckout):not(.ayo-curriculo-index-index):not(.curriculo-index-index) .b2b-primary-btn:hover {
     background: var(--awa-primary-hover, var(--awa-primary-hover)) !important;
     transform: translateY(-1px) !important;
-    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgba(183, 51, 55, 0.25)) !important;
+    box-shadow: var(--awa-shadow-brand, 0 4px 16px rgba(183, 51, 55, 0.30))) !important;
 }
 
 body:not(.checkout-index-index):not(.rokanthemes-onepagecheckout):not(.ayo-curriculo-index-index):not(.curriculo-index-index) button.action.primary:active,
@@ -1603,7 +1599,7 @@ a.action.secondary:hover,
 :is(body.catalog-category-view, body.catalogsearch-result-index) .b2b-primary-btn {
     min-height: 40px !important;
     padding: 0 var(--awa-space-4, 16px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     border-radius: var(--awa-radius-sm, 6px) !important;
 }
 
@@ -1664,7 +1660,7 @@ body.catalogsearch-result-index .filter-options .field > .label,
 body.catalogsearch-result-index .filter-options .fieldset > .field > .label {
     display: block !important;
     margin-bottom: var(--awa-space-1-5, 6px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-medium, 500) !important;
     color: var(--awa-text-secondary, #555555) !important;
     letter-spacing: 0.01em !important;
@@ -1694,8 +1690,8 @@ textarea {
 .product-item {
     border-radius: var(--awa-radius-lg, 16px) !important;
     overflow: hidden !important;
-    transition: transform var(--awa-duration, 0.25s) var(--awa-ease),
-                box-shadow var(--awa-duration, 0.25s) var(--awa-ease) !important;
+    transition: transform var(--awa-duration, 200ms) var(--awa-ease),
+                box-shadow var(--awa-duration, 200ms) var(--awa-ease) !important;
 }
 
 /* Product card hover — unified elevation */
@@ -1725,7 +1721,7 @@ textarea {
 /* Price display — consistent */
 .price-box .price,
 .info-price .price {
-    font-size: var(--awa-font-xl, 18px) !important;
+    font-size: var(--awa-font-xl, 22px) !important;
     font-weight: var(--awa-weight-extrabold, 800) !important;
     color: var(--awa-text, var(--awa-text-primary)) !important;
 }
@@ -1733,7 +1729,7 @@ textarea {
 /* Old price strike-through */
 .price-box .old-price .price,
 .info-price .old-price .price {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-normal, 400) !important;
     color: var(--awa-text-muted, #888888) !important;
     text-decoration: line-through !important;
@@ -1778,13 +1774,13 @@ textarea {
 :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .awa-home-section,
 :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .ayo-home5-section,
 :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .top-home-content {
-    padding-top: var(--awa-space-10, 40px) !important;
-    padding-bottom: var(--awa-space-10, 40px) !important;
+    padding-top: var(--awa-space-10, 64px) !important;
+    padding-bottom: var(--awa-space-10, 64px) !important;
 }
 
 /* First section after slider — tighter */
 :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .top-home-content--above-fold + .top-home-content {
-    padding-top: var(--awa-space-8, 32px) !important;
+    padding-top: var(--awa-space-8, 40px) !important;
 }
 
 /* Section headers — consistent spacing */
@@ -1980,7 +1976,7 @@ body.catalog-product-view .product-info-main > * + * {
 /* Footer headings — consistent */
 .footer-container h4,
 .footer-container .block-title strong {
-    font-size: var(--awa-font-lg, 16px) !important;
+    font-size: var(--awa-font-lg, 18px) !important;
     font-weight: var(--awa-weight-bold, 700) !important;
     color: var(--awa-text, var(--awa-text-primary)) !important;
     margin-bottom: var(--awa-space-4, 16px) !important;
@@ -2021,8 +2017,8 @@ body.catalog-product-view .product-info-main > * + * {
     /* Section spacing — tighter on tablet */
     :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .awa-home-section,
     :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .ayo-home5-section {
-        padding-top: var(--awa-space-8, 32px) !important;
-        padding-bottom: var(--awa-space-8, 32px) !important;
+        padding-top: var(--awa-space-8, 40px) !important;
+        padding-bottom: var(--awa-space-8, 40px) !important;
     }
 }
 
@@ -2040,7 +2036,7 @@ body.catalog-product-view .product-info-main > * + * {
 
     h2, .block-title strong,
     .awa-section-header__title {
-        font-size: var(--awa-font-xl, 18px) !important;
+        font-size: var(--awa-font-xl, 22px) !important;
     }
 
     /* Sections — compact mobile */
@@ -2088,7 +2084,7 @@ body.catalog-product-view .product-info-main > * + * {
     /* Price smaller on mobile cards */
     :is(body.catalog-category-view, body.catalogsearch-result-index) .price-box .price,
     :is(body.catalog-category-view, body.catalogsearch-result-index) .info-price .price {
-        font-size: var(--awa-font-lg, 16px) !important;
+        font-size: var(--awa-font-lg, 18px) !important;
     }
 
     /* Forms: stack properly */
@@ -2193,7 +2189,7 @@ img[loading="lazy"] {
 
 /* Smooth page transitions */
 .page-wrapper {
-    transition: opacity var(--awa-duration, 0.25s) var(--awa-ease) !important;
+    transition: opacity var(--awa-duration, 200ms) var(--awa-ease) !important;
 }
 
 /* Breadcrumbs — consistent styling */
@@ -2203,7 +2199,7 @@ img[loading="lazy"] {
 }
 
 .breadcrumbs li {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     color: var(--awa-text-muted, #888888) !important;
 }
 
@@ -2249,7 +2245,7 @@ img[loading="lazy"] {
 
 .messages .message-info,
 .messages .message-notice {
-    background: var(--awa-info-bg, #f0f9ff) !important;
+    background: var(--awa-info-bg, #eff6ff) !important;
     border: 1px solid var(--awa-info, #0ea5e9) !important;
     color: #0c4a6e !important;
 }
@@ -2299,8 +2295,8 @@ img[loading="lazy"] {
 .toolbar .limiter-options {
     min-height: 36px !important;
     border-radius: var(--awa-radius-sm, 6px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
-    padding: 0 var(--awa-space-8, 32px) 0 var(--awa-space-3, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
+    padding: 0 var(--awa-space-8, 40px) 0 var(--awa-space-3, 12px) !important;
 }
 
 /* Sidebar filters — consistent */
@@ -2347,7 +2343,7 @@ img[loading="lazy"] {
 .table-wrapper table th {
     background: var(--awa-bg-muted, var(--awa-bg-muted)) !important;
     padding: var(--awa-space-3, 12px) var(--awa-space-4, 16px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     color: var(--awa-text-secondary, #555555) !important;
     text-align: left !important;
@@ -2375,7 +2371,7 @@ img[loading="lazy"] {
     text-align: center !important;
     padding: var(--awa-space-12, 48px) var(--awa-space-6, 24px) !important;
     color: var(--awa-text-muted, #888888) !important;
-    font-size: var(--awa-font-lg, 16px) !important;
+    font-size: var(--awa-font-lg, 18px) !important;
 }
 
 /* Tooltip — consistent */
@@ -2384,7 +2380,7 @@ img[loading="lazy"] {
     color: var(--awa-bg) !important;
     border-radius: var(--awa-radius-sm, 6px) !important;
     padding: var(--awa-space-2, 8px) var(--awa-space-3, 12px) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     box-shadow: var(--awa-shadow-md) !important;
 }
 
@@ -2548,11 +2544,11 @@ body.cms-seja-cliente-b2b .page-wrapper .column.main h2.b2b-program-title {
     align-items: center !important;
     gap: 8px !important;
     padding: 10px 16px !important;
-    background: var(--awa-surface-alt, #f8fafc) !important;
+    background: var(--awa-surface-alt, #f7f7f8) !important;
     border: 1px solid var(--awa-border, #e2e8f0) !important;
     border-radius: 10px !important;
     font-size: 14px !important;
-    color: var(--awa-text-secondary, #475569) !important;
+    color: var(--awa-text-secondary, var(--awa-text-soft, #475569)) !important;
 }
 
 .catalog-product-view .b2b-login-to-see-price a {
@@ -2951,7 +2947,7 @@ body.customer-account-create .field .control select {
 .awa-benefits-bar,
 .newsletter-subscribe .field,
 .newsletter-subscribe .action {
-    border-radius: var(--awa-radius-xl, 16px) !important; /* audit: was 22px */
+    border-radius: var(--awa-radius-xl, 20px) !important; /* audit: was 22px */
 }
 
 /* 999px → 9999px (pill) — normalize */
@@ -3015,7 +3011,7 @@ span.badge,
 
 /* Product cards — consistent shadow */
 .products-grid .product-item-info {
-    box-shadow: var(--awa-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
+    box-shadow: var(--awa-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05))) !important;
     transition: box-shadow 0.2s ease, transform 0.2s ease !important;
 }
 
@@ -3026,7 +3022,7 @@ span.badge,
 
 /* Sidebar blocks — subtle shadow */
 .sidebar .block {
-    box-shadow: var(--awa-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
+    box-shadow: var(--awa-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05))) !important;
 }
 
 /* Cards and panels — consistent shadow */
@@ -3079,7 +3075,7 @@ h3:not(.product-name) {
 
 /* h4 — normalize to 18px (was 14px = body text) */
 h4 {
-    font-size: var(--awa-font-xl, 18px) !important;
+    font-size: var(--awa-font-xl, 22px) !important;
     font-weight: var(--awa-weight-semibold, 600) !important;
     line-height: 1.4 !important;
     color: var(--awa-text, var(--awa-text)) !important;
@@ -3100,14 +3096,14 @@ h4 {
 
 /* Price — consistent across pages */
 .price-box .price {
-    font-size: var(--awa-font-xl, 18px) !important;
+    font-size: var(--awa-font-xl, 22px) !important;
     font-weight: var(--awa-weight-bold, 700) !important;
     color: var(--awa-primary, var(--awa-primary)) !important;
 }
 
 /* Old price */
 .price-box .old-price .price {
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
     font-weight: var(--awa-weight-normal, 400) !important;
     color: var(--awa-text-muted, #888888) !important;
     text-decoration: line-through !important;
@@ -3170,7 +3166,7 @@ body.customer-account-create select:focus {
 .cms-index-index .awa-home-section,
 .cms-home .top-home-content,
 .cms-home .awa-home-section {
-    margin-bottom: var(--awa-space-8, 32px) !important;
+    margin-bottom: var(--awa-space-8, 40px) !important;
     padding-top: var(--awa-space-6, 24px) !important;
     padding-bottom: var(--awa-space-6, 24px) !important;
 }
@@ -3247,7 +3243,7 @@ button.primary:hover,
 a.action.back,
 a.action.remind {
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
 }
 
 .action.back:hover,
@@ -3266,13 +3262,13 @@ a.action.remind:hover {
     padding: var(--awa-space-3, 12px) 0 !important;
     margin-bottom: var(--awa-space-4, 16px) !important;
     border: none !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
 }
 
 .breadcrumbs a,
 .breadcrumbs li {
     color: var(--awa-text-secondary, var(--awa-text-secondary)) !important;
-    font-size: var(--awa-font-sm, 12px) !important;
+    font-size: var(--awa-font-sm, 13px) !important;
 }
 
 .breadcrumbs a:hover {
@@ -3309,7 +3305,7 @@ a.action.remind:hover {
     }
     
     h3:not(.product-name) {
-        font-size: var(--awa-font-xl, 18px) !important;
+        font-size: var(--awa-font-xl, 22px) !important;
     }
     
     /* Product grid — 2 columns with consistent gap */

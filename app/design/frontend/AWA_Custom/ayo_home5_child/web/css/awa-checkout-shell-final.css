@@ -19,10 +19,10 @@ html body#html-body:is(
     --awa-checkout-gap: var(--awa-checkout-gap-lg);
     --awa-checkout-gap-mobile: var(--awa-checkout-gap-md);
     /* Magento checkout: shell vence styles-l OKLCH */
-    --awa-primary: var(--awa-brand, #b73337);
-    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
-    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
-    --awa-red: var(--awa-brand, #b73337);
+    --awa-primary: var(--awa-brand, var(--awa-brand));
+    --awa-primary-hover: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-primary-dark: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-red: var(--awa-brand, var(--awa-brand));
 }
 
 /* ── Page shell — inset único 16px ───────────────────────────────────────── */
@@ -177,9 +177,9 @@ html body#html-body.checkout-onepage-success {
     --awa-checkout-gap-lg: 16px;
     --awa-grid-shell-max: min(100%, 1280px);
     --awa-grid-container-pad: 16px;
-    --awa-primary: var(--awa-brand, #b73337);
-    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
-    --awa-red: var(--awa-brand, #b73337);
+    --awa-primary: var(--awa-brand, var(--awa-brand));
+    --awa-primary-hover: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-red: var(--awa-brand, var(--awa-brand));
 }
 
 html body#html-body.checkout-onepage-success .page-wrapper .page-main.container {
@@ -203,7 +203,7 @@ html body#html-body.checkout-onepage-success .page-wrapper .awa-order-success__c
 }
 
 html body#html-body.checkout-onepage-success .page-wrapper .awa-order-success__title {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
     font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem) !important;
     font-weight: 600 !important;
 }

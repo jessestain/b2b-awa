@@ -18,7 +18,14 @@ $modesLabelId = 'modes-label-' . $toolbarSlot;
 <div class="modes" role="group" aria-label="<?= $block->escapeHtmlAttr(__('Modo de exibição dos produtos')) ?>">
     <?php $_modes = $block->getModes(); ?>
     <?php if ($_modes && count($_modes) > 1): ?>
-    <strong class="modes-label" id="<?= /* @noEscape */ $modesLabelId ?>"><?= $block->escapeHtml(__('Hide Sidebar')) ?></strong>
+    <?php /* task-70: o toggle de filtros nasce com estado e rotulo de ABRIR.
+             Antes: <strong> sem role/aria e texto fixo "Ocultar Filtros" (traducao de
+             "Hide Sidebar") -> no MOBILE, com a gaveta FECHADA, o visitante lia o OPOSTO
+             do que precisava e o leitor de tela nao recebia estado nenhum.
+             O JS (awa-custom-home-category-compat.js: updateFilterLabel) ja escreve
+             texto/aria-expanded corretos depois; isto conserta o SSR / sem-JS.
+             aria-controls aponta para a lista que ele abre (aria-controls estava vazio). */ ?>
+    <strong class="modes-label" id="<?= /* @noEscape */ $modesLabelId ?>" role="button" tabindex="0" data-awa-filter-toggle="true" aria-expanded="false" aria-controls="narrow-by-list"><?= $block->escapeHtml(__('Filters')) ?></strong>
     <?php foreach ($block->getModes() as $_code => $_label): ?>
         <?php if ($block->isModeActive($_code)): ?>
             <strong title="<?= $block->escapeHtmlAttr((string) $_label) ?>"

@@ -19,10 +19,10 @@ html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index,
     --awa-cms-shell-max: min(100%, 1280px);
     --awa-cms-prose-max: min(100%, 800px);
     /* Magento CMS: shell vence styles-l OKLCH */
-    --awa-primary: var(--awa-brand, #b73337);
-    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
-    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
-    --awa-red: var(--awa-brand, #b73337);
+    --awa-primary: var(--awa-brand, var(--awa-brand));
+    --awa-primary-hover: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-primary-dark: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-red: var(--awa-brand, var(--awa-brand));
 }
 
 /* Container — eixo 1280px; gutter site-wide 16 mobile / 24 tablet+ (Pixel QA) */
@@ -63,7 +63,7 @@ html body#html-body.cms-page-view .column.main .awa-inst {
 
 /* ─── Hierarquia tipográfica corporativa (escala fluid-h3 das demais superfícies) */
 html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status) .column.main h1 {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
     font-weight: 600 !important;
     font-size: clamp(22px, 2vw, 28px) !important;
     line-height: 1.25 !important;
@@ -296,9 +296,9 @@ html body#html-body.cms-nossas-marcas .column.main .awa-cms-nossas-marcas > h2 {
 html body#html-body.cms-nossas-marcas .awa-brand-empty {
     margin-block: 16px 24px;
     padding: 20px 16px;
-    border: 1px dashed color-mix(in srgb, var(--awa-primary, #b73337) 35%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 35%, transparent);
     border-radius: 8px;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 4%, #fff);
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 4%, #fff);
     text-align: left;
 }
 html body#html-body.cms-nossas-marcas .awa-brand-empty__text {
@@ -316,7 +316,7 @@ html body#html-body.cms-nossas-marcas .awa-brand-empty__cta .action.primary {
     min-height: 44px;
     padding: 0 16px;
     border-radius: 4px;
-    background: var(--awa-primary, #b73337);
+    background: var(--awa-primary, var(--awa-brand));
     color: #fff !important;
     text-decoration: none;
     font-weight: 600;
@@ -344,7 +344,7 @@ html body#html-body.cms-noroute-index .page-wrapper .column.main .awa-404-page__
     justify-content: center !important;
     min-height: 44px !important;
     padding-inline: var(--awa-cms-gap-md, 12px) !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     text-decoration: underline !important;
     text-underline-offset: 2px !important;
     box-sizing: border-box !important;
@@ -353,9 +353,9 @@ html body#html-body.cms-noroute-index .page-wrapper .column.main .awa-404-page__
 /* P1-404-PRIMARY-ACTION 2026-09-08: a regra global deixava o texto branco
    sobre fundo transparente. O primeiro link volta a ser uma acao primaria. */
 html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapper .column.main .awa-404-page__links a:first-child {
-    background: var(--awa-primary, #b73337) !important;
-    background-color: var(--awa-primary, #b73337) !important;
-    border: 1px solid var(--awa-primary, #b73337) !important;
+    background: var(--awa-primary, var(--awa-brand)) !important;
+    background-color: var(--awa-primary, var(--awa-brand)) !important;
+    border: 1px solid var(--awa-primary, var(--awa-brand)) !important;
     border-radius: var(--awa-radius-sm, 6px) !important;
     color: #fff !important;
     font-weight: 600 !important;
@@ -363,9 +363,9 @@ html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapp
 }
 
 html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapper .column.main .awa-404-page__links a:first-child:is(:hover, :focus-visible) {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
-    background-color: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
-    border-color: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 88%, #000) !important;
+    background-color: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 88%, #000) !important;
+    border-color: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 88%, #000) !important;
     color: #fff !important;
 }
 

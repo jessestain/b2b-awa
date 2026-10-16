@@ -29,21 +29,6 @@ class ValidateCnpjOnSavePlugin
         $passwordHash = null
     ): array {
         $rawCnpj = $this->extractCnpj($customer);
-        // #region agent log
-        @file_put_contents('/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-6a6568.log', json_encode([
-            'sessionId' => '6a6568',
-            'runId' => 'repo-save',
-            'hypothesisId' => 'D',
-            'location' => 'ValidateCnpjOnSavePlugin.php:beforeSave',
-            'message' => 'cnpj save plugin invoked',
-            'data' => [
-                'hasCnpj' => $rawCnpj !== '',
-                'customerId' => (int) ($customer->getId() ?: 0),
-                'taxvatEmpty' => trim((string) $customer->getTaxvat()) === '',
-            ],
-            'timestamp' => (int) round(microtime(true) * 1000),
-        ]) . "\n", FILE_APPEND);
-        // #endregion
         if ($rawCnpj === '') {
             return [$customer, $passwordHash];
         }

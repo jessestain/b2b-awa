@@ -1,505 +1,71 @@
-:root {
-    --awa-carousel-button-size: 44px;
-    --awa-carousel-button-radius: 999px;
-    --awa-carousel-button-offset: clamp(6px, 1.2vw, 16px);
-    --awa-carousel-button-bg: var(--awa-bg-surface, #ffffff);
-    --awa-carousel-button-color: var(--awa-text, #333333);
-    --awa-carousel-button-border: color-mix(in srgb, var(--awa-primary, #b73337) 24%, #ffffff);
-    --awa-carousel-button-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
-    --awa-carousel-button-disabled-opacity: 0.45;
-    --awa-carousel-focus-ring: 2px solid var(--awa-primary, #b73337);
-    --awa-carousel-focus-offset: 2px;
-    --awa-carousel-nav-z: 4;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel {
-    position: relative;
-    box-sizing: border-box;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    display: block;
-    pointer-events: none;
-    z-index: var(--awa-carousel-nav-z);
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] {
-    position: absolute !important;
-    inset: 0 !important;
-    margin: 0 !important;
-    margin-top: 0 !important;
-    margin-block-start: 0 !important;
-    display: block !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    padding: 0 !important;
-    border: 0 !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-    pointer-events: none !important;
-    z-index: var(--awa-carousel-nav-z) !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button {
-    position: absolute;
-    top: 50%;
-    width: var(--awa-carousel-button-size);
-    height: var(--awa-carousel-button-size);
-    min-width: var(--awa-carousel-button-size);
-    min-height: var(--awa-carousel-button-size);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    border-radius: var(--awa-carousel-button-radius);
-    border: 1px solid var(--awa-carousel-button-border);
-    background: var(--awa-carousel-button-bg);
-    color: var(--awa-carousel-button-color);
-    box-shadow: var(--awa-carousel-button-shadow);
-    transform: translateY(-50%);
-    pointer-events: auto;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__button {
-    position: absolute !important;
-    top: 50% !important;
-    left: auto !important;
-    right: auto !important;
-    width: var(--awa-carousel-button-size) !important;
-    height: var(--awa-carousel-button-size) !important;
-    min-width: var(--awa-carousel-button-size) !important;
-    min-height: var(--awa-carousel-button-size) !important;
-    margin: 0 !important;
-    transform: translateY(-50%) !important;
-}
-
-html body#html-body .page-wrapper :is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport']
-    :is(.awa-owl-nav__btn, .awa-carousel__button) {
-    position: absolute !important;
-    inset: auto !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn--prev,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button--prev {
-    left: max(var(--awa-carousel-button-offset), env(safe-area-inset-left));
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--prev,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--prev {
-    left: var(--awa-carousel-button-offset) !important;
-    right: auto !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn--next,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button--next {
-    right: max(var(--awa-carousel-button-offset), env(safe-area-inset-right));
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--next,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--next {
-    right: var(--awa-carousel-button-offset) !important;
-    left: auto !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__toggle {
-    top: var(--awa-carousel-button-offset);
-    right: max(var(--awa-carousel-button-offset), env(safe-area-inset-right));
-    transform: none;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__toggle {
-    top: var(--awa-carousel-button-offset) !important;
-    right: var(--awa-carousel-button-offset) !important;
-    left: auto !important;
-    transform: none !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn svg,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button svg {
-    width: 18px;
-    height: 18px;
-    pointer-events: none;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn:hover:not(:disabled):not(.is-disabled),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button:hover:not(:disabled):not(.is-disabled) {
-    background: var(--awa-primary, #b73337);
-    border-color: var(--awa-primary, #b73337);
-    color: #ffffff;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn:active:not(:disabled):not(.is-disabled),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button:active:not(:disabled):not(.is-disabled) {
-    transform: translateY(-50%) scale(0.98);
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__toggle:active:not(:disabled):not(.is-disabled) {
-    transform: scale(0.98);
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn:is(:disabled, .is-disabled, [aria-disabled='true']),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button:is(:disabled, .is-disabled, [aria-disabled='true']) {
-    opacity: var(--awa-carousel-button-disabled-opacity);
-    cursor: not-allowed;
-    pointer-events: none;
-    box-shadow: none;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--prev:is(:disabled, .is-disabled, [aria-disabled='true']),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--prev:is(:disabled, .is-disabled, [aria-disabled='true']),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--next:is(:disabled, .is-disabled, [aria-disabled='true']),
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--next:is(:disabled, .is-disabled, [aria-disabled='true']) {
-    transform: translateY(-50%) !important;
-}
-
-html body#html-body .page-wrapper :is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav[data-awa-nav-anchor='viewport']
-    :is(.awa-owl-nav__btn--prev, .awa-carousel__button--prev, .awa-owl-nav__btn--next, .awa-carousel__button--next):is(:disabled, .is-disabled, [aria-disabled='true']) {
-    transform: translateY(-50%) !important;
-}
-
-html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel > .awa-owl-nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--prev:is(:disabled, .is-disabled, [aria-disabled='true']),
-html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel > .awa-owl-nav[data-awa-nav-anchor='viewport'] .awa-owl-nav__btn--next:is(:disabled, .is-disabled, [aria-disabled='true']),
-html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel > .awa-owl-nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--prev:is(:disabled, .is-disabled, [aria-disabled='true']),
-html body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel > .awa-owl-nav[data-awa-nav-anchor='viewport'] .awa-carousel__button--next:is(:disabled, .is-disabled, [aria-disabled='true']) {
-    transform: translateY(-50%) !important;
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-owl-nav__btn:focus-visible,
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel > .awa-carousel__nav .awa-carousel__button:focus-visible {
-    outline: var(--awa-carousel-focus-ring);
-    outline-offset: var(--awa-carousel-focus-offset);
-}
-
-:is(
-    .awa-shelf--carousel,
-    .block.related,
-    .block.upsell,
-    .awa-pdp-related,
-    .rokan-mostviewed,
-    .categorytab-container,
-    .hot-deal-tab-slider,
-    .awa-super-offers-carousel
-) .awa-carousel .awa-owl-progress {
-    margin-top: 12px;
-}
-
-.awa-carousel-nav-host > .awa-owl-nav--header-slot,
-.awa-carousel-nav-host > .awa-owl-nav.awa-owl-nav--header-mounted {
-    display: none !important;
-}
+:root{--awa-carousel-button-size:44px;--awa-carousel-button-radius:999px;--awa-carousel-button-offset:clamp(6px, 1.2vw, 16px);--awa-carousel-button-bg:var(--awa-bg-surface, var(--awa-bg));--awa-carousel-button-color:var(--awa-text, var(--awa-text));--awa-carousel-button-border:color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 24%, var(--awa-bg));--awa-carousel-button-shadow:0 1px 2px rgba(15, 23, 42, 0.08);--awa-carousel-button-disabled-opacity:0.45;--awa-carousel-focus-ring:2px solid var(--awa-primary, var(--awa-primary));--awa-carousel-focus-offset:2px;--awa-carousel-nav-z:4}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel{position:relative;box-sizing:border-box}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav{position:absolute;inset:0;margin:0;display:block;pointer-events:none;z-index:var(--awa-carousel-nav-z)}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport]{position:absolute!important;inset:0!important;margin:0!important;margin-top:0!important;margin-block-start:0!important;display:block!important;height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;border:0!important;box-sizing:border-box!important;transform:none!important;pointer-events:none!important;z-index:var(--awa-carousel-nav-z)!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn{position:absolute;top:50%;width:var(--awa-carousel-button-size);height:var(--awa-carousel-button-size);min-width:var(--awa-carousel-button-size);min-height:var(--awa-carousel-button-size);display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:var(--awa-carousel-button-radius);border:1px solid var(--awa-carousel-button-border);background:var(--awa-carousel-button-bg);color:var(--awa-carousel-button-color);box-shadow:var(--awa-carousel-button-shadow);transform:translateY(-50%);pointer-events:auto;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease,opacity .2s ease,box-shadow .2s ease}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__button,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn{position:absolute!important;top:50%!important;left:auto!important;right:auto!important;width:var(--awa-carousel-button-size)!important;height:var(--awa-carousel-button-size)!important;min-width:var(--awa-carousel-button-size)!important;min-height:var(--awa-carousel-button-size)!important;margin:0!important;transform:translateY(-50%)!important}html body#html-body .page-wrapper :is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] :is(.awa-owl-nav__btn,.awa-carousel__button){position:absolute!important;inset:auto!important;top:50%!important;transform:translateY(-50%)!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button--prev,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn--prev{left:max(var(--awa-carousel-button-offset),env(safe-area-inset-left))}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__button--prev,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--prev{left:var(--awa-carousel-button-offset)!important;right:auto!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button--next,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn--next{right:max(var(--awa-carousel-button-offset),env(safe-area-inset-right))}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__button--next,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--next{right:var(--awa-carousel-button-offset)!important;left:auto!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__toggle{top:var(--awa-carousel-button-offset);right:max(var(--awa-carousel-button-offset),env(safe-area-inset-right));transform:none}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__toggle{top:var(--awa-carousel-button-offset)!important;right:var(--awa-carousel-button-offset)!important;left:auto!important;transform:none!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button svg,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn svg{width:18px;height:18px;pointer-events:none}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button:hover:not(:disabled):not(.is-disabled),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn:hover:not(:disabled):not(.is-disabled){background:var(--awa-primary,var(--awa-primary));border-color:var(--awa-primary,var(--awa-primary));color:var(--awa-bg)}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button:active:not(:disabled):not(.is-disabled),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn:active:not(:disabled):not(.is-disabled){transform:translateY(-50%) scale(.98)}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__toggle:active:not(:disabled):not(.is-disabled){transform:scale(.98)}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button:is(:disabled,.is-disabled,[aria-disabled=true]),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn:is(:disabled,.is-disabled,[aria-disabled=true]){opacity:var(--awa-carousel-button-disabled-opacity);cursor:not-allowed;pointer-events:none;box-shadow:none}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__button--next:is(:disabled,.is-disabled,[aria-disabled=true]),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-carousel__button--prev:is(:disabled,.is-disabled,[aria-disabled=true]),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--next:is(:disabled,.is-disabled,[aria-disabled=true]),:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--prev:is(:disabled,.is-disabled,[aria-disabled=true]){transform:translateY(-50%)!important}html body#html-body .page-wrapper :is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav[data-awa-nav-anchor=viewport] :is(.awa-owl-nav__btn--prev,.awa-carousel__button--prev,.awa-owl-nav__btn--next,.awa-carousel__button--next):is(:disabled,.is-disabled,[aria-disabled=true]){transform:translateY(-50%)!important}html body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel>.awa-owl-nav[data-awa-nav-anchor=viewport] .awa-carousel__button--next:is(:disabled,.is-disabled,[aria-disabled=true]),html body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel>.awa-owl-nav[data-awa-nav-anchor=viewport] .awa-carousel__button--prev:is(:disabled,.is-disabled,[aria-disabled=true]),html body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel>.awa-owl-nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--next:is(:disabled,.is-disabled,[aria-disabled=true]),html body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-carousel>.awa-owl-nav[data-awa-nav-anchor=viewport] .awa-owl-nav__btn--prev:is(:disabled,.is-disabled,[aria-disabled=true]){transform:translateY(-50%)!important}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-carousel__button:focus-visible,:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel>.awa-carousel__nav .awa-owl-nav__btn:focus-visible{outline:var(--awa-carousel-focus-ring);outline-offset:var(--awa-carousel-focus-offset)}:is(
+.awa-shelf--carousel,.block.related,.block.upsell,.awa-pdp-related,.rokan-mostviewed,.categorytab-container,.hot-deal-tab-slider,.awa-super-offers-carousel
+) .awa-carousel .awa-owl-progress{margin-top:12px}.awa-carousel-nav-host>.awa-owl-nav--header-slot,.awa-carousel-nav-host>.awa-owl-nav.awa-owl-nav--header-mounted{display:none!important}

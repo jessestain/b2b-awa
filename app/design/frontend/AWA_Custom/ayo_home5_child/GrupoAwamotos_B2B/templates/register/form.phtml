@@ -411,6 +411,33 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                     </div>
                 </div>
 
+                <?php
+                /* Captcha anti-bot (2026-10-05): o bloco e criado AQUI em vez de vir do layout,
+                   porque este formulario e custom e o layout do tema nao injetava o filho
+                   'captcha' (getChildHtml retornava vazio). Criar direto garante a renderizacao. */
+                $b2bCaptchaHtml = '';
+                try {
+                    $b2bCaptchaBlock = $block->getLayout()->createBlock(\Magento\Captcha\Block\Captcha::class);
+                    if ($b2bCaptchaBlock) {
+                        $b2bCaptchaBlock->setFormId('user_create');
+                        $b2bCaptchaBlock->setImgWidth(230);
+                        $b2bCaptchaBlock->setImgHeight(50);
+                        $b2bCaptchaHtml = $b2bCaptchaBlock->toHtml();
+                    }
+                } catch (\Throwable $e) {
+                    $b2bCaptchaHtml = '';
+                }
+                ?>
+                <?php if (trim((string)$b2bCaptchaHtml) !== ''): ?>
+                <div class="field b2b-field b2b-field-captcha" data-awa-captcha="1">
+                    <label class="label" for="captcha_user_create">
+                        <span><?= $block->escapeHtml(__('Verificação de segurança')) ?></span>
+                    </label>
+                    <?= /* @noEscape */ $b2bCaptchaHtml ?>
+                    <p class="b2b-field-note"><?= $block->escapeHtml(__('Confirme que você não é um robô para concluir o cadastro.')) ?></p>
+                </div>
+                <?php endif; ?>
+
                 <div class="actions-toolbar b2b-login-actions" hidden>
                     <div class="primary">
                         <button type="submit" class="b2b-btn-entrar create-b2b-account" title="<?= $block->escapeHtmlAttr(__('Criar Conta B2B')) ?>">

@@ -1,0 +1,93 @@
+<?php
+declare(strict_types=1);
+
+namespace GrupoAwamotos\B2B\Plugin\Pricing;
+
+use GrupoAwamotos\ERPIntegration\Model\CustomerPriceProvider;
+use GrupoAwamotos\ERPIntegration\Model\ResourceModel\SyncLog;
+use Magento\Catalog\Pricing\Price\TierPrice as TierPriceModel;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Pricing\Amount\AmountFactory;
+use Psr\Log\LoggerInterface;
+
+/**
+ * B2B Densidade — preço da LISTA do cliente (Sectra) na tabela de quantidade.
+ *
+ * Resolve o código ERP do cliente pelo ENTITY MAP do sync (confiável mesmo com
+ * sessão depersonalizada pelo FPC), com fallback para o atributo erp_code.
+ * Injeta o preço da lista em TierPrice::getTierPriceList().
+ */
+class CustomerTierPrice
+{
+    public function __construct(
+        private readonly Session $customerSession,
+        private readonly CustomerPriceProvider $customerPriceProvider,
+        private readonly SyncLog $syncLog,
+        private readonly AmountFactory $amountFactory,
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
+    public function afterGetTierPriceList(TierPriceModel $subject, array $list): array
+    {
+        if (!$this->customerSession->isLoggedIn()) {
+            return $list;
+        }
+        try {
+            $product = $subject->getProduct();
+        } catch (\Throwable $e) {
+            return $list;
+        }
+        if (!$product || !(int) $product->getId()) {
+            return $list;
+        }
+        $customerId = (int) $this->customerSession->getCustomerId();
+        $sku = (string) $product->getSku();
+        if ($customerId < 1 || $sku === '') {
+            return $list;
+        }
+
+        // 1. Entity map do sync (caminho confiável no contexto FPC)
+        $erpCode = 0;
+        try {
+            $mapped = $this->syncLog->getErpCodeByMagentoId('customer', $customerId);
+            $erpCode = $mapped !== null && $mapped !== '' ? (int) $mapped : 0;
+        } catch (\Throwable $e) {
+            $erpCode = 0;
+        }
+
+        // 2. Fallback: atributo erp_code do cliente
+        if ($erpCode <= 0) {
+            try {
+                $customer = $this->customerSession->getCustomerData();
+                $attr = $customer ? $customer->getCustomAttribute('erp_code') : null;
+                $erpCode = $attr ? (int) $attr->getValue() : 0;
+            } catch (\Throwable $e) {
+                $erpCode = 0;
+            }
+        }
+        if ($erpCode <= 0) {
+            return $list;
+        }
+
+        try {
+            $price = $this->customerPriceProvider->getCustomerPrice($erpCode, $sku);
+        } catch (\Throwable $e) {
+            $this->logger->error('[B2B Tier] falha ao obter preço da lista: ' . $e->getMessage());
+            return $list;
+        }
+        if ($price === null || $price <= 0) {
+            return $list;
+        }
+
+        try {
+            $list[] = [
+                'price_qty' => 1.0,
+                'price'     => $this->amountFactory->create($price, []),
+            ];
+        } catch (\Throwable $e) {
+            $this->logger->error('[B2B Tier] falha ao criar amount: ' . $e->getMessage());
+        }
+        return $list;
+    }
+}

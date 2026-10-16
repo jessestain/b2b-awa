@@ -76,7 +76,7 @@
 }
 
 .awa-pdp-faq__question:focus-visible {
-  outline: 2px solid var(--awa-cc-focus, rgba(183, 51, 55, .28));
+  outline: 2px solid var(--awa-cc-focus, rgba(183, 51, 55, .28)));
   outline-offset: 2px;
   border-radius: 4px;
 }

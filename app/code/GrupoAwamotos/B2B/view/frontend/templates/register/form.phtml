@@ -406,6 +406,17 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                     </div>
                 </div>
 
+                <?php $b2bCaptchaHtml = $block->getChildHtml('captcha'); ?>
+                <?php if (trim((string)$b2bCaptchaHtml) !== ''): ?>
+                <div class="field b2b-field b2b-field-captcha" data-awa-captcha="1">
+                    <label class="label" for="captcha_user_create">
+                        <span><?= $block->escapeHtml(__('Verificação de segurança')) ?></span>
+                    </label>
+                    <?= /* @noEscape */ $b2bCaptchaHtml ?>
+                    <p class="b2b-field-note"><?= $block->escapeHtml(__('Confirme que você não é um robô para concluir o cadastro.')) ?></p>
+                </div>
+                <?php endif; ?>
+
                 <div class="actions-toolbar b2b-login-actions">
                     <div class="primary">
                         <button type="submit" class="b2b-btn-entrar create-b2b-account" title="<?= $block->escapeHtmlAttr(__('Criar Conta B2B')) ?>">

@@ -15,10 +15,10 @@ body .page-wrapper {
     --awa-surface: #fff;
     --awa-surface-soft: #f8fafc;
     --awa-text-1: #1f2937;
-    --awa-text-2: #475569;
+    --awa-text-2: var(--awa-text-soft, #475569);
     --awa-text-3: #64748b;
-    --awa-accent: var(--primary-color, #b73337);
-    --awa-accent-hover: var(--primary-hover, #8e2629);
+    --awa-accent: var(--primary-color, var(--awa-brand));
+    --awa-accent-hover: var(--primary-hover, var(--awa-brand-dark));
 }
 
 body .page-wrapper .action.primary,

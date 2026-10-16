@@ -1,0 +1,79 @@
+<?php
+/**
+ * AWA Motos — override do template do core
+ * vendor/magento/module-catalog/view/frontend/templates/product/view/counter.phtml
+ *
+ * ACHADO SEO-001 (superfície 2): o core entrega no HTML do visitante anônimo
+ * items.<id>.price_info com final_price/regular_price, formatted_prices (string "R$ ..."),
+ * extension_attributes.msrp.msrp_price, tax_adjustments e weee_adjustment.
+ *
+ * Este override imprime o MESMO payload do core, exceto quando o gate B2B nega preço:
+ * nesse caso as chaves de preço saem de cada item ANTES da serialização.
+ * O bloco 'Magento_Catalog/js/product/view/provider' continua recebendo JSON válido.
+ *
+ * O gate chega por <argument name="b2b_gate"> no layout do tema
+ * (Magento_Catalog/layout/catalog_product_view.xml) — sem DI/setup:di:compile.
+ * Fail-closed: sem gate válido, ou em erro, as chaves de preço são removidas.
+ *
+ * @var $block \Magento\Catalog\Block\Ui\ProductViewCounter
+ */
+
+/** @var string $viewCounterData */
+$viewCounterData = $block->getCurrentProductData();
+
+/** @var \GrupoAwamotos\B2B\ViewModel\PdpGate|null $b2bGate */
+$b2bGate = $block->getData('b2b_gate');
+$awaPricesVisible = false;
+if ($b2bGate instanceof \GrupoAwamotos\B2B\ViewModel\PdpGate) {
+    try {
+        $awaPricesVisible = $b2bGate->canViewPrices();
+    } catch (\Throwable $exception) {
+        $awaPricesVisible = false;
+    }
+}
+
+if (!$awaPricesVisible && is_string($viewCounterData) && $viewCounterData !== '') {
+    $awaPayload = json_decode($viewCounterData, true);
+
+    if (is_array($awaPayload)) {
+        /** @var string[] $awaPriceKeys */
+        $awaPriceKeys = [
+            'price_info',
+            'tax_adjustments',
+            'prices',
+            'base_price',
+            'final_price',
+            'regular_price',
+            'special_price',
+            'minimal_price',
+        ];
+
+        if (isset($awaPayload['items']) && is_array($awaPayload['items'])) {
+            foreach ($awaPayload['items'] as $awaProductId => $awaItem) {
+                if (!is_array($awaItem)) {
+                    continue;
+                }
+                foreach ($awaPriceKeys as $awaPriceKey) {
+                    unset($awaPayload['items'][$awaProductId][$awaPriceKey]);
+                }
+            }
+        }
+
+        $awaEncoded = json_encode($awaPayload);
+        // Nunca devolver string vazia: o x-magento-init precisa de JSON válido.
+        $viewCounterData = $awaEncoded !== false ? $awaEncoded : '{"items":[]}';
+    } else {
+        // Payload ilegível: fail-closed com estrutura válida.
+        $viewCounterData = '{"items":[]}';
+    }
+}
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+                "Magento_Catalog/js/product/view/provider": {
+                    "data": <?= /* @noEscape */ $viewCounterData ?>
+            }
+        }
+    }
+</script>

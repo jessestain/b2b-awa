@@ -320,7 +320,7 @@ final class CascadeAssetManifest
         'design-system' => [
             'file' => 'awa-design-system.min.css',
             'fragment' => 'awa-design-system',
-            'query' => '?v=20260904-premium-ui-w18',
+            'query' => '?v=20261015-limiter-spacing-fix',
         ],
         'plp-shell' => [
             'file' => 'awa-plp-shell-final.min.css',

@@ -2,30 +2,33 @@
 declare(strict_types=1);
 
 /**
- * AWA Motos – título principal visível da homepage.
+ * AWA Motos — H1 SEO da homepage (invisível: só leitores de tela e crawlers).
  *
- * Reutiliza o único H1 existente, com estilo restrito à homepage.
- * Incluído apenas em cms_index_index via layout XML.
+ * Histórico:
+ *   - 22/05/2026 (0ed46505b): criado como sr-only.
+ *   - 16/09/2026 (c23362e09): passou a ser renderizado como título VISÍVEL
+ *     ("AWA Motos — Peças e Acessórios para Motos") logo acima do banner,
+ *     com CSS embutido no próprio template — virava uma faixa de texto solta
+ *     no topo da home.
  *
- * @var \Magento\Framework\View\Element\Template $block
+ * NÃO escrever a sequência de tag de estilo (nem em comentário) neste arquivo:
+ * o tema tem um filtro por regex no HTML cru que remove esses blocos, e uma
+ * ocorrência literal dentro de comentário já truncou CSS e quebrou a home
+ * (incidente de 04/10/2026).
+ *   - 12/10/2026: volta a ser sr-only. O H1 continua no DOM (um único H1 na
+ *     página, para SEO e leitores de tela), mas não ocupa espaço visual.
+ *
+ * O clip vai INLINE de propósito: garante a ocultação antes de qualquer CSS
+ * assíncrono/deferido (o tema tem folhas deferidas e histórico de FOUC).
+ * A classe `.awa-sr-only` já existe no tema (bloco de acessibilidade do head).
+ *
+ * Incluído apenas em cms_index_index via layout XML
+ * (Magento_Cms/layout/cms_index_index.xml, bloco `awa.seo.h1`,
+ *  movido para dentro do <main> antes de `content-top-home`).
+ *
+ * @var Magento\Framework\View\Element\Template $block
  */
 ?>
-<style>
-body.cms-index-index h1.awa-home-title {
-    box-sizing: border-box;
-    width: calc(100% - 32px);
-    max-width: 1232px;
-    margin: 16px auto;
-    padding: 0;
-    color: #1f2937;
-    font-size: clamp(20px, 2vw, 28px);
-    font-weight: 700;
-    line-height: 1.3;
-    text-align: left;
-    white-space: normal;
-    overflow-wrap: break-word;
-}
-</style>
-<h1 class="awa-home-title">
+<h1 class="awa-home-title awa-sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0">
     <?= $block->escapeHtml(__('AWA Motos — Peças e Acessórios para Motos')) ?>
 </h1>

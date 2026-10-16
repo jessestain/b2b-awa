@@ -353,7 +353,7 @@ body .page-wrapper .navigation.verticalmenu.side-verticalmenu {
     display: flex;
     align-items: center;
     gap: var(--awa-space-2, 8px);
-    min-height: var(--awa-touch-target, 48px);
+    min-height: var(--awa-touch-target, 44px);
     margin-inline: var(--awa-space-1, 4px);
     padding-block: var(--awa-space-3, 12px);
     padding-inline: var(--awa-space-4, 16px);
@@ -433,7 +433,7 @@ body .page-wrapper .navigation.verticalmenu.side-verticalmenu {
     justify-content: center;
     gap: var(--awa-space-2, 8px);
     width: 100%;
-    min-height: var(--awa-touch-target, 48px);
+    min-height: var(--awa-touch-target, 44px);
     cursor: pointer;
   }
 
@@ -819,7 +819,7 @@ body .page-wrapper .shadow_bkg_show {
     color: var(--awa-text-muted, var(--awa-text-secondary));
     cursor: pointer;
     display: flex;
-    font-size: var(--awa-font-sm, 14px);
+    font-size: var(--awa-font-sm, 13px);
     font-weight: 500;
     gap: var(--awa-space-2, 8px);
     line-height: 1.35;
@@ -866,7 +866,7 @@ body .page-wrapper .shadow_bkg_show {
     color: var(--awa-bg);
     cursor: pointer;
     display: inline-flex;
-    font-size: var(--awa-font-sm, 14px);
+    font-size: var(--awa-font-sm, 13px);
     font-weight: 600;
     gap: var(--awa-space-2, 8px);
     justify-content: center;
@@ -1061,7 +1061,7 @@ body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
-    z-index: var(--awa-z-dropdown, 100120);
+    z-index: var(--awa-z-dropdown, 99);
   }
 
   :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
@@ -1134,7 +1134,7 @@ body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
 @media (min-width: 992px) {
   body .page-wrapper .navigation.verticalmenu .togge-menu
     > li.ui-menu-item.level0.vmm-current > a.level-top {
-    background: var(--awa-vmenu-surface-active, color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 12%, transparent)) !important;
+    background: var(--awa-vmenu-surface-active, color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 12%, transparent))) 12%, transparent)) !important;
     color: var(--awa-primary, var(--awa-primary)) !important;
     font-weight: 600;
     box-shadow: inset 3px 0 0 var(--awa-primary, var(--awa-primary));
@@ -1180,9 +1180,9 @@ body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
     .navigation__inner-item--level1.imagem.img-subcategory img:not([src]) {
     background: linear-gradient(
       90deg,
-      var(--awa-bg-muted, #f0f0f0) 0%,
+      var(--awa-bg-muted, #f1f5f9) 0%,
       color-mix(in srgb, var(--awa-border, var(--awa-border)) 60%, white) 50%,
-      var(--awa-bg-muted, #f0f0f0) 100%
+      var(--awa-bg-muted, #f1f5f9) 100%
     );
     background-size: 200% 100%;
     animation: awa-img-shimmer 1.4s linear infinite;
@@ -1214,7 +1214,7 @@ body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
   body .awa-vmf-portal .navigation__inner-item--level1.imagem.img-subcategory img[src=""] {
     animation: none !important;
     background-image: none;
-    background: var(--awa-bg-muted, #f0f0f0);
+    background: var(--awa-bg-muted, #f1f5f9);
   }
 }
 
@@ -1408,7 +1408,7 @@ body .page-wrapper textarea {
   border: 1.5px solid var(--awa-border, var(--awa-border));
   border-radius: var(--awa-radius-sm, 8px);
   padding: 12px 16px;
-  font-size: var(--awa-text-sm, 14px);
+  font-size: var(--awa-text-sm, 13px);
   color: var(--awa-text, var(--awa-text-primary));
   background: var(--awa-bg, var(--awa-bg));
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1448,7 +1448,7 @@ body .page-wrapper .fieldset > .field > .label,
 body .page-wrapper .fieldset > .field > label,
 body .page-wrapper .form .field .label {
   font-weight: 600;
-  font-size: var(--awa-text-sm, 14px);
+  font-size: var(--awa-text-sm, 13px);
   color: var(--awa-text-primary);
   margin-bottom: 4px;
   line-height: 1.4;
@@ -1492,7 +1492,7 @@ body .page-wrapper .field textarea._valid {
 
 body .page-wrapper .action.primary,
 body .page-wrapper button.action.primary {
-  min-height: var(--awa-btn-h, 48px);
+  min-height: var(--awa-btn-h, 44px);
   border-radius: var(--awa-radius-sm, 8px);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1812,8 +1812,8 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 /* ── 1. ROOT TOKEN OVERRIDE — Paleta AWA Red (Fase 7) ── */
 :root {
     /* === PALETA PRIMÁRIA AWA RED === */
-    --awa-primary:          #b73337;
-    --awa-primary-hover:    #8e2629;
+    --awa-primary:          var(--awa-brand);
+    --awa-primary-hover:    var(--awa-brand-dark);
     --awa-primary-dark:     var(--awa-primary-hover);
     --awa-primary-light:    #fcefee;
     --awa-primary-subtle:   rgba(183, 51, 55, 0.08);
@@ -1836,15 +1836,15 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 
     /* Backgrounds */
     --awa-bg:               #ffffff;
-    --awa-bg-subtle:        #F8FAFC;
-    --awa-bg-muted:         #F1F5F9;
+    --awa-bg-subtle:        #f8fafc;
+    --awa-bg-muted:         #f1f5f9;
     --awa-bg-surface:       var(--awa-bg);
     --awa-bg-page:          var(--awa-bg);
 
     /* Bordas */
-    --awa-border:           #E2E8F0;
-    --awa-border-strong:    #CBD5E1;
-    --awa-border-subtle:    #F1F5F9;
+    --awa-border:           #e2e8f0;
+    --awa-border-strong:    #cbd5e1;
+    --awa-border-subtle:    #f1f5f9;
 
     /* Aliases legados — sincronizados com AWA Red */
     --awa-red:              var(--awa-primary); /* alias de --awa-primary */
@@ -2186,9 +2186,13 @@ hr,
 }
 
 .price-box .special-price .price,
-.special-price .price,
-.price-final_price .price {
+.special-price .price {
     color: var(--awa-primary) !important;
+}
+
+/* Preço final (regular): tinta #111 — DS 14/10/2026 (era primary laranja) */
+.price-final_price .price {
+    color: var(--awa-ink) !important;
 }
 
 .price-box .old-price .price,
@@ -2389,8 +2393,8 @@ div.message.info {
 
 .cart-totals .totals.grand .amount .price,
 .grand.totals .price {
-    color: var(--awa-primary);
-    font-weight: 700;
+    color: var(--awa-ink);
+    font-weight: 800;
 }
 
 
@@ -2654,7 +2658,7 @@ body.checkout-cart-index .awa-nav-overlay.is-visible {
 /* Cards de Produto: transição suave de sombra e borda ao hover.
    Transform é gerenciado pelo VP-4 no pai (.product-item) — não duplicar aqui. */
 body .page-wrapper .product-item-info {
-    transition: box-shadow var(--awa-duration, 0.25s) var(--awa-ease),
+    transition: box-shadow var(--awa-duration, 200ms) var(--awa-ease),
                 border-color var(--awa-duration-fast, 0.15s) var(--awa-ease) !important;
     will-change: box-shadow;
 }
@@ -2758,7 +2762,7 @@ body {
     }
 
     .navigation.verticalmenu .vmm-drill-panel > li {
-        border-block-end: 1px solid var(--awa-vmenu-border-subtle, color-mix(in srgb, var(--awa-text, var(--awa-text)) 8%, transparent));
+        border-block-end: 1px solid var(--awa-vmenu-border-subtle, color-mix(in srgb, var(--awa-text, var(--awa-text)) 8%, transparent))) 8%, transparent));
     }
 
     .navigation.verticalmenu .vmm-drill-panel > li:last-child {
@@ -2770,7 +2774,7 @@ body {
         color: var(--awa-text, var(--awa-text));
         cursor: pointer;
         display: flex;
-        font-size: var(--awa-font-sm, 14px);
+        font-size: var(--awa-font-sm, 13px);
         font-weight: 500;
         gap: var(--awa-space-2, 8px);
         min-height: var(--awa-touch-target, 44px);
@@ -2791,7 +2795,7 @@ body {
 
     .navigation.verticalmenu .vmm-drill-panel > li > a:hover,
     .navigation.verticalmenu .vmm-drill-panel > li > a:focus-visible {
-        background: var(--awa-vmenu-surface-hover, color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 8%, transparent));
+        background: var(--awa-vmenu-surface-hover, color-mix(in srgb, var(--awa-primary, var(--awa-primary)) 8%, transparent))) 8%, transparent));
         color: var(--awa-primary, var(--awa-primary));
         transform: none;
     }
@@ -2872,7 +2876,7 @@ body {
         place-items: center;
         grid-auto-flow: column;
         gap: var(--awa-space-1, 4px);
-        font-size: var(--awa-font-sm, 14px);
+        font-size: var(--awa-font-sm, 13px);
         font-weight: 600;
         min-height: var(--awa-touch-target, 44px);
         min-width: var(--awa-touch-target, 44px);

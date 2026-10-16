@@ -18,7 +18,7 @@ final class MinicartAssetVersion
     /**
      * Bump when publishing minicart JS/PHTML that browsers may keep by query.
      */
-    public const RUNTIME = '20260903-navfix-r1';
+    public const RUNTIME = '20261007-minicart-loopfix-r1';
 
     public static function query(): string
     {

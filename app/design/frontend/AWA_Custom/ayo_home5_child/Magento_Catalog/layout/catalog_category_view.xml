@@ -85,5 +85,16 @@
                    after="category.products.list"/>
         </referenceContainer>
 
+        <!--
+            ACHADO SEO-001: o JSON-LD ItemList da PLP (GrupoAwamotos\\SchemaOrg\\Block\\CategoryItemList)
+            monta offers.price sem consultar o gate B2B. Passamos o gate por argumento de layout
+            (sem construtor novo => sem setup:di:compile) para o bloco parar de publicar preço.
+        -->
+        <referenceBlock name="grupoawamotos.schema.category.itemlist">
+            <arguments>
+                <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+            </arguments>
+        </referenceBlock>
+
     </body>
 </page>

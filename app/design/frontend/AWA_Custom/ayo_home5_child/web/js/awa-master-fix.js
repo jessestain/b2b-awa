@@ -1284,7 +1284,7 @@
         }
 
         if (!panel.id) {
-            panel.id = 'awa-minicart-panel';
+            panel.id = 'awa-minicart-dialog';
         }
 
         trigger.setAttribute('aria-haspopup', 'dialog');

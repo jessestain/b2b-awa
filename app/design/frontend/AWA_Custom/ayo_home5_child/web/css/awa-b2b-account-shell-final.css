@@ -35,11 +35,11 @@ html body#html-body:is(
     --awa-grid-gap-loose: var(--awa-acct-gap-md);
     --awa-shell-gutter-account: var(--awa-acct-shell-pad);
     /* Magento 2columns-left: shell vence styles-l OKLCH e super-global circular */
-    --awa-primary: var(--awa-brand, #b73337);
-    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
-    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
-    --awa-red: var(--awa-brand, #b73337);
-    --awa-b2b-primary: var(--awa-brand, #b73337);
+    --awa-primary: var(--awa-brand, var(--awa-brand));
+    --awa-primary-hover: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-primary-dark: var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-red: var(--awa-brand, var(--awa-brand));
+    --awa-b2b-primary: var(--awa-brand, var(--awa-brand));
 }
 
 /* Flow tier — cotações/listas/quickorder: conteúdo mais estreito */
@@ -248,7 +248,7 @@ html body#html-body:is(.account, [class*="b2b-"]) .page-layout-2columns-left .co
 
 /* ── Page title ──────────────────────────────────────────────────────────── */
 html body#html-body:is(.account, [class*="b2b-"]) .page-wrapper .page-title-wrapper .page-title {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
     font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem) !important;
     font-weight: 600 !important;
     line-height: 1.3 !important;
@@ -712,7 +712,7 @@ html body#html-body#html-body#html-body.b2b-account-dashboard .page-wrapper .b2b
     --b2b-surface-radius: 8px;
     --b2b-badge-radius: var(--b2b-surface-radius);
     --b2b-onboard-pad: 12px;
-    --b2b-onboard-title-size: var(--awa-b2b-section-title-size, clamp(1rem, 0.95rem + 0.25vw, 1.125rem));
+    --b2b-onboard-title-size: var(--awa-b2b-section-title-size, clamp(1rem, 0.95rem + 0.25vw, 1.125rem)));
     --b2b-checklist-gap: var(--awa-acct-gap-sm, 8px);
     --b2b-card-pad: 12px;
     --b2b-section-pad: 12px;
@@ -1457,10 +1457,10 @@ html body#html-body.awa-dark-mode.b2b-account-dashboard .page-wrapper :is(
 html body#html-body#html-body#html-body:is(.account, .b2b-account-shell, .awa-account-operational, .b2b-account-dashboard, [class*="b2b-"])
   .page-wrapper
   .awa-site-header.awa-account-header {
-    --awa-header-site-h: 68px !important;
-    --awa-header-sticky-h: 68px !important;
-    --awa-header-nav-h: 0px !important;
-    --awa-nav-bar-h: 0px !important;
+    --awa-header-site-h: 68px!important;
+    --awa-header-sticky-h: 68px!important;
+    --awa-header-nav-h: 0px!important;
+    --awa-nav-bar-h: 0px!important;
     height: 68px !important;
     min-height: 68px !important;
     max-height: 68px !important;
@@ -1519,7 +1519,7 @@ html body#html-body:is(.account, .b2b-account-shell, .awa-account-operational, .
 /* SSOT-1 Onda 4: gutter desktop 24 (stepped, não fluido) */
 @media (min-width: 768px) {
 html body#html-body:is(.account,.b2b-account-dashboard,.b2b-account-shell,.awa-account-operational,[class*="b2b-"]) {
-  --awa-acct-shell-pad: 24px !important;
+  --awa-acct-shell-pad: 24px!important;
 }
 html body#html-body:is(.b2b-account-dashboard, .b2b-account-index) .page-wrapper :is(.page-main, .page-main.container, #maincontent.page-main) {
   padding-inline: 24px !important;

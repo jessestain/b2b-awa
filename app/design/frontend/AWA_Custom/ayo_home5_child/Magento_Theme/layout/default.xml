@@ -169,8 +169,10 @@
                    template="Magento_Theme::html/awa-visual-qa-fixes-css.phtml"
                    after="awa.audit.bundle.css"/>
 
-            <!-- OG Meta: gerado por URL (mesmo conteúdo para todos os visitantes na mesma URL).
-                 FPC cacheia por URL — correto. Removido cacheable=false que impedia caching do site inteiro. -->
+            <!-- OG Meta: gerado por URL. O conteúdo VARIA por visitante: o preço só é emitido
+                 quando o gate B2B permite (achado SEO-001). O FPC varia por auth + status de
+                 aprovação + tabela de preço (HttpContextPlugin / CustomerPriceListContextPlugin),
+                 então a entrada de cache do visitante anônimo não é reusada pelo cliente aprovado. -->
             <block class="Magento\Framework\View\Element\Template"
                    name="awa.og.meta"
                    template="Magento_Theme::html/awa-og-meta.phtml"
@@ -178,6 +180,7 @@
                 <arguments>
                     <argument name="view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\OpenGraph</argument>
                     <argument name="open_graph_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\OpenGraph</argument>
+                    <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
                 </arguments>
             </block>
 
@@ -200,6 +203,15 @@
                    name="awa.minicart.open.terminal"
                    template="Magento_Theme::html/awa-minicart-open-terminal.phtml"
                    after="awa.cookie.consent.fix.css"/>
+        </referenceBlock>
+
+        <!-- SEO-013: self-canonical para páginas CMS e para a rota custom /catalogo/ (o template
+             só emite nos handles da whitelist; ver Magento_Cms::awa-cms-canonical.phtml). -->
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.cms.canonical"
+                   template="Magento_Cms::awa-cms-canonical.phtml"
+                   after="-"/>
         </referenceBlock>
     </body>
 </page>

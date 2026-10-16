@@ -155,6 +155,19 @@ define([
         }
     }
 
+    // HOTFIX B2B-AUTH (13/10): estado visivel — loading ate a secao decidir.
+    function setAuthState(state)
+    {
+        try {
+            document.body.classList.remove(
+                "b2b-auth-pending", "b2b-auth-granted", "b2b-auth-denied", "b2b-auth-error"
+            );
+            document.body.classList.add("b2b-auth-" + state);
+        } catch (e) {
+            // body indisponivel — segue
+        }
+    }
+
     function init(config)
     {
         // Skip on pages with no product add-to-cart buttons (homepage, checkout, etc.)
@@ -619,30 +632,22 @@ define([
          * Guest FPC HTML served to a logged-in shopper, or pending HTML served
          * to an approved B2B customer, must restore add-to-cart.
          */
+        setAuthState('pending');
+
         function customerCanShop()
         {
+            // HOTFIX B2B-AUTH (13/10): autorizacao EXPLICITA (fail-closed).
+            // O servidor e a fonte da verdade; a UI apenas reflete.
             try {
                 var panel = customerData.get('b2b_panel')();
-                if (panel && panel.can_add_to_cart === true) {
-                    return true;
-                }
-                if (panel && panel.approval_status === 'approved' && panel.can_add_to_cart !== false) {
-                    return true;
-                }
-                if (
-                    panel
-                    && panel.is_b2b === true
-                    && panel.badge_icon
-                    && panel.badge_icon !== 'clock-o'
-                    && panel.can_add_to_cart !== false
-                ) {
-                    return true;
+                if (panel && typeof panel.can_add_to_cart === 'boolean') {
+                    return panel.can_add_to_cart === true;
                 }
             } catch (e) {
-                // ignore missing section
+                // secao indisponivel — trata como nao autorizado
             }
 
-            return serverMode === 'guest' && isCustomerLoggedIn();
+            return false;
         }
 
         function releaseIfCustomerCanShop()
@@ -651,6 +656,7 @@ define([
                 return false;
             }
             isRestricted = false;
+            setAuthState('granted');
             restoreOriginalButtons();
             syncPriceBlocksAfterLogin();
             if (observerInstance) {
@@ -660,9 +666,38 @@ define([
             return true;
         }
 
+        var panelResolved = false;
         function checkAndUpdateState()
         {
-            releaseIfCustomerCanShop();
+            if (releaseIfCustomerCanShop()) {
+                return;
+            }
+            try {
+                var panel = customerData.get('b2b_panel')();
+                if (panel && panel.is_b2b === false) {
+                    // guest: o gate SSR ja esta correto - estado terminal
+                    panelResolved = true;
+                    setAuthState( denied);
+                } else if (panel && typeof panel.can_add_to_cart === boolean) {
+                    panelResolved = true;
+                    setAuthState(panel.can_add_to_cart ? 'granted' : 'denied');
+                }
+            } catch (e) {
+                // segue
+            }
+            // erro: a secao nunca chegou — sem bloqueio silencioso
+            window.setTimeout(function () {
+                if (!panelResolved) {
+                    setAuthState('error');
+                    var btn = document.querySelector('.b2b-login-to-buy-btn[data-b2b-injected="1"]');
+                    if (btn && btn.textContent.indexOf('tente novamente') === -1) {
+                        btn.textContent = 'Tente novamente';
+                        btn.addEventListener('click', function () {
+                            window.location.reload();
+                        });
+                    }
+                }
+            }, 10000);
         }
 
         function bindCustomerDataSubscribe()

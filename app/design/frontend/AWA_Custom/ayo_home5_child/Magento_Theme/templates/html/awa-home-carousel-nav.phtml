@@ -1,0 +1,40 @@
+<?php
+/**
+ * AWA Motos — loader da init BARATA das setas do carrossel da HOME.
+ *
+ * CONTEXTO (por que este arquivo existe)
+ * O motor completo (awa-scroll-carousel) foi removido da home de propósito em
+ * Magento_Theme/layout/cms_index_index.xml ("Isolation r4") porque causava um
+ * longtask de ~2.3s que atrapalhava o LCP do hero. O CSS scroll-snap ficou, então
+ * arrastar com o dedo/trackpad funciona — mas as setas ‹ ›, o autoplay e a barra
+ * de progresso pararam, e o layout deixou escrito:
+ *
+ *     "No JS arrows until a cheap init is re-enabled."
+ *
+ * Este bloco é essa init. Ele é DELIBERADAMENTE separado do loader global
+ * (awa-shelf-carousel-loader.phtml) para não reativar, nem por acidente, o motor
+ * pesado nesta página: aquele loader emite 64 KB de CSS de carrossel + o
+ * awa-scroll-carousel.min.js, e ambos continuam fora da home.
+ *
+ * O que este bloco emite: UM <script defer>. Nada mais. Sem CSS.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+declare(strict_types=1);
+
+/** Guard anti-duplicação: no máximo um <script> por resposta. */
+if (!empty($GLOBALS['__awaHomeCarouselNavEmitted'])) {
+    return;
+}
+$GLOBALS['__awaHomeCarouselNavEmitted'] = true;
+
+$request = $block->getRequest();
+if (!$request || $request->getFullActionName() !== 'cms_index_index') {
+    return;
+}
+
+/* Versão do asset: mudar aqui força o browser a baixar de novo. */
+$assetVersion = '20261012-carousel-contract-r1';
+$jsUrl = $block->getViewFileUrl('js/awa-home-carousel-nav.js') . '?v=' . $assetVersion;
+?>
+<script src="<?= $block->escapeUrl($jsUrl) ?>" defer></script>

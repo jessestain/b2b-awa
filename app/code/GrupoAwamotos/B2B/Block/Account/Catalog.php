@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace GrupoAwamotos\B2B\Block\Account;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\View\Element\Template;
@@ -12,6 +13,7 @@ use Magento\Framework\View\Element\Template\Context;
 /**
  * Lista os produtos Private Label exclusivos do cliente logado.
  * Usado na página /b2b/catalog do painel da conta.
+ * Somente produtos Enabled no Magento (status alinhado ao escopo ativo do Sectra).
  */
 class Catalog extends Template
 {
@@ -19,6 +21,7 @@ class Catalog extends Template
 
     private const EXCLUSIVE_TABLE = 'grupoawamotos_b2b_exclusive_product';
     private const NAME_ATTR_CODE  = 'name';
+    private const STATUS_ATTR_CODE = 'status';
 
     /** @var array[]|null */
     private ?array $products = null;
@@ -53,6 +56,7 @@ class Catalog extends Template
         $exclusiveTable = $this->resourceConnection->getTableName(self::EXCLUSIVE_TABLE);
         $productTable   = $this->resourceConnection->getTableName('catalog_product_entity');
         $varcharTable   = $this->resourceConnection->getTableName('catalog_product_entity_varchar');
+        $intTable       = $this->resourceConnection->getTableName('catalog_product_entity_int');
         $eavTable       = $this->resourceConnection->getTableName('eav_attribute');
 
         $nameAttrId = (int) $connection->fetchOne(
@@ -62,9 +66,28 @@ class Catalog extends Template
                 ->where('entity_type_id = ?', 4)
         );
 
+        $statusAttrId = (int) $connection->fetchOne(
+            $connection->select()
+                ->from($eavTable, ['attribute_id'])
+                ->where('attribute_code = ?', self::STATUS_ATTR_CODE)
+                ->where('entity_type_id = ?', 4)
+        );
+
+        if ($statusAttrId <= 0) {
+            return $this->products = [];
+        }
+
         $select = $connection->select()
             ->from(['ep' => $exclusiveTable], ['product_id', 'label'])
             ->join(['cpe' => $productTable], 'cpe.entity_id = ep.product_id', ['sku'])
+            ->join(
+                ['cps' => $intTable],
+                sprintf(
+                    'cps.entity_id = cpe.entity_id AND cps.attribute_id = %d AND cps.store_id = 0',
+                    $statusAttrId
+                ),
+                []
+            )
             ->joinLeft(
                 ['cpv' => $varcharTable],
                 sprintf(
@@ -74,6 +97,7 @@ class Catalog extends Template
                 ['name' => 'value']
             )
             ->where('ep.customer_id = ?', $customerId)
+            ->where('cps.value = ?', Status::STATUS_ENABLED)
             ->order('cpe.sku ASC');
 
         $rows = $connection->fetchAll($select);

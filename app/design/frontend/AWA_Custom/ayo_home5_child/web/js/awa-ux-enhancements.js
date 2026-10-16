@@ -192,14 +192,22 @@ define(['jquery'], function ($) {
                 '.rokan-mostviewed',
                 '.awa-home-products'
             ].join(', ');
+            /* FIX 12/10/2026 (TBT — o batch de leitura/escrita canonico): o loop fazia
+             * getComputedStyle(el) (LEITURA que forca recalc) e logo em seguida escrevia
+             * el.style.* (ESCRITA que suja o DOM) => a proxima iteracao forcava OUTRO reflow.
+             * Medido no perfil: 249ms de long task. Agora: le TODOS primeiro, escreve depois. */
+            var alvos = [];
             document.querySelectorAll(selectors).forEach(function (el) {
                 if (el.classList.contains('awa-home-section--below-fold')) {
                     return;
                 }
                 if (window.getComputedStyle(el).contentVisibility === 'auto') {
-                    el.style.contentVisibility = 'visible';
-                    el.style.containIntrinsicSize = 'unset';
+                    alvos.push(el);
                 }
+            });
+            alvos.forEach(function (el) {
+                el.style.contentVisibility = 'visible';
+                el.style.containIntrinsicSize = 'unset';
             });
         } catch (e) {}
     }
@@ -351,33 +359,79 @@ define(['jquery'], function ($) {
             });
 
             // H-crumbs-compact (2026-08-02): nav textual — 44px inflava .items ~50px (CDP).
-            // Onda 5F: compact só desktop (≥768px); mobile fica com alvo ≥36px via CSS/DS.
-            if (window.matchMedia('(min-width: 768px)').matches) {
-                forceTouch44(document.querySelectorAll('.breadcrumbs a, .nav-breadcrumbs a'), {
-                    'display': 'inline-flex',
-                    'align-items': 'center',
-                    'min-height': '0',
-                    'min-block-size': '0',
-                    'height': 'auto',
-                    'padding-block': '2px',
-                    'box-sizing': 'border-box'
-                });
-
-                // Re-aplica no próximo frame (vence writers tardios / race com touch-44-terminal).
-                var crumbProps = {
-                    'display': 'inline-flex',
-                    'align-items': 'center',
-                    'min-height': '0',
-                    'min-block-size': '0',
-                    'height': 'auto',
-                    'padding-block': '2px',
-                    'box-sizing': 'border-box'
-                };
-                if (window.requestAnimationFrame) {
-                    window.requestAnimationFrame(function () {
-                        forceTouch44(document.querySelectorAll('.breadcrumbs a, .nav-breadcrumbs a'), crumbProps);
+            // Onda 5F: compact só desktop (>=768px).
+            //
+            // BUG CORRIGIDO 2026-10-05 (auditoria WCAG 2.5.8):
+            //   forceTouch44 usa el.style.setProperty(..., 'important') — estilo INLINE
+            //   vence QUALQUER CSS, inclusive !important em @layer. E não havia limpeza
+            //   ao mudar de viewport: se a página carregava em desktop e ia para mobile,
+            //   o min-height:0 do desktop FICAVA cravado e o alvo do breadcrumb media
+            //   28x17px no mobile (mínimo WCAG 2.5.8 = 24x24).
+            //   Agora aplica o valor certo por viewport E limpa as props quando muda.
+            var crumbSelector = '.breadcrumbs a, .nav-breadcrumbs a';
+            var crumbPropsDesktop = {
+                'display': 'inline-flex',
+                'align-items': 'center',
+                'min-height': '0',
+                'min-block-size': '0',
+                'height': 'auto',
+                'padding-block': '2px',
+                'line-height': '',
+                'box-sizing': 'border-box'
+            };
+            var crumbPropsMobile = {
+                'display': 'inline-flex',
+                'align-items': 'center',
+                'min-height': '44px',
+                'min-block-size': '44px',
+                'height': 'auto',
+                'max-height': 'none',
+                'padding-block': '0',
+                'line-height': '44px',
+                'box-sizing': 'border-box'
+            };
+            function aplicarCrumbProps() {
+                var mobile = !window.matchMedia('(min-width: 768px)').matches;
+                var props = mobile ? crumbPropsMobile : crumbPropsDesktop;
+                var nodes = document.querySelectorAll(crumbSelector);
+                // limpa o que o outro viewport tenha cravado
+                nodes.forEach(function (el) {
+                    ['min-height', 'min-block-size', 'line-height', 'padding-block', 'display', 'align-items'].forEach(function (k) {
+                        if (!(k in props) || props[k] === '') {
+                            el.style.removeProperty(k);
+                        }
                     });
-                }
+                });
+                forceTouch44(nodes, props);
+                // a cadeia ul > li também trava por overflow:hidden + height fixo
+                forceTouch44(document.querySelectorAll(
+                    '.breadcrumbs ul.items, .nav-breadcrumbs ul.items,' +
+                    '.breadcrumbs ul.items > .item, .nav-breadcrumbs ul.items > .item'
+                ), mobile ? {
+                    'min-height': '44px',
+                    'height': 'auto',
+                    'max-height': 'none',
+                    'overflow': 'visible',
+                    'align-items': 'center'
+                } : {
+                    'min-height': '0',
+                    'height': 'auto',
+                    'max-height': 'none',
+                    'overflow': '',
+                    'align-items': ''
+                });
+            }
+            aplicarCrumbProps();
+            // Re-aplica no próximo frame (vence writers tardios / race com touch-44-terminal).
+            if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(aplicarCrumbProps);
+            }
+            // e reavalia quando a viewport cruza o breakpoint (bug do valor cravado)
+            if (window.matchMedia) {
+                var mqCrumb = window.matchMedia('(min-width: 768px)');
+                var onCrumbMq = function () { aplicarCrumbProps(); };
+                if (mqCrumb.addEventListener) { mqCrumb.addEventListener('change', onCrumbMq); }
+                else if (mqCrumb.addListener) { mqCrumb.addListener(onCrumbMq); }
             }
 
             forceTouch44(document.querySelectorAll(

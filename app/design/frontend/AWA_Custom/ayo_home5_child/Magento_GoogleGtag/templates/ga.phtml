@@ -36,7 +36,7 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
     }
 
     function boot() {
-        var el, cfg, script;
+        var el, cfg;
         if (applied || !allowsMarketing()) { return; }
         if (typeof w.require !== 'function') {
             w.setTimeout(boot, 200);
@@ -46,11 +46,12 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
         el = d.getElementById('awa-ga4-defer-json');
         if (!el || !el.textContent) { return; }
         try { cfg = JSON.parse(el.textContent); } catch (e) { return; }
-        script = d.createElement('script');
-        script.type = 'text/x-magento-init';
-        script.textContent = JSON.stringify({ '*': { 'Magento_GoogleGtag/js/google-analytics': cfg } });
-        d.head.appendChild(script);
-        w.require(['mage/apply/main']);
+        /* task-65: o bloco `text/x-magento-init` NUNCA era aplicado — `mage/apply/main`
+           ja esta inicializado quando este codigo roda, entao re-requere-lo nao varre o
+           DOM de novo e o config ficava orfao (GA4 nao subia). Chamamos o modulo direto. */
+        w.require(['Magento_GoogleGtag/js/google-analytics'], function (ga) {
+            if (typeof ga === 'function') { ga(cfg); }
+        });
     }
 
     function schedule() {

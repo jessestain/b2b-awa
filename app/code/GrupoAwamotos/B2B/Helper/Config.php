@@ -30,6 +30,10 @@ class Config extends AbstractHelper
     public const XML_PATH_SCORING_ENABLED = 'grupoawamotos_b2b/customer_approval/scoring_enabled';
     public const XML_PATH_AUTO_APPROVE_GROUPS = 'grupoawamotos_b2b/customer_approval/auto_approve_groups';
     public const XML_PATH_PENDING_MESSAGE = 'grupoawamotos_b2b/customer_approval/pending_message';
+    // FIX F-02 (2026-10-14): mensagens específicas por status — rejeitado/suspenso não
+    // podem receber a mensagem de "conta em análise".
+    public const XML_PATH_REJECTED_MESSAGE = 'grupoawamotos_b2b/customer_approval/rejected_message';
+    public const XML_PATH_SUSPENDED_MESSAGE = 'grupoawamotos_b2b/customer_approval/suspended_message';
     public const XML_PATH_SEND_APPROVAL_EMAIL = 'grupoawamotos_b2b/customer_approval/send_approval_email';
     public const XML_PATH_NOTIFY_ADMIN = 'grupoawamotos_b2b/customer_approval/notify_admin_new_customer';
     public const XML_PATH_ADMIN_EMAIL = 'grupoawamotos_b2b/customer_approval/admin_email';
@@ -230,6 +234,30 @@ class Config extends AbstractHelper
     {
         return (string) $this->scopeConfig->getValue(
             self::XML_PATH_PENDING_MESSAGE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get rejected message (FIX F-02)
+     */
+    public function getRejectedMessage($storeId = null): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_REJECTED_MESSAGE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get suspended message (FIX F-02)
+     */
+    public function getSuspendedMessage($storeId = null): string
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_SUSPENDED_MESSAGE,
             ScopeInterface::SCOPE_STORE,
             $storeId
         );

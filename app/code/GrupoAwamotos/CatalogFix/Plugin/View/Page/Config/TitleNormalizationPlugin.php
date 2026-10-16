@@ -56,7 +56,7 @@ class TitleNormalizationPlugin
         $suffix    = mb_substr($title, $sepPos, null, 'UTF-8');
         $normalized = $this->normalizeIfAllCaps($mainTitle);
 
-        return [$normalized !== $mainTitle ? $normalized . $suffix : $title];
+        return [$this->deDuplicateBrandSuffix($normalized !== $mainTitle ? $normalized . $suffix : $title)];
     }
 
     /**
@@ -81,10 +81,37 @@ class TitleNormalizationPlugin
 
         $normalized = $this->normalizeIfAllCaps($mainTitle);
         if ($normalized !== $mainTitle) {
-            return $normalized . $suffix;
+            return $this->deDuplicateBrandSuffix($normalized . $suffix);
         }
 
-        return $result;
+        return $this->deDuplicateBrandSuffix($result);
+    }
+
+    /**
+     * SEO-012 (04/10/2026): remove sufixo de marca DUPLICADO.
+     *
+     * O `meta_title` gravado no catalogo ja traz " — AWA Motos | Peças para Motos" e o template
+     * da PDP acrescenta " | AWA Motos". Em produtos cujo meta_title veio de importacao, o
+     * resultado servido ficava com DOIS sufixos, medido em PDP real:
+     *   "Borracha do Estribo Yes (par) — AWA Motos | Peças para Motos | AWA Motos" (72 chars)
+     * Google trunca em ~60. Aqui mantemos apenas UM sufixo canonico.
+     *
+     * So age quando ha duplicata; titulo sem duplicata passa intacto.
+     */
+    private function deDuplicateBrandSuffix(string $title): string
+    {
+        if (substr_count($title, '| AWA Motos') < 2) {
+            return $title;
+        }
+
+        $pos = mb_strpos($title, '| AWA Motos', 0, 'UTF-8');
+        $main = rtrim(mb_substr($title, 0, $pos, 'UTF-8'));
+
+        // tira restos de sufixo que sobraram colados ao nome
+        $main = (string) preg_replace('/\s*(?:—|-|\|)\s*AWA Motos\s*$/u', '', $main);
+        $main = (string) preg_replace('/\s*\|\s*Pe(?:ç|c)as para Motos\s*$/u', '', $main);
+
+        return rtrim($main, " \t—|") . ' | AWA Motos';
     }
 
     private function normalizeIfAllCaps(string $value): string

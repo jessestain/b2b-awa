@@ -34,7 +34,7 @@ if ($merchantVatNumber === '') {
 }
 $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' => ltrim($path, '/')]);
 ?>
-<div class="page_footer" role="contentinfo">
+<div class="page_footer">
 <noscript><style>@media(max-width:767px){.page_footer .velaContent,.page-footer .velaContent{display:block!important}}</style></noscript>
     <svg class="awa-footer-sprite"
          xmlns="http://www.w3.org/2000/svg"
@@ -60,28 +60,28 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
     <section class="awa-footer-trust-bar" aria-label="<?= $escaper->escapeHtmlAttr(__('Diferenciais AWA Motos')) ?>">
         <div class="container">
             <div class="awa-footer-trust-grid">
-                <div class="awa-footer-trust-item">
+                <div class="awa-footer-trust-item" style="background:oklch(.525 .155 27.5)!important">
                     <span class="awa-footer-trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="#awa-icon-truck"/></svg></span>
                     <div class="awa-footer-trust-copy">
                         <strong><?= $escaper->escapeHtml(__('Envio para todo o Brasil')) ?></strong>
                         <span><?= $escaper->escapeHtml(__('Entrega para lojistas e consumidores finais')) ?></span>
                     </div>
                 </div>
-                <div class="awa-footer-trust-item">
+                <div class="awa-footer-trust-item" style="background:oklch(.525 .155 27.5)!important">
                     <span class="awa-footer-trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="#awa-icon-shield"/></svg></span>
                     <div class="awa-footer-trust-copy">
                         <strong><?= $escaper->escapeHtml(__('Conexão criptografada (SSL)')) ?></strong>
                         <span><?= $escaper->escapeHtml(__('Certificado digital na finalização e no cadastro')) ?></span>
                     </div>
                 </div>
-                <div class="awa-footer-trust-item">
+                <div class="awa-footer-trust-item" style="background:oklch(.525 .155 27.5)!important">
                     <span class="awa-footer-trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="#awa-icon-gear"/></svg></span>
                     <div class="awa-footer-trust-copy">
                         <strong><?= $escaper->escapeHtml(__('Garantia de fábrica')) ?></strong>
                         <span><?= $escaper->escapeHtml(__('Peças originais com nota fiscal')) ?></span>
                     </div>
                 </div>
-                <div class="awa-footer-trust-item">
+                <div class="awa-footer-trust-item" style="background:oklch(.525 .155 27.5)!important">
                     <span class="awa-footer-trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><use href="#awa-icon-b2b"/></svg></span>
                     <div class="awa-footer-trust-copy">
                         <strong><?= $escaper->escapeHtml(__('Preços de atacado')) ?></strong>
@@ -145,15 +145,18 @@ $directUrl = static fn(string $path): string => $block->getUrl('', ['_direct' =>
 
                     <!-- Logo AWA Motos -->
                     <div class="col-md-3 col-sm-12 col-xs-12 awa-footer-bottom__logo-col">
-                        <a href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
+                        <a class="awa-footer-lockup"
+                           href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"
                            title="<?= $escaper->escapeHtmlAttr($logoAlt) ?>"
                            aria-label="<?= $escaper->escapeHtmlAttr($logoAlt) ?>">
-                            <img class="awa-footer-bottom__logo-img"
+                            <img class="awa-footer-bottom__logo-img awa-footer-lockup__mark"
                                  src="<?= $escaper->escapeUrl($logoSrc) ?>"
                                  alt="<?= $escaper->escapeHtmlAttr($logoAlt) ?>"
                                  width="142" height="81"
                                  loading="lazy" decoding="async">
+                            <span class="awa-footer-lockup__tagline" style="display:none"><?= $escaper->escapeHtml(__('MOTO COMPONENTES')) ?></span>
                         </a>
+                        
                     </div>
 
                     <!-- Condição comercial comum a todos os pedidos -->
@@ -274,7 +277,7 @@ $awaFooterInteractionsConfigJson = json_encode(
 ?>
 <script type="application/json" id="awa-footer-interactions-config-json"><?= /* @noEscape */ $awaFooterInteractionsConfigJson ?></script>
 <?php
-$awaFooterBootUrl = $block->getViewFileUrl('js/awa-footer-boot-r16d.min.js') . '?v=20260827-axis-bp';
+$awaFooterBootUrl = $block->getViewFileUrl('js/awa-footer-boot-r16d.min.js') . '?v=20261012-footer-toggle-a11y';
 $awaFooterBootIsHome = in_array('cms_index_index', $block->getLayout()->getUpdate()->getHandles(), true);
 ?>
 <?php if ($awaFooterBootIsHome): ?>

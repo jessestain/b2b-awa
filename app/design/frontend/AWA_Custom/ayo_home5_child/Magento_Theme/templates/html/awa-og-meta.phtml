@@ -18,6 +18,23 @@ if (!$viewModel instanceof OpenGraph) {
 }
 
 $meta = $viewModel->getMetaData();
+
+// ACHADO SEO-001: o visitante que não pode ver preço não recebe o valor no HTML.
+// Gate recebido pelo <argument name="b2b_gate"> do layout (Magento_Theme/layout/default.xml).
+// Fail-closed: sem gate válido, ou em erro, o preço NÃO é emitido.
+$b2bGate = $block->getData('b2b_gate');
+$awaPricesVisible = false;
+if ($b2bGate instanceof \GrupoAwamotos\B2B\ViewModel\PdpGate) {
+    try {
+        $awaPricesVisible = $b2bGate->canViewPrices();
+    } catch (\Throwable $exception) {
+        $awaPricesVisible = false;
+    }
+}
+if (!$awaPricesVisible) {
+    unset($meta['price_amount'], $meta['price_currency']);
+}
+
 $esc = static function (string $value) use ($block): string {
     return $block->escapeHtmlAttr($value);
 };

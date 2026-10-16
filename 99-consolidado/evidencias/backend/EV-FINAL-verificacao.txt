@@ -1,0 +1,51 @@
+############ A) Mirasvit_ReportApi (fora do config.php) ############
+ComponentRegistrar MODULE  Mirasvit_ReportApi => NULL
+ComponentRegistrar LIBRARY Mirasvit_ReportApi => '/home/user/htdocs/srv1113343.hstgr.cloud/app/code/Mirasvit/ReportApi'
+ComponentRegistrar MODULE  Mirasvit_Report    => '/home/user/htdocs/srv1113343.hstgr.cloud/app/code/Mirasvit/Report'
+etc/ do ReportApi: module.xml, mst_report.xsd
+tem Setup/ ? false
+tem di.xml/events.xml/webapi.xml/acl.xml ? false
+OK   DI Mirasvit\ReportApi\Api\SchemaInterface => Mirasvit\ReportApi\Config\Schema
+OK   DI Mirasvit\ReportApi\Api\RequestBuilderInterface => Mirasvit\ReportApi\Processor\RequestBuilder
+OK   DI Mirasvit\ReportApi\Api\RequestInterface => Mirasvit\ReportApi\Processor\Request
+OK   DI Mirasvit\ReportApi\Api\ResponseInterface => Mirasvit\ReportApi\Processor\Response
+OK   DI Mirasvit\ReportApi\Api\Service\TableServiceInterface => Mirasvit\ReportApi\Service\TableService
+Schema: 16 tabelas, sales_order com 76 colunas
+OK   ponta a ponta sales_order => 1 linhas :: {"sales_order|entity_id":"8","sales_order|increment_id":"000000007"}
+
+############ B) StoreSetup x Rokanthemes_Faq ############
+module.xml sha256 = 2465e7ad647dee920ce6df7c1e227c82dcca0f36803c6b021a3e6392e8167ad1 (489 bytes)
+module.xml conteudo:
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="GrupoAwamotos_StoreSetup" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_GraphQl"/>
+            <module name="Rokanthemes_Blog"/>
+            <module name="Rokanthemes_SlideBanner"/>
+            <module name="Rokanthemes_Testimonials"/>
+        </sequence>
+    </module>
+</config>
+
+referencias a Rokanthemes_Faq no module.xml: 0
+enabled=351 configOn=351 MESMA ORDEM? true
+StoreSetup idx=346 vizinhos: Rokanthemes_Testimonials, Rokanthemes_StoreLocator, GrupoAwamotos_StoreSetup, GrupoAwamotos_AbandonedCart, Rokanthemes_Toprate
+StoreSetup enabled? true
+Rokanthemes_Faq enabled? false
+checkDependenciesWhenDisableModules([Rokanthemes_Faq]) => {"Rokanthemes_Faq":[]}
+checkDependenciesWhenEnableModules([StoreSetup])    => {"GrupoAwamotos_StoreSetup":[]}
+setup_module: {"module":"GrupoAwamotos_StoreSetup","schema_version":"1.0.0","data_version":"1.0.0"}
+setup_module: {"module":"Rokanthemes_Faq","schema_version":"2.4.1","data_version":"2.4.1"}
+rokan_faq total = 5
+cms_page faq = [{"page_id":26,"identifier":"faq","is_active":1},{"page_id":56,"identifier":"faq","is_active":1},{"page_id":65,"identifier":"faq","is_active":1}]
+
+############ C) papeis de ACL orfaos ############
+authorization_role total = 29
+authorization_rule total = 2047
+linhas 189/191 em authorization_role = 0
+linhas 189/191 em authorization_rule = 0
+papeis tipo U orfaos = 0
+papeis com parent inexistente = 0
+admins ativos = 13
+FK de entrada: [{"CONSTRAINT_NAME":"AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID","TABLE_NAME":"authorization_rule","DELETE_RULE":"CASCADE"}]

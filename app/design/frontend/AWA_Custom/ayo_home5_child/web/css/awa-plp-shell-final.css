@@ -255,7 +255,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 
 html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper :is(.page-title-wrapper .page-title, .awa-category-hero__title, .shop-tab-title h1) {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
+    font-family: var(--awa-font-heading, 'rubik', arial, sans-serif) !important;
     font-weight: 600 !important;
     line-height: 1.3 !important;
     margin-block: 0 var(--awa-plp-gap-sm) !important;
@@ -956,7 +956,7 @@ html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearc
 
 html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
 .page-wrapper .awa-category-hero {
-    --awa-primary: #b73337;
+    --awa-primary: var(--awa-brand);
 }
 
 html body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
@@ -1217,7 +1217,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
         border-radius: 0 !important;
         background: transparent !important;
         box-shadow: none !important;
-        color: #b73337 !important;
+        color: var(--awa-brand) !important;
         font: inherit !important;
         text-decoration: underline !important;
         white-space: normal !important;

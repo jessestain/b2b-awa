@@ -349,10 +349,13 @@ define([
                 return;
             }
 
-            var style = document.createElement('style');
-            style.id = 'awa-footer-categories-desktop-lock';
-            style.textContent = '@media (min-width:768px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__inner{display:grid!important;grid-template-columns:minmax(96px,max-content) minmax(0,1fr)!important;align-items:center!important;column-gap:clamp(14px,2vw,28px)!important;row-gap:10px!important;height:auto!important;min-height:0!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__toggle{display:none!important;visibility:hidden!important;pointer-events:none!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__heading{grid-column:1!important;grid-row:1!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__panel{grid-column:2!important;grid-row:1!important;display:block!important;max-height:none!important;height:auto!important;visibility:visible!important}}';
-            (document.head || document.documentElement).appendChild(style);
+            /* 10/10/2026: o CSS abaixo foi MIGRADO para o awa-align-grid-terminal
+               (CSS estatico do tema). Antes era injetado aqui em runtime, quando o
+               IntersectionObserver do rodape disparava — o que causava CLS de 0,734 no
+               PDP desktop (o painel passava de escondido para display:block depois do
+               primeiro paint). Manter no CSS estatico elimina o shift.
+               A funcao permanece para compatibilidade e marca o estado via data-attribute. */
+            document.documentElement.setAttribute('data-awa-footer-categories-lock', 'static');
         }
 
         function initCategoriesToggle() {

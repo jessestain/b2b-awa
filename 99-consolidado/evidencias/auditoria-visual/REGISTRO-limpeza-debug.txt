@@ -1,0 +1,56 @@
+VITORIA: remocao de codigo de DEBUG EM PRODUCAO (05/10/2026)
+============================================================
+O QUE FOI ENCONTRADO
+  8 arquivos PHP escreviam log de debug em disco a cada chamada:
+    ERPIntegration/Model/Connection.php ............... assertTcpReachable  <- TODA query do ERP
+    B2B/Plugin/Customer/ValidateCnpjOnSavePlugin ...... beforeSave          <- TODA gravacao de cliente
+    B2B/Ui/Component/Listing/Column/CustomerDocument .. prepareDataSource   <- TODA render da grid
+    B2B/Controller/Register/Save.php .................. catch de erro do cadastro
+    B2B/Observer/B2bRegistrationEnrichmentObserver
+    B2B/CommercialPanel/Plugin/DeniedPageDebugPlugin
+    B2B/CommercialPanel/Plugin/CockpitAccessGuardPlugin
+    B2B/Controller/Adminhtml/CommercialCustomer/View.php
+
+  Todos escreviam com file_put_contents(..., FILE_APPEND | LOCK_EX)
+  = I/O SINCRONO com LOCK EXCLUSIVO no caminho critico.
+
+  E o OptimizeHeadStylesPlugin.php tinha um metodo inteiro de debug
+  (debugW18CssQueryLog) chamado em 4 pontos, incluindo beforeSendResponse,
+  que roda em TODA requisicao HTML. O proprio codigo dizia
+  "@internal debug W18 - remover apos verificacao". Nunca foi removido.
+
+O DANO MEDIDO
+  .cursor/ = 393 MB  ·  65 arquivos debug-*.log
+     debug-f5fc02.log = 260 MB   (do plugin de head styles)
+     debug-f5fb4a.log =  75 MB
+     debug-6a6568.log =  17 MB   (do ValidateCnpjOnSavePlugin)
+     debug-ec9e74.log =  12 MB
+     debug-1895de.log =   7 MB
+
+O QUE FOI FEITO
+  - removidos 9 blocos delimitados por "#region agent log" (5.247 bytes)
+  - removidos 2 metodos orfaos de debug (782 + 2.035 bytes)
+  - 8/8 arquivos com sintaxe validada por php -l
+  - OPcache resetado
+  - 369 MB liberados (.cursor 393 MB -> 24 MB)
+  - copia de seguranca dos 4 logs ativos de hoje em /tmp/awa-debug-quarentena
+
+VERIFICACAO
+  ERP testado DEPOIS de editar o Connection.php:
+    conexao OK  ·  3 filiais  ·  #2 BOOMERANG MOTO PECAS  ·  MT_MATERIAL ativos 12.131
+  loja 200 em 6/6 jornadas (incluindo /b2b/register/)
+  0 logs de debug recriados apos 2 acessos
+    -> confirma que nao e so limpeza: a escrita foi eliminada
+  escritas em .cursor/debug no app/code: 0
+
+PLACAR (tools/medir-divida-css.ps1)
+  plugin bytes ....................... 693.199 -> 690.894
+  plugin linhas .......................... 9.199 -> 9.153
+  debug hardcoded no plugin .................. 2 -> 0
+  arquivos com escrita de debug ......... (novo) 0
+  logs de debug (bytes) ................. (novo) 0
+  Nenhum indicador piorou. Gate da loja 26/26 PASS.
+
+ROLLBACK
+  _backups/debug-logs-20261005T175659Z/   (os 8 arquivos)
+  _backups/debug-remove-20261005T175600Z/ (o plugin de head styles)

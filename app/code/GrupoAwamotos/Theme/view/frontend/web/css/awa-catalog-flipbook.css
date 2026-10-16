@@ -26,7 +26,7 @@
     animation: awa-catalog-spin 0.9s linear infinite;
     border: 3px solid rgba(183, 51, 55, 0.15);
     border-radius: 50%;
-    border-top-color: var(--awa-red, #b73337);
+    border-top-color: var(--awa-brand, #b73337);
     height: 40px;
     width: 40px;
 }
@@ -84,8 +84,8 @@
 
 .awa-catalog-flipbook__btn:hover,
 .awa-catalog-flipbook__btn:focus-visible {
-    background: var(--awa-red, #b73337);
-    border-color: var(--awa-red, #b73337);
+    background: var(--awa-brand, #b73337);
+    border-color: var(--awa-brand, #b73337);
     color: #fff;
     outline: none;
 }
@@ -99,7 +99,7 @@
 }
 
 .awa-catalog-flipbook__download {
-    background: var(--awa-red, #b73337);
+    background: var(--awa-brand, #b73337);
     border-radius: 8px;
     color: #fff;
     cursor: pointer;

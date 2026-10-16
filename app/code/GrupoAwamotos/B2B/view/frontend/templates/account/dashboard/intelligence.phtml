@@ -45,9 +45,7 @@ $hasAnyIntelligenceCard = $hasRfmCard || $hasFrequencyCard;
                         <span class="value"><?= /* @noEscape */ $block->formatPrice((float) ($rfm['monetary'] ?? 0)) ?></span>
                     </div>
                 </div>
-                <div class="rfm-recommendation">
-                    <p><strong><?= $block->escapeHtml(__('Dica do Consultor:')) ?></strong> <?= $block->escapeHtml($rfm['suggested_action'] ?? __('Continue comprando para desbloquear recomendações personalizadas.')) ?></p>
-                </div>
+
             </div>
         <?php endif; ?>
 

@@ -7,16 +7,50 @@
  *   o nome acessível deve conter o texto visível "Adicionar ao Carrinho"; o span
  *   do botão já é o nome. Info do produto fica no contexto da página (h1).
  *
- * @var $block \Magento\Catalog\Block\Product\View
+ * SSR B2B GATE (13/10/2026 — fix do CLS desktop do PDP, medido 0,277 @1366):
+ *   Antes, o estado de visitante (qty/ATC ocultos + botão "Entrar para Comprar")
+ *   era aplicado SÓ no DOMContentLoaded pelo login-to-cart.js — sob rede lenta o
+ *   1º paint saía com qty/ATC VISÍVEIS e o swap no DCL movia a coluna de compra.
+ *   Agora o SSR entrega o estado FINAL do visitante (PADROES-LAYOUT 4: bloco que
+ *   encolhe = geometria final no SSR): qty/ATC ocultos com os MESMOS marcadores
+ *   que o JS usa para restaurar (data-b2b-original-hidden) + o botão
+ *   data-b2b-ssr="guest" (o login-to-cart.js já tem wireSsrGuestButton pronto para
+ *   esse caso: liga o modal de login). O corpo ganha as classes
+ *   b2b-restricted-mode/b2b-guest-mode no parse (classList.add idempotente no JS)
+ *   e o CSS abaixo garante: o botão SSR só aparece no modo restrito; se o JS
+ *   restaurar (cliente logado que recebeu HTML de visitante), a classe sai do
+ *   corpo, o botão some e o ATC volta visível — sem CTA duplicado.
+ *
+ * @var \Magento\Catalog\Block\Product\View $block
  */
 ?>
 <?php $_product = $block->getProduct(); ?>
 <?php $buttonTitle = __('Add to Cart'); ?>
+<?php
+$isLoggedIn = false;
+/** @var \Magento\Customer\ViewModel\Customer\Auth|null $auth */
+$auth = $block->getData('auth');
+if ($auth instanceof \Magento\Customer\ViewModel\Customer\Auth) {
+    $isLoggedIn = $auth->isLoggedIn();
+}
+$isGuest = !$isLoggedIn;
+?>
 <?php if ($_product->isSaleable()): ?>
-<div class="box-tocart">
+<?php if ($isGuest): ?>
+<script>document.body.classList.add('b2b-restricted-mode','b2b-guest-mode');</script>
+<style>
+.b2b-login-to-buy-btn[data-b2b-ssr="guest"]{display:none!important}
+body.b2b-restricted-mode .b2b-login-to-buy-btn[data-b2b-ssr="guest"]{display:flex!important}
+</style>
+<?php /* FIX F-04 (2026-10-14): sem JavaScript a classe b2b-restricted-mode nunca é
+   adicionada e o CTA "Entrar para Comprar" ficava invisível (display:none). O fallback
+   abaixo vale apenas para noscript — com JS o comportamento atual é preservado. */ ?>
+<noscript><style>html body#html-body .b2b-login-to-buy-btn[data-b2b-ssr="guest"]{display:flex!important}</style></noscript>
+<?php endif; ?>
+<div class="box-tocart<?= $isGuest ? ' b2b-login-to-buy-mode' : '' ?>">
     <div class="fieldset">
         <?php if ($block->shouldRenderQuantity()): ?>
-        <div class="field qty">
+        <div class="field qty"<?= $isGuest ? ' data-b2b-original-hidden="1" hidden aria-hidden="true" style="display:none!important"' : '' ?>>
             <label class="label" for="qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
             <div class="control">
                 <input type="number"
@@ -34,13 +68,27 @@
             </div>
         </div>
         <?php endif; ?>
+        <?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
+        <?php if ($awaStockVm): $awaStock = $awaStockVm->getStockInfo($block->getProduct()); ?>
+            <?php if ($awaStock['in_stock'] && $awaStock['qty'] > 0): ?>
+                <div class="awa-stock-qty awa-stock-qty--pdp"><?= $block->escapeHtml(__('Em estoque: %1 unidades', number_format($awaStock['qty'], 0, ',', '.'))) ?></div>
+            <?php endif; ?>
+        <?php endif; ?>
         <div class="actions">
             <button type="submit"
                     title="<?= $block->escapeHtmlAttr($buttonTitle) ?>"
                     class="action primary tocart"
-                    id="product-addtocart-button" disabled>
+                    id="product-addtocart-button" disabled<?= $isGuest ? ' data-b2b-original-hidden="1" aria-hidden="true" tabindex="-1" style="display:none!important"' : '' ?>>
                 <span><?= $block->escapeHtml($buttonTitle) ?></span>
             </button>
+            <?php if ($isGuest): ?>
+            <button type="button"
+                    class="b2b-login-to-buy-btn"
+                    data-b2b-ssr="guest"
+                    title="<?= $block->escapeHtmlAttr(__('Entrar para Comprar')) ?>">
+                <span><?= $block->escapeHtml(__('Entrar para Comprar')) ?></span>
+            </button>
+            <?php endif; ?>
             <?= $block->getChildHtml('', true) ?>
         </div>
     </div>

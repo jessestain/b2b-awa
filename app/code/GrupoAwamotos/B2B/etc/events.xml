@@ -35,11 +35,24 @@
     <event name="sales_order_save_after">
         <observer name="grupoawamotos_b2b_order_status_notification"
                   instance="GrupoAwamotos\B2B\Observer\OrderStatusNotification"/>
+        <!-- Alçada B2B: gatilho da aprovação de pedidos por valor.
+             Roda em sales_order_save_after (área global = frontend, adminhtml, webapi_rest,
+             graphql, crontab) e SOMENTE no primeiro save do pedido recém-criado, porque
+             sales_order_place_after dispara antes de o pedido ter entity_id (ver comentário
+             do gate Sectra acima) e porque etc/frontend/events.xml não é carregado no admin.
+             O próprio observer garante idempotência (não duplica solicitação) e recência
+             (não retém pedido histórico salvo depois por sync de ERP/fatura/comentário).
+             ORDEM IMPORTA: este observer vem ANTES do gate Sectra para que o pedido acima da
+             alçada já esteja retido quando o gate Sectra avaliar — senão um pedido de R$ 237
+             mil era marcado "liberado para Importar Pedidos" antes da aprovação interna. -->
+        <observer name="grupoawamotos_b2b_order_approval_trigger"
+                  instance="GrupoAwamotos\B2B\Observer\OrderPlaceAfterObserver"/>
         <!-- Gate Sectra Importar Pedidos: sales_order_place_after dispara ANTES do pedido
              ter entity_id (Order::place() roda antes do orderRepository->save() em
              Magento\Sales\Model\Service\OrderService::place()), então o guard de entity_id
              nunca passava ali. sales_order_save_after já ocorre com o pedido persistido;
-             o observer só age no primeiro save (sectra_import_status ainda NULL). -->
+             o observer só age no primeiro save (sectra_import_status ainda NULL) e ignora
+             pedido retido (holded), que será reavaliado no save do unhold. -->
         <observer name="grupoawamotos_b2b_sectra_order_import_gate"
                   instance="GrupoAwamotos\B2B\Observer\SectraOrderImportGateObserver"/>
     </event>
@@ -88,6 +101,16 @@
     <event name="catalog_product_save_after">
         <observer name="grupoawamotos_b2b_private_label_product_save"
                   instance="GrupoAwamotos\B2B\Observer\PrivateLabelProductSave"/>
+    </event>
+
+    <event name="grupoawamotos_b2b_registration_submitted">
+        
+        <observer name="grupoawamotos_b2b_customer_register"
+                  instance="GrupoAwamotos\B2B\Observer\CustomerRegisterObserver"/>
+    
+        
+        <observer name="grupoawamotos_b2b_erp_registration_check"
+                  instance="GrupoAwamotos\B2B\Observer\ErpRegistrationCheckObserver"/>
     </event>
 
 </config>

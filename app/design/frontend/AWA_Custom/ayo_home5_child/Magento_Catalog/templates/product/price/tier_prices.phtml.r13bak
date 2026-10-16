@@ -1,0 +1,148 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter*/
+/** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
+$tierPriceModel = $block->getPrice();
+if (!$tierPriceModel instanceof \Magento\Catalog\Pricing\Price\TierPrice) {
+    return;
+}
+$tierPrices = $tierPriceModel->getTierPriceList();
+/** @var \Magento\Msrp\Pricing\Price\MsrpPrice $msrpPrice */
+$msrpPrice = $block->getPriceType('msrp_price');
+$msrpShowOnGesture = $msrpPrice->isShowPriceOnGesture();
+/** @var \Magento\Catalog\Model\Product $product */
+$product = $block->getSaleableItem();
+?>
+<?php if (count($tierPrices)): ?>
+    <div class="awa-b2b-tier-prices-wrapper">
+        <h4 class="awa-b2b-tier-title">
+            <?= $block->escapeHtml(__('Descontos por Volume')) ?>
+        </h4>
+        <div class="awa-b2b-tier-table-container">
+            <table class="awa-b2b-tier-table">
+                <thead>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Quantidade')) ?></th>
+                        <th><?= $block->escapeHtml(__('Preço Unit.')) ?></th>
+                        <th><?= $block->escapeHtml(__('Economia')) ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($tierPrices as $index => $price): ?>
+                        <tr>
+                            <?php
+                            $productId = $product->getId();
+                            $isSaleable = $product->isSaleable();
+                            $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
+
+                            $savePercent = $block->formatPercent($tierPriceModel->getSavePercent($price['price']));
+                            $priceAmountBlock = $block->renderAmount(
+                                $price['price'],
+                                [
+                                    'price_id'          => $index,
+                                    'id_suffix'         => '-' . $index,
+                                    'include_container' => true,
+                                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
+                                ]
+                            );
+                            ?>
+
+                            <td>
+                                <?= $block->escapeHtml(__('%1 un. ou mais', $localeFormatter->formatNumber($price['price_qty']))) ?>
+                            </td>
+
+                            <?php if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()): ?>
+                                <?php
+                                $addToCartUrl = '';
+                                if ($isSaleable) {
+                                    $addToCartUrl = $this->helper(\Magento\Checkout\Helper\Cart::class)
+                                        ->getAddUrl($product, ['qty' => $price['price_qty']]);
+                                }
+                                $tierPriceData = [
+                                    'addToCartUrl' => $addToCartUrl,
+                                    'name' => $product->getName(),
+                                    'realPrice' => $block->renderAmount(
+                                        $price['price'],
+                                        [
+                                            'price_id'          => $index,
+                                            'id_suffix'         => '-' . $index,
+                                            'include_container' => true
+                                        ]
+                                    ),
+                                    'msrpPrice' => $block->renderAmount(
+                                        $block->getPriceType('msrp_price')->getAmount(),
+                                        [
+                                            'price_id'          => $index,
+                                            'id_suffix'         => '-' . $index,
+                                            'include_container' => true
+                                        ]
+                                    ),
+                                ];
+                                if ($block->getCanDisplayQty($product)) {
+                                    $tierPriceData['qty'] = $price['price_qty'];
+                                }
+                                ?>
+                                <td>
+                                    <a href="#"
+                                       id="<?= $block->escapeHtmlAttr($popupId) ?>"
+                                       data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>"
+                                       class="awa-tier-price-link">
+                                        <?= $block->escapeHtml(__('Clique para ver o preço')) ?>
+                                    </a>
+                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        'event.preventDefault()',
+                                        'a#' . $block->escapeHtmlAttr($popupId)
+                                    ) ?>
+                                </td>
+                            <?php else: ?>
+                                <td>
+                                    <div class="awa-tier-price-amount">
+                                        <?= /* @noEscape */ $priceAmountBlock ?>
+                                    </div>
+                                </td>
+                            <?php endif; ?>
+
+                            <td>
+                                <?php if ($savePercent > 0): ?>
+                                    <span class="awa-tier-save-badge">
+                                        <?= $block->escapeHtml(__('%1% Off', $localeFormatter->formatNumber($savePercent))) ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="awa-tier-save-placeholder">-</span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <?php if ($msrpShowOnGesture):?>
+        <script type="text/x-magento-init">
+            {
+                ".product-info-main": {
+                    "addToCart": {
+                        "origin": "tier",
+                        "addToCartButton": "#product_addtocart_form [type=submit]",
+                        "inputQty": "#qty",
+                        "attr": "[data-tier-price]",
+                        "productForm": "#product_addtocart_form",
+                        "productId": "<?= (int) $productId ?>",
+                        "productIdInput": "input[type=hidden][name=product]",
+                        "isSaleable": "<?= (bool) $isSaleable ?>"
+                    }
+                }
+            }
+        </script>
+    <?php endif;?>
+<?php endif; ?>

@@ -16,4 +16,17 @@
                 type="GrupoAwamotos\B2B\Plugin\GraphQl\HideSpecialPricePlugin"
                 sortOrder="10"/>
     </type>
+
+    <!-- HOTFIX B2B-AUTH (13/10) -->
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AddProductsToCart">
+        <plugin name="grupoawamotos_b2b_block_gql_add_to_cart"
+                type="GrupoAwamotos\B2B\Plugin\GraphQl\BlockAddProductsToCartPlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AddSimpleProductsToCart">
+        <plugin name="grupoawamotos_b2b_block_gql_add_to_cart_legacy"
+                type="GrupoAwamotos\B2B\Plugin\GraphQl\BlockAddProductsToCartPlugin"
+                sortOrder="10"/>
+    </type>
+
 </config>

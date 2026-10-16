@@ -57,6 +57,11 @@
              MutationObserver on documentElement froze main thread (scrollbar visible, scrollTop=0). -->
         <remove src="js/awa-css-gate.js"/>
         <remove src="js/awa-css-gate.min.js"/>
+        <!-- Setas do carrossel da home - init BARATA (r1). O motor pesado
+             (awa-scroll-carousel) segue removido de proposito (longtask ~2.3s
+             no LCP do hero). Este script so liga as setas ao scroll nativo que
+             ja existe. Ver: web/js/awa-home-carousel-nav.js -->
+        <script src="js/awa-home-carousel-nav.js"/>
     </head>
     <body>
         <!-- Home freeze r4d: do not compile Magento_Ui messages KO / pageCache block

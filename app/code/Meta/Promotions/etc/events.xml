@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="salesrule_rule_save_after">
-        <observer name="meta_promotions_rule_save" instance="Meta\Promotions\Observer\SalesRuleSave"/>
-    </event>
-</config>

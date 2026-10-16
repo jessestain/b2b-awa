@@ -33,16 +33,10 @@ define([], function () {
             return;
         }
         if (window.__awaHeaderStickyInit) {
-            emitHeaderDebug(
-                'H3',
-                'awa-header-sticky-r8.js:init:alreadyInitialized',
-                'Header sticky already initialized, skipping re-init',
-                {
-                    path: window.location.pathname,
-                    scrollY: window.pageYOffset || 0,
-                    bodyClass: document.body ? document.body.className : ''
-                }
-            );
+/* 12/10/2026: chamada de debug MORTA removida — a funcao emitHeaderDebug e um no-op (return;),
+         * mas os ARGUMENTOS eram avaliados: a coleta de geometria lia getBoundingClientRect + estilos
+         * de 4 elementos, 3x por carga; o perfil mediu 296ms. Codigo morto que executava. */
+
             return;
         }
         window.__awaHeaderStickyInit = true;
@@ -93,16 +87,10 @@ define([], function () {
             return;
         }
 
-        emitHeaderDebug(
-            'H2',
-            'awa-header-sticky-r8.js:init',
-            'Header sticky initialized with baseline geometry',
-            {
-                path: window.location.pathname,
-                bodyClass: document.body ? document.body.className : '',
-                geometry: collectHeaderGeometry()
-            }
-        );
+/* 12/10/2026: chamada de debug MORTA removida — a funcao emitHeaderDebug e um no-op (return;),
+         * mas os ARGUMENTOS eram avaliados: a coleta de geometria lia getBoundingClientRect + estilos
+         * de 4 elementos, 3x por carga; o perfil mediu 296ms. Codigo morto que executava. */
+
 
         function isCondensedAllowed() {
             let body = document.body;
@@ -363,15 +351,10 @@ define([], function () {
 
             if (!isHeaderRenderable()) {
                 if (headerRenderableLast !== false) {
-                    emitHeaderDebug(
-                        'H5',
-                        'awa-header-sticky-r8.js:updateStickyState:notRenderable',
-                        'Header is not renderable, sticky cleared',
-                        {
-                            scrollY: scrollY,
-                            geometry: collectHeaderGeometry()
-                        }
-                    );
+/* 12/10/2026: chamada de debug MORTA removida — a funcao emitHeaderDebug e um no-op (return;),
+         * mas os ARGUMENTOS eram avaliados: a coleta de geometria lia getBoundingClientRect + estilos
+         * de 4 elementos, 3x por carga; o perfil mediu 296ms. Codigo morto que executava. */
+
                     headerRenderableLast = false;
                 }
                 clearStickyClasses();
@@ -413,21 +396,10 @@ define([], function () {
                         window.__awaUpdateHeaderHeight();
                     }
                 } catch (heightErr) { /* ignore */ }
-                emitHeaderDebug(
-                    'H1',
-                    'awa-header-sticky-r8.js:updateStickyState:stickyTransition',
-                    'Sticky state transitioned and condensed geometry applied',
-                    {
-                        isSticky: isSticky,
-                        lastSticky: lastSticky,
-                        scrollY: scrollY,
-                        threshold: threshold,
-                        direction: direction,
-                        isMobile: window.matchMedia('(max-width: 767px)').matches,
-                        footerBlocksSticky: footerBlocksSticky,
-                        geometry: collectHeaderGeometry()
-                    }
-                );
+/* 12/10/2026: chamada de debug MORTA removida — a funcao emitHeaderDebug e um no-op (return;),
+         * mas os ARGUMENTOS eram avaliados: a coleta de geometria lia getBoundingClientRect + estilos
+         * de 4 elementos, 3x por carga; o perfil mediu 296ms. Codigo morto que executava. */
+
             }
 
             header.classList.toggle('awa-scroll-down', direction === 'down' && isSticky);
@@ -481,17 +453,10 @@ define([], function () {
                 footerBlocksSticky = top < 96 && entry.boundingClientRect.bottom > 0;
                 if (footerBlocksStickyLast !== footerBlocksSticky) {
                     footerBlocksStickyLast = footerBlocksSticky;
-                    emitHeaderDebug(
-                        'H5',
-                        'awa-header-sticky-r8.js:footerGuard',
-                        'Footer sticky guard toggled',
-                        {
-                            footerBlocksSticky: footerBlocksSticky,
-                            footerTop: Math.round(top * 100) / 100,
-                            footerBottom: Math.round(entry.boundingClientRect.bottom * 100) / 100,
-                            scrollY: window.pageYOffset || 0
-                        }
-                    );
+/* 12/10/2026: chamada de debug MORTA removida — a funcao emitHeaderDebug e um no-op (return;),
+         * mas os ARGUMENTOS eram avaliados: a coleta de geometria lia getBoundingClientRect + estilos
+         * de 4 elementos, 3x por carga; o perfil mediu 296ms. Codigo morto que executava. */
+
                 }
                 onScroll();
             }, { root: null, threshold: [0, 0.01, 0.05, 0.1, 0.25, 0.5, 1], rootMargin: '0px 0px 0px 0px' });

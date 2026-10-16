@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-		<add id="Rokanthemes_Faq::rokanfaq" title="Rokanthemes FAQ" module="Rokanthemes_Faq" sortOrder="100" parent="Rokanthemes_RokanBase::rokanbase" resource="Rokanthemes_Faq::rokanfaq"/>
-        <add id="Rokanthemes_Faq::faq" title="Manage FAQ" module="Rokanthemes_Faq" sortOrder="10" parent="Rokanthemes_Faq::rokanfaq" action="rokanthemes/faq/gird" resource="Rokanthemes_Faq::faq"/>
-        <add id="Rokanthemes_Faq::faq_setting" title="FAQ Setting" module="Rokanthemes_Faq" sortOrder="20" parent="Rokanthemes_Faq::rokanfaq" action="adminhtml/system_config/edit/section/faq_setting" resource="Rokanthemes_Faq::faq_setting"/>
-    </menu>
-</config>

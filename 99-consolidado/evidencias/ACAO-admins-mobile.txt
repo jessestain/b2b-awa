@@ -1,0 +1,50 @@
+ACAO DE SEGURANCA: contas de admin de teste desativadas (05/10/2026)
+=====================================================================
+CONTEXTO
+   a varredura de modulos (item 181) achou 2FA desligado com 18 admins ativos.
+   Antes de mexer no 2FA, auditei as contas: 18 admins e muito, e se parte for
+   conta de teste, desligar reduz a superficie SEM risco de trancar ninguem.
+
+O QUE A AUDITORIA ACHOU
+   nenhuma conta nunca logou · nenhuma >180 dias · nenhuma sem papel
+   MAS 5 contas de TESTE ativas, com papeis REAIS de producao:
+     #154 smoke_vendedora ....... papel "AWA Comercial Vendedora"
+     #155 smoke_supervisora ..... papel "Supervisora"
+     #156 smoke_gerencia ........ papel "edmar"
+     #157 smoke_ti .............. papel "AWA TI"   <- acesso administrativo de TI
+     #159 qa.auditor.20260914 ... papel "qa.auditor.20260914"
+   e-mails @awamotos.local (dominio falso), criadas 04/08 e 14/09/2026
+   2 PAPEIS ORFAOS: role_id=189 "12" -> user_id=2 e role_id=191 -> user_id=153
+     (esses admins nao existem mais; os papeis ficaram)
+
+POR QUE FOI SEGURO DESATIVAR (5 verificacoes antes)
+   1. ZERO referencias a smoke_vendedora/supervisora/gerencia/ti em
+      app/code, scripts/, tools/ e no repositorio local
+   2. scripts/b2b_portal_smoke.php NAO usa conta de admin (so testa as paginas)
+   3. esse script NAO esta no cron
+   4. 0 sessoes ativas nas 5 contas
+   5. ultimo login: 04/08 (smoke) e 14/09 (qa.auditor) - sem uso ha meses
+
+O QUE FOI FEITO
+   backup completo de admin_user (20 linhas) e authorization_role (31 linhas)
+     em _backups/admins-20261005T194705Z/
+   UPDATE admin_user SET is_active = 0  nas 5 contas (NAO deletadas - reversivel)
+   cache:clean config
+
+RESULTADO
+   ADMINS ATIVOS: 18 -> 13
+   os 13 tem papel (0 sem papel) - todos conseguem entrar
+   loja 200 em 6/6
+
+DESCOBERTA BOA (ja existia)
+   o path do admin e `admin_49fxvZi8FI` (env.php backend.frontName)
+   => /admin responde 404 POR DESIGN - o atacante nao sabe o caminho
+
+ROLLBACK
+   _backups/admins-20261005T194705Z/admin_user.tsv
+   UPDATE admin_user SET is_active=1 WHERE user_id IN (154,155,156,157,159);
+
+PENDENTE
+   os 2 papeis orfaos (role_id 189 e 191) - inofensivos, mas sujam o ACL
+   o 2FA continua DESLIGADO. Agora com 13 contas reais o rollout e mais viavel,
+   mas ligar forca cada admin a configurar o app - DECISAO DO DONO.

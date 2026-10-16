@@ -458,4 +458,22 @@
         </arguments>
     </type>
 
+
+    <!-- HOTFIX B2B-AUTH (13/10) -->
+    <type name="GrupoAwamotos\B2B\Model\CustomerData\B2bPanel">
+        <arguments>
+            <argument name="priceVisibility" xsi:type="object">GrupoAwamotos\B2B\Api\PriceVisibilityInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="grupoawamotos_b2b_block_guest_cart_item_save"
+                type="GrupoAwamotos\B2B\Plugin\Checkout\BlockGuestCartItemSavePlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Checkout\Model\Cart">
+        <plugin name="grupoawamotos_b2b_block_cart_add_product"
+                type="GrupoAwamotos\B2B\Plugin\Checkout\BlockCartAddProductPlugin"
+                sortOrder="10"/>
+    </type>
+
 </config>

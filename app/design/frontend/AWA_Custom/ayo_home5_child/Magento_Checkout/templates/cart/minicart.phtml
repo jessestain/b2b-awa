@@ -194,4 +194,78 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
     }
     </script>
     <?php endif; ?>
+<?php /* SHIM TEMPORÁRIO (task-17) — fora dos condicionais: precisa rodar na HOME, que é a página do sintoma. Ver shim-minicart-defer-shell.js e PATCH.md. Remover quando o pipeline estático for corrigido. */ ?>
+<script>
+/* ============================================================================
+ * SHIM TEMPORÁRIO — duplicação no painel do minicart (task-17) — REMOVER quando o
+ * pipeline de asset estático do tema for corrigido.
+ *
+ * SINTOMA: ao abrir o minicart, o estado vazio (e, com itens, o conteúdo) aparece
+ * DUAS vezes — uma do shell SSR `awa-minicart-defer-shell` e outra do conteúdo ko
+ * `#minicart-content-wrapper`. Medido em 02/10/2026, clique real:
+ *   sem shim  -> 2 blocos `.awa-minicart-empty` visíveis (905,153) e (905,381)
+ *   com shim  -> 1 bloco visível
+ *
+ * CAUSA: o CSS do tema mantém o shell SSR visível mesmo depois que o conteúdo real
+ * monta — em `awa-design-system.css` há duas regras com o MESMO seletor e a MESMA
+ * especificidade:
+ *     ...block-minicart > .awa-minicart-defer-shell{display:none!important}
+ *     ...block-minicart > .awa-minicart-defer-shell{display:flex!important}   <- vence
+ * e o runtime (`web/js/awa-minicart-ui-bootstrap.js`) nunca toca no defer-shell
+ * (0 referências). Corrigir só por CSS NÃO funciona: a regra vencedora vive dentro
+ * de `@layer awa-fixes`, e `!important` dentro de layer vence `!important` sem layer
+ * independentemente de especificidade (medido: um <style> injetado com :has(#id),
+ * que casava, perdeu para o `display:flex`).
+ *
+ * O QUE ESTE SHIM FAZ: remove o shell SSR quando — e só quando — o conteúdo ko já
+ * foi renderizado (`#minicart-content-wrapper` com filhos). Enquanto o ko não
+ * renderizou, o shell continua no lugar (senão o painel abriria vazio).
+ * Não grava nada, não decide estado, não mexe no carrinho.
+ *
+ * IDEMPOTENTE: guarda global, observer desconectado após a remoção, e inerte se o
+ * minicart não existir na página.
+ * ========================================================================== */
+(function (w, d) {
+    'use strict';
+
+    if (w.__awaMiniShellShim) {
+        return;
+    }
+    w.__awaMiniShellShim = true;
+
+    function removerShellSsr() {
+        var ko = d.getElementById('minicart-content-wrapper');
+        if (!ko || ko.children.length === 0) {
+            return false;
+        }
+        var shell = d.querySelector('.block-minicart > .awa-minicart-defer-shell');
+        if (shell && shell.parentNode) {
+            shell.parentNode.removeChild(shell);
+        }
+        return true;
+    }
+
+    if (removerShellSsr()) {
+        return;
+    }
+
+    if (w.MutationObserver) {
+        var obs = new w.MutationObserver(function () {
+            if (removerShellSsr()) {
+                obs.disconnect();
+            }
+        });
+        obs.observe(d.documentElement, { childList: true, subtree: true });
+        return;
+    }
+
+    var iv = w.setInterval(function () {
+        if (removerShellSsr()) {
+            w.clearInterval(iv);
+        }
+    }, 400);
+}(window, document));
+</script>
+
 </div>
+

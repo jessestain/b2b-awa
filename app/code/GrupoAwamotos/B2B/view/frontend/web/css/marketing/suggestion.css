@@ -785,8 +785,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: var(--awa-red, #b73337) !important;
-    border-color: var(--awa-red, #b73337) !important;
+    background: var(--awa-brand, #b73337) !important;
+    border-color: var(--awa-brand, #b73337) !important;
     padding: 12px 25px;
     font-size: 1rem;
     border-radius: 4px;

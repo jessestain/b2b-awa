@@ -75,7 +75,7 @@ body.cms-seja-cliente-b2b .b2b-benefit-icon {
     align-items: center !important;
     justify-content: center !important;
     border-radius: 999px !important;
-    background: color-mix(in srgb, var(--awa-red, #b73337) 10%, #ffffff) !important;
+    background: color-mix(in srgb, var(--awa-red, var(--awa-brand)) 10%, #ffffff) !important;
     color: transparent !important;
     font-size: 0 !important;
     line-height: 1 !important;

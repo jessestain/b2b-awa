@@ -369,7 +369,7 @@ $renderNicheShelves = static function (
 			</div>
 		</header>
 		<div class="awa-category-carousel">
-			<div class="awa-category-carousel__viewport">
+			<div class="awa-category-carousel__viewport" role="region" aria-roledescription="<?= $block->escapeHtmlAttr(__('carrossel')) ?>" aria-label="<?= $block->escapeHtmlAttr(__('Compre por categoria')) ?>" tabindex="0">
 			<div class="awa-category-carousel__track awa-reel awa-reel--sm" id="awa-cat-carousel" data-count="<?php echo count($categoryCarouselCategories); ?>">
 				<?php foreach ($categoryCarouselCategories as $idx => $cat): ?>
 				<?php

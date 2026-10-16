@@ -1,3 +1,4 @@
+/* WhatsApp button: usa o token do WhatsApp, nao o de sucesso */
 :root {
     /* Auth empty layout não carrega _tokens.less.
        Literais = @awa-color-primary / hover. Declarar ANTES de qualquer color-mix:
@@ -1134,8 +1135,8 @@ html body#html-body.b2b-auth-shell .page-wrapper .page-main :is(
     min-block-size: 44px !important;
     height: 44px !important;
     padding: var(--b2b-auth-gap-sm, 8px) var(--b2b-auth-gap-lg, 16px) !important;
-    background: var(--awa-success, #117a6f) !important;
-    border: 1px solid var(--awa-success, #117a6f) !important;
+    background: var(--awa-whatsapp-bg, #117a6f) !important;
+    border: 1px solid var(--awa-whatsapp-bg, #117a6f) !important;
     /* branco tokenizado — vence link brand do design-system (#awa-boost) */
     color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
     -webkit-text-fill-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
@@ -1153,8 +1154,8 @@ body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .pa
 body#html-body.b2b-auth-shell:is(.b2b-register-index, .b2b-register-success) .page-wrapper .b2b-login-whatsapp:focus-visible,
 html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp:hover,
 html body#html-body.b2b-auth-shell .page-wrapper .page-main a.b2b-login-whatsapp:focus-visible {
-    background: color-mix(in srgb, var(--awa-success, #117a6f) 82%, var(--awa-text, #111827)) !important;
-    border-color: color-mix(in srgb, var(--awa-success, #117a6f) 82%, var(--awa-text, #111827)) !important;
+    background: color-mix(in srgb, var(--awa-whatsapp-bg, #117a6f) 82%, var(--awa-text, #111827)) !important;
+    border-color: color-mix(in srgb, var(--awa-whatsapp-bg, #117a6f) 82%, var(--awa-text, #111827)) !important;
     color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
     -webkit-text-fill-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
 }

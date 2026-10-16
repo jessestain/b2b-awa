@@ -44,7 +44,7 @@
     line-height:     1 !important;
     border-radius:   var(--awa-radius-full, 9999px) !important;
     border:          none !important;
-    background:      var(--awa-primary, var(--awa-red, #b73337)) !important;
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand))) !important;
     color:           var(--awa-text-inverse, #fff) !important;
     cursor:          pointer;
     box-shadow:      var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%));
@@ -56,10 +56,10 @@
 }
 #awa-ai-chat-root .awa-ai-chat__toggle:hover {
     transform:  scale(1.07);
-    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
+    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%)));
 }
 #awa-ai-chat-root .awa-ai-chat__toggle:focus-visible {
-    outline:        3px solid var(--awa-primary, #b73337);
+    outline:        3px solid var(--awa-primary, var(--awa-brand));
     outline-offset: 3px;
 }
 
@@ -121,7 +121,7 @@
     max-height:     calc(100vh - 120px);
     background:     var(--awa-surface, var(--awa-bg, #fff));
     border-radius:  var(--awa-radius-md, 16px);
-    box-shadow:     var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
+    box-shadow:     var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%)));
     display:        flex;
     flex-direction: column;
     overflow:       hidden;
@@ -142,7 +142,7 @@
     align-items:     center;
     justify-content: space-between;
     padding:         12px 16px;
-    background:      var(--awa-primary, var(--awa-red, #b73337));
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:           var(--awa-text-inverse, #fff);
 }
 .awa-ai-chat__header-info {
@@ -215,7 +215,7 @@
     display: none !important; /* product cards only on assistant turns */
 }
 .awa-ai-chat__msg--user .awa-ai-chat__msg-bubble {
-    background:    var(--awa-primary, var(--awa-red, #b73337));
+    background:    var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:         var(--awa-text-inverse, #fff);
     border-radius: var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-xs, 4px) var(--awa-radius-md, 10px);
 }
@@ -228,7 +228,7 @@
     border-radius: var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-xs, 4px);
 }
 .awa-ai-chat__msg--assistant .awa-ai-chat__msg-bubble a {
-    color:           var(--awa-primary, #b73337);
+    color:           var(--awa-primary, var(--awa-brand));
     text-decoration: underline;
 }
 .awa-ai-chat__msg--assistant .awa-ai-chat__msg-bubble a:hover {
@@ -306,7 +306,7 @@
 }
 .awa-ai-chat__input:focus {
     outline:      none;
-    border-color: var(--awa-primary, #b73337);
+    border-color: var(--awa-primary, var(--awa-brand));
 }
 .awa-ai-chat__input:disabled {
     background: var(--awa-bg-subtle, #f9fafb);
@@ -335,7 +335,7 @@
     z-index:         2;
     border-radius:   var(--awa-radius-full, 9999px);
     border:          none;
-    background:      var(--awa-primary, var(--awa-red, #b73337));
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:           var(--awa-text-inverse, #fff);
     cursor:          pointer;
     flex-shrink:     0;
@@ -350,7 +350,7 @@
     cursor:  not-allowed;
 }
 .awa-ai-chat__send:focus-visible {
-    outline:        3px solid var(--awa-primary, #b73337);
+    outline:        3px solid var(--awa-primary, var(--awa-brand));
     outline-offset: 2px;
 }
 
@@ -367,7 +367,7 @@
     color:           var(--awa-text-secondary);
 }
 .awa-ai-chat__legal-link {
-    color:           var(--awa-primary, var(--awa-red, #b73337));
+    color:           var(--awa-primary, var(--awa-red, var(--awa-brand)));
     text-decoration: underline;
     text-underline-offset: 2px;
     display:         inline-flex;
@@ -430,7 +430,7 @@
     transition:      border-color .15s ease, box-shadow .15s ease;
 }
 .awa-ai-chat__product:hover {
-    border-color: var(--awa-primary, var(--awa-red, #b73337));
+    border-color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     box-shadow:   var(--awa-shadow-md, 0 4px 14px rgb(0 0 0 / 8%));
 }
 .awa-ai-chat__product-thumb {
@@ -460,7 +460,7 @@
     color:       var(--awa-text-muted, var(--awa-text-secondary, rgb(0 0 0 / 55%)));
 }
 .awa-ai-chat__product-meta strong {
-    color: var(--awa-primary, var(--awa-red, #b73337));
+    color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     font-weight: 700;
 }
 .awa-ai-chat__product-fitment {
@@ -560,7 +560,7 @@
 .awa-ai-coach__close:hover,
 .awa-ai-coach__close:focus-visible {
     color: var(--awa-text-primary, #111827);
-    background: var(--awa-bg-muted, rgb(0 0 0 / 5%));
+    background: var(--awa-bg-muted, #f1f5f9));
 }
 .awa-ai-coach__message {
     margin: 0 32px 12px 0;
@@ -592,13 +592,13 @@
 }
 .awa-ai-coach__btn:hover,
 .awa-ai-coach__btn:focus-visible {
-    border-color: var(--awa-primary, #b73337);
-    color: var(--awa-primary, #b73337);
+    border-color: var(--awa-primary, var(--awa-brand));
+    color: var(--awa-primary, var(--awa-brand));
 }
 .awa-ai-coach__btn--primary {
     grid-column: 1 / -1;
-    background: var(--awa-primary, var(--awa-red, #b73337));
-    border-color: var(--awa-primary, var(--awa-red, #b73337));
+    background: var(--awa-primary, var(--awa-red, var(--awa-brand)));
+    border-color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color: var(--awa-text-inverse, #fff);
 }
 .awa-ai-coach__btn--primary:hover,
@@ -630,8 +630,8 @@
 @keyframes awa-ai-coach-pulse {
     0%, 100% { box-shadow: var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%)); }
     50% {
-        box-shadow: 0 0 0 8px color-mix(in srgb, var(--awa-primary, #b73337) 22%, transparent),
-                    var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
+        box-shadow: 0 0 0 8px color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 22%, transparent),
+                    var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%)));
     }
 }
 

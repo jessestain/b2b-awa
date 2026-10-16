@@ -1,0 +1,2759 @@
+{
+ "grafia": [
+  {
+   "token": "--awa-header-shell-max",
+   "canonico": "1280px",
+   "grafias": [
+    "1280px",
+    "1280px !important"
+   ],
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ]
+  },
+  {
+   "token": "--awa-bg-muted",
+   "canonico": "#f1f5f9",
+   "grafias": [
+    "#F1F5F9",
+    "#f1f5f9"
+   ],
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-head-tail-bundle.css"
+   ]
+  },
+  {
+   "token": "--awa-radius-s",
+   "canonico": "8px",
+   "grafias": [
+    "8px",
+    "8px !important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ]
+  },
+  {
+   "token": "--awa-radius-m",
+   "canonico": "12px",
+   "grafias": [
+    "12px",
+    "12px !important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ]
+  },
+  {
+   "token": "--awa-btn-h",
+   "canonico": "44px",
+   "grafias": [
+    "44px",
+    "44px !important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ]
+  },
+  {
+   "token": "--awa-header-row-h-mobile",
+   "canonico": "52px",
+   "grafias": [
+    "52px",
+    "52px!important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-mobile-grid-critical.css"
+   ]
+  },
+  {
+   "token": "--awa-header-logo-h",
+   "canonico": "34px",
+   "grafias": [
+    "34px",
+    "34px!important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-mobile-grid-critical.css"
+   ]
+  },
+  {
+   "token": "--awa-hdr-height-sticky",
+   "canonico": "56px",
+   "grafias": [
+    "56px",
+    "56px!important"
+   ],
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-mobile-grid-critical.css"
+   ]
+  },
+  {
+   "token": "--awa-plp-shell-pad",
+   "canonico": "24px",
+   "grafias": [
+    "24px !important",
+    "24px!important"
+   ],
+   "arquivos": [
+    "awa-design-system.css"
+   ]
+  }
+ ],
+ "reais": [
+  {
+   "token": "--awa-header-stack-h",
+   "n_valores_reais": 18,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-header-visual-audit-fixes-20260630.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "112px",
+    "116px",
+    "128px",
+    "140px",
+    "156px",
+    "160px",
+    "96px",
+    "calc(44px + var(--awa-header-sticky-h))",
+    "calc(44px + var(--awa-header-sticky-h,116px))",
+    "calc(var(--awa-header-promo-h) + var(--awa-header-main-row-h) + var(--awa-header-nav-h))",
+    "calc(var(--awa-header-promo-h) + var(--awa-header-main-row-h))",
+    "calc(var(--awa-header-promo-h, 0px) + var(--awa-header-main-row-h))",
+    "calc(var(--awa-header-promo-h, 32px) + var(--awa-header-main-row-h) + var(--awa-header-nav-h))",
+    "var(--awa-header-sticky-h)",
+    "var(--awa-header-sticky-h, 116px)",
+    "var(--awa-header-sticky-h, 96px)",
+    "var(--awa-header-sticky-h,112px)",
+    "var(--awa-header-sticky-h,96px)"
+   ]
+  },
+  {
+   "token": "--awa-header-sticky-h",
+   "n_valores_reais": 9,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "112px",
+    "116px",
+    "68px",
+    "96px",
+    "calc(56px + var(--awa-header-nav-h,48px))",
+    "calc(var(--awa-header-main-height) + var(--awa-header-nav-height))",
+    "calc(var(--awa-header-main-row-h) + var(--awa-header-nav-frame-h))",
+    "calc(var(--awa-header-main-row-h, 68px) + var(--awa-header-nav-frame-h))",
+    "calc(var(--awa-header-main-row-h,56px) + var(--awa-header-nav-h,48px))"
+   ]
+  },
+  {
+   "token": "--awa-header-scroll-offset",
+   "n_valores_reais": 8,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-header-mobile-grid-critical.css"
+   ],
+   "valores": [
+    "112px",
+    "116px",
+    "128px",
+    "160px",
+    "56px",
+    "96px",
+    "calc(var(--awa-header-main-row-h,68px) + var(--awa-header-nav-h,48px))",
+    "var(--awa-header-sticky-h)"
+   ]
+  },
+  {
+   "token": "--awa-bg-surface",
+   "n_valores_reais": 7,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-m2-visual-ssot.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#1e293b",
+    "#ffffff",
+    "var(--awa-bg)",
+    "var(--awa-gray-50,var(--awa-bg-subtle))",
+    "var(--awa-sg-c35)",
+    "var(--awa-white, #fff)",
+    "var(--awa-white, var(--audit-white))"
+   ]
+  },
+  {
+   "token": "--awa-text-primary",
+   "n_valores_reais": 7,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-visual-bugfix.css"
+   ],
+   "valores": [
+    "#111827",
+    "#f1f5f9",
+    "var(--awa-bg)",
+    "var(--awa-color-text-primary, var(--awa-text))",
+    "var(--awa-ink)",
+    "var(--awa-text)",
+    "var(--awa-text, #0f172a)"
+   ]
+  },
+  {
+   "token": "--awa-header-main-row-h",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "56px",
+    "64px",
+    "68px",
+    "72px",
+    "96px",
+    "var(--awa-header-main-height)"
+   ]
+  },
+  {
+   "token": "--awa-header-nav-h",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "0",
+    "40px",
+    "44px",
+    "46px",
+    "48px",
+    "var(--awa-header-nav-height)"
+   ]
+  },
+  {
+   "token": "--awa-grid-gap",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ]
+  },
+  {
+   "token": "--awa-home-section-gap",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-home-density-grid-20260611.css",
+    "awa-home-impeccable-terminal-v1.css",
+    "awa-home-visual-bugfixes-2026-06-28.css"
+   ],
+   "valores": [
+    "12px",
+    "8px",
+    "clamp(32px, 5vw, 56px)",
+    "var(--awa-stack-tight, 12px)",
+    "var(--awa-stack-tight, var(--awa-space-3, 12px))",
+    "var(--awa-stack-tight,var(--awa-space-3,12px))"
+   ]
+  },
+  {
+   "token": "--awa-text-muted",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css",
+    "awa-visual-bugfix.css"
+   ],
+   "valores": [
+    "#6b7280",
+    "#94a3b8",
+    "rgba(255, 255, 255, 0.85)",
+    "var(--awa-ink-soft)",
+    "var(--awa-sg-c53, var(--awa-text-secondary))",
+    "var(--awa-text-secondary)"
+   ]
+  },
+  {
+   "token": "--awa-border",
+   "n_valores_reais": 6,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-components-b2b-foundation.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#334155",
+    "#e2e8f0",
+    "#e5e7eb",
+    "var(--awa-line)",
+    "var(--awa-sg-c19)",
+    "var(--awa-sg-c27, #e5e5e5)"
+   ]
+  },
+  {
+   "token": "--awa-text",
+   "n_valores_reais": 5,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#333333",
+    "#3f454d",
+    "var(--awa-ink)",
+    "var(--awa-sg-c54, #333333)",
+    "var(--awa-text-main)"
+   ]
+  },
+  {
+   "token": "--awa-gap",
+   "n_valores_reais": 5,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "20px",
+    "var(--awa-gap-2-5)",
+    "var(--awa-gap-lg)",
+    "var(--awa-gap-md)",
+    "var(--awa-gap-xl)"
+   ]
+  },
+  {
+   "token": "--awa-header-promo-h",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-header-visual-audit-fixes-20260630.css"
+   ],
+   "valores": [
+    "0",
+    "32px",
+    "36px",
+    "44px"
+   ]
+  },
+  {
+   "token": "--awa-header-col-gap",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "12px",
+    "16px",
+    "18px",
+    "28px"
+   ]
+  },
+  {
+   "token": "--awa-carousel-button-offset",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-carousel-contract.css",
+    "awa-pdp-layout-r1-20261003.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ],
+   "valores": [
+    "-30px",
+    "-46px",
+    "4px",
+    "clamp(6px, 1.2vw, 16px)"
+   ]
+  },
+  {
+   "token": "--awa-ui-radius-card",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-cart-stack.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "16px",
+    "8px",
+    "var(--awa-radius)",
+    "var(--awa-radius-md, 10px)"
+   ]
+  },
+  {
+   "token": "--awa-radius-md",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-components-b2b-foundation.css",
+    "awa-design-system.css",
+    "awa-home-visual-bugfixes-2026-06-28.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-standardization-20261004.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "12px",
+    "14px",
+    "8px",
+    "var(--awa-radius-m)"
+   ]
+  },
+  {
+   "token": "--awa-bg",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-m2-visual-ssot.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-sg-c35, #ffffff)",
+    "var(--awa-surface)",
+    "var(--awa-white, #fff)"
+   ]
+  },
+  {
+   "token": "--awa-text-secondary",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-visual-bugfix.css"
+   ],
+   "valores": [
+    "#4b5563",
+    "#666666",
+    "#cbd5e1",
+    "rgba(255, 255, 255, 0.92)"
+   ]
+  },
+  {
+   "token": "--awa-border-subtle",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#eeeeee",
+    "#f1f5f9",
+    "var(--awa-sg-c7)",
+    "var(--awa-text-soft, #475569)"
+   ]
+  },
+  {
+   "token": "--awa-text-inverse",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-bg)",
+    "var(--awa-sg-c35)",
+    "var(--awa-white, var(--awa-sg-c35))"
+   ]
+  },
+  {
+   "token": "--awa-radius-sm",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-components-b2b-foundation.css",
+    "awa-design-system.css",
+    "awa-home-visual-bugfixes-2026-06-28.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "12px",
+    "4px",
+    "8px",
+    "var(--awa-radius-s)"
+   ]
+  },
+  {
+   "token": "--awa-header-site-shell-h",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "116px",
+    "calc(56px + var(--awa-header-nav-h,48px))",
+    "calc(var(--awa-header-main-row-h,56px) + var(--awa-header-nav-h,48px))",
+    "var(--awa-header-sticky-h)"
+   ]
+  },
+  {
+   "token": "--awa-header-gutter",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "1rem",
+    "var(--awa-space-4, 16px)",
+    "var(--awa-space-6, 24px)",
+    "var(--awa-space-8, 32px)"
+   ]
+  },
+  {
+   "token": "--awa-main-nav-link-pad-x",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "14px",
+    "16px",
+    "1rem"
+   ]
+  },
+  {
+   "token": "--awa-header-container-padding",
+   "n_valores_reais": 4,
+   "arquivos": [
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "12px",
+    "16px",
+    "20px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-grid-section-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "12px",
+    "16px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-home-carousel-gutter",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-home-impeccable-terminal-v1.css"
+   ],
+   "valores": [
+    "0",
+    "48px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-header-search-h",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "40px",
+    "44px",
+    "46px"
+   ]
+  },
+  {
+   "token": "--awa-header-shell-pad",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "12px",
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-page-pad",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px",
+    "var(--awa-acct-shell-pad)"
+   ]
+  },
+  {
+   "token": "--awa-home-shell-max",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-home-density-grid-20260611.css",
+    "awa-home-impeccable-terminal-v1.css",
+    "awa-home-visual-bugfixes-2026-06-28.css"
+   ],
+   "valores": [
+    "1280px",
+    "1440px",
+    "min(100%, 1280px)"
+   ]
+  },
+  {
+   "token": "--awa-shell-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "1rem",
+    "clamp(var(--awa-space-5), 2vw, var(--awa-space-8))"
+   ]
+  },
+  {
+   "token": "--awa-home-carousel-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-carousel-bundle.css",
+    "awa-home-corporate-density-grid-2026-06.css"
+   ],
+   "valores": [
+    "12px",
+    "8px",
+    "var(--awa-home-corp-gap)"
+   ]
+  },
+  {
+   "token": "--awa-home-card-pad",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "0",
+    "6px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-plp-stack-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-plp-shell-final.css",
+    "awa-vfix-plp-search.css"
+   ],
+   "valores": [
+    "var(--awa-search-stack-gap)",
+    "var(--awa-stack-tight, var(--awa-space-3, 12px))",
+    "var(--awa-stack-tight, var(--awa-vfix-gap-sm, 12px))"
+   ]
+  },
+  {
+   "token": "--awa-fs-xs",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "14px",
+    "clamp(10px, calc(9.33px + 0.208vw), 12px)"
+   ]
+  },
+  {
+   "token": "--awa-primary",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-checkout-shell-final.css",
+    "awa-cms-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-head-tail-bundle.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-plp-shell-final.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-brand)",
+    "var(--awa-brand, var(--awa-brand))",
+    "var(--awa-brand,var(--awa-brand))"
+   ]
+  },
+  {
+   "token": "--awa-primary-hover",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-checkout-shell-final.css",
+    "awa-cms-shell-final.css",
+    "awa-head-tail-bundle.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-brand-dark)",
+    "var(--awa-brand-dark, var(--awa-brand-dark))",
+    "var(--awa-brand-dark,var(--awa-brand-dark))"
+   ]
+  },
+  {
+   "token": "--awa-primary-dark",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-checkout-shell-final.css",
+    "awa-cms-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css"
+   ],
+   "valores": [
+    "var(--awa-brand-dark)",
+    "var(--awa-brand-dark, var(--awa-brand-dark))",
+    "var(--awa-primary-hover)"
+   ]
+  },
+  {
+   "token": "--awa-red",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-b2b-auth-shell-final.css",
+    "awa-checkout-shell-final.css",
+    "awa-cms-shell-final.css",
+    "awa-head-preload-critical-home.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-brand)",
+    "var(--awa-brand, var(--awa-brand))",
+    "var(--awa-primary)"
+   ]
+  },
+  {
+   "token": "--awa-bg-page",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css"
+   ],
+   "valores": [
+    "#0f172a",
+    "#ffffff",
+    "var(--awa-bg)"
+   ]
+  },
+  {
+   "token": "--awa-bg-elevated",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-design-system.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#334155",
+    "#f9fafb",
+    "var(--awa-sg-c35)"
+   ]
+  },
+  {
+   "token": "--awa-border-strong",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-b2b-auth-shell-final.css",
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#cbd5e1",
+    "#cccccc",
+    "#d1d5db"
+   ]
+  },
+  {
+   "token": "--awa-ui-radius-button",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-cart-stack.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "var(--awa-radius-md, 10px)",
+    "var(--awa-radius-sm)"
+   ]
+  },
+  {
+   "token": "--awa-gray-200",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-border)",
+    "var(--awa-gray-470, #777777)",
+    "var(--awa-sg-c27)"
+   ]
+  },
+  {
+   "token": "--awa-gray-300",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-gray-250)",
+    "var(--awa-gray-470, #777777)",
+    "var(--awa-sg-c22)"
+   ]
+  },
+  {
+   "token": "--awa-switcher-break",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-defer-global-bundle.css"
+   ],
+   "valores": [
+    "20rem",
+    "30rem",
+    "45rem"
+   ]
+  },
+  {
+   "token": "--awa-radius-pill",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-standardization-20261004.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "10px",
+    "9999px",
+    "999px"
+   ]
+  },
+  {
+   "token": "--awa-shadow-md",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0 2px 8px rgb(0 0 0 / 10%)",
+    "0 4px 12px rgba(0, 0, 0, 0.1)",
+    "0 6px 16px rgba(16, 24, 40, .12)"
+   ]
+  },
+  {
+   "token": "--awa-container",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "100%",
+    "1280px",
+    "1440px"
+   ]
+  },
+  {
+   "token": "--awa-header-row-h",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-contract-grid-20260626.css",
+    "awa-header-mobile-grid-critical.css"
+   ],
+   "valores": [
+    "56px",
+    "68px",
+    "var(--awa-header-main-height)"
+   ]
+  },
+  {
+   "token": "--awa-page-section-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "2rem",
+    "var(--awa-space-5)",
+    "var(--awa-space-6)"
+   ]
+  },
+  {
+   "token": "--awa-main-nav-link-min-h",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "44px",
+    "46px",
+    "48px"
+   ]
+  },
+  {
+   "token": "--awa-top-account-link-min-height",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "44px",
+    "var(--awa-size-34, 34px)",
+    "var(--awa-space-7, 32px)"
+   ]
+  },
+  {
+   "token": "--awa-top-account-link-padding-inline",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0.5rem",
+    "var(--awa-space-2)",
+    "var(--awa-space-3)"
+   ]
+  },
+  {
+   "token": "--awa-top-account-links-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0.25rem",
+    "var(--awa-space-1)",
+    "var(--awa-space-2)"
+   ]
+  },
+  {
+   "token": "--awa-red-light",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#fcefee",
+    "color-mix(in srgb, var(--awa-red) 16%, transparent)",
+    "color-mix(in srgb, var(--awa-red) 16%, var(--awa-bg-surface))"
+   ]
+  },
+  {
+   "token": "--awa-header-actions-width",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "220px",
+    "260px",
+    "276px"
+   ]
+  },
+  {
+   "token": "--awa-header-gap",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "16px",
+    "18px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-bg-soft",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-m2-visual-ssot.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#f7f7f7",
+    "var(--awa-bg-subtle, #f7f7f7)",
+    "var(--awa-sg-c50, var(--awa-bg-subtle))"
+   ]
+  },
+  {
+   "token": "--awa-container-max",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-structural-fix-2026-05-20.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "100%",
+    "1280px",
+    "1440px"
+   ]
+  },
+  {
+   "token": "--awa-font-size",
+   "n_valores_reais": 3,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-text-base)",
+    "var(--awa-text-base-plus)",
+    "var(--awa-text-md)"
+   ]
+  },
+  {
+   "token": "--awa-grid-shell-max",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-checkout-shell-final.css",
+    "awa-commerce-impeccable-refine.css"
+   ],
+   "valores": [
+    "min(100%, 1280px)",
+    "min(100%,1280px)"
+   ]
+  },
+  {
+   "token": "--awa-grid-container-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-checkout-shell-final.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-grid-card-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "12px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-grid-col-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-inline-lock-20260626-phase3d22b.css",
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "12px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-grid-rhythm-sm",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "4px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-grid-rhythm-md",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "12px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-page-pad-catalog",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-grid-gap-tight",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-b2b-account-shell-final.css"
+   ],
+   "valores": [
+    "12px",
+    "var(--awa-acct-gap-md)"
+   ]
+  },
+  {
+   "token": "--awa-grid-gap-loose",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-b2b-account-shell-final.css"
+   ],
+   "valores": [
+    "12px",
+    "var(--awa-acct-gap-md)"
+   ]
+  },
+  {
+   "token": "--awa-container-gutter",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css",
+    "awa-standardization-20261004.css"
+   ],
+   "valores": [
+    "24px",
+    "var(--awa-sp-5, 24px)"
+   ]
+  },
+  {
+   "token": "--awa-search-radius",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--awa-radius-md, 8px)"
+   ]
+  },
+  {
+   "token": "--awa-header-nav-bg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-m2-visual-ssot.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-white, #fff)"
+   ]
+  },
+  {
+   "token": "--awa-home-terminal-shell",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "min(100%, 1280px)",
+    "min(100%, var(--awa-home-shell-max, 1280px))"
+   ]
+  },
+  {
+   "token": "--awa-home-terminal-section",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "20px",
+    "clamp(22px, 2.5vw, 34px)"
+   ]
+  },
+  {
+   "token": "--awa-home-terminal-card-min",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "282px",
+    "clamp(292px, 24vw, 330px)"
+   ]
+  },
+  {
+   "token": "--awa-home-terminal-thumb-min",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css"
+   ],
+   "valores": [
+    "142px",
+    "clamp(148px, 13vw, 184px)"
+   ]
+  },
+  {
+   "token": "--awa-home-shell-gutter",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-home-density-grid-20260611.css",
+    "awa-home-impeccable-terminal-v1.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-shell-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "24px",
+    "clamp(16px, 3vw, 24px)"
+   ]
+  },
+  {
+   "token": "--awa-control-height",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-m2-visual-ssot.css",
+    "awa-super-global-20260611m.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ],
+   "valores": [
+    "44px",
+    "clamp(44px, 4.6vw, 48px)"
+   ]
+  },
+  {
+   "token": "--awa-control-radius",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-audit-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "6px",
+    "var(--awa-radius-sm)"
+   ]
+  },
+  {
+   "token": "--awa-header-nav-frame-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "44px",
+    "50px"
+   ]
+  },
+  {
+   "token": "--awa-shell-gutter",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-container-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-align-grid-terminal-2026-06-11.css",
+    "awa-commerce-impeccable-refine.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-fs-xs3",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "11px",
+    "12px"
+   ]
+  },
+  {
+   "token": "--awa-fs-xl",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "20px",
+    "clamp(18px, calc(17.33px + 0.208vw), 20px)"
+   ]
+  },
+  {
+   "token": "--awa-radius",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--border-radius-base)"
+   ]
+  },
+  {
+   "token": "--awa-radius-lg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-audit-bundle.css",
+    "awa-components-b2b-foundation.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "12px",
+    "16px"
+   ]
+  },
+  {
+   "token": "--awa-acct-shell-max",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css"
+   ],
+   "valores": [
+    "min(100%, 1100px)",
+    "min(100%, 1280px)"
+   ]
+  },
+  {
+   "token": "--awa-acct-shell-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "16px",
+    "24px"
+   ]
+  },
+  {
+   "token": "--awa-header-site-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "68px",
+    "96px"
+   ]
+  },
+  {
+   "token": "--awa-nav-bar-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-b2b-account-shell-final.css",
+    "awa-design-system.css",
+    "awa-home-impeccable-terminal-v1.css"
+   ],
+   "valores": [
+    "0",
+    "48px"
+   ]
+  },
+  {
+   "token": "--awa-flow-radius",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-cart-stack.css",
+    "awa-defer-global-bundle.css"
+   ],
+   "valores": [
+    "var(--awa-radius-md, 10px)",
+    "var(--awa-radius-xl, 16px)"
+   ]
+  },
+  {
+   "token": "--awa-checkout-shell-max",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-checkout-shell-final.css",
+    "awa-structural-fix-2026-05-20.css"
+   ],
+   "valores": [
+    "min(100%, 1280px)",
+    "min(1280px, calc(100vw - 48px))"
+   ]
+  },
+  {
+   "token": "--awa-cc-focus-ring",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "0 0 0 3px rgb(183 51 55 / 16%)",
+    "var(--awa-primary)"
+   ]
+  },
+  {
+   "token": "--awa-font-size-10",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0.625rem",
+    "10px"
+   ]
+  },
+  {
+   "token": "--awa-font-size-11",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0.6875rem",
+    "11px"
+   ]
+  },
+  {
+   "token": "--awa-font-size-13",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0.8125rem",
+    "13px"
+   ]
+  },
+  {
+   "token": "--awa-duration-fast",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "120ms",
+    "200ms"
+   ]
+  },
+  {
+   "token": "--awa-home-pad-standard",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css",
+    "awa-home-density-grid-20260611.css",
+    "awa-home-impeccable-terminal-v1.css"
+   ],
+   "valores": [
+    "12px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-home-pad-featured",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-commerce-impeccable-refine.css",
+    "awa-head-preload-critical-home.css",
+    "awa-home-density-grid-20260611.css",
+    "awa-home-impeccable-terminal-v1.css"
+   ],
+   "valores": [
+    "12px",
+    "16px"
+   ]
+  },
+  {
+   "token": "--awa-radius-xs",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "4px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-surface",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-design-system.css",
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-bg)"
+   ]
+  },
+  {
+   "token": "--awa-text-1",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "#1f2937",
+    "var(--awa-text)"
+   ]
+  },
+  {
+   "token": "--awa-text-2",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "var(--awa-text-secondary)",
+    "var(--awa-text-soft, #475569)"
+   ]
+  },
+  {
+   "token": "--awa-accent",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-red, var(--awa-sg-c26))",
+    "var(--primary-color, var(--awa-brand))"
+   ]
+  },
+  {
+   "token": "--awa-accent-hover",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-components-b2b-foundation.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "var(--awa-primary-hover)",
+    "var(--primary-hover, var(--awa-brand-dark))"
+   ]
+  },
+  {
+   "token": "--awa-shelf-preinit-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-cookie-consent-fix.css",
+    "awa-design-system.css",
+    "awa-home-b2b-ops-density-20260805.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "280px",
+    "420px"
+   ]
+  },
+  {
+   "token": "--awa-text-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#999999",
+    "var(--awa-gray-450,#999999)"
+   ]
+  },
+  {
+   "token": "--awa-size-18",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "1.125rem",
+    "18px"
+   ]
+  },
+  {
+   "token": "--awa-size-22",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "1.375rem",
+    "22px"
+   ]
+  },
+  {
+   "token": "--awa-size-28",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "1.75rem",
+    "28px"
+   ]
+  },
+  {
+   "token": "--awa-size-30",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "1.875rem",
+    "30px"
+   ]
+  },
+  {
+   "token": "--awa-size-40",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-critical-fold-site.css",
+    "awa-critical-fold.css",
+    "awa-head-preload-critical-home.css"
+   ],
+   "valores": [
+    "2.5rem",
+    "40px"
+   ]
+  },
+  {
+   "token": "--awa-gray-500",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-text-muted)",
+    "var(--awa-text-secondary)"
+   ]
+  },
+  {
+   "token": "--awa-gray-150",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#f2f2f2",
+    "var(--awa-gray-100, var(--awa-bg-muted))"
+   ]
+  },
+  {
+   "token": "--awa-focus-ring",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-design-system.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0 0 0 3px rgba(183, 51, 55, 0.22)",
+    "rgba(183, 51, 55, .30)"
+   ]
+  },
+  {
+   "token": "--awa-input-height",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-m2-visual-ssot.css",
+    "awa-super-global-20260611m.css",
+    "awa-visual-fixes-2026-06-29-final.css"
+   ],
+   "valores": [
+    "44px",
+    "var(--awa-control-height)"
+   ]
+  },
+  {
+   "token": "--awa-f-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--size-sm-md, clamp(1rem, 0.8rem + 1vw, 1.88rem))"
+   ]
+  },
+  {
+   "token": "--awa-home-section-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "12px",
+    "var(--section-padding)"
+   ]
+  },
+  {
+   "token": "--awa-home-section-pad-tight",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css",
+    "awa-home-density-grid-20260611.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--size-md-lg)"
+   ]
+  },
+  {
+   "token": "--awa-pdp-sticky-reserve",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-defer-global-bundle.css"
+   ],
+   "valores": [
+    "clamp(4.5rem, 12vw, 5.75rem)",
+    "clamp(4.75rem, 11vw, 5.75rem)"
+   ]
+  },
+  {
+   "token": "--awa-ink",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#1a1a1a",
+    "#333333"
+   ]
+  },
+  {
+   "token": "--awa-font-body",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "'rubik', 'open sans', arial, sans-serif",
+    "'source sans 3', sans-serif"
+   ]
+  },
+  {
+   "token": "--awa-h-control",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "40px",
+    "44px"
+   ]
+  },
+  {
+   "token": "--awa-h-cta",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "34px",
+    "44px"
+   ]
+  },
+  {
+   "token": "--awa-ds-radius-sm",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--awa-radius-s, 8px)"
+   ]
+  },
+  {
+   "token": "--awa-radius-ctl",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "8px",
+    "var(--awa-radius-s, 8px)"
+   ]
+  },
+  {
+   "token": "--awa-card-canonical-name-lines",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "2",
+    "3"
+   ]
+  },
+  {
+   "token": "--awa-card-canonical-name-minh",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "37.8px",
+    "56.7px"
+   ]
+  },
+  {
+   "token": "--awa-card-canonical-img-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-bg-subtle",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-head-tail-bundle.css"
+   ],
+   "valores": [
+    "#f8fafc",
+    "var(--awa-surface-alt)"
+   ]
+  },
+  {
+   "token": "--awa-page-gutter",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css"
+   ],
+   "valores": [
+    "var(--awa-page-gutter-md)",
+    "var(--awa-sp-4)"
+   ]
+  },
+  {
+   "token": "--awa-input-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "44px",
+    "var(--awa-btn-h, 44px)"
+   ]
+  },
+  {
+   "token": "--awa-header-condensed-pad-inline",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-header-mobile-grid-critical.css",
+    "awa-standardization-20261004.css"
+   ],
+   "valores": [
+    "12px",
+    "var(--awa-sp-3, 12px)"
+   ]
+  },
+  {
+   "token": "--awa-b2b-ops-header-h",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-home-b2b-ops-density-20260805.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "44px",
+    "var(--awa-btn-h, 44px)"
+   ]
+  },
+  {
+   "token": "--awa-home-fab-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-design-system.css",
+    "awa-standardization-20261004.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "16px",
+    "var(--awa-sp-4, 16px)"
+   ]
+  },
+  {
+   "token": "--awa-font-size-12",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "0.75rem",
+    "12px"
+   ]
+  },
+  {
+   "token": "--awa-font-size-3xl",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "1.5rem",
+    "36px"
+   ]
+  },
+  {
+   "token": "--awa-text-main",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-gray-700, var(--awa-text))",
+    "var(--awa-text)"
+   ]
+  },
+  {
+   "token": "--awa-page-section-gap-lg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "3rem",
+    "var(--awa-space-7)"
+   ]
+  },
+  {
+   "token": "--awa-shell-sidebar",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "280px",
+    "clamp(248px, 22vw, 320px)"
+   ]
+  },
+  {
+   "token": "--awa-shell-checkout-sidebar",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "380px",
+    "clamp(320px, 28vw, 388px)"
+   ]
+  },
+  {
+   "token": "--awa-main-nav-link-radius",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "6px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-ui-radius-input",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "6px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-ui-radius-tag",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-preload-critical-home.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "10px",
+    "4px"
+   ]
+  },
+  {
+   "token": "--awa-primary-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#f9e5e5",
+    "#fcefee"
+   ]
+  },
+  {
+   "token": "--awa-primary-subtle",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "rgb(183 51 55 / 6%)",
+    "rgba(183, 51, 55, 0.08)"
+   ]
+  },
+  {
+   "token": "--awa-red-dark",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-primary-hover)",
+    "var(--awa-primary-hover, var(--awa-primary-hover))"
+   ]
+  },
+  {
+   "token": "--awa-red-bg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-head-tail-bundle.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#fff8f8",
+    "rgba(183, 51, 55, 0.06)"
+   ]
+  },
+  {
+   "token": "--awa-header-logo-width",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "172px",
+    "184px"
+   ]
+  },
+  {
+   "token": "--awa-header-search-min",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-header-contract-grid-20260626.css"
+   ],
+   "valores": [
+    "280px",
+    "320px"
+   ]
+  },
+  {
+   "token": "--awa-home-compact-section-pad",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-home-compact-spacing-terminal-20260707.css"
+   ],
+   "valores": [
+    "10px",
+    "clamp(10px,1.4vw,18px)"
+   ]
+  },
+  {
+   "token": "--awa-home-compact-tight-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-home-compact-spacing-terminal-20260707.css"
+   ],
+   "valores": [
+    "8px",
+    "clamp(8px,1vw,12px)"
+   ]
+  },
+  {
+   "token": "--awa-home-compact-group-gap",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-home-compact-spacing-terminal-20260707.css"
+   ],
+   "valores": [
+    "10px",
+    "clamp(12px,1.6vw,20px)"
+   ]
+  },
+  {
+   "token": "--awa-home-corp-section-pad-tight",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-home-corporate-density-grid-2026-06.css"
+   ],
+   "valores": [
+    "6px",
+    "8px"
+   ]
+  },
+  {
+   "token": "--awa-fs-sm",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "15px",
+    "clamp(12px, calc(11.33px + 0.208vw), 14px)"
+   ]
+  },
+  {
+   "token": "--awa-fs-md",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "17px",
+    "clamp(14px, calc(13.33px + 0.208vw), 16px)"
+   ]
+  },
+  {
+   "token": "--awa-fs-lg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "18px",
+    "clamp(16px, calc(15.33px + 0.208vw), 18px)"
+   ]
+  },
+  {
+   "token": "--awa-fs-2xl",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "22px",
+    "clamp(24px, calc(21.33px + 0.833vw), 32px)"
+   ]
+  },
+  {
+   "token": "--awa-fs-3xl",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "24px",
+    "clamp(28px, calc(25.33px + 0.833vw), 36px)"
+   ]
+  },
+  {
+   "token": "--awa-success",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#16a34a",
+    "#2d7a3a"
+   ]
+  },
+  {
+   "token": "--awa-warning",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#b87a00",
+    "#d97706"
+   ]
+  },
+  {
+   "token": "--awa-error",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "var(--awa-brand)",
+    "var(--awa-danger, #dc2626)"
+   ]
+  },
+  {
+   "token": "--awa-info",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#0369a1",
+    "#0ea5e9"
+   ]
+  },
+  {
+   "token": "--awa-shadow-sm",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0 1px 3px rgb(0 0 0 / 6%)",
+    "0 1px 3px rgba(0, 0, 0, 0.08)"
+   ]
+  },
+  {
+   "token": "--awa-shadow-lg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-impeccable-layout-2026-06-16.css",
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0 12px 40px rgb(0 0 0 / 15%)",
+    "0 8px 24px rgba(0, 0, 0, 0.12)"
+   ]
+  },
+  {
+   "token": "--awa-red-extra-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "color-mix(in srgb, var(--awa-red) 8%, transparent)",
+    "color-mix(in srgb, var(--awa-red) 8%, var(--awa-bg-surface))"
+   ]
+  },
+  {
+   "token": "--awa-white",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-sg-c61)"
+   ]
+  },
+  {
+   "token": "--awa-gray-400",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "var(--awa-gray-300, var(--awa-sg-c22))",
+    "var(--awa-gray-470, var(--awa-sg-c51))"
+   ]
+  },
+  {
+   "token": "--awa-success-mid",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#15803d",
+    "#22a05a"
+   ]
+  },
+  {
+   "token": "--awa-success-bg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#dcfce7",
+    "#f0fdf4"
+   ]
+  },
+  {
+   "token": "--awa-warning-bg",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "#fef3c7",
+    "#fffbeb"
+   ]
+  },
+  {
+   "token": "--awa-success-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "color-mix(in srgb, var(--awa-success) 12%, var(--awa-bg-surface))",
+    "rgb(22 163 74 / 10%)"
+   ]
+  },
+  {
+   "token": "--awa-warning-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "color-mix(in srgb, var(--awa-warning) 12%, var(--awa-bg-surface))",
+    "rgb(217 119 6 / 10%)"
+   ]
+  },
+  {
+   "token": "--awa-danger-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "color-mix(in srgb, var(--awa-danger) 12%, var(--awa-bg-surface))",
+    "rgb(220 38 38 / 10%)"
+   ]
+  },
+  {
+   "token": "--awa-info-light",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "color-mix(in srgb, var(--awa-info) 12%, var(--awa-bg-surface))",
+    "rgb(14 165 233 / 10%)"
+   ]
+  },
+  {
+   "token": "--awa-text-on-primary",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-white, var(--awa-sg-c61))"
+   ]
+  },
+  {
+   "token": "--awa-text-on-dark",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css",
+    "awa-tokens-base.css"
+   ],
+   "valores": [
+    "#ffffff",
+    "var(--awa-white, var(--awa-sg-c61))"
+   ]
+  },
+  {
+   "token": "--awa-shadow",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0 2px 8px rgb(0 0 0 / 20%)",
+    "0 2px 8px rgb(0 0 0 / 8%)"
+   ]
+  },
+  {
+   "token": "--awa-shadow-hover",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0 8px 25px rgb(0 0 0 / 12%)",
+    "0 8px 25px rgb(0 0 0 / 25%)"
+   ]
+  },
+  {
+   "token": "--awa-radius-full",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "50%",
+    "9999px"
+   ]
+  },
+  {
+   "token": "--awa-container-padding",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "15px",
+    "clamp(12px, 2.1vw, var(--awa-space-5))"
+   ]
+  },
+  {
+   "token": "--awa-leading-normal",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "1.4",
+    "normal"
+   ]
+  },
+  {
+   "token": "--awa-tracking-tight",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "-.01em",
+    "0.01em"
+   ]
+  },
+  {
+   "token": "--awa-tracking-normal",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0.02em",
+    "normal"
+   ]
+  },
+  {
+   "token": "--awa-tracking-wide",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    ".02em",
+    "0.5px"
+   ]
+  },
+  {
+   "token": "--awa-tracking-wide2",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    ".03em",
+    "0.005em"
+   ]
+  },
+  {
+   "token": "--awa-tracking-wide3",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    ".12em",
+    "0.014em"
+   ]
+  },
+  {
+   "token": "--awa-tracking-wide4",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "0.015em",
+    "0.12em"
+   ]
+  },
+  {
+   "token": "--awa-gtc-1",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-super-global-20260611m.css"
+   ],
+   "valores": [
+    "1fr",
+    "repeat(1, 1fr)"
+   ]
+  },
+  {
+   "token": "--awa-vfix-radius-md",
+   "n_valores_reais": 2,
+   "arquivos": [
+    "awa-vfix-b2b-auth.css",
+    "awa-vfix-cms-b2b.css"
+   ],
+   "valores": [
+    "var(--awa-radius-md, 12px)",
+    "var(--awa-radius-sm, 8px)"
+   ]
+  }
+ ],
+ "criticos": [
+  "--awa-header-stack-h",
+  "--awa-header-sticky-h",
+  "--awa-header-scroll-offset",
+  "--awa-header-main-row-h",
+  "--awa-header-nav-h",
+  "--awa-grid-gap",
+  "--awa-home-section-gap",
+  "--awa-gap",
+  "--awa-header-promo-h",
+  "--awa-header-col-gap",
+  "--awa-header-site-shell-h",
+  "--awa-header-gutter",
+  "--awa-header-container-padding",
+  "--awa-grid-section-gap",
+  "--awa-header-search-h",
+  "--awa-header-shell-pad",
+  "--awa-shell-gap",
+  "--awa-home-carousel-gap",
+  "--awa-plp-stack-gap",
+  "--awa-header-row-h",
+  "--awa-page-section-gap",
+  "--awa-top-account-link-min-height",
+  "--awa-top-account-links-gap",
+  "--awa-header-actions-width",
+  "--awa-header-gap",
+  "--awa-font-size",
+  "--awa-grid-shell-max",
+  "--awa-grid-container-pad",
+  "--awa-grid-card-gap",
+  "--awa-grid-col-gap",
+  "--awa-grid-rhythm-sm",
+  "--awa-grid-rhythm-md",
+  "--awa-grid-gap-tight",
+  "--awa-grid-gap-loose",
+  "--awa-header-nav-bg",
+  "--awa-control-height",
+  "--awa-header-nav-frame-h",
+  "--awa-header-site-h",
+  "--awa-font-size-10",
+  "--awa-font-size-11",
+  "--awa-font-size-13",
+  "--awa-input-height",
+  "--awa-f-gap",
+  "--awa-pdp-sticky-reserve",
+  "--awa-header-condensed-pad-inline",
+  "--awa-b2b-ops-header-h",
+  "--awa-home-fab-gap",
+  "--awa-font-size-12",
+  "--awa-font-size-3xl",
+  "--awa-page-section-gap-lg",
+  "--awa-header-logo-width",
+  "--awa-header-search-min",
+  "--awa-home-compact-tight-gap",
+  "--awa-home-compact-group-gap"
+ ]
+}

@@ -286,10 +286,10 @@
 :root {
     /* ── cookie — design tokens ─── */
     --cookie-c1: #6f1d20;
-    --cookie-c2: var(--awa-brand, #b73337);
+    --cookie-c2: var(--awa-brand, var(--awa-brand));
     --cookie-c3: #fca5a5;
     --cookie-c4: #f9fafb;
-    --cookie-c5: var(--awa-brand-dark, #8e2629);
+    --cookie-c5: var(--awa-brand-dark, var(--awa-brand-dark));
     --cookie-c6: #111827;
     --cookie-c7: var(--awa-bg);
 }

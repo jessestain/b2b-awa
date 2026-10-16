@@ -1,0 +1,5 @@
+/* Ordem de camadas do design system.
+   RODADA C FASE 2A (14/10/2026): awa-action-green e awa-spacing-normalize
+   declaradas PRIMEIRAS — para regras !important, a primeira camada
+   declarada vence (documentado em awa-touch-targets.css §layer). */
+@layer awa-action-green, awa-spacing-normalize, awa-cta-green, awa-fixes, awa-visual-priority, awa-header-first-paint-lock, awa-hero-ui-lock, awa-pixel-qa;

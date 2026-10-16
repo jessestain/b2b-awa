@@ -268,5 +268,10 @@
         </arguments>
     </type>
 
-</config>
+    <type name="Magento\Framework\View\Page\Config">
+        <plugin name="grupoawamotos_catalogfix_pagination_robots"
+                type="GrupoAwamotos\CatalogFix\Plugin\PaginationRobotsPlugin"
+                sortOrder="100"/>
+    </type>
 
+</config>

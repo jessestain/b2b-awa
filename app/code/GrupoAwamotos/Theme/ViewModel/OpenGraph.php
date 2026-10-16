@@ -248,7 +248,9 @@ final class OpenGraph implements ArgumentInterface
 
             $categoryImage = (string) $category->getImageUrl();
             if ($categoryImage !== '') {
-                $meta['image'] = $categoryImage;
+                // ACHADO SEO-015: og:image precisa ser URL ABSOLUTA; getImageUrl() devolve
+                // caminho relativo (/media/catalog/category/...), o que quebra o preview social.
+                $meta['image'] = $this->toAbsoluteUrl($categoryImage);
                 unset($meta['image_width'], $meta['image_height']);
             }
         }
@@ -315,5 +317,17 @@ final class OpenGraph implements ArgumentInterface
         $value = (string) preg_replace('/\s+/u', ' ', $value);
 
         return trim($value);
+    }
+
+    /**
+     * Garante URL absoluta para tags que exigem host (Open Graph / Twitter Card).
+     */
+    private function toAbsoluteUrl(string $url): string
+    {
+        if ($url === '' || preg_match('#^https?://#i', $url) === 1) {
+            return $url;
+        }
+
+        return $this->getBaseUrl() . '/' . ltrim($url, '/');
     }
 }

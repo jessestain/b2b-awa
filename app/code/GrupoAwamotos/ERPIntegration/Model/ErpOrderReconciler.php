@@ -288,17 +288,9 @@ class ErpOrderReconciler
             // comercial, nao necessariamente este pedido. Nao decidimos isso
             // sozinhos: fica para conferencia humana, salvo --forcar.
             if ($divergenciaEstrutura && !$forcar) {
+                // Nao loga aqui: acumula e loga UMA vez apos o laco, deduplicado.
+                // Motivo completo em awaReconcileDeveAlertar().
                 $relatorio['requer_conferencia'][] = $item;
-                $this->logger->warning(sprintf(
-                    '[ERP Reconcile] pedido %s (entity_id %d) casa com ERP CODIGO=%d mas a estrutura difere:'
-                    . ' %d linha(s)/%s no Magento contra %d no ERP. Nao reconciliado.',
-                    $incrementId,
-                    $entityId,
-                    $codigoErp,
-                    $linhasMagento,
-                    $incrementId,
-                    $linhasErp
-                ));
                 continue;
             }
 
@@ -337,6 +329,21 @@ class ErpOrderReconciler
             }
         }
 
+        // Loga os pendentes de conferencia UMA vez, deduplicado (ver awaReconcileDeveAlertar).
+        if (!empty($relatorio['requer_conferencia']) && $this->awaReconcileDeveAlertar($relatorio['requer_conferencia'])) {
+            foreach ($relatorio['requer_conferencia'] as $pendente) {
+                $this->logger->warning(sprintf(
+                    '[ERP Reconcile] CONFERIR pedido %s (entity_id %d): existe no ERP como CODIGO=%d'
+                    . ' mas a estrutura difere (%d linha(s) no Magento contra %d no ERP). Nada foi gravado.',
+                    $pendente['increment_id'],
+                    $pendente['entity_id'],
+                    $pendente['erp_codigo'],
+                    $pendente['linhas_magento'],
+                    $pendente['linhas_erp']
+                ));
+            }
+        }
+
         return $relatorio;
     }
 
@@ -347,6 +354,66 @@ class ErpOrderReconciler
      *
      * @return array<int, array<string, mixed>>
      */
+
+    /**
+     * Decide se o alerta de conferencia humana deve ser emitido agora.
+     *
+     * Chamado a cada 30 minutos pelo cron ReconcileOrders. Sem isto, os MESMOS pedidos
+     * eram sinalizados em toda execucao: 3 pedidos x 2 mensagens x 48 execucoes =
+     * aproximadamente 288 linhas/dia de ruido para um caso que aguarda CONFERENCIA
+     * HUMANA e pode demorar dias -- e ruido nesse volume faz o alerta real se perder.
+     *
+     * Regra: avisa quando o conjunto MUDA (imediato) e, sem mudanca, lembra uma vez por
+     * dia. A primeira ocorrencia SEMPRE avisa: nada e escondido.
+     *
+     * O estado fica em arquivo sob var/ e nao em cache injetado DE PROPOSITO: um argumento
+     * novo no construtor exigiria setup:di:compile, e o DI compilado quebraria a
+     * instanciacao do cron. Se o arquivo falhar, retorna true e avisa sempre -- nunca
+     * perder um alerta por causa do mecanismo.
+     *
+     * @param list<array<string, mixed>> $pendentes
+     */
+    private function awaReconcileDeveAlertar(array $pendentes): bool
+    {
+        $assinatura = $this->assinaturaPendentes($pendentes);
+        $arquivo = BP . '/var/awa-reconcile-estado.json';
+        $bruto = @file_get_contents($arquivo);
+        if (!is_string($bruto) || $bruto === '') {
+            @file_put_contents($arquivo, (string) json_encode(['assinatura' => $assinatura, 'quando' => time()]), LOCK_EX);
+            return true;
+        }
+        $anterior = json_decode($bruto, true);
+        if (!is_array($anterior)) {
+            return true;
+        }
+        $mudou = $assinatura !== (string) ($anterior['assinatura'] ?? '');
+        $quando = (int) ($anterior['quando'] ?? 0);
+        $lembrete = $quando <= 0 || (time() - $quando) >= 86400;
+        if ($mudou || $lembrete) {
+            @file_put_contents($arquivo, (string) json_encode(['assinatura' => $assinatura, 'quando' => time()]), LOCK_EX);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Assinatura estavel do conjunto pendente (para deduplicar entre execucoes).
+     *
+     * @param list<array<string, mixed>> $pendentes
+     */
+    public function assinaturaPendentes(array $pendentes): string
+    {
+        return sha1((string) json_encode(array_map(
+            static fn (array $p): array => [
+                (string) ($p['increment_id'] ?? ''),
+                (int) ($p['entity_id'] ?? 0),
+                (int) ($p['erp_codigo'] ?? 0),
+                (int) ($p['linhas_magento'] ?? 0),
+                (int) ($p['linhas_erp'] ?? 0),
+            ],
+            $pendentes
+        )));
+    }
     private function pedidosPendentes(int $limite): array
     {
         $retorno = $this->orderPull->getPendingOrders($limite);

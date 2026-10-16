@@ -55,6 +55,23 @@ class OptimizeHeadStylesPlugin
     // Listas de match por rota (homeGate/authStrip/cartStrip/...) também —
     // ver os grupos homônimos no manifest.
 
+    /**
+     * /catalogo — rota de MODULO custom (`catalogo/index/index`), NAO e CMS page nem
+     * categoria. Medido em 07/10/2026: o body class e `catalogo-index-index
+     * awa-catalog-page page-layout-2columns-left`, e o header `X-Awa-Header-Optimize`
+     * vinha *** v12 *** (default) — ou seja, NENHUM branch de otimizacao rodava.
+     *
+     * Consequencia medida: `awa-master-fix.js` ficava ATIVO nesta rota. E o mesmo script
+     * que o comentario de BUG-404-HANG (abaixo) documenta como "trava/derruba o renderer
+     * do Chromium" — 0/3 runs completam com ele, 3/3 OK sem. Ele ja e removido em
+     * HOME_ACTION e CATALOG_STACK_ACTIONS; a rota do catalogo nunca foi incluida.
+     *
+     * Medicao no /catalogo antes da correcao: 31 long tasks, *** 4.088ms *** de main
+     * thread bloqueada, DCL 8.321ms, load 17.507ms, e 62 long tasks DEPOIS do load
+     * (t=40s+), 923 mutacoes de DOM, 304 requestAnimationFrame.
+     */
+    private const CATALOGO_ACTION = 'catalogo_index_index';
+
     /** PLP/busca/PDP: stack dedicado §89–§94 — omitir terminal Impeccable (~183KB). */
     private const CATALOG_STACK_ACTIONS = [
         'catalog_category_view',
@@ -124,9 +141,6 @@ class OptimizeHeadStylesPlugin
             return;
         }
 
-        // #region agent log
-        $this->debugW18CssQueryLog('in', $fullAction, $html);
-        // #endregion
 
         $html = $this->stripRedundantAsyncNoscript($html);
         $html = $this->normalizeCssStaggerOnloadHandlers($html, $fullAction === self::HOME_ACTION);
@@ -178,6 +192,7 @@ class OptimizeHeadStylesPlugin
             || $fullAction === self::CMS_PAGE_VIEW_ACTION
             || $fullAction === self::B2B_MARKETING_LANDING_ACTION
             || $fullAction === self::HELP_CENTER_ACTION
+            || $fullAction === self::CATALOGO_ACTION
         ) {
             // BUG-404-HANG / BUG-CMS-HANG: awa-master-fix.js trava/derruba o renderer
             // do Chromium nestas rotas (confirmado via Playwright em cms_noroute_index,
@@ -192,6 +207,7 @@ class OptimizeHeadStylesPlugin
                 self::NOROUTE_ACTION => 'v12-noroute',
                 self::CMS_PAGE_VIEW_ACTION => 'v12-cms-page',
                 self::HELP_CENTER_ACTION => 'v12-helpcenter',
+                self::CATALOGO_ACTION => 'v12-catalogo',
                 default => 'v12-b2b-landing',
             };
             $subject->setHeader('X-Awa-Header-Optimize', $optimizeTag, true);
@@ -335,6 +351,37 @@ class OptimizeHeadStylesPlugin
         $html = $this->injectGlobalWebVitalsRum($html);
         $html = $this->injectViewTransitionGuardScript($html);
           $html = $this->normalizeExcessiveHtmlBodySpecificity($html);
+
+        /* task-51: o lock de geometria do breadcrumbs e injetado DEPOIS do
+         * normalizador de especificidade - senao ele colapsa o booster de 24x
+         * #html-body para 3x e a regra perde para o min-height do
+         * align-grid-terminal (6 IDs, mesma @layer awa-visual-priority).
+         * Mesma posicao relativa do injectCatalogDesktopClsGeometryLock (PLP). */
+        if ($fullAction === 'catalog_product_view') {
+            $html = $this->injectPdpBreadcrumbGeometryLock($html);
+        }
+
+        /* task-73 P1: hierarquia de CTA na PDP anonima — o cadastro (cliente NOVO)
+         * passa a ser o controle PRIMARIO e "Entrar para Comprar" (quem JA e cliente)
+         * vira SECUNDARIO, mas continua visivel e focavel. Medido antes: o unico
+         * preenchido era o "Entrar para Comprar" (bg rgb(183,51,55), 574x44), e o
+         * cadastro era link de texto de 219x44/13px. */
+        if ($fullAction === 'catalog_product_view') {
+            $html = $this->injectPdpCtaHierarchy($html);
+        }
+
+        /* task-51 passo 2: alinha o bloco do hero da categoria (breadcrumb + H1 +
+         * contagem) a borda do container. Medido: +24px no desktop e +12px no
+         * mobile, porque o card do hero re-aplica padding que o container ja da. */
+        /* task-71: as LANDINGS de busca (/capacetes etc.) tem a classe
+         * `search_landing-page-view` no body, mas o $fullAction delas e a acao do
+         * modulo de landing — NAO entra em CATALOG_HEADER_ACTIONS, entao nenhum lock
+         * era injetado nelas. Disparamos tambem por CONTEUDO da resposta. */
+        if (in_array($fullAction, self::CATALOG_HEADER_ACTIONS, true)
+            || str_contains($html, 'search_landing-page-view')
+        ) {
+            $html = $this->injectCategoryHeroAlignLock($html);
+        }
 
         /* Home: gate após body-terminal — folhas pesadas entram na fila idle (PSI/TBT). */
         if ($fullAction === self::HOME_ACTION) {
@@ -487,57 +534,11 @@ class OptimizeHeadStylesPlugin
             $html = $this->stripHomeCssGate($html);
         }
 
-        // #region agent log
-        $this->debugW18CssQueryLog('out', $fullAction, $html);
-        $subject->setHeader('X-Awa-Debug-W18', 'plugin-ran', true);
-        // #endregion
 
         $subject->setBody($html);
     }
 
-    /**
-     * @internal debug W18 — remover após verificação
-     */
-    private function debugW18CssQueryLog(string $phase, string $fullAction, string $html): void
-    {
-        // #region agent log
-        $extract = static function (string $html, string $needle): string {
-            if (!preg_match('/' . preg_quote($needle, '/') . '[^"\'\\s]*/', $html, $m)) {
-                return 'ABSENT';
-            }
-            return substr($m[0], 0, 120);
-        };
-        $payload = [
-            'sessionId' => 'f5fc02',
-            'runId' => 'post-fix',
-            'hypothesisId' => $phase === 'in' ? 'H4' : 'H5',
-            'location' => 'OptimizeHeadStylesPlugin.php:beforeSendResponse',
-            'message' => 'css-query-pipeline',
-            'timestamp' => (int) round(microtime(true) * 1000),
-            'data' => [
-                'phase' => $phase,
-                'fullAction' => $fullAction,
-                'hasSessionCookie' => $this->request->getCookie('PHPSESSID') !== null,
-                'constSsot' => \GrupoAwamotos\Theme\Model\Generated\CascadeAssetVersionConsts::M2_VISUAL_SSOT,
-                'constAlign' => \GrupoAwamotos\Theme\Model\Generated\CascadeAssetVersionConsts::ALIGN_GRID,
-                'manifestDs' => $this->manifest->query('design-system'),
-                'htmlSsot' => $extract($html, 'awa-m2-visual-ssot.min.css'),
-                'htmlAlign' => $extract($html, 'awa-align-grid-terminal-2026-06-11.min.css'),
-                'htmlDs' => $extract($html, 'awa-design-system.min.css'),
-                'hasW18' => str_contains($html, 'premium-ui-w18'),
-                'hasSecao59' => str_contains($html, 'secao51-59'),
-                'hasSecao60' => str_contains($html, 'secao51-60'),
-            ],
-        ];
-        $line = json_encode($payload, JSON_UNESCAPED_SLASHES) . "\n";
-        @file_put_contents(
-            '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-f5fc02.log',
-            $line,
-            FILE_APPEND | LOCK_EX
-        );
-        // #endregion
-    }
-
+    
     /**
      * Home freeze 2026-09-02: do not load css-gate JS or QUEUE_HOME_LOAD_LAST
      * on cms_index_index. Safety-net for FPC/preload leftovers.
@@ -880,9 +881,6 @@ class OptimizeHeadStylesPlugin
         }
 
         $query = $this->manifest->query('design-system');
-        // #region agent log
-        $this->debugW18CssQueryLog('ds-buster', 'n/a', 'QUERY=' . $query);
-        // #endregion
         if ($query === '') {
             return $html;
         }
@@ -1104,6 +1102,18 @@ class OptimizeHeadStylesPlugin
         $catalogScope = 'html body#html-body#html-body#html-body'
             . ':is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper';
 
+        /* AWA PDP layout r1 (2026-10-03) — bloco versionado do child theme.
+         * Lido do arquivo para não engordar esta cadeia e ficar versionável.
+         * Esta área só é renderizada quando há rodapé (PDP/PLP); a home remove
+         * blocos <style id="awa-…">, então lá a correção não se aplica. */
+        $awaPdpLayoutR1Css = '';
+        $awaPdpLayoutGlob = BP . '/app/design/frontend/AWA_Custom/ayo_home5_child/web/css/awa-pdp-layout-r*.css';
+        foreach (glob($awaPdpLayoutGlob) ?: [] as $awaPdpLayoutFile) {
+            if (is_readable($awaPdpLayoutFile)) {
+                $awaPdpLayoutR1Css .= (string) file_get_contents($awaPdpLayoutFile);
+            }
+        }
+
         $css = '<style id="' . $styleId . '">'
             . $targetScope . ' :is(footer.page-footer,.page-footer){'
             . 'box-sizing:border-box!important;background:var(--awa-bg,Canvas)!important;'
@@ -1198,6 +1208,7 @@ class OptimizeHeadStylesPlugin
             . 'content:"* Ao cadastrar, você concorda com nossa Política de Privacidade"!important;'
             . 'grid-column:1/-1!important;grid-row:2!important;display:block!important;font-size:12px!important;line-height:1.4!important;'
             . 'color:var(--awa-text-secondary,var(--awa-text))!important;font-style:italic!important;margin:0!important;padding:2px 0 0!important}'
+            . $awaPdpLayoutR1Css
             . '</style>';
 
         /* H10A: setProperty('background',…) expande longhands vazios no style attr
@@ -2803,8 +2814,8 @@ class OptimizeHeadStylesPlugin
             . $styleId
             . '.min.css?v=20260904-premium-ui-w9';
         $cssStagger = 'window.__awaCssQ?__awaCssQ(this):(/themes\\.min|third-party-bundle|visual-bugfix|deferred-stack/.test(this.href||\'\')?(window.__awaCssPend=window.__awaCssPend||[]).push(this):(this.media=\'all\'))';
-        $link = '<link rel="stylesheet" href="' . $href . '" media="print"'
-            . ' onload="' . $cssStagger . '" id="' . $styleId . '"/>';
+        $link = '<link rel="stylesheet" href="' . $href . '" id="' . $styleId . '"/>';
+
         $replaced = preg_replace('/<\/head>/i', $link . "\n</head>", $html, 1);
 
         return is_string($replaced) ? $replaced : $html;
@@ -7173,9 +7184,6 @@ CSS;
             . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/'
             . HeaderImpeccableCascadeLockCss::M2_VISUAL_SSOT_FILE
             . HeaderImpeccableCascadeLockCss::M2_VISUAL_SSOT_QUERY;
-        // #region agent log
-        $this->debugW18CssQueryLog('ssot-inject', 'n/a', $href);
-        // #endregion
 
         $tag = '<link rel="stylesheet" href="' . $href . '" media="all"'
             . ' data-awa-m2-visual-ssot="1" data-awa-bundle="m2-visual-ssot"/>';
@@ -7389,6 +7397,21 @@ CSS;
                         return $matches[0];
                     }
                     if (preg_match('/media=["\']print["\']/i', $attrs) || preg_match('/onload=/i', $attrs)) {
+                        return $matches[0];
+                    }
+                    /* Guard CLS/LCP (05/10/2026 - lead, opcao B). O template awa-home-critical-stack.phtml
+                       declara a criticidade de first paint no proprio <link> com data-awa-defer="home-lcp".
+                       Este metodo e um FALLBACK para o caso de o layout nao remover um <link> bloqueante
+                       orfao (FPC velho) e por isso NAO pode reescrever um link que se declarou
+                       first-paint-critical: quem declara a criticidade e o template, nao o fallback.
+                       SEM este guard o <link id="awa-design-system-home"> saia media="print"
+                       onload="this.media='all'" e a home media CLS 1.7012 (um unico shift de 0.9931 em
+                       t=2017ms, FCP=1612ms; o header inteiro saltava: body margin 8px -> 0).
+                       Meta: CLS <= 0.10. Nao remover sem medir de novo.
+                       O atributo chega DUAS vezes no mesmo tag (home-lcp e catalog-noncritical), por isso
+                       o teste e por ATRIBUTO (procura o valor home-lcp dentro de um data-awa-defer), nunca
+                       pela tag inteira. */
+                    if (preg_match('/data-awa-defer=["\'][^"\']*(?<![A-Za-z0-9_-])home-lcp(?![A-Za-z0-9_-])[^"\']*["\']/i', $attrs)) {
                         return $matches[0];
                     }
 
@@ -8083,6 +8106,21 @@ HTML;
 
         $style = '<style id="awa-focus-visible-global-guard">'
             . ':where(a,button,[role="button"],input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible{outline:2px solid var(--awa-primary,#b73337)!important;outline-offset:2px!important}'
+            /* task-66 NOVO-1 (WCAG 2.4.7, REGRESSAO): o botao "Departamentos"
+             * (button.title-category-dropdown / .our_categories, 206x44) recebe foco
+             * (matches(':focus-visible')=true, vira activeElement) mas SEM mudanca
+             * visual: 4 folhas + 2 blocos inline aplicam outline:0px!important,
+             * box-shadow:none!important e background fixo em (min-width:992px).
+             * Para !important a CAMADA vence a especificidade; a @layer awa-fixes e
+             * declarada ANTES de awa-visual-priority (e entre importants a camada
+             * primeira vence), entao esta regra ganha das 4+2 sem especificidade
+             * absurda — e o !important e inevitavel porque os resets tambem sao. */
+            . '@layer awa-fixes{@media (min-width:992px){'
+            . 'html body#html-body .page-wrapper .awa-site-header :is(button,.our_categories).title-category-dropdown:focus-visible,'
+            . 'html body#html-body .page-wrapper button.title-category-dropdown:focus-visible{'
+            . 'outline:2px solid var(--awa-primary,var(--awa-brand,#b73337))!important;'
+            . 'outline-offset:2px!important}'
+            . '}}'
             . '</style>';
 
         $injected = preg_replace('/<\/head>/i', $style . "\n</head>", $html, 1);
@@ -8099,6 +8137,182 @@ HTML;
      * &lt;body&gt; (head.additional). Este lock é &lt;style&gt; síncrono no &lt;/head&gt;
      * — render-blocking, sem download extra, FPC-safe. Só ≥768px.
      */
+    /**
+     * PDP: reserva a geometria FINAL do breadcrumbs no &lt;head&gt; real.
+     *
+     * Evidencia 10/10/2026 (probe-cwv --throttle psi, 1365x900):
+     *   /ret-titan-2000-03-d-e-501.html  CLS 1,3572
+     *   div.breadcrumbs 172,77 -&gt; 160,22 - a altura colapsava de 77px para 22px
+     *   porque `ul.items` nao era flex no 1o paint (os &lt;li&gt; empilhavam).
+     *
+     * O lock equivalente de PLP/busca existe desde 2026-08-17 mas esta gated em
+     * CATALOG_HEADER_ACTIONS, que NAO inclui catalog_product_view. Este lock usa a
+     * MESMA tecnica (style sincrono no &lt;/head&gt;, render-blocking, FPC-safe) e o
+     * MESMO booster de 24x #html-body, mas contem SO o breadcrumbs - para nao herdar
+     * as ~200 regras de grid/header do lock de PLP.
+     *
+     * PRESERVADO de proposito: NAO tocamos em display/max-width/overflow/
+     * white-space de `a` nem de `.item`. A protecao de ellipsis do nome do produto
+     * vive em awa-super-global-20260611m.css (max-width 120/220px) e
+     * awa-defer-global-bundle.css, e um display:flex a destruiria.
+     */
+    /**
+     * PLP/busca: alinha breadcrumb + H1 + contagem a borda do container.
+     *
+     * Evidencia 10/10/2026 (probe-hero-alinhamento.js, artefato servido):
+     *   PLP 1365 ref=62,5 -&gt; .breadcrumbs / .awa-category-hero__content /
+     *   .awa-category-hero__title / .awa-category-hero__count todos em 86,5 (+24)
+     *   PLP 390  ref=16   -&gt; os mesmos 4 em 28 (+12)
+     *   .mst_categorySearch, .products-grid e .toolbar-products ja estavam em 0
+     *   PDP ret-titan 1365: .breadcrumbs em 61,5 (+0) - nao pode regredir
+     *
+     * Cadeia medida: .category-view-move(pad 8, desktop) &gt; .awa-category-hero(0)
+     * &gt; .awa-category-hero__content(pad-left 16 desktop / 12 mobile). 8+16=24;
+     * 0+12=12.
+     *
+     * Por que NAO zeramos o padding do .category-view-move: aquela regra e
+     * compartilhada (':is(.toolbar-sorter.sorter,.field.limiter&gt;.control,
+     * #layered-ajax-filter-block,.block.filter,.category-view-move)') e governa
+     * tambem a sidebar de filtros, que hoje esta em delta +8 e nao deve mudar.
+     * Cancelamos os 8px no proprio hero, filho unico daquele wrapper.
+     */
+    private function injectCategoryHeroAlignLock(string $html): string
+    {
+        if (str_contains($html, 'id="awa-category-hero-align-lock"')) {
+            return $html;
+        }
+        if (stripos($html, '</head>') === false) {
+            return $html;
+        }
+
+        $cat = 'html body' . str_repeat('#html-body', 24)
+            . ':is(.catalog-category-view,.catalogsearch-result-index)';
+        $sel = $cat . ' .page-wrapper ';
+        $css = '<style id="awa-category-hero-align-lock">'
+            . '@layer awa-visual-priority{'
+            . '/* (a) o card do hero nao re-indenta crumbs + H1 + contagem */'
+            . $sel . '.awa-category-hero__content{padding-left:0!important}'
+            . '/* task-71: LANDING de busca — cadeia .nav-breadcrumbs > .container > .row >
+             * .col-sm-12 > .breadcrumbs. O .nav-breadcrumbs da a borda canonica (24/16) e
+             * o .container RE-APLICA o mesmo padding (duplicado); o .breadcrumbs ainda
+             * trazia 24px proprios. Cancelamos no alvo mais estreito: o .container SO
+             * quando envolve crumbs (:has) e o proprio .breadcrumbs — sem tocar na regra
+             * compartilhada do .container. Onde ja e 0 (PLP/PDP), e no-op. */'
+            . '/* Fecha a camada para por a regra do .container em awa-fixes (abaixo):
+             * a vencedora do padding do .container e awa-design-system.min.css NA MESMA
+             * camada awa-visual-priority, com 13 repeticoes de #html-body (esp 13-8-2).
+             * Para !important entre camadas a PRIMEIRA vence — awa-fixes vem antes —
+             * entao ganhamos por CAMADA, sem repetir #html-body nenhuma vez. */'
+            . '}'
+            . '@layer awa-fixes{'
+            . 'html body#html-body .page-wrapper .nav-breadcrumbs .container:has(.breadcrumbs){'
+            . 'padding-inline:0!important}'
+            . '}'
+            . '@layer awa-visual-priority{'
+            . 'html body#html-body .page-wrapper .nav-breadcrumbs .breadcrumbs{'
+            . 'padding-inline:0!important}'
+            . '@media (min-width:768px){'
+            . '/* (b) os 8px do wrapper, cancelados no hero (nao na regra compartilhada) */'
+            . $sel . '.category-view-move > .awa-category-hero{margin-inline-start:-8px!important}'
+            . '}'
+            . '}</style>';
+
+        $injetado = preg_replace('/<\/head>/i', $css . "\n</head>", $html, 1);
+
+        return is_string($injetado) ? $injetado : $html;
+    }
+
+    /**
+     * PDP anonima: cadastro = PRIMARIO, "Entrar para Comprar" = SECUNDARIO.
+     *
+     * Evidencia 11/10/2026 (probe-t73-pdp-cta.js, 1365 e 390):
+     *   "Ver preco atacado" ....... link de texto 125x44
+     *   "Cadastre-se gratis ->" ... link de texto 219x44 @13px
+     *   "Entrar para Comprar" ..... UNICO preenchido, bg rgb(183,51,55), 574x44/332x44
+     *
+     * A hierarquia e VISUAL: nao reordenamos o DOM (menos risco). Os dois caminhos
+     * (login e cadastro) seguem visiveis, focaveis e com tabindex >= 0.
+     */
+    private function injectPdpCtaHierarchy(string $html): string
+    {
+        if (str_contains($html, 'id="awa-pdp-cta-hierarchy"')) {
+            return $html;
+        }
+        if (stripos($html, '</head>') === false) {
+            return $html;
+        }
+
+        $p = 'html body#html-body.catalog-product-view .page-wrapper ';
+        $prim = 'display:inline-flex!important;align-items:center!important;'
+            . 'justify-content:center!important;min-height:44px!important;'
+            . 'padding:10px 18px!important;border-radius:8px!important;'
+            . 'text-decoration:none!important;font-size:14px!important;font-weight:600!important;'
+            . 'box-sizing:border-box!important;';
+        $sec = 'display:inline-flex!important;align-items:center!important;'
+            . 'justify-content:center!important;min-height:44px!important;'
+            . 'padding:10px 18px!important;border-radius:8px!important;'
+            . 'text-decoration:none!important;font-size:14px!important;font-weight:600!important;'
+            . 'box-sizing:border-box!important;background:transparent!important;'
+            . 'border:1px solid currentColor!important;';
+        $cor = 'var(--awa-primary,var(--awa-brand,#b73337))';
+        $css = '<style id="awa-pdp-cta-hierarchy">'
+            . '@layer awa-visual-priority{'
+            . $p . '.b2b-login-to-see-price a.b2b-register-cta{'
+            . $prim . 'background:' . $cor . '!important;color:#fff!important}'
+            . $p . '.b2b-login-to-see-price a:not(.b2b-register-cta){'
+            . $sec . 'color:' . $cor . '!important}'
+            . $p . '.box-tocart.b2b-login-to-buy-mode .b2b-login-to-buy-btn{'
+            . 'background:transparent!important;color:' . $cor . '!important;'
+            . 'border:1px solid currentColor!important}'
+            . '}'
+            . '</style>';
+
+        $injetado = preg_replace('/<\/head>/i', $css . "\n</head>", $html, 1);
+
+        return is_string($injetado) ? $injetado : $html;
+    }
+
+    private function injectPdpBreadcrumbGeometryLock(string $html): string
+    {
+        if (str_contains($html, 'id="awa-pdp-breadcrumb-lock"')) {
+            return $html;
+        }
+        if (stripos($html, '</head>') === false) {
+            return $html;
+        }
+
+        $pdp = 'html body' . str_repeat('#html-body', 24) . '.catalog-product-view';
+        $sel = $pdp . ' .page-wrapper ';
+        $css = '<style id="awa-pdp-breadcrumb-lock">'
+            . '@layer awa-visual-priority{'
+            . $sel . ':is(.nav-breadcrumbs,.awa-category-hero__crumbs) .breadcrumbs{'
+            . 'display:block!important;box-sizing:border-box!important;'
+            . 'margin:0 0 12px!important;padding:0!important;'
+            . 'font-size:12px!important;line-height:1.25!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important}'
+            . $sel . '.breadcrumbs ul.items{'
+            . 'display:flex!important;flex-wrap:wrap!important;align-items:center!important;'
+            . 'gap:4px 8px!important;margin:0!important;padding:0!important;'
+            . 'list-style:none!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important}'
+            . $sel . '.breadcrumbs ul.items > .item{'
+            . 'display:inline-flex!important;align-items:center!important;'
+            . 'margin:0!important;padding:0!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important}'
+            . $sel . '.breadcrumbs ul.items > .item :is(a,strong,span){'
+            . 'font-size:inherit!important;line-height:1.25!important}'
+            . '}'
+            . '@media (max-width:767px){'
+            . $sel . '.breadcrumbs ul.items,'
+            . $sel . '.breadcrumbs ul.items > .item{min-height:44px!important}'
+            . '}'
+            . '</style>';
+
+        $injetado = preg_replace('/<\/head>/i', $css . "\n</head>", $html, 1);
+
+        return is_string($injetado) ? $injetado : $html;
+    }
+
     private function injectCatalogDesktopClsGeometryLock(string $html): string
     {
         if (str_contains($html, 'id="awa-plp-desktop-cls-lock"')) {
@@ -8201,31 +8415,31 @@ HTML;
             . $plp . ' .page-wrapper :is(.nav-breadcrumbs .breadcrumbs,.breadcrumbs){'
             . 'box-sizing:border-box!important;margin:0!important;padding:0!important;'
             . 'width:auto!important;max-width:100%!important;flex:0 0 auto!important;'
-            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
-            . 'display:inline-flex!important;align-items:center!important;overflow:hidden!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important;'
+            . 'display:block!important;align-items:center!important;overflow:hidden!important;'
             . 'border:0!important;box-shadow:none!important;'
-            . 'font-size:14px!important;line-height:24px!important}'
+            . 'font-size:12px!important;line-height:1.25!important}'
             /* CDP: ul width:100% + .item:last-child flex-grow:1 + max-width:220px
              * → caixa 1232px com texto ~79px (emptyRight 932, last 220). */
             . $plp . ' .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) ul.items{'
-            . 'display:inline-flex!important;flex-wrap:nowrap!important;align-items:center!important;'
+            . 'display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:4px 8px!important;'
             . 'box-sizing:border-box!important;margin:0!important;padding:0!important;'
-            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important;'
             . 'width:max-content!important;max-width:100%!important;flex:0 0 auto!important;'
             . 'overflow:hidden!important;list-style:none!important;'
             . 'border:0!important;box-shadow:none!important;'
-            . 'font-size:14px!important;line-height:24px!important}'
+            . 'font-size:12px!important;line-height:1.25!important}'
             . $plp . ' .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) ul.items > .item,'
             . $plp . ' .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) ul.items > .item:last-child{'
             . 'display:inline-flex!important;align-items:center!important;'
             . 'flex:0 1 auto!important;width:auto!important;max-width:none!important;min-width:0!important;'
-            . 'min-height:24px!important;height:24px!important;max-height:24px!important;'
-            . 'font-size:14px!important;line-height:24px!important;padding:0!important;'
+            . 'min-height:24px!important;height:auto!important;max-height:none!important;'
+            . 'font-size:12px!important;line-height:1.25!important;padding:0!important;'
             . 'overflow:hidden!important;margin:0!important}'
             . $plp . ' .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) ul.items > .item :is(a,span,strong){'
             . 'display:inline-flex!important;align-items:center!important;'
-            . 'font-size:14px!important;line-height:24px!important;'
-            . 'min-height:0!important;height:24px!important;max-height:24px!important;'
+            . 'font-size:inherit!important;line-height:1.25!important;'
+            . 'min-height:0!important;height:auto!important;max-height:none!important;'
             . 'padding-block:0!important;overflow:visible!important}'
             /* CDP AM/AN 2026-08-21: lock height:104/76 overflow:hidden clipped
              * banner (125>104) and related-search recs (346>76). */
@@ -8526,7 +8740,7 @@ HTML;
             . '@media (min-width:768px) and (max-width:991px){'
             . $plp . ' .page-wrapper .page-main>.columns.layout-2-col{'
             . 'gap:12px!important;'
-            . 'grid-template-columns:minmax(196px,220px) minmax(0,1fr)!important}'
+            . 'grid-template-columns:minmax(0,1fr)!important}'
             . '}'
             . '</style>'
             . '<script id="awa-plp-search-in-place">'

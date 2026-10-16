@@ -8,6 +8,46 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class SyncLog extends AbstractDb
 {
+    /**
+     * The sync log stores families of entity_type values, e.g. order_pull /
+     * order_status / sectra_b2b_order for orders and price / price_delta for
+     * prices. The console and the admin dashboard address one logical name per
+     * family. Without this map a lookup of "order" matches no row at all, so a
+     * running integration is reported as "never ran".
+     */
+    public const TYPE_FAMILIES = [
+        'order' => ['order_pull', 'order_status', 'sectra_b2b_order'],
+        'price' => ['price', 'price_delta'],
+        'customer' => ['customer', 'customer_auto_link', 'sectra_b2b_customer'],
+    ];
+
+    /**
+     * Expand a logical sync type into the concrete entity_type values stored in the log.
+     *
+     * @param string|array<int,string>|null $entityType
+     * @return array<int,string>|null null means "no filter"
+     */
+    public function expandTypes($entityType): ?array
+    {
+        if ($entityType === null || $entityType === '' || $entityType === []) {
+            return null;
+        }
+
+        $requested = is_array($entityType) ? $entityType : [$entityType];
+        $expanded = [];
+
+        foreach ($requested as $type) {
+            if (isset(self::TYPE_FAMILIES[$type])) {
+                $expanded = array_merge($expanded, self::TYPE_FAMILIES[$type]);
+                continue;
+            }
+
+            $expanded[] = $type;
+        }
+
+        return array_values(array_unique($expanded));
+    }
+
     protected function _construct(): void
     {
         $this->_init('grupoawamotos_erp_sync_log', 'log_id');
@@ -129,7 +169,7 @@ class SyncLog extends AbstractDb
     /**
      * Get recent sync logs
      */
-    public function getRecentLogs(int $limit = 100, ?string $entityType = null): array
+    public function getRecentLogs(int $limit = 100, $entityType = null): array
     {
         $connection = $this->getConnection();
         $select = $connection->select()
@@ -137,8 +177,9 @@ class SyncLog extends AbstractDb
             ->order('created_at DESC')
             ->limit($limit);
 
-        if ($entityType) {
-            $select->where('entity_type = ?', $entityType);
+        $types = $this->expandTypes($entityType);
+        if ($types) {
+            $select->where('entity_type IN (?)', $types);
         }
 
         return $connection->fetchAll($select);
@@ -147,8 +188,13 @@ class SyncLog extends AbstractDb
     /**
      * Get sync statistics for a time period
      */
-    public function getSyncStats(string $entityType, int $days = 7): array
+    public function getSyncStats($entityType, int $days = 7): array
     {
+        $types = $this->expandTypes($entityType);
+        if (!$types) {
+            return [];
+        }
+
         $connection = $this->getConnection();
         $fromDate = (new \DateTime())->modify("-{$days} days")->format('Y-m-d H:i:s');
 
@@ -158,7 +204,7 @@ class SyncLog extends AbstractDb
                 'total' => 'COUNT(*)',
                 'total_records' => 'SUM(records_processed)',
             ])
-            ->where('entity_type = ?', $entityType)
+            ->where('entity_type IN (?)', $types)
             ->where('created_at >= ?', $fromDate)
             ->group('status');
 

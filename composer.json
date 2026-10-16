@@ -110,6 +110,9 @@
         "patches": {
             "tubalmartin/cssmin": {
                 "PHP 8.4 null guard for preg_replace_callback in Minifier::minify()": "patches/tubalmartin-cssmin-php84-null-guard.patch"
+            },
+            "magento/module-open-search": {
+                "Deep pagination (Point-in-Time) with an empty hits page causes \"array offset on false\" and returns empty results": "patches/magento-module-open-search-empty-hits-guard.patch"
             }
         }
     }

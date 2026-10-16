@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<!--
+ | AWA Motos — child theme override for catalog_product_view
+ | Corrige bugs e carrega CSS de conversão/polish de forma não-bloqueante.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!--
+            BUG-07: Remove os dois arquivos CSS bloqueantes herdados do ayo_home5
+            (awa-round3-pdp-conversion.css e awa-pdp-final-polish.css).
+            Os estilos críticos já estão no awa-pdp-cascade-terminal.min.css
+            e no awa-ui-simplify-terminal.min.css carregados via defer.
+        -->
+        <remove src="css/awa-round3-pdp-conversion.css"/>
+        <remove src="css/awa-pdp-final-polish.css"/>
+        <!--
+            Fase 6 fatia 4 — paridade catalogStripImpeccable ↔ PageConfig.
+            Não remover gallery / distill / ui-simplify (PDP precisa).
+            OptimizeHeadStylesPlugin permanece safety-net.
+        -->
+        <remove src="css/awa-impeccable-audit-2026-05-28.min.css"/>
+        <remove src="css/awa-impeccable-audit-2026-05-28.css"/>
+        <remove src="css/awa-commerce-impeccable-refine.min.css"/>
+        <!--
+            PERF-2026-10-13 (probe CDP validado): styles-l (2,0 MB) e awa-vfix-pdp
+            deixam o head bloqueante e passam a carregar via print-swap no
+            awa-pdp-defer-legacy.phtml (head.additional). Probe: bloquear
+            styles-l altera 1 px nas âncoras da PDP; bloquear vfix-pdp altera 0.
+        -->
+        <remove src="css/styles-l.css"/>
+        <remove src="css/awa-vfix-pdp.css"/>
+        <!-- awa-pdp-shell-final.css: arquivo movido para _deprecated/ em Jun-2026; referência removida (404 ativo). Estilos cobertos por awa-pdp-premium.css + critical inline. -->
+    </head>
+    <body>
+        <attribute name="class" value="awa-pdp-page-contract"/>
+        <!-- Rokanthemes PriceCountdown declara cacheable="false" na PDP — remove para FPC/Varnish -->
+        <referenceBlock name="product.info.pricecountdown.product.page" remove="true"/>
+        <referenceBlock name="awa.header.impeccable.critical.global" remove="true"/>
+        <!-- Terminal lock — align-grid após pdp-shell (§41 PDP mobile + badges) -->
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.align.grid.terminal.pdp"
+                   template="Magento_Theme::html/awa-align-grid-terminal-loader.phtml"
+                   after="-"/>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.pdp.defer.legacy"
+                   template="Magento_Theme::html/awa-pdp-defer-legacy.phtml"
+                   after="-"/>
+        </referenceBlock>
+        <!--
+            BUG-01: Remove o container duplicado de social links do tema pai ayo_default.
+            O container "awa.product.info.social" (class "product-social-extra") renderiza
+            os mesmos links Imprimir/Compartilhar já fornecidos pelo container padrão
+            Magento "product.info.social" (class "product-social-links").
+        -->
+        <referenceBlock name="awa.product.info.addto" remove="true"/>
+        <referenceBlock name="product.info.addto">
+            <arguments>
+                <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+                <argument name="addto_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!--
+            ACHADO SEO-001: o core publica items.<id>.price_info no JSON do bloco
+            product_viewed_counter (vendor/.../product/view/counter.phtml). Passamos o gate
+            por argumento de layout para o override do tema poder remover as chaves de preço.
+            Sem construtor novo => sem setup:di:compile.
+        -->
+        <referenceBlock name="product_viewed_counter">
+            <arguments>
+                <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="catalog.product.related">
+            <arguments>
+                <argument name="bestseller_card_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="product.info.upsell">
+            <arguments>
+                <argument name="bestseller_card_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="product.attributes">
+            <arguments>
+                <argument name="product_output" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductOutput</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="product.info.overview">
+            <arguments>
+                <argument name="product_output" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductOutput</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="product.info.description">
+            <arguments>
+                <argument name="product_output" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductOutput</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="awa.product.info.mailto" remove="true"/>
+
+        <!--
+            Magento layout: ações terciárias (Imprimir/Compartilhar) no fim do buy-box.
+            product.info.social é o container nativo (htmlClass product-social-links).
+            after="-" no product.info.main alinha DOM à hierarquia de conversão
+            (título → preço/CTA → add-to-cart → social), em vez de depender só de flex order.
+        -->
+        <move element="product.info.social" destination="product.info.main" after="-"/>
+
+        <!--
+            MELHORIA-01: Bloco de compatibilidade inline (Marca/Modelo/Ano) acima do add-to-cart.
+            Renderiza somente quando os atributos estão preenchidos (50 produtos).
+        -->
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="awa.product.info.compatibility"
+                   template="Magento_Catalog::product/view/awa-compatibility.phtml"
+                   after="product.info.price"
+                   before="product.info.addtocart"/>
+        </referenceContainer>
+
+        <!--
+            SPRINT 2 (2026-06-28): Bloco CEP / Shipping Estimator acima do add-to-cart.
+            Renderiza campo CEP + botao Calcular que faz AJAX para /awa/cep/estimate.
+            Posicionado apos product.info.price, antes de product.info.addtocart,
+            seguindo o padrao awa.product.info.compatibility.
+
+            DESATIVADO 2026-07-03: "por enquanto não vai ter" cotação de frete na PDP.
+            Bloco/template/JS mantidos intactos — só removido do layout via
+            referenceBlock remove="true" logo abaixo. Para reativar, apagar essa
+            referenceBlock (e implementar o endpoint /awa/cep/estimate, que hoje
+            não existe — ver nota do template).
+        -->
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View"
+                   name="awa.product.info.cep.estimator"
+                   template="Magento_Catalog::product/view/awa-pdp-cep-estimator.phtml"
+                   after="awa.product.info.compatibility"
+                   before="product.info.addtocart">
+                <arguments>
+                    <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="awa.product.info.cep.estimator" remove="true"/>
+
+        <!--
+            BUG-07: Carrega os CSS de conversão/polish de forma não-bloqueante.
+            Os arquivos são servidos com media="print" onload="this.media='all'" para
+            não bloquear o render. Lidos pelo browser antes do DOMContentLoaded.
+        -->
+
+        <!--
+            R17-RESTAURATION: Breadcrumbs PDP renderizados server-side via template customizado.
+            Substitui widget JS que dependia do menu vertical (Rokanthemes_Themeoption).
+            Usa GrupoAwamotos\Theme\ViewModel\ProductStructuredData para gerar path.
+            Posicionado após page.main.title para hierarquia visual correta.
+        -->
+        <referenceBlock name="breadcrumbs">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Catalog::product/breadcrumbs.phtml</argument>
+            </action>
+            <arguments>
+                <argument name="breadcrumb_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductStructuredData</argument>
+            </arguments>
+        </referenceBlock>
+        <!-- breadcrumbs.pdp removido: referenceContainer page.main não existe no Magento —
+             o bloco ficava órfão. Breadcrumb PDP usa o block breadcrumbs acima (nav.breadcrumbs). -->
+
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.pdp.conversion.async.css"
+                   template="Magento_Theme::html/awa-pdp-conversion-async.phtml"
+                   before="-"/>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.pdp.gallery.sync"
+                   template="Magento_Catalog::product/view/awa-pdp-gallery-sync.phtml"
+                   after="awa.pdp.conversion.async.css"/>
+        </referenceContainer>
+
+        <!--
+            FASE 8 (2026-07-03): Safety net do botao "Adicionar ao Carrinho".
+            Ver comentario completo em awa-pdp-addtocart-safety.phtml. Resumo:
+            o botao nasce com disabled="disabled" (padrao do core Magento) e so
+            e liberado por Magento_Catalog/js/validate-product; este bloco
+            garante que ele nao fique preso desabilitado se essa cadeia de JS
+            falhar por qualquer motivo, e reporta o evento para monitoramento.
+        -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.pdp.addtocart.safety"
+                   template="Magento_Theme::html/awa-pdp-addtocart-safety.phtml"
+                   after="awa.pdp.conversion.async.css"/>
+        </referenceContainer>
+
+        <!--
+            BUG-03: Schema.org Product JSON-LD — gerado via ProductStructuredData ViewModel.
+            Emitido no fim do body (válido para Google; evita bytes extras no <head>).
+            Inclui: Product (@type), Offer (preço/disponibilidade), AggregateRating
+            (quando há avaliações), BreadcrumbList.
+        -->
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.schema.product.jsonld"
+                   template="Magento_Catalog::product/view/awa-product-jsonld.phtml"
+                   after="awa.pdp.conversion.async.css">
+                <arguments>
+                    <argument name="product_structured_data_view_model"
+                              xsi:type="object">GrupoAwamotos\Theme\ViewModel\ProductStructuredData</argument>
+                    <argument name="pdp_gate"
+                              xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+                </arguments>
+            </block>
+            <!-- F1-04 (2026-06-27): FAQPage JSON-LD para rich results do Google -->
+            <block class="GrupoAwamotos\SchemaOrg\Block\ProductFaq"
+                   name="awa.schema.product.faq.jsonld"
+                   template="GrupoAwamotos_SchemaOrg::product_faq_jsonld.phtml"
+                   after="awa.schema.product.jsonld"/>
+        </referenceContainer>
+
+        <!--
+            F1-04 (2026-06-27): Seção visual de FAQ na PDP (acordeão semântico)
+            Renderiza bloco GrupoAwamotos\SchemaOrg\Block\ProductFaq com template FAQ visível.
+            O template Magento_Theme::product.info.details.phtml customizado itera
+            apenas o grupo detailed_info; então posicionamos o FAQ como bloco
+            independente no content.aside (que existe no tema filho) via
+            content.bottom e usamos move para alocar após product.info.details.
+        -->
+        <referenceContainer name="content">
+            <block class="GrupoAwamotos\SchemaOrg\Block\ProductFaq"
+                   name="awa.product.faq"
+                   template="GrupoAwamotos_SchemaOrg::product_faq.phtml"
+                   after="product.info.details"/>
+        </referenceContainer>
+        <referenceBlock name="product.info.addtocart">
+            <arguments>
+                <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="product.info.main">
+            <!-- B2B Densidade: garante o bloco de preço por quantidade (tier) na PDP -->
+            <block class="Magento\Catalog\Pricing\Render" name="product.price.tier" after="product.info.price">
+                <arguments>
+                    <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                    <argument name="price_type_code" xsi:type="string">tier_price</argument>
+                    <argument name="zone" xsi:type="string">item_view</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

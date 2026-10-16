@@ -50,6 +50,16 @@ define([], function () {
         }
         setCookie(COOKIE_NAME, value, COOKIE_DAYS);
         setCookie(MAGENTO_COOKIE_NAME, JSON.stringify({ 1: 1 }), COOKIE_DAYS);
+
+        /* task-14: o ga.phtml (linha 76) e o Meta pixel head-idle.phtml (linha 103)
+         * só liberam as tags DEPOIS deste evento; sem ele o consentimento só vale
+         * na próxima navegação. Contrato copiado de
+         * app/code/GrupoAwamotos/CookieConsent/view/frontend/web/js/cookie-consent.js:65. */
+        try {
+            window.dispatchEvent(new CustomEvent('awa:cookie-consent', { detail: { value: value } }));
+        } catch (e) {
+            // CustomEvent indisponível
+        }
     }
 
     function hideMagentoNativeCookie() {
@@ -132,6 +142,19 @@ define([], function () {
         banner.setAttribute('aria-hidden', 'false');
         banner.style.display = 'block';
         banner.style.pointerEvents = 'auto';
+
+        /* task-14: o Rokanthemes_Themeoption/templates/html/header.phtml (linhas 256-275,
+         * `syncInitialInert`) marca com `inert` todo nó com `hidden` ou
+         * `aria-hidden="true"` — inclusive `#awa-cookie-banner[hidden]` (linha 260).
+         * Como o banner nasce com os dois atributos, ele entra na página inerte; sem
+         * remover aqui, o overlay fica visível, cobre a tela, mas NÃO recebe clique
+         * nem foco: o clique atravessa e atinge o que está atrás (medido: clique real
+         * em "Permitir cookies" caiu em DIV.awa-section-header__left e, em outra
+         * rolagem, navegou para uma PDP). */
+        banner.removeAttribute('inert');
+        if ('inert' in banner) {
+            banner.inert = false;
+        }
 
         requestAnimationFrame(function () {
             requestAnimationFrame(function () {

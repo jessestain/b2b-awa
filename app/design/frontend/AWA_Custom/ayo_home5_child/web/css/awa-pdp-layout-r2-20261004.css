@@ -1,0 +1,26 @@
+/* ==========================================================================
+ * AWA — PDP layout polish · r2 · 2026-10-04
+ * Pacote: 02-frontend-b2b-a11y/pacote-layout-pdp
+ *
+ * Complementa o r1 (awa-pdp-layout-r1-20261003.css). Mesmo veículo: o plugin
+ * do tema lê todos os arquivos awa-pdp-layout-r*.css e injeta no style terminal.
+ * ========================================================================== */
+@layer awa-fixes {
+
+  /* --- 8b) Nome do produto no card de recomendados: mesma linguagem dos
+     cards da vitrine de relacionados, que é o padrão do tema.
+     Antes: herdava o estilo de link inline (vermelho da marca, sublinhado,
+     peso 500) enquanto .product-item-link das outras vitrines é
+     oklch(0.22 0.012 27), 600, sem sublinhado — o card parecia de outro
+     componente (defeito relatado como "título vermelho"). */
+  html body#html-body .rx-pdp-card .rx-pdp-name {
+    color: var(--awa-ink, oklch(0.22 0.012 27)) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+  }
+  html body#html-body .rx-pdp-card .rx-pdp-name:hover,
+  html body#html-body .rx-pdp-card .rx-pdp-name:focus-visible {
+    color: var(--awa-brand, #b73337)) !important;
+    text-decoration: underline !important;
+  }
+}

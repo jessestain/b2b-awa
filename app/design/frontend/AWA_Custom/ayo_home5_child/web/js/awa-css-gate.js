@@ -2077,7 +2077,7 @@ setImportant(link, 'display', 'inline-flex');
         });
 
         document.querySelectorAll('.page_footer .awa-footer-devby, .page-footer .awa-footer-devby').forEach(function (el) {
-            setImportant(el, 'min-height', '0');
+            setImportant(el, 'min-height', '32px');
             setImportant(el, 'height', 'auto');
         });
 

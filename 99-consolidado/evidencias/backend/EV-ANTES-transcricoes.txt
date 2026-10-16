@@ -1,0 +1,254 @@
+TRANSCRIÇÕES BRUTAS — ESTADO *ANTES* DAS MUDANÇAS (task-37)
+Capturadas em 05/10/2026 no servidor /home/jessessh/htdocs/srv1113343.hstgr.cloud
+Comandos exatos no cabeçalho de cada bloco. Nada aqui foi reescrito.
+
+================================================================================
+[A1] COMANDO: ssh AWA "php /tmp/diag-report.php"
+      (teste funcional ponta a ponta do Mirasvit_Report usando o ReportApi)
+--------------------------------------------------------------------------------
+=== 1) DI: preferences de ReportApi (declaradas em Mirasvit_Report/etc/di.xml) ===
+OK   Mirasvit\ReportApi\Api\SchemaInterface => Mirasvit\ReportApi\Config\Schema
+OK   Mirasvit\ReportApi\Api\RequestBuilderInterface => Mirasvit\ReportApi\Processor\RequestBuilder
+OK   Mirasvit\ReportApi\Api\RequestInterface => Mirasvit\ReportApi\Processor\Request
+OK   Mirasvit\ReportApi\Api\ResponseInterface => Mirasvit\ReportApi\Processor\Response
+OK   Mirasvit\ReportApi\Api\Service\TableServiceInterface => Mirasvit\ReportApi\Service\TableService
+OK   Mirasvit\Report\Api\Repository\ReportRepositoryInterface => Mirasvit\Report\Repository\ReportRepository
+
+=== 2) Schema (le mst_report.xml pelo FileResolver do Magento) ===
+OK   getTables() => 16 tabelas
+OK   hasTable(sales_order) => true
+OK   getTable(sales_order)->getColumns() => 76 colunas
+FAIL getType(money) => TypeError: get_class(): Argument #1 ($object) must be of type object, string given
+      << ERRO DO MEU INSTRUMENTO, nao do sistema: getType() devolve o NOME DA CLASSE
+         (string do mapa <argument name="types"> do di.xml), nao um objeto.
+
+=== 3) Tabelas configuradas (amostra) ===
+  sales_order, sales_order_item, sales_order_payment, sales_payment_transaction, sales_order_tax, sales_order_address, quote, quote_item, cataloginventory_stock_item, sales_invoice, catalog_category_product, mst_search_report_log, customer_entity, customer_address_entity, catalog_product_entity
+
+=== 4) Relatorios registrados (ReportRepository) ===
+OK   getList() => 2 relatorios: search_report_volume, search_report_query
+OK   get("order") => null
+
+=== 5) PONTA A PONTA: RequestBuilder -> process() -> linhas do banco ===
+OK   sales_order: entity_id, increment_id (3 linhas) => 1 linhas :: {"sales_order|entity_id":"8","sales_order|increment_id":"000000007"}
+
+================================================================================
+[A2] COMANDO: ssh AWA "php bin/magento module:status Mirasvit_ReportApi"
+--------------------------------------------------------------------------------
+Mirasvit_ReportApi : Module does not exist
+
+================================================================================
+[A3] COMANDO: ssh AWA "php /tmp/diag-dep.php"   (ComponentRegistrar)
+--------------------------------------------------------------------------------
+MODULE  Mirasvit_ReportApi  => NULL
+MODULE  Mirasvit_Report     => '/home/user/htdocs/srv1113343.hstgr.cloud/app/code/Mirasvit/Report'
+LIBRARY Mirasvit_ReportApi  => '/home/user/htdocs/srv1113343.hstgr.cloud/app/code/Mirasvit/ReportApi'
+
+================================================================================
+[A4] COMANDO: ssh AWA "cd <root> && find app/code/Mirasvit/ReportApi -type f | sort"
+      (recorte — a listagem completa tem 81 arquivos)
+--------------------------------------------------------------------------------
+app/code/Mirasvit/ReportApi/etc/module.xml
+app/code/Mirasvit/ReportApi/etc/mst_report.xsd
+app/code/Mirasvit/ReportApi/registration.php
+app/code/Mirasvit/ReportApi/version.json
+app/code/Mirasvit/ReportApi/version.txt
+(NAO existe none: di.xml, events.xml, webapi.xml, acl.xml, db_schema.xml, Setup/)
+
+================================================================================
+[A5] CONTEUDO de app/code/Mirasvit/ReportApi/etc/module.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Mirasvit_ReportApi">
+    </module>
+</config>
+      << SEM <sequence>, SEM setup_version
+
+================================================================================
+[A6] TRECHO de app/code/Mirasvit/ReportApi/registration.php (o registro)
+--------------------------------------------------------------------------------
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::LIBRARY,     <<< LIBRARY, nao MODULE
+    'Mirasvit_ReportApi',
+    __DIR__
+);
+
+================================================================================
+[A7] CONTEUDO de app/code/Mirasvit/Report/etc/module.xml
+--------------------------------------------------------------------------------
+<module name="Mirasvit_Report">
+    <sequence>
+        <module name="Mirasvit_ReportApi"/>
+    </sequence>
+</module>
+
+================================================================================
+[A8] PREFIXO de app/code/Mirasvit/Report/etc/di.xml (linhas 72-84)
+--------------------------------------------------------------------------------
+    <!--ReportApi definitions-->
+    <preference for="Mirasvit\ReportApi\Api\SchemaInterface" type="Mirasvit\ReportApi\Config\Schema"/>
+    <preference for="Mirasvit\ReportApi\Api\RequestInterface" type="Mirasvit\ReportApi\Processor\Request"/>
+    <preference for="Mirasvit\ReportApi\Api\RequestBuilderInterface" type="Mirasvit\ReportApi\Processor\RequestBuilder"/>
+    <preference for="Mirasvit\ReportApi\Api\ResponseInterface" type="Mirasvit\ReportApi\Processor\Response"/>
+    <preference for="Mirasvit\ReportApi\Api\Processor\RequestFilterInterface" type="Mirasvit\ReportApi\Processor\RequestFilter"/>
+    <preference for="Mirasvit\ReportApi\Api\Processor\RequestSortOrderInterface" type="Mirasvit\ReportApi\Processor\RequestSortOrder"/>
+    <preference for="Mirasvit\ReportApi\Api\Service\TableServiceInterface" type="Mirasvit\ReportApi\Service\TableService"/>
+    <preference for="Mirasvit\ReportApi\Api\Service\ColumnServiceInterface" type="Mirasvit\ReportApi\Service\ColumnService"/>
+    <type name="Mirasvit\ReportApi\Api\SchemaInterface">
+        <arguments><argument name="types" xsi:type="array"> ... 13 tipos ... </argument>
+
+================================================================================
+[A9] COMANDO: ssh AWA "cd <root> && grep -rl 'Mirasvit.ReportApi' app/code/Mirasvit/Report --include=*.php | wc -l"
+--------------------------------------------------------------------------------
+19
+
+================================================================================
+[B1] COMANDO: ssh AWA "cd <root> && cat app/code/GrupoAwamotos/StoreSetup/etc/module.xml"
+      (ANTES — sha256 6b0b871d3e020ad9b4c0e7e5d0017d102f53a8112ca0d66fa5e65a67085ce25b, 534 bytes)
+--------------------------------------------------------------------------------
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="GrupoAwamotos_StoreSetup" setup_version="1.0.0">
+        <sequence>
+            <module name="Magento_GraphQl"/>
+            <module name="Rokanthemes_Blog"/>
+            <module name="Rokanthemes_SlideBanner"/>
+            <module name="Rokanthemes_Testimonials"/>
+            <module name="Rokanthemes_Faq"/>          <<< UNICA referencia em todo o modulo
+        </sequence>
+    </module>
+</config>
+
+================================================================================
+[B2] COMANDO: ssh AWA "cd <root> && grep -rn 'Faq' app/code/GrupoAwamotos/StoreSetup/"
+      (recorte: a lista completa esta no RELATORIO.md)
+--------------------------------------------------------------------------------
+app/code/GrupoAwamotos/StoreSetup/etc/module.xml:9:            <module name="Rokanthemes_Faq"/>
+app/code/GrupoAwamotos/StoreSetup/Setup/Patch/Data/AyoSeedContentV2.php:30:        $this->seedFaq($connection);
+app/code/GrupoAwamotos/StoreSetup/Setup/Patch/Data/AyoSeedContentV2.php:169:    private function seedFaq($connection): void
+app/code/GrupoAwamotos/StoreSetup/Setup/Patch/Data/AyoSeedContent.php:40:        $this->seedFaq($connection);
+app/code/GrupoAwamotos/StoreSetup/Setup/Patch/Data/AyoSeedContent.php:278:    private function seedFaq($connection): void
+(+ helpers de CONTEUDO CMS: homeFaqQuickContent(), contentFaq(), getFaqDefinitions(), cmsPageFaqContent())
+<< NENHUMA referencia a classe Rokanthemes\Faq em PHP — zero
+
+================================================================================
+[B3] CORPO de AyoSeedContentV2::seedFaq  (o unico consumidor da tabela)
+--------------------------------------------------------------------------------
+    private function seedFaq($connection): void
+    {
+        $table = $this->moduleDataSetup->getTable('rokan_faq');
+
+        if (!$connection->isTableExists($table)) {                 << GUARDA
+            $this->logger->warning('[AyoSeedContentV2] Tabela rokan_faq nao encontrada.');
+            return;                                                << NAO QUEBRA
+        }
+        ...
+        foreach ($rows as $row) { $connection->insert($table, $row); }
+
+================================================================================
+[B4] COMANDO: ssh AWA "cd <root> && grep -rl 'Rokanthemes_Faq|Rokanthemes\\Faq' app/code/ app/design/"
+--------------------------------------------------------------------------------
+app/code/GrupoAwamotos/StoreSetup/etc/module.xml      << UNICA ocorrencia no projeto inteiro
+(fim)
+app/design/  => ZERO ocorrencias
+
+================================================================================
+[B5] COMANDO: ssh AWA "php /tmp/diag-dep.php"  (DependencyChecker = a classe que
+      module:disable/module:enable usam)
+--------------------------------------------------------------------------------
+=== checkDependenciesWhenDisableModules([Rokanthemes_Faq]) ===
+count=1
+{ "Rokanthemes_Faq": [] }          << NENHUM modulo habilitado depende dele
+
+=== checkDependenciesWhenDisableModules([StoreSetup]) ===
+{ "GrupoAwamotos_StoreSetup": [] }
+
+=== checkDependenciesWhenEnableModules([StoreSetup]) ===
+{ "GrupoAwamotos_StoreSetup": [] }
+
+=== ModuleList (habilitados) ===
+Rokanthemes_Faq enabled? false
+StoreSetup enabled? true
+Mirasvit_Report enabled? true
+<< Magento monta o grafo de dependencia com PackageInfo::getRequire() (composer.json),
+   NAO com <sequence> de module.xml. Ver vendor/magento/framework/Module/DependencyChecker.php:118
+
+================================================================================
+[B6] COMANDO: ssh AWA "php /tmp/diag-bc.php"  (recorte)
+--------------------------------------------------------------------------------
+### tabelas rokan_*  => rokan_faq presente
+### rokan_faq total  => 5
+entity_id | status | parent_id | question | answer | created_time
+1 | 1 | 0 | Qual o prazo de entrega? | ... | 2026-02-24 03:52:44
+...
+### setup_module
+GrupoAwamotos_StoreSetup | 1.0.0 | 1.0.0
+Mirasvit_Report | 1.0.0 | 1.0.0
+Mirasvit_SearchReport | 1.0.0 | 1.0.0
+Rokanthemes_Faq | 2.4.1 | 2.4.1        << O MODULO ESTA INSTALADO (schema e data)
+### patch_list (StoreSetup)
+GrupoAwamotos\StoreSetup\Setup\Patch\Data\AyoSeedContent
+GrupoAwamotos\StoreSetup\Setup\Patch\Data\AyoSeedContentV2   << patches JA APLICADOS
+### cms_page com faq
+page_id | identifier | is_active
+26 | faq | 1
+56 | faq | 1
+65 | faq | 1
+### url_rewrite faq
+2209 | faq | cms/page/view/page_id/26 | cms-page    << a pagina /faq e CMS PAGE
+
+================================================================================
+[B7] COMANDO: curl -sL https://awamotos.com/faq  (recorte do HTML servido)
+--------------------------------------------------------------------------------
+<div class="breadcrumbs"> ... <strong itemprop="name" aria-current="page">Perguntas Frequentes (FAQ)</strong>
+<h1 class="awa-institutional-h1">Perguntas Frequentes (FAQ)</h1>
+<div class="awa-inst" role="main" aria-label="Perguntas Frequentes">
+  <div class="awa-faq-category">
+    <div class="awa-faq-item">
+    <div class="awa-faq-item">
+<< HTML ESTATICO do CMS; sem bloco do Rokanthemes\Faq
+
+================================================================================
+[C1] COMANDO: ssh AWA "php /tmp/diag-acl.php"  (recorte — SOMENTE LEITURA)
+--------------------------------------------------------------------------------
+### authorization_role (todas)   [31 linhas]
+role_id | parent_id | tree_level | sort_order | role_type | user_id | user_type | role_name
+189 | 0 | 1 | 0 | U | 2 | 1 | 12
+191 | 1 | 2 | 0 | U | 153 | 2 | audit_temp_1783540959
+(+ 29 linhas legitimas)
+
+### os 2 papeis: os admins existem?
+role_id | role_name | user_id | admin_existe
+189 | 12 | 2 | NULL          << admin_user.user_id=2 NAO EXISTE
+191 | audit_temp_1783540959 | 153 | NULL   << admin_user.user_id=153 NAO EXISTE
+
+### filhos de 189/191 em authorization_role   => (vazio)
+### authorization_rule por papel
+role_id | regras
+189 | 3            << 3 regras (autorizacao) orfas
+(191 nao aparece => 0 regras)
+
+### FKs que APONTAM para authorization_role
+authorization_rule | role_id | AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID | authorization_role | role_id
+<< UNICA FK de entrada
+
+### FKs de authorization_role  => (vazio)
+### FKs que apontam para authorization_rule => (vazio)
+
+### SHOW CREATE TABLE authorization_rule
+CONSTRAINT `AUTHORIZATION_RULE_ROLE_ID_AUTHORIZATION_ROLE_ROLE_ID`
+  FOREIGN KEY (`role_id`) REFERENCES `authorization_role` (`role_id`) ON DELETE CASCADE
+<< DELETAR O PAPEL APAGA AS REGRAS AUTOMATICAMENTE
+
+### total de linhas
+roles | regras
+31 | 2050
+
+================================================================================
+[C2] ERRO DE INSTRUMENTO (registrado por honestidade)
+--------------------------------------------------------------------------------
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'assert_id' in 'field list'
+<< colunas reais de authorization_rule: rule_id, role_id, resource_id, privileges, permission
+   (NAO existe assert_id). Corrigido e reexecutado — nenhuma query de escrita foi afetada.

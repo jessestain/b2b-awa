@@ -32,7 +32,27 @@ class SyncProductsCommand extends Command
             ->setDescription('Sincroniza produtos do ERP para o Magento')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Apenas simula, não faz alterações')
             ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Limita quantidade de produtos', 0)
-            ->addOption('sku', 's', InputOption::VALUE_REQUIRED, 'Sincroniza apenas um SKU específico');
+            ->addOption('sku', 's', InputOption::VALUE_REQUIRED, 'Sincroniza apenas um SKU específico')
+            ->addOption(
+                'deactivate-stale',
+                null,
+                InputOption::VALUE_NONE,
+                'Desativa no Magento SKUs Sectra fora do escopo ativo (CCKATIVO, e CKCOMERCIALIZA se o filtro estiver ligado)'
+            )
+            ->addOption(
+                'reactivate-stale',
+                null,
+                InputOption::VALUE_NONE,
+                'Reativa no Magento SKUs Sectra que voltaram ao escopo ativo e ainda estao desativados. '
+                . 'Nao reativa item com preco de placeholder (ver InactiveProductReactivationGuard).'
+            )
+            ->addOption(
+                'reconcile-scope',
+                null,
+                InputOption::VALUE_NONE,
+                'Faz os DOIS lados do escopo numa passada: desativa quem saiu e reativa quem voltou. '
+                . 'E a forma correta no cron, porque os dois lados precisam ser simetricos.'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -64,8 +84,108 @@ class SyncProductsCommand extends Command
             return $this->syncSingleSku($sku, $output, $dryRun);
         }
 
+        if ($input->getOption('deactivate-stale')) {
+            return $this->deactivateStale($output, $dryRun);
+        }
+
+        if ($input->getOption('reactivate-stale')) {
+            return $this->reactivateStale($output, $dryRun);
+        }
+
+        /* Os dois lados de uma vez: sem isto o operador precisa lembrar de rodar duas
+         * vezes, e esquecer o lado "reativar" foi exatamente o que deixou 27 produtos
+         * fora da loja em 06/10/2026. */
+        if ($input->getOption('reconcile-scope')) {
+            return $this->reconcileScope($output, $dryRun);
+        }
+
         // Full sync
         return $this->syncAll($output, $dryRun, $limit);
+    }
+
+    private function deactivateStale(OutputInterface $output, bool $dryRun): int
+    {
+        $output->writeln('<info>Reconciliacao de produtos fora do escopo ativo do Sectra</info>');
+        $output->writeln('');
+
+        $result = $this->productSync->reconcileInactiveProducts($dryRun);
+
+        $output->writeln(sprintf('Materiais Sectra: <comment>%d</comment>', (int) $result['all_erp']));
+        $output->writeln(sprintf('Escopo ativo:     <comment>%d</comment>', (int) $result['active_erp']));
+        $output->writeln(sprintf('Candidatos:       <comment>%d</comment>', (int) $result['candidates']));
+
+        if (!empty($result['skip_reason'])) {
+            $output->writeln('<error>Reconciliacao ignorada: ' . $result['skip_reason'] . '</error>');
+            return Command::FAILURE;
+        }
+
+        if ($dryRun) {
+            foreach ($result['candidate_skus'] as $sku) {
+                $output->writeln('  ' . $sku);
+            }
+            $output->writeln('');
+            $output->writeln('<comment>DRY-RUN: nenhum produto foi desativado.</comment>');
+            return Command::SUCCESS;
+        }
+
+        $output->writeln(sprintf('Desativados:      <info>%d</info>', (int) $result['deactivated']));
+        return Command::SUCCESS;
+    }
+
+    private function reactivateStale(OutputInterface $output, bool $dryRun): int
+    {
+        $output->writeln('<info>Reconciliacao de produtos que VOLTARAM ao escopo ativo do Sectra</info>');
+        $output->writeln('');
+
+        $result = $this->productSync->reconcileReactivation($dryRun);
+
+        $output->writeln(sprintf('Materiais Sectra:  <comment>%d</comment>', (int) $result['all_erp']));
+        $output->writeln(sprintf('Escopo ativo:      <comment>%d</comment>', (int) $result['active_erp']));
+        $output->writeln(sprintf('Candidatos:        <comment>%d</comment>', (int) $result['candidates']));
+        $output->writeln(sprintf('Retidos por preco: <comment>%d</comment>', (int) $result['blocked_by_price']));
+
+        if (!empty($result['skip_reason'])) {
+            $output->writeln('<error>Reconciliacao ignorada: ' . $result['skip_reason'] . '</error>');
+            return Command::FAILURE;
+        }
+
+        if ((int) $result['blocked_by_price'] > 0) {
+            $output->writeln('');
+            $output->writeln('<comment>Retidos por preco de placeholder (corrigir no Sectra):</comment>');
+            foreach (array_slice($result['blocked_skus'], 0, 25) as $sku) {
+                $output->writeln('  ' . $sku);
+            }
+        }
+
+        if ($dryRun) {
+            $output->writeln('');
+            $output->writeln(sprintf(
+                '<comment>DRY-RUN: %d produto(s) seriam reativados; %d retidos por preco.</comment>',
+                (int) ($result['reactivatable'] ?? 0),
+                (int) $result['blocked_by_price']
+            ));
+            return Command::SUCCESS;
+        }
+
+        $output->writeln('');
+        $output->writeln(sprintf('Reativados:        <info>%d</info>', (int) $result['reactivated']));
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Os dois lados numa passada. E a forma que o cron deve usar: desativar sem
+     * reativar e o bug que deixou 27 produtos fora da loja.
+     */
+    private function reconcileScope(OutputInterface $output, bool $dryRun): int
+    {
+        $saida = $this->deactivateStale($output, $dryRun);
+
+        $output->writeln('');
+        $reativar = $this->reactivateStale($output, $dryRun);
+
+        return ($saida === Command::SUCCESS && $reativar === Command::SUCCESS)
+            ? Command::SUCCESS
+            : Command::FAILURE;
     }
 
     private function syncSingleSku(string $sku, OutputInterface $output, bool $dryRun): int

@@ -1,0 +1,254 @@
+/*
+ * AWA Motos — tokens base do tema (arquivo gerado)
+ * ================================================
+ *
+ * POR QUE ESTE ARQUIVO EXISTE
+ * Os CSS do tema sao recortados por pagina: a home remove o design system,
+ * o login remove tambem, e o CSS critico da home nao carrega na PLP. Medido
+ * em 06/10/2026: `--awa-font-size-10/11/13` existiam na home e NAO na PLP.
+ * Este arquivo entra pelo `default_head_blocks.xml`, que vale para todas as
+ * paginas e nao e removido por nenhum desses recortes.
+ *
+ * DE ONDE VEM CADA VALOR
+ * Do fallback escrito no proprio codigo: `var(--awa-touch-min, 44px)` declara
+ * que o valor e 44px. Entram apenas tokens cujo fallback aparece com UM SO
+ * valor em todos os usos. Os ambiguos ficam de fora — escolher ali seria
+ * decisao de design, nao padronizacao.
+ *
+ * ATENCAO: bloco de replicacao do design system editado a mao em
+ * 13/10/2026 (paleta laranja/preto/verde). Ao regenerar com
+ * tools/gerar-tokens-base.php, reaplicar os valores deste bloco.
+ * Gerado em 2026-10-06T15:49:58Z · 60 tokens.
+ */
+:root {
+
+  /* b */
+  --awa-b2b-border:                  #e5e7eb;
+  --awa-b2b-section-title-size:      clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+
+  /* bg */
+  --awa-bg-overlay:                  rgb(15 23 42 / 50%);
+
+  /* brand */
+  --awa-brand-tint-5:                color-mix(in srgb, var(--awa-brand) 5%, transparent);
+
+  /* btn */
+  --awa-btn-height-lg:               48px;
+
+  /* cart */
+  --awa-cart-summary-max-h:          calc(100dvh - var(--awa-cart-mobile-bar-clearance, calc( 60px + 16px + env(safe-area-inset-bottom, 0px) )) - 48vh);
+
+  /* cc */
+  --awa-cc-focus:                    rgba(183, 51, 55, .32);
+  --awa-cc-shadow-cta:               0 8px 24px rgb(183 51 55 / 18%);
+  --awa-cc-shadow-cta-hover:         0 14px 30px rgb(142 38 41 / 22%);
+  --awa-cc-status-error-bg:          #fef2f2;
+
+  /* container */
+  --awa-container-narrow:            960px;
+
+  /* duration */
+  --awa-duration-normal:             0.2s ease;
+
+  /* ease */
+  --awa-ease-out:                    ease-out;
+
+  /* error */
+  --awa-error-border:                #fecaca;
+  --awa-error-text:                  #7f1d1d;
+
+  /* f */
+  --awa-f-md:                        16px;
+
+  /* font */
+  --awa-font-2xl:                    20px;
+  --awa-font-2xs:                    10px;
+  --awa-font-3xl:                    24px;
+  --awa-font-4xl:                    28px;
+  --awa-font-size-14:                14px;
+  --awa-font-size-2xs: 10px;
+
+  /* grid */
+  --awa-grid-rhythm-xs:              4px;
+
+  /* header */
+  --awa-header-desktop-bottom:       68px;
+
+  /* home */
+  --awa-home-card-min-h:             240px;
+  --awa-home-section-gap-featured:   20px;
+  --awa-home-space-1:                4px;
+  --awa-home-space-2:                8px;
+
+  /* icon */
+  --awa-icon-size-md:                1.25rem;
+
+  /* layer */
+  --awa-layer-assistant:             100200;
+  --awa-layer-nav-panel:             920;
+
+  /* muted */
+  --awa-muted:                       color-mix(in srgb, CanvasText 62%, Canvas);
+
+  /* neutral */
+  --awa-neutral-300:                 #d1d5db;
+  --awa-neutral-600:                 #666;
+  --awa-neutral-700:                 #374151;
+  --awa-neutral-900:                 #111111;
+
+  /* on */
+  --awa-on-brand:                    #ffffff;
+  --awa-on-primary:                  #111111;
+
+  /* page */
+  --awa-page-main-pad:               clamp(16px,3vw,24px);
+
+  /* progress */
+  --awa-progress:                    0.08;
+
+  /* rating */
+  --awa-rating-star:                 #f59e0b;
+
+  /* red */
+  --awa-red-strong:                  #991b1b;
+
+  /* scrollbar */
+  --awa-scrollbar-thumb:             rgb(100 116 139 / 32%);
+
+  /* search */
+  --awa-search-panel-left:           16px;
+  --awa-search-panel-top:            104px;
+  --awa-search-panel-width:          calc(100vw - 32px);
+
+  /* shadow */
+  --awa-shadow-xl:                   0 16px 40px rgb(0 0 0 / 15%);
+  --awa-shadow-xs:                   0 1px 2px rgba(0, 0, 0, 0.05);
+
+  /* space */
+  --awa-space-11:                    44px;
+  --awa-space-12:                    48px;
+
+  /* surface */
+  --awa-surface-hover:               rgb(0 0 0 / 4%);
+
+  /* text */
+  --awa-text-dim:                    #94a3b8;
+  --awa-text-hint:                   #999;
+  --awa-text-strong:                 #111111;
+
+  /* touch */
+  --awa-touch-min:                   44px;
+
+  /* transition */
+  --awa-transition-base:             200ms ease;
+
+  /* vmenu */
+  --awa-vmenu-item-h:                48px;
+
+  /* whatsapp */
+  --awa-whatsapp-bg:                 #117a6f;
+  --awa-whatsapp-bg-hover:           #075e54;
+
+  /* z */
+  --awa-z-minicart:                  1300;
+
+  /* ------------------------------------------------------------------ */
+  /* Tokens do design system, replicados aqui porque ele nao carrega em     */
+  /* todas as paginas: o login B2B media 18 tokens VAZIOS em 06/10/2026.    */
+  /* Sem isto, todo CSS que os usa e descartado nessas paginas.             */
+  /* ------------------------------------------------------------------ */
+  --awa-b2b-ops-card-info-min:       88px;
+  --awa-b2b-ops-card-thumb:          160px;
+  --awa-b2b-ops-cat-header-h:        48px;
+  --awa-b2b-ops-cat-section-h:       220px;
+  --awa-b2b-ops-cat-track-h:         148px;
+  --awa-b2b-ops-header-h:            44px;
+  --awa-b2b-ops-hero-h:              clamp(176px, 24.5vw, 472px);
+  --awa-b2b-ops-section-pad:         8px;
+  --awa-b2b-ops-subtitle-size:       12px;
+  --awa-b2b-ops-title-size:          20px;
+  --awa-brand:                       #b73337;
+  --awa-brand-dark:                  #8e2629;
+  --awa-brand-soft:                  #f9eeee;
+  --awa-btn-h:                       44px;
+  --awa-card-canonical-img-pad:      8px;
+  --awa-card-canonical-name-lh:      1.35;
+  --awa-card-canonical-name-lines:   3;
+  --awa-card-canonical-name-minh:    56.7px;
+  --awa-card-canonical-name-size:    14px;
+  --awa-container:                   1280px;
+  --awa-cro-card-min-h-desktop:      0px;
+  --awa-focus-ring:                  rgba(183, 51, 55, .35);
+  --awa-font-body:                   'Source Sans 3', sans-serif;
+  --awa-font-display:                'Rubik', sans-serif;
+  --awa-h-control:                   var(--awa-h-cta, 44px);
+  --awa-h-cta:                       44px;
+  --awa-home-fab-gap:                16px;
+  --awa-home-fab-h:                  56px;
+  --awa-ink:                         #111111;
+  --awa-ink-soft:                    #555555;
+  --awa-input-h:                     44px;
+  --awa-line:                        #e7e7ea;
+  --awa-radius-ctl:                  8px;
+  --awa-radius-m:                    12px;
+  --awa-radius-pill:                 999px;
+  --awa-radius-s:                    8px;
+  --awa-secao50:                     1;
+  --awa-secao51:                     1;
+  --awa-shadow-card:                 0 1px 2px rgba(16,24,40,.06), 0 2px 8px rgba(16,24,40,.08);
+  --awa-shadow-md:                   0 6px 16px rgba(16, 24, 40, .12);
+  --awa-shelf-preinit-h:             280px;
+  --awa-sp-1:                        4px;
+  --awa-sp-4:                        16px;
+  --awa-surface:                     #ffffff;
+  --awa-surface-alt:                 #f7f7f8;
+  --awa-text:                        #111111;
+  --awa-text-soft:                   #555555;
+
+  /* ------------------------------------------------------------------ */
+  /* Escala tipografica canonica, copiada do _tokens.less (que compila     */
+  /* para styles-l.min.css — e o login B2B NAO carrega styles-l).           */
+  /* O login media 4 tokens de font-size VAZIOS em 06/10/2026.              */
+  /* ------------------------------------------------------------------ */
+  --awa-font-size-xs:                 11px;
+  --awa-font-size-12:                 12px;
+  --awa-font-size-sm:                 13px;
+  --awa-font-size-md:                 15px;
+  --awa-font-size-16:                 16px;
+  --awa-font-size-lg:                 18px;
+  --awa-font-size-20:                 20px;
+  --awa-font-size-xl:                 22px;
+
+  /* Escala tipografica canonica (todos os degraus do _tokens.less). */
+  /* O login B2B nao carrega styles-l nem o CSS critico da home, entao     */
+  /* media 4 tokens de font-size VAZIOS em 06/10/2026.                      */
+  --awa-font-size-24:                 24px;
+  --awa-font-size-2xl:                28px;
+  --awa-font-size-3xl:                36px;
+  --awa-font-size-4xl:                48px;
+
+  /* Tokens que faltavam nas paginas sem design system (login B2B media 8     */
+  /* VAZIOS em 06/10/2026). Valores literais, colhidos da fonte mais          */
+  /* confiavel que os define.                                                  */
+  --awa-font-size-10:         0.625rem;   /* de awa-head-preload-critical-home.css */
+  --awa-font-size-11:         0.6875rem;   /* de awa-head-preload-critical-home.css */
+  --awa-font-size-13:         0.8125rem;   /* de awa-head-preload-critical-home.css */
+  --awa-success:              #22c55e;   /* de awa-impeccable-layout-2026-06-16.css */
+  --awa-bg-soft:              #f7f7f7;   /* de awa-impeccable-layout-2026-06-16.css */
+  --awa-radius-sm:            8px;   /* de awa-impeccable-layout-2026-06-16.css */
+  --awa-radius-md:            12px;   /* de awa-impeccable-layout-2026-06-16.css */
+  /* --awa-error era rejeitado pela regra 'so literal', mas a cadeia resolve     */
+  /* dentro deste proprio arquivo: --awa-brand esta aqui. Sem ele, o login      */
+  /* (que nao carrega o design system) ficava sem cor de erro.                  */
+  --awa-error:                #dc2626;
+
+  /* Contraste em blocos de fundo colorido (.awa-cta, banners).
+     Medido em 06/10/2026: no /faq o h3 e o p do .awa-cta ficavam
+     #201918 e #393130 sobre #b23c34 => contraste 2.96 e 2.17 (min 4.5).
+     A causa: o CSS usa var(--awa-text-on-primary), que depende de
+     var(--awa-white) e var(--awa-sg-c61) — ambos VAZIOS nessas paginas,
+     entao a declaracao era descartada e uma regra escura vencia. */
+  --awa-white:                    #ffffff;
+  --awa-text-on-primary:          #ffffff;
+  --awa-text-on-dark:             #ffffff;
+}

@@ -39,9 +39,6 @@ class DeniedPageDebugPlugin
         $isFullAdmin = $this->authorization->isAllowed('Magento_Backend::all');
         $isCockpitOnly = $this->portfolioScope->isCockpitOnlyUser();
         $willRedirect = !$isFullAdmin && $isCockpitOnly;
-        // #region agent log
-        file_put_contents('/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-302306.log', json_encode(['sessionId' => '302306', 'runId' => 'verify', 'hypothesisId' => 'H1', 'location' => 'DeniedPageDebugPlugin.php:aroundExecute', 'message' => 'admin/denied decision', 'data' => ['isFullAdmin' => $isFullAdmin, 'isCockpitOnly' => $isCockpitOnly, 'willRedirect' => $willRedirect], 'timestamp' => (int) round(microtime(true) * 1000)]) . "\n", FILE_APPEND | LOCK_EX);
-        // #endregion
         if ($willRedirect) {
             return $this->redirectFactory->create()
                 ->setPath('awa_commercial/commercialdashboard/index');

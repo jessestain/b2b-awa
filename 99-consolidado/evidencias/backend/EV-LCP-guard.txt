@@ -1,0 +1,134 @@
+############ GUARD CLS/LCP — evidencia bruta (05/10/2026) ############
+
+=== 1) ARQUIVO IMPLANTADO ===
+3ad909a07b87a7dcba5cca61213601f7354edfaf0f62c8ec30eeaf8e62dc22f7  /home/jessessh/htdocs/srv1113343.hstgr.cloud/app/code/GrupoAwamotos/Theme/Plugin/Response/OptimizeHeadStylesPlugin.php
+-rw-rw-r-- 1 root www-data 691968 Oct  5 20:17 /home/jessessh/htdocs/srv1113343.hstgr.cloud/app/code/GrupoAwamotos/Theme/Plugin/Response/OptimizeHeadStylesPlugin.php
+
+--- linhas 7358-7366 (o guard) ---
+                       onload="this.media='all'" e a home media CLS 1.7012 (um unico shift de 0.9931 em
+                       t=2017ms, FCP=1612ms; o header inteiro saltava: body margin 8px -> 0).
+                       Meta: CLS <= 0.10. Nao remover sem medir de novo.
+                       O atributo chega DUAS vezes no mesmo tag (home-lcp e catalog-noncritical), por isso
+                       o teste e por ATRIBUTO (procura o valor home-lcp dentro de um data-awa-defer), nunca
+                       pela tag inteira. */
+                    if (preg_match('/data-awa-defer=["\'][^"\']*(?<![A-Za-z0-9_-])home-lcp(?![A-Za-z0-9_-])[^"\']*["\']/i', $attrs)) {
+                        return $matches[0];
+                    }
+
+=== 2) BACKUP ===
+-- /home/jessessh/htdocs/srv1113343.hstgr.cloud/_backups/cls-lcp-guard-20261005T201658Z
+total 712
+drwxrwsr-x+   2 deploy   www-data   4096 Oct  5 20:16 .
+drwxrwsr-x+ 164 jessessh www-data  20480 Oct  5 20:20 ..
+-rw-rw-r--+   1 deploy   www-data    256 Oct  5 20:16 ANTES.txt
+-rw-rw-r--+   1 deploy   www-data 690622 Oct  5 20:16 OptimizeHeadStylesPlugin.php.orig
+arquivo: /home/jessessh/htdocs/srv1113343.hstgr.cloud/app/code/GrupoAwamotos/Theme/Plugin/Response/OptimizeHeadStylesPlugin.php
+sha256: 8b551c4beb902b0929b49b58f9353a2d5040101553f51331b82ed65127bac7dd
+bytes: 690622
+linhas: 9144
+dono: 0
+grupo: 33
+modo: 664
+8b551c4beb902b0929b49b58f9353a2d5040101553f51331b82ed65127bac7dd  /home/jessessh/htdocs/srv1113343.hstgr.cloud/_backups/cls-lcp-guard-20261005T201658Z/OptimizeHeadStylesPlugin.php.orig
+-- /home/jessessh/htdocs/srv1113343.hstgr.cloud/_backups/cls-lcp-guard-20261005T201719Z
+total 712
+drwxrwsr-x+   2 deploy   www-data   4096 Oct  5 20:17 .
+drwxrwsr-x+ 164 jessessh www-data  20480 Oct  5 20:20 ..
+-rw-rw-r--+   1 deploy   www-data    256 Oct  5 20:17 ANTES.txt
+-rw-rw-r--+   1 deploy   www-data 690622 Oct  5 20:17 OptimizeHeadStylesPlugin.php.orig
+arquivo: /home/jessessh/htdocs/srv1113343.hstgr.cloud/app/code/GrupoAwamotos/Theme/Plugin/Response/OptimizeHeadStylesPlugin.php
+sha256: 8b551c4beb902b0929b49b58f9353a2d5040101553f51331b82ed65127bac7dd
+bytes: 690622
+linhas: 9144
+dono: 0
+grupo: 33
+modo: 664
+8b551c4beb902b0929b49b58f9353a2d5040101553f51331b82ed65127bac7dd  /home/jessessh/htdocs/srv1113343.hstgr.cloud/_backups/cls-lcp-guard-20261005T201719Z/OptimizeHeadStylesPlugin.php.orig
+
+=== 3) 'design-system' esta no homeGateFragments? ===
+(nao esta no homeGate — o design-system nao passa pelo gateHomeLargeStylesheets)
+
+=== 4) PASSO 5 DO PROTOCOLO: curl -sI https://awamotos.com/ ===
+HTTP/2 200 
+server: nginx
+date: Mon, 05 Oct 2026 20:21:02 GMT
+content-type: text/html; charset=UTF-8
+content-length: 371543
+vary: Accept-Encoding
+content-security-policy: font-src www.paypalobjects.com *.cloudflare.com *.twitter.com *.gstatic.com *.typekit.net *.twimg.com *.trustedshops.com *.googleapis.com *.sandbox.paypal.com *.youtube.com *.paypal.com *.googleadservices.com *.google-analytics.com *.google.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.placeholder.com maxcdn.bootstrapcdn.com fonts.gstatic.com data: 'self'; form-action pilot-payflowlink.paypal.com www.paypal.com www.sandbox.paypal.com *.twitter.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.googleapis.com *.placeholder.com 'self'; frame-ancestors 'self'; frame-src bid.g.doubleclick.net *.youtube.com *.youtube-nocookie.com www.paypal.com www.sandbox.paypal.com pilot-payflowlink.paypal.com www.paypalobjects.com player.vimeo.com https://www.google.com/recaptcha/ *.twitter.com *.google.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.googleapis.com *.placeholder.com cdn.lightwidget.com lightwidget.com 'self'; img-src 'self' data: widgets.magentocommerce.com googleads.g.doubleclick.net www.google.com bid.g.doubleclick.net www.googleadservices.com *.google-analytics.com *.analytics.google.com www.googletagmanager.com t.paypal.com www.paypal.com www.paypalobjects.com fpdbs.paypal.com fpdbs.sandbox.paypal.com *.vimeocdn.com i.ytimg.com *.youtube.com cdn.jsdelivr.net blob: *.cloudflare.com *.klarna.com *.googleadservices.com *.paypal.com *.twitter.com *.twimg.com *.ytimg.com *.lightemporium.com *.usercentrics.eu *.cdninstagram.com *.google.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.googleapis.com *.placeholder.com cdn.lightwidget.com lightwidget.com www.facebook.com www.google-analytics.com data: 'self'; script-src googleads.g.doubleclick.net www.googleadservices.com www.google-analytics.com analytics.google.com www.googletagmanager.com www.paypal.com www.sandbox.paypal.com www.paypalobjects.com t.paypal.com s.ytimg.com www.googleapis.com vimeo.com www.vimeo.com *.vimeocdn.com *.youtube.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://cdn.jsdelivr.net connect.facebook.net https://connect.facebook.net *.cloudflare.com *.twitter.com *.twimg.com *.gstatic.com *.trustedshops.com *.usercentrics.eu *.fontawesome.com *.google.com *.instagram.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.googleapis.com *.placeholder.com cdn.lightwidget.com lightwidget.com blob: 'self' 'unsafe-inline' 'unsafe-eval'; style-src https://cdn.jsdelivr.net *.cloudflare.com *.googleapis.com *.twitter.com *.twimg.com *.gstatic.com *.typekit.net *.trustedshops.com *.usercentrics.eu *.fontawesome.com *.google.com *.youtube.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.placeholder.com cdn.lightwidget.com lightwidget.com maxcdn.bootstrapcdn.com fonts.googleapis.com 'self' 'unsafe-inline'; object-src 'self'; media-src 'self'; manifest-src 'self'; connect-src www.googleadservices.com *.google-analytics.com *.analytics.google.com www.googletagmanager.com vimeo.com www.sandbox.paypal.com www.paypalobjects.com www.paypal.com pilot-payflowlink.paypal.com *.cloudflare.com *.twitter.com *.paypal.com *.twimg.com *.google.com *.youtube.com *.cdninstagram.com s7.addthis.com *.addthis.com *.moatads.com *.addthisedge.com *.facebook.com *.googleapis.com *.placeholder.com cdn.lightwidget.com lightwidget.com www.facebook.com connect.facebook.net www.google-analytics.com blob: data: 'self'; child-src http: https: blob: 'self'; default-src 'self'; base-uri 'self';
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-awa-header-optimize: v12-r8-nostack
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+x-permitted-cross-domain-policies: master-only
+referrer-policy: strict-origin-when-cross-origin
+age: 0
+accept-ranges: bytes
+x-xss-protection: 0
+pragma: no-cache
+expires: -1
+cache-control: no-store, no-cache, must-revalidate, max-age=0
+alt-svc: clear
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=(self)
+
+
+=== 4b) tag <link id="awa-design-system-home"> no HTML SERVIDO (3 fetchs) ===
+--- fetch 1 ---
+<link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+  media=? NAO | onload=? NAO | data-awa-defer no tag = 1
+--- fetch 2 ---
+<link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+  media=? NAO | onload=? NAO | data-awa-defer no tag = 1
+--- fetch 3 ---
+<link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+  media=? NAO | onload=? NAO | data-awa-defer no tag = 1
+
+=== 5) TESTE UNITARIO DO GUARD (extraido do arquivo implantado) ===
+sha256 do arquivo = 3ad909a07b87a7dcba5cca61213601f7354edfaf0f62c8ec30eeaf8e62dc22f7
+
+guard encontrado na linha 7364 e extraido do ARQUIVO:
+  /data-awa-defer=["'][^"']*(?<![A-Za-z0-9_-])home-lcp(?![A-Za-z0-9_-])[^"']*["']/i
+  (validacao da regex: true)
+
+=== CASOS ===
+PASS  A) ESTADO POS-patch-02: sem media, sem onload, com home-lcp (DEVE PULAR)                     casou=true esperado=true
+PASS  B) ESTADO ATUAL: com home-lcp E o onload inerte do patch-02 (DEVE PULAR - pelo guard OU pelo onload) casou=true esperado=true
+PASS  C) DEFEITO ORIGINAL: DOIS data-awa-defer, home-lcp + catalog-noncritical (DEVE PULAR)        casou=true esperado=true
+PASS  D) FALLBACK LEGITIMO: link orfao SEM home-lcp (NAO deve pular -> plugin reescreve)           casou=false esperado=false
+PASS  E) FALLBACK LEGITIMO: outro id, com o fragmento design-system (NAO deve pular)               casou=false esperado=false
+PASS  F) FRONTEIRA: valor parecido x-home-lcp NAO pode casar (NAO deve pular)                      casou=false esperado=false
+PASS  G) FRONTEIRA: valor home-lcp-extra NAO pode casar (NAO deve pular)                           casou=false esperado=false
+PASS  H) FRONTEIRA: home-lcp como segundo valor numa lista (DEVE PULAR)                            casou=true esperado=true
+
+=== CONTROLE: o guard ANTIGO (media=print || onload=) segura o caso A? ===
+guard ANTIGO pularia? false  (esperado false -> era AQUI que o plugin re-deferia)
+guard NOVO  pularia? true  (esperado true)
+
+falhas = 0
+
+=== 6) TOTAL de data-awa-defer na home (o deferidor continua ativo?) ===
+data-awa-defer="catalog-noncritical" = 0
+data-awa-defer="home-lcp"            = 1
+media="print"                         = 9
+
+=== 7) PROVA DE CAUSALIDADE (contrafactual sobre os attrs REAIS servidos) ===
+TAG SERVIDA AGORA:
+  <link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+
+=== ATTRS REAIS ===
+  rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"
+
+=== SEM O MEU GUARD (guard antigo) ===
+  pularia? false
+  SERVIDO SERIA:
+    <link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp" media="print" onload="this.media='all'" data-awa-defer="catalog-noncritical"/>
+
+=== COM O MEU GUARD (implantado) ===
+  pularia? true
+  SERVIDO E: 
+    <link rel="stylesheet" href="https://awamotos.com/static/version1791151764/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-design-system.min.css?v=20260904-premium-ui-w19" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+
+VEREDITO: o guard E LOAD-BEARING — sem ele este link voltaria a media="print" + data-awa-defer duplicado.
+
+=== 8) TEMPLATE (app/design, leitura) linha 42 ===
+<link rel="stylesheet" href="<?= $__dsUrl ?>" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
