@@ -154,3 +154,15 @@
 - PENDENTE (follow-up comercial): alinhamento FINAL de itens por pedido com o time
   (ERP tratado como verdade); Magento mantém snapshot web para histórico.
 - #117 (200105) segue nunca-importado no Sectra — falha distinta, documentada.
+
+## ATUALIZAÇÃO — 2026-10-16 ~10:15 BRT (404 do autocomplete r3)
+
+- Diagnóstico: o HTML atual NÃO referencia popular-r3 (migração r3->r9 em 03/10).
+  O 404 vinha de páginas cacheadas antigas (service worker /sw.js + browser) com a
+  versão 1792154979 (de ~14/10).
+- Correção (COMMIT d89166d13): stub no-op autocomplete.popular-r3.min.js no tema —
+  qualquer cache antigo agora recebe 200 + JS vazio (sem 404, sem lógica duplicada).
+- Verificado: stub 200; backend 4/4 caminhos 200; público 200 (/, /mini.html);
+  HTML da busca = 0 referências a r3.
+- Nota de processo: smoke com query malformada (&dsreg sem ?) gerou falso 404 no lote —
+  corrigido na verificação final; site nunca esteve fora.
