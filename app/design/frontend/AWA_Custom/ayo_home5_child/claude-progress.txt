@@ -318,3 +318,25 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Estado: toque44=104 (pílulas footer ~70 + Manetes/Retrovisores + fone/email), tipografia=32
   (Novo/Assistente/price-notice), alts=3. clip=6 (carrossel intencional).
+
+## ATUALIZAÇÃO — 2026-10-16 ~13:25 BRT (campanha, round 8 — BREAKTHROUGH)
+
+### Progresso: 264 -> 86 (-178, 67%!)
+- CAUSA FINAL da resistência: o edit do modelo PHP (cascade lock) não estava vivo —
+  opcache do FPM não resetava de fato. Após reset explícito dos pools 19002-19004,
+  as pílulas do footer ficaram 44px na home E carrinho (probes confirmam).
+- 8821fdd3d: chat toggle 44px + max-width + fone/email globais 44px (toque44 104->39).
+- Commits do round: 6b4a5dcce (3 fontes do lock) + 8821fdd3d + 51e950d0c (docs).
+
+### Estado final do round
+- toque44=39: fone/email header x15 (top utility bar — próximo alvo), chat close x5
+  (fora do #awa-ai-chat-root), termos de busca x6, breadcrumb Início x3 (não-ticket).
+- tipografia=32: Novo x6, Assistente x6, price-notice x6 (próximos).
+- clip=12: carrossel peek (intencional) + teaser do chat (peek intencional do widget).
+- alts=3 (templates).
+
+### Próximo round
+1. fone/email do top utility bar (descobrir o container inline exato via probe).
+2. Novo/Assistente/price-notice 12px (probe por elemento para achar o vencedor).
+3. close do chat (container fora do root).
+4. Alts dos carrosséis (templates).
