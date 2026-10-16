@@ -265,3 +265,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 ### Ferramentas: probe_owner.js (scan de stylesheets) — limitado: cssRules de sheets
   CORS/construídos não aparecem; próximo passo: instrumentar via Performance.getEntriesByType
   ou interceptar adições de <style> com MutationObserver no CDP.
+
+## ATUALIZAÇÃO — 2026-10-16 ~12:30 BRT (campanha, round 5)
+
+### Progresso: 264 -> 142 (-122)
+- h1 carrinho: templates noItems/noItems-clean em h2 (COMMIT 926d5b10d, verificado no disco/HEAD),
+  mas o HTML renderizado continua h1 — cache de saída que sobrevive a flush/clean/opcache(todos
+  pools)/varnish ban. Origem chegou a servir h2 logo após o fix e REVERTEU sozinha. Próximo
+  round: instrumentar o render (log do block checkout.cart.empty + template usado via
+  preferência no di.xml / compiled layout em Redis) antes de mais tentativas de flush.
+- Footer links 28px + badge Novo 11px: vencedores vivem em pipeline JS/stylesheet não estático
+  (MutationObserver não registrou injeção de <style>; adoptedStyleSheets=0; sem shadow roots).
+  Próxima investigação: o loader de CSS do awa-head-preload monta o <style> via texto PHP —
+  rastrear o bloco que emite essas regras no fonte do phtml (procura por "categories-list" +
+  28px nas seções JS do preload).
+- Alts (18 imgs na home): carrossel usa <picture> sem alt no template do slider da home —
+  alvo do próximo round (Magento_Catalog/product/list.phtml já trata alt do produto).
+
+### Ferramentas novas: probe_cart_state.js (adopted/shadow/iframes), probe_inject.js
+  (MutationObserver pré-scripts), probe_owner.js (scan stylesheets).
