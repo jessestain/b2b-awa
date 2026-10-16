@@ -563,3 +563,24 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 ### Pendencia do ciclo: crescimento das abas da PDP (descricao/FAQ) abaixo da dobra —
   responsavel por parte do 0.09 residual; atacar no proximo ciclo (render inicial das
   abas no estado final ou reserva de altura).
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:15 BRT (ciclo 2-3: CLS residual + tentativa slim 98KB)
+
+### Feito: botao Entrar 44px no SSR (2f2234fd6) — CLS desktop 0.09 mantido, regressao verde.
+
+### Investigado: TTFB 520ms era artefato do pos-ban na ORIGEM. Via Varnish real = 31ms
+  (age>0, HTML cacheado apesar do cache-control:no-store do Magento). Nao e problema.
+
+### Tentativa: estender o slim do bloco align-grid-inline (98KB) da HOME para todas as
+  paginas. Arquitetura ja existente: injectSiteShellInlineLock usa ~1KB na HOME e 98KB
+  nas demais; o restante "entra via align-grid terminal (idle/gate)".
+  - Cobertura combinada do bloco em styles-l+core-bundle+align-grid = 24% (159 regras
+    unicas) -> a migracao para o core-bundle (render-blocking) era necessaria.
+  - FALHOU: o $css non-home INTERCALA strings CSS com logica PHP ($skipCatalogRuntimePatch,
+    $payload=$css, $injected=preg_replace...) entre as linhas 2877-5776 — o corte por
+    linha quebrou o metodo (Undefined variable). ROLLBACK imediato e completo (site 200,
+    regressao rc=0, plugin restaurado do backup).
+  - LICAO: para o proximo ciclo, extrair primeiro o payload CSS para uma constante/membro
+    isolado (single source) e so entao slimar a emissao; nao editar o metodo por corte.
+
+### Estado: site estavel, 200, regressao verde. Objetivo ativo (ciclo 2/256).
