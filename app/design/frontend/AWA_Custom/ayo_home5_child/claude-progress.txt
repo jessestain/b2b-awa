@@ -584,3 +584,20 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
     isolado (single source) e so entao slimar a emissao; nao editar o metodo por corte.
 
 ### Estado: site estavel, 200, regressao verde. Objetivo ativo (ciclo 2/256).
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:15 BRT (ciclo 3: slim do align-grid inline no PDP — SUCESSO)
+
+### ccdd (proximo commit): HTML do PDP -91KB (705 -> 614KB)
+- O bloco align-grid-inline-lock (98KB) era montado CONDICIONALMENTE por acao no plugin
+  (HOME/catalogo/PDP com segmentos $css .= dentro de ifs — por isso o corte anterior falhou).
+- Fix correto: branch dedicado para catalog_product_view que emite APENAS o shell
+  first-paint (~1KB: tokens + header + main + footer shell), e o bloco completo foi
+  movido para o awa-core-bundle.min.css (RENDER-BLOCKING no head, marcador
+  AWA-MOVED-ALIGN-INLINE-LOCK).
+- Verificado: primeiro paint identico (early probe: promo 44/sticky 116/nav 48/main
+  182->183 inalterados); regressao rc=0; inventario PDP limpo nos 3 breakpoints;
+  CWV: FCP 0.92->1.15s e LCP 1.15s (ainda < 1.8/2.5s metas — trade aceito: CSS cacheavel
+  imutavel vs inline transferido a cada load); CLS 0.109 (variacao dos shifts residuais
+  ja mapeados: abas da PDP + hidratacao).
+- A HOME continua no proprio branch; catalogo permanece com o bloco full (proximo ciclo
+  pode replicar o branch se a cobertura das regras de catalogo for verificada).
