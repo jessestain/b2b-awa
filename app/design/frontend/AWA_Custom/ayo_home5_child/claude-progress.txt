@@ -299,3 +299,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Estado: tipografia 32 (Novo x6, Assistente x6, price-notice x6), toque44 104,
   clip 6 (carrossel), alts 3. Regressão DS verde em todos os lotes.
+
+## ATUALIZAÇÃO — 2026-10-16 ~13:05 BRT (campanha, round 7)
+
+### Progresso: 264 -> 142 (-122). h1 carrinho ZERADO, overflow ZERADO, taglines ZERADOS.
+- 6b4a5dcce: pílulas do footer 28->44px nas 3 fontes do CASCADE LOCK identificadas:
+  HeaderImpeccableCascadeLockCss.php (modelo PHP que emite CSS inline — o "inline-style-tag"
+  dos probes), awa-footer-terminal-lock-v1.min.css, awa-home-impeccable-terminal-v1.min.css.
+- AINDA resiste: uma 4a cópia da regra (28px, ids longos, pílula padding:4px 10px) que o probe
+  não conseguiu atribuir (getStyleSheetByID retorna vazio p/ todas as folhas). Candidatas a
+  testar no próximo round por ELIMINAÇÃO: awa-header-mobile-grid-critical.css (inlinada?),
+  awa-home-critical-stack-2026-06-11.min.css, awa-defer-global-bundle.min.css. Método: remover
+  a regra de UM candidato por vez e medir computado (teste controlado), em vez de adicionar
+  camadas de especificidade.
+- Aprendizado: a guerra de especificidade não resolve — o código duplica a MESMA regra em
+  N lugares (cascade lock). O caminho correto é REMOVER as cópias (absorver rounds) e manter
+  UMA regra canônica — próxima fase da campanha.
+
+### Estado: toque44=104 (pílulas footer ~70 + Manetes/Retrovisores + fone/email), tipografia=32
+  (Novo/Assistente/price-notice), alts=3. clip=6 (carrossel intencional).
