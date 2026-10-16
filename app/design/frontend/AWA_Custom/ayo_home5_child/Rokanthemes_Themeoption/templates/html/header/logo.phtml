@@ -3,6 +3,19 @@
  * AWA Custom Logo Template
  * Refactored for performance (lazy loading + fetchpriority) and accessibility.
  *
+ * Item 14 (pacote layout PDP, 04/10/2026): a assinatura "MOTO COMPONENTES" vinha
+ * embutida na arte com ~6 px de altura (ilegível em 48 px de caixa; nenhum asset
+ * do acervo melhora — medido em tools/derivar_logo.py). Aqui a faixa embutida é
+ * escondida (clip-path) e a assinatura passa a ser texto vetorial sob a marca.
+ *
+ * SEGURANÇA (por que assim):
+ *  - os estilos vão NESTE template porque a home remove os <style id="awa-…"> do tema;
+ *  - a assinatura nasce com style="display:none" — se o CSS abaixo não vencer em alguma
+ *    página, ela simplesmente NÃO aparece (nunca sobra texto solto);
+ *  - fora da home o lockup vale com o escopo padrão; NA HOME ele precisa de um bloco
+ *    próprio (`cms-index-index`), porque lá a caixa do logo é fixada em 44 px com
+ *    overflow hidden (medido: div.logo 104x44 dentro da coluna de 160x68).
+ *
  * @var \Magento\Theme\Block\Html\Header\Logo $block
  * @var \Magento\Framework\Escaper $escaper
  */
@@ -12,24 +25,121 @@ $logoUrl = $block->getUrl('');
 $logoSrc = $block->getLogoSrc();
 $logoAlt = $block->getLogoAlt();
 
-// CLS: atributos = dimensões naturais do PNG (161×92, ratio 1.75) — coincidem com a
-// largura aplicada via CSS (.logo img { width:161px; height:auto }). O navegador deriva
-// o aspect-ratio dos atributos e reserva a altura correta em todos os breakpoints (desktop
-// 161×92, mobile 132×~75), eliminando o conflito atributo↔CSS e o layout shift.
+// CLS: atributos = dimensões naturais do PNG (161×92, ratio 1.75).
 $logoWidth = 161;
 $logoHeight = 92;
 $isHomePage = $block->getRequest()->getFullActionName() === 'cms_index_index';
 // Home: LCP é o hero slider — logo sem fetchpriority=high (evita competição de bandwidth/prioridade)
 $logoFetchPriority = $isHomePage ? '' : ' fetchpriority="high"';
 ?>
-<div class="logo">
+<div class="logo awa-logo-lockup">
     <a href="<?= $escaper->escapeUrl($logoUrl) ?>"
        title="<?= $escaper->escapeHtmlAttr($storeName) ?>"
        aria-label="<?= $escaper->escapeHtmlAttr(__('Ir para a página inicial da AWA Motos')) ?>">
-        <img src="<?= $escaper->escapeUrl($logoSrc) ?>"
+        <img class="awa-logo-lockup__mark"
+             src="<?= $escaper->escapeUrl($logoSrc) ?>"
              alt="<?= $escaper->escapeHtmlAttr($logoAlt) ?>"
              width="<?= $escaper->escapeHtmlAttr($logoWidth) ?>"
              height="<?= $escaper->escapeHtmlAttr($logoHeight) ?>"
              loading="eager"<?= $logoFetchPriority ?> />
+        <span class="awa-logo-lockup__tagline" style="display:none"><?= $escaper->escapeHtml(__('MOTO COMPONENTES')) ?></span>
     </a>
 </div>
+<style>
+/* AWA — lockup do logo AWA (pacote layout PDP · item 14 · 04/10/2026)
+   Camada awa-fixes + seletor explícito: vence a cascata do tema independentemente
+   da ordem de injeção dos blocos. Fora da home, que tem header próprio. */
+@layer awa-fixes {
+  html body#html-body#html-body#html-body:not(.cms-index-index) .logo.awa-logo-lockup > a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+  }
+  html body#html-body#html-body#html-body:not(.cms-index-index) .logo.awa-logo-lockup img.awa-logo-lockup__mark {
+    clip-path: inset(0 0 7% 0) !important;
+    height: 52px !important;
+    max-height: 52px !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+  html body#html-body#html-body#html-body:not(.cms-index-index) .logo.awa-logo-lockup .awa-logo-lockup__tagline {
+    display: block !important;
+    margin-top: 2px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    letter-spacing: .16em !important;
+    font-weight: 600 !important;
+    color: var(--awa-brand, #b73337) !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  /* --- Header mobile (pacote layout PDP · rodada 2 · 04/10/2026) ------------
+     Estas duas regras vivem NESTE template (e não no bloco terminal do tema)
+     porque a home remove as tags style com id "awa-..." do tema; aqui valem em todas as páginas.
+     R2-02: a caixa do prompt de conta é 44px com overflow:hidden e o bloco de
+     texto do desktop (143-146px) continuava renderizado — sobrava um link
+     "Entrar" de 16px cortado e a linha "Para ver os preços" resolvia 0x0. No
+     mobile o ponto de entrada é o link-ícone 44x44 com aria-label "Entrar na
+     conta"; o texto do desktop sai de cena de forma limpa.
+     R2-07: o CTA "Cadastre-se" da faixa promocional media 69x17 no mobile
+     (alvo de toque); volta aos 44px sem mexer na altura da barra. */
+  @media (max-width: 767px) {
+    html body#html-body#html-body#html-body#html-body#html-body .awa-header-account-prompt__text {
+      display: none !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body .awa-header-account-prompt .awa-header-account-prompt__mobile-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+    }
+    html body#html-body#html-body#html-body#html-body#html-body .awa-b2b-promo-bar__cta {
+      display: inline-flex !important;
+      align-items: center !important;
+      min-height: 44px !important;
+    }
+  }
+  html body#html-body#html-body#html-body:not(.cms-index-index) .header_main.awa-main-header-inner-wrap .logo.awa-logo-lockup {
+    max-width: 148px !important;
+  }
+
+  /* Home: mesmo lockup. Lá a caixa do logo é fixada em 44 px com overflow hidden
+     (medido: div.logo 104x44 dentro da coluna de 160x68), então ela precisa ser destravada. */
+  html body#html-body#html-body#html-body#html-body#html-body.cms-index-index .logo.awa-logo-lockup {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body.cms-index-index .logo.awa-logo-lockup > a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    height: auto !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body.cms-index-index .logo.awa-logo-lockup img.awa-logo-lockup__mark {
+    clip-path: inset(0 0 7% 0) !important;
+    height: 52px !important;
+    max-height: 52px !important;
+    width: auto !important;
+    max-width: 100% !important;
+  }
+  html body#html-body#html-body#html-body#html-body#html-body.cms-index-index .logo.awa-logo-lockup .awa-logo-lockup__tagline {
+    display: block !important;
+    margin-top: 2px !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    letter-spacing: .16em !important;
+    font-weight: 600 !important;
+    color: var(--awa-brand, #b73337) !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+}
+</style>
