@@ -284,3 +284,18 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Ferramentas novas: probe_cart_state.js (adopted/shadow/iframes), probe_inject.js
   (MutationObserver pré-scripts), probe_owner.js (scan stylesheets).
+
+## ATUALIZAÇÃO — 2026-10-16 ~12:45 BRT (campanha, round 6)
+
+### Progresso: 264 -> 142 (-122; h1 carrinho ZERADO, footer em andamento)
+- h1 do carrinho RESOLVIDO (render cache finalmente cedeu após o ciclo completo de
+  flush/deploys; verificado via probe: 1 h1).
+- 8994d6740: append com cadeia de 44 ids no align-grid (footer 44px + badge 12px).
+  Verificado na HOME via probe: vencedor = 44px. Inventário: toque44 ainda 104 —
+  restam páginas onde o link do footer vive em wrapper diferente (section.awa-footer-
+  categories-expand — regra 28px com 20 ids) OU o height renderizado fica <44 apesar
+  do min-height (padding colapsado). Próximo round: probe por página (PLP/PDP) do
+  wrapper real e ajuste do seletor (:is() deve cobrir o anchor dentro do expand).
+
+### Estado: tipografia 32 (Novo x6, Assistente x6, price-notice x6), toque44 104,
+  clip 6 (carrossel), alts 3. Regressão DS verde em todos os lotes.
