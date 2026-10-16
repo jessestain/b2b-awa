@@ -1,0 +1,1 @@
+@layer awa-fixes{html body#html-body .rx-pdp-card .rx-pdp-name{color:var(--awa-ink,oklch(.22 .012 27))!important;font-weight:600!important;text-decoration:none!important}html body#html-body .rx-pdp-card .rx-pdp-name:focus-visible,html body#html-body .rx-pdp-card .rx-pdp-name:hover{color:var(--awa-brand,#b73337) )!important;text-decoration:underline!important}}
