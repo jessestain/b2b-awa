@@ -9,6 +9,18 @@ $isHomeRoute = $fullActionName === 'cms_index_index' || $pathSlug === '';
 $isDemoStagePreview = $fullActionName === 'cms_page_view'
     && in_array($pathSlug, ['homepage_ayo_home5_stage', 'homepage_ayo_home5_demo_stage'], true);
 $isProductRoute = $fullActionName === 'catalog_product_view';
+/* ESCOPO PROVADO (04/10/2026): awa-page-home-category-premium (45 KB) e CSS de
+   HOME/CATEGORIA — o nome e o conteudo dizem, e a propria home o remove via XML.
+   Ele vinha sendo carregado em `!$isProductRoute`, ou seja, em contato, conta, B2B
+   e CMS. MEDIDO com probe-dependencia-folhas.js em /contact/: desabilitar essa folha
+   nao altera NENHUM valor computado de 25 componentes-ancora — confirmado nas 4
+   combinacoes (desktop+mobile x anonimo+logado). Restringido ao escopo do nome. */
+$isListingRoute = in_array($fullActionName, [
+    'cms_index_index',
+    'catalog_category_view',
+    'catalogsearch_result_index',
+    'catalogsearch_advanced_result',
+], true) || $pathSlug === '';
 $isCheckoutRoute = in_array($fullActionName, [
     'checkout_cart_index',
     'checkout_index_index',
@@ -34,7 +46,7 @@ $linkMedia = $isCheckoutRoute
 <link rel="stylesheet"
       type="text/css"
       <?= /* @noEscape */ $linkMedia ?>
-      href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-round9-post-themeoption-overrides.css')) ?>" />
+      href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-themeoption-bundle.css')) ?>" />
 <?php
 /**
  * awa-round10-footer-light-perfect.css removido (2026-07-22):
@@ -43,22 +55,13 @@ $linkMedia = $isCheckoutRoute
  * Autoridade única: GrupoAwamotos\Theme\Model\HeaderImpeccableCascadeLockCss.
  */
 ?>
-<link rel="stylesheet"
-      type="text/css"
-      <?= /* @noEscape */ $linkMedia ?>
-      href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-components-b2b-foundation.css')) ?>" />
-<link rel="stylesheet"
-      type="text/css"
-      <?= /* @noEscape */ $linkMedia ?>
-      href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-compat-b2b-nav-plp-cart-checkout.css')) ?>" />
+
+
 <?php if ($isCheckoutRoute): ?>
 <link rel="stylesheet"
       type="text/css"
       media="all"
       href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-page-b2b-cart-checkout-premium.css')) ?>" />
-<?php elseif (!$isProductRoute): ?>
-<link rel="stylesheet"
-      type="text/css"
-      <?= /* @noEscape */ $linkMedia ?>
-      href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-page-home-category-premium.css')) ?>" />
+<?php elseif ($isListingRoute || $isDemoStagePreview): ?>
+
 <?php endif; ?>
