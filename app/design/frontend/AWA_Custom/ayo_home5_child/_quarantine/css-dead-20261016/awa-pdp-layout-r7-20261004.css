@@ -1,0 +1,102 @@
+/* ==========================================================================
+ * AWA — correções da RODADA 2 (achados R2-01..R2-12) · r7 · 2026-10-04
+ * Pacote: 02-frontend-b2b-a11y/pacote-layout-pdp  (ver ACHADOS-RODADA2.md)
+ * Carregado pelo mesmo veículo terminal do tema (glob awa-pdp-layout-r*.css),
+ * presente em PDP/PLP/busca/categorias — a home é excluída de propósito
+ * (blocos <style id="awa-…"> são removidos lá; ver PATCH.md).
+ * ========================================================================== */
+@layer awa-fixes {
+
+  /* --- R2-02 (P1) · Prompt de conta no header mobile ------------------------
+     A caixa é 44px com overflow:hidden, mas o bloco de texto do desktop
+     (146px) continuava renderizado: sobrava um link "Entrar" de 16px cortado em
+     x331 e a linha "Para ver os preços" resolvia 0x0 (invisível também para
+     leitor de tela). No mobile o ponto de entrada previsto é o link-ícone
+     `.awa-header-account-prompt__mobile-link` (44x44, aria-label "Entrar na
+     conta"); aqui o bloco de texto sai de cena de forma limpa e o ícone
+     mantém alvo de 44x44. */
+  @media (max-width: 767px) {
+    html body#html-body .awa-header-account-prompt__text {
+      display: none !important;
+    }
+    html body#html-body .awa-header-account-prompt .awa-header-account-prompt__mobile-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 44px !important;
+      min-width: 44px !important;
+      height: 44px !important;
+      min-height: 44px !important;
+    }
+  }
+
+  /* --- R2-03 (P2) · Breadcrumb da PDP cortava o produto sem ellipsis --------
+     Medido no mobile: `div.breadcrumbs` 358px com `ul.items` de scrollWidth 407
+     (49px escondidos) e o `li.item.product` de 304px com `flex:0 0 auto` —
+     o ellipsis declarado nunca era aplicado porque o item estourava o <ul>.
+     (A sonda do relatório citou `nav.nav-breadcrumbs`; o elemento real na PDP é
+     `div.breadcrumbs` com `aria-label="Navegação estrutural"`.) */
+  @media (max-width: 767px) {
+    html body#html-body .breadcrumbs {
+      overflow: hidden !important;
+    }
+    html body#html-body .breadcrumbs .items {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+    html body#html-body .breadcrumbs .items > .item {
+      min-width: 0 !important;
+      flex: 0 0 auto !important;
+    }
+    html body#html-body .breadcrumbs .items > .item.product {
+      flex: 0 1 auto !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+    html body#html-body .breadcrumbs .items > .item.product > *,
+    html body#html-body .breadcrumbs .items > .item.product span {
+      display: block !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+  }
+
+  /* --- R2-04 (P2) · "Cod:" do SKU nos cards em 1,79:1 ----------------------
+     rgb(187,187,187) sobre rgb(247,247,248); o valor estava em 3,31:1.
+     Alvos medidos: #6b6b6b = 4,98:1 e #525252 = 7,30:1 sobre #f7f7f8.
+     Escopo: vitrine/busca — na home o mesmo bloco já estava em 7,58:1 e não
+     deve ser tocado. */
+  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .awa-b2b-sku__label {
+    color: #6b6b6b !important;
+  }
+  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .awa-b2b-sku__value {
+    color: #525252 !important;
+  }
+
+  /* --- R2-05 (P2) · Badge "Muito Recomendado" em 2,54:1 -------------------
+     Branco sobre #10b981 = 2,54:1; com #047857 vai para 5,48:1.
+     Obs.: o outro item do achado ("Em estoque") foi **falso-positivo** — o
+     cálculo do relatório ignorou o alfa do `rgba(40,167,69,.08)`; composto
+     sobre branco o contraste já era 6,56:1 (não alterado). */
+  html body#html-body .rx-pdp-badge.rx-badge-high {
+    background-color: #047857 !important;
+  }
+
+  /* --- R2-07 (P2) · CTA "Cadastre-se" da faixa com 17px de altura no mobile -
+     Desktop = 120x44; no mobile o link encolhia para 69x17 dentro da barra de
+     44px. Alvo de toque volta aos 44px sem mexer na altura da barra. */
+  @media (max-width: 767px) {
+    html body#html-body .awa-b2b-promo-bar__cta {
+      display: inline-flex !important;
+      align-items: center !important;
+      min-height: 44px !important;
+    }
+  }
+}

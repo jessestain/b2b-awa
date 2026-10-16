@@ -1,0 +1,136 @@
+/* ==========================================================================
+ * AWA — PDP layout polish · r1 · 2026-10-03
+ * Pacote: 02-frontend-b2b-a11y/pacote-layout-pdp (ver PATCH.md / VERIFICACAO.md)
+ * Alvo: PDP (catalog_product_view) e faixa de benefícios do rodapé.
+ *
+ * Por que @layer awa-fixes:
+ *   O tema publica CSS terminal por PHP/phtml e usa `@layer awa-fixes`.
+ *   Pela cascata, declarações `!important` DENTRO de uma camada vencem as
+ *   `!important` fora de camada; dentro da camada, vale a última declaração.
+ *   Este bloco vai no fim do último stylesheet terminal => dono único.
+ *
+ * Um bloco por achado, com o mínimo de propriedades. Nada de seletor novo
+ * em cima de regra viva que não seja o alvo do achado.
+ * ========================================================================== */
+@layer awa-fixes {
+
+  /* --- 1) Galeria: moldura da miniatura quadrada 85x85 (thumb do Fotorama)
+     Antes: 85x64 forçado por awa-pdp-conversion-async.phtml (64px !important)
+     + OptimizeHeadStylesPlugin (56px/52px), com a imagem 85x85 comprimida em
+     81x60 => produto menor que na imagem principal e corte no topo. */
+  html body#html-body.catalog-product-view .page-wrapper .product.media .fotorama__nav__frame--thumb,
+  html body#html-body.catalog-product-view .page-wrapper .product.media .fotorama__thumb-border {
+    width: 85px !important;
+    height: 85px !important;
+  }
+
+  /* --- 2) Aba "Detalhes": um único indicador.
+     Antes: 3 indicadores concorrentes — border-bottom 3px do .item.title.active
+     + text-decoration:underline no <a> + ::before 50x2px rgb(142,38,41). */
+  html body#html-body.catalog-product-view .product.data.items > .item.title.active > a {
+    text-decoration: none !important;
+  }
+  html body#html-body.catalog-product-view .product.data.items > .item.title.active > a::before {
+    content: none !important;
+  }
+
+  /* --- 3) Selo "Em estoque": ponto com respiro e padding simétrico.
+     Antes: ::before 8x8 sem margin encostado no "E" (o badge nem é flex em
+     produção, então `gap` não age) + padding assimétrico 4px/12px. */
+  html body#html-body.catalog-product-view .product-info-stock-sku .stock.available,
+  html body#html-body.catalog-product-view .product-info-stock-sku .stock.unavailable {
+    padding: 4px 12px !important;
+    border-radius: 999px !important;
+  }
+  html body#html-body.catalog-product-view .product-info-stock-sku .stock.available::before,
+  html body#html-body.catalog-product-view .product-info-stock-sku .stock.unavailable::before {
+    margin-right: 6px !important;
+    box-shadow: none !important;
+  }
+
+  /* --- 6) Carrossel "Produtos Relacionados": setas saem de cima dos cards.
+     Antes: .awa-owl-nav com inset:0 sobre o trilho e botões a 16px da borda
+     (x 173..217 e 1329..1373), cobrindo o 1º e o 5º card. O deslocamento do
+     nav e do trilho é feito por JS (inline top/height), então a via estável é
+     deslocar os botões pelo próprio custom property do tema: eles passam para
+     as calhas laterais (fora do trilho), padrão "setas fora do carrossel". */
+  @media (min-width: 768px) {
+    html body#html-body.catalog-product-view .awa-pdp-related .awa-carousel {
+      --awa-carousel-button-offset: -30px!important;
+    }
+  }
+  @media (min-width: 1440px) {
+    html body#html-body.catalog-product-view .awa-pdp-related .awa-carousel {
+      --awa-carousel-button-offset: -46px!important;
+    }
+  }
+
+  /* --- 8) Card de recomendados: parar de pular pintura.
+     Antes: content-visibility:auto + contain-intrinsic-size:280px faziam a
+     foto do card sair em branco em captura de página inteira/print.
+     Também centraliza o grid quando há 1 único item. */
+  html body#html-body .rx-pdp-card {
+    content-visibility: visible !important;
+    contain-intrinsic-size: auto !important;
+  }
+  html body#html-body .rx-pdp-grid[data-item-count="1"] {
+    justify-content: center !important;
+  }
+
+  /* --- 9) Header: fio inferior contínuo.
+     Antes: .header_main.awa-main-header-inner-wrap desenha border-bottom de
+     1px em 1545px, mas .awa-main-header__inner.wp-header (1280px, fundo #fff,
+     mesmo z-index, depois no DOM) cobre o miolo => fio visível só em x0-132 e
+     x1413-1544. Aqui o fio passa a ser desenhado por ::after acima do filho. */
+  html body#html-body .header_main.awa-main-header-inner-wrap {
+    border-bottom: 0 !important;
+  }
+  html body#html-body .header_main.awa-main-header-inner-wrap::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 1px !important;
+    background: rgb(225, 225, 225) !important;
+    z-index: 25 !important;
+    pointer-events: none !important;
+  }
+
+  /* --- 10) Faixa promocional do topo: mensagem + CTA centrados como grupo.
+     Antes: padding 0 52px 0 24px assimétrico e <p> ocupando 1204px com o CTA
+     por cima do fim da caixa => mensagem 81px à esquerda do centro e 449px de
+     vermelho vazio à esquerda contra ~150px à direita. */
+  html body#html-body .awa-b2b-promo-bar__inner {
+    justify-content: center !important;
+    padding-inline: 24px !important;
+    gap: 16px !important;
+  }
+  html body#html-body .awa-b2b-promo-bar__text {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 190px) !important;
+    overflow: visible !important;
+  }
+  html body#html-body .awa-b2b-promo-bar__lead-long {
+    display: inline !important;
+    width: auto !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+  html body#html-body .awa-b2b-promo-bar__cta {
+    margin-inline-start: 0 !important;
+  }
+
+  /* --- 11) Faixa de benefícios do rodapé: itens alinhados pela 1ª linha.
+     Antes: grid de 4 colunas com itens em align-items:center; o item da SSL
+     quebra em 2 linhas e fica 59px de altura contra 41px dos outros, então
+     ícones e títulos dos demais ficam desalinhados. */
+  html body#html-body .awa-footer-trust-item {
+    align-items: flex-start !important;
+  }
+  html body#html-body .awa-footer-trust-item .awa-footer-trust-copy {
+    padding-top: 1px !important;
+  }
+}

@@ -82,7 +82,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalo
     .b2b-login-to-see-price__message {
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 1 !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
     display: -webkit-box !important;
     font-size: 12px !important;
     font-weight: 600 !important;
