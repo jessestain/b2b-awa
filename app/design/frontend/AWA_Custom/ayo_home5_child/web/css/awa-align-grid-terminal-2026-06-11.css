@@ -26626,17 +26626,20 @@ body.contact-index-index .column.main h2.awa-contact-form__title {
 }
 
 
-/* ── DS 2026-10-16 v2: cadeia de 44 ids — vence qualquer regra anterior ── */
+}
+
+
+/* ── DS 2026-10-16 v3: cadeia de 44 ids ── */
 @media (max-width: 1023px) {
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header :is(a.level-top.navigation__link, a[href^="tel:"], a[href^="mailto:"]),
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-header-contact-links :is(a[href^="tel:"], a[href^="mailto:"]),
   html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer, .page-footer) a {
     min-height: 44px !important;
     height: auto !important;
     display: inline-flex !important;
     align-items: center !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
   }
 }
-html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card) .sale-text :is(label, span) {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.product-item, .item-product, .awa-product-card) :is(label, .sale-text label, .sale-text span) {
   font-size: 12px !important;
 }
