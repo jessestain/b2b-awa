@@ -548,3 +548,18 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 ### Resultado: CLS desktop 0.745 -> 0.09 (meta <0.1). FCP 0.9s, LCP 0.9-1.2s.
   Restante do 0.09: hidratacao do botao Entrar (39->44px) e crescimento das abas da
   PDP (descricao/FAQ) — ABAIXO da dobra; proximo ciclo ataca esses.
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:05 BRT (ciclo 2: CLS residual — botao Entrar)
+
+### Causa raiz: o align-grid e "body-terminal" (carrega ASSINCRONO, apos o primeiro
+  paint) — todas as regras 44px dele aplicam ~1s tarde. O botao "Entrar para Comprar"
+  nascia com 39px (so padding) e crescia para 44px quando o align-grid chegava.
+
+### Fix (arquitetural): min-height:44px + box-sizing:border-box adicionados ao estilo
+  SSR inline do proprio botao (addtocart.phtml, bloco que ja o estiliza no HTML inicial)
+  -> o botao nasce com 44px no primeiro paint, sem depender do align-grid async.
+
+### Medicoes: CWV desktop CLS 0.09 (meta <0.1 ok); regressao rc=0.
+### Pendencia do ciclo: crescimento das abas da PDP (descricao/FAQ) abaixo da dobra —
+  responsavel por parte do 0.09 residual; atacar no proximo ciclo (render inicial das
+  abas no estado final ou reserva de altura).
