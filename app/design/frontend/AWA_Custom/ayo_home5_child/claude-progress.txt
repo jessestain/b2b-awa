@@ -229,3 +229,21 @@ ds-b13-20261016-135547
 ### Backups
 ds-b14-20261016-140504 · ds-b15-20261016-141424/143255 · ds-b16-20261016-142052 ·
 ds-b17-20261016-143550 · ds-b18-20261016-144635
+
+## ATUALIZAÇÃO — 2026-10-16 ~12:10 BRT (campanha, round 3)
+
+### Progresso: 264 -> 148 (-116). Tipografia 130->32; taglines ZERADOS.
+- c268ebca9: footer lockup tagline 10->12px na fonte (align-grid css+min) — o vencedor
+  real era a regra `html body#html-body#html-body .awa-footer-lockup .awa-footer-lockup__tagline`.
+- Probe CDP (CSS.getMatchedStylesForNode) agora é ferramenta padrão p/ achar o vencedor
+  real da cascata (probe_tagline.js / probe_badge.js em /tmp + _audit).
+- Badge "Novo" x6: o label herda 11px do container do card (regra `label` sem font-size) —
+  corrigir no card (próximo round, alvo: .item-product/.product-item-info font-size).
+
+### Remanescentes
+- toque44=104: footer links mobile (~70: Cavaletes/Bagageiros/Guidões/Bauletos/fone/email)
+  — verificar se o vencedor é o defer-global (injetado depois do core bundle); mover a
+  regra 44px para lá com 12x. "Manetes" x3 + Início x3 (breadcrumb = não-ticket).
+- tipografia=32: Novo x6, Assistente x5, Entrar para Comprar/para ver preços x6.
+- h1 carrinho x3 + alts x3 (templates — próximo round).
+- clip=6: carrossel peek intencional (não-ticket, documentado).
