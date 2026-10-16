@@ -3303,7 +3303,7 @@ final class HeaderImpeccableCascadeLockCss
         // align-grid/visual-bugfix --awa-bg soft card when document order loses).
         return '/*§footer-store-flat-r21-inline*/'
             . '@layer awa-visual-priority{' . $flat . '}'
-            . '/*§footer-store-flat-r21b-unlayered*/' . $flat;
+            ;
     }
 
     public static function footerCopyrightFlatR20Rules(): string
@@ -3348,7 +3348,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§footer-cnpj-flat-r26-inline*/'
             . '@layer awa-visual-priority{' . $flat . '}'
-            . '/*§footer-cnpj-flat-r26-unlayered*/' . $flat;
+            ;
     }
 
     /**
@@ -3387,7 +3387,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§b2b-promo-contrast-r27-inline*/'
             . '@layer awa-visual-priority{' . $rules . '}'
-            . '/*§b2b-promo-contrast-r27-unlayered*/' . $rules;
+            ;
     }
 
     /**
@@ -3534,7 +3534,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§b2b-promo-shell-r40c-inline*/'
             . '@layer awa-visual-priority{' . $rules . '}'
-            . '/*§b2b-promo-shell-r40c-unlayered*/' . $rules;
+            ;
     }
 
     /**
@@ -3562,7 +3562,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§footer-seals-pay-flat-r28-inline*/'
             . '@layer awa-visual-priority{' . $flat . '}'
-            . '/*§footer-seals-pay-flat-r28-unlayered*/' . $flat;
+            ;
     }
 
     /**
@@ -3613,7 +3613,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§footer-newsletter-r29-inline*/'
             . '@layer awa-visual-priority{' . $rules . '}'
-            . '/*§footer-newsletter-r29-unlayered*/' . $rules;
+            ;
     }
 
     /**
@@ -3686,7 +3686,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§footer-trust-icon-flat-r31-inline*/'
             . '@layer awa-visual-priority{' . $flat . '}'
-            . '/*§footer-trust-icon-flat-r31-unlayered*/' . $flat;
+            ;
     }
 
 
@@ -3777,7 +3777,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§ham-flat-r34-inline*/'
             . '@layer awa-visual-priority{' . $flat . '}'
-            . '/*§ham-flat-r34-unlayered*/' . $flat;
+            ;
     }
 
     /**
@@ -3815,7 +3815,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§bottom-nav-equal-r35-inline*/'
             . '@layer awa-visual-priority{' . $media . '}'
-            . '/*§bottom-nav-equal-r35-unlayered*/' . $media;
+            ;
     }
 
     /**
@@ -3835,7 +3835,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§owl-progress-radius-r35-inline*/'
             . '@layer awa-visual-priority{' . $core . '}'
-            . '/*§owl-progress-radius-r35-unlayered*/' . $core;
+            ;
     }
 
     /**
@@ -3858,7 +3858,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§carousel-nav-radius-r36-inline*/'
             . '@layer awa-visual-priority{' . $core . '}'
-            . '/*§carousel-nav-radius-r36-unlayered*/' . $core;
+            ;
     }
 
     /**
@@ -3901,7 +3901,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§carousel-toggle-gutter-r71-inline*/'
             . '@layer awa-visual-priority{' . $core . '}'
-            . '/*§carousel-toggle-gutter-r71-unlayered*/' . $core;
+            ;
     }
 
     /**
@@ -3948,7 +3948,7 @@ final class HeaderImpeccableCascadeLockCss
 
         return '/*§bottom-nav-inactive-r37c-inline*/'
             . '@layer awa-visual-priority{' . $media . '}'
-            . '/*§bottom-nav-inactive-r37c-unlayered*/' . $media;
+            ;
     }
 
     public static function footerDenseDesktopR67Rules(): string

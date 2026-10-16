@@ -497,3 +497,14 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
    (maior ganho de parse; alinha com a governanca "zero CSS fora dos bundles").
 2. Deduplicar regras repetidas do cascade lock (footer pill etc. em 4-5 lugares).
 3. Purga do styles-l (168KB, bloat Rokanthemes) com auditoria por seletor.
+
+## ATUALIZAÇÃO — 2026-10-16 ~16:25 BRT (performance: gemeos unlayered removidos)
+
+### Modelo PHP: removidos 13 gemeos "-unlayered" dos micro-locks (r20-r40)
+- Padrao: cada fix emitia `@layer awa-visual-priority{X}` + gemeo `X` solto no HTML.
+- Prova empirica (CSS.getMatchedStylesForNode no footer): a copia layered vence sempre
+  (a regra aparecia 4x casada; agora 2x). Computed do footer identico antes/depois
+  (transparent/border 0/radius 0).
+- PHP valido, opcache resetado (19002/19003/19004), HTML servido sem os marcadores.
+- Regressao: rc=0, 0 falhas.
+- Economia: ~6KB brutos de HTML + 13 regras a menos por pagina (menos parse/ambiguidade).
