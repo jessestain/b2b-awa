@@ -704,3 +704,20 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 3. Re-medir com probe_inp2 ate pointerdown <200ms.
 
 ### Estado CWV: CLS/LCP/FCP verdes; INP: FAQ 16ms, menu 320ms (melhorou de 800ms).
+
+## ATUALIZAÇÃO — 2026-10-16 ~18:35 BRT (ciclo 10: override do vertical-menu-init no filho)
+
+### Fix INP do menu (Magento-standard: override de tema, filho sombreia o pai):
+- app/design/frontend/AWA_Custom/ayo_home5_child/web/js/vertical-menu-init.js (copia do
+  pai com UMA mudanca): openMenu() agora adia o addClass(menu-open)+show() para
+  requestAnimationFrame — o layout sincrono do mega-menu (~300ms) sai do frame do
+  pointerdown; o estado do botao muda imediatamente e o painel pinta 1 frame depois.
+- Deploy: view_preprocessed movido, static:deploy ok, arquivo copiado ao pub do filho
+  (o deploy nao copia JS de tema por override — fallback runtime resolve filho-primeiro).
+- Regressao: rc=0.
+- NOTA de medicao: o ambiente headless varia 300-1000ms entre runs no mesmo alvo
+  (event-timing pointerup 800/320/992ms). O ganho real e arquitetural: o trabalho
+  pesado nao roda mais no frame do clique. Medicao de campo (RUM/Lighthouse real)
+  recomendada para o numero definitivo do INP.
+
+### CWV: CLS/LCP/FCP verdes; INP: FAQ 16ms, menu com defer (validar em campo).
