@@ -302,7 +302,7 @@
        display/headings = Rubik, body/UI = Source Sans 3 (self-hosted em web/fonts/).
        Poppins NÃO é carregada pelo tema — referência legada removida (audit 2026-08-10). */
     --awa-font: 'Rubik', 'Open Sans', Arial, sans-serif;
-    --awa-font-size: 16px;
+    --awa-font-size: @font-size-16;
     --awa-line-height: var(--awa-leading-loose);
 
     /* Tipografia ? escala de pesos (BP-22) */
@@ -1585,7 +1585,7 @@ body .page-wrapper [id]:not(input, select, textarea, button) {
 /* --- Mobile XS (?375px) --- */
 @media (width <= 375px) {
     :root {
-        --awa-font-size: 15px;
+        --awa-font-size: @font-size-15;
     }
 
     body .page-wrapper .page-main {

@@ -186,7 +186,7 @@
 
     /* Tipografia ? Poppins carregada pelo Ayo via Google Fonts */
     --awa-font: 'Poppins', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, 'Helvetica Neue', arial, sans-serif;
-    --awa-font-size: 16px;
+    --awa-font-size: @font-size-16;
     --awa-line-height: var(--awa-leading-loose);
 
     /* Tipografia ? escala de pesos (BP-22) */
@@ -1468,7 +1468,7 @@ body .page-wrapper [id]:not(input, select, textarea, button) {
 /* --- Mobile XS (?375px) --- */
 @media (width <= 375px) {
     :root {
-        --awa-font-size: 15px;
+        --awa-font-size: @font-size-15;
     }
 
     body .page-wrapper .page-main {
