@@ -118,3 +118,29 @@
 
 ### Backups
 - ds-wave2-20261016-113119 + ds-wave2fix-20261016-113445 (wave 2, inclui fallback do tema pai).
+
+## ATUALIZAÇÃO — 2026-10-16 ~09:15 BRT (melhoria do reconciliador)
+
+### Concluído (COMMIT dc0fcc0ba)
+- OrderImportGate: match linha a linha (SKU+QTD como multiset, tolerância 1e-4) em vez de
+  5 campos agregados. Totais (VLRTOTAL com ICMS-ST/lista) NÃO bloqueiam mais o ACK quando os
+  itens conferem — loga INFO "Itens conferem; totais divergem".
+- Novo comando: bin/magento b2b:sectra:manual-ack <increment_id> <erp_order_code> [--reason=...]
+  (valida CODIGO no VE_PEDIDO read-only; reusa acknowledgeOrder → entity_map + comentário no
+  histórico + status processing). PARA USAR: só com autorização pedido a pedido.
+- di.xml: item b2b_sectra_manual_ack registrado.
+
+### Verificado
+- php -l limpo; di:compile rc=0 (a falha única foi transitória — conflito de lock, re-rodou OK);
+  GATE bin/magento list = 1; smoke 4×200; runtime via b2b:sectra:sync-prospect --poll sem erros;
+  os 3 pedidos (200104/106/107) seguem pulados por divergência REAL de itens (correto).
+
+### Diagnóstico dos 3 pedidos (read-only, 09:0x BRT)
+- Não é bug de sync: a equipe comercial EDITA os pedidos no ERP após a importação (auditoria
+  USERNAME1/2+OBSERVACAO): 200104 +=3008×1 (EDMAR retirou em mão); 200106 -3122×20 (movida p/
+  196731); 200107 +=3122×20 errado +3511×12; #120 (200108) mudou de 6→8 itens (TATIANE 05/10).
+- #117 (200105) NUNCA importado no Sectra (ausente de VE_PEDIDO) — falha distinta.
+- Decisão de negócio por pedido pendente (TATIANE/ROSE) antes de qualquer ACK manual.
+
+### Backups
+- ds-reconcile-20261016-120505 (pré-patch; rollback automático da 1ª tentativa).
