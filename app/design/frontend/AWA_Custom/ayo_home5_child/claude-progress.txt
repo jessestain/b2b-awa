@@ -247,3 +247,21 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 - tipografia=32: Novo x6, Assistente x5, Entrar para Comprar/para ver preços x6.
 - h1 carrinho x3 + alts x3 (templates — próximo round).
 - clip=6: carrossel peek intencional (não-ticket, documentado).
+
+## ATUALIZAÇÃO — 2026-10-16 ~12:20 BRT (campanha, round 4)
+
+### Progresso: 264 -> 142 (-122)
+- 0810c6d9b: append 12x no fim do align-grid (footer 44px + badge 12px) — servido confirmado,
+  mas SEM efeito computado: o vencedor real vive em stylesheet injetado/construído por JS
+  (scan document.styleSheets retorna vazio p/ a regra) — alvo do próximo round: localizar o
+  ponto de injeção no awa-head-preload/fragments JS e corrigir na origem.
+- 926d5b10d: h1 do carrinho vazio -> h2 (T7). HTML servido = 1 h1; o navegador ainda conta 2
+  (elemento extra injetado por JS) — investigar qual JS adiciona o h1.
+
+### Remanescentes: toque44=98 (footer links ~70 + Manetes/Retrovisores), tipografia=32
+  (Novo x6, Assistente x6, Entrar para Comprar x3...), clip=6 (carrossel intencional),
+  h1=3 (JS-injected), a11y-alt=3 (templates lazy-load).
+
+### Ferramentas: probe_owner.js (scan de stylesheets) — limitado: cssRules de sheets
+  CORS/construídos não aparecem; próximo passo: instrumentar via Performance.getEntriesByType
+  ou interceptar adições de <style> com MutationObserver no CDP.
