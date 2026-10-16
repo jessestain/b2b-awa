@@ -1,0 +1,62 @@
+# AWA Motos — design system — claude-progress.txt
+# Última atualização: 2026-10-16 ~07:5x BRT (sessão deepseek-harness)
+
+## Linha do tempo (2026-10-16, madrugada→manhã BRT)
+
+- 02:31-03:24 — Acesso SSH: ban intermitente no IP do harness (177.112.64.12). Causa raiz:
+  fail2ban/edge + 6 reinícios manuais do usuário + backup automático Hostinger.
+  Resolução: reboot autorizado via API Hostinger (03:24) + janelas de rede.
+- 03:26 — Discovery completo (disc0.out, 4516 linhas): inventário CSS, tokens,
+  spacing hardcoded, refs, git, tooling. Parser em _audit/parse_disc0.ps1.
+- 03:44-04:0x — Bloqueio na borda (2h); poll automático a cada 15 min.
+- 05:41 — Janela abriu. Etapa 1 aplicada (batch1 v2/v3/v4): 95 arquivos LESS,
+  546 substituições margin-top/padding → @awa-space-*, LEFTOVERS=0.
+  Incidentes: bug argv do apply (corrigido), socket FPM errado (corrigido p/ 19002),
+  rollback extraiu tar no lugar errado (lixo movido), 500 transitório OpenSearch.
+  Commit c98d0351e. Regressão DS verde.
+- 05:5x-06:1x — Etapa 3 paginação: causa raiz REAL no LESS compilado
+  (_awa-plp-consistency-pass2 + _awa-interaction-state-consistency), não nos
+  arquivos standalone. Commits 22bfc055c + eecde17e3. Medido branco/vermelho
+  em categoria (desktop+mobile) e busca.
+- 06:05 — OpenSearch estava parado (disabled) desde o reboot → grids vazios.
+  Usuário autorizou iniciar; categoria 100 produtos, busca 84.
+- 06:1x-07:1x — Etapa 2: mapa CSS (disc1/disc2) + quarentena de 2 órfãos
+  (commit 18c69cba5) + desenho de 5 bundles aprovado pelo usuário.
+- 07:14-07:5x — Wave 1 dos bundles (16 CSS → 5): tentativas 6b (falhou:
+  layouts não graváveis pelo deploy; loop de trap), 6c (falhou: BK sem permissão
+  p/ jessessh), 6d (em andamento — ver batch6d.out).
+
+## Comandos-chave (produção)
+
+- SSH: deploy@AWA (alias local). XMLs: sudo -n -u jessessh <cmd>.
+- Deploy tema: mv pub/static/frontend/AWA_Custom/ayo_home5_child <bk> ;
+  php -d opcache.enable_cli=0 -d opcache.enable=0 bin/magento setup:static-content:deploy -f pt_BR --theme AWA_Custom/ayo_home5_child
+- Caches: php bin/magento cache:flush ;
+  php /home/deploy/awa-fixes-20261014/cachetool.phar opcache:reset --fcgi=127.0.0.1:19002 ;
+  sudo -n varnishadm ban 'req.url ~ .'
+- Smoke backend: curl -s -H 'Host: awamotos.com' http://127.0.0.1:8088/<path>
+- Regressão: bash scripts/ui-ds-regression.sh  (exige /tmp/awa-cdp/node_modules/ws
+  e /tmp/cdp_audit.js — recriados pós-reboot)
+- Git: repo raiz = docroot; branch rescue/production-20260712; NUNCA git add geral;
+  commits por arquivo explícito.
+
+## Estado atual / próximos passos
+
+1. Confirmar wave 1 bundles (batch6d): deploy + smoke 6 páginas + regressão verde
+   → commit por arquivo (5 bundles + 6 XMLs).
+2. Criar/atualizar arquivos de continuidade na raiz do tema
+   (feature_list.json, claude-progress.txt, init.sh) e commitar.
+3. Item 4 do usuário: validação 3 breakpoints (390/768/1440 + 1024) nas páginas
+   home/categoria/produto/carrinho/login; medir contraste da paginação (WCAG AA).
+4. Aceite item 1: grep das exceções documentadas de spacing (esperado 0 fora delas).
+5. Waves 2-3 da consolidação (phtml async: awa-head-preload.phtml; js: awa-css-gate.js).
+6. Relatório final por etapa.
+
+## Backups (rollback)
+
+- ds-spacing-20261016-084323 (etapa 1: plan.json + files-before.tar.gz + md5-antes.txt)
+- ds-pagination2-20261016-091109 (etapa 3: 2 partials LESS)
+- ds-pagination-20261016-085201 (etapa 3: 4 arquivos standalone — engano parcial)
+- ds-bundles-* (wave 1: 16 css + 6 xml)
+- _quarantine/css-dead-20261016/ (2 órfãos; padrão dos anteriores 2026-07-08/08-13)
+
