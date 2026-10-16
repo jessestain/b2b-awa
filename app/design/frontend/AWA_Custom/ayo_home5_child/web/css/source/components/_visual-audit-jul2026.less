@@ -62,7 +62,7 @@
 // ── 4. Ícones sociais — contraste visível no footer escuro ───────────────────
 @{va-scope} .page-wrapper :is(.page_footer, .page-footer) {
     .awa-footer-pro__social-link {
-        background: color-mix(in srgb, var(--awa-neutral-700, #374151) 88%, #fff) !important;
+        background: color-mix(in srgb, var(--awa-neutral-700, @awa-color-gray-700) 88%, #fff) !important;
         border: 1.5px solid color-mix(in srgb, #fff 22%, transparent) !important;
         color: #fff !important;
 
@@ -362,13 +362,13 @@
 // ── 10. B2B register — validação inline visível ──────────────────────────────
 @{va-scope}.b2b-register-index .page-wrapper .b2b-register-page {
     .field._error .label span {
-        color: var(--b2b-reg-c16, #dc2626) !important;
+        color: var(--b2b-reg-c16, @awa-color-danger) !important;
     }
 
     .field .mage-error,
     .field .field-error {
         display: block !important;
-        color: var(--b2b-reg-c16, #dc2626) !important;
+        color: var(--b2b-reg-c16, @awa-color-danger) !important;
         font-size: 12px !important;
         margin-top: 6px !important;
         line-height: 1.35 !important;
@@ -378,7 +378,7 @@
     .field._error input,
     .field._error select,
     .field._error textarea {
-        border-color: var(--b2b-reg-c16, #dc2626) !important;
+        border-color: var(--b2b-reg-c16, @awa-color-danger) !important;
         box-shadow: 0 0 0 3px rgb(220 38 38 / 10%) !important;
     }
 }

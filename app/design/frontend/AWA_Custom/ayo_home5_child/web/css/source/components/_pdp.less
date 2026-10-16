@@ -38,11 +38,11 @@
             &:not(:last-child)::after {
                 content: '/';
                 margin-inline-start: 4px;
-                color: var(--awa-gray-500, #6b7280);
+                color: var(--awa-gray-500, @awa-color-gray-500);
             }
 
             a {
-                color: var(--awa-gray-500, #6b7280);
+                color: var(--awa-gray-500, @awa-color-gray-500);
                 text-decoration: none;
                 transition: color var(--awa-transition-fast, 150ms ease);
 
@@ -50,7 +50,7 @@
             }
 
             strong {
-                color: var(--awa-gray-700, #374151);
+                color: var(--awa-gray-700, @awa-color-gray-700);
                 font-weight: var(--awa-weight-normal, 400);
                 white-space: nowrap;
                 overflow: hidden;
@@ -113,7 +113,7 @@
 
     .product.attribute.sku {
         font-size: var(--awa-text-sm, 13px);
-        color: var(--awa-gray-500, #6b7280);
+        color: var(--awa-gray-500, @awa-color-gray-500);
         margin-block: 0 12px;
 
         .type {
@@ -156,7 +156,7 @@
     .old-price .price {
         font-size: var(--awa-text-base, 15px);
         font-weight: var(--awa-weight-normal, 400);
-        color: var(--awa-gray-500, #6b7280);
+        color: var(--awa-gray-500, @awa-color-gray-500);
         text-decoration: line-through;
     }
 }
@@ -181,7 +181,7 @@
         p,
         .b2b-message {
             font-size: var(--awa-text-sm, 13px);
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             margin: 0;
         }
 
@@ -222,7 +222,7 @@
         padding: 12px 16px;
         font-size: var(--awa-text-sm, 13px);
         font-weight: var(--awa-weight-semibold, 600);
-        color: var(--awa-gray-700, #374151);
+        color: var(--awa-gray-700, @awa-color-gray-700);
         border: 1px solid var(--awa-gray-200, #e5e7eb);
         border-bottom: none;
         border-radius: 4px 4px 0 0;
@@ -253,7 +253,7 @@
         padding: 20px 16px;
         font-size: var(--awa-text-base, 15px);
         line-height: 1.6;
-        color: var(--awa-gray-700, #374151);
+        color: var(--awa-gray-700, @awa-color-gray-700);
     }
 }
 

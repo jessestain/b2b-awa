@@ -37,7 +37,7 @@
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 4px;
-    color: #374151;
+    color: @awa-color-gray-700;
 }
 
 .awa-pdp-cep-estimator__input {
@@ -57,7 +57,7 @@
         box-shadow: 0 0 0 3px rgba(37, 99, 235, .25);
     }
     &[aria-invalid="true"] {
-        border-color: #dc2626;
+        border-color: @awa-color-danger;
         box-shadow: 0 0 0 3px rgba(220, 38, 38, .2);
     }
 }
@@ -78,8 +78,8 @@
 
     &:hover { background: #1f2937; }
     &:active { transform: translateY(1px); }
-    &:disabled { background: #6b7280; cursor: not-allowed; }
-    &[aria-busy="true"] { background: #6b7280; }
+    &:disabled { background: @awa-color-gray-500; cursor: not-allowed; }
+    &[aria-busy="true"] { background: @awa-color-gray-500; }
 }
 
 .awa-pdp-cep-estimator__spinner {
@@ -103,7 +103,7 @@
 .awa-pdp-cep-estimator__help {
     margin: 8px 0 0;
     font-size: 12px;
-    color: #6b7280;
+    color: @awa-color-gray-500;
 }
 
 .awa-pdp-cep-estimator__login-link {
@@ -151,7 +151,7 @@
 }
 .awa-pdp-cep-estimator__eta {
     grid-column: 2 / 4;
-    color: #6b7280;
+    color: @awa-color-gray-500;
     font-size: 12px;
 }
 
@@ -185,7 +185,7 @@
     .awa-pdp-cep-estimator__label { color: #d1d5db; }
     .awa-pdp-cep-estimator__input {
         background: #111827;
-        border-color: #374151;
+        border-color: @awa-color-gray-700;
         color: #e5e7eb;
     }
     .awa-pdp-cep-estimator__help,

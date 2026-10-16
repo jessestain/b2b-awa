@@ -25,7 +25,7 @@
 
         p {
             font-size: var(--awa-text-base, 15px);
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             margin: 0;
             max-width: 360px;
         }
@@ -75,7 +75,7 @@
 
         .item-options {
             font-size: var(--awa-text-xs, 11px);
-            color: var(--awa-gray-500, #6b7280);
+            color: var(--awa-gray-500, @awa-color-gray-500);
             margin-block-start: 4px;
         }
 
@@ -92,7 +92,7 @@
 
         .action.delete,
         .action-delete {
-            color: var(--awa-gray-500, #6b7280);
+            color: var(--awa-gray-500, @awa-color-gray-500);
             transition: color var(--awa-transition-fast, 150ms ease);
 
             &:hover {
@@ -110,12 +110,12 @@
     .cart-totals {
         .mark {
             font-size: var(--awa-text-sm, 13px);
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
         }
 
         .amount {
             font-size: var(--awa-text-sm, 13px);
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             font-variant-numeric: tabular-nums;
         }
 
@@ -188,7 +188,7 @@
                 label.label {
                     font-size: var(--awa-text-sm, 13px);
                     font-weight: var(--awa-weight-medium, 500);
-                    color: var(--awa-gray-700, #374151);
+                    color: var(--awa-gray-700, @awa-color-gray-700);
                 }
 
                 input#coupon_code {
@@ -278,7 +278,7 @@ body:is(.customer-account-login, .customer-account-create) .page-wrapper {
         .label {
             font-size: var(--awa-text-sm, 13px);
             font-weight: var(--awa-weight-medium, 500);
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             margin-block-end: 4px;
             display: block;
         }
@@ -336,7 +336,7 @@ body:is(.customer-account-login, .customer-account-create) .page-wrapper {
     .actions-toolbar .secondary a,
     .secondary-action a {
         font-size: var(--awa-text-sm, 13px);
-        color: var(--awa-gray-700, #374151);
+        color: var(--awa-gray-700, @awa-color-gray-700);
         text-decoration: underline;
 
         &:hover {

@@ -165,10 +165,10 @@
         display: flex;
         align-items: center;
         font-size: var(--awa-text-xs, 11px);
-        color: var(--awa-gray-500, #6b7280);
+        color: var(--awa-gray-500, @awa-color-gray-500);
 
         a {
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             text-decoration: none;
             transition: color var(--awa-transition-fast, 150ms ease);
 
@@ -179,7 +179,7 @@
 
         strong {
             font-weight: var(--awa-weight-medium, 500);
-            color: var(--awa-gray-500, #6b7280);
+            color: var(--awa-gray-500, @awa-color-gray-500);
         }
 
         // Separador entre itens (via ::before do tema pai)
@@ -220,7 +220,7 @@
     button.action.secondary {
         background-color: transparent;
         border: 1px solid var(--awa-gray-200, #e5e7eb);
-        color: var(--awa-gray-700, #374151);
+        color: var(--awa-gray-700, @awa-color-gray-700);
         border-radius: var(--awa-radius-sm, 8px);
         font-weight: var(--awa-weight-medium, 500);
         transition: border-color var(--awa-transition-fast, 150ms ease),
@@ -256,7 +256,7 @@
         // Preço antigo (riscado, cinza)
         .old-price .price,
         .price-wrapper.old-price .price {
-            color: var(--awa-gray-500, #6b7280);
+            color: var(--awa-gray-500, @awa-color-gray-500);
             text-decoration: line-through;
             font-weight: var(--awa-weight-normal, 400);
         }

@@ -125,7 +125,7 @@
             .filter-label {
                 font-size: var(--awa-text-sm, 13px);
                 font-weight: var(--awa-weight-semibold, 600);
-                color: var(--awa-gray-700, #374151);
+                color: var(--awa-gray-700, @awa-color-gray-700);
                 display: block;
                 margin-block-end: 6px;
             }
@@ -148,7 +148,7 @@
                 padding: 4px 10px;
                 border-radius: var(--awa-radius-pill, 20px);
                 font-size: var(--awa-text-xs, 12px);
-                color: var(--awa-gray-700, #374151);
+                color: var(--awa-gray-700, @awa-color-gray-700);
 
                 .label { font-weight: var(--awa-weight-semibold, 600); }
                 .action.remove {
@@ -207,7 +207,7 @@
                     border-radius: var(--awa-radius-sm, 8px);
                     border: 1px solid var(--awa-gray-200, #e5e7eb);
                     background: transparent;
-                    color: var(--awa-gray-700, #374151);
+                    color: var(--awa-gray-700, @awa-color-gray-700);
                     font-size: var(--awa-text-sm, 13px);
                     text-decoration: none;
                     transition: border-color var(--awa-transition-fast, 150ms ease),
@@ -229,7 +229,7 @@
                 border-radius: var(--awa-radius-sm, 8px);
                 border: 1px solid var(--awa-gray-200, #e5e7eb);
                 text-decoration: none;
-                color: var(--awa-gray-700, #374151);
+                color: var(--awa-gray-700, @awa-color-gray-700);
                 transition: border-color var(--awa-transition-fast, 150ms ease),
                             background var(--awa-transition-fast, 150ms ease);
 
@@ -251,7 +251,7 @@
         .message.notice[data-ui-id="message-notice"] {
             text-align: center;
             padding: 40px 24px;
-            color: var(--awa-gray-700, #374151);
+            color: var(--awa-gray-700, @awa-color-gray-700);
             font-size: var(--awa-text-base, 15px);
         }
     }

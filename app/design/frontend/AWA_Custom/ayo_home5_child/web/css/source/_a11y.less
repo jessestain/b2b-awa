@@ -268,7 +268,7 @@ input[type="radio"]::before {
 .field._required > .label::after,
 .field.required > label::after {
     content: " *";
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-weight: var(--awa-weight-bold, 700);
     margin-inline-start: 0.125rem;
 }
@@ -293,7 +293,7 @@ input[type="radio"]::before {
 .field._error .control input,
 .field._error .control select,
 .field._error .control textarea {
-    border-color: var(--awa-color-error, #DC2626);
+    border-color: var(--awa-color-error, @awa-color-danger);
     border-width: 2px;
 }
 
@@ -304,7 +304,7 @@ input[type="radio"]::before {
     align-items: center;
     gap: var(--awa-gap-xs, 4px);
     margin-block-start: var(--awa-gap-xs, 4px);
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-size: var(--awa-fs-sm, 14px);
     line-height: var(--awa-leading-normal, 1.5);
     min-block-size: 1.5rem;

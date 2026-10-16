@@ -108,7 +108,7 @@
 .field.required > label::after,
 .field._required > .label::after {
     content: " *";
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-weight: var(--awa-weight-bold, 700);
     margin-inline-start: 0.125rem;
 }
@@ -454,7 +454,7 @@ input[type="range"] {
 .field._error > .label,
 .field.error > .label,
 .field.has-error > .label {
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
 }
 
 .field._error .control input,
@@ -464,14 +464,14 @@ input[type="range"] {
 .field.has-error input,
 .field.has-error select,
 .field.has-error textarea {
-    border-color: var(--awa-color-error, #DC2626);
+    border-color: var(--awa-color-error, @awa-color-danger);
     border-width: 2px;
 }
 
 .field._error .input:focus-visible,
 .field.has-error input:focus-visible {
-    outline-color: var(--awa-color-error, #DC2626);
-    border-color: var(--awa-color-error, #DC2626);
+    outline-color: var(--awa-color-error, @awa-color-danger);
+    border-color: var(--awa-color-error, @awa-color-danger);
 }
 
 .field .messages,
@@ -481,7 +481,7 @@ input[type="range"] {
     align-items: center;
     gap: var(--awa-gap-xs, 4px);
     margin-block-start: var(--awa-gap-xs, 4px);
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-size: var(--awa-fs-sm, 14px);
     line-height: var(--awa-leading-normal, 1.5);
     font-weight: var(--awa-weight-medium, 500);

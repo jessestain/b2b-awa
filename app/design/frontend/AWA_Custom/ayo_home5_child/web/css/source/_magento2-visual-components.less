@@ -564,24 +564,24 @@
 
 .field.required > .label::after {
     content: " *";
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
 }
 
 .field._error .control input,
 .field._error .control select,
 .field._error .control textarea {
-    border-color: var(--awa-color-error, #DC2626);
+    border-color: var(--awa-color-error, @awa-color-danger);
 }
 
 .field .messages,
 .field .mage-error {
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-size: var(--awa-fs-sm, 14px);
     min-block-size: 1.25rem;
 }
 
 .field .field-error {
-    color: var(--awa-color-error, #DC2626);
+    color: var(--awa-color-error, @awa-color-danger);
     font-size: var(--awa-fs-sm, 14px);
     display: flex;
     align-items: center;
@@ -613,7 +613,7 @@
 
 .message.error {
     background: #FEF2F2;
-    border-color: var(--awa-color-error, #DC2626);
+    border-color: var(--awa-color-error, @awa-color-danger);
     color: #991B1B;
 }
 
