@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--awa-section-header-mb, @ds-space-md);
-  padding-bottom: 12px;
+  padding-bottom: @awa-space-3;
   border-bottom: 2px solid @awa-color-border;
 
   &__left {
@@ -47,7 +47,7 @@
     font-weight: @awa-weight-bold;
     line-height: @lh-tight;
     color: @awa-color-text-primary;
-    padding-left: 12px;
+    padding-left: @awa-space-3;
     border-left: 4px solid @awa-color-primary;
     margin: 0;
   }
@@ -302,7 +302,7 @@
     display: flex;
     justify-content: center;
     gap: @awa-gap-xs;
-    margin-top: 16px;
+    margin-top: @awa-space-4;
 
     .owl-dot span,
     .swiper-pagination-bullet {
@@ -326,7 +326,7 @@
   }
 
   .owl-stage, .swiper-wrapper { display: flex; align-items: stretch; }
-  .owl-item, .swiper-slide  { padding: 0 4px; height: auto; }
+  .owl-item, .swiper-slide  { padding: 0 @awa-space-1; height: auto; }
   .owl-item { min-height: 280px; } // reserva espaço antes das imagens lazy → reduz CLS mid-scroll
   .owl-item .product-item-info, .swiper-slide .product-item-info { height: 100%; }
 }

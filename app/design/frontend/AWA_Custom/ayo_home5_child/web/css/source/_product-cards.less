@@ -249,7 +249,7 @@
 
   // === 5. CORPO DO CARD (.product-info) ===
   .product-info {
-    padding: 10px 12px 12px; // respiro do texto — compensa card edge-to-edge
+    padding: @awa-space-3 @awa-space-3 @awa-space-3; // respiro do texto — compensa card edge-to-edge
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -359,7 +359,7 @@
   // === 9. CTA — botão com separação visual clara do corpo ===
   .product-info-cart {
     margin-top: auto;
-    padding-top: 10px;
+    padding-top: @awa-space-3;
     border-top: 1px solid var(--awa-border, #ebebeb);
   }
 
@@ -680,14 +680,14 @@
     flex-direction: column;
     flex: 1;
     height: auto;
-    padding: 10px 12px 12px; // respiro do texto — compensa card edge-to-edge
+    padding: @awa-space-3 @awa-space-3 @awa-space-3; // respiro do texto — compensa card edge-to-edge
     gap: 0;
   }
 
   // CTA: ancora no fundo do card via flex — border-top separa visualmente do corpo
   .product-info-cart {
     margin-top: auto;
-    padding-top: 10px;
+    padding-top: @awa-space-3;
     border-top: 1px solid var(--awa-border, #ebebeb);
   }
 
@@ -870,7 +870,7 @@
       justify-content: center;
       width: 100%;
       min-height: auto;
-      padding: 8px 0;
+      padding: @awa-space-2 0;
       border: none;
       border-radius: 0;
       background: transparent;
@@ -905,7 +905,7 @@
     }
 
     .product-info {
-      padding: 8px 10px 10px;
+      padding: @awa-space-2 @awa-space-3 @awa-space-3;
     }
 
     .product-name .product-item-link {

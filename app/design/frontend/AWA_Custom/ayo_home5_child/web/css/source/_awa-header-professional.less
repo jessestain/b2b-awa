@@ -685,7 +685,7 @@
 
                 .awa-header-contact-links__item {
                     min-height: 42px;
-                    padding: 0 12px;
+                    padding: 0 @awa-space-3;
                 }
 
                 .awa-header-contact-links__item:not(.awa-header-contact-links__item--whatsapp) {
@@ -698,7 +698,7 @@
 
                 .hoteline_header .whatsapp-hotline {
                     min-height: 42px;
-                    padding: 0 12px;
+                    padding: 0 @awa-space-3;
                 }
             }
 
@@ -757,7 +757,7 @@
             display: flex;
             align-items: center;
             margin: 0;
-            padding: 0 12px;
+            padding: 0 @awa-space-3;
             background: transparent; /* Remove o background vermelho global */
             color: var(--awa-nav-text);
             cursor: pointer;
@@ -857,7 +857,7 @@
                             color: var(--awa-nav-text);
                             font-weight: 600;
                             font-size: var(--awa-font-sm);
-                            padding: 0 14px;
+                            padding: 0 @awa-space-4;
                             min-height: 36px;
                             height: 36px;
                             display: flex;
@@ -909,7 +909,7 @@
                     align-items: center;
                     justify-content: center;
                     min-height: 34px;
-                    padding: 0 12px;
+                    padding: 0 @awa-space-3;
                     border: 1px solid var(--awa-nav-pill-border);
                     border-radius: 999px;
                     background: var(--awa-nav-pill-bg);
@@ -931,7 +931,7 @@
                 .mage-dropdown-dialog,
                 .dropdown.switcher-dropdown,
                 .switcher-dropdown {
-                    margin-top: 8px;
+                    margin-top: @awa-space-2;
                     border: 1px solid rgba(229, 229, 229, 0.95);
                     border-radius: 14px;
                     background: var(--awa-bg);
@@ -958,7 +958,7 @@
                 .dropdown.switcher-dropdown span,
                 .switcher-dropdown span {
                     display: block;
-                    padding: 10px 14px;
+                    padding: @awa-space-3 @awa-space-4;
                 }
 
                 .mage-dropdown-dialog a:hover,
@@ -1005,7 +1005,7 @@
         }
 
         .awa-main-header {
-            padding: 10px 0; /* mobile: 10px (era 12px) — mais espaço acima do fold */
+            padding: @awa-space-3 0; /* mobile: 10px (era 12px) — mais espaço acima do fold */
 
             .awa-main-header__inner {
                 display: flex;
@@ -1672,7 +1672,7 @@ body .page-wrapper .awa-site-header.awa-header-professional {
 body .page-wrapper .awa-site-header.awa-header-professional .awa-nav-bar .awa-header-categories {
     // Remove todo o background extra do wrapper
     background: transparent;
-    padding: 0 12px;
+    padding: 0 @awa-space-3;
 
     .title-category-dropdown {
         background: var(--awa-nav-pill-bg);

@@ -86,7 +86,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
             gap: 8px !important;
             width: 100% !important;
             min-height: 44px !important;
-            padding: 10px 12px !important;
+            padding: @awa-space-3 @awa-space-3 !important;
             line-height: 1.25 !important;
             text-decoration: none !important;
         }
@@ -115,7 +115,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         min-width: 304px !important;
         max-width: ~"min(420px, calc(100vw - 32px))" !important;
         max-height: ~"min(70vh, 560px)" !important;
-        padding: 8px !important;
+        padding: @awa-space-2 !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
@@ -125,7 +125,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         display: inline-flex !important;
         align-items: center !important;
         min-height: 40px !important;
-        padding: 8px 10px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
         border-radius: var(--awa-radius-sm, 8px) !important;
         text-decoration: none !important;
     }
@@ -154,7 +154,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         opacity: 1 !important;
         overflow-x: hidden !important;
         overflow-y: auto !important;
-        padding: 12px 12px calc(20px + env(safe-area-inset-bottom)) !important;
+        padding: @awa-space-3 12px calc(20px + env(safe-area-inset-bottom)) !important;
         background: var(--awa-bg, Canvas) !important;
         box-shadow: 8px 0 24px color-mix(in srgb, CanvasText 14%, transparent) !important;
         z-index: 1300 !important;
@@ -178,7 +178,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         justify-content: space-between !important;
         gap: 12px !important;
         min-height: 52px !important;
-        padding: 0 0 10px !important;
+        padding: 0 0 @awa-space-3 !important;
         margin: 0 0 8px !important;
         border-bottom: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas)) !important;
     }
@@ -221,7 +221,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
 
     html body#html-body:is(.awa-menu-drawer-open, .nav-open) [data-role='awa-vertical-menu-panel'] > li.ui-menu-item.level0 > a.level-top {
         min-height: 44px !important;
-        padding: 10px 8px !important;
+        padding: @awa-space-3 @awa-space-2 !important;
     }
 }
 
@@ -341,7 +341,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
 
     html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index) .page-wrapper .awa-site-header button.title-category-dropdown.our_categories[data-role='awa-vertical-menu-trigger'],
     html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index) .page-wrapper .awa-site-header button.our_categories.title-category-dropdown[data-role='awa-vertical-menu-trigger'] {
-        padding: 0 14px !important;
+        padding: 0 @awa-space-4 !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
@@ -660,7 +660,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         height: 44px !important;
         min-height: 44px !important;
         max-height: 44px !important;
-        padding: 0 10px !important;
+        padding: 0 @awa-space-3 !important;
         gap: 8px !important;
         border-radius: 8px !important;
         border: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas)) !important;
@@ -753,7 +753,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
         height: 44px !important;
         min-height: 44px !important;
         max-height: 44px !important;
-        padding: 0 14px !important;
+        padding: 0 @awa-space-4 !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
@@ -799,7 +799,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
     .awa-site-header .awa-nav-quick-links__link {
         min-height: 44px !important;
         align-items: center !important;
-        padding: 0 4px !important;
+        padding: 0 @awa-space-1 !important;
         font-size: 13px !important;
         line-height: 1.2 !important;
         white-space: nowrap !important;
@@ -944,7 +944,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
             height: 44px !important;
             min-height: 44px !important;
             max-height: 44px !important;
-            padding: 0 8px !important;
+            padding: 0 @awa-space-2 !important;
             gap: 6px !important;
             box-shadow: none !important;
             overflow: hidden !important;
@@ -1021,7 +1021,7 @@ html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index)
             height: 44px !important;
             min-height: 44px !important;
             max-height: 44px !important;
-            padding: 0 12px !important;
+            padding: 0 @awa-space-3 !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: flex-start !important;
@@ -1190,7 +1190,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
         max-inline-size: var(--awa-container-max, 1280px) !important;
         margin-inline: auto !important;
         min-height: 0 !important;
-        padding: 8px 12px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
     }
 
     .footer-bottom-inner {
@@ -1252,7 +1252,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
         width: 100% !important;
         max-width: none !important;
         margin: 0 !important;
-        padding: 6px 0 0 !important;
+        padding: @awa-space-2 0 0 !important;
         border-top: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 10%, Canvas)) !important;
         text-align: left !important;
     }
@@ -1293,7 +1293,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
 
     .awa-footer-categories-expand {
         margin: 8px 0 0 !important;
-        padding: 8px 0 4px !important;
+        padding: @awa-space-2 0 @awa-space-1 !important;
     }
 
     .awa-footer-categories-expand__inner {
@@ -1334,7 +1334,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
         display: inline-flex !important;
         align-items: center !important;
         min-height: 32px !important;
-        padding: 6px 10px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
         line-height: 1.2 !important;
     }
 
@@ -1379,8 +1379,8 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
         height: auto !important;
         min-height: 0 !important;
         max-height: none !important;
-        margin-top: 8px !important;
-        padding: 8px 0 4px !important;
+        margin-top: @awa-space-2 !important;
+        padding: @awa-space-2 0 @awa-space-1 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand__inner {
@@ -1430,7 +1430,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-trust-grid {
         gap: 8px !important;
-        padding: 8px 0 !important;
+        padding: @awa-space-2 0 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-trust-item {
@@ -1440,7 +1440,7 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
         gap: 10px !important;
         min-height: 56px !important;
         height: auto !important;
-        padding: 8px 10px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-trust-icon {
@@ -1458,12 +1458,12 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) #footer.footer-container {
-        padding: 10px 16px 8px !important;
+        padding: @awa-space-3 @awa-space-4 @awa-space-2 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-newsletter {
         margin-bottom: 8px !important;
-        padding: 10px 12px !important;
+        padding: @awa-space-3 @awa-space-3 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-newsletter-wrapper,
@@ -1505,35 +1505,35 @@ html body#html-body .page-wrapper :is(.page_footer, .page-footer) {
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) #footer.footer-container > .container {
-        padding: 10px 16px !important;
+        padding: @awa-space-3 @awa-space-4 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) #footer.footer-container .rowFlexMargin {
         gap: 8px !important;
-        padding: 8px 0 !important;
+        padding: @awa-space-2 0 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .vela-content.velaFooterMenu {
         height: auto !important;
-        padding: 4px 8px !important;
+        padding: @awa-space-1 @awa-space-2 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .velaFooterTitle {
         height: auto !important;
         min-height: 52px !important;
-        padding: 4px 0 !important;
+        padding: @awa-space-1 0 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .footer-bottom {
         margin: 12px 12px 0 !important;
-        padding: 12px !important;
+        padding: @awa-space-3 !important;
     }
 
     html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-bottom__copyright {
         width: 100% !important;
         max-width: none !important;
         margin: 8px 0 0 !important;
-        padding: 8px 0 0 !important;
+        padding: @awa-space-2 0 0 !important;
         text-align: left !important;
     }
 
@@ -1588,7 +1588,7 @@ html body#html-body .page-wrapper :is(.products-grid, .block-products-list, .pro
         gap: 6px !important;
         width: 100% !important;
         min-height: 44px !important;
-        padding: 0 12px !important;
+        padding: 0 @awa-space-3 !important;
         border-radius: 8px !important;
         text-align: center !important;
         line-height: 1.15 !important;
@@ -1641,7 +1641,7 @@ html body#html-body .page-wrapper {
             width: 44px !important;
             min-width: 44px !important;
             height: 44px !important;
-            padding: 6px !important;
+            padding: @awa-space-2 !important;
         }
     }
 
@@ -1808,7 +1808,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
         row-gap: 4px !important;
         min-height: 44px !important;
         margin: 0 !important;
-        padding: 0 0 4px !important;
+        padding: 0 0 @awa-space-1 !important;
         list-style: none !important;
     }
 
@@ -1874,7 +1874,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
     :is(.item-product, .product-item, .products-list .product-item-info) {
         gap: 10px !important;
         overflow: hidden !important;
-        padding: 8px !important;
+        padding: @awa-space-2 !important;
     }
 
     :is(.item-product, .product-item, .product-item-info) .product-name a,
@@ -1950,7 +1950,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
 
         .fieldset > .legend {
             margin-bottom: 10px !important;
-            padding-bottom: 8px !important;
+            padding-bottom: @awa-space-2 !important;
         }
 
         :is(.table, .data.table, .totals, .checkout-shipping-method, .checkout-payment-method) {
@@ -2005,12 +2005,12 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
 
     .product-info-main,
     .product.media {
-        padding: 12px !important;
+        padding: @awa-space-3 !important;
     }
 
     .product-info-main .page-title-wrapper {
         margin: 0 !important;
-        padding-bottom: 8px !important;
+        padding-bottom: @awa-space-2 !important;
         border-bottom: 1px solid var(--awa-border) !important;
     }
 
@@ -2028,7 +2028,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
     }
 
     .product-info-main .price-box {
-        margin-top: 8px !important;
+        margin-top: @awa-space-2 !important;
         margin-bottom: 10px !important;
     }
 
@@ -2040,7 +2040,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
     .product-info-main .product-options-bottom,
     .product-info-main .box-tocart,
     .product-info-main .product-add-form .fieldset {
-        margin-top: 10px !important;
+        margin-top: @awa-space-2 !important;
     }
 
     .product-options-bottom .field.qty,
@@ -2142,7 +2142,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
         min-height: 44px !important;
         width: 100% !important;
         max-width: 100% !important;
-        padding: 10px 12px !important;
+        padding: @awa-space-3 @awa-space-3 !important;
         border-radius: var(--awa-radius-sm, 8px) !important;
         box-sizing: border-box !important;
         text-decoration: none !important;
@@ -2251,7 +2251,7 @@ html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .pag
 
         :is(.wrapper.grid.products-grid, .products-grid, .products-list) li.item-product,
         :is(.products-grid .item-product, .products-list .item) {
-            padding: 10px !important;
+            padding: @awa-space-3 !important;
             gap: var(--product-card-gap, 12px) !important;
             align-items: stretch !important;
         }
@@ -2339,11 +2339,11 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
         }
 
         .opc-wrapper {
-            padding: 12px !important;
+            padding: @awa-space-3 !important;
         }
 
         .opc-block-summary {
-            padding: 12px !important;
+            padding: @awa-space-3 !important;
         }
 
         .field-tooltip .field-tooltip-content {
@@ -2359,7 +2359,7 @@ html body#html-body:not(.cms-home):not(.cms-index-index):not(.cms-homepage_ayo_h
             border-radius: var(--awa-radius-sm, 8px) !important;
             background: var(--awa-bg-surface, Canvas) !important;
             box-shadow: none !important;
-            padding: 12px !important;
+            padding: @awa-space-3 !important;
         }
 
         :is(button, .action, .action.primary, .action.secondary, .action.primary:visited, .action.secondary:visited) {
@@ -2623,7 +2623,7 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .pa
         }
 
         .awa-category-carousel__dots {
-            margin-top: 8px !important;
+            margin-top: @awa-space-2 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -3072,7 +3072,7 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .pa
 
         .top-home-content--above-fold .banner_item .text-banner {
             width: 100% !important;
-            padding: 12px 16px !important;
+            padding: @awa-space-3 @awa-space-4 !important;
             align-items: flex-start !important;
             justify-content: flex-end !important;
         }

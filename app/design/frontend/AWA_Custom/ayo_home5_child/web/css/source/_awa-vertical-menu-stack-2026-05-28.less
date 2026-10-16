@@ -10,7 +10,7 @@ body .page-wrapper .navigation.verticalmenu
     [data-role="awa-vmenu-search-row"] {
     display: none; /* visível só no desktop — JS toggle */
     /* H13: padding vertical enxuto — input 44px; evita li ~69px */
-    padding: 4px 8px !important;
+    padding: @awa-space-1 @awa-space-2 !important;
     border-bottom: 1px solid var(--awa-vmenu-border,
         color-mix(in srgb, oklch(42% 0.01 25) 8%, transparent)) !important;
     margin-bottom: 0 !important;
@@ -50,7 +50,7 @@ body .page-wrapper .navigation.verticalmenu .awa-vmenu-search-input {
     height: 44px !important;
     margin: 0 !important;
     margin-top: 0 !important;
-    padding: 7px 10px 7px 32px !important;
+    padding: @awa-space-2 @awa-space-3 @awa-space-2 @awa-space-7 !important;
     background: color-mix(in srgb, oklch(42% 0.01 25) 5%,
         var(--awa-vmenu-surface, oklch(99.4% 0.004 25))) !important;
     border: 1px solid transparent !important;
@@ -92,7 +92,7 @@ body .page-wrapper .navigation.verticalmenu
 body .page-wrapper .navigation.verticalmenu .awa-vmenu-search-empty-li {
     display: none;
     list-style: none !important;
-    padding: 20px 14px 16px !important;
+    padding: @awa-space-5 @awa-space-4 @awa-space-4 !important;
     text-align: center !important;
     border-bottom: none !important;
     background: var(--awa-vmenu-surface, oklch(99.4% 0.004 25)) !important;
@@ -335,7 +335,7 @@ body .page-wrapper .navigation.verticalmenu .awa-vmenu__section-label::after {
         height: auto !important;
         width: 100% !important;
         max-width: 100% !important;
-        padding: 16px 12px 14px 16px !important;
+        padding: @awa-space-4 @awa-space-3 @awa-space-4 @awa-space-4 !important;
     }
 
     body .page-wrapper .navigation.verticalmenu .level0.submenu
@@ -395,7 +395,7 @@ body .page-wrapper .navigation.verticalmenu .awa-vmenu__section-label::after {
     body .awa-vmf-portal[data-awa-vmf-density="compact"] .navigation__inner-list--level1 {
         grid-template-columns: minmax(0, 1fr) minmax(120px, 150px) !important;
         gap: 0 12px !important;
-        padding: 14px 10px 12px 18px !important;
+        padding: @awa-space-4 @awa-space-3 @awa-space-3 @awa-space-5 !important;
     }
 
     body .page-wrapper .navigation.verticalmenu.side-verticalmenu
@@ -459,7 +459,7 @@ body .page-wrapper .navigation.verticalmenu .awa-vmenu__section-label::after {
     body .page-wrapper .navigation.verticalmenu .level0.submenu
         .navigation__inner-item--level1.subcategory-second-level > a,
     body .awa-vmf-portal .navigation__inner-item--level1.subcategory-second-level > a {
-        padding: 6px 10px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
         border-radius: 6px !important;
         font-size: 13.5px !important;
         font-weight: 500 !important;
@@ -484,7 +484,7 @@ body .page-wrapper .navigation.verticalmenu .awa-vmenu__section-label::after {
         letter-spacing: 0.02em !important;
         text-transform: none !important;
         color: var(--awa-primary, @awa-color-primary) !important;
-        padding: 10px 14px !important;
+        padding: @awa-space-3 @awa-space-4 !important;
     }
 }
 
@@ -523,7 +523,7 @@ body .awa-vmf-portal.navigation__submenu a {
 body .page-wrapper .navigation.verticalmenu .togge-menu > li.awa-vmenu-empty .awa-vmenu-empty__text {
     white-space: normal !important;
     line-height: 1.45 !important;
-    padding: 12px 14px !important;
+    padding: @awa-space-3 @awa-space-4 !important;
 }
 
 /* Focus visible — todos os controles interativos */
@@ -731,7 +731,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
         display: inline-flex !important;
         align-items: center !important;
         gap: 4px !important;
-        margin-top: 10px !important;
+        margin-top: @awa-space-2 !important;
         padding: 0 !important;
         background: transparent !important;
         border: none !important;
@@ -913,7 +913,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
     body .page-wrapper .navigation.verticalmenu .level0.submenu .subchildmenu.mega-columns {
         display: block !important;
         grid-template-columns: none !important;
-        padding: 8px 0 10px !important;
+        padding: @awa-space-2 0 @awa-space-3 !important;
     }
 
     body .page-wrapper .navigation.verticalmenu .level0.submenu
@@ -924,7 +924,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
     body .page-wrapper .navigation.verticalmenu .level0.submenu
         .navigation__inner-item--level1.subcategory-second-level > a {
         min-height: var(--awa-touch-min, 44px) !important;
-        padding: 10px 16px 10px 28px !important;
+        padding: @awa-space-3 @awa-space-4 @awa-space-3 @awa-space-7 !important;
         font-size: 14px !important;
     }
 
@@ -932,7 +932,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
         .navigation__inner-item--level1.subcategory-title span {
         font-size: 13px !important;
         font-weight: 600 !important;
-        padding: 8px 16px 4px !important;
+        padding: @awa-space-2 @awa-space-4 @awa-space-1 !important;
         margin: 0 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.04em !important;
@@ -951,7 +951,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
         display: flex !important;
         align-items: center !important;
         gap: 8px !important;
-        padding: 10px 12px !important;
+        padding: @awa-space-3 @awa-space-3 !important;
         background: var(--awa-vmenu-surface, oklch(99.4% 0.004 25)) !important;
         border-bottom: 1px solid var(--awa-vmenu-polish-divider, color-mix(in srgb, var(--awa-text, oklch(42% 0.01 25)) 7%, transparent)) !important;
     }
@@ -959,7 +959,7 @@ body .page-wrapper .navigation.verticalmenu .cat-label[style*="ff4400"] {
     body .page-wrapper .navigation.verticalmenu .vmm-drill-back-btn {
         min-height: var(--awa-touch-min, 44px) !important;
         min-width: var(--awa-touch-min, 44px) !important;
-        padding: 0 10px !important;
+        padding: 0 @awa-space-3 !important;
         border: none !important;
         border-radius: 8px !important;
         background: transparent !important;
@@ -1151,7 +1151,7 @@ body .page-wrapper .navigation.verticalmenu.side-verticalmenu {
         overflow-x: visible !important;
         overflow-y: auto !important;
         overscroll-behavior: contain !important;
-        padding-right: 12px !important;
+        padding-right: @awa-space-3 !important;
         scrollbar-gutter: stable both-edges !important;
     }
 
@@ -1341,7 +1341,7 @@ body .awa-vmf-portal.submenu img {
         > li.ui-menu-item.level0._active > a.level-top,
     body .page-wrapper .navigation.verticalmenu .togge-menu
         > li.ui-menu-item.level0.vmm-current-category > a.level-top {
-        padding-left: 14px !important;
+        padding-left: @awa-space-4 !important;
         padding-inline: 14px !important;
         transition-property: color, background-color !important;
     }
@@ -1406,7 +1406,7 @@ body .awa-vmf-portal.submenu img {
         > li.ui-menu-item.level0._active > a.level-top,
     html body#html-body .page-wrapper .navigation.verticalmenu .togge-menu
         > li.ui-menu-item.level0.vmm-current-category > a.level-top {
-        padding-left: 14px !important;
+        padding-left: @awa-space-4 !important;
         padding-inline: 14px !important;
         border-left: 0 !important;
     }

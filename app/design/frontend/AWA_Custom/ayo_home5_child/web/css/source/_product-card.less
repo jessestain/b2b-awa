@@ -40,7 +40,7 @@
     // Foto — fundo branco puro para imagem destacada
     --card-photo-bg:         @awa-color-white;
     --card-photo-radius:     0;                              // sem radius interno — segue o radius do card
-    --card-photo-padding:    6px;                            // padding mínimo para respiração
+    --card-photo-padding: @awa-space-2;                            // padding mínimo para respiração
     --card-photo-min-h:      184px;     // fallback quando aspect-ratio não suportado
 
     // Nome — --awa-fs-md (1.0625rem ~17px)
@@ -257,7 +257,7 @@ body,
         flex-direction: column;
         flex: 1;
         gap: var(--card-gap);
-        padding: 10px 12px 12px; // top | horizontal | bottom — respiro do texto
+        padding: @awa-space-3 @awa-space-3 @awa-space-3; // top | horizontal | bottom — respiro do texto
         border-top: 1px solid rgba(0, 0, 0, 0.04); // divisor sutil foto↔texto
     }
 
@@ -466,7 +466,7 @@ body,
             justify-content: center;
             gap: 7px;
             width: 100%;
-            padding: 6px 0;
+            padding: @awa-space-2 0;
             font-size: var(--awa-font-sm); // 13px — restaura tamanho de fonte para o botão
             background: transparent;
             color: var(--awa-primary, @awa-color-primary-mid);
@@ -510,7 +510,7 @@ body,
         margin-top: auto;
         display: flex;
         flex-direction: column;
-        padding-top: 4px;
+        padding-top: @awa-space-1;
         width: 100%;
 
         form[data-role="tocart-form"] {
@@ -564,7 +564,7 @@ body,
         line-height: 1.2;
         text-align: center;
         text-decoration: none;
-        padding: 10px 16px;
+        padding: @awa-space-3 @awa-space-4;
         cursor: pointer;
         transition: background-color @awa-transition;
         box-shadow: none;
@@ -612,7 +612,7 @@ body,
         line-height: 1.2;
         text-align: center;
         text-decoration: none;
-        padding: 10px 16px;
+        padding: @awa-space-3 @awa-space-4;
         cursor: pointer;
         transition: background @awa-transition, color @awa-transition, border-color @awa-transition;
 
@@ -706,10 +706,10 @@ body,
 .cms-index-index .rokan-bestseller .products-swiper--bestseller .swiper-slide:nth-child(2)
     .product-item .product-info .awa-price-slot > .b2b-login-to-see-price {
     box-sizing: content-box;
-    padding-top: 8px;
-    padding-right: 8px;
-    padding-bottom: 8px;
-    padding-left: 8px;
+    padding-top: @awa-space-2;
+    padding-right: @awa-space-2;
+    padding-bottom: @awa-space-2;
+    padding-left: @awa-space-2;
 }
 
 // Widgets de produto Magento (CMS blocks)
@@ -890,8 +890,8 @@ body,
 .list-tab-product,
 .block-products-list,
 .block-new-products {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: @awa-space-3;
+    padding-right: @awa-space-3;
 
     .owl-nav button,
     .owl-prev,
@@ -1101,7 +1101,7 @@ body,
 
     .product-item-details,
     .product-info {
-        padding: 0 6px 6px;
+        padding: 0 @awa-space-2 @awa-space-2;
     }
 }
 

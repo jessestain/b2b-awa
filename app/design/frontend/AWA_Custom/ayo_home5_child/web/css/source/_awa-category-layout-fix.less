@@ -45,8 +45,8 @@
     background: var(--awa-bg-surface, @awa-color-white);
     border: 1px solid var(--awa-plp-border, var(--awa-border, @awa-color-border));
     border-radius: 5px ;
-    padding: 10px 12px ;
-    margin-top: 12px ;
+    padding: @awa-space-3 @awa-space-3 ;
+    margin-top: @awa-space-3 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -201,8 +201,8 @@
     background: @awa-color-white;
     border: 1px solid var(--awa-border, @awa-color-border);
     border-radius: var(--awa-radius-lg, 16px);
-    padding: 16px;
-    margin-top: 16px;
+    padding: @awa-space-4;
+    margin-top: @awa-space-4;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -250,7 +250,7 @@
     display: flex ;
     align-items: flex-start ;
     gap: 8px ;
-    padding: 8px 10px ;
+    padding: @awa-space-2 @awa-space-3 ;
     border-radius: 8px;
     background: var(--awa-bg-surface, @awa-color-bg-soft);
     border: 1px solid transparent;
@@ -366,14 +366,14 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .block-reorder .actions-toolbar {
-    margin-top: 12px ;
+    margin-top: @awa-space-3 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .block-reorder .actions-toolbar .action.tocart {
     width: 100% ;
     display: block ;
-    padding: 10px 12px ;
+    padding: @awa-space-3 @awa-space-3 ;
     font-size: @font-size-12 ;
     font-weight: 700 ;
     border-radius: var(--awa-radius-md, 8px) ;
@@ -415,8 +415,8 @@
 @media (max-width: 767px) {
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .sidebar-additional1 .block-reorder {
-        margin-top: 12px;
-        padding: 14px;
+        margin-top: @awa-space-3;
+        padding: @awa-space-4;
     }
 }
 
@@ -492,8 +492,8 @@
 @media (max-width: 767px) {
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .toolbar-products.toolbar-bottom {
-        margin-top: 12px ;
-        padding: 10px 12px ;
+        margin-top: @awa-space-3 ;
+        padding: @awa-space-3 @awa-space-3 ;
     }
 }
 
@@ -513,7 +513,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .page-main {
-    padding-top: 12px ;
+    padding-top: @awa-space-3 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -548,7 +548,7 @@
 
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .awa-category-hero__content {
-        padding: 8px 0 4px ;
+        padding: @awa-space-2 0 @awa-space-1 ;
     }
 
     :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -582,7 +582,7 @@
     justify-content: space-between ;
     flex-wrap: wrap ;
     gap: 8px ;
-    padding: 10px 14px ;
+    padding: @awa-space-3 @awa-space-4 ;
     background: @awa-color-bg-fafafa ;
     border: 1px solid @awa-color-border ;
     border-radius: 8px ;
@@ -611,7 +611,7 @@
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .toolbar-products .toolbar-sorter select.sorter-options {
     height: 36px ;
-    padding: 0 28px 0 10px ;
+    padding: 0 @awa-space-7 0 @awa-space-3 ;
     font-size: @font-size-12 ;
     border-radius: 6px ;
     border: 1px solid #d9d9d9 ;
@@ -709,7 +709,7 @@
 @media (max-width: 767px) {
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .toolbar-products:not(.toolbar-bottom) {
-        padding: 8px 10px ;
+        padding: @awa-space-2 @awa-space-3 ;
         gap: 6px ;
     }
 
@@ -746,7 +746,7 @@
     background: @awa-color-white ;
     border: 1px solid @awa-color-border ;
     border-radius: 12px ;
-    padding: 16px ;
+    padding: @awa-space-4 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -765,7 +765,7 @@
     font-size: @font-size-13 ;
     font-weight: 600 ;
     color: @awa-color-dark ;
-    padding: 10px 0 ;
+    padding: @awa-space-3 0 ;
     border-bottom: 1px solid @awa-color-gray-f0 ;
     cursor: pointer ;
     display: flex ;
@@ -793,7 +793,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-options .filter-options-content {
-    padding: 8px 0 ;
+    padding: @awa-space-2 0 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
@@ -816,7 +816,7 @@
     font-size: @font-size-13 ;
     color: @awa-color-text-mid ;
     text-decoration: none ;
-    padding: 4px 0 ;
+    padding: @awa-space-1 0 ;
     display: flex ;
     align-items: center ;
     justify-content: space-between ;
@@ -938,7 +938,7 @@
     display: inline-flex ;
     align-items: center ;
     gap: 4px ;
-    padding: 4px 0 ;
+    padding: @awa-space-1 0 ;
     transition: color 0.15s ;
 }
 
@@ -981,7 +981,7 @@
         align-items: center ;
         justify-content: center ;
         min-height: 44px ;
-        padding: 0 14px ;
+        padding: 0 @awa-space-4 ;
         border-radius: 999px ;
         border: 1px solid var(--awa-primary, @awa-color-primary) ;
         background: @awa-color-white ;
@@ -1089,9 +1089,9 @@
     .toolbar.toolbar-products.toolbar-bottom {
     border: 1px solid @awa-color-border ;
     border-radius: 8px ;
-    padding: 10px 14px ;
+    padding: @awa-space-3 @awa-space-4 ;
     background: @awa-color-bg-fafafa ;
-    margin-top: 24px ;
+    margin-top: @awa-space-6 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)

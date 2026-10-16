@@ -16,14 +16,14 @@
 .b2b-quickorder {
     background: var(--awa-white);
     border-radius: 16px;
-    padding: 24px;
+    padding: @awa-space-6;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--awa-border);
 
     .block-title {
         margin-bottom: 24px;
         border-bottom: 1px solid var(--awa-border);
-        padding-bottom: 16px;
+        padding-bottom: @awa-space-4;
 
         strong {
             font-size: @font-size-24;
@@ -32,7 +32,7 @@
         }
 
         .quickorder-description {
-            margin-top: 8px;
+            margin-top: @awa-space-2;
             color: var(--awa-muted);
             font-size: @font-size-15;
         }
@@ -46,7 +46,7 @@
         .csv-dropzone {
             border: 2px dashed var(--awa-border);
             border-radius: 12px;
-            padding: 40px 20px;
+            padding: @awa-space-8 @awa-space-5;
             text-align: center;
             background: var(--awa-bg-soft);
             transition: all 0.3s ease;
@@ -94,7 +94,7 @@
         }
 
         .csv-actions {
-            margin-top: 12px;
+            margin-top: @awa-space-3;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -126,7 +126,7 @@
             display: grid;
             grid-template-columns: 1fr 120px 48px;
             gap: 16px;
-            padding: 12px;
+            padding: @awa-space-3;
             background: var(--awa-b2bqo-c6);
             border-radius: 8px;
             font-weight: 700;
@@ -143,7 +143,7 @@
             gap: 16px;
             align-items: center;
             margin-bottom: @space-3;
-            padding: 4px;
+            padding: @awa-space-1;
             transition: all 0.2s;
 
             .col-sku input {
@@ -200,7 +200,7 @@
     // 3. ACTIONS
     // --------------------------------------------------------------------------
     .quickorder-add-row {
-        margin-top: 16px;
+        margin-top: @awa-space-4;
         
         button {
             border: 1px dashed var(--awa-primary);
@@ -220,11 +220,11 @@
     }
 
     .quickorder-actions {
-        margin-top: 32px;
+        margin-top: @awa-space-7;
         display: flex;
         gap: 16px;
         border-top: 1px solid var(--awa-border);
-        padding-top: 24px;
+        padding-top: @awa-space-6;
 
         .action.primary {
             flex: 2;
@@ -249,7 +249,7 @@
 // RESPONSIVE REFINEMENT
 @media (max-width: 767px) {
     .b2b-quickorder {
-        padding: 16px;
+        padding: @awa-space-4;
         
         .quickorder-header-row {
             display: none;

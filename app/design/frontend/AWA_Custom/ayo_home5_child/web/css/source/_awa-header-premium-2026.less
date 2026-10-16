@@ -203,13 +203,13 @@
 @media (max-width: 991px) {
     .page-wrapper .awa-site-header {
         .awa-main-header {
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
+            padding-top: @awa-space-3 !important;
+            padding-bottom: @awa-space-3 !important;
         }
         
         .awa-header-mobile-toggle {
             background: var(--awa-hprem-c6);
-            padding: 8px;
+            padding: @awa-space-2;
             border-radius: 8px;
             transition: background 0.2s ease;
             &:active { background: var(--awa-hprem-c5); }
@@ -217,7 +217,7 @@
         
         .awa-header-cart-link {
             background: var(--awa-hprem-c6);
-            padding: 8px;
+            padding: @awa-space-2;
             border-radius: 8px;
             color: var(--awa-hprem-c1);
             .awa-cart-link-badge:not(.awa-badge-hidden) {

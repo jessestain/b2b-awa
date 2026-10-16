@@ -49,7 +49,7 @@
         background-color: var(--awa-primary, CanvasText) !important;
         border-radius: 8px !important;
         min-height: 64px !important;
-        padding: 8px 12px !important;
+        padding: @awa-space-2 @awa-space-3 !important;
     }
 
     .page-wrapper :is(.page_footer, .page-footer) .footer-bottom .awa-footer-bottom__logo-img {
@@ -257,7 +257,7 @@
             height: auto !important; // vence trava legada de min-height 336px no plugin terminal.
             min-height: 0 !important;
             max-height: none !important;
-            padding-bottom: 8px;
+            padding-bottom: @awa-space-2;
         }
 
         .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs,
@@ -311,7 +311,7 @@
             min-height: 0 !important; // vence regra terminal antiga clamp(540px,145vw,620px).
             max-height: none !important;
             margin: 0 !important;
-            padding: 12px 16px 16px !important;
+            padding: @awa-space-3 @awa-space-4 @awa-space-4 !important;
             overflow: visible !important;
         }
 
@@ -346,7 +346,7 @@
             width: 100% !important;
             min-height: 58px !important;
             margin: 0 !important;
-            padding: 10px 12px !important;
+            padding: @awa-space-3 @awa-space-3 !important;
             overflow: visible !important;
         }
 
@@ -393,7 +393,7 @@
             max-width: 260px !important;
             min-height: 40px !important;
             height: 40px !important;
-            padding: 0 14px !important;
+            padding: 0 @awa-space-4 !important;
             font-size: 13px !important;
             white-space: nowrap !important;
         }
@@ -413,7 +413,7 @@
             min-height: 0 !important; // vence trava terminal que criava uma area vazia antes de pagamento/selos.
             max-width: calc(100% - 24px) !important;
             margin: 0 auto !important;
-            padding: 12px !important;
+            padding: @awa-space-3 !important;
             overflow: visible !important;
         }
 
@@ -496,7 +496,7 @@
             height: auto !important;
             min-height: 0 !important;
             margin: 0 !important;
-            padding: 10px !important;
+            padding: @awa-space-3 !important;
             width: 100% !important;
         }
 
@@ -512,7 +512,7 @@
         .page-wrapper :is(.page_footer, .page-footer) .awa-footer-devby {
             height: auto !important;
             min-height: 0 !important;
-            padding: 8px 16px !important;
+            padding: @awa-space-2 @awa-space-4 !important;
         }
 
         .page-wrapper :is(.page_footer, .page-footer) .awa-footer-devby__inner {
@@ -556,7 +556,7 @@
             inset: auto !important;
             justify-content: center;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: @awa-space-2;
             min-height: 40px;
             pointer-events: auto !important;
             transform: none !important;

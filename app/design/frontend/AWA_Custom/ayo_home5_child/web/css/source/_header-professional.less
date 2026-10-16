@@ -214,7 +214,7 @@ body .page-wrapper .awa-site-header .awa-header-search-col.top-search {
       height: 44px;
       font-size: var(--awa-font-sm);
       color: @text-color;
-      padding: 0 14px 0 42px;
+      padding: 0 @awa-space-4 0 @awa-space-8;
       width: 100%;
       outline: none;
       .ds-transition(~'border-color, box-shadow');
@@ -256,7 +256,7 @@ body .page-wrapper .awa-site-header .awa-header-right-col {
   .header-control-account {
     border: 1.5px solid @awa-color-border;
     border-radius: var(--awa-radius-md);
-    padding: 8px 14px;
+    padding: @awa-space-2 @awa-space-4;
     display: flex !important;
     align-items: center;
     gap: 10px;
@@ -304,7 +304,7 @@ body .page-wrapper .awa-site-header .awa-header-right-col .awa-header-cart-link 
   background: @awa-red;
   color: @awa-color-white;
   border-radius: var(--awa-radius-md);
-  padding: 8px 16px;
+  padding: @awa-space-2 @awa-space-4;
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
@@ -346,7 +346,7 @@ body .page-wrapper .awa-site-header .awa-header-right-col a.awa-header-cart-fall
   background: @awa-red;
   color: @awa-color-white;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: @awa-space-2 @awa-space-4;
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
@@ -365,7 +365,7 @@ body .page-wrapper .awa-site-header .awa-header-right-col .minicart-wrapper a.sh
   background: @awa-red;
   color: @awa-color-white;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: @awa-space-2 @awa-space-4;
   display: inline-flex !important;
   align-items: center;
   gap: 8px;
@@ -432,7 +432,7 @@ body .page-wrapper .awa-site-header .awa-nav-bar .awa-nav-categories button {
   color: @awa-color-white;
   border: none;
   border-radius: 4px 4px 0 0;
-  padding: 10px 20px;
+  padding: @awa-space-3 @awa-space-5;
   font-size: var(--awa-font-sm);
   font-weight: 600;
   text-transform: none;
@@ -452,7 +452,7 @@ body .page-wrapper .awa-site-header .nav-sections .navigation a.level-top {
   font-size: var(--awa-font-sm);
   font-weight: 500;
   color: @awa-color-text-primary;
-  padding: 10px 14px;
+  padding: @awa-space-3 @awa-space-4;
   position: relative;
   .ds-transition(color);
 
@@ -539,7 +539,7 @@ body .page-wrapper .awa-site-header .navigation a[href*="super-ofertas.html"]::a
       gap: 4px;
       min-height: auto;
       height: auto;
-      padding: 6px 0;
+      padding: @awa-space-2 0;
     }
 
     .top-bar-left {
@@ -561,7 +561,7 @@ body .page-wrapper .awa-site-header .navigation a[href*="super-ofertas.html"]::a
 
   // === ZONA 2 — Header mobile ===
   body .page-wrapper .awa-site-header .header.awa-main-header {
-    padding: 10px 12px;
+    padding: @awa-space-3 @awa-space-3;
   }
 
   body .page-wrapper .awa-site-header .awa-main-header__inner.wp-header {
@@ -595,7 +595,7 @@ body .page-wrapper .awa-site-header .navigation a[href*="super-ofertas.html"]::a
   // Carrinho compacto
   body .page-wrapper .awa-site-header .awa-header-right-col .awa-header-cart-link,
   body .page-wrapper .awa-site-header .awa-header-right-col a.awa-header-cart-fallback {
-    padding: 6px 10px;
+    padding: @awa-space-2 @awa-space-3;
     font-size: 0;
 
     .awa-header-cart-link-icon,
@@ -731,7 +731,7 @@ body .page-wrapper .awa-site-header .awa-nav-bar .awa-nav-categories button {
   background: @awa-color-primary;
   color: @awa-color-white;
   border: none;
-  padding: 10px 20px;
+  padding: @awa-space-3 @awa-space-5;
   font-size: var(--awa-font-sm);
   font-weight: 600;
   text-transform: none;

@@ -5,13 +5,13 @@
     // Home mobile should breathe from section wrappers, not from page-main.
     body.cms-index-index .page-wrapper .page-main,
     body.cms-home .page-wrapper .page-main {
-        padding: 0 0 32px !important;
+        padding: 0 0 @awa-space-7 !important;
     }
 
     body.cms-index-index .page-wrapper .top-home-content,
     body.cms-home .page-wrapper .top-home-content {
         padding-inline-start: var(--awa-page-pad-mobile, 16px) !important;
-        padding-right: 16px !important;
+        padding-right: @awa-space-4 !important;
         box-sizing: border-box !important;
     }
 
@@ -50,7 +50,7 @@
     body.cms-home .page-wrapper .product-item-info,
     body.catalog-category-view .page-wrapper .product-item-info,
     body.catalogsearch-result-index .page-wrapper .product-item-info {
-        padding: 12px !important;
+        padding: @awa-space-3 !important;
     }
 
     body.cms-index-index .page-wrapper .product-item-photo,
@@ -74,7 +74,7 @@
     body.catalog-category-view .page-wrapper .product-item-actions .action,
     body.catalogsearch-result-index .page-wrapper .product-item-actions .action {
         min-height: 40px !important;
-        padding: 10px 12px !important;
+        padding: @awa-space-3 @awa-space-3 !important;
         font-size: 12px !important;
     }
 
@@ -82,7 +82,7 @@
     body.catalog-category-view .page-wrapper .toolbar-products,
     body.catalogsearch-result-index .page-wrapper .toolbar-products {
         gap: 10px !important;
-        padding: 12px !important;
+        padding: @awa-space-3 !important;
     }
 
     body.catalog-category-view .page-wrapper .toolbar-products .modes,
@@ -101,7 +101,7 @@
     body.cms-noroute-index .page-wrapper .page-main,
     body.b2b-auth-shell .page-wrapper .page-main,
     body.customer-account-login .page-wrapper .page-main {
-        padding-bottom: 24px !important;
+        padding-bottom: @awa-space-6 !important;
     }
 
     body.checkout-cart-index .page-wrapper .column.main,
@@ -110,18 +110,18 @@
     body.b2b-auth-shell .page-wrapper .column.main,
     body.customer-account-login .page-wrapper .column.main {
         min-height: auto !important;
-        padding-bottom: 24px !important;
+        padding-bottom: @awa-space-6 !important;
     }
 
     body.checkout-cart-index .page-wrapper .cart-empty {
-        padding: 28px 20px !important;
+        padding: @awa-space-7 @awa-space-5 !important;
         gap: 16px !important;
     }
 
     body.b2b-auth-shell .page-wrapper .column.main,
     body.customer-account-login .page-wrapper .column.main {
         padding-inline-start: var(--awa-page-pad-mobile, 16px) !important;
-        padding-right: 16px !important;
+        padding-right: @awa-space-4 !important;
     }
 
     body.b2b-auth-shell .page-wrapper .login-container,
@@ -140,8 +140,8 @@
     body.cms-noroute-index .page-wrapper .page-footer,
     body.b2b-auth-shell .page-wrapper .page-footer,
     body.customer-account-login .page-wrapper .page-footer {
-        margin-top: 24px !important;
-        padding-top: 24px !important;
+        margin-top: @awa-space-6 !important;
+        padding-top: @awa-space-6 !important;
     }
 
     body.checkout-cart-index .page-wrapper .page-footer .awa-footer-trust-bar,
@@ -203,6 +203,6 @@
     body.cms-noroute-index .page-wrapper .page-footer,
     body.b2b-auth-shell .page-wrapper .page-footer,
     body.customer-account-login .page-wrapper .page-footer {
-        margin-top: 32px !important;
+        margin-top: @awa-space-7 !important;
     }
 }

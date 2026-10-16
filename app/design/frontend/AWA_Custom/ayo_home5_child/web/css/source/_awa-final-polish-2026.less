@@ -10,7 +10,7 @@
 // ============================================================================
 
 @awa-max-inline-size: var(--awa-container-wide-max, 1440px);
-@awa-container-padding: 24px;
+@awa-container-padding: @awa-space-6;
 @awa-gap-md: 24px;
 @awa-gap-sm: 16px;
 @awa-gap-lg: 48px;
@@ -193,7 +193,7 @@ html body .block-title strong {
 // 5. SWIPER / CAROUSEL FIXES
 // ----------------------------------------------------------------------------
 html body .swiper-container {
-    padding-bottom: 40px !important;
+    padding-bottom: @awa-space-8 !important;
 }
 
 html body .swiper-wrapper {
@@ -239,8 +239,8 @@ html body .swiper-slide .product-item {
     }
     
     html body .page-main {
-        padding-top: 24px !important;
-        padding-bottom: 24px !important;
+        padding-top: @awa-space-6 !important;
+        padding-bottom: @awa-space-6 !important;
     }
 }
 

@@ -86,8 +86,8 @@
         background: var(--awa-bg-soft, #f7f7f7) !important;
         border: 1px solid var(--awa-border-color, #e5e5e5) !important;
         border-radius: 10px !important;
-        padding: 12px 14px !important;
-        margin-top: 8px !important;
+        padding: @awa-space-3 @awa-space-4 !important;
+        margin-top: @awa-space-2 !important;
     }
 
     .awa-footer-atendimento__store-name,
@@ -136,7 +136,7 @@
     .item-product .product-image-photo[src*="placeholder"],
     .item-product .product-image-photo.awa-img-fallback {
         object-fit: contain !important;
-        padding: 12px !important;
+        padding: @awa-space-3 !important;
         opacity: 0.85 !important;
     }
 
@@ -332,20 +332,20 @@
     }
 
     @{va-scope} .page-wrapper .awa-footer-trust-bar .awa-footer-trust-item {
-        padding: 12px 8px !important;
+        padding: @awa-space-3 @awa-space-2 !important;
     }
 }
 
 // ── 13. Espaços verticais excessivos em páginas internas ────────────────────
 @{va-internals} .page-wrapper {
     .page-main {
-        padding-top: 12px !important;
+        padding-top: @awa-space-3 !important;
         min-height: 0 !important;
     }
 
     .nav-breadcrumbs {
         margin-bottom: 8px !important;
-        padding-top: 8px !important;
+        padding-top: @awa-space-2 !important;
     }
 
     .page-title-wrapper,
@@ -370,7 +370,7 @@
         display: block !important;
         color: var(--b2b-reg-c16, @awa-color-danger) !important;
         font-size: 12px !important;
-        margin-top: 6px !important;
+        margin-top: @awa-space-1 !important;
         line-height: 1.35 !important;
     }
 

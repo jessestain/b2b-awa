@@ -224,8 +224,8 @@ body .page-wrapper .awa-site-header {
     .awa-main-header {
       background: var(--awa-hdr-surface);
       border-bottom: 0;
-      padding-top:    10px;
-      padding-bottom: 10px;
+      padding-top: @awa-space-3;
+      padding-bottom: @awa-space-3;
     }
 
     // ── Row interno: logo + busca + conta ───────────────────────────────────
@@ -518,7 +518,7 @@ body .page-wrapper .awa-site-header {
         height: 18px;
         justify-content: center;
         min-width: 18px;
-        padding: 0 4px;
+        padding: 0 @awa-space-1;
         position: absolute !important;
         right: -4px;
         top: -4px;
@@ -637,7 +637,7 @@ body .page-wrapper .awa-site-header {
       gap: 12px;
       height: var(--awa-hdr-navbar-h);
       letter-spacing: 0;
-      padding: 0 20px;
+      padding: 0 @awa-space-5;
       text-transform: none;
       white-space: nowrap;
       width: 100%;
@@ -705,14 +705,14 @@ body .page-wrapper .awa-site-header {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         border: 1px solid @awa-border-soft;
         border-top: 0;
-        padding: 12px 0;
+        padding: @awa-space-3 0;
 
         li.level0 {
           border: 0;
           transition: all 0.2s ease;
 
           > a {
-            padding: 12px 24px;
+            padding: @awa-space-3 @awa-space-6;
             font-size: @font-size-14;
             font-weight: 500;
             color: @awa-text;
@@ -724,7 +724,7 @@ body .page-wrapper .awa-site-header {
             &:hover {
               background: rgba(183, 51, 55, 0.04);
               color: var(--awa-red);
-              padding-left: 28px;
+              padding-left: @awa-space-7;
             }
           }
 
@@ -761,7 +761,7 @@ body .page-wrapper .awa-site-header {
       font-weight: 500;
       height: var(--awa-hdr-navbar-h);
       letter-spacing: 0;
-      padding: 0 22px;
+      padding: 0 @awa-space-6;
       text-decoration: none;
       text-transform: none;
       transition: color @transition-fast;
@@ -1317,7 +1317,7 @@ body .page-wrapper .awa-site-header {
 // 480px: padding mínimo + font-size ≥16px (evita zoom iOS no input)
 @media (max-width: 480px) {
   .page-wrapper .awa-site-header .header.awa-main-header {
-    padding: 8px 12px;
+    padding: @awa-space-2 @awa-space-3;
   }
   .page-wrapper .awa-site-header input#search {
     font-size: var(--awa-fs-base);
@@ -1368,7 +1368,7 @@ body .page-wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 14px;
+    padding: @awa-space-2 @awa-space-4;
     background: linear-gradient(135deg, fade(@awa-red, 8%) 0%, fade(@awa-red, 4%) 100%) !important;
     border: 1px solid fade(@awa-red, 15%) !important;
     border-radius: 12px;
@@ -1448,7 +1448,7 @@ body .page-wrapper {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 16px;
+    padding: @awa-space-2 @awa-space-4;
     background: linear-gradient(135deg, @awa-red 0%, darken(@awa-red, 10%) 100%) !important;
     border-radius: 12px;
     color: @awa-white !important;

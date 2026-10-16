@@ -90,7 +90,7 @@
     height: var(--awa-header-main-row-h) !important;
     min-height: var(--awa-header-main-row-h) !important;
     max-height: var(--awa-header-main-row-h) !important;
-    padding: 4px 16px !important;
+    padding: @awa-space-1 @awa-space-4 !important;
     margin: 0 !important;
     background: var(--awa-bg, Canvas) !important;
     border: 0 !important;
@@ -206,7 +206,7 @@
     .page-wrapper .awa-site-header form#search_mini_form input#search {
     height: var(--awa-header-control-h) !important;
     line-height: var(--awa-header-control-h) !important;
-    padding: 0 14px !important;
+    padding: 0 @awa-space-4 !important;
     font-size: 14px !important;
     background: transparent !important;
     border: 0 !important;
@@ -493,7 +493,7 @@
     display: inline-flex !important;
     align-items: center !important;
     min-height: 44px !important;
-    padding: 0 4px !important;
+    padding: 0 @awa-space-1 !important;
     color: var(--awa-text, oklch(22% .02 20)) !important;
     font-size: 13px !important;
     font-weight: 650 !important;
@@ -514,7 +514,7 @@
     max-height: ~"min(70vh, 560px)" !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
-    padding: 8px !important;
+    padding: @awa-space-2 !important;
     box-sizing: border-box !important;
     background: var(--awa-bg, Canvas) !important;
     border: 1px solid var(--awa-border, oklch(90% .008 20)) !important;
@@ -527,7 +527,7 @@
     display: flex !important;
     align-items: center !important;
     min-height: 40px !important;
-    padding: 0 10px !important;
+    padding: 0 @awa-space-3 !important;
     border-radius: 6px !important;
     color: var(--awa-text, oklch(22% .02 20)) !important;
     font-size: 13px !important;
@@ -675,7 +675,7 @@
     width: 100% !important;
     max-width: var(--awa-container-catalog, 1280px) !important;
     margin: 0 auto !important;
-    padding: 0 52px 0 16px !important;
+    padding: 0 @awa-space-9 0 @awa-space-4 !important;
     overflow: visible !important;
   }
 
@@ -803,8 +803,8 @@
 
   html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-account-dashboard)
     .page-wrapper .awa-site-header form#search_mini_form input#search {
-    padding-left: 14px !important;
-    padding-right: 64px !important;
+    padding-left: @awa-space-4 !important;
+    padding-right: @awa-space-11 !important;
   }
 
   html body#html-body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-account-dashboard)
@@ -1241,7 +1241,7 @@
     box-sizing: border-box !important;
     width: 100% !important;
     min-width: 0 !important;
-    padding: 0 8px !important;
+    padding: 0 @awa-space-2 !important;
     gap: 0 !important;
   }
 
