@@ -26646,6 +26646,8 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 }
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #awa-ai-chat-root :is(a, button) {
   min-height: 44px !important;
+  max-width: calc(100vw - 32px) !important;
+  box-sizing: border-box !important;
 }
 @media (max-width: 1023px) {
   html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(a[href^="tel:"], a[href^="mailto:"]) {
