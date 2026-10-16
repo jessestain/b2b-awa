@@ -447,3 +447,24 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
    para CTA/acao e awa-visual-priority para o resto.
 6. opcache FPM: reset 19002/19003/19004 e CONFERIR o efeito no HTML/computed.
 7. Limpar chromes orfaos dos probes.
+
+## ATUALIZAÇÃO — 2026-10-16 ~15:50 BRT (refinamento da PDP)
+
+### ccdd91142 (v12) — Refinamento da pagina do produto (/mini/...-543.html):
+1. OCULTADOS (display:none, layer-wrapped 128 ids):
+   - .awa-stock-qty--pdp ("Em estoque: 2.511 unidades" — duplicava o "Em estoque" do
+     bloco product-info-stock-sku que ja mostra disponibilidade + SKU).
+   - #awa-social-proof-pdp (ja colapsado; agora none explicito).
+   - .product.alert.price ("Receber notificacoes de baixa de preco", 70px liberados).
+2. BOTAO "Entrar para Comprar" (.b2b-login-to-buy-btn): era contorno VERMELHO
+   transparente -> agora VERDE de acao (var(--awa-action,#0f7a3d)) preenchido, texto
+   branco, hover --awa-action-dark. Verificado por probe: bg rgb(15,122,61) 44px.
+3. GATE de preco (.b2b-login-to-see-price.price-box): gap/padding compactados via tokens;
+   altura final 100px = 2 links com alvo de toque de ~44px cada (padrao correto, aceito).
+4. CARROSSEL relacionados: track mobile alinhado ao padding do container (antes o primeiro
+   slide comecava em x=326 num viewport de 390; agora slide em 16px, slide 298px + peek).
+   overflow=0 mantido nos 3 breakpoints.
+5. NOTA: nao ha dois blocos de compra duplicados (o 2o "box-tocart" era o mesmo elemento
+   casado por 2 seletores); o botao padrao fica oculto p/ guest e o fluxo B2B mostra o
+   "Entrar para Comprar" verde.
+- Regressao DS: rc=0, 0 falhas apos o lote.
