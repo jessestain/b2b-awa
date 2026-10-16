@@ -293,7 +293,7 @@
     // Revelar URLs dos links para referência impressa
     body .page-wrapper .column.main a[href]:not([href^='#']):not([href^='javascript']):not(.action.primary):not(.action.tocart)::after {
         content: ' (' attr(href) ')';
-        font-size: 11px;
+        font-size: @font-size-11;
         color: @awa-color-text-mid; // [PRINT-ONLY] escuro suficiente para B&W sem depender de token
         word-break: break-all;
         display: inline;
@@ -377,7 +377,7 @@
     @container awa-shelf-slide (min-width: 160px) and (max-width: 220px) {
         .actions-primary .action.tocart,
         .btn-add-to-cart {
-            font-size: 11px;
+            font-size: @font-size-11;
             padding-inline: @awa-space-2;
         }
     }

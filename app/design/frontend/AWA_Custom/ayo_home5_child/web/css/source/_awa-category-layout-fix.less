@@ -210,7 +210,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    font-size: 11px;
+    font-size: @font-size-11;
     font-weight: 700;
     color: var(--awa-text, @awa-color-dark);
     text-transform: uppercase;
@@ -339,7 +339,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .block-reorder .product-item-name {
-    font-size: 11px ;
+    font-size: @font-size-11 ;
     font-weight: 500;
     line-height: 1.45;
     flex: 1;
@@ -374,7 +374,7 @@
     width: 100% ;
     display: block ;
     padding: 10px 12px ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     font-weight: 700 ;
     border-radius: var(--awa-radius-md, 8px) ;
     background: var(--awa-primary, @awa-color-primary) ;
@@ -456,7 +456,7 @@
     -webkit-box-orient: vertical ;
     overflow: hidden ;
     min-height: calc(1.4em * 2) ;
-    font-size: 14px ;
+    font-size: @font-size-14 ;
     font-weight: 600 ;
     line-height: 1.45 ;
     color: var(--awa-text, @awa-color-dark) ;
@@ -485,7 +485,7 @@
         .products-grid .item-product .product-name,
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .products-grid .item-product .product-item-name {
-        font-size: 12px ;
+        font-size: @font-size-12 ;
     }
 }
 
@@ -559,7 +559,7 @@
 
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .awa-category-hero__count {
-        font-size: 12px ;
+        font-size: @font-size-12 ;
         color: @awa-color-text-soft ;
         font-weight: 400 ;
         margin: 0 ;
@@ -602,7 +602,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .toolbar-products .toolbar-amount {
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     color: @awa-color-text-soft ;
     font-weight: 400 ;
     white-space: nowrap ;
@@ -612,7 +612,7 @@
     .toolbar-products .toolbar-sorter select.sorter-options {
     height: 36px ;
     padding: 0 28px 0 10px ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     border-radius: 6px ;
     border: 1px solid #d9d9d9 ;
     background-color: @awa-color-white ;
@@ -653,13 +653,13 @@
     display: flex ;
     align-items: center ;
     gap: 4px ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     font-weight: 500 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .toolbar-products .sorter-label {
-    font-size: 11px ;
+    font-size: @font-size-11 ;
     color: @awa-color-text-soft ;
     font-weight: 500 ;
     text-transform: uppercase ;
@@ -668,7 +668,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .toolbar-products .limiter {
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     color: @awa-color-text-soft ;
 }
 
@@ -676,7 +676,7 @@
     .toolbar-products .limiter select {
     height: 32px ;
     padding-inline: var(--awa-page-pad-desktop, 24px); padding-block: 0 0 8px ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     border-radius: 6px ;
     min-width: 50px ;
 }
@@ -729,7 +729,7 @@
     :is(body.catalog-category-view, body.catalogsearch-result-index)
         .toolbar-products select.sorter-options {
         height: 32px ;
-        font-size: 11px ;
+        font-size: @font-size-11 ;
     }
 
 
@@ -753,7 +753,7 @@
     .block.filter .block-title strong,
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-title strong {
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     font-weight: 700 ;
     text-transform: uppercase ;
     letter-spacing: 0.08em ;
@@ -762,7 +762,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-options-item .filter-options-title {
-    font-size: 13px ;
+    font-size: @font-size-13 ;
     font-weight: 600 ;
     color: @awa-color-dark ;
     padding: 10px 0 ;
@@ -813,7 +813,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-options-item .item a {
-    font-size: 13px ;
+    font-size: @font-size-13 ;
     color: @awa-color-text-mid ;
     text-decoration: none ;
     padding: 4px 0 ;
@@ -830,14 +830,14 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-options-item .count {
-    font-size: 11px ;
+    font-size: @font-size-11 ;
     color: #aaa ;
     font-weight: 400 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-current .block-subtitle {
-    font-size: 11px ;
+    font-size: @font-size-11 ;
     font-weight: 700 ;
     text-transform: uppercase ;
     letter-spacing: 0.07em ;
@@ -865,7 +865,7 @@
     border: 1px solid var(--awa-primary, @awa-color-primary) ;
     border-radius: 999px ;
     padding: 3px 6px 3px 10px ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     color: var(--awa-primary, @awa-color-primary) ;
     font-weight: 500 ;
     max-width: 220px ;
@@ -898,7 +898,7 @@
     border-radius: 50% ;
     background: var(--awa-primary, @awa-color-primary) ;
     color: @awa-color-white ;
-    font-size: 10px ;
+    font-size: @font-size-10 ;
     font-weight: 700 ;
     text-decoration: none ;
     flex-shrink: 0 ;
@@ -920,7 +920,7 @@
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-current .item .action.remove::after {
     content: '×' ;
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     line-height: 1 ;
 }
 
@@ -931,7 +931,7 @@
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)
     .filter-actions .action.clear {
-    font-size: 12px ;
+    font-size: @font-size-12 ;
     color: var(--awa-primary, @awa-color-primary) ;
     font-weight: 600 ;
     text-decoration: none ;
@@ -986,7 +986,7 @@
         border: 1px solid var(--awa-primary, @awa-color-primary) ;
         background: @awa-color-white ;
         color: var(--awa-primary, @awa-color-primary) ;
-        font-size: 13px ;
+        font-size: @font-size-13 ;
         font-weight: 700 ;
         cursor: pointer ;
         user-select: none ;
@@ -1069,7 +1069,7 @@
     align-items: center ;
     justify-content: center ;
     border-radius: 8px ;
-    font-size: 14px ;
+    font-size: @font-size-14 ;
 }
 
 :is(body.catalog-category-view, body.catalogsearch-result-index)

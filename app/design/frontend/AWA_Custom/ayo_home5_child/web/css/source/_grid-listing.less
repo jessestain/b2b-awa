@@ -50,7 +50,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    font-size: 12px;
+    font-size: @font-size-12;
   }
 
   .item {
@@ -62,7 +62,7 @@
       content: '›';
       margin-left: 4px;
       color: var(--awa-border, @awa-color-gray-300);
-      font-size: 14px;
+      font-size: @font-size-14;
       line-height: 1;
     }
 
@@ -114,7 +114,7 @@
   // Contador "12 Itens"
   .toolbar-amount,
   .toolbar-number {
-    font-size: 13px;
+    font-size: @font-size-13;
     color: var(--awa-text-muted, @awa-color-text-muted);
 
     .toolbar-number { font-weight: 700; color: var(--awa-text, @awa-color-dark); }
@@ -147,7 +147,7 @@
       transition: all 0.15s;
 
       &::before {
-        font-size: 14px;
+        font-size: @font-size-14;
         line-height: 1;
       }
 
@@ -180,7 +180,7 @@
     gap: 8px;
 
     label {
-      font-size: 12px;
+      font-size: @font-size-12;
       color: var(--awa-text-muted, @awa-color-text-muted);
       white-space: nowrap;
     }
@@ -190,7 +190,7 @@
       padding: 0 28px 0 10px;
       border: 1px solid var(--awa-border, @awa-color-gray-300);
       border-radius: var(--awa-radius-sm, 4px);
-      font-size: 12px;
+      font-size: @font-size-12;
       color: var(--awa-text, @awa-color-dark);
       background: var(--awa-bg, @awa-color-white);
       appearance: none;
@@ -290,7 +290,7 @@
     border-radius: 999px;
     background: var(--awa-primary, @awa-color-primary-mid);
     color: var(--awa-text-inverse);
-    font-size: 11px;
+    font-size: @font-size-11;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
@@ -348,7 +348,7 @@
     word-break: break-word;
     min-height: 2.8em;
     line-height: 1.4;
-    font-size: 13px;
+    font-size: @font-size-13;
     font-weight: 500;
     color: var(--awa-text, @awa-color-dark);
     text-decoration: none;
@@ -435,7 +435,7 @@
     border-radius: 999px;
     background: var(--awa-primary, @awa-color-primary-mid);
     color: var(--awa-text-inverse);
-    font-size: 11px;
+    font-size: @font-size-11;
     font-weight: 700;
     line-height: 1.2;
     white-space: nowrap;
@@ -463,7 +463,7 @@
   .product-list > .item-product .product-desc {
     margin: 2px 0 0;
     color: var(--awa-text-muted, @awa-color-text-muted);
-    font-size: 12px;
+    font-size: @font-size-12;
     line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -630,7 +630,7 @@
 // Código SKU (Cod: 340 DR)
 .product-item-sku,
 .product-sku {
-  font-size: 12px;
+  font-size: @font-size-12;
   color: var(--awa-text-muted, @awa-color-text-muted);
   margin: 0;
   letter-spacing: 0.02em;
@@ -641,7 +641,7 @@
   margin: 0;
 
   .product-item-link {
-    font-size: 13px;
+    font-size: @font-size-13;
     font-weight: 500;
     color: var(--awa-text, @awa-color-dark);
     text-decoration: none;
@@ -670,14 +670,14 @@
 
 // Avaliações (estrelas)
 .product-reviews-summary {
-  font-size: 12px;
+  font-size: @font-size-12;
   color: var(--awa-text-muted, @awa-color-text-muted);
   margin: 2px 0 0;
 }
 
 .product-item-details {
   .stock {
-    font-size: 12px;
+    font-size: @font-size-12;
     font-weight: 600;
     margin-top: 2px;
 
@@ -714,7 +714,7 @@
   // Texto "Faça login para ver preços" — NÃO aplicar italic a .price-box (logado)
   .price-box-inner,
   .price-login {
-    font-size: 12px;
+    font-size: @font-size-12;
     color: var(--awa-text-muted, @awa-color-text-muted);
     font-style: normal;
     margin: 0 0 8px;
@@ -735,7 +735,7 @@
     padding: 4px 12px;
     text-align: center;
     border-radius: var(--awa-radius-sm, 4px);
-    font-size: 12px;
+    font-size: @font-size-12;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.15s;
@@ -785,7 +785,7 @@
 
   // Preço riscado
   .old-price .price-wrapper .price {
-    font-size: 12px;
+    font-size: @font-size-12;
     color: var(--awa-text-muted, @awa-color-text-muted);
     text-decoration: line-through;
     font-weight: 400;
@@ -810,7 +810,7 @@
     border-radius: 999px;
     background: var(--awa-primary, @awa-color-primary-mid);
     color: var(--awa-text-inverse);
-    font-size: 11px;
+    font-size: @font-size-11;
     font-weight: 700;
     line-height: 1.3;
   }
@@ -822,7 +822,7 @@
 .block.filter {
 
   .filter-options-title {
-    font-size: 13px;
+    font-size: @font-size-13;
     font-weight: 700;
     color: var(--awa-text, @awa-color-dark);
     padding: 10px 0 8px;
@@ -844,7 +844,7 @@
       padding: 10px 14px;
       border-bottom: none;
       margin-bottom: 0;
-      font-size: 13px;
+      font-size: @font-size-13;
     }
 
     .filter-options-content {
@@ -869,7 +869,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 6px 0;
-      font-size: 12px;
+      font-size: @font-size-12;
       color: var(--awa-text, @awa-color-dark);
       text-decoration: none;
       transition: color 0.15s;
@@ -886,7 +886,7 @@
 
     // Contador de itens (ex: "23 itens")
     .count {
-      font-size: 12px;
+      font-size: @font-size-12;
       color: var(--awa-text-muted, @awa-color-text-muted);
       background: var(--awa-bg-surface, @awa-color-bg-soft);
       padding: 1px 6px;
@@ -927,7 +927,7 @@
       padding: 0 8px;
       border: 1px solid var(--awa-border, @awa-color-gray-300);
       border-radius: var(--awa-radius-sm, 4px);
-      font-size: 13px;
+      font-size: @font-size-13;
       color: var(--awa-text, @awa-color-dark);
       text-decoration: none;
       background: var(--awa-bg, @awa-color-white);
@@ -1109,7 +1109,7 @@
   }
 
   .wrapper.grid.products-grid .item-product .product-name .product-item-link {
-    font-size: 12px;
+    font-size: @font-size-12;
     line-height: 1.35;
   }
 
@@ -1124,7 +1124,7 @@
   }
 
   .product-item-name .product-item-link {
-    font-size: 12px;
+    font-size: @font-size-12;
     line-height: 1.35;
   }
 
@@ -1140,7 +1140,7 @@
     .action--b2b-login,
     a[href*="b2b/register"],
     a[href*="b2b/account/login"] {
-      font-size: 11px;
+      font-size: @font-size-11;
       padding: 4px 8px;
     }
   }

@@ -80,7 +80,7 @@
         &::after {
             content: '\e901'; // Icomoon arrow se aplicável ou svg
             font-family: 'icomoon';
-            font-size: 10px;
+            font-size: @font-size-10;
             transform: translateY(1px); // Ajuste fino visual
         }
     }
@@ -715,7 +715,7 @@ input[type="radio"] {
             
             &::before {
                 font-family: 'luma-icons';
-                font-size: 14px;
+                font-size: @font-size-14;
                 line-height: 1;
             }
         }
@@ -735,7 +735,7 @@ input[type="radio"] {
         align-items: center;
         gap: 8px;
         color: var(--awa-text-muted, @awa-color-gray-500);
-        font-size: 12px;
+        font-size: @font-size-12;
         
         .item {
             display: inline-flex;
@@ -760,7 +760,7 @@ input[type="radio"] {
             &:not(:last-child)::after {
                 content: '\e617';
                 font-family: 'luma-icons';
-                font-size: 10px;
+                font-size: @font-size-10;
                 margin-left: 8px;
                 color: var(--awa-gray-300, @awa-neutral-300);
             }
