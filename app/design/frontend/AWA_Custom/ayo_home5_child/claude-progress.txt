@@ -685,3 +685,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 ### Restante do INP: o handler do clique no menu (vertical-menu-init.js do tema pai +
   awa-menu-bootstrap-runtime dept-strip-r16) — analisar o custo do toggle do flyout
   no proximo ciclo (construcao/layout do mega-menu).
+
+## ATUALIZAÇÃO — 2026-10-16 ~18:20 BRT (ciclo 9: menu 320ms — causa raiz e plano)
+
+### Causa raiz do INP restante (320ms no menu de categorias):
+- vertical-menu-init.js (tema PAI ayo/ayo_home5) openMenu(): $list.stop(true,true)
+  .removeAttr("style").show() — o jQuery .show() restaura display:block e o browser
+  faz o LAYOUT SINCRONO do mega-menu inteiro (dezenas de level0 + paineis .submenu de
+  550-700px com imagens) no mesmo frame do clique.
+
+### Plano do fix (preservando update-compat do Magento):
+1. RequireJS mixin no tema filho (AWA_Custom) para o widget do tema pai: deferir o
+   .show() para requestAnimationFrame (o layout sai do frame do pointerdown).
+2. content-visibility:auto nos paineis .level0.submenu fechados (off-screen left) com
+   contain-intrinsic-size — render lazy no hover. ATENCAO: o tema ja teve corte de
+   item com content-visibility no carrinho (_awa-cart-filled.less) — validar o flyout
+   antes (altura/intrinsic-size).
+3. Re-medir com probe_inp2 ate pointerdown <200ms.
+
+### Estado CWV: CLS/LCP/FCP verdes; INP: FAQ 16ms, menu 320ms (melhorou de 800ms).
