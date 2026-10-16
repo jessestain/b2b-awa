@@ -521,3 +521,30 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   rc=0, inventario limpo nos 3 breakpoints.
 - Licao: para mover blocos inline que DECLARAM layer, manter um stub com a declaracao
   da layer no lugar original (cascade layers: a ordem da primeira declaracao decide).
+
+## ATUALIZAÇÃO — 2026-10-16 ~16:55 BRT (ciclo CWV: CLS desktop corrigido)
+
+### Baseline CWV (PDP, headless, frio): FCP 0.9s, LCP 1.2s, CLS mobile 0.005,
+  CLS desktop 0.745 (FALHAVA <0.1).
+
+### Causa raiz do CLS desktop (0.739): aos ~1s o conteudo inteiro descia 23px.
+  Investigacao por atribuicao de layout-shift + snapshots temporais:
+  - o header renderiza com tokens (--awa-header-site-h / --awa-header-sticky-h) que
+    mudam entre o primeiro paint e o settle; a fileira de nav (.header-nav-global)
+    crescia ~25->48px no swap da Rubik 600; o breadcrumb entrava no fluxo tarde.
+  - @font-face da Rubik/Source Sans e inline SEM metric overrides (ascent/descent/
+    size-adjust vazios) — swap muda metricas.
+
+### Fixes (v13/v14/v15 em @layer awa-visual-priority, cadeia 32 ids, align-grid):
+  - v13: .header-nav-global min-height:48px (reserva da fileira de nav) + breadcrumb
+    line-height:15px.
+  - v14: reserva min-height no .awa-site-header e .breadcrumbs (perdeu p/ regra
+    min-height:0 do critical — descartado).
+  - v15: FIXA OS TOKENS do header no valor settled em >=992px:
+    --awa-header-site-h:161px / --awa-header-sticky-h:116px /
+    --awa-header-main-row-h:68px / --awa-header-promo-h:44px
+    -> main nasce em y=182 (era 160) e o settle agora move apenas 1px.
+
+### Resultado: CLS desktop 0.745 -> 0.09 (meta <0.1). FCP 0.9s, LCP 0.9-1.2s.
+  Restante do 0.09: hidratacao do botao Entrar (39->44px) e crescimento das abas da
+  PDP (descricao/FAQ) — ABAIXO da dobra; proximo ciclo ataca esses.
