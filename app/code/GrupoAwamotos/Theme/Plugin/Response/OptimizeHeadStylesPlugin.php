@@ -535,6 +535,21 @@ class OptimizeHeadStylesPlugin
         }
 
 
+        /* A11y bridge (WCAG 2.5.3/1.3.5): as edicoes de template do header nao
+           propagam (anomalia de cache de bloco documentada no claude-progress).
+           Normalizacao no HTML final; remover quando os templates renderizarem. */
+        $html = str_replace(
+            'aria-label="Ir&#x20;para&#x20;a&#x20;p&#xE1;gina&#x20;inicial&#x20;da&#x20;AWA&#x20;Motos"',
+            'aria-label="Ir&#x20;para&#x20;a&#x20;p&#xE1;gina&#x20;inicial&#x20;da&#x20;AWA&#x20;Motos&#x20;&#x2014;&#x20;MOTO&#x20;COMPONENTES"',
+            $html
+        );
+        $html = str_replace(
+            'aria-label="AWA&#x20;Motos"',
+            'aria-label="AWA&#x20;Motos&#x20;&#x2014;&#x20;MOTO&#x20;COMPONENTES"',
+            $html
+        );
+        $html = str_replace(' autocomplete="search"', '', $html);
+
         $subject->setBody($html);
     }
 

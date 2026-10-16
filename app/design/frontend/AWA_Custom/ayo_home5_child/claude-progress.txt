@@ -738,3 +738,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   header nao. Suspeita: cache de bloco/layout em Redis com indice divergente OU o
   header e SSR por painel B2B com cache proprio. INVESTIGAR no proximo ciclo (buscando
   cache tags do bloco logo no Redis).
+
+## ATUALIZAÇÃO — 2026-10-16 ~20:10 BRT (ciclo 12: a11y bridge no response plugin + recuperacao)
+
+### Ponte a11y (aplicada no beforeSendResponse do OptimizeHeadStylesPlugin):
+- As edicoes de phtml do header NAO propagam (anomalia: nem opcache, nem restart FPM,
+  nem FLUSHDB direto no Redis db1+db2 mudam o HTML do logo; o bloco nao esta no
+  block_html; validate_timestamps=1). O pipeline PHP do plugin propaga.
+- Bridge: str_replace no HTML final — logo aria + footer lockup aria + remocao do
+  autocomplete="search". VERIFICADO: autocomplete=0 e aria "AWA Motos — MOTO
+  COMPONENTES" no servido. Remover a ponte quando a anomalia for resolvida.
+- Detalhe: o root do backend 8088 e /home/jessessh/htdocs -> symlink p/ /home/user/htdocs
+  (mesmo arvore, descartado).
+
+### INCIDENTE + RECUPERACAO: o generated/metadata/primary|global|plugin-list.php sumiu
+  (efeito colateral de um deploy anterior) -> 500s em paginas nao-home. Recuperado com
+  php -d opcache.enable_cli=0 -d opcache.enable=0 bin/magento setup:di:compile +
+  restart php8.4-fpm. Regressao: rc=0, 0 falhas apos a recuperacao.
+- LICAO: apos qualquer deploy que mexa em generated/, conferir
+  ls generated/metadata/ | grep -c plugin-list (>=7) e smoke imediato.
