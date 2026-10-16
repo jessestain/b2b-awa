@@ -46,7 +46,7 @@
                 text-decoration: none;
                 transition: color var(--awa-transition-fast, 150ms ease);
 
-                &:hover { color: var(--awa-red, #b73337); }
+                &:hover { color: var(--awa-brand, @awa-color-primary); }
             }
 
             strong {
@@ -78,7 +78,7 @@
 
     .fotorama__nav__frame--thumb:hover,
     .fotorama__nav__frame--thumb.fotorama__active {
-        border-color: var(--awa-red, #b73337);
+        border-color: var(--awa-brand, @awa-color-primary);
     }
 
     // Imagem do thumb: object-fit contain
@@ -147,7 +147,7 @@
     .special-price .price {
         font-size: clamp(22px, 3.2vw, 30px);
         font-weight: var(--awa-weight-bold, 700);
-        color: var(--awa-red, #b73337);
+        color: var(--awa-brand, @awa-color-primary);
         font-variant-numeric: tabular-nums;
         line-height: 1.2;
     }
@@ -192,7 +192,7 @@
             justify-content: center;
             gap: 6px;
             padding: 10px 20px;
-            background: var(--awa-red, #b73337);
+            background: var(--awa-brand, @awa-color-primary);
             color: #fff;
             border-radius: var(--awa-radius-sm, 8px);
             font-size: var(--awa-text-sm, 13px);
@@ -201,7 +201,7 @@
             transition: background var(--awa-transition-fast, 150ms ease);
 
             &:hover {
-                background: var(--awa-red-dark, #8e2629);
+                background: var(--awa-red-dark, @awa-color-primary-dark);
             }
         }
     }
@@ -232,18 +232,18 @@
                     background var(--awa-transition-fast, 150ms ease);
 
         &:hover {
-            color: var(--awa-red, #b73337);
+            color: var(--awa-brand, @awa-color-primary);
             background: var(--awa-gray-100, #f5f5f5);
         }
 
         &:focus-visible {
-            outline: 2px solid var(--awa-red, #b73337);
+            outline: 2px solid var(--awa-brand, @awa-color-primary);
             outline-offset: 2px;
         }
     }
 
     .product.data.items > .item.title.active > .switch {
-        color: var(--awa-red, #b73337);
+        color: var(--awa-brand, @awa-color-primary);
         background: #fff;
         border-bottom-color: #fff;
     }

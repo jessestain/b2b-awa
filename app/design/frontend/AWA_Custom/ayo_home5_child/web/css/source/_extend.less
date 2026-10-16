@@ -337,9 +337,9 @@ body.checkout-cart-index {
     html body#html-body {
         --awa-oklch-primary: oklch(52.5% 0.155 27.5);
         --awa-oklch-primary-hover: oklch(41.5% 0.13 27.5);
-        --awa-oklch-ink: oklch(22% 0.012 27);
-        --awa-oklch-text: oklch(32% 0.012 27);
-        --awa-oklch-muted: oklch(48% 0.01 27);
+        --awa-oklch-ink: #111111;
+        --awa-oklch-text: #111111;
+        --awa-oklch-muted: #555555;
         --awa-oklch-surface: oklch(100% 0 0);
         --awa-oklch-soft: oklch(97% 0 0);
         --awa-oklch-border: oklch(90% 0.01 27);
@@ -1935,14 +1935,14 @@ html body#html-body:not(.onepagecheckout-index-index):not(.checkout-index-index)
         .awa-header-minicart .awa-header-cart-fallback :is(.awa-minicart-icon, .awa-header-cart-fallback__icon) {
             width: 28px !important;
             height: 28px !important;
-            color: var(--awa-primary, #b73337) !important;
+            color: var(--awa-primary, @awa-color-primary) !important;
             fill: none !important;
-            stroke: var(--awa-primary, #b73337) !important;
+            stroke: var(--awa-primary, @awa-color-primary) !important;
         }
 
         .awa-header-minicart .action.showcart .awa-minicart-icon circle,
         .awa-header-minicart .awa-header-cart-fallback .awa-header-cart-fallback__icon circle {
-            fill: var(--awa-primary, #b73337) !important;
+            fill: var(--awa-primary, @awa-color-primary) !important;
             stroke: none !important;
         }
 

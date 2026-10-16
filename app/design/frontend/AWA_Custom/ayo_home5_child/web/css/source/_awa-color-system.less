@@ -5,7 +5,7 @@
 // ╚══════════════════════════════════════════════════════════════════════════╝
 //
 // DIAGNÓSTICO: 3511 hex hardcoded vs 1693 var() = 67% não-tokenizado.
-// Top offenders: #A33B3B (610×), #fff (612×), #e5e5e5 (154×), #8e2629 (105×)
+// Top offenders: #A33B3B (610×), #fff (612×), #e5e5e5 (154×), @awa-color-primary-dark (105×)
 //
 // SOLUÇÃO: Escala canônica como SINGLE SOURCE OF TRUTH.
 // Tokens definidos em _awa-variables.less (LESS) e _tokens.less (CSS props).
@@ -21,7 +21,7 @@
 // │ Hex           │ Token canônico       │ Uso                            │
 // ├───────────────┼──────────────────────┼─────────────────────────────────┤
 // │ #A33B3B       │ --awa-red            │ Primary brand, CTA, links       │
-// │ #8e2629       │ --awa-red-dark       │ Hover states, active            │
+// │ @awa-color-primary-dark       │ --awa-red-dark       │ Hover states, active            │
 // │ #fef2f2       │ --awa-primary-50     │ Error bg, subtle alert          │
 // │ #ffffff / #fff│ --awa-white          │ Backgrounds, button text        │
 // │ #1a1a1a       │ --awa-secondary      │ Dark surfaces, utility bar      │

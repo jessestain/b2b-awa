@@ -56,8 +56,8 @@
 }
 
 .block-search input#search:focus-visible {
-    border-color: var(--awa-color-primary, #b73337);
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -2px;
 }
 
@@ -71,7 +71,7 @@
     block-size: var(--awa-touch-target, 44px);
     display: inline-grid;
     place-items: center;
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
     color: var(--awa-white, #ffffff);
     border: 0;
     cursor: pointer;
@@ -79,7 +79,7 @@
 }
 
 .block-search .actions .action.search:hover {
-    background: var(--awa-color-primary-dark, #8e2629);
+    background: var(--awa-color-primary-dark, @awa-color-primary-dark);
 }
 
 
@@ -109,7 +109,7 @@
 }
 
 .header.links > li > a:hover {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -135,7 +135,7 @@
     position: absolute;
     inset-block-start: 0;
     inset-inline-end: 0;
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
     color: var(--awa-white, #ffffff);
     border-radius: 9999px;
     min-inline-size: 1.25rem;
@@ -178,7 +178,7 @@
 }
 
 .footer.content .links a:hover {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .footer.content h4,
@@ -235,7 +235,7 @@
 }
 
 .breadcrumbs a:hover {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .breadcrumbs .itemstrong {
@@ -306,8 +306,8 @@
 
 .toolbar .modes .modes-mode.mode-active,
 .toolbar .modes .modes-mode:hover {
-    border-color: var(--awa-color-primary, #b73337);
-    color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -328,7 +328,7 @@
 
 .products-grid .product-item:hover,
 .product-items .product-item:hover {
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
     box-shadow: var(--awa-shadow-md, 0 4px 12px rgba(0,0,0,0.10));
 }
 
@@ -371,7 +371,7 @@
 }
 
 .product-item .product-item-link:hover {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -391,7 +391,7 @@
 .price-box .price {
     font-size: var(--awa-fs-lg, 18px);
     font-weight: 700;
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
     letter-spacing: -0.01em;
 }
 
@@ -404,7 +404,7 @@
 }
 
 .price-box .special-price .price {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
     font-size: var(--awa-fs-xl, 20px);
 }
 
@@ -461,7 +461,7 @@
 #qty.minus:hover,
 #qty.plus:hover {
     background: var(--awa-color-bg-soft, #f7f7f7);
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 #product-addtocart-button,
@@ -472,7 +472,7 @@
     gap: var(--awa-gap-sm, 8px);
     min-block-size: var(--awa-touch-target, 44px);
     padding-inline: var(--awa-space-6, 24px);
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
     color: var(--awa-white, #ffffff);
     border: 0;
     border-radius: var(--awa-radius-md, 8px);
@@ -486,7 +486,7 @@
 
 #product-addtocart-button:hover,
 .box-tocart .action.tocart:hover {
-    background: var(--awa-color-primary-dark, #8e2629);
+    background: var(--awa-color-primary-dark, @awa-color-primary-dark);
 }
 
 
@@ -557,9 +557,9 @@
 .field .control input:focus-visible,
 .field .control select:focus-visible,
 .field .control textarea:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -2px;
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .field.required > .label::after {
@@ -642,7 +642,7 @@
     inline-size: 2rem;
     block-size: 2rem;
     border: 2px solid var(--awa-border, #e5e5e5);
-    border-top-color: var(--awa-color-primary, #b73337);
+    border-top-color: var(--awa-color-primary, @awa-color-primary);
     border-radius: 50%;
     animation: awa-spin 0.8s linear infinite;
     display: inline-block;
@@ -691,13 +691,13 @@
 }
 
 .pages .item:hover {
-    border-color: var(--awa-color-primary, #b73337);
-    color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
+    color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .pages .item.current {
-    background: var(--awa-color-primary, #b73337);
-    border-color: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
+    border-color: var(--awa-color-primary, @awa-color-primary);
     color: var(--awa-white, #ffffff);
     font-weight: 700;
 }
@@ -740,8 +740,8 @@
 
 .product.data.items > .item.title.active > .switch,
 .product.data.items > .item.title > .switch:hover {
-    color: var(--awa-color-primary, #b73337);
-    border-block-end-color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
+    border-block-end-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .product.data.items > .item.content {
@@ -859,8 +859,8 @@ details.description > .content {
 }
 
 .swatch-option.selected {
-    border-color: var(--awa-color-primary, #b73337);
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -4px;
 }
 

@@ -679,7 +679,7 @@ body .page-wrapper .awa-site-header .awa-header-right-col a.awa-header-cart-link
 // ── FIX 4: Minicart ghost SSOT (fundo transparente + ícone primary; badge mantém contraste) ──
 body .page-wrapper .awa-site-header .awa-header-right-col .minicart-wrapper .showcart.header-mini-cart {
   background: transparent;
-  color: var(--awa-primary, #b73337);
+  color: var(--awa-primary, @awa-color-primary);
   border-radius: 0;
   padding: 0;
   display: inline-flex !important;
@@ -693,13 +693,13 @@ body .page-wrapper .awa-site-header .awa-header-right-col .minicart-wrapper .sho
 
   &:hover {
     background: transparent;
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, @awa-color-primary);
     opacity: 0.88;
   }
 
   // Badge quantidade
   .counter.qty {
-    background: var(--awa-primary, #b73337);
+    background: var(--awa-primary, @awa-color-primary);
     color: @awa-color-white;
     border-radius: 99px;
     padding: 1px 7px;

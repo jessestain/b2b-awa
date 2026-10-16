@@ -72,6 +72,12 @@ html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
         background: @awa-bg-page;
         max-width: 40rem;
         margin-inline: auto;
+
+        /* Motivo: display:flex do autor anula o UA [hidden] { display: none }.
+           O empty nasce com hidden no PHTML quando há pedidos (has_items). */
+        &[hidden] {
+            display: none !important;
+        }
     }
 
     .awa-home-recent-orders__empty-icon {

@@ -98,18 +98,18 @@ html body#html-body:not(.onepagecheckout-index-index):not(.checkout-index-index)
             // SSOT ghost 2026-07-30: fundo transparente + ícone primary em TODAS as
             // páginas. CTA sólido vermelho fica só em Departamentos.
             background: transparent !important;
-            color: var(--awa-primary, #b73337) !important;
+            color: var(--awa-primary, @awa-color-primary) !important;
             transition: opacity 120ms @awa-ease, color 120ms @awa-ease !important;
 
             svg,
             svg path {
-                stroke: var(--awa-primary, #b73337) !important;
+                stroke: var(--awa-primary, @awa-color-primary) !important;
             }
 
             &:hover {
                 background: transparent !important;
                 opacity: 0.88 !important;
-                color: var(--awa-primary, #b73337) !important;
+                color: var(--awa-primary, @awa-color-primary) !important;
             }
 
             &:focus-visible {

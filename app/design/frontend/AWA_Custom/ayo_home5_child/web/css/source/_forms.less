@@ -157,9 +157,9 @@ input:hover {
 
 .input:focus-visible,
 input:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -2px;
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 .input:disabled,
@@ -210,9 +210,9 @@ textarea {
 }
 
 textarea:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -2px;
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -244,9 +244,9 @@ select {
 }
 
 select:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: -2px;
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -288,8 +288,8 @@ input[type="radio"]::before {
 }
 
 input[type="checkbox"]:checked {
-    background: var(--awa-color-primary, #b73337);
-    border-color: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 input[type="checkbox"]:checked::after {
@@ -305,7 +305,7 @@ input[type="checkbox"]:checked::after {
 }
 
 input[type="radio"]:checked {
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 input[type="radio"]:checked::after {
@@ -316,12 +316,12 @@ input[type="radio"]:checked::after {
     inline-size: 10px;
     block-size: 10px;
     border-radius: 50%;
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
 }
 
 input[type="checkbox"]:focus-visible,
 input[type="radio"]:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: 2px;
 }
 
@@ -385,7 +385,7 @@ input[type="checkbox"].switch::after,
 
 input[type="checkbox"].switch:checked,
 .switch-input:checked {
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
 }
 
 input[type="checkbox"].switch:checked::after,
@@ -415,7 +415,7 @@ input[type="file"]::file-selector-button {
     padding: var(--awa-space-2, 8px) var(--awa-space-4, 16px);
     border: 0;
     border-radius: var(--awa-radius-sm, 4px);
-    background: var(--awa-color-primary, #b73337);
+    background: var(--awa-color-primary, @awa-color-primary);
     color: var(--awa-white, #ffffff);
     font-weight: var(--awa-weight-bold, 700);
     cursor: pointer;
@@ -429,7 +429,7 @@ input[type="file"]::file-selector-button {
 input[type="range"] {
     inline-size: 100%;
     min-block-size: 44px;
-    accent-color: var(--awa-color-primary, #b73337);
+    accent-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 

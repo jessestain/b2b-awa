@@ -150,15 +150,15 @@ html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar a {
 
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar a:hover,
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar a:focus-visible {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, @awa-color-primary);
     text-decoration: underline;
     text-underline-offset: 3px;
 }
 
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar .awa-promo-bar-cta {
     background-color: transparent;
-    color: var(--awa-primary, #b73337);
-    border: 1px solid var(--awa-primary, #b73337);
+    color: var(--awa-primary, @awa-color-primary);
+    border: 1px solid var(--awa-primary, @awa-color-primary);
     border-radius: @awa-radius-sm;
     padding: 4px 10px;
     font-weight: 600;
@@ -167,7 +167,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar .awa-promo
 
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar .awa-promo-bar-cta:hover,
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar .awa-promo-bar-cta:focus-visible {
-    background-color: var(--awa-primary, #b73337);
+    background-color: var(--awa-primary, @awa-color-primary);
     color: #fff;
 }
 
@@ -364,7 +364,7 @@ html body#html-body.cms-index-index .page-wrapper .product-badge {
 html body#html-body.cms-index-index .page-wrapper .awa-home-section[data-section="best-sellers"],
 html body#html-body.cms-index-index .page-wrapper .bestseller-section,
 html body#html-body.cms-index-index .page-wrapper .best-sellers-section {
-    border-top: 2px solid var(--awa-primary, #b73337);
+    border-top: 2px solid var(--awa-primary, @awa-color-primary);
     border-top-width: 2px;
 }
 
@@ -372,9 +372,9 @@ html body#html-body.cms-index-index .page-wrapper .action.primary,
 html body#html-body.cms-index-index .page-wrapper .btn-primary,
 html body#html-body.cms-index-index .page-wrapper .awa-cta-primary,
 html body#html-body.cms-index-index .page-wrapper button[type="submit"].action.primary {
-    background: var(--awa-primary, #b73337);
+    background: var(--awa-primary, @awa-color-primary);
     color: #fff;
-    border: 1px solid var(--awa-primary, #b73337);
+    border: 1px solid var(--awa-primary, @awa-color-primary);
     font-weight: 600;
     transition: background-color 180ms ease, border-color 180ms ease;
 }
@@ -383,12 +383,12 @@ html body#html-body.cms-index-index .page-wrapper .action.primary:hover,
 html body#html-body.cms-index-index .page-wrapper .action.primary:focus-visible,
 html body#html-body.cms-index-index .page-wrapper .btn-primary:hover,
 html body#html-body.cms-index-index .page-wrapper .btn-primary:focus-visible {
-    background: #8e2629;
-    border-color: #8e2629;
+    background: @awa-color-primary-dark;
+    border-color: @awa-color-primary-dark;
 }
 
 html body#html-body :focus-visible {
-    outline: 2.5px solid var(--awa-primary, #b73337);
+    outline: 2.5px solid var(--awa-primary, @awa-color-primary);
     outline-offset: 2px;
     border-radius: @awa-radius-sm;
 }

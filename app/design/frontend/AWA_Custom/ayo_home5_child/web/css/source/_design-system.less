@@ -11,8 +11,8 @@
    ├────────────┬──────────────────┬───────────────────┬─────────────────┤
    │ Grupo      │ LESS var          │ CSS custom prop    │ Valor           │
    ├────────────┼──────────────────┼───────────────────┼─────────────────┤
-   │ CORES      │ @awa-color-primary│ --awa-primary      │ #b73337         │
-   │            │ (ver _awa-vars)  │ --awa-primary-hover│ #8e2629         │
+   │ CORES      │ @awa-color-primary│ --awa-primary      │ @awa-color-primary         │
+   │            │ (ver _awa-vars)  │ --awa-primary-hover│ @awa-color-primary-dark         │
    │            │ @awa-ink         │ --awa-ink          │ #1a1a1a         │
    │            │ @awa-ink-05      │ --awa-ink-05       │ rgba(0,0,0,.05) │
    │            │ @awa-ink-20      │ --awa-ink-20       │ rgba(0,0,0,.20) │
@@ -22,7 +22,7 @@
    │            │ @awa-color-bg-soft│ --awa-bg-soft     │ #f7f7f7         │
    │            │ @awa-color-success│ --awa-success     │ @awa-color-success         │
    │            │ @awa-color-warning│ --awa-warning     │ @awa-color-warning         │
-   │            │ @awa-color-error │ --awa-error        │ #b73337         │
+   │            │ @awa-color-error │ --awa-error        │ @awa-color-primary         │
    │            │ @awa-color-info  │ --awa-info         │ #0ea5e9         │
    ├────────────┼──────────────────┼───────────────────┼─────────────────┤
    │ ESPAÇAMENTO│ @awa-s-0         │ --awa-s-0          │ 0               │
@@ -398,8 +398,8 @@
 // Aqui apenas aliases semânticos para o design system.
 //
 // ── Primárias ──────────────────────────────────────────────────────────────
-//   @awa-color-primary       #b73337   Vermelho AWA (botões, links, CTAs)
-//   @awa-color-primary-dark  #8e2629   Hover da primária
+//   @awa-color-primary       @awa-color-primary   Vermelho AWA (botões, links, CTAs)
+//   @awa-color-primary-dark  @awa-color-primary-dark   Hover da primária
 //
 // ── Texto ──────────────────────────────────────────────────────────────────
 //   @awa-color-text-primary  @awa-color-dark   Texto principal (body)
@@ -418,7 +418,7 @@
 // ── Semânticas (feedback) ──────────────────────────────────────────────────
 //   @awa-color-success       @awa-color-success   Estado de sucesso
 //   @awa-color-warning       @awa-color-warning   Estado de alerta
-//   @awa-color-error         #b73337   Estado de erro (= primária)
+//   @awa-color-error         @awa-color-primary   Estado de erro (= primária)
 //   @awa-color-info          #0ea5e9   Estado informativo
 
 // Aliases de conveniência do design system (ponteiros para _awa-variables)

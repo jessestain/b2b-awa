@@ -138,18 +138,18 @@ small, .small {
 // ============================================================================
 
 a {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
     text-decoration: none;
     transition: color 150ms ease;
 }
 
 a:hover {
-    color: var(--awa-color-primary-dark, #8e2629);
+    color: var(--awa-color-primary-dark, @awa-color-primary-dark);
     text-decoration: underline;
 }
 
 a:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: 2px;
     border-radius: 2px;
 }
@@ -223,7 +223,7 @@ a:focus-visible {
 .awa-text-primary   { color: var(--awa-text-primary, #333333); }
 .awa-text-secondary { color: var(--awa-text-secondary, #666666); }
 .awa-text-muted     { color: var(--awa-text-muted, #999999); }
-.awa-text-brand     { color: var(--awa-color-primary, #b73337); }
+.awa-text-brand     { color: var(--awa-color-primary, @awa-color-primary); }
 .awa-text-success   { color: var(--awa-color-success, #059669); }
 .awa-text-error     { color: var(--awa-color-error, #DC2626); }
 .awa-text-warning   { color: var(--awa-color-warning, #D97706); }

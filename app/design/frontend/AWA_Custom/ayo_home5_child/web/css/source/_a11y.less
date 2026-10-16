@@ -28,7 +28,7 @@
 
 // --- Visible focus for keyboard users ---
 :focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: 2px;
     border-radius: 2px;
 }
@@ -41,7 +41,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-    outline: 2px solid var(--awa-color-primary, #b73337);
+    outline: 2px solid var(--awa-color-primary, @awa-color-primary);
     outline-offset: 2px;
 }
 
@@ -50,7 +50,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
     outline-offset: -2px;
-    border-color: var(--awa-color-primary, #b73337);
+    border-color: var(--awa-color-primary, @awa-color-primary);
 }
 
 
@@ -67,8 +67,8 @@ a[href="#maincontent"] {
     inset-inline-start: -9999px;
     z-index: 99999;
     padding: var(--awa-space-3, 12px) var(--awa-space-6, 24px);
-    background: var(--awa-color-primary, #b73337);
-    // !important necessario: vence "a, a:focus{color:#b73337!important}" injetado via
+    background: var(--awa-color-primary, @awa-color-primary);
+    // !important necessario: vence "a, a:focus{color:@awa-color-primary!important}" injetado via
     // painel admin (Rokanthemes Theme Options -> pub/media/rokanthemes/theme_option/custom_default.css),
     // que nao pode ser editado diretamente. Sem isto o skip-link (WCAG 2.4.1) fica com
     // texto vermelho sobre fundo vermelho ao receber foco de teclado (contraste ~2:1).
@@ -95,7 +95,7 @@ a[href="#maincontent"]:focus {
     outline-offset: 2px;
 }
 
-// !important necessario: vence "a:hover{color:#8e2629!important}" injetado via painel admin.
+// !important necessario: vence "a:hover{color:@awa-color-primary-dark!important}" injetado via painel admin.
 // Especificidade classe+pseudo-classe (0,2,0) > elemento+pseudo-classe (0,1,1) do admin, entao
 // isto vence mesmo com !important de ambos os lados. Sem isto, passar o mouse sobre o skip-link
 // (usuario de teclado + mouse) troca o texto para vermelho escuro sobre fundo vermelho (~1.4:1).
@@ -239,7 +239,7 @@ input[type="radio"]::before {
     }
 
     .price-box .price {
-        color: var(--awa-color-primary-dark, #8e2629) !important;
+        color: var(--awa-color-primary-dark, @awa-color-primary-dark) !important;
         font-weight: 900 !important;
     }
 
@@ -402,14 +402,14 @@ img {
 // ============================================================================
 
 a {
-    color: var(--awa-color-primary, #b73337);
+    color: var(--awa-color-primary, @awa-color-primary);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
 }
 
 a:hover {
-    color: var(--awa-color-primary-dark, #8e2629);
+    color: var(--awa-color-primary-dark, @awa-color-primary-dark);
     text-decoration-thickness: 2px;
 }
 
