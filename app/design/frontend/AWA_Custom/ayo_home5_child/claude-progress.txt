@@ -468,3 +468,32 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
    casado por 2 seletores); o botao padrao fica oculto p/ guest e o fluxo B2B mostra o
    "Entrar para Comprar" verde.
 - Regressao DS: rc=0, 0 falhas apos o lote.
+
+## ATUALIZAÇÃO — 2026-10-16 ~16:15 BRT (performance)
+
+### Medicoes reais da PDP (cold, 1440, transferSize = comprimido):
+- TTFB 489ms origem / ~150ms com HTML em hit no Varnish. DCL 1.7s, Load 3.7s, CLS=0.
+- Peso total 1.24MB (brotli): CSS externo 353KB (styles-l 168, align-grid 56, core 9,
+  pdp 6...) + JS 272KB + imagens 322KB + fontes 23KB.
+- HTML: 787KB bruto -> 117KB no fio (BROTLI ativo, 6.7:1). CSS inline = 463KB bruto em
+  54 blocos <style> (~70KB no fio, mas ~463KB de parse por carga).
+
+### Feito (commit proximo): cadeias de ids encurtadas 128 -> 32
+- Maior cadeia concorrente = 30 ids (core-bundle). 32 cobre com seguranca.
+- align-grid: 810KB -> 760KB (-49.9KB). 52 cadeias reescritas.
+- Regressao: rc=0, 0 falhas. Inventario ok.
+
+### Diagnostico do CSS inline (54 blocos, 463KB):
+- 3 blocos grandes: align-grid-inline-lock 98KB (primeiro paint, NAO remover),
+  footer-critical-stability 59KB, cls-nav-fix 33KB.
+- ~40 micro-locks de rodadas antigas (r21-r40: footer-*, fab-stack, bottom-nav,
+  ham-flat... 1-18KB cada, ~120KB) — candidatos a absorcao/remocao na fase estrutural.
+- Consolidar tudo nos bundles: ganho estimado ~60-70KB no fio + economia real de parse.
+- RISCO: os blocos grandes existem para o primeiro paint (FOUC). A consolidacao exige
+  fase dedicada com verificacao por bloco (render antes/depois).
+
+### Prioridades de performance restantes (recomendado):
+1. Fase estrutural: absorver os ~40 micro-locks inline nos bundles centralizados
+   (maior ganho de parse; alinha com a governanca "zero CSS fora dos bundles").
+2. Deduplicar regras repetidas do cascade lock (footer pill etc. em 4-5 lugares).
+3. Purga do styles-l (168KB, bloat Rokanthemes) com auditoria por seletor.
