@@ -1630,6 +1630,17 @@ for (i = 0; i < GATE_EVENTS.length; i += 1) {
         }
     }, { capture: true, passive: true });
 
+    /* INP guard: debounce por requestAnimationFrame — observers de mutacao nao podem
+       bloquear o paint do clique (ex.: abrir o menu dispara scan em todo o DOM). */
+    var awaRafThrottle = function (fn) {
+        var queued = false;
+        return function () {
+            if (queued) { return; }
+            queued = true;
+            window.requestAnimationFrame(function () { queued = false; fn(); });
+        };
+    };
+
     /* r37c: Escape/overlay close aria-expanded without a toggle click — observe. */
     /* Sync when menu-controller toggles body.nav-open without a toggle click. */
     (function observeBodyDrawerClass() {
@@ -1655,9 +1666,9 @@ for (i = 0; i < GATE_EVENTS.length; i += 1) {
             }
             btn.setAttribute('data-awa-r37c-obs', '1');
             try {
-                var mo = new MutationObserver(function () {
+                var mo = new MutationObserver(awaRafThrottle(function () {
                     forceHomeTabAndFooterToggleContrast();
-                });
+                }));
                 mo.observe(btn, { attributes: true, attributeFilter: ['aria-expanded', 'class'] });
             } catch (e) {}
         }
@@ -1669,7 +1680,7 @@ for (i = 0; i < GATE_EVENTS.length; i += 1) {
         window.setTimeout(scan, 2000);
         if (typeof MutationObserver !== 'undefined') {
             try {
-                new MutationObserver(scan).observe(document.documentElement, { childList: true, subtree: true });
+                new MutationObserver(awaRafThrottle(scan)).observe(document.documentElement, { childList: true, subtree: true });
             } catch (e2) {}
         }
     }());
@@ -2077,7 +2088,7 @@ setImportant(link, 'display', 'inline-flex');
         });
 
         document.querySelectorAll('.page_footer .awa-footer-devby, .page-footer .awa-footer-devby').forEach(function (el) {
-            setImportant(el, 'min-height', '0');
+            setImportant(el, 'min-height', '32px');
             setImportant(el, 'height', 'auto');
         });
 

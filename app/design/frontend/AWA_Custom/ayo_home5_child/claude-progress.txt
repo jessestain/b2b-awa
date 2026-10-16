@@ -671,3 +671,17 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 3. Meta: INP <200ms nos 3 alvos (menu, FAQ, abas).
 
 ### Ja feito no ciclo: syncInert via rAF (d982b0ee1) + medicao INP real.
+
+## ATUALIZAÇÃO — 2026-10-16 ~18:10 BRT (ciclo 8: INP — rAF no css-gate, ganhos medidos)
+
+### awa-css-gate.js: observers de mutacao (btn aria-expanded + scan documentElement
+  childList/subtree) agora usam awaRafThrottle (requestAnimationFrame, 1 exec/frame).
+  JS valido, servido.
+
+### INP re-medido (mesmo probe):
+- FAQ/details: 288-336ms -> 16ms ✓ (abaixo de 200).
+- Menu de categorias (.title-category-dropdown): 800ms -> 320ms (melhorou; ainda >200).
+
+### Restante do INP: o handler do clique no menu (vertical-menu-init.js do tema pai +
+  awa-menu-bootstrap-runtime dept-strip-r16) — analisar o custo do toggle do flyout
+  no proximo ciclo (construcao/layout do mega-menu).
