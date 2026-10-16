@@ -630,3 +630,21 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   (h1=1, h2=8, h3=27); contrastes: tagline 3.54:1 e a unica abaixo de 4.5 (12px
   vermelho da marca — decorativo do lockup; registrar para decisao de design).
 - Regressao DS: rc=0 apos o fix.
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:45 BRT (ciclo 6: INP medido + rAF no guard de inert)
+
+### INP (medido com PerformanceObserver event-timing + CDP Input real):
+- pointerdown na ABA da PDP: 520ms | menu vertical: 328ms | click: 168ms.
+- INP ~300-520ms — ACIMA da meta <200ms. 29 long tasks, max 431ms, TBT 4989ms.
+- Atribuicao: (1) o stack de abas da PDP (awa-pdp-details — paineis sempre empilhados,
+  toggle animado = re-layout pesado no clique); (2) abertura do mega-menu vertical.
+  Nao e o guard de inert: syncInert custa 1ms (110 els) — medido.
+
+### Fix aplicado (preventivo): syncInert agora roda via requestAnimationFrame
+  (1 execucao por frame, nao por mutacao) — antes, cada aria-hidden toggled pelo
+  carrossel disparava um scan sincrono do body. JS valido, servido, regressao a seguir.
+
+### Proximo ciclo (INP <200ms):
+1. Abas da PDP: trocar o toggle animado por display:none (ou reduzir o custo do
+   re-layout do painel) — investigar o mecanismo em awa-pdp-details.phtml + _product-page.less.
+2. Mega-menu: adiar construcao do flyout (requestIdleCallback) ou memoizar.

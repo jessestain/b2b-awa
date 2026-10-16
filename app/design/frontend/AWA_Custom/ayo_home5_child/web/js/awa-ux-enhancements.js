@@ -776,12 +776,21 @@ define(['jquery'], function ($) {
         });
     };
     if ('inert' in document.createElement('div')) {
-        syncInert();
+        var inertQueued = false;
+        var queueInert = function () {
+            if (inertQueued) { return; }
+            inertQueued = true;
+            window.requestAnimationFrame(function () {
+                inertQueued = false;
+                syncInert();
+            });
+        };
+        queueInert();
         try {
-            new MutationObserver(function () { syncInert(); })
+            new MutationObserver(queueInert)
                 .observe(document.body, { attributes: true, attributeFilter: ['aria-hidden', 'inert'], subtree: true });
         } catch (e) { /* observador e progressivo; guard roda tambem em load */ }
-        window.addEventListener('load', syncInert);
+        window.addEventListener('load', queueInert);
     }
 
     return {};
