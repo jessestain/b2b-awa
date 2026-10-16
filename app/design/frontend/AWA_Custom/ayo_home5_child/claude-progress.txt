@@ -1,5 +1,5 @@
 # AWA Motos — design system — claude-progress.txt
-# Última atualização: 2026-10-16 ~07:5x BRT (sessão deepseek-harness)
+# Última atualização: 2026-10-16 ~08:15 BRT (sessão deepseek-harness)
 
 ## Linha do tempo (2026-10-16, madrugada→manhã BRT)
 
@@ -60,3 +60,36 @@
 - ds-bundles-* (wave 1: 16 css + 6 xml)
 - _quarantine/css-dead-20261016/ (2 órfãos; padrão dos anteriores 2026-07-08/08-13)
 
+
+## ATUALIZAÇÃO — 2026-10-16 ~08:15 BRT (sessão deepseek-flash)
+
+### Concluído nesta sessão
+- Wave 1 bundles: 13 CSS → 4 bundles (core/catalog/auth/cart). COMMIT bd307d853.
+  - Incidentes resolvidos: layouts têm chattr +i (default_head_blocks.xml) → chattr -i/+i;
+    layouts são jessessh:www-data → sudo -n -u jessessh; bug meu de inserção XML (removeu sem
+    inserir) → recuperado do backup ds-bundles-20261016-110101; bundles devem usar BYTES
+    SERVIDOS (.min pré-construídos divergem do fonte .css — minify_files=1 mas Magento copia .min).
+- 2ª passada spacing (declarações mistas token+px): 9 arquivos. COMMIT 771f22f4c. Regressão verde.
+- Aceite item 3: contraste medido = 5.85:1 (branco #fff sobre #b23c34/oklch do brand) — WCAG AA OK,
+  em categoria desktop/tablet/mobile + busca.
+- Aceite item 4: sweep 3 breakpoints × 5 páginas = 15/15 sem overflow, 0 imagens quebradas,
+  body 16px INCLUSIVE no tablet (768). Painel B2B não testável (sem credencial na sessão).
+- Aceite item 1: restantes = micro 1/2/3/5px + env(safe-area) + aritmética LESS + off-scale
+  funcional (72/80/55/88/96px) + comentários → exceções documentadas.
+
+### GATILHO DE ESCOPO (reportado ao usuário)
+- Item 1: estimado ~160 ocorrências → real 546 substituições em 95 arquivos (3,4×).
+- Item 2: estimado 33 carregados/até 46 órfãos → real 38 carregados, 2 órfãos novos.
+- Item 3: confirmado 12+ regras concorrentes; vencedor real era LESS compilado (não os standalone).
+
+### Pendente (próxima sessão)
+- Waves 2-3: CSS carregados via phtml async (awa-head-preload.phtml, awa-pdp-conversion-async.phtml,
+  awa-post-themeoption-head-css.phtml) e via JS (awa-css-gate.js, awa-home-bootstrap-defer.js).
+  PDP: awa-round3-pdp-conversion, awa-pdp-final-polish, awa-pdp-premium (via phtml getViewFileUrl).
+- Rebuild dos pares .min desatualizados (build-awa-css-min-pair.sh) — débito pré-existente.
+- Painel B2B: validar com conta de teste (sem credencial).
+
+### Backups desta sessão
+- ds-bundles-recover-20261016-110844 (recuperação wave 1), ds-spacing2-20261016-111535 (2ª passada),
+  ds-bundles-20261016-110101 (pré-wave1: 16 css + 6 xml), ds-pagination2-20261016-091109.
+- Quarentena: _quarantine/css-dead-20261016/ (2 órfãos).
