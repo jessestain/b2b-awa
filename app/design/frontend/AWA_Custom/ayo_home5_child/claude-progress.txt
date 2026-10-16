@@ -378,3 +378,37 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Remanescentes: toque44=24 (close x3, ✕ x2, termos de busca x6, Início x3 nao-ticket),
   tipografia=20, clip=6 (carrossel intencional), alts=3.
+
+## ATUALIZAÇÃO — 2026-10-16 ~14:55 BRT (campanha, round 11 — FECHAMENTO)
+
+### Progresso: 264 -> 17 flags, TODOS documentados como nao-tickets:
+- 6 clip: peek intencional dos carrosseis (home categorias + PDP relacionados) — design.
+- 3 a11y-alt: 18 imagens com alt="" (DECORATIVAS — padrao WCAG correto; nome acessivel vem
+  do rotulo visivel ao lado). Detector ajustado para nao contar alt="" como ausente.
+- 8 toque44: widget de chat flutuante no cadastro — CSS = 44px (min-height) confirmado por
+  probe; getBoundingClientRect = 42.68px porque um ANCESTRAL aplica escala ~0,97
+  (44 x 0,97 = 42,68). Efeito de medicao de 2,6% num widget auxiliar — aceito e documentado,
+  sem inflar tamanhos para "burlar" a metrica.
+
+### REGRESSAO ENCONTRADA E CORRIGIDA (o valor do suite de invariantes)
+- O rebuild do core-bundle (batches 13-16) alterou a ordem/semantica das cascade layers e o
+  botao de ACAO da PDP voltou a VERMELHO (rgb(183,51,55)) — a regressao detectou.
+- 0e3b20a42 (v9): restaura o verde de acao (var(--awa-action,#0f7a3d)) em
+  @layer awa-visual-priority com cadeia de 128 ids (a layer de MAIOR prioridade para
+  !important) + :hover com --awa-action-dark. Regressao verde (0 DS-FAIL) apos o fix.
+
+### Commits do round: 3c57610a0 (v6-v8) · 2355388fd (progress label) · 06a9d4ee4 (container
+  .progress-step) · 0e3b20a42 (v9 verde de acao).
+
+### Estado final verificado
+- Inventario CDP: 14 paginas x 390/768/1440 — 0 tickets acionaveis.
+- Regressao DS: rc=0, 0 DS-FAIL (200s, zero laranja legado, botao acao verde 44px,
+  body 16px, preco PDP #111, overflow=0, skin no head).
+- Governanca: overrides em @layer awa-visual-priority com cadeia 128 ids; tokens/variaveis;
+  commits arquivo a arquivo; nenhum CSS novo carregado.
+
+### Pendencias de divida (nao-bloqueantes, documentadas)
+1. O codebase continua com a MESMA regra duplicada em N lugares (cascade lock) — a fase de
+   "absorver e remover arquivos de rodadas antigas" segue como trabalho estrutural futuro.
+2. view_preprocessed precisa ser limpo antes de cada deploy (protocolo documentado).
+3. nginx open_file_cache: recarregar apos alterar CSS servido.
