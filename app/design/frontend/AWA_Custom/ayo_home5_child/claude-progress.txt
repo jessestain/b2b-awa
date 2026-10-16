@@ -648,3 +648,26 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 1. Abas da PDP: trocar o toggle animado por display:none (ou reduzir o custo do
    re-layout do painel) — investigar o mecanismo em awa-pdp-details.phtml + _product-page.less.
 2. Mega-menu: adiar construcao do flyout (requestIdleCallback) ou memoizar.
+
+## ATUALIZAÇÃO — 2026-10-16 ~17:55 BRT (ciclo 7: INP — diagnostico completo da causa raiz)
+
+### Atribuicao por target (event-timing):
+- BUTTON.title-category-dropdown (menu de categorias): pointerup 800ms.
+- FAQ accordion (delegado em HTML): pointerdown 336 / pointerup 288ms.
+- <details> nativo: barato (nao aparece no top).
+
+### Causa raiz (investigada no JS servido):
+- O preload emite DEZENAS de loops JS "terminal" (cascade lock JS): MutationObservers
+  (body class, aria-expanded, DOM subtree) + listeners (click capture, keydown Escape,
+  ajaxComplete, cartUpdate) + timeouts (700/1500/3000/6000ms) que RE-APLICAM estilos
+  inline em massa (footer: querySelectorAll + setProperty em ~100 elementos a cada
+  disparo). Abrir o menu muda classes do body -> observers sincronos -> 800ms ate o paint.
+- O botao de categorias (Rokanthemes verticalmenu) e o gatilho mais caro.
+
+### Plano da fase INP (proximo ciclo, cirurgia no preload/modelo):
+1. rAF-defer/debounce nos observers que disparam em clique/mutacao (padrao ja aplicado
+   no syncInert com sucesso).
+2. Remover re-aplicacoes redundantes (os mesmos estilos ja estao nos bundles v1-v15).
+3. Meta: INP <200ms nos 3 alvos (menu, FAQ, abas).
+
+### Ja feito no ciclo: syncInert via rAF (d982b0ee1) + medicao INP real.
