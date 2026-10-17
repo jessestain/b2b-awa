@@ -1094,3 +1094,9 @@ DEPOIS (v21c em @layer awa-visual-priority):
   cascade — projeto de dono (risco: a ordem dos layers e a especificidade).
 ### Rotina diaria agendada: 09:30 BRT — runner + regressao + Lighthouse, com
   acao imediata em P1 novos e registro na continuidade.
+
+## MONITORAMENTO #1 — 2026-10-17 ~01:00 BRT
+### Runner: 209 tickets (baseline 210 — estavel). P1=30: todos conhecidos
+  (account links 32px@992 [mapeado], ai-chat 43px [artefato sub-pixel 42.68],
+  CLS transientes cart/pdp [estado-dependente]). Regressao rc=0.
+### Lighthouse: 100x4 (ultima checagem ciclo 36, sem mudancas desde entao).
