@@ -856,3 +856,23 @@ DEPOIS (v21c em @layer awa-visual-priority):
 - 390/767/768/992/1366 inalterados ✓
 
 ### Regressao DS: rc=0, 0 falhas.
+
+## ATUALIZAÇÃO — 2026-10-16 ~22:35 BRT (ciclo 18: runner construido + CTAs do login P0)
+
+### Tarefa 1 CONCLUIDA: audit_runner.js + shot_grid.js no servidor
+- audit_runner.js: 7 paginas x 7 breakpoints = 49 cargas, tickets numerados por
+  categoria/gravidade (overflow, CLS, img, alt, h1, viewport, texto<12px, toque<44px,
+  contraste). Primeira rodada: 349 tickets (base para os proximos ciclos).
+- shot_grid.js: screenshots por pagina x largura em /tmp/awa-shots/.
+
+### P0 ENCONTRADO PELO RUNNER E CORRIGIDO: CTAs do login invisiveis
+- "Criar conta B2B" = branco sobre transparente; "Ativar conta existente" = branco
+  sobre branco (contraste 1:1). Causa: a regra :is(#product-addtocart-button,
+  .box-tocart .action.tocart, .b2b-btn-entrar, .b2b-btn-register, .b2b-btn-claim)
+  {color:#fff!important} na skin (awa-ds-skin-v1) — o branco dos botoes de ACAO
+  vazou para os CTAs do login (que tem cores proprias: outlined vermelho / neutro).
+- FIX: removidos os 3 b2b do :is() na skin (.min) + rebuild do core bundle + auth
+  bundle + sync pub. VERIFICADO: register = rgb(183,51,55), claim = rgb(17,24,39).
+- Regressao: rc=0.
+
+### Proximo: CLS do carrinho (0.17-0.21 @767-992 — novo achado do runner) + SKU 11px.
