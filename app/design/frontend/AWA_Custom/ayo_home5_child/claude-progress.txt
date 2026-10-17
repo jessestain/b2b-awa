@@ -1155,3 +1155,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
   plugin + agregacao p75 diaria. Duas decisoes do dono: o destino do beacon e a
   aprovacao do carregamento. Zero risco visual, zero PII (LGPD ok).
 ### Nenhuma mudanca de producao aplicada neste ciclo (plano apenas).
+
+## ATUALIZAÇÃO — 2026-10-17 ~02:00 BRT (continuacao: ciclo 4 — toolbar 1 linha)
+### v48: o wrapper .center da toolbar tinha flex-wrap:wrap empilhando o sorter e o
+  limiter (labels a 55px de distancia). Com nowrap+center+gap12 em >=992, os labels
+  ficaram na MESMA linha (5px = offset interno do label). #29/30 RESOLVIDO.
+### Com isso, das 5 decisoes, a toolbar saiu da lista por via CSS (sem template).
+### Regressao verde.
