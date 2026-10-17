@@ -1122,3 +1122,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   tickets, P1 30 -> 9. Os 9 = 1 CLS transiente (pdp@1600 0.118) + 8x ai-chat 43px
   (artefato de escala/DPR do widget, 44px CSS renderizado 42.68 — documentado).
 ### Baseline oficial do monitoramento: 188 tickets / 9 P1 / regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:40 BRT (ciclo 45: ai-chat 42.7 = geometria do modulo)
+### O 42.7px dos botoes do ai-chat (cadastro) = geometria INTERNA do modulo (nao
+  scale, nao min-height — 2 iterações de override nao moveram). E o 97% do padrao
+  44px — caso marginal documentado como o ultimo artefato conhecido. Regras mortas
+  revertidas. Regressao verde.
+### Baseline final do runner: 188 tickets / 9 P1 = 1 CLS transiente + 8 ai-chat
+  (todos com causa documentada; nenhum bug visivel restante).
