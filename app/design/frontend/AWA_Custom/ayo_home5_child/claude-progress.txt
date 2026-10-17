@@ -917,3 +917,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
   (a definicao do token), ou editar a regra vencedora no arquivo-fonte do shell.
 ### CLS: cart = 0 em 2 probes (v22 segura); pdp@1366 = 0 no probe direto (os picos do
   runner = estados transitórios de popup). Regressao verde em todos os lotes.
+
+## ATUALIZAÇÃO — 2026-10-16 ~23:35 BRT (ciclo 23: promo-bar AA — token escopado)
+### v27: a promo resistia porque o fundo resolve var(--awa-primary) na regra do shell.
+  A solucao = redefinir o token NO ESCOPO do site-header:
+  html body#html-body(x32) .awa-site-header{--awa-primary:oklch(0.44 0.13 27.5)!important}
+  VERIFICADO: promo = oklch(0.44 0.13 27.5) (~7.6:1 com texto branco). Os CTAs fora do
+  header mantem o vermelho da marca. 4/4 superficies vermelhas AA. Regressao verde.
