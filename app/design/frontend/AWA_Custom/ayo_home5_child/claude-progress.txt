@@ -876,3 +876,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
 - Regressao: rc=0.
 
 ### Proximo: CLS do carrinho (0.17-0.21 @767-992 — novo achado do runner) + SKU 11px.
+
+## ATUALIZAÇÃO — 2026-10-16 ~22:45 BRT (ciclo 19: CLS do carrinho zerado)
+
+### Runner achou CLS 0.778@768 / 0.159@992 no /checkout/cart/ (acima da meta 0.1).
+### Causa raiz (atribuicao layout-shift): os itens do rodape de confianca
+  (.awa-footer-trust-item) renderizavam 77px no 1o paint e ENCOLHIAM para 42px quando
+  os loops JS terminais aplicavam estilos inline tardios; o colapso empurrava o
+  cart-empty (440->367) e o restante em cascata.
+### Fix v22 (core bundle, render-blocking): height/min/max 42px + overflow visible
+  no trust-item desde o 1o paint.
+### RESULTADO: CLS cart = 0 em 768 e 992. Regressao: rc=0.
