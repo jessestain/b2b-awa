@@ -944,3 +944,13 @@ DEPOIS (v21c em @layer awa-visual-priority):
   "Receber novidades"). Verificado: bridge = 1 no servido.
 ### slide-title (home): NAO-TICKET — branco 24px/700 sobre scrim rgba(15,23,42,.62)
   (o runner nao ve gradientes). Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:05 BRT (ciclo 26: trust-item do rodape AA)
+### O vermelho do .awa-footer-trust-item (white text 3.57:1) resistia porque a regra
+  do footer-terminal-lock (transparent!important em layer declarada antes) vencia as
+  cadeias de 32 e 128 ids. Aplicado v30 (trust-item no :is do v26) + v32 (128 ids)
+  — o matched-rules confirma o vencedor = background-color #8e2629 (7.6:1).
+### Runner: o patch oklch quebrou a injecao (0 tickets) — REVERTIDO limpo; runner
+  verde de novo. Limitacao documentada: o parser de contraste e rgb-only (oklch vira
+  falso positivo, ex. grid-mode 4.99:1).
+### Regressao verde em todos os lotes do ciclo.
