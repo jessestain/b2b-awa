@@ -903,3 +903,17 @@ DEPOIS (v21c em @layer awa-visual-priority):
   vermelho mais escuro para texto, ou texto menor com peso — documentado).
 ### CLS pendente: cart 0.1-0.4 (estado-dependente: cart-empty SSR) e pdp@1366 0.154
   — proximos ciclos com o estado reproduzido.
+
+## ATUALIZAÇÃO — 2026-10-16 ~23:25 BRT (ciclo 22: contraste das superficies vermelhas)
+### v26: vermelho escuro #8e2629 (7.6:1 com texto branco) nas superficies de texto:
+  awa-header-categories (menu Departamentos) e awa-header-account-prompt VERIFICADOS
+  no computado. A faixa benefits e a footer-trust usam o mesmo override.
+### A promo-bar (.awa-b2b-promo-bar) RESISTE: o background resolve via
+  var(--awa-primary) por uma cadeia que o override de 32 ids (hex, literal oklch e
+  custom property no elemento) nao venceu. Diagnostico: o token --awa-primary resolve
+  oklch(0.525 0.155 27.5); o vencedor = html body#html-body .page-wrapper .awa-site-header
+  :is(#awa-b2b-promo-bar,...) {background-color:var(--awa-primary,...)!important}.
+  Proxima tentativa (ciclo futuro): redefinir --awa-primary no :root do align-grid
+  (a definicao do token), ou editar a regra vencedora no arquivo-fonte do shell.
+### CLS: cart = 0 em 2 probes (v22 segura); pdp@1366 = 0 no probe direto (os picos do
+  runner = estados transitórios de popup). Regressao verde em todos os lotes.
