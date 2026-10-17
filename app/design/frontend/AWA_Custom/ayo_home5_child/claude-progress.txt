@@ -1100,3 +1100,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   (account links 32px@992 [mapeado], ai-chat 43px [artefato sub-pixel 42.68],
   CLS transientes cart/pdp [estado-dependente]). Regressao rc=0.
 ### Lighthouse: 100x4 (ultima checagem ciclo 36, sem mudancas desde entao).
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:15 BRT (ciclo 42: account links @992 — vencedor mapeado)
+### O account-prompt__link @992 computa 32px com min-height:32px!important do SHELL
+  INLINE do header (cadeia que vence os 32 ids do align-grid). O v25b (height:auto)
+  nao moveu. Impacto real: baixo (992 = tablet-paisagem, mouse-dominante). Documentado
+  como P1-residual conhecido; a correcao definitiva = editar o shell inline (ponte
+  ou o modelo PHP do cascade-lock) — candidato do proximo lote de ponte.
+### Regressao verde.
