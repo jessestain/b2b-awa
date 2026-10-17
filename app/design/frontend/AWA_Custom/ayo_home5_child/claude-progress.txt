@@ -1011,3 +1011,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
   do cart/header chegando no async ~1.5s.
 ### PROXIMO CICLO: migrar o bloco do cart (cart-empty + header right-col/account)
   do align-grid para o core bundle (render-blocking) — o padrao slim-migration.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:25 BRT (ciclo 32: v36 reserva estrutural do cart)
+### v36 (core bundle, render-blocking): o cart-empty ja nasce com a estrutura final
+  (grid areas seals/hero/trust + max 720 + centering) — o reflow de -70px do async
+  sumiu. CLS do cart: 0.754 -> 0.387 (-49%). Regressao verde.
+### Restante: o shift do header right-col (account links dh=-23 ~1.4s) — reservar a
+  geometria final do right-col/account no core bundle (proximo ciclo).
