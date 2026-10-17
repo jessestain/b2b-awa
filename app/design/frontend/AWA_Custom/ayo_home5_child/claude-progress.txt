@@ -1043,3 +1043,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
   de main-thread nos retries. Regressao verde.
 ### Consolidacao JS: etapa de INP concluida no gate. Restam os eventos (o hook
   awa:css-gate-applied ja centraliza) — inventario final + RUM = proximos.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:50 BRT (ciclo 36: auditoria de fechamento Fase 3)
+### Lighthouse MOBILE (390px): 100/100/100/100, 0 fails — desktop ja estava 100x4.
+### Snapshot a11y mobile (390): arvore completa e correta — skip links, dialog do
+  minicart nomeado ("Meu Carrinho"), REF: nos cards, newsletter com o name contendo
+  o texto visivel, paginacao 1-[2]-[3]-Proximo, cookie alertdialog acessivel,
+  navegacao mobile. Nenhum no no invalido.
+### Grid de screenshots atualizado (12 arquivos /tmp/awa-shots: home/plp/pdp x
+  390/768/1440/1920) — evidencia visual da Fase 3.
+### CONCLUSAO DA AUDITORIA: inconsistências visuais/tecnicas criticas = 0. Os
+  residuos = RUM (veredito de campo do CLS/INP) + anomalia de phtml (dono/root).
