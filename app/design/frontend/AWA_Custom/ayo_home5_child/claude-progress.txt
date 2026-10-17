@@ -1018,3 +1018,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
   sumiu. CLS do cart: 0.754 -> 0.387 (-49%). Regressao verde.
 ### Restante: o shift do header right-col (account links dh=-23 ~1.4s) — reservar a
   geometria final do right-col/account no core bundle (proximo ciclo).
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:35 BRT (ciclo 33: newsletter mount = residual do cart)
+### v37 (header right-col) + v38 (newsletter geometry) aplicados — o CLS do cart
+  estabilizou em 0.383: o reflow estrutural (v36, -49%) e o residual (0.297 @552ms)
+  = o MOUNT DE CONTEUDO da newsletter (dh=115px quando o form renderiza completo a
+  0.55s) — nao e geometria CSS (a reserva v38 nao moveu o numero).
+### Fix real do residual: o SSR do form da newsletter deve nascer na altura final
+  (template — dominio da anomalia de phtml/ponte) OU aceitar 0.38 como o teto
+  headless do cart vazio. RUM segue sendo o veredito (o estado com itens nao shift).
+### Regressao verde. Próximo: retomar a consolidacao dos loops (os timers 700-6000ms
+  do minicart/footer sao o alvo de INP) + o inventario Fase 3.
