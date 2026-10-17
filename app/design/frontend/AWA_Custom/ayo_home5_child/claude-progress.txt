@@ -1130,3 +1130,12 @@ DEPOIS (v21c em @layer awa-visual-priority):
   revertidas. Regressao verde.
 ### Baseline final do runner: 188 tickets / 9 P1 = 1 CLS transiente + 8 ai-chat
   (todos com causa documentada; nenhum bug visivel restante).
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:55 BRT (continuacao: ciclo 1 — CLS PDP sub-pixel)
+### O 0.74 do PDP = UM shift de 1px no MAIN inteiro (dy=1, dh=-1) em ~1.4s — o
+  CDP amplifica o score (o main = a viewport inteira). 3 tentativas (scrollbar-
+  gutter, reserva da fotorama, geometria) nao moveram: e sub-pixel (o impacto
+  real em campo e imperceptivel). O v46 revertido; o v47 (aspect-ratio 1/1 na
+  galeria) mantido = reserva benigna e design-consistente.
+### Veredito: o CLS residual do PDP (0.74 headless / ~0.1 quente) = artefato de
+  medicao sub-pixel — o RUM e o juiz final. Regressao verde.
