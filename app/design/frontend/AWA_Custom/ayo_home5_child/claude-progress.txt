@@ -1188,3 +1188,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
   e espacamentos estao agora PADRONIZADOS: catalogo 1440/1392 cols, pad lateral
   24px, top 12px, gaps 12px, footer 144px. Auth = shells intencionais (480/920).
 ### Verificado por probe em 5 paginas + regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~09:40 BRT (v52 + monitoramento 3)
+### v52 (padronizacao "tudo"): h1 = 24px em todo o catalogo (era 22/24/28 conforme
+  a pagina) + gap 12px nos auth (era "normal"). Invariante da regressao h1 22->24.
+### MONITORAMENTO #3: 190 tickets / P1 11 (baseline 188/9) — os +2 = transientes
+  de CLS pos-deploy (pdp@1600 0.255, cart@768 0.473) + os 8 ai-chat 43px
+  documentados. Nenhuma categoria nova. Regressao rc=0.
