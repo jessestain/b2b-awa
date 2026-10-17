@@ -1079,3 +1079,9 @@ DEPOIS (v21c em @layer awa-visual-priority):
   uma linha exige reestruturacao de template (dominio da anomalia de phtml/ponte).
 ### Decisao: manter o v41 (base inofensiva) e deixar a unificacao como backlog
   documentado — o custo atual = estetica (densidade), nao bug. Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:50 BRT (ciclo 39: #16/17 densidade do menu — OK)
+### Medido a 1440: barra do menu 48px (branca), 4 itens a 44px de altura (toque ✓),
+  fonte 14px, distribuicao space-between com gaps ~129px. Tudo na regra 4-16px/DS.
+  NAO-TICKET. Com isso, TODOS os itens da auditoria de 50 itens foram medidos e
+  classificados (corrigidos ou nao-tickets documentados).
