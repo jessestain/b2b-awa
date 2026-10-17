@@ -1172,3 +1172,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
 ### DECISAO: a fusao dos 31 CSSs fica para o HML/dono (o teste em producao direto
   provou-se arriscado demais para o valor). O plano continua documentado.
 ### Estado: site 200, regressao rc=0, baseline intacta.
+
+## ATUALIZAÇÃO — 2026-10-17 ~09:15 BRT (pergunta do dono: containers/grids padronizados?)
+### MEDIDO (1440/1600): NAO estavam — 3 padroes: home full-bleed (1430/1590),
+  catalogo 1280, auth 480/920. E o v20 tinha falhado no PDP/cart a 1600 (ficaram
+  1280 com max-width 1440 — havia width:1280 fixo). v20b: width:min(100%,1440px)
+  adicionado. AGORA a 1600: home 1590(full-bleed)+cols 1440; plp/pdp/busca/cart =
+  1440 com cols 1392; auth = 480/920 (shells intencionais). Regressao verde.
