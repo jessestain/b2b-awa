@@ -1054,3 +1054,19 @@ DEPOIS (v21c em @layer awa-visual-priority):
   390/768/1440/1920) — evidencia visual da Fase 3.
 ### CONCLUSAO DA AUDITORIA: inconsistências visuais/tecnicas criticas = 0. Os
   residuos = RUM (veredito de campo do CLS/INP) + anomalia de phtml (dono/root).
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:00 BRT (ciclo 37: styles-l medido — plano de purge)
+### styles-l.min.css SERVIDO = 1.978 KB (1.93 MB), ~8464 regras — o compilado cheio
+  do tema pai (widgets de todas as paginas). Os seletores do DS estao duplicados
+  (styles-l 1x + bundles 1-4x). Cobertura CDP indisponivel no headless atual
+  (API retornou vazio) — o numero "168KB" anterior = gzip, o raw = 1.93MB.
+### PLANO DE PURGE (decisao do dono — update-compat primeiro):
+  1. LESS-level (correto): dividir os _sources do tema pai e compilar so o usado
+     (trabalho de semanas, riscos de upgrade).
+  2. Runtime surgical (rapido, arriscado): strip dos blocos de paginas nao usadas
+     no .min — quebra em upgrades e no static:deploy.
+  3. Intermediario (recomendado): manter o styles-l como fallback, mover os blocos
+     criticos (checkout/account/pdp) para os bundles render-blocking ja existentes
+     e deixar o styles-l com media="print" (carregamento sob demanda).
+### O gzip real entregue: ~168KB na rede — o custo atual = o parse do CSS no
+  first-paint (a meta FCP ja esta OK em 0.5-1.2s).
