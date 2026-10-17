@@ -1029,3 +1029,9 @@ DEPOIS (v21c em @layer awa-visual-priority):
   headless do cart vazio. RUM segue sendo o veredito (o estado com itens nao shift).
 ### Regressao verde. Próximo: retomar a consolidacao dos loops (os timers 700-6000ms
   do minicart/footer sao o alvo de INP) + o inventario Fase 3.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:45 BRT (ciclo 34: timers idle — INP)
+### v39: os retries do loop do minicart (700/1500/3000/6000ms) viraram 1 timeout +
+  2 requestIdleCallback (window.__awaIdle com fallback) — os retries nao competem
+  mais com as interacoes do usuario (alvo INP). Servido verificado + regressao verde.
+### Padrao para os demais loops (footer/toggle/promo) no proximo ciclo.
