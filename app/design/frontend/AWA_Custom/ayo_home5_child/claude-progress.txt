@@ -887,3 +887,8 @@ DEPOIS (v21c em @layer awa-visual-priority):
 ### Fix v22 (core bundle, render-blocking): height/min/max 42px + overflow visible
   no trust-item desde o 1o paint.
 ### RESULTADO: CLS cart = 0 em 768 e 992. Regressao: rc=0.
+
+## ATUALIZAÇÃO — 2026-10-16 ~22:50 BRT (ciclo 20: pager 44px + SKU 12px)
+### v23: (1) paginacao min-height/height 40->44 (correcao do meu v18); (2) SKU
+  label/value 11->12px + cor #475569 (contraste 4.5+). Verificado por probe:
+  pager 44x44, sku 12px rgb(71,85,105). Regressao verde.
