@@ -988,3 +988,16 @@ DEPOIS (v21c em @layer awa-visual-priority):
   servido (oklch 0, #8e2629 1) + computed. 7.6:1 com texto branco.
 ### Licao: antes de culpar os loops JS, checar o SSR (o padrao da anomalia de
   phtml — inline SSR nao passa pelo CSS). Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:50 BRT (ciclo 30: audit do ciclo — Lighthouse + CWV)
+### Lighthouse (pós-batch contraste/SSR): 100/100/100/100 mantidos, 0 fails.
+### CWV medido (servidor, 1440):
+  - PDP: FCP 532-1252ms ✓ | LCP 1660-1672ms ✓ | CLS 0.106 (quente) / 0.928 (frio
+    pos-ban — artefato do primeiro hit; o estado quente fica na meta ~0.1).
+  - Cart: FCP 480ms ✓ | LCP 608-748ms ✓ | CLS 0.087-0.482 (estado-dependente —
+    a secao de cupom/totais renderiza tarde em alguns estados; os fixes v22 seguraram
+    o estado principal).
+### Scan de inline SSR !important: limpo (so a minha ponte #8e2629 + utilitarios
+  benignos). O padrao do trust-item era o unico caso critico.
+### RECOMENDACAO: instrumentar RUM (fpc.awamotos/analytics) para o CLS/INP real —
+  headless varia por estado; o RUM e o veredito definitivo das metas.
