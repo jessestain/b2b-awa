@@ -1148,3 +1148,10 @@ DEPOIS (v21c em @layer awa-visual-priority):
   estrutural restante (o v36 eliminou a estrutural). RUM = o juiz.
 ### Os residuos tecnicos autonomos = FECHADOS. Restam: as 5 decisoes do dono +
   o monitoramento diario.
+
+## ATUALIZAÇÃO — 2026-10-17 ~02:15 BRT (continuacao: ciclo 3 — plano RUM pronto)
+### Entregavel preparado: _audit/rum-plan.md (workspace local) — web-vitals 4.x
+  (2KB async) + beacon para o analytics existente OU /awa-rum/collect via o
+  plugin + agregacao p75 diaria. Duas decisoes do dono: o destino do beacon e a
+  aprovacao do carregamento. Zero risco visual, zero PII (LGPD ok).
+### Nenhuma mudanca de producao aplicada neste ciclo (plano apenas).
