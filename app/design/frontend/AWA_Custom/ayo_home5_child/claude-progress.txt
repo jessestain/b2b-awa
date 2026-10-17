@@ -1162,3 +1162,13 @@ DEPOIS (v21c em @layer awa-visual-priority):
   ficaram na MESMA linha (5px = offset interno do label). #29/30 RESOLVIDO.
 ### Com isso, das 5 decisoes, a toolbar saiu da lista por via CSS (sem template).
 ### Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~02:20 BRT (continuacao: ciclo 5 — incidente + licao)
+### INCIDENTE (recuperado): 2 parse errors no plugin durante o teste de remocao de
+  CSS via ponte (marca sem comentario; ancora parcial de comentario multiline).
+  Rollback imediato em ambos: site de volta em 200 + regressao verde em minutos.
+### LICAO: testes de ponte exigem (1) mark DENTRO do comentario, (2) ancora do
+  comentario COMPLETO, (3) mkdir do backup antes do python. Documentado no padrao.
+### DECISAO: a fusao dos 31 CSSs fica para o HML/dono (o teste em producao direto
+  provou-se arriscado demais para o valor). O plano continua documentado.
+### Estado: site 200, regressao rc=0, baseline intacta.
