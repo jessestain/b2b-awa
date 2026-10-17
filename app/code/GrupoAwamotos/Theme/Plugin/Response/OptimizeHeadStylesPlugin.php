@@ -550,6 +550,12 @@ class OptimizeHeadStylesPlugin
         );
         $html = str_replace(' autocomplete="search"', '', $html);
         /* Nomenclatura unica do SKU (auditoria #39): Cod: -> REF: */
+        /* Lighthouse label-content-name-mismatch: o name (title) deve conter o texto visivel */
+        $html = str_replace(
+            'title="Cadastrar&#x20;e-mail&#x20;na&#x20;newsletter"',
+            'title="Receber&#x20;novidades:&#x20;cadastrar&#x20;e-mail&#x20;na&#x20;newsletter"',
+            $html
+        );
         $html = str_replace(
             '<span class="awa-b2b-sku__label">Cod:</span>',
             '<span class="awa-b2b-sku__label">REF:</span>',

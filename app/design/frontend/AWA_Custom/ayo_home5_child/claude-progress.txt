@@ -933,3 +933,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
   = peek intencional do carrossel de categorias (overflow 0).
 ### Pendente: h2.slide-title (home) = texto sobre imagem de slide — validar com o
   compositing do bg (proximo ciclo).
+
+## ATUALIZAÇÃO — 2026-10-16 ~23:45 BRT (ciclo 25: LIGHTHOUSE 100 ACROSS THE BOARD)
+### Lighthouse snapshot (desktop, PLP): A11y 100 · Best Practices 100 · SEO 100 ·
+  Agentic Browsing 100 — 42 passed, 0 failed (era A11y 93 com 5 fails).
+### Fails eliminados: (1) aria-dialog-name + agent-accessibility-tree = o observer
+  MutationObserver em awa-ux-enhancements.js aplica aria-label="Meu Carrinho de
+  Compras" quando o jQuery cria o .ui-dialog do minicart; (2) label-content-name-
+  mismatch = ponte no plugin (title da newsletter agora contem o texto visivel
+  "Receber novidades"). Verificado: bridge = 1 no servido.
+### slide-title (home): NAO-TICKET — branco 24px/700 sobre scrim rgba(15,23,42,.62)
+  (o runner nao ve gradientes). Regressao verde.

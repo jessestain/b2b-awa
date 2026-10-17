@@ -816,3 +816,21 @@ define(['jquery'], function ($) {
     return {};
 });
 
+/* Lighthouse aria-dialog-name: re-aplica o aria-label quando o .ui-dialog do
+   minicart e criado pelo jQuery APOS o nosso fixLegacyA11y inicial */
+function applyMinicartDialogName() {
+    var dialogs = document.querySelectorAll('.minicart-wrapper .ui-dialog[role="dialog"]');
+    for (var i = 0; i < dialogs.length; i++) {
+        if (!dialogs[i].getAttribute('aria-label') || dialogs[i].getAttribute('aria-label').indexOf('Meu Carrinho') !== 0) {
+            dialogs[i].setAttribute('aria-label', 'Meu Carrinho de Compras');
+        }
+    }
+}
+if (window.MutationObserver) {
+    var minicartDialogObserver = new MutationObserver(function () {
+        applyMinicartDialogName();
+    });
+    minicartDialogObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'role'] });
+} else {
+    setInterval(applyMinicartDialogName, 1200);
+}
