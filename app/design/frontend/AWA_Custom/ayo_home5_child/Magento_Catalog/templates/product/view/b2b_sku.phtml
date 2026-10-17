@@ -7,7 +7,7 @@ $_product = $block->getProduct();
 ?>
 <?php if ($_product && $_product->getSku()): ?>
     <div class="awa-b2b-pdp-sku">
-        <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
+        <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('REF:')); ?></span>
         <span class="awa-b2b-sku__value" id="awa-sku-value"><?php echo $block->escapeHtml($_product->getSku()); ?></span>
         <button class="awa-sku-copy-btn"
                 type="button"

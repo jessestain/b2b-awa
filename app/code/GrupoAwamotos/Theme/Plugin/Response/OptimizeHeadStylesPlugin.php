@@ -549,6 +549,12 @@ class OptimizeHeadStylesPlugin
             $html
         );
         $html = str_replace(' autocomplete="search"', '', $html);
+        /* Nomenclatura unica do SKU (auditoria #39): Cod: -> REF: */
+        $html = str_replace(
+            '<span class="awa-b2b-sku__label">Cod:</span>',
+            '<span class="awa-b2b-sku__label">REF:</span>',
+            $html
+        );
 
         $subject->setBody($html);
     }

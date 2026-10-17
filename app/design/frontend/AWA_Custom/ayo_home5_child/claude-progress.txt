@@ -781,3 +781,29 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Proximos ciclos: tooltip 3014 (hover simulado), popups (#41-44, espera estendida),
   Fase 2 (grid 1600px #21, densidade #16/17/32/40) e Fase 3 (tokens/contraste/rodape).
+
+## ATUALIZAÇÃO — 2026-10-16 ~21:05 BRT (ciclo 14: auditoria Fase 1/2 — nomenclatura + anomalia P1)
+
+### #39 Cod: -> REF: unificado — via ponte no response plugin (as 4 templates tambem
+  nao propagam: a anomalia de phtml afeta o BODY, nao so o header). Verificado:
+  Cod: 0, REF: 1 no servido.
+
+### ANOMALIA DE PHTML — ESCALADA COMO P1 DE INFRA:
+  Fatos medidos: (1) edicoes de PHP (classes/plugin) propagam; (2) edicoes de PHTML nao
+  propagam — nem header nem body; (3) validate_timestamps=1; (4) restart do php8.4-fpm
+  nao muda; (5) FLUSHDB direto no Redis db1+db2 nao muda; (6) o bloco nao esta no
+  block_html; (7) o disco TEM o conteudo novo (grep confirma); (8) root 8088 =
+  /home/jessessh/htdocs -> symlink p/ /home/user/htdocs (mesma arvore).
+  HIPOTESES RESTANTES: overlay/container do FPM com mount divergente de app/design;
+  algum rsync/sync de terceiros restaurando os phtml; template engine com cache em
+  disco alem do Redis. O DONO PRECISA investigar (acesso root): comparar o inode do
+  arquivo visto pelo PHP-FPM (php -r no contexto do pool) com o do disco.
+  WORKAROUND ATIVO: ponte str_replace no beforeSendResponse (logo/footer/autocomplete/Cod).
+
+### Floatantes (#41-44): cookie banner (z=850) + whatsapp 56x56 (z=100200) com 36px de
+  gap em 1440 (sem overlap); push/toast = trigger-dependente (nao reproduziram em 18s).
+  v19 preventivo (stack quando o cookie banner esta visivel) fica para quando o
+  cenario for reproduzido.
+
+### Tooltip "3014" (#01-03): nao reproduz em 12 hovers do menu — precisa do contexto
+  exato da captura (pagina/breakpoint). Pendente.

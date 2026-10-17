@@ -238,7 +238,7 @@ if ($_b2bActive) {
 						</h2>
 
         <div class="awa-b2b-sku" title="<?php echo $block->escapeHtmlAttr(__('Código do produto')); ?>">
-            <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
+            <span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('REF:')); ?></span>
             <span class="awa-b2b-sku__value"><?php echo $block->escapeHtml($_product->getSku()); ?></span>
         </div>
         <?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
@@ -352,7 +352,7 @@ if ($_b2bActive) {
 							</a>
 						</h2>
 						<div class="awa-b2b-sku" title="<?php echo $block->escapeHtmlAttr(__('Código do produto')); ?>">
-							<span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('Cod:')); ?></span>
+							<span class="awa-b2b-sku__label"><?php echo $block->escapeHtml(__('REF:')); ?></span>
 							<span class="awa-b2b-sku__value"><?php echo $block->escapeHtml($_product->getSku()); ?></span>
 						</div>
 						<?php $awaStockVm = \Magento\Framework\App\ObjectManager::getInstance()->get(\GrupoAwamotos\B2B\ViewModel\StockQty::class); ?>
