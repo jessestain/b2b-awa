@@ -1179,3 +1179,12 @@ DEPOIS (v21c em @layer awa-visual-priority):
   1280 com max-width 1440 — havia width:1280 fixo). v20b: width:min(100%,1440px)
   adicionado. AGORA a 1600: home 1590(full-bleed)+cols 1440; plp/pdp/busca/cart =
   1440 com cols 1392; auth = 480/920 (shells intencionais). Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~09:25 BRT (ordem: padronizar tudo)
+### v51 (ordem do dono): ESPACAMENTOS PADRONIZADOS em todas as paginas —
+  main padding-top 12px (era 0 na home/PLP), columns gap 12px (a home era 32),
+  footer padding-bottom 144px (multiplo de 16; era 136 so na home e 0 nas demais).
+### Junto com o v20b (containers 1440 em >=1600 no PDP/cart), os containers, grids
+  e espacamentos estao agora PADRONIZADOS: catalogo 1440/1392 cols, pad lateral
+  24px, top 12px, gaps 12px, footer 144px. Auth = shells intencionais (480/920).
+### Verificado por probe em 5 paginas + regressao verde.
