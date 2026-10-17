@@ -924,3 +924,12 @@ DEPOIS (v21c em @layer awa-visual-priority):
   html body#html-body(x32) .awa-site-header{--awa-primary:oklch(0.44 0.13 27.5)!important}
   VERIFICADO: promo = oklch(0.44 0.13 27.5) (~7.6:1 com texto branco). Os CTAs fora do
   header mantem o vermelho da marca. 4/4 superficies vermelhas AA. Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-16 ~23:40 BRT (ciclo 24: gate banner AA + nao-tickets)
+### v28: "Cadastrar para ver" (gate banner PLP) branco sobre #b73337 a 13px (3.19:1)
+  -> bg #8e2629 (7.6:1). VERIFICADO no computado.
+### Nao-tickets medidos: grid-mode "2" = #b73337 sobre branco = 4.99:1 (passa AA;
+  o runner nao parseia oklch — limitação do tool, nao do site); os 7 "fora-da-viewport"
+  = peek intencional do carrossel de categorias (overflow 0).
+### Pendente: h2.slide-title (home) = texto sobre imagem de slide — validar com o
+  compositing do bg (proximo ciclo).
