@@ -825,3 +825,15 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Proximo ciclo (Fase 2 continua): mapear a cadeia de wrappers do grid e liberar a
   largura em >=1600px (meta ~1150px) sem quebrar 390/768/1440; depois densidade (#16/17).
+
+## ATUALIZAÇÃO — 2026-10-16 ~21:30 BRT (ciclo 16: #21 — causa raiz = token de container)
+
+### Cadeia medida (1600px): MAIN.page-main = 1280px (token --awa-grid-shell-max
+  min(100%,1280px)) > .columns.layout-2-col = 1232 (grid) > sidebar 260 + gap +
+  grid 940 = 1232 EXATO. O grid preenche o container inteiro — o "vazio" de 312px =
+  o limite de 1280 do container (padrao deliberado da campanha/tokens).
+
+### Decisao necessaria (design): #21 so "corrige" alargando o container em >=1600:
+  html body .page-wrapper .page-main{--awa-grid-shell-max:min(100%,1440px)} (afeta
+  header/footer/home junto). NAO APLICAR sem ordem — identidade visual preservada.
+  Registrado como opcao pronta.
