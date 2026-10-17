@@ -837,3 +837,22 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
   html body .page-wrapper .page-main{--awa-grid-shell-max:min(100%,1440px)} (afeta
   header/footer/home junto). NAO APLICAR sem ordem — identidade visual preservada.
   Registrado como opcao pronta.
+
+## ATUALIZAÇÃO — 2026-10-16 ~21:55 BRT (ciclo 17: responsividade — 2 bugs reais corrigidos)
+
+### Varredura de 7 breakpoints (390/767/768/992/1366/1600/1920) com probe de
+  overflow/grid/cards — antes e depois:
+
+ANTES:
+- 768: grid 220px (cards 104px!) — sidebar display:none + .col-main display:contents
+  jogava os filhos (toolbar+grid) para a COLUNA 1 (220px) do .columns.layout-2-col.
+- 992: grid 280px (cards 85px!) — mesmo defeito na coluna 1.
+DEPOIS (v21c em @layer awa-visual-priority):
+- 768: grid 480px, cards 234px (2/linha) ✓ | 992: grid 644px, cards 207px (3/linha) ✓
+- overflow=0 em TODOS os breakpoints ✓
+
+### v20: container 1440 em >=1600 (pagina+header+rodape coerentes):
+- 1600/1920: main 1440, grid 1100 (era 940/1280) — #21 da auditoria RESOLVIDO.
+- 390/767/768/992/1366 inalterados ✓
+
+### Regressao DS: rc=0, 0 falhas.
