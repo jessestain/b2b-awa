@@ -1070,3 +1070,12 @@ DEPOIS (v21c em @layer awa-visual-priority):
      e deixar o styles-l com media="print" (carregamento sob demanda).
 ### O gzip real entregue: ~168KB na rede — o custo atual = o parse do CSS no
   first-paint (a meta FCP ja esta OK em 0.5-1.2s).
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:10 BRT (ciclo 38: toolbar — medido, parcial)
+### #29/30 medido: os ESPAÇAMENTOS da toolbar estao TODOS na regra 4-16px (pad 8px,
+  gaps 4-12px, labels 12-13px). O ponto do audit = o sorter e o limiter EMPILHADOS
+  em 3 linhas a >=992 (labels em y=470 vs 525). O v41 (row+nowrap no .toolbar) nao
+  moveu: os controles vivem em wrappers aninhados do Rokanthemes — a unificacao em
+  uma linha exige reestruturacao de template (dominio da anomalia de phtml/ponte).
+### Decisao: manter o v41 (base inofensiva) e deixar a unificacao como backlog
+  documentado — o custo atual = estetica (densidade), nao bug. Regressao verde.
