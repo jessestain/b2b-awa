@@ -892,3 +892,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
 ### v23: (1) paginacao min-height/height 40->44 (correcao do meu v18); (2) SKU
   label/value 11->12px + cor #475569 (contraste 4.5+). Verificado por probe:
   pager 44x44, sku 12px rgb(71,85,105). Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-16 ~23:10 BRT (ciclo 21: runner calibrado + touch <=992)
+### Runner v3 (filtros corrigidos: toque so <=992; imagens so pos-load): 285 -> 215
+  tickets reais. P1 = 35 (25 toque <=992 + 4 CLS + ...).
+### v25: toggles do rodape + links do account-prompt com min-height 44 em <=992
+  (os 16px/32px reais de tablet). Regressao verde.
+### v24 (promo 19px) REVERTIDO: o texto da promo ja corta a 13px na barra de 44px;
+  a correcao de contraste da promo exige decisao de design (opcoes: barra mais alta,
+  vermelho mais escuro para texto, ou texto menor com peso — documentado).
+### CLS pendente: cart 0.1-0.4 (estado-dependente: cart-empty SSR) e pdp@1366 0.154
+  — proximos ciclos com o estado reproduzido.
