@@ -1001,3 +1001,13 @@ DEPOIS (v21c em @layer awa-visual-priority):
   benignos). O padrao do trust-item era o unico caso critico.
 ### RECOMENDACAO: instrumentar RUM (fpc.awamotos/analytics) para o CLS/INP real —
   headless varia por estado; o RUM e o veredito definitivo das metas.
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:00 BRT (ciclo 31: CLS residual atribuido)
+### PDP: header ESTAVEL (161px constante na timeline) — o pico 0.74 de um run =
+  transiente de widget (ai-chat) + scrollbar; o estado estrutural fica ~0.106.
+### CART @1440 (vazio): 2 shifts = a chegada TARDIA do align-grid (~1.46/1.58s):
+  (1) header right-col dh=-23 + account links (0.282); (2) cart-empty dh=-70 +
+  promo text (0.466). O padrao = o mesmo das migracoes anteriores: regras finais
+  do cart/header chegando no async ~1.5s.
+### PROXIMO CICLO: migrar o bloco do cart (cart-empty + header right-col/account)
+  do align-grid para o core bundle (render-blocking) — o padrao slim-migration.
