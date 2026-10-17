@@ -954,3 +954,20 @@ DEPOIS (v21c em @layer awa-visual-priority):
   verde de novo. Limitacao documentada: o parser de contraste e rgb-only (oklch vira
   falso positivo, ex. grid-mode 4.99:1).
 ### Regressao verde em todos os lotes do ciclo.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:15 BRT (ciclo 27: mapa dos loops JS inline)
+
+### ACHADO SISTEMICO (Fase 3): o CSS esta correto (matched-rules confirmam o vencedor),
+  mas ~10 IIFEs de JS reaplicam estilos inline com setProperty(...,"important") em
+  runtime — sao eles que re-pintam o trust-item (oklch) e causavam o CLS do cart.
+  Mapa dos loops: (1) awa-css-gate (injeta o style post-audit com a promo oklch,
+  cadeia de 7 ids); (2) footer-contrast-terminal (pinta links/toggles do rodape);
+  (3) loop do minicart (transparent+stroke vermelho); (4) loop toggle-nav-footer;
+  (5) loop do footer e() (containers/truste/newsletter com dezenas de setProperty);
+  (6) loop da promo mobile. Todos com multiplos setTimeout (700/1500/3s/6s).
+### DECISAO DE ARQUITETURA PENDENTE (dono): consolidar os loops em UM hook pos-CSS
+  (o padrao awa-css-gate-applied ja existe!) e remover os setProperty que duplicam
+  o que o CSS final ja define. Ganhos: CLS residual zero + INP melhor + ~15-20KB de
+  JS. Escopo grande — propor um plano por etapas no proximo ciclo.
+### Trust-item: CSS vencedor = #8e2629 (matched-rules); o computed oklch = o loop
+  (5) reaplicando. Consertar no escopo da consolidacao acima.
