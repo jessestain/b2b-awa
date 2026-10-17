@@ -1108,3 +1108,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   como P1-residual conhecido; a correcao definitiva = editar o shell inline (ponte
   ou o modelo PHP do cascade-lock) — candidato do proximo lote de ponte.
 ### Regressao verde.
+
+## ATUALIZAÇÃO — 2026-10-17 ~01:25 BRT (ciclo 43: account @992 — vencedor preciso)
+### matched-rules: o min-height:32px!important = 3 regras do shell INLINE (o bloco
+  injetado/SSR com o modo default do header) — e uma regra com min-height:0. E a
+  propria regra de DESIGN (o account compacto de 32px no header desktop).
+### DECISAO FINAL: o 992 fica como limite aceito — a regra de toque da campanha e
+  <=767 estrita; a extensao <=992 aplica onde nao conflita com o design do header.
+  Documentado como nao-ticket de design (nao e bug: e o compacto intencional).
