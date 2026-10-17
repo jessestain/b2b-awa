@@ -971,3 +971,12 @@ DEPOIS (v21c em @layer awa-visual-priority):
   JS. Escopo grande — propor um plano por etapas no proximo ciclo.
 ### Trust-item: CSS vencedor = #8e2629 (matched-rules); o computed oklch = o loop
   (5) reaplicando. Consertar no escopo da consolidacao acima.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:25 BRT (ciclo 28: 1o passo da consolidacao dos loops)
+### v33: removido do loop (awa-css-gate.min.js, >=992) o setProperty font-size:10px
+  no .awa-footer-copyright__disclaimer — contradizia o piso DS de 12px (o loop
+  anulava o CSS). VERIFICADO: computed 12px, inline vazio.
+### Padrao estabelecido para a consolidacao: remover do JS os setProperty que
+  duplicam/contradizem o CSS final, um por vez, com probe antes/depois + regressao.
+### Proximo: os demais setProperty contraditorios do mesmo loop (candidatos: os
+  removes/repaints do footer e() e o font-size do promo mobile).
