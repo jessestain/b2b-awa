@@ -807,3 +807,21 @@ ds-b17-20261016-143550 · ds-b18-20261016-144635
 
 ### Tooltip "3014" (#01-03): nao reproduz em 12 hovers do menu — precisa do contexto
   exato da captura (pagina/breakpoint). Pendente.
+
+## ATUALIZAÇÃO — 2026-10-16 ~21:20 BRT (ciclo 15: auditoria Fase 2 — medicao inicial)
+
+### Medido a 1600px:
+- #22 breadcrumb: #475569 em 14px = contraste 7.5:1 — PASSA WCAG AA. Nao reproduz
+  (provável estado antigo da captura). Nao-ticket.
+- #24 contador: o elemento "Ambiente exclusivo para vendas corporativas" = 16px; os
+  spans count (autocomplete) ja estao em 12px+ desde v6/v7. Nao reproduz.
+- #21 grid: confirmado — grid central 940px de 1592 disponiveis (59%), com ~200px de
+  sobra a direita; sidebar = 260px (ok). O wrapper do grid usa classes fora dos
+  seletores esperados (.wrapper.grid dentro de .col-main display:contents) — precisa
+  de um ciclo dedicado para mapear a cadeia real de wrappers + as regras Bootstrap
+  que travam a largura antes de qualquer override.
+- #23 H1 "Mini": 22px/700/rubik — o tamanho e invariante da regressao DS (h1=22px).
+  Mudar exige atualizar o invariante junto — decisao de design, nao aplicar sem ordem.
+
+### Proximo ciclo (Fase 2 continua): mapear a cadeia de wrappers do grid e liberar a
+  largura em >=1600px (meta ~1150px) sem quebrar 390/768/1440; depois densidade (#16/17).
