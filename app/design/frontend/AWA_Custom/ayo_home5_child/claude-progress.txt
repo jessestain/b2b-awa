@@ -1035,3 +1035,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   2 requestIdleCallback (window.__awaIdle com fallback) — os retries nao competem
   mais com as interacoes do usuario (alvo INP). Servido verificado + regressao verde.
 ### Padrao para os demais loops (footer/toggle/promo) no proximo ciclo.
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:40 BRT (ciclo 35: idle em todos os loops)
+### v40: os retries dos 5 loops (footer e() pesado, footer-contrast, toggle-nav,
+  promo mobile, disclaimer) agora usam requestIdleCallback — cada loop mantem 1
+  timeout inicial + retries idle. O e() (dezenas de setProperty) era o maior custo
+  de main-thread nos retries. Regressao verde.
+### Consolidacao JS: etapa de INP concluida no gate. Restam os eventos (o hook
+  awa:css-gate-applied ja centraliza) — inventario final + RUM = proximos.
