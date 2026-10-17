@@ -551,6 +551,13 @@ class OptimizeHeadStylesPlugin
         $html = str_replace(' autocomplete="search"', '', $html);
         /* Nomenclatura unica do SKU (auditoria #39): Cod: -> REF: */
         /* Lighthouse label-content-name-mismatch: o name (title) deve conter o texto visivel */
+        /* Trust-item do rodape: o SSR emite inline oklch da marca (3.66:1) —
+           troca pelo vermelho escuro AA (7.6:1) */
+        $html = str_replace(
+            'style="background:oklch(.525 .155 27.5)!important"',
+            'style="background:#8e2629!important"',
+            $html
+        );
         $html = str_replace(
             'title="Cadastrar&#x20;e-mail&#x20;na&#x20;newsletter"',
             'title="Receber&#x20;novidades:&#x20;cadastrar&#x20;e-mail&#x20;na&#x20;newsletter"',

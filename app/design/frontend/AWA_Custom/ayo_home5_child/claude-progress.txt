@@ -980,3 +980,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   duplicam/contradizem o CSS final, um por vez, com probe antes/depois + regressao.
 ### Proximo: os demais setProperty contraditorios do mesmo loop (candidatos: os
   removes/repaints do footer e() e o font-size do promo mobile).
+
+## ATUALIZAÇÃO — 2026-10-17 ~00:40 BRT (ciclo 29: trust-item AA — causa raiz SSR)
+### CAUSA RAIZ DEFINITIVA do trust-item: o SSR emite style="background:oklch(.525
+  .155 27.5)!important" INLINE (nao era JS!) — inline !important vence o CSS.
+### Ponte no plugin: o inline vira background:#8e2629!important. VERIFICADO no
+  servido (oklch 0, #8e2629 1) + computed. 7.6:1 com texto branco.
+### Licao: antes de culpar os loops JS, checar o SSR (o padrao da anomalia de
+  phtml — inline SSR nao passa pelo CSS). Regressao verde.
