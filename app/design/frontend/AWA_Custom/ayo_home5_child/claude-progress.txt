@@ -1195,3 +1195,13 @@ DEPOIS (v21c em @layer awa-visual-priority):
 ### MONITORAMENTO #3: 190 tickets / P1 11 (baseline 188/9) — os +2 = transientes
   de CLS pos-deploy (pdp@1600 0.255, cart@768 0.473) + os 8 ai-chat 43px
   documentados. Nenhuma categoria nova. Regressao rc=0.
+
+## MONITORAMENTO #2 — 2026-10-18 ~09:30 BRT (dia 2: incidente de reboot + recuperacao)
+### INCIDENTE: o servidor reiniciou (uptime 23h) -> /tmp limpo -> ws + cdp_audit.js
+  + todos os probes PERDIDOS -> regressao quebrou (rc=1, 37 fails "cdp_audit falhou").
+### RECUPERACAO: (1) /tmp/awa-cdp voltou como root -> chown deploy; (2) npm install
+  ws; (3) cdp_audit.js RESTAURADO do backup local do workspace; (4) audit_runner.js
+  re-enviado + recalibrado (load-wait + toque<=767). Regressao: rc=0, 0 fails.
+### LICAO PERMANENTE: /tmp nao sobrevive a reboot — os scripts criticos (cdp_audit,
+  audit_runner) DEVEM viver no repo/workspace (o cdp_audit ja esta no _audit local;
+  considerar mover o runner para o repo tambem).
