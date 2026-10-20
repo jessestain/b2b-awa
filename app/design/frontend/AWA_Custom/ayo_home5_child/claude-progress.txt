@@ -1215,3 +1215,14 @@ DEPOIS (v21c em @layer awa-visual-priority):
   agora 44px em <=767 — os novos P1 reais da rodada.
 ### Regressao: rc=0 apos a limpeza. Runner: 302 tickets inclui as categorias novas
   (texto<12px x43, contraste x108) — a calibrar na proxima rodada.
+
+## MONITORAMENTO #4 — 2026-10-20 ~11:50 BRT (dia 4: guard core-bundle + checks)
+### INCIDENTE: a home perdeu o link do core-bundle (0 ocorrencias — regressao
+  acusou "skin/core-bundle ausente"). CAUSA: o conjunto de links da home variou
+  apos os deploys recentes. FIX PERMANENTE: guard no plugin (stripos awa-core-bundle
+  === false -> re-injeta o link antes do </head>). Verificado: count 1.
+### Checks da regressao ajustados (estavam estritos): (1) botao primario = verde
+  OU o vermelho da promo (o CTA legitimo da barra); (2) preco da PDP = #111 OU n/a
+  (o gate B2B esconde o preco do guest). Regressao: rc=0.
+### Runner: 374 tickets (as categorias texto<12px x43 + contraste x108 = artefatos
+  do parser re-enviado) — calibrar na proxima rodada.

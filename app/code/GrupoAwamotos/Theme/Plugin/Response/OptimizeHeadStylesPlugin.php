@@ -145,6 +145,21 @@ class OptimizeHeadStylesPlugin
         $html = $this->stripRedundantAsyncNoscript($html);
         $html = $this->normalizeCssStaggerOnloadHandlers($html, $fullAction === self::HOME_ACTION);
         $html = $this->appendVisualFixesCacheBuster($html);
+        $html = preg_replace(
+            '~(awa-(?:header-refine-20261019|b2b-auth-shell-final)(?:\.min)?\.css)(?:\?[^"\'<>\s]*)?~',
+            '$1?v=20261020-visual-components-r1',
+            $html
+        ) ?? $html;
+        $html = preg_replace(
+            '~(awa-header-refine-20261019(?:\.min)?\.css)(?:\?[^"\'<>\s]*)?~',
+            '$1?v=20261020-drawer-stack-r1',
+            $html
+        ) ?? $html;
+        $html = preg_replace(
+            '~(awa-home-cards-carousels-20261018-tbarrows-f22(?:\.min)?\.css)(?:\?[^"\'<>\s]*)?~',
+            '$1?v=20261020-home-spacing-r1',
+            $html
+        ) ?? $html;
         $html = $this->appendDesignSystemCacheBuster($html);
         $html = $this->appendPlpShellCacheBuster($html);
         $html = $this->appendAiAssistantCacheBuster($html);
@@ -532,6 +547,10 @@ class OptimizeHeadStylesPlugin
         if ($fullAction === self::HOME_ACTION) {
             $html = $this->stripHomeAwaInlineStyleTags($html);
             $html = $this->stripHomeCssGate($html);
+            /* Crítico do header B2B: as folhas do painel voltam ao HTML (ver
+               stripHomeHeavyParentStylesheets) e a geometria entra inline para o
+               1º paint não exibir o dropdown oculto no fluxo (HEADER-B2B-CSS-HOME-20261019). */
+            $html = $this->injectHomeB2bPanelCriticalStyles($html);
         }
 
 
@@ -569,7 +588,14 @@ class OptimizeHeadStylesPlugin
             $html
         );
 
-        $subject->setBody($html);
+/*AWA-GUARD-CORE-BUNDLE*/        /* Guard: se o core-bundle sumir dos links (regressao detectou), re-injeta */
+        if (stripos($html, 'awa-core-bundle') === false) {
+            $html = str_replace(
+                '</head>',
+                '<link rel="stylesheet" href="https://awamotos.com/static/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-core-bundle.min.css">' . "</head>",
+                $html
+            );
+        }        $subject->setBody($html);
     }
 
     
@@ -1019,7 +1045,7 @@ class OptimizeHeadStylesPlugin
             return $html;
         }
 
-        $query = '20260815-hygiene-r1';
+        $query = '20261020-nav-desktop-r2';
 
         return preg_replace_callback(
             '/<script\s[^>]*src=["\']([^"\']*' . preg_quote($needle, '/') . ')(\?[^"\']*)?["\'][^>]*><\/script>/i',
@@ -2835,7 +2861,7 @@ class OptimizeHeadStylesPlugin
         }
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -4068,7 +4094,7 @@ $css = '<style id="awa-align-grid-inline-lock-20260626-phase3d22b">'
             . 'var owned="data-awa-hidden-focus-sync",storedTab="data-awa-prev-tabindex",storedAria="data-awa-prev-aria-hidden";'
             . 'function isHidden(el){if(!el||!el.isConnected){return true;}'
             . 'if(el.hidden||el.closest("[hidden]")){return true;}'
-            . 'var cs=getComputedStyle(el),r=el.getBoundingClientRect();'
+            . 'var cs=getComputedStyle(el);if(cs.display==="none"||cs.visibility==="hidden"){return true;}var r=el.getBoundingClientRect();'
             . 'return cs.display==="none"||cs.visibility==="hidden"||r.width===0||r.height===0;}'
             . 'function remember(el){if(!el.hasAttribute(storedTab)){el.setAttribute(storedTab,el.hasAttribute("tabindex")?el.getAttribute("tabindex"):"");}'
             . 'if(!el.hasAttribute(storedAria)){el.setAttribute(storedAria,el.hasAttribute("aria-hidden")?el.getAttribute("aria-hidden"):"");}}'
@@ -4084,7 +4110,7 @@ $css = '<style id="awa-align-grid-inline-lock-20260626-phase3d22b">'
             . 'function sync(){var root=document.querySelector(".awa-site-header");if(!root){return;}'
             . 'if(headerObserver){headerObserver.disconnect();}'
             . 'var nodes=root.querySelectorAll(".action.nav-toggle,.awa-header-mobile-toggle,.awa-header-cart-link,.awa-header-cart-fallback,.awa-minicart-continue,.header-control.header-nav,.header-control.header-nav a,.header-control.header-nav button,.awa-nav-quick-links__link,.title-category-dropdown,.awa-header-account-prompt__icon,.awa-header-account-prompt__link,.awa-top-link-anchor,.header.links a,.top-header a[href]");'
-            . 'nodes.forEach(function(el){if(isHidden(el)){hide(el);}else{restore(el);}});'
+            . 'var hiddenStates=[];nodes.forEach(function(el){hiddenStates.push(isHidden(el));});nodes.forEach(function(el,index){if(hiddenStates[index]){hide(el);}else{restore(el);}});'
             . 'if(headerObserver){headerObserver.observe(root,headerObserverOptions);}}'
             . 'function soon(){requestAnimationFrame(sync);setTimeout(sync,250);setTimeout(sync,1200);}'
             . 'var mutationSyncQueued=false;'
@@ -5976,7 +6002,16 @@ CSS;
             . 'if(window.requestAnimationFrame){requestAnimationFrame(c);}'
             . '}catch(e){}})();</script>';
 
-        $payload = $css . ($js !== '' ? "\n" . $js : '') . "\n" . $footerHeadingJs;
+                /* VS5b (ciclo 2, item A): terminal JS vira <script src> cacheavel quando a
+           base estatica versionada e conhecida (fallback = inline atual). */
+        if ($js !== '' && str_starts_with($js, '<script id="awa-touch-44-terminal-js">')) {
+            $staticBase = $this->staticBaseOrNull($html);
+            if ($staticBase !== null) {
+                $js = '<script src="' . $staticBase . 'js/awa-touch-44-terminal-js.js?v=20261018-vs5b"'
+                    . ' id="awa-touch-44-terminal-js"></script>';
+            }
+        }
+$payload = $css . ($js !== '' ? "\n" . $js : '') . "\n" . $footerHeadingJs;
         $injected = preg_replace('/<\/body>/i', $payload . "\n</body>", $html, 1);
 
         return is_string($injected) ? $injected : $html;
@@ -6285,6 +6320,7 @@ CSS;
          * align-grid terminal fica em media=print (css-gate) — tokens 24 do arquivo
          * NÃO aplicam na tela; este lock no <head> é a fonte de verdade do eixo. */
         $gutterLock = '<style id="awa-pixel-qa-catalog-hdr-gutter-16">'
+            . HeaderImpeccableCascadeLockCss::catalogGridDensityRules()
             /* Layer awa-pixel-qa ANTES de awa-fixes: !important da layer anterior vence o
              * align-grid (mesma layer / ordem tardia na home media=all). */
             . '@layer awa-pixel-qa,awa-fixes;'
@@ -7125,7 +7161,18 @@ CSS;
             . 'window.addEventListener("resize",scheduleA,{passive:true});'
             . 'window.addEventListener("load",scheduleA,{once:true,passive:true});'
             . 'window.setTimeout(scheduleA,900);window.setTimeout(scheduleA,2500);})();</script>';
-        $withTerminal = preg_replace('/<\/body>/i', $homeTerminal . "\n</body>", $injected, 1);
+                /* VS5c (ciclo 2, item A): script pixel-qa vira <script src> cacheavel (in-place,
+           sem defer; fallback inline). */
+        $staticBase = $this->staticBaseOrNull($html);
+        if ($staticBase !== null) {
+            $homeTerminal = preg_replace(
+                '/<script[^>]*\bid="awa-pixel-qa-home-gutter-24"[^>]*>.*?<\/script>\s*/is',
+                '<script src="' . $staticBase . 'js/awa-pixel-qa-home-gutter-24.js?v=20261018-vs5c" id="awa-pixel-qa-home-gutter-24"></script>',
+                $homeTerminal,
+                1
+            ) ?? $homeTerminal;
+        }
+$withTerminal = preg_replace('/<\/body>/i', $homeTerminal . "\n</body>", $injected, 1);
         $htmlOut = is_string($withTerminal) ? $withTerminal : (is_string($injected) ? $injected : $html);
 
         /* PIXEL-QA: neutraliza dense-inline do footer (phtml/boot) que força padding 2px 16px. */
@@ -7284,7 +7331,7 @@ CSS;
         $html = preg_replace('/<link\s[^>]*awa-m2-visual-ssot[^>]*\/?>\s*/i', '', $html) ?? $html;
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7374,7 +7421,7 @@ CSS;
         }
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7674,10 +7721,26 @@ CSS;
      * Header locks permanecem media=all (anti-FOUC). Polish/bugfix abaixo da dobra
      * usam media=print onload (GTmetrix 2026-07-23 — reduzir CSS sync no critical path).
      */
+    /**
+     * VS5b: base estatica versionada da storefront (para converter terminais
+     * inline em <script src>/<link> cacheaveis). null quando nao disponivel.
+     */
+    private function staticBaseOrNull(string $html): ?string
+    {
+        if (preg_match(
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $m
+        )) {
+            return '/static/' . $m[1] . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/';
+        }
+
+        return null;
+    }
     private function convertHomeHeavyTerminalsToExternal(string $html): string
     {
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7825,7 +7888,7 @@ CSS;
         }
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7894,7 +7957,7 @@ CSS;
     private function injectHomeAlignGridStylesheetsIfMissing(string $html): string
     {
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7934,7 +7997,7 @@ CSS;
         }
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -7998,8 +8061,9 @@ CSS;
             'awa-third-party-bundle',
             'awa-home-deferred-stack',
             'awa-commerce-impeccable-refine',
-            'awa-b2b-status-panel',
-            'css/header/status-panel',
+            /* B2B status panel NÃO entra no strip: na home ele é hidratado por JS
+               (conta logada) e, sem estas folhas, o dropdown abre visível/desalinhado
+               no header. Defeito HEADER-B2B-CSS-HOME-20261019 (evidência 19/10/2026). */
         ]);
 
         $urls = $this->extractGateQueueUrls($html);
@@ -8018,8 +8082,6 @@ CSS;
                 || str_contains($url, 'awa-third-party-bundle')
                 || str_contains($url, 'awa-home-deferred-stack')
                 || str_contains($url, 'awa-commerce-impeccable-refine')
-                || str_contains($url, 'awa-b2b-status-panel')
-                || str_contains($url, 'css/header/status-panel')
             ) {
                 $changed = true;
                 continue;
@@ -8028,6 +8090,54 @@ CSS;
         }
 
         return $changed ? $this->replaceCssGateQueue($html, $filtered) : $html;
+    }
+
+    /**
+     * Home — crítico inline do painel B2B (header de conta logada).
+     *
+     * O painel é hidratado por JS nas páginas FPC (home) e o CSS completo do componente
+     * carrega assíncrono (2 folhas print→all). Sem geometria no 1º paint, o dropdown —
+     * que nasce com aria-hidden — aparece no fluxo do header e o texto do trigger quebra
+     * em 3 linhas (defeito HEADER-B2B-CSS-HOME-20261019).
+     * Regras espelham awa-critical-fold*.css (F24) + terminal de awa-b2b-status-panel.css.
+     * Roda DEPOIS de stripHomeAwaInlineStyleTags, por isso o id NÃO começa com "awa-".
+     */
+    private function injectHomeB2bPanelCriticalStyles(string $html): string
+    {
+        if (str_contains($html, 'id="b2b-panel-critical-home"')) {
+            return $html;
+        }
+
+        $style = <<<'CSS'
+<style id="b2b-panel-critical-home">
+html body#html-body .page-wrapper .b2b-status-panel{position:relative!important;display:flex!important;align-items:center!important;min-width:0!important;max-width:100%!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger{display:inline-flex!important;align-items:center!important;gap:16px!important;padding:0!important;border:0!important;background:transparent!important;background-image:none!important;box-shadow:none!important;transform:none!important;min-height:44px!important;height:44px!important;box-sizing:border-box!important;max-width:min(360px,40vw)!important;color:inherit!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__icon{display:inline-flex!important;flex:0 0 auto!important}
+html body#html-body .page-wrapper .b2b-status-panel .awa-b2b-panel-icon{display:block!important;width:16px!important;height:16px!important;max-width:16px!important;max-height:16px!important;flex-shrink:0!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__icon .awa-b2b-panel-icon--user{width:32px!important;height:32px!important;max-width:32px!important;max-height:32px!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__text{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;min-width:0!important;overflow:hidden!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__line1{display:block!important;max-width:100%!important;font-size:13px!important;font-weight:400!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__line2{display:block!important;max-width:100%!important;font-size:14px!important;font-weight:700!important;line-height:1.2!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__chevron{display:inline-flex!important;align-items:center!important;flex:0 0 auto!important;margin-left:2px!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-dropdown{position:absolute!important;top:calc(100% + 8px)!important;right:0!important;left:auto!important;width:min(420px,calc(100vw - 24px))!important;max-height:min(72vh,520px)!important;overflow-x:hidden!important;overflow-y:auto!important;border:1px solid var(--awa-border,#e5e7eb)!important;border-radius:var(--awa-radius-lg,12px)!important;background:#fff!important;box-shadow:0 10px 40px rgb(0 0 0 / 15%)!important;z-index:100300!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-dropdown[aria-hidden="true"],html body#html-body .page-wrapper .awa-account-dropdown__menu[aria-hidden="true"]{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+html body#html-body .page-wrapper .awa-header-right-col:has(.b2b-status-panel){gap:12px!important;align-items:center!important}
+html body#html-body .page-wrapper .awa-header-right-col:has(.b2b-status-panel)>:is(.awa-header-account-prompt,.awa-header-contact-links){display:none!important;visibility:hidden!important;pointer-events:none!important;width:0!important;min-width:0!important;max-width:0!important;margin:0!important;padding:0!important;overflow:hidden!important;opacity:0!important}
+@media (max-width:767px){
+html body#html-body .page-wrapper .b2b-status-panel{min-width:0!important;max-width:min(88px,24vw)!important;overflow:hidden!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger{gap:4px!important;max-width:100%!important;padding:4px 6px!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__text{flex:1 1 auto!important;min-width:0!important;max-width:7ch!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__line1{max-width:7ch!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__line2{display:none!important}
+html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__chevron{display:none!important}
+html body#html-body .page-wrapper .b2b-status-panel .awa-b2b-panel-icon--user{width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important}
+}
+</style>
+CSS;
+
+        $injected = preg_replace('/<\/head>/i', $style . "\n</head>", $html, 1);
+
+        return is_string($injected) ? $injected : $html;
     }
 
     private function stripStylesheetFragments(string $html, array $fragments): string
@@ -8086,7 +8196,7 @@ CSS;
             return $html;
         }
 
-        if (!preg_match('#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#', $html, $versionMatch)) {
+        if (!preg_match('#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#', $html, $versionMatch)) {
             return $html;
         }
 
@@ -8901,7 +9011,7 @@ HTML;
         }
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
@@ -9187,7 +9297,7 @@ HTML;
         $html = preg_replace('/<link\s[^>]*awa-header-contract-grid-20260626[^>]*\/?>\s*/i', '', $html) ?? $html;
 
         if (!preg_match(
-            '#/static/(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
             $html,
             $versionMatch
         )
