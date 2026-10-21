@@ -1226,3 +1226,11 @@ DEPOIS (v21c em @layer awa-visual-priority):
   (o gate B2B esconde o preco do guest). Regressao: rc=0.
 ### Runner: 374 tickets (as categorias texto<12px x43 + contraste x108 = artefatos
   do parser re-enviado) — calibrar na proxima rodada.
+
+## MONITORAMENTO #5 — 2026-10-21 ~09:45 BRT (dia 5: persistencia definitiva)
+### INCIDENTE RECORRENTE: o /tmp foi limpo de novo (o ws + os scripts sumiram —
+  "Cannot find module ws"). FIX DEFINITIVO: o ambiente CDP agora vive no HOME
+  persistente (/home/deploy/awa-cdp: ws + cdp_audit.js + audit_runner.js) com
+  symlinks /tmp/awa-cdp -> home, /tmp/cdp_audit.js e /tmp/audit_runner.js.
+### PRE-STEP DO MONITORAMENTO ATUALIZADO: recriar os symlinks apos cada reboot
+  (o /tmp nao sobrevive). Regressao: rc=0.
