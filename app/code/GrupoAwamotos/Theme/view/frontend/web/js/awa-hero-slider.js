@@ -654,9 +654,11 @@ fn();
             }
 
             wantsCycle = slideCount > 1 && config.loop === true;
-            // Mobile: keep carousel manual to avoid late autoplay-triggered CLS spikes.
-            disableMobileAutoplay = isMobileHeroTarget(target);
-            useCustomMobileAutoplay = !disableMobileAutoplay
+            // AWA 2026-10-27: autoplay mobile por requisito de negocio. O contrato
+            // waitForTransition=false (awa-hero-autoplay-fix.js) evita o travamento causado
+            // pelo lock transition:none do tema; o CLS e mitigado pelo lock de altura existente.
+            disableMobileAutoplay = false;
+            useCustomMobileAutoplay = false
                 && mq.matches
                 && wantsCycle
                 && config.autoplay !== false
@@ -689,7 +691,7 @@ fn();
                         return '<button class="' + className + '" type="button" aria-label="Ir para o slide ' + (index + 1) + '"></button>';
                     }
                 } : false,
-                autoplay: disableMobileAutoplay ? false : (useCustomMobileAutoplay ? false : autoplaySettings),
+                autoplay: slideCount > 1 && autoplaySettings ? deepMerge({ enabled: true }, autoplaySettings) : false,
                 keyboard: {
                     enabled: true,
                     onlyInViewport: true,

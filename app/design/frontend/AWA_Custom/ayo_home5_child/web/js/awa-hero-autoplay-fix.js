@@ -88,23 +88,19 @@
         if (!el || !el.swiper) { return false; }
         estado.el = el;
 
-        /* Mobile: carrossel MANUAL por desenho (awa-hero-slider.js:640 —
-         * "keep carousel manual to avoid late autoplay-triggered CLS spikes").
-         * Nao ligar autoplay aqui. */
+        /* AWA 2026-10-27: autoplay mobile reativado por requisito de negocio.
+         * Aplica o MESMO contrato do desktop (waitForTransition=false por causa do
+         * lock transition:none do tema) e continua respeitando prefers-reduced-motion
+         * (aplicarSwiper para o autoplay nesse caso). */
         if (el.closest('.wrapper_slider.visible-xs')) {
-            /* FIX 12/10/2026 (LCP): o ramo mobile RETORNAVA assumindo "manual por desenho",
-             * mas o swiper tem autoplay LIGADO na config (medido: running=true, delay=3000)
-             * => o hero do mobile AVANCAVA a cada 3s e cada avanco atualizava o LCP (9,84s!).
-             * O comentario do tema e explicito: "keep carousel manual to avoid late
-             * autoplay-triggered CLS spikes". Aqui se PARA o autoplay de fato. */
             var swm = el.swiper;
-            if (swm && swm.autoplay) {
-                try {
-                    swm.autoplay.stop();
-                    if (swm.params && swm.params.autoplay) { swm.params.autoplay.enabled = false; }
-                } catch (e) { /* se falhar, o comportamento e o de antes */ }
+            if (!swm) { return true; }
+            if (!swm.params || !swm.params.autoplay || swm.params.autoplay === false) {
+                w.__awaHeroAutoplayFix = 'autoplay-desligado-na-config';
+                return true;
             }
-            w.__awaHeroAutoplayFix = 'mobile-manual-por-desenho-autoplay-parado';
+            if (!aplicarSwiper(swm)) { return false; }
+            w.__awaHeroAutoplayFix = 'aplicado';
             return true;
         }
 
