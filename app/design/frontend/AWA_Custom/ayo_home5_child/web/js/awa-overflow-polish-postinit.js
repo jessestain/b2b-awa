@@ -145,8 +145,8 @@
             setImportant(inner, 'max-width', hidden ? '0px' : '1280px');
             setImportant(inner, 'margin-left', 'auto');
             setImportant(inner, 'margin-right', 'auto');
-            setImportant(inner, 'padding', hidden ? '0' : '0 52px 0 24px');
-            setImportant(inner, 'padding-left', hidden ? '0' : '24px');
+            setImportant(inner, 'padding', hidden ? '0' : '0 52px');
+            setImportant(inner, 'padding-left', hidden ? '0' : '52px');
             setImportant(inner, 'padding-right', hidden ? '0' : '52px');
         }
         if (text) {
