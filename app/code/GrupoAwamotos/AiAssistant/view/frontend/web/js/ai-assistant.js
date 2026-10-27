@@ -132,9 +132,16 @@ define([
 
         toggleChat: function () {
             var willOpen = !this.isOpen();
+            if (willOpen) {
+                this._awaReturnFocus = document.activeElement;
+            }
             this.isOpen(willOpen);
 
             if (willOpen) {
+                /* B3: abrir a conversa consome a pendência do coach. */
+                if (typeof this.coachUnread === 'function') {
+                    this.coachUnread(false);
+                }
                 this._scrollToBottom();
                 var el = document.getElementById('awa-ai-chat-input');
                 if (el) {
@@ -143,9 +150,13 @@ define([
                 return;
             }
 
-            var toggle = document.querySelector('#awa-ai-chat-root .awa-ai-chat__toggle');
+            var toggle = this._awaReturnFocus;
+            if (!toggle || !toggle.isConnected || typeof toggle.focus !== 'function') {
+                toggle = document.querySelector('#awa-ai-chat-root .awa-ai-chat__toggle');
+            }
+            this._awaReturnFocus = null;
             if (toggle) {
-                requestAnimationFrame(function () { toggle.focus(); });
+                requestAnimationFrame(function () { toggle.focus({preventScroll: true}); });
             }
         },
 
@@ -330,6 +341,12 @@ define([
                     var msg = 'Não foi possível conectar ao assistente. Tente novamente.';
                     if (xhr && xhr.status === 403) {
                         msg = 'Sessão expirada. Recarregue a página e tente de novo.';
+                    } else if (xhr && xhr.status === 429) {
+                        /* Rate limit do Nginx (/aiassistant/). Sem este ramo a
+                         * mensagem genérica "Tente novamente" incentivaria o
+                         * reenvio imediato, agravando a rajada. */
+                        msg = (xhr.responseJSON && xhr.responseJSON.error) ||
+                            'Muitas mensagens em pouco tempo. Aguarde alguns segundos e tente de novo.';
                     }
                     onDone(msg, xhr && xhr.responseJSON ? xhr.responseJSON : null);
                 }

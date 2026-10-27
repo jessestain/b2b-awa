@@ -10,18 +10,8 @@
         </job>
 
         <!-- Health Check: every 5 minutes -->
-        <job name="whatsapp_commerce_health_check"
-             instance="GrupoAwamotos\WhatsAppCommerce\Cron\HealthCheck"
-             method="execute">
-            <schedule>*/5 * * * *</schedule>
-        </job>
 
         <!-- Phase 6: Review Request — daily at 10:00 AM -->
-        <job name="whatsapp_commerce_review_request"
-             instance="GrupoAwamotos\WhatsAppCommerce\Cron\ReviewRequest"
-             method="execute">
-            <schedule>0 10 * * *</schedule>
-        </job>
 
         <!-- Phase 6: Meta Description Generator — weekly Sunday at 3:00 AM -->
         <job name="whatsapp_commerce_meta_generator"
@@ -31,11 +21,6 @@
         </job>
 
         <!-- Phase 6: Retargeting Campaign — daily at 11:00 AM -->
-        <job name="whatsapp_commerce_retargeting"
-             instance="GrupoAwamotos\WhatsAppCommerce\Cron\RetargetingCampaign"
-             method="execute">
-            <schedule>0 11 * * *</schedule>
-        </job>
 
     </group>
 </config>

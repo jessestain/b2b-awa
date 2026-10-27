@@ -6,6 +6,8 @@ namespace GrupoAwamotos\AiAssistant\Controller\Adminhtml\Copilot;
 
 use GrupoAwamotos\AiAssistant\Api\AssistantOrchestratorInterface;
 use GrupoAwamotos\AiAssistant\Helper\Config;
+use GrupoAwamotos\B2B\CommercialPanel\Model\PortfolioScope;
+use GrupoAwamotos\B2B\Helper\CurrentAttendant;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -27,7 +29,9 @@ class Chat extends Action
         private readonly Json                           $jsonSerializer,
         private readonly Config                         $config,
         private readonly AssistantOrchestratorInterface $orchestrator,
-        private readonly LoggerInterface                $logger
+        private readonly LoggerInterface                $logger,
+        private readonly CurrentAttendant               $currentAttendant,
+        private readonly PortfolioScope                 $portfolioScope
     ) {
         parent::__construct($context);
     }
@@ -56,9 +60,18 @@ class Chat extends Action
         $adminUser = $this->_auth->getUser();
         $sessionId = hash('sha256', (string) $adminUser->getId() . '_admin_copilot');
 
+        /* Escopo por carteira: mesmas regras do cockpit comercial
+         * (GrupoAwamotos_B2B::commercial_all_portfolios etc.). Vendedora vê
+         * só a própria carteira; Supervisora e Administrators, tudo. */
+        $role      = $adminUser->getRole();
+        $attendant = $this->currentAttendant->get();
         $context = [
-            'admin_user_id' => (int) $adminUser->getId(),
-            'is_admin'      => true,
+            'admin_user_id'        => (int) $adminUser->getId(),
+            'is_admin'             => true,
+            'admin_role'           => $role ? (string) $role->getRoleName() : '',
+            'attendant_id'         => isset($attendant['attendant_id']) ? (int) $attendant['attendant_id'] : null,
+            'attendant_name'       => isset($attendant['name']) ? (string) $attendant['name'] : null,
+            'portfolio_restricted' => !$this->portfolioScope->canBypassPortfolioScope(),
         ];
 
         try {

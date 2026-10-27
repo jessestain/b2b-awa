@@ -109,6 +109,7 @@
         <column name="b2b_receita_situacao">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Status Receita</label>
             </settings>
         </column>
@@ -126,6 +127,7 @@
         <column name="b2b_registration_campaign">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Origem CNAME / Campanha</label>
             </settings>
         </column>
@@ -133,6 +135,7 @@
         <column name="b2b_origin_host">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Origem Host</label>
             </settings>
         </column>
@@ -140,6 +143,7 @@
         <column name="b2b_utm_source">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">UTM Source</label>
             </settings>
         </column>
@@ -147,6 +151,7 @@
         <column name="b2b_utm_medium">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">UTM Medium</label>
             </settings>
         </column>
@@ -154,6 +159,7 @@
         <column name="b2b_utm_campaign">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">UTM Campaign</label>
             </settings>
         </column>
@@ -174,6 +180,7 @@
         <column name="b2b_cnae_profile">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Perfil CNAE</label>
             </settings>
         </column>
@@ -211,6 +218,7 @@
         <column name="erp_block_reason">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Motivo do Bloqueio</label>
             </settings>
         </column>

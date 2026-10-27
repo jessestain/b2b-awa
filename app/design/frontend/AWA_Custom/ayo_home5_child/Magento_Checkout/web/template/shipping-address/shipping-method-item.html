@@ -12,7 +12,13 @@
     </td>
     <!-- ko ifnot: (method.error_message) -->
     <td class="col col-price awa-shipping-rate-row__price">
+        <!-- ko if: (method.method_title || '').toLowerCase().indexOf('combinar') !== -1 -->
+        <!-- Missão estabilização 2026-10-22: "Frete a combinar" exibe "A combinar" (preço 0 por design). -->
+        <span class="price" data-bind="i18n: 'A combinar'"></span>
+        <!-- /ko -->
+        <!-- ko ifnot: (method.method_title || '').toLowerCase().indexOf('combinar') !== -1 -->
         <each args="element.getRegion('price')" render=""></each>
+        <!-- /ko -->
     </td>
     <!-- /ko -->
     <td class="col col-method awa-shipping-rate-row__title"

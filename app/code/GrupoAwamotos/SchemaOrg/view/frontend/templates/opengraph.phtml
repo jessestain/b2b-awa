@@ -55,11 +55,18 @@ if ($product && $product->getId()) {
 
 <?php if ($product && $product->getId()): ?>
 <!-- Open Graph Product -->
-<?php $ogFinalPrice = (float) $product->getFinalPrice(); ?>
-<?php if ($ogFinalPrice > 0): ?>
-<meta property="product:price:amount" content="<?= number_format($ogFinalPrice, 2, '.', '') ?>" />
-<meta property="product:price:currency" content="BRL" />
-<?php endif; ?>
+<?php /*
+    ACHADO SEO-001 — bloco de preço REMOVIDO daqui de propósito.
+
+    Este template lia $product->getFinalPrice() direto e publicava product:price:amount no
+    HTML do visitante anônimo. O OG canônico do site é o bloco awa.og.meta
+    (Magento_Theme::html/awa-og-meta-phtml), que é gated por
+    GrupoAwamotos\B2B\ViewModel\PdpGate.
+
+    NÃO reintroduzir product:price:* aqui sem o mesmo gate. Aplicar o gate neste ViewModel
+    exigiria <sequence> de GrupoAwamotos_B2B no módulo SchemaOrg, o que criaria dependência
+    circular (B2B -> SchemaOrg já existe).
+*/ ?>
 <?php if ($product->isAvailable()): ?>
 <meta property="product:availability" content="in stock" />
 <?php endif; ?>

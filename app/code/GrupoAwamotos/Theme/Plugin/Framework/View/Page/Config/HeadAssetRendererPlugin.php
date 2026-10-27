@@ -51,7 +51,11 @@ class HeadAssetRendererPlugin
      */
     private const BLOCKING_CSS_TO_ASYNC = [
         'GrupoAwamotos_AiAssistant/css/ai-assistant',
-        'css/awa-visual-fixes-2026-06-29-final',
+        // 11/10/2026 (task-76): awa-visual-fixes-2026-06-29-final REMOVIDA desta lista.
+        // Ela define a geometria do 1o paint no MOBILE (lista -102px, gate -6,6) e, sendo async,
+        // chegava ~2,4s DEPOIS do FCP => shift de 0,0575 medido no celular (PLP/busca).
+        // Comprovado pelo discriminador data-awa-async (o plugin marca o que converte).
+        // Backup: _backups/cls-mobile-async-20261011T155837Z/
     ];
 
     /**

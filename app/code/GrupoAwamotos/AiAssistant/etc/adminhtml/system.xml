@@ -15,6 +15,12 @@
             <group id="general" translate="label" type="text" sortOrder="10"
                    showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Configurações Gerais do LLM</label>
+                <field id="provider" translate="label comment" type="select" sortOrder="5"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Provedor do LLM</label>
+                    <comment>DeepSeek direto usa a chave do grupo DeepSeek; se falhar, a mesma requisição cai no OpenRouter.</comment>
+                    <source_model>GrupoAwamotos\AiAssistant\Model\Config\Source\LlmProvider</source_model>
+                </field>
                 <field id="enabled" translate="label comment" type="select" sortOrder="10"
                        showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Habilitar Assistente de IA</label>
@@ -90,6 +96,27 @@
                 </field>
             </group>
 
+            <group id="deepseek" translate="label comment" type="text" sortOrder="17"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>DeepSeek (API direta)</label>
+                <comment>Usado quando "Provedor do LLM" = DeepSeek. Atenção LGPD: o texto das conversas (já sem CPF/CNPJ/telefone/e-mail) é processado por servidores da DeepSeek fora do Brasil.</comment>
+                <field id="api_key" translate="label" type="obscure" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>DeepSeek API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="model" translate="label comment" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Modelo</label>
+                    <comment>deepseek-chat (com tools). Não use deepseek-reasoner: não chama ferramentas.</comment>
+                </field>
+                <field id="timeout_seconds" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Timeout (segundos)</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
+
             <group id="storefront" translate="label" type="text" sortOrder="20"
                    showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Widget de Chat no Site</label>
@@ -122,6 +149,21 @@
                     <label>Máximo de Mensagens por Hora (por IP)</label>
                     <comment>Proteção de custo. Clientes que excederem recebem mensagem de pausa e link para o LiveChat.</comment>
                     <validate>validate-digits validate-greater-than-zero</validate>
+                    <depends>
+                        <field id="ai_assistant/general/enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+
+            <group id="b2b" translate="label comment" type="text" sortOrder="22"
+                   showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Preços B2B</label>
+                <comment>Preço exibido pelo assistente para clientes B2B logados.</comment>
+                <field id="use_erp_price" translate="label comment" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Usar preço da tabela ERP (Sectra)</label>
+                    <comment>Sim: o assistente mostra o preço da lista própria do cliente (mesma fonte da vitrine); quando não há preço próprio, mantém o preço do catálogo (tabela NACIONAL sincronizada do Sectra). Não: usa sempre o preço de catálogo.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="ai_assistant/general/enabled">1</field>
                     </depends>

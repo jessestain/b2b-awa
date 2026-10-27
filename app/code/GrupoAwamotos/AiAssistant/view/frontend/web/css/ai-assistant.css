@@ -26,6 +26,20 @@
     height:   56px;
 }
 
+/* ── Convivência com o card de cookies ───────────────────────────
+   O FAB era o único flutuante que NÃO era empurrado pelo consentimento
+   (o cascade lock já trata .awa-whatsapp-float e #awa-back-to-top), então
+   ficava por cima dele — z-index 100200 > 99999.
+
+   --awa-cookie-banner-top-gap é MEDIDO por cookie-consent.js: distância do
+   rodapé da viewport até a borda superior do card, + 12px de folga. Só é
+   exposto (>0) abaixo de 640px, onde o card ocupa quase toda a largura; no
+   desktop o card é estreito e à esquerda, o valor é 0 e o max() devolve a
+   posição normal do FAB. */
+body.awa-cookie-banner-active #awa-ai-chat-root {
+    bottom: max(24px, var(--awa-cookie-banner-top-gap, 0px));
+}
+
 /* ── Bubble de abertura ───────────────────────────────────────────
    !important pontual: themes/Magento button defaults (padding 8×16,
    min-height 44px, inline-flex) derrubam o FAB 56×56 sem isso. */
@@ -44,11 +58,14 @@
     margin:          0 !important;
     line-height:     1 !important;
     border-radius:   var(--awa-radius-full, 9999px) !important;
-    border:          none !important;
-    background:      var(--awa-primary, var(--awa-red, #b73337)) !important;
+    /* Anel branco de 3px: o FAB passou a ser o avatar (círculo da marca),
+       e o anel o destaca sobre qualquer fundo, como nos chats de referência. */
+    border:          3px solid var(--awa-surface, #fff) !important;
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand))) !important;
     color:           var(--awa-text-inverse, #fff) !important;
     cursor:          pointer;
-    box-shadow:      var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%));
+    overflow:        hidden;
+    box-shadow:      var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 18%));
     transition:      transform 0.2s ease, box-shadow 0.2s ease;
     position:        relative;
     z-index:         1;
@@ -60,33 +77,78 @@
     box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
 }
 #awa-ai-chat-root .awa-ai-chat__toggle:focus-visible {
-    outline:        3px solid var(--awa-primary, #b73337);
+    outline:        3px solid var(--awa-primary, var(--awa-brand));
     outline-offset: 3px;
 }
 
+/* ── Teaser do estado fechado (balão ao lado do avatar) ──────────
+   Substitui o pill "ASSISTENTE". Clicável: abre o chat.
+   !important pelo mesmo motivo do FAB: defaults de button do tema. */
 #awa-ai-chat-root .awa-ai-chat__toggle-label {
-    position:        absolute;
-    bottom:          calc(100% + 8px);
-    left:            50%;
-    transform:       translateX(-50%);
-    display:         inline-flex;
-    align-items:     center;
-    justify-content: center;
-    width:           max-content;
-    max-width:       none;
-    min-height:      20px;
-    padding:         4px 10px;
-    border-radius:   var(--awa-radius-full, 9999px);
-    background:      color-mix(in srgb, var(--awa-ink, #1a1717) 88%, var(--awa-surface, #fff) 12%);
-    color:           var(--awa-text-inverse, #fff);
-    border:          1px solid color-mix(in srgb, var(--awa-surface, #fff) 20%, transparent);
-    font-size:       10px;
-    font-weight:     700;
-    letter-spacing:  0.04em;
-    line-height:     1;
-    white-space:     nowrap;
-    pointer-events:  none;
-    text-transform:  uppercase;
+    position:        absolute !important;
+    right:           calc(100% + 12px);
+    bottom:          6px;
+    left:            auto;
+    transform:       none;
+    display:         inline-flex !important;
+    align-items:     center !important;
+    gap:             8px;
+    width:           max-content !important;
+    max-width:       min(260px, calc(100vw - 120px)) !important;
+    min-width:       0 !important;
+    height:          auto !important;
+    min-height:      0 !important;
+    max-height:      none !important;
+    margin:          0 !important;
+    padding:         10px 14px !important;
+    border:          1px solid var(--awa-border, rgb(0 0 0 / 10%)) !important;
+    border-radius:   16px 16px 4px 16px !important;
+    background:      var(--awa-surface, #fff) !important;
+    background-color: var(--awa-surface, #fff) !important;
+    color:           var(--awa-text-primary, #111827) !important;
+    box-shadow:      var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%));
+    font-size:       13px !important;
+    font-weight:     600 !important;
+    line-height:     1.35 !important;
+    letter-spacing:  0;
+    text-align:      left;
+    text-transform:  none !important;
+    white-space:     normal !important;
+    cursor:          pointer;
+    appearance:      none;
+    -webkit-appearance: none;
+    transition:      opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    animation:       awa-ai-teaser-in 0.35s ease-out;
+}
+#awa-ai-chat-root .awa-ai-chat__toggle-label:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
+}
+#awa-ai-chat-root .awa-ai-chat__toggle-label:focus-visible {
+    outline: 3px solid var(--awa-primary, var(--awa-brand));
+    outline-offset: 2px;
+}
+.awa-ai-chat__teaser-status {
+    width:         8px;
+    height:        8px;
+    flex-shrink:   0;
+    border-radius: var(--awa-radius-full, 9999px);
+    background:    var(--awa-success, #16a34a);
+    box-shadow:    0 0 0 3px color-mix(in srgb, var(--awa-success, #16a34a) 22%, transparent);
+}
+.awa-ai-chat__teaser-text {
+    display: block;
+}
+@keyframes awa-ai-teaser-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* FAB = avatar: o símbolo preenche o círculo; o anel branco separa do fundo. */
+#awa-ai-chat-root .awa-ai-chat__toggle-avatar {
+    width:         100%;
+    height:        100%;
+    border-radius: var(--awa-radius-full, 9999px);
 }
 
 #awa-ai-chat-root:has(.awa-ai-coach--visible) .awa-ai-chat__toggle-label,
@@ -101,6 +163,35 @@
     align-items:     center;
     justify-content: center;
     line-height:     0;
+}
+
+/* ── B3: ponto de mensagem não lida no FAB ──────────────────────
+   !important pontual pelo mesmo motivo do FAB e do botão de som: os defaults
+   de button do tema sobrescrevem tamanho e cor de filhos posicionados. */
+#awa-ai-chat-root .awa-ai-chat__unread {
+    /* Nasce oculto: o span existe no DOM desde o primeiro paint (a home
+       difere o Knockout com data-awa-ai-defer="1") e só acende quando o
+       binding aplica .awa-ai-chat__unread--on. */
+    display:       none !important;
+    position:      absolute !important;
+    top:           2px;
+    right:         2px;
+    width:         14px !important;
+    height:        14px !important;
+    min-width:     14px !important;
+    min-height:    14px !important;
+    padding:       0 !important;
+    margin:        0 !important;
+    border-radius: var(--awa-radius-full, 9999px) !important;
+    background:    var(--awa-success, #16a34a) !important;
+    border:        2px solid var(--awa-surface, #fff);
+    box-sizing:    border-box;
+    pointer-events: none;
+    z-index:       2;
+}
+
+#awa-ai-chat-root .awa-ai-chat__unread--on {
+    display: block !important;
 }
 .awa-ai-chat__toggle-icon svg {
     display:    block;
@@ -154,7 +245,7 @@
     align-items:     center;
     justify-content: space-between;
     padding:         12px 16px;
-    background:      var(--awa-primary, var(--awa-red, #b73337));
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:           var(--awa-text-inverse, #fff);
 }
 .awa-ai-chat__header-info {
@@ -228,7 +319,7 @@
     display: none !important; /* product cards only on assistant turns */
 }
 .awa-ai-chat__msg--user .awa-ai-chat__msg-bubble {
-    background:    var(--awa-primary, var(--awa-red, #b73337));
+    background:    var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:         var(--awa-text-inverse, #fff);
     border-radius: var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-xs, 4px) var(--awa-radius-md, 10px);
 }
@@ -241,7 +332,7 @@
     border-radius: var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-md, 10px) var(--awa-radius-xs, 4px);
 }
 .awa-ai-chat__msg--assistant .awa-ai-chat__msg-bubble a {
-    color:           var(--awa-primary, #b73337);
+    color:           var(--awa-primary, var(--awa-brand));
     text-decoration: underline;
 }
 .awa-ai-chat__msg--assistant .awa-ai-chat__msg-bubble a:hover {
@@ -319,7 +410,7 @@
 }
 .awa-ai-chat__input:focus {
     outline:      none;
-    border-color: var(--awa-primary, #b73337);
+    border-color: var(--awa-primary, var(--awa-brand));
 }
 .awa-ai-chat__input:disabled {
     background: var(--awa-bg-subtle, #f9fafb);
@@ -348,7 +439,7 @@
     z-index:         2;
     border-radius:   var(--awa-radius-full, 9999px);
     border:          none;
-    background:      var(--awa-primary, var(--awa-red, #b73337));
+    background:      var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color:           var(--awa-text-inverse, #fff);
     cursor:          pointer;
     flex-shrink:     0;
@@ -363,7 +454,7 @@
     cursor:  not-allowed;
 }
 .awa-ai-chat__send:focus-visible {
-    outline:        3px solid var(--awa-primary, #b73337);
+    outline:        3px solid var(--awa-primary, var(--awa-brand));
     outline-offset: 2px;
 }
 
@@ -380,7 +471,7 @@
     color:           var(--awa-text-secondary);
 }
 .awa-ai-chat__legal-link {
-    color:           var(--awa-primary, var(--awa-red, #b73337));
+    color:           var(--awa-primary, var(--awa-red, var(--awa-brand)));
     text-decoration: underline;
     text-underline-offset: 2px;
     display:         inline-flex;
@@ -404,10 +495,35 @@
     min-width:      0;
 }
 .awa-ai-chat__subtitle {
+    display:     inline-flex;
+    align-items: center;
+    gap:         5px;
     font-size:   11px;
     font-weight: 500;
-    opacity:     .85;
+    opacity:     .92;
     line-height: 1.2;
+}
+.awa-ai-chat__online-dot {
+    width:         7px;
+    height:        7px;
+    flex-shrink:   0;
+    border-radius: var(--awa-radius-full, 9999px);
+    background:    var(--awa-success, #16a34a);
+    box-shadow:    0 0 0 2px rgb(255 255 255 / 55%);
+}
+/* Header: mesmo avatar do FAB, com anel branco sobre o fundo da marca. */
+.awa-ai-chat__header .awa-ai-chat__avatar {
+    width:      36px;
+    height:     36px;
+    padding:    0;
+    background: transparent;
+    overflow:   hidden;
+    box-shadow: 0 0 0 2px var(--awa-surface, #fff);
+}
+.awa-ai-chat__header .awa-ai-chat__avatar svg {
+    display: block;
+    width:   100%;
+    height:  100%;
 }
 .awa-ai-chat__avatar {
     display:         inline-flex;
@@ -443,7 +559,7 @@
     transition:      border-color .15s ease, box-shadow .15s ease;
 }
 .awa-ai-chat__product:hover {
-    border-color: var(--awa-primary, var(--awa-red, #b73337));
+    border-color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     box-shadow:   var(--awa-shadow-md, 0 4px 14px rgb(0 0 0 / 8%));
 }
 .awa-ai-chat__product-thumb {
@@ -473,8 +589,16 @@
     color:       var(--awa-text-muted, var(--awa-text-secondary, rgb(0 0 0 / 55%)));
 }
 .awa-ai-chat__product-meta strong {
-    color: var(--awa-primary, var(--awa-red, #b73337));
+    color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     font-weight: 700;
+}
+.awa-ai-chat__product-stock {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--awa-success, #15803d);
+}
+.awa-ai-chat__product-stock--out {
+    color: var(--awa-danger, #b91c1c);
 }
 .awa-ai-chat__product-fitment {
     font-size: 11px;
@@ -506,6 +630,9 @@
     #awa-ai-chat-root {
         right:  12px;
         bottom: 12px;
+    }
+    body.awa-cookie-banner-active #awa-ai-chat-root {
+        bottom: max(12px, var(--awa-cookie-banner-top-gap, 0px));
     }
     #awa-ai-chat-root .awa-ai-chat__toggle-label {
         display: none;
@@ -575,6 +702,70 @@
     color: var(--awa-text-primary, #111827);
     background: var(--awa-bg-muted, rgb(0 0 0 / 5%));
 }
+/* ── B1: identidade do coach (avatar + nome + presença) ──────────── */
+.awa-ai-coach__identity {
+    display:       flex;
+    align-items:   center;
+    gap:           8px;
+    /* Reserva a faixa do botão de fechar (36px + 4px de offset). */
+    margin:        0 40px 10px 0;
+}
+
+.awa-ai-coach__avatar {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    width:           32px;
+    height:          32px;
+    flex-shrink:     0;
+    border-radius:   var(--awa-radius-full, 9999px);
+    /* Mesmo avatar do FAB e do header (símbolo #awa-ai-avatar). */
+    background:      transparent;
+    overflow:        hidden;
+    box-shadow:      0 0 0 2px var(--awa-surface, #fff), 0 2px 8px rgb(0 0 0 / 12%);
+}
+
+.awa-ai-coach__avatar svg {
+    display: block;
+    width:   100%;
+    height:  100%;
+}
+
+.awa-ai-coach__identity-text {
+    display:        flex;
+    flex-direction: column;
+    gap:            1px;
+    min-width:      0;
+}
+
+.awa-ai-coach__name {
+    font-size:      13px;
+    font-weight:    700;
+    line-height:    1.2;
+    color:          var(--awa-text-primary, #111827);
+    white-space:    nowrap;
+    overflow:       hidden;
+    text-overflow:  ellipsis;
+}
+
+.awa-ai-coach__status {
+    display:     inline-flex;
+    align-items: center;
+    gap:         5px;
+    font-size:   11px;
+    font-weight: 500;
+    line-height: 1.2;
+    color:       var(--awa-text-secondary, rgb(0 0 0 / 60%));
+}
+
+.awa-ai-coach__status-dot {
+    width:         7px;
+    height:        7px;
+    flex-shrink:   0;
+    border-radius: var(--awa-radius-full, 9999px);
+    background:    var(--awa-success, #16a34a);
+}
+
 .awa-ai-coach__message {
     margin: 0 32px 12px 0;
     font-size: 14px;
@@ -605,13 +796,13 @@
 }
 .awa-ai-coach__btn:hover,
 .awa-ai-coach__btn:focus-visible {
-    border-color: var(--awa-primary, #b73337);
-    color: var(--awa-primary, #b73337);
+    border-color: var(--awa-primary, var(--awa-brand));
+    color: var(--awa-primary, var(--awa-brand));
 }
 .awa-ai-coach__btn--primary {
     grid-column: 1 / -1;
-    background: var(--awa-primary, var(--awa-red, #b73337));
-    border-color: var(--awa-primary, var(--awa-red, #b73337));
+    background: var(--awa-primary, var(--awa-red, var(--awa-brand)));
+    border-color: var(--awa-primary, var(--awa-red, var(--awa-brand)));
     color: var(--awa-text-inverse, #fff);
 }
 .awa-ai-coach__btn--primary:hover,
@@ -625,6 +816,50 @@
     text-align: center;
     grid-column: 1 / -1;
 }
+
+/* ── B2: uma ação principal só ──────────────────────────────────
+   Antes o card trazia dois botões de largura cheia competindo (primário
+   vermelho + outline). A ação secundária continua existindo, mas como link
+   discreto — mantém a função e elimina a paralisia de escolha. */
+.awa-ai-coach__btn--quiet {
+    border-color:    transparent;
+    background:      transparent;
+    color:           var(--awa-text-secondary, rgb(0 0 0 / 62%));
+    font-weight:     600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    min-height:      36px;
+    padding:         6px 8px;
+}
+
+.awa-ai-coach__btn--quiet:hover,
+.awa-ai-coach__btn--quiet:focus-visible {
+    border-color: transparent;
+    background:   var(--awa-bg-subtle, #f3f4f6);
+    color:        var(--awa-primary, var(--awa-brand));
+}
+
+@media (max-width: 767px) {
+    /* Alvo de toque continua em 44px no mobile. */
+    .awa-ai-coach__btn--quiet {
+        min-height: 44px;
+    }
+
+    /* Defeito pré-existente: o X do coach ficava em 36×36, abaixo do alvo de
+       44px que o projeto já aplica em .awa-ai-chat__chip, .awa-ai-coach__btn
+       e .awa-ai-chat__legal-link. */
+    .awa-ai-coach__close {
+        width:      44px;
+        height:     44px;
+        min-width:  44px;
+        min-height: 44px;
+    }
+
+    /* Acompanha o botão maior (44px + 4px de offset). */
+    .awa-ai-coach__identity {
+        margin-right: 48px;
+    }
+}
 .awa-ai-coach__steps {
     margin: 0 0 8px;
     padding-left: 18px;
@@ -637,13 +872,19 @@
 }
 
 #awa-ai-chat-root .awa-ai-chat__toggle--pulse {
-    animation: awa-ai-coach-pulse 1.6s ease-in-out 2;
+    animation: awa-ai-coach-pulse 1.5s ease-in-out 2;
+    transform-origin: center center;
 }
 
 @keyframes awa-ai-coach-pulse {
-    0%, 100% { box-shadow: var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%)); }
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: var(--awa-shadow-lg, 0 8px 24px rgb(0 0 0 / 12%));
+    }
     50% {
-        box-shadow: 0 0 0 8px color-mix(in srgb, var(--awa-primary, #b73337) 22%, transparent),
+        transform: scale(1.22);
+        box-shadow: 0 0 0 14px color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 55%, transparent),
+                    0 0 0 26px color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 28%, transparent),
                     var(--awa-shadow-xl, 0 16px 40px rgb(0 0 0 / 15%));
     }
 }

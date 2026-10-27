@@ -314,6 +314,25 @@ class PerformanceAnalyzer implements AnalyzerInterface
     private function createAndSaveAlert(string $type, string $severity, string $title, string $message, array $context): void
     {
         try {
+            /* DEDUPE NA ORIGEM (task-49, 10/10/2026). Antes desta guarda o metodo criava uma linha
+               NOVA a cada rodada do cron, de 15 em 15 minutos: a tabela acumulou 157 linhas de
+               nosuchentity_spike, 15 abertas, entrando 1 nova a cada 15 minutos. Agora, existindo
+               alerta ABERTO do mesmo tipo+severidade+fonte, ele e INCREMENTADO.
+               NAO tocamos em notified_at de proposito: a coluna pertence ao cooldown do consumidor
+               (Cron/AlertProcessor.php, NOTIFY_COOLDOWN_HOURS = 6) e reescreve-la reabriria o
+               flood de e-mail corrigido em 10/10/2026. */
+            $existente = $this->alertRepository->getLatestOpenAlert($type, $severity, 'performance_analyzer');
+
+            if ($existente !== null) {
+                $existente->setOccurrences(((int) $existente->getOccurrences()) + 1);
+                $existente->setMessage($message);
+                $existente->setContextData($context);
+                $existente->setLastOccurrence(date('Y-m-d H:i:s'));
+                $this->alertRepository->save($existente);
+
+                return;
+            }
+
             $alert = $this->alertFactory->create();
             $alert->setAlertType($type);
             $alert->setSeverity($severity);

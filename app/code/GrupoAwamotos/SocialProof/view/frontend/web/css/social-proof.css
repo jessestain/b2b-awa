@@ -250,3 +250,9 @@
         box-shadow: none;
     }
 }
+/* Q2 anti-CLS (19/10/2026): o container #awa-social-proof-pdp renderiza vazio e o
+   AJAX (social-proof-inject.js) popula ~10s — reserva de altura impede o reflow.
+   Altura de 2 badges em linha = 56px (badge 44px + gap). */
+#awa-social-proof-pdp.social-proof-container {
+    min-height: 56px;
+}

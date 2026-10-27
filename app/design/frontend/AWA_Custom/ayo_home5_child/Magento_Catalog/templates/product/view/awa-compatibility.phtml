@@ -17,9 +17,11 @@ if (!$product) {
     return;
 }
 
-$marca  = (string) $product->getData('marca_moto');
-$modelo = (string) $product->getData('modelo_moto');
-$ano    = (string) $product->getData('ano_moto');
+// Pós-migração select (B2B Densidade): getData devolve o option_id;
+// getAttributeText devolve o rótulo (ex.: Honda, CG Titan, 1999).
+$marca  = (string) ($product->getAttributeText('marca_moto') ?? $product->getData('marca_moto'));
+$modelo = (string) ($product->getAttributeText('modelo_moto') ?? $product->getData('modelo_moto'));
+$ano    = (string) ($product->getAttributeText('ano_moto') ?? $product->getData('ano_moto'));
 
 if ($marca === '' && $modelo === '' && $ano === '') {
     return;
@@ -27,7 +29,7 @@ if ($marca === '' && $modelo === '' && $ano === '') {
 ?>
 <div class="awa-pdp-compat" aria-label="<?= $escaper->escapeHtmlAttr(__('Compatibilidade do produto')) ?>">
     <div class="awa-pdp-compat__header">
-        <svg class="awa-pdp-compat__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg class="awa-pdp-compat__icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
         <span class="awa-pdp-compat__title"><?= $escaper->escapeHtml(__('Compatibilidade')) ?></span>

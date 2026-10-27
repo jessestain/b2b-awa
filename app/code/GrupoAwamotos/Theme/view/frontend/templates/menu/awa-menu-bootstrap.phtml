@@ -16,7 +16,7 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
 $isCatalogPlp = in_array('catalog_category_view', $layoutHandles, true)
     || in_array('catalogsearch_result_index', $layoutHandles, true);
 $menuRuntimeVersion = \GrupoAwamotos\Theme\Model\MinicartAssetVersion::query();
-$controllerUrl = $block->getViewFileUrl('js/awa-menu-controller.dept-strip-r16.js') . $menuRuntimeVersion;
+$controllerUrl = $block->getViewFileUrl('js/awa-menu-controller.anchor-r23.js') . $menuRuntimeVersion;
 $floatingCoreUrl = '';
 $floatingDomUrl = '';
 
@@ -36,8 +36,8 @@ $menuConfig = [
     'hoverDelay' => 100,
     'limitShow' => 0,
 ];
-$menuCssUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::css/awa-menu-v2-dept-open-fix.css');
-$runtimeUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::js/awa-menu-bootstrap-runtime.dept-strip-r16.js');
+$menuCssUrl = $block->getViewFileUrl('css/awa-menu-v2-dept-open-fix.anchor-r18.css');
+$runtimeUrl = $block->getViewFileUrl('GrupoAwamotos_Theme::js/awa-menu-bootstrap-runtime.dept-strip-r17.js');
 $controllerPinUrl = preg_replace('/\.js(?:\?.*)?$/i', '', $controllerUrl);
 $runtimeConfig = [
     'controllerUrl' => $controllerUrl,
@@ -126,19 +126,19 @@ window.__AWA_MENU_V2 = true; /* awa-dept-typography-strip-r16 */
 <?php if (!$isHomePage && $floatingCoreUrl !== '' && $floatingDomUrl !== ''): ?>
 <script defer src="<?= $block->escapeUrl($floatingCoreUrl) ?>"></script>
 <script defer src="<?= $block->escapeUrl($floatingDomUrl) ?>"></script>
+<?php endif; ?>
 <link rel="preload" href="<?= $block->escapeUrl($menuCssUrl) ?>" as="style"/>
 <link rel="stylesheet" href="<?= $block->escapeUrl($menuCssUrl) ?>" id="awa-menu-v2-dept-open-fix"/>
-<?php endif; ?>
 <style id="awa-menu-v2-desktop-fallback-static">
 @media (min-width: 992px) {
-    .navigation.verticalmenu.side-verticalmenu:hover > [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu"]:hover > [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu-trigger"]:hover ~ [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu-trigger"]:active ~ [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu-trigger"]:focus ~ [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu-trigger"]:focus-visible ~ [data-role="awa-vertical-menu-panel"],
-    [data-role="awa-vertical-menu-panel"]:hover,
-    [data-role="awa-vertical-menu-panel"]:focus-within {
+    .navigation.verticalmenu.side-verticalmenu:not([data-awa-menu-controller-ready="1"]):hover > [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]):hover > [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-trigger"]:hover ~ [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-trigger"]:active ~ [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-trigger"]:focus ~ [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-trigger"]:focus-visible ~ [data-role="awa-vertical-menu-panel"],
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-panel"]:hover,
+    [data-role="awa-vertical-menu"]:not([data-awa-menu-controller-ready="1"]) > [data-role="awa-vertical-menu-panel"]:focus-within {
         display: flex !important;
         flex-direction: column !important;
         visibility: visible !important;

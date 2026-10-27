@@ -28,6 +28,10 @@
                 <enabled>1</enabled>
                 <frequency>360</frequency>
                 <filter_comercializa>1</filter_comercializa>
+                <!-- Portao de publicacao: desligado e em dry-run por padrao -->
+                <publication_gate_enabled>0</publication_gate_enabled>
+                <publication_gate_dry_run>1</publication_gate_dry_run>
+                <publication_gate_max_percent>10</publication_gate_max_percent>
             </sync_products>
             <sync_categories>
                 <enabled>1</enabled>

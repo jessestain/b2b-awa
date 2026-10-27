@@ -119,10 +119,20 @@ class ResolveCustomerErpCodes
             'errors' => $errors,
         ]);
 
+        // C-03 (auditoria 2026-10-13): um ciclo que processa clientes e nao
+        // vincula NENHUM e falha, nao sucesso. Antes reportava 'success' com
+        // "0 vinculados", deixando a integracao quebrada em silencio.
+        $status = 'success';
+        if ($errors > 0) {
+            $status = 'partial';
+        } elseif ($total > 0 && $linked === 0) {
+            $status = 'error';
+        }
+
         $this->syncLogResource->addLog(
             'customer_auto_link',
             'sync',
-            $errors > 0 ? 'partial' : 'success',
+            $status,
             sprintf(
                 'Auto-link por CPF/CNPJ: %d processados, %d vinculados, %d não encontrados, %d erros',
                 $total,

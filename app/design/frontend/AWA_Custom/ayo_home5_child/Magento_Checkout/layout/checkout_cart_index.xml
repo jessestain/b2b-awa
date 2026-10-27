@@ -21,6 +21,14 @@
         <remove src="css/awa-commerce-impeccable-refine.min.css"/>
         <remove src="css/awa-focus-visible.min.css"/>
         <remove src="css/awa-focus-visible.css"/>
+        <!-- AWA Perf Fase 1 (2026-10-26): CSS off-page removido só nesta rota (cascata vencedora:
+             estas folhas são adicionadas via <css src> no head global default_head_blocks.xml;
+             o <remove src> por rota é o mecanismo correto e reversível).
+             - home-cards-carousels: regras de carrossel/cards da HOME (.cms-index-index); o carrinho não os usa.
+             - ai-chat-fullscreen: tela cheia do chat IA (mobile); não é layout do carrinho.
+             Rollback: remover estas 2 linhas (restaura o backup perf-fase1-20261026T141511Z). -->
+        <remove src="css/awa-home-cards-carousels-20261018-tbarrows-f22.css"/>
+        <remove src="css/awa-ai-chat-fullscreen-20261018.css"/>
         <!-- header-stack migrado para _awa-header-stack.less (43.01) — remove órfão retirado 2026-08-11 -->
         <!-- Stack único: polish + layout-terminal (~70KB, 1 request bloqueante) -->
         <css src="css/awa-cart-bundle.css"/>

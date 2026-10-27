@@ -3657,6 +3657,13 @@ final class HeaderImpeccableCascadeLockCss
             . 'inset-block-end:calc(' . $nav . ' + 12px + 56px + 12px + ' . $cookie . ' + ' . $safe . ')!important}'
             . '}';
 
+        // CookieConsent owns the measured offset; keep its choice buttons unobstructed.
+        $rules .= '@media(max-width:640px){'
+            . $cookieRoot . ' .awa-ai-chat__toggle{'
+            . 'bottom:max(24px,var(--awa-cookie-banner-top-gap,0px))!important;'
+            . 'inset-block-end:max(24px,var(--awa-cookie-banner-top-gap,0px))!important}'
+            . '}';
+
         return '/*§mobile-fab-stack-r30-inline*/'
             . '@layer awa-fixes{' . $rules . '}'
             . '@layer awa-visual-priority{' . $rules . '}'
@@ -8409,12 +8416,37 @@ JS;
         // Audit30 Média/Baixa — home omite cascade-lock; este bloco cobre dark header etc.
         $tag = self::audit30SurfaceStyleTag() . "\n" . $tag;
 
+        $tag = self::externalizeGuardScript($tag, $html);
+
         $pos = stripos($html, '</body>');
         if ($pos === false) {
             return $html . "\n" . $tag;
         }
 
         return substr($html, 0, $pos) . $tag . "\n" . substr($html, $pos);
+    }
+
+    /**
+     * VS5c (ciclo 2, item A): troca o script do guard por <script src> cacheavel
+     * quando a base estatica versionada e conhecida (fallback = inline atual).
+     */
+    private static function externalizeGuardScript(string $payload, string $html): string
+    {
+        if (!preg_match(
+            '#(?:/static/)?(version[A-Za-z0-9]+)/frontend/AWA_Custom/ayo_home5_child/pt_BR/#',
+            $html,
+            $m
+        )) {
+            return $payload;
+        }
+
+        return preg_replace(
+            '/<script[^>]*\bid="' . preg_quote(self::HOME_GUARD_SCRIPT_ID, '/') . '"[^>]*>.*?<\/script>\s*/is',
+            '<script src="/static/' . $m[1] . '/frontend/AWA_Custom/ayo_home5_child/pt_BR/js/'
+                . self::HOME_GUARD_SCRIPT_ID . '.js?v=20261018-vs5c" id="' . self::HOME_GUARD_SCRIPT_ID . '"></script>',
+            $payload,
+            1
+        ) ?? $payload;
     }
 
     public static function footerInjection(): string
@@ -8858,6 +8890,8 @@ JS;
             $tag .= self::audit30SurfaceStyleTag() . "\n";
         }
 
+        $tag = self::externalizeGuardScript($tag, $html);
+
         if ($tag === '') {
             return $html;
         }
@@ -8889,6 +8923,20 @@ JS;
         }
 
         return substr($html, 0, $pos) . $tag . "\n" . substr($html, $pos);
+    }
+
+    /** Visible density labels must not depend on retired icon fonts. */
+    public static function catalogGridDensityRules(): string
+    {
+        $root = 'html body#html-body:is(.catalog-category-view,.catalogsearch-result-index)'
+            . ' .page-wrapper .toolbar-products .grid-mode-show-type-products';
+        $rules = $root . ' a[data-grid-mode]>.awa-grid-density__value{'
+            . 'display:inline!important;visibility:visible!important;opacity:1!important;'
+            . 'font:700 14px/1 var(--awa-font-body,Arial,sans-serif)!important;'
+            . 'text-indent:0!important;color:var(--awa-text,CanvasText)!important}'
+            . $root . ' a[data-grid-mode].actived>.awa-grid-density__value{'
+            . 'color:var(--awa-text-inverse,white)!important}';
+        return '@layer awa-visual-priority{' . $rules . '}' . $rules;
     }
 
     private static function catalogParityRules(): string

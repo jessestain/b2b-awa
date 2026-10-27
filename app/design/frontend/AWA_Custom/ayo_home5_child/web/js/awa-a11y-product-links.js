@@ -1,44 +1,69 @@
-/**
- * A11Y-001 — Product Image Links Accessibility Fix
- *
- * Adds aria-label to product photo anchors that have no accessible name.
- * These links (from Rokanthemes widgets) carry only an image child without
- * any text content, resulting in the browser using the href as the SR label.
- *
- * Strategy: for each qualifying anchor, use the contained img[alt] text.
- * Runs once after DOM ready (deferred via requestIdleCallback).
- */
-define([], function () {
+(function (w, d) {
     'use strict';
 
-    let SELECTORS = [
-        '.product-item-photo',
-        '.product-thumb-link',
-        '.product photo',
-        'a.product-item-photo'
-    ].join(',');
+    function runA11yGlobals() {
+        var logo = d.querySelector('.logo a, a.logo');
+        if (logo) {
+            logo.removeAttribute('aria-hidden');
+            if (!logo.getAttribute('aria-label')) {
+                logo.setAttribute('aria-label', 'AWA Motos - Página inicial');
+            }
+        }
 
-    function fixProductLinks() {
-        let links = document.querySelectorAll(SELECTORS);
-        links.forEach(function (link) {
-            // Skip if already has accessible name
-            if (link.getAttribute('aria-label') ||
-                link.getAttribute('aria-labelledby') ||
-                link.textContent.trim()) {
-                return;
+        d.querySelectorAll('.minicart-wrapper img:not([alt]), .minicart-wrapper img[alt=""]').forEach(function (img) {
+            img.setAttribute('alt', 'Produto no carrinho');
+        });
+
+        var emptyLinkSelectors = [
+            '.action.showcart',
+            '.action.nav-toggle',
+            '.action.wishlist',
+            '.action.tocompare',
+            'a.action.quickview-handler'
+        ];
+        var labelMap = {
+            showcart: 'Carrinho de compras',
+            'nav-toggle': 'Menu de navegação',
+            wishlist: 'Lista de desejos',
+            tocompare: 'Comparar produto',
+            'quickview-handler': 'Visualização rápida'
+        };
+
+        emptyLinkSelectors.forEach(function (sel) {
+            d.querySelectorAll(sel).forEach(function (link) {
+                if (!link.getAttribute('aria-label') && !link.textContent.trim()) {
+                    var key = sel.split('.').pop();
+                    if (labelMap[key]) {
+                        link.setAttribute('aria-label', labelMap[key]);
+                    }
+                }
+            });
+        });
+
+        var seen = {};
+        d.querySelectorAll('.product-item[id]').forEach(function (el) {
+            if (seen[el.id]) {
+                el.id = el.id + '-tab-' + (Object.keys(seen).length);
             }
-            let img = link.querySelector('img[alt]');
-            if (img && img.alt && img.alt.trim()) {
-                link.setAttribute('aria-label', img.alt.trim());
-            }
+            seen[el.id] = true;
         });
     }
 
-    if (typeof requestIdleCallback === 'function') {
-        requestIdleCallback(fixProductLinks);
-    } else {
-        setTimeout(fixProductLinks, 200);
+    var a11yIntent = ['pointerdown', 'keydown', 'touchstart'];
+    var a11yDone = false;
+
+    function runOnIntent() {
+        if (a11yDone) {
+            return;
+        }
+        a11yDone = true;
+        a11yIntent.forEach(function (name) {
+            w.removeEventListener(name, runOnIntent, true);
+        });
+        runA11yGlobals();
     }
 
-    return {};
-});
+    a11yIntent.forEach(function (name) {
+        w.addEventListener(name, runOnIntent, { capture: true, passive: name !== 'keydown', once: true });
+    });
+}(window, document));

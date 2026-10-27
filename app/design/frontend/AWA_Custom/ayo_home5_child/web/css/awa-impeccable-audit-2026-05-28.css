@@ -1,228 +1,101 @@
-/*
- * AWA Motos — Impeccable audit fixes (2026-05-28)
- * Terminal layer: selectors match header-refine / hover-lock specificity.
- */
-
-/* --- Layout property animations (compositor-only) --- */
-@media (prefers-reduced-motion: no-preference) {
-  html body#html-body .page-wrapper .header-wrapper-sticky,
-  html body#html-body .page-wrapper .header-wrapper-sticky.is-sticky,
-  html body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky,
-  html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky,
-  html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky.is-sticky,
-  html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky.awa-header-condensed,
-  #html-body .page-wrapper .header-wrapper-sticky,
-  #html-body .page-wrapper .header-wrapper-sticky.is-sticky,
-  #html-body .page-wrapper .awa-site-header .header-wrapper-sticky {
-    transition: box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease !important;
-    transition-property: box-shadow, opacity, transform !important;
+@media (prefers-reduced-motion:no-preference) {
+  #html-body .page-wrapper .awa-site-header .header-wrapper-sticky,#html-body .page-wrapper .header-wrapper-sticky,#html-body .page-wrapper .header-wrapper-sticky.is-sticky,html body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky,html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky,html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky.awa-header-condensed,html body#html-body .page-wrapper .awa-site-header.awa-header-professional .header-wrapper-sticky.is-sticky,html body#html-body .page-wrapper .header-wrapper-sticky,html body#html-body .page-wrapper .header-wrapper-sticky.is-sticky {
+    transition:box-shadow .2s ease,opacity .2s ease,transform .2s ease!important;
+    transition-property:box-shadow,opacity,transform!important
   }
-
-  html body#html-body .page-wrapper .logo,
-  html body#html-body .page-wrapper .awa-site-header .logo,
-  html body#html-body .page-wrapper .awa-header-brand-cell .logo,
-  html body#html-body .page-wrapper .awa-site-header .awa-header-brand .logo,
-  html body#html-body .page-wrapper .logo img,
-  html body#html-body .page-wrapper .awa-site-header .awa-header-brand-cell .logo img,
-  html body#html-body .page-wrapper .awa-site-header.awa-header-professional.awa-header-condensed .awa-main-header .awa-header-brand .logo img,
-  #html-body .page-wrapper .logo,
-  #html-body .page-wrapper .awa-site-header .logo,
-  #html-body .page-wrapper .awa-header-brand-cell .logo,
-  #html-body .page-wrapper .logo img {
-    transition: opacity 0.2s ease, transform 0.2s ease !important;
-    transition-property: opacity, transform !important;
+  #html-body .page-wrapper .awa-header-brand-cell .logo,#html-body .page-wrapper .awa-site-header .logo,#html-body .page-wrapper .logo,#html-body .page-wrapper .logo img,html body#html-body .page-wrapper .awa-header-brand-cell .logo,html body#html-body .page-wrapper .awa-site-header .awa-header-brand .logo,html body#html-body .page-wrapper .awa-site-header .awa-header-brand-cell .logo img,html body#html-body .page-wrapper .awa-site-header .logo,html body#html-body .page-wrapper .awa-site-header.awa-header-professional.awa-header-condensed .awa-main-header .awa-header-brand .logo img,html body#html-body .page-wrapper .logo,html body#html-body .page-wrapper .logo img {
+    transition:opacity .2s ease,transform .2s ease!important;
+    transition-property:opacity,transform!important
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  html body#html-body .page-wrapper .header-wrapper-sticky,
-  html body#html-body .page-wrapper .logo,
-  html body#html-body .page-wrapper .logo img,
-  #html-body .page-wrapper .header-wrapper-sticky,
-  #html-body .page-wrapper .logo,
-  #html-body .page-wrapper .logo img {
-    transition: none !important;
+@media (prefers-reduced-motion:reduce) {
+  #html-body .page-wrapper .header-wrapper-sticky,#html-body .page-wrapper .logo,#html-body .page-wrapper .logo img,html body#html-body .page-wrapper .header-wrapper-sticky,html body#html-body .page-wrapper .logo,html body#html-body .page-wrapper .logo img {
+    transition:none!important
   }
 }
-
-/* --- Tiny body text (11px → 12px minimum) --- */
-html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line1,
-html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register,
-html body#html-body .page-wrapper .awa-site-header a.awa-header-account-prompt__link.awa-header-account-prompt__link--register,
-#html-body .page-wrapper .awa-header-account-prompt__guest .awa-header-account-prompt__line1,
-#html-body .page-wrapper .awa-header-account-prompt[data-awa-auth-state="guest"] .awa-header-account-prompt__line1,
-#html-body .page-wrapper .awa-benefit-item .awa-benefit-desc,
-#html-body .page-wrapper .awa-benefit-desc,
-#html-body .page-wrapper .awa-benefits-bar .awa-benefit-desc {
-  font-size: max(12px, 0.8125rem) !important;
-  line-height: 1.45 !important;
+#html-body .page-wrapper .awa-benefit-desc,#html-body .page-wrapper .awa-benefit-item .awa-benefit-desc,#html-body .page-wrapper .awa-benefits-bar .awa-benefit-desc,#html-body .page-wrapper .awa-header-account-prompt[data-awa-auth-state=guest] .awa-header-account-prompt__line1,#html-body .page-wrapper .awa-header-account-prompt__guest .awa-header-account-prompt__line1,html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line1,html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register,html body#html-body .page-wrapper .awa-site-header a.awa-header-account-prompt__link.awa-header-account-prompt__link--register {
+  font-size:max(12px, .8125rem)!important;
+  line-height:1.45!important
 }
-
-/* --- Footer trust bar on brand red background --- */
-html body#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy strong,
-html body#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy strong,
-#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy strong,
-#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy strong {
-  color: var(--awa-bg) !important;
+#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy strong,#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy strong,html body#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy strong,html body#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy strong {
+  color:#fff!important
 }
-
-html body#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy span,
-html body#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy span,
-#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy span,
-#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy span {
-  color: rgba(255, 255, 255, 0.88) !important;
+#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy span,#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy span,html body#html-body .page-wrapper .page-footer .awa-footer-trust-bar .awa-footer-trust-copy span,html body#html-body .page-wrapper .page_footer .awa-footer-trust-bar .awa-footer-trust-copy span {
+  color:rgba(255,255,255,.88)!important
 }
-
-/* --- Business contact cards: dark text on light surfaces --- */
-html body#html-body .page-wrapper .awa-footer-business-contact__action,
-html body#html-body .page-wrapper .awa-footer-business-contact__action--primary,
-#html-body .page-wrapper .awa-footer-business-contact__action,
-#html-body .page-wrapper .awa-footer-business-contact__action--primary {
-  background: var(--awa-bg) !important;
-  border: 1px solid #e5e7eb !important;
-  color: #111827 !important;
+#html-body .page-wrapper .awa-footer-business-contact__action,#html-body .page-wrapper .awa-footer-business-contact__action--primary,html body#html-body .page-wrapper .awa-footer-business-contact__action,html body#html-body .page-wrapper .awa-footer-business-contact__action--primary {
+  background:#fff!important;
+  border:1px solid #e5e7eb!important;
+  color:#111827!important
 }
-
-html body#html-body .page-wrapper .awa-footer-business-contact__action:hover,
-html body#html-body .page-wrapper .awa-footer-business-contact__action--primary:hover,
-#html-body .page-wrapper .awa-footer-business-contact__action:hover,
-#html-body .page-wrapper .awa-footer-business-contact__action--primary:hover {
-  background: #f9fafb !important;
-  color: #111827 !important;
+#html-body .page-wrapper .awa-footer-business-contact__action--primary:hover,#html-body .page-wrapper .awa-footer-business-contact__action:hover,html body#html-body .page-wrapper .awa-footer-business-contact__action--primary:hover,html body#html-body .page-wrapper .awa-footer-business-contact__action:hover {
+  background:#f9fafb!important;
+  color:#111827!important
 }
-
-html body#html-body .page-wrapper .awa-footer-business-contact__action-copy strong,
-html body#html-body .page-wrapper .awa-footer-business-contact__action-copy small,
-#html-body .page-wrapper .awa-footer-business-contact__action-copy strong,
-#html-body .page-wrapper .awa-footer-business-contact__action-copy small {
-  color: #111827 !important;
+#html-body .page-wrapper .awa-footer-business-contact__action-copy small,#html-body .page-wrapper .awa-footer-business-contact__action-copy strong,html body#html-body .page-wrapper .awa-footer-business-contact__action-copy small,html body#html-body .page-wrapper .awa-footer-business-contact__action-copy strong {
+  color:#111827!important
 }
-
-html body#html-body .page-wrapper .awa-footer-business-contact__action--primary .awa-footer-business-contact__action-copy small::after,
-#html-body .page-wrapper .awa-footer-business-contact__action--primary .awa-footer-business-contact__action-copy small::after {
-  color: #166534 !important;
+#html-body .page-wrapper .awa-footer-business-contact__action--primary .awa-footer-business-contact__action-copy small::after,html body#html-body .page-wrapper .awa-footer-business-contact__action--primary .awa-footer-business-contact__action-copy small::after {
+  color:#166534!important
 }
-
-/* --- Atendimento: labels on light surfaces --- */
-html body#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label,
-html body#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label--social,
-html body#html-body .page-wrapper .page-footer:not(.awa-footer--dark) .awa-footer-atendimento__label,
-#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label,
-#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label--social,
-#html-body .page-wrapper .page-footer:not(.awa-footer--dark) .awa-footer-atendimento__label {
-  color: #6b7280 !important;
+#html-body .page-wrapper .page-footer:not(.awa-footer--dark) .awa-footer-atendimento__label,#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label,#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label--social,html body#html-body .page-wrapper .page-footer:not(.awa-footer--dark) .awa-footer-atendimento__label,html body#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label,html body#html-body .page-wrapper .page_footer:not(.awa-footer--dark) .awa-footer-atendimento__label--social {
+  color:#6b7280!important
 }
-
-/* --- Atendimento: labels on dark footer (contrast fix) --- */
-html body#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label,
-html body#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label--social,
-#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label,
-#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label--social {
-  color: rgba(255, 255, 255, 0.78) !important;
-  background-color: transparent !important;
+#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label,#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label--social,html body#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label,html body#html-body .page-wrapper .page_footer.awa-footer--dark .awa-footer-atendimento__label--social {
+  color:rgba(255,255,255,.78)!important;
+  background-color:transparent!important
 }
-
-html body#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-name,
-html body#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-address,
-html body#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-name,
-html body#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-address,
-#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-name,
-#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-address,
-#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-name,
-#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-address {
-  color: #111827 !important;
-  background-color: transparent !important;
+#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-address,#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-name,#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-address,#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-name,html body#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-address,html body#html-body .page-wrapper .page_footer .awa-footer-atendimento__store-name,html body#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-address,html body#html-body .page-wrapper .page_footer p.awa-footer-atendimento__store-name {
+  color:#111827!important;
+  background-color:transparent!important
 }
-
-html body#html-body .page-wrapper .awa-footer-trust-copy strong,
-html body#html-body .page-wrapper .page_footer .awa-footer-trust-item .awa-footer-trust-copy strong {
-  color: var(--awa-bg) !important;
-  font-size: max(12px, 0.75rem) !important;
+html body#html-body .page-wrapper .awa-footer-trust-copy strong,html body#html-body .page-wrapper .page_footer .awa-footer-trust-item .awa-footer-trust-copy strong {
+  color:#fff!important;
+  font-size:max(12px, .75rem)!important
 }
-
-html body#html-body .page-wrapper .awa-benefit-desc,
-html body#html-body .page-wrapper .awa-benefits-bar .awa-benefit-desc {
-  font-size: max(12px, 0.8125rem) !important;
+html body#html-body .page-wrapper .awa-benefit-desc,html body#html-body .page-wrapper .awa-benefits-bar .awa-benefit-desc {
+  font-size:max(12px, .8125rem)!important
 }
-
-html body#html-body .page-wrapper .awa-footer-business-contact__action strong,
-html body#html-body .page-wrapper .awa-footer-business-contact__action small,
-html body#html-body .page-wrapper .awa-footer-business-contact__action-copy strong,
-html body#html-body .page-wrapper .awa-footer-business-contact__action-copy small {
-  color: #111827 !important;
+html body#html-body .page-wrapper .awa-footer-business-contact__action small,html body#html-body .page-wrapper .awa-footer-business-contact__action strong,html body#html-body .page-wrapper .awa-footer-business-contact__action-copy small,html body#html-body .page-wrapper .awa-footer-business-contact__action-copy strong {
+  color:#111827!important
 }
-
-/* --- Promo bar: opacity-only dismiss (no max-height transition) --- */
-#html-body #awa-b2b-promo-bar,
-#html-body .page-wrapper #awa-b2b-promo-bar {
-  transition: opacity 0.25s ease !important;
-  transition-property: opacity !important;
+#html-body #awa-b2b-promo-bar,#html-body .page-wrapper #awa-b2b-promo-bar {
+  transition:opacity .25s ease!important;
+  transition-property:opacity!important
 }
-
-/* --- Header search: flatten nested card chrome --- */
 #html-body .page-wrapper .awa-site-header form#search_mini_form.minisearch {
-  box-shadow: none !important;
-  background: transparent !important;
+  box-shadow:none!important;
+  background:0 0!important
 }
-
-/* --- /impeccable layout: promo bar CTA alinhado à linha --- */
 html body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-bar__cta {
-  display: inline-flex !important;
-  align-items: center !important;
-  align-self: center !important;
-  line-height: 1.4 !important;
+  display:inline-flex!important;
+  align-items:center!important;
+  align-self:center!important;
+  line-height:1.4!important
 }
-
-/* --- /impeccable layout: B2B hero CTA primário (vence herança da seção) --- */
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .awa-hero-b2b-cta__btn--primary,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .awa-hero-b2b-cta__btn--primary:link,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .awa-hero-b2b-cta__btn--primary:visited,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .awa-hero-b2b-cta__btn--primary:hover,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .awa-hero-b2b-cta__btn--primary:focus-visible {
-  color: var(--awa-text-on-primary, var(--awa-bg)) !important;
+#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta__btn--primary,#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta__btn--primary:focus-visible,#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta__btn--primary:hover,#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta__btn--primary:link,#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta__btn--primary:visited {
+  color:var(--awa-text-on-primary,#fff)!important
 }
-
-/* --- /impeccable layout: mobile home — nav bar off, hero colado ao header --- */
-@media (max-width: 991px) {
-  html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    .awa-site-header
-    :is(.header-control.awa-nav-bar, .header-control.header-nav.awa-nav-bar) {
-    display: none !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-    border: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+@media (max-width:991px) {
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar) {
+    display:none!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    border:0!important;
+    visibility:hidden!important;
+    pointer-events:none!important
   }
-
-  #html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    .top-home-content--above-fold {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--above-fold {
+    margin-top:0!important;
+    padding-top:0!important
   }
 }
-
-@media (max-width: 479px) {
-  #html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    .awa-benefits-bar
-    .awa-benefit-desc {
-    display: none !important;
+@media (max-width:479px) {
+  #html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-benefits-bar .awa-benefit-desc {
+    display:none!important
   }
 }

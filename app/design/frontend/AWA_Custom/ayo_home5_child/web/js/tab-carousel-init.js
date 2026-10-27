@@ -181,15 +181,14 @@ define([
             .attr('aria-selected', 'true')
             .attr('tabindex', '0');
 
-        $panels.stop(true, true).hide()
-            .removeClass('animate1')
+        /* B2 (CICLO 4): exibicao dos paineis por CSS (.tab_content escopado),
+           sem .hide()/.fadeIn() => 0 leituras curCSS por painel. */
+        $panels.removeClass('animate1')
             .attr('aria-hidden', 'true');
 
         if ($target.length) {
             $target.addClass('animate1')
-                .attr('aria-hidden', 'false')
-                .stop(true, true)
-                .fadeIn(150);
+                .attr('aria-hidden', 'false');
         }
 
         return $target;

@@ -25,12 +25,19 @@ class RateLimiter
     /**
      * Check allowance and increment counter atomically.
      *
+     * Cliente logado usa bucket próprio (cust:{id}); visitante continua por IP.
+     * Assim um NAT compartilhado não consome a cota do B2B, e um cliente
+     * logado não herda o limite de outro IP.
+     *
      * @return bool true if allowed, false if rate limit exceeded
      */
-    public function checkAndIncrement(string $ipAddress): bool
+    public function checkAndIncrement(string $ipAddress, ?int $customerId = null): bool
     {
         $limit   = $this->config->getRateLimitPerHour();
-        $ipHash  = hash('sha256', $ipAddress);
+        $bucket  = ($customerId !== null && $customerId > 0)
+            ? 'cust:' . $customerId
+            : 'ip:' . $ipAddress;
+        $ipHash  = hash('sha256', $bucket);
         $conn    = $this->resource->getConnection();
         $table   = $this->resource->getTableName('grupoawamotos_ai_rate_limit');
 

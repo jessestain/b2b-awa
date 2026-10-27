@@ -523,6 +523,8 @@
     // 5. BACK TO TOP BUTTON
     // ===========================================
     function initBackToTop() {
+        // The theme component already owns visibility, keyboard and reduced-motion behavior.
+        if (document.getElementById('awa-back-to-top')) { return; }
         var btn = document.getElementById('awaBackToTop');
         var legacyBtn = document.getElementById('back-top');
         var fixedRightTopTriggers = document.querySelectorAll('.fixed-right .scroll-top');
@@ -703,6 +705,10 @@
         var nav = getNavElements();
         var overlay = document.querySelector('.awa-nav-overlay');
         var hiddenValue = isOpen ? 'false' : 'true';
+        var mobileViewport = window.matchMedia
+            ? window.matchMedia('(max-width: 991px)').matches
+            : window.innerWidth < 992;
+        var sectionHiddenValue = mobileViewport ? hiddenValue : 'false';
         var expandedValue = isOpen ? 'true' : 'false';
         var labelValue = isOpen ? 'Fechar menu de navegação' : 'Abrir menu de navegação';
 
@@ -710,7 +716,11 @@
             if (!nav.navSections.id) {
                 nav.navSections.id = 'nav-sections';
             }
-            setAriaIfChanged(nav.navSections, 'aria-hidden', hiddenValue);
+            if (mobileViewport || (!document.body.classList.contains('_has-modal')
+                && nav.navSections.getAttribute('data-awa-hidden-focus-sync') !== '1')) {
+                setAriaIfChanged(nav.navSections, 'aria-hidden', sectionHiddenValue);
+                if (!mobileViewport && nav.navSections.inert) { nav.navSections.inert = false; }
+            }
         }
 
         if (nav.navToggle && nav.navSections) {
@@ -752,6 +762,7 @@
     }
 
     function initMobileNavClose() {
+        if (window.__AWA_MENU_V2 && document.querySelector('[data-role="awa-vertical-menu"][data-awa-menu-controller-ready="1"]')) { return; }
         var navMediaQuery = window.matchMedia('(max-width: 991px)');
 
         function isMobileNavMediaActive() {
@@ -1284,7 +1295,7 @@
         }
 
         if (!panel.id) {
-            panel.id = 'awa-minicart-panel';
+            panel.id = 'awa-minicart-dialog';
         }
 
         trigger.setAttribute('aria-haspopup', 'dialog');

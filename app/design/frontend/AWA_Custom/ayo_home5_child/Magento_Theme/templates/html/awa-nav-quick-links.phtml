@@ -31,6 +31,7 @@ $collectionFactory = $this->helper(\Magento\Catalog\Helper\Data::class);
 // Categorias de destaque hardcoded (IDs das mais vendidas)
 // Fallback para nomes + URLs se a collection não estiver disponível.
 $quickLinks = [
+    ['name' => 'Pedido Rápido', 'url' => $block->getUrl('b2b/quickorder')],
     ['name' => 'Nossas Marcas', 'url' => $directUrl('nossas-marcas')],
     ['name' => 'Lançamentos',   'url' => $cmsPageUrl('lancamentos')],
     ['name' => 'Catálogo',      'url' => $cmsPageUrl('catalogo')],

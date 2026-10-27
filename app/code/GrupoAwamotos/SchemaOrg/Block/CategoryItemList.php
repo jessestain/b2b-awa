@@ -97,7 +97,7 @@ class CategoryItemList extends Template
                 $item['image'] = $imageUrl;
             }
 
-            if ($price > 0.0) {
+            if ($this->canEmitPrices() && $price > 0.0) {
                 $item['offers'] = [
                     '@type'         => 'Offer',
                     'price'         => round($price, 2),
@@ -110,6 +110,30 @@ class CategoryItemList extends Template
         }
 
         return $items;
+    }
+
+    /**
+     * ACHADO SEO-001: o preço do JSON-LD da listagem só é emitido para quem pode ver preço.
+     *
+     * O gate chega por <argument name="b2b_gate"> no layout do tema (passo 04 deste pacote),
+     * sem alterar o construtor do bloco — o que manteria o custo de setup:di:compile e criaria
+     * risco de dependência circular SchemaOrg -> B2B.
+     *
+     * Fail-closed: sem gate válido, ou em erro, NÃO emite preço.
+     */
+    private function canEmitPrices(): bool
+    {
+        $gate = $this->getData('b2b_gate');
+
+        if (!$gate instanceof \GrupoAwamotos\B2B\ViewModel\PdpGate) {
+            return false;
+        }
+
+        try {
+            return $gate->canViewPrices();
+        } catch (\Throwable $exception) {
+            return false;
+        }
     }
 
     private function getProductImageUrl(mixed $product): string

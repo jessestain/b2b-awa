@@ -23,6 +23,16 @@ final class SlotGuide
     private const MAX_SLOT = 80;
 
     /**
+     * @param string $whatsappLabel WhatsApp de atendimento já formatado — vem da
+     *        config (Orchestrator::whatsappLabel). Antes era "(16) 3301-1890",
+     *        que é o telefone fixo, não o WhatsApp.
+     */
+    public function __construct(
+        private readonly string $whatsappLabel = '(16) 99736-7588'
+    ) {
+    }
+
+    /**
      * @return array{
      *     active: bool,
      *     step: string,
@@ -231,7 +241,7 @@ final class SlotGuide
         $scope = trim($state['part'] . ' ' . $state['model']);
         $scope = $scope !== '' ? ' de ' . $scope : '';
 
-        return 'Não encontrei' . $scope . ' no catálogo agora. Tente outro nome ou fale no WhatsApp (16) 3301-1890.';
+        return 'Não encontrei' . $scope . ' no catálogo agora. Tente outro nome ou fale no WhatsApp ' . $this->whatsappLabel . '.';
     }
 
     /**

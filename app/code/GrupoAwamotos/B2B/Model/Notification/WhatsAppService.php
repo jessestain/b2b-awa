@@ -133,6 +133,14 @@ class WhatsAppService
 
     private function formatPhone(string $phone): string
     {
+        $phone = trim($phone);
+
+        // IDs de GRUPO do WhatsApp (ex.: 120363433828293440-group / 1203...@g.us):
+        // devem ser preservados como vieram — a normalizacao por digitos os destruiria.
+        if (str_contains($phone, '-group') || str_contains($phone, '@g.us')) {
+            return $phone;
+        }
+
         $phone = preg_replace('/\D/', '', $phone);
         if (strlen($phone) === 11 || strlen($phone) === 10) {
             $phone = '55' . $phone;

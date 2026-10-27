@@ -76,6 +76,7 @@
                 <item name="b2b_attendant_repair_erp" xsi:type="object">GrupoAwamotos\B2B\Console\Command\RepairAttendantsFromErpCommand</item>
                 <item name="b2b_registration_audit_health" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditRegistrationHealthCommand</item>
                 <item name="b2b_audit_erp_readiness" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditErpReadinessCommand</item>
+                <item name="b2b_customer_flag_erp_inactive" xsi:type="object">GrupoAwamotos\B2B\Console\Command\FlagErpInactiveCustomersCommand</item>
                 <item name="b2b_registration_audit_missing" xsi:type="object">GrupoAwamotos\B2B\Console\Command\AuditMissingDataCommand</item>
                 <item name="b2b_registration_backfill_phone" xsi:type="object">GrupoAwamotos\B2B\Console\Command\BackfillPhoneFromAddressCommand</item>
                 <item name="b2b_registration_backfill_razao_cnpj" xsi:type="object">GrupoAwamotos\B2B\Console\Command\BackfillRazaoSocialFromCnpjCacheCommand</item>
@@ -91,6 +92,7 @@
                 <item name="b2b_sectra_validate_order_import" xsi:type="object">GrupoAwamotos\B2B\Console\Command\ValidateSectraOrderImportCommand</item>
                 <item name="b2b_sectra_cancel_stuck_orders" xsi:type="object">GrupoAwamotos\B2B\Console\Command\CancelStuckOrdersCommand</item>
                 <item name="b2b_sectra_manual_ack" xsi:type="object">GrupoAwamotos\B2B\Console\Command\ManualOrderAckCommand</item>
+                <item name="b2b_private_label_scan" xsi:type="object">GrupoAwamotos\B2B\Console\Command\PrivateLabelScanCommand</item>
             </argument>
         </arguments>
     </type>

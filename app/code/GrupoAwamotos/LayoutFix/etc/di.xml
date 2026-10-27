@@ -6,11 +6,7 @@
                 type="GrupoAwamotos\LayoutFix\Plugin\Cms\PageLayoutUpdateXmlSanitizer"/>
     </type>
 
-    <!-- Fix: suppress "Broken reference" INFO log for product.info.media/product.info.main
-         in the Ayo theme where both elements are moved to different containers -->
-    <type name="Magento\Framework\View\Layout\ScheduledStructure">
-        <plugin name="grupoawamotos_layoutfix_suppress_media_sort_broken_ref"
-                type="GrupoAwamotos\LayoutFix\Plugin\ScheduledStructureSortPlugin"
-                sortOrder="10"/>
-    </type>
+    <!-- O plugin que suprime o log "Broken reference" de product.info.media/product.info.main
+         vive em GrupoAwamotos_CatalogFix (grupoawamotos_catalogfix_suppress_media_sort_broken_ref).
+         A copia que existia aqui era identica e foi removida. -->
 </config>

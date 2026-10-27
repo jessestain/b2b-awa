@@ -44,13 +44,13 @@ class B2bPanel implements SectionSourceInterface
     public function getSectionData(): array
     {
         if (!$this->b2bHelper->isEnabled() || !$this->customerSession->isLoggedIn()) {
-            return ['is_b2b' => false];
+            return ['is_b2b' => false, 'ai_context' => $this->getAiContext()];
         }
 
         $customerGroupId = (int) $this->customerSession->getCustomerGroupId();
 
         if (!in_array($customerGroupId, $this->b2bHelper->getB2BGroupIds(), true)) {
-            return ['is_b2b' => false];
+            return ['is_b2b' => false, 'ai_context' => $this->getAiContext()];
         }
 
         $customerId = (int) $this->customerSession->getCustomerId();
@@ -107,6 +107,7 @@ class B2bPanel implements SectionSourceInterface
 
         $section = [
             'is_b2b' => true,
+            'ai_context' => $this->getAiContext(),
             'first_name' => $firstName,
             'full_name' => $fullName,
             'company' => $company,
@@ -129,6 +130,48 @@ class B2bPanel implements SectionSourceInterface
         }
 
         return $section;
+    }
+
+    /**
+     * Minimal private presentation context. Never accepted as backend authorization.
+     * Session/account identifiers are not returned or sent to the assistant provider.
+     *
+     * @return array{is_logged_in: bool, is_approved: bool, identity_key: string}
+     */
+    private function getAiContext(): array
+    {
+        $context = ['is_logged_in' => false, 'is_approved' => false, 'identity_key' => 'guest'];
+        if (!$this->customerSession->isLoggedIn()) {
+            return $context;
+        }
+
+        $context['is_logged_in'] = true;
+        $context['identity_key'] = ''; // Unverifiable session fails closed in the UI.
+        try {
+            $customerId = (int) $this->customerSession->getCustomerId();
+            $sessionId = (string) $this->customerSession->getSessionId();
+            if ($customerId <= 0 || $sessionId === '') {
+                return $context;
+            }
+            $context['identity_key'] = hash_hmac(
+                'sha256',
+                'awa-ai-presentation-context:' . $customerId,
+                $sessionId
+            );
+            $groupId = (int) $this->customerSession->getCustomerGroupId();
+            if ($this->b2bHelper->isEnabled()
+                && in_array($groupId, $this->b2bHelper->getB2BGroupIds(), true)
+            ) {
+                $customer = $this->customerRepository->getById($customerId);
+                $attribute = $customer->getCustomAttribute('b2b_approval_status');
+                $context['is_approved'] = $attribute !== null
+                    && $attribute->getValue() === ApprovalStatus::STATUS_APPROVED;
+            }
+        } catch (\Throwable) {
+            $context['is_approved'] = false;
+            $this->logger->warning('[B2bPanel] AI presentation context unavailable.');
+        }
+        return $context;
     }
 
     /**

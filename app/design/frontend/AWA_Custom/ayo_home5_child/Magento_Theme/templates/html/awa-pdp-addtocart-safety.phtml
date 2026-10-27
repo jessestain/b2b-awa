@@ -36,6 +36,14 @@
  * inicializar. O botao sempre terminava habilitado; o warning era so ruido
  * de telemetria. 8000ms da margem real sobre o pior caso observado sem
  * deixar de detectar uma trava genuina (falha de terceiro/rede).
+ *
+ * 2026-10-13: gate B2B SSR (addtocart.phtml) entrega o botao DESABILITADO
+ * para visitantes POR DESIGN (b2b-guest-mode) e para clientes pendentes
+ * (b2b-pending-mode). O probe passou a ignorar esses estados (sem warning,
+ * sem dataLayer) — antes acusava falso positivo em TODA sessao anonima,
+ * mesmo com o gate funcionando perfeitamente. Cliente aprovado que recebe
+ * SSR de visitante (FPC) ganha uma segunda checagem (+6s) para o
+ * login-to-cart.js restaurar o botao antes de qualquer report.
  */
 ?>
 <script>
@@ -61,19 +69,35 @@
         }
     }
 
-    function checkButton() {
+    function isB2bRestricted() {
+        return !!(d.body && (d.body.classList.contains('b2b-guest-mode')
+            || d.body.classList.contains('b2b-pending-mode')
+            || d.body.classList.contains('b2b-restricted-mode')));
+    }
+
+    function checkButton(attempt) {
         var button = d.getElementById('product-addtocart-button');
         if (!button || !button.disabled) {
             return;
         }
-        // Ainda desabilitado apos a janela de graca: apenas reporta para
-        // monitoramento. Magento_Catalog/js/validate-product continua sendo
-        // a UNICA autoridade que pode habilitar este botao (fail-closed).
+        if (isB2bRestricted()) {
+            // Botao desabilitado POR DESIGN (visitante/pendente). Um cliente
+            // aprovado pode ter recebido SSR de visitante via FPC: da uma
+            // segunda chance para o login-to-cart.js restaurar antes de
+            // desistir em silencio.
+            if (!attempt) {
+                w.setTimeout(function () { checkButton(true); }, 6000);
+            }
+            return;
+        }
+        // Nao ha estado B2B restrito e o botao segue desabilitado: trava real.
+        // Apenas reporta para monitoramento (fail-closed: a unica autoridade
+        // que habilita o botao continua sendo Magento_Catalog/js/validate-product).
         reportStuckButton(button);
     }
 
     function schedule() {
-        w.setTimeout(checkButton, GRACE_MS);
+        w.setTimeout(function () { checkButton(false); }, GRACE_MS);
     }
 
     if (d.readyState === 'loading') {

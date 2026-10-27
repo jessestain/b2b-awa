@@ -21,8 +21,8 @@ Cores primárias da marca AWA Motos. Usadas em buttons, links, highlights.
 
 | Token | Valor | Uso |
 |---|---|---|
-| `@awa-color-primary` | `#b73337` | Button BG, link, primary actions |
-| `@awa-color-primary-dark` | `#8e2629` | Hover states, active states |
+| `@awa-color-primary` | `#ff6b00` | Button BG, link, primary actions (laranja DS 13/10/2026) |
+| `@awa-color-primary-dark` | `#e85d00` | Hover states, active states |
 | `@awa-color-text-primary` | `#333333` | Body text, main content |
 | `@awa-color-button-text` | `#ffffff` | Text on primary button |
 | `@awa-color-link` | = `@awa-color-primary` | Anchor links |
@@ -241,7 +241,7 @@ Para feedback visual (success, error, warning, info).
 ### Error
 | Token | Valor | Uso |
 |---|---|---|
-| `@awa-color-error` | = `@awa-color-primary` | Error badge (reusa brand red) |
+| `@awa-color-error` | `#dc2626` | Error badge (vermelho semântico, único fora da paleta) |
 | `@awa-color-error-bg` | `fade(@awa-color-primary, 8%)` | Error background (subtle) |
 | `@awa-color-error-text` | = `@awa-color-primary-dark` | Error text |
 
@@ -403,7 +403,7 @@ input:focus-visible {
 - Use tokens em `_extend.less` para expor como CSS custom props
 
 ❌ **DON'T:**
-- Hardcode hex colors (`#b73337`) — use `@awa-color-primary`
+- Hardcode hex colors (`#ff6b00`) — use `@awa-color-primary`
 - Hardcode spacing (`16px`) — use `@awa-space-4`
 - Hardcode radius (`8px`) — use `@awa-radius-sm`
 - Criar aliases sem padrão — mantenha nomenclatura consistente

@@ -102,7 +102,49 @@ define([
                 $panel.removeAttr('inert').prop('hidden', false);
 
                 if (animate) {
-                    $panel.stop(true, true).slideDown(180);
+                    /* B2 (CICLO 4): expansao por transicao CSS de max-height.
+                       O jQuery slideDown lia height/padding/margin via curCSS a cada
+                       frame. Aqui: 1 leitura de scrollHeight + transition nativa.
+                       max-height inline com !important porque killers legados do
+                       tema (sem layer, !important) venceriam a camada normal. */
+                    var panelEl = $panel[0];
+
+                    if (!panelEl || panelEl.__awaFooterAnimating) {
+                        return;
+                    }
+
+                    panelEl.__awaFooterAnimating = 1;
+                    panelEl.style.setProperty('overflow', 'hidden', 'important');
+                    panelEl.style.setProperty('transition', 'max-height 180ms ease', 'important');
+                    panelEl.style.setProperty('max-height', '0px', 'important');
+
+                    void panelEl.offsetHeight;
+
+                    var contentHeight = panelEl.scrollHeight;
+
+                    var cleanupFooterAnim = function () {
+                        panelEl.removeEventListener('transitionend', onFooterTransitionEnd);
+                        panelEl.style.removeProperty('max-height');
+                        panelEl.style.removeProperty('overflow');
+                        panelEl.style.removeProperty('transition');
+                        panelEl.__awaFooterAnimating = 0;
+                    };
+
+                    var onFooterTransitionEnd = function (event) {
+                        if (event.target === panelEl && event.propertyName === 'max-height') {
+                            cleanupFooterAnim();
+                        }
+                    };
+
+                    panelEl.addEventListener('transitionend', onFooterTransitionEnd);
+
+                    window.requestAnimationFrame(function () {
+                        window.requestAnimationFrame(function () {
+                            panelEl.style.setProperty('max-height', contentHeight + 'px', 'important');
+                        });
+                    });
+
+                    window.setTimeout(cleanupFooterAnim, 260);
                     return;
                 }
 
@@ -110,16 +152,10 @@ define([
                 return;
             }
 
-            $panel.prop('hidden', true);
-
-            if (animate) {
-                $panel.stop(true, true).slideUp(180, function () {
-                    $panel.attr('inert', '');
-                });
-                return;
-            }
-
-            $panel.stop(true, true).hide().attr('inert', '');
+            /* B2 (CICLO 4): fechamento preservado (instantaneo, como antes —
+               hidden era setado antes do slideUp). */
+            $panel.removeClass('awa-footer-anim awa-footer-expanded');
+            $panel.prop('hidden', true).attr('inert', '');
         }
 
         function setPanelState($trigger, shouldExpand)
@@ -264,6 +300,10 @@ define([
 
         function initBrandSlider()
         {
+            // D4 (2026-10-24): brand slider/Swiper apenas na home (demais paginas nao baixam o swiper-bundle).
+            if (!document.body.classList.contains('cms-index-index')) {
+                return;
+            }
             var $slider = $root.find(sliderSelector);
             var slidesCount;
             var maxSlidesPerView;

@@ -1,0 +1,51 @@
+@layer awa-cartcheckout-fix {
+  html body#html-body .b2b-login-modal-overlay,html body#html-body .b2b-login-modal-overlay.active {
+    --awa-z-modal:10200!important;
+    z-index:10200!important
+  }
+  html body#html-body #b2b-login-modal.active .b2b-login-modal {
+    max-height:calc(100dvh - 24px)!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important
+  }
+  @media (max-width:767px) {
+    html body#html-body #b2b-login-modal.active .b2b-login-modal-header {
+      display:grid!important;
+      grid-template-columns:minmax(0,1fr) 44px!important;
+      grid-template-rows:auto auto!important;
+      column-gap:12px!important;
+      row-gap:8px!important;
+      position:relative!important
+    }
+    html body#html-body #b2b-login-modal.active .b2b-login-modal-close {
+      grid-column:2!important;
+      grid-row:1/span 2!important;
+      justify-self:end!important;
+      align-self:start!important;
+      position:relative!important;
+      top:0!important;
+      right:0!important;
+      left:auto!important;
+      bottom:auto!important;
+      width:44px!important;
+      height:44px!important;
+      min-width:44px!important;
+      min-height:44px!important
+    }
+  }
+  html body#html-body#html-body#html-body#html-body .page-wrapper .minicart-wrapper:is(.active,.show,.is-open) .block-minicart :is(.product-item-photo,.product-image-container,.product-image-wrapper),html body#html-body#html-body#html-body#html-body .page-wrapper .awa-header-minicart--expanded .block-minicart :is(.product-item-photo,.product-image-container,.product-image-wrapper) {
+    flex:0 0 72px!important;
+    width:72px!important;
+    min-width:72px!important;
+    max-width:72px!important;
+    height:72px!important;
+    min-height:72px!important;
+    max-height:72px!important
+  }
+  html body#html-body#html-body#html-body#html-body .page-wrapper .minicart-wrapper:is(.active,.show,.is-open) .block-minicart :is(img.product-image-photo,.product-image-wrapper img),html body#html-body#html-body#html-body#html-body .page-wrapper .awa-header-minicart--expanded .block-minicart :is(img.product-image-photo,.product-image-wrapper img) {
+    width:72px!important;
+    height:72px!important;
+    max-width:72px!important;
+    max-height:72px!important
+  }
+}

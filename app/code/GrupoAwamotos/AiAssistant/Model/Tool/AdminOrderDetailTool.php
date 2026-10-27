@@ -14,7 +14,9 @@ use GrupoAwamotos\WhatsAppCommerce\Api\AdminDashboardInterface;
 class AdminOrderDetailTool implements ToolInterface
 {
     public function __construct(
-        private readonly AdminDashboardInterface $adminDashboard
+        private readonly AdminDashboardInterface $adminDashboard,
+        private readonly \GrupoAwamotos\B2B\CommercialPanel\Model\PortfolioScope $portfolioScope,
+        private readonly \Magento\Framework\App\ResourceConnection $resource
     ) {
     }
 
@@ -48,6 +50,23 @@ class AdminOrderDetailTool implements ToolInterface
         if ($incrementId === '') {
             return ['error' => 'Número do pedido não informado.'];
         }
+
+        /* Escopo por carteira: o pedido só é consultável se o cliente dono
+         * estiver na carteira visível. Mensagem única para inexistente e
+         * fora de escopo (anti-enumeração). */
+        if (!$this->portfolioScope->canBypassPortfolioScope()) {
+            $connection = $this->resource->getConnection();
+            $customerId = $connection->fetchOne(
+                $connection->select()
+                    ->from($this->resource->getTableName('sales_order'), ['customer_id'])
+                    ->where('increment_id = ?', $incrementId)
+                    ->limit(1)
+            );
+            if (!$customerId || !$this->portfolioScope->canAccessCustomer((int) $customerId)) {
+                return ['error' => 'Pedido não encontrado na sua carteira.'];
+            }
+        }
+
         return $this->adminDashboard->orderDetail($incrementId);
     }
 

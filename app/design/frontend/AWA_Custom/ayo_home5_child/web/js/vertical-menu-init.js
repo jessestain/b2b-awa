@@ -158,7 +158,8 @@ define([
                     $list.stop(true, true).removeAttr('style').show();
                     $('body').removeClass('background_shadow_show');
                 } else {
-                    $list.stop(true, true).fadeIn(200);
+                    /* B2 (CICLO 4): fade por transicao CSS (opacity), sem curCSS por frame. */
+                    $list.addClass('awa-menu-fade menu-open');
                     $('body').addClass('background_shadow_show');
                 }
             });
@@ -171,7 +172,12 @@ define([
             if (isDesktop()) {
                 $list.stop(true, true).hide();
             } else {
-                $list.stop(true, true).fadeOut(200);
+                /* B2 (CICLO 4): opacidade via CSS; display:none apos a transicao. */
+                window.setTimeout(function () {
+                    if (!$list.hasClass('menu-open')) {
+                        $list.removeClass('awa-menu-fade').hide();
+                    }
+                }, 220);
             }
 
             $('body').removeClass('background_shadow_show');
@@ -232,7 +238,8 @@ define([
 
                 if ($panel.hasClass('subchildmenu')) {
                     if (nestedAnimate) {
-                        $panel.stop(true, true).slideUp(200);
+                        /* B2 (CICLO 4): fechar submenu por classe (grid 0fr), sem slideUp. */
+                        $panel.addClass('awa-submenu-anim').removeClass('awa-open');
                     } else {
                         $panel.stop(true, true).removeAttr('style');
                     }
@@ -351,7 +358,7 @@ define([
                 $('body').removeClass('background_shadow_show');
             } else {
                 /* Entering mobile → collapse */
-                $list.removeClass('menu-open').hide();
+                $list.removeClass('menu-open awa-menu-fade').hide();
                 $title.removeClass('active').attr('aria-expanded', 'false');
                 $('body').removeClass('background_shadow_show');
             }
@@ -506,7 +513,8 @@ define([
 
                 $p.toggleClass('_active');
                 $t.attr('aria-expanded', expanding ? 'true' : 'false');
-                $p.children(childPanelSelector).stop(true, true).slideToggle(200);
+                /* B2 (CICLO 4): submenu por classe (grid rows), sem slideToggle. */
+                $p.children(childPanelSelector).addClass('awa-submenu-anim').toggleClass('awa-open', expanding);
             });
 
             $nav.on('keydown' + NS, '.open-children-toggle', function (e) {
@@ -542,7 +550,8 @@ define([
 
             $items.each(function (i) {
                 if (i >= limitItemShow) {
-                    $(this).addClass('orther-link').hide();
+                    /* B2 (CICLO 4): esconder via CSS (.orther-link{display:none}), sem curCSS. */
+                    $(this).addClass('orther-link');
                 }
             });
 
@@ -563,7 +572,8 @@ define([
                 }
 
                 $a.attr('aria-expanded', expanding ? 'true' : 'false');
-                $hidden.stop(true, true)[expanding ? 'fadeIn' : 'fadeOut'](180);
+                /* B2 (CICLO 4): N itens excedentes via classe (0 curCSS por item). */
+                $hidden.toggleClass('awa-shown', expanding);
             }).on('keydown' + NS, function (e) {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();

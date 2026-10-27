@@ -114,12 +114,27 @@ $headerMode = $isPasswordAuthHeader
 		<div class="awa-checkout-header-brand" data-awa-checkout-brand="true">
 				<?= /* @noEscape — Magento\Theme\Block\Html\Header\Logo: output gerado por bloco PHP confiável */ $this->getChildHtml('logo') ?>
 			</div>
+			<?php /* PLANO B2B F4.4: selo de ambiente seguro + ajuda rápida via WhatsApp no
+			   fechamento do pedido (mesmo padrão do /b2b/account/login/). Apenas marcação
+			   visual — nenhuma regra de negócio. */ ?>
+			<div class="awa-checkout-trust-badge" data-awa-checkout-trust="true">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+				<span><?= $escaper->escapeHtml(__('Ambiente Seguro B2B')) ?> | <?= $escaper->escapeHtml(__('Faturamento CNPJ')) ?></span>
+			</div>
 			<nav class="awa-checkout-header-actions" aria-label="<?= $escaper->escapeHtmlAttr(__('Navegação do checkout')) ?>">
 				<a class="awa-checkout-back-cart"
 				   href="<?= $escaper->escapeUrl($checkoutCartUrl) ?>">
 					<?= $escaper->escapeHtml(__('Editar carrinho')) ?>
 				</a>
 			</nav>
+			<a class="awa-checkout-whatsapp-btn"
+			   href="https://wa.me/5516997367588?text=<?= $escaper->escapeUrl((string) __('Olá, estou finalizando um pedido B2B e preciso de ajuda.')) ?>"
+			   target="_blank"
+			   rel="noopener noreferrer"
+			   aria-label="<?= $escaper->escapeHtmlAttr(__('Ajuda rápida via WhatsApp (abre em nova aba)')) ?>">
+				<span aria-hidden="true">&#128172;</span>
+				<span><?= $escaper->escapeHtml(__('Ajuda rápida')) ?></span>
+			</a>
 			<?php if ($checkoutSupportHtml !== ''): ?>
 				<div class="awa-checkout-header-support" data-awa-checkout-support="true">
 					<?= /* @noEscape — $checkoutSupportHtml vem de getChildHtml('hotline_header'): bloco PHP confiável */ $checkoutSupportHtml ?>
@@ -132,7 +147,7 @@ $headerMode = $isPasswordAuthHeader
 <div id="header" class="header-container" data-awa-header-shell="true" data-awa-header-variant="default">
 	<div class="header-content" data-awa-header-content="true">
 		<!-- ═══ B2B PROMO BAR (scrolls away) ═══ -->
-		<div class="top-header awa-utility-bar awa-b2b-promo-bar"
+		<div class="top-header awa-utility-bar awa-b2b-promo-bar" data-awa-promo-ssr-collapsed="1" style="display:none!important"
 			id="awa-b2b-promo-bar"
 			data-awa-header-utility="b2b-promo"
 			role="complementary"
@@ -158,9 +173,9 @@ $headerMode = $isPasswordAuthHeader
 						   ambos como substrings literais. */ ?>
 						<?php /* UX 2026-08-04: CTA no fim da frase (chip terminal), sem quebrar
 						   a sentença no meio — conversão B2B + hierarquia visual. */ ?>
-						<a href="<?= $escaper->escapeUrl($block->getUrl('b2b/register')) ?>" class="awa-b2b-promo-bar__cta" aria-label="<?= $escaper->escapeHtmlAttr(__('Cadastre agora — Cadastre-se no Cadastro B2B')) ?>">
+						<a href="<?= $escaper->escapeUrl($block->getUrl('b2b/register')) ?>" class="awa-b2b-promo-bar__cta" style="width:auto!important;min-width:fit-content!important;padding-inline:6px!important;overflow:visible!important" aria-label="<?= $escaper->escapeHtmlAttr(__('Cadastre agora — Cadastre-se no Cadastro B2B')) ?>">
 						<strong class="awa-b2b-promo-bar__cta-long" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre agora')) ?></strong>
-						<strong class="awa-b2b-promo-bar__cta-short" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
+						<strong class="awa-b2b-promo-bar__cta-short" style="width:auto!important;max-width:none!important" aria-hidden="true"><?= $escaper->escapeHtml(__('Cadastre-se')) ?></strong>
 					</a>
 				</p>
 				<button type="button" id="awa-b2b-promo-close" class="awa-b2b-promo-close" aria-label="<?= $escaper->escapeHtmlAttr(__('Fechar')) ?>">&times;</button>
@@ -290,7 +305,10 @@ $headerMode = $isPasswordAuthHeader
 							<div class="col-md-2 col-sm-2 col-xs-12 awa-header-brand awa-header-brand-cell" data-awa-header-brand="true">
 								<?= /* @noEscape — Logo: bloco PHP confiável */ $this->getChildHtml('logo') ?>
 							</div>
-							<a class="awa-header-cart-link" href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"><svg class="awa-header-cart-link-icon" viewBox="-0.25 0.5 24 24" aria-hidden="true" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M3.5 4h2l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 7H7.1"></path></svg><span class="awa-cart-link-badge awa-badge-hidden" aria-hidden="true"></span><span><?= $escaper->escapeHtml(__('Abrir carrinho')) ?></span></a>
+							<?php /* PLANO B2B F2.1: âncora morta removida — .awa-header-cart-link ficava
+							   display:none!important em todos os modos do header (CSS terminal) e duplicava
+							   o gatilho do carrinho. O gatilho unificado (ícone + contador) é o
+							   .action.header-mini-cart.showcart do minicart.phtml. */ ?>
 						</div>
 						<div class="awa-header-search-col top-search awa-header-actions" data-awa-header-search-row="true">
 							<?= /* @noEscape — Busca: bloco confiável */ $this->getChildHtml('topSearch') ?>

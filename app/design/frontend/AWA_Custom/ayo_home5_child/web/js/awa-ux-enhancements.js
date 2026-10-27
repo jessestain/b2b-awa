@@ -358,81 +358,6 @@ define(['jquery'], function ($) {
                 'box-sizing': 'border-box'
             });
 
-            // H-crumbs-compact (2026-08-02): nav textual — 44px inflava .items ~50px (CDP).
-            // Onda 5F: compact só desktop (>=768px).
-            //
-            // BUG CORRIGIDO 2026-10-05 (auditoria WCAG 2.5.8):
-            //   forceTouch44 usa el.style.setProperty(..., 'important') — estilo INLINE
-            //   vence QUALQUER CSS, inclusive !important em @layer. E não havia limpeza
-            //   ao mudar de viewport: se a página carregava em desktop e ia para mobile,
-            //   o min-height:0 do desktop FICAVA cravado e o alvo do breadcrumb media
-            //   28x17px no mobile (mínimo WCAG 2.5.8 = 24x24).
-            //   Agora aplica o valor certo por viewport E limpa as props quando muda.
-            var crumbSelector = '.breadcrumbs a, .nav-breadcrumbs a';
-            var crumbPropsDesktop = {
-                'display': 'inline-flex',
-                'align-items': 'center',
-                'min-height': '0',
-                'min-block-size': '0',
-                'height': 'auto',
-                'padding-block': '2px',
-                'line-height': '',
-                'box-sizing': 'border-box'
-            };
-            var crumbPropsMobile = {
-                'display': 'inline-flex',
-                'align-items': 'center',
-                'min-height': '44px',
-                'min-block-size': '44px',
-                'height': 'auto',
-                'max-height': 'none',
-                'padding-block': '0',
-                'line-height': '44px',
-                'box-sizing': 'border-box'
-            };
-            function aplicarCrumbProps() {
-                var mobile = !window.matchMedia('(min-width: 768px)').matches;
-                var props = mobile ? crumbPropsMobile : crumbPropsDesktop;
-                var nodes = document.querySelectorAll(crumbSelector);
-                // limpa o que o outro viewport tenha cravado
-                nodes.forEach(function (el) {
-                    ['min-height', 'min-block-size', 'line-height', 'padding-block', 'display', 'align-items'].forEach(function (k) {
-                        if (!(k in props) || props[k] === '') {
-                            el.style.removeProperty(k);
-                        }
-                    });
-                });
-                forceTouch44(nodes, props);
-                // a cadeia ul > li também trava por overflow:hidden + height fixo
-                forceTouch44(document.querySelectorAll(
-                    '.breadcrumbs ul.items, .nav-breadcrumbs ul.items,' +
-                    '.breadcrumbs ul.items > .item, .nav-breadcrumbs ul.items > .item'
-                ), mobile ? {
-                    'min-height': '44px',
-                    'height': 'auto',
-                    'max-height': 'none',
-                    'overflow': 'visible',
-                    'align-items': 'center'
-                } : {
-                    'min-height': '0',
-                    'height': 'auto',
-                    'max-height': 'none',
-                    'overflow': '',
-                    'align-items': ''
-                });
-            }
-            aplicarCrumbProps();
-            // Re-aplica no próximo frame (vence writers tardios / race com touch-44-terminal).
-            if (window.requestAnimationFrame) {
-                window.requestAnimationFrame(aplicarCrumbProps);
-            }
-            // e reavalia quando a viewport cruza o breakpoint (bug do valor cravado)
-            if (window.matchMedia) {
-                var mqCrumb = window.matchMedia('(min-width: 768px)');
-                var onCrumbMq = function () { aplicarCrumbProps(); };
-                if (mqCrumb.addEventListener) { mqCrumb.addEventListener('change', onCrumbMq); }
-                else if (mqCrumb.addListener) { mqCrumb.addListener(onCrumbMq); }
-            }
 
             forceTouch44(document.querySelectorAll(
                 '.page_footer .awa-footer-section__toggle, .page-footer .awa-footer-section__toggle'
@@ -677,7 +602,7 @@ define(['jquery'], function ($) {
             window.addEventListener('resize', syncSearchLayout, { passive: true });
 
             syncSearchLayout();
-            [400, 1200, 2500, 5000, 9000, 14000].forEach(function (delay) {
+            [150].forEach(function (delay) {
                 window.setTimeout(syncSearchLayout, delay);
             });
         } catch (e) {}
@@ -834,3 +759,34 @@ if (window.MutationObserver) {
 } else {
     setInterval(applyMinicartDialogName, 1200);
 }
+
+/* AWA-VS1 (17/10/2026) — navegação confiável do menu mobile.
+   O drawer mobile recebe o clique mas o hit-test cai no container (camadas de
+   carrossel/hero por cima), impedindo o link de navegar. Fallback por
+   coordenada: com o menu aberto, clique sobre um link de categoria navega. */
+(function () {
+  if (window.__awaMenuLinkFix) { return; }
+  window.__awaMenuLinkFix = true;
+  function menuOpen() {
+    var b = document.body;
+    return !!(b && (b.classList.contains('nav-open') || b.classList.contains('awa-menu-drawer-open') || b.classList.contains('awa-mobile-drawer-open')));
+  }
+  document.addEventListener('click', function (e) {
+    try {
+      if (!menuOpen()) { return; }
+      var links = document.querySelectorAll('.section-items a[href], .nav-sections a[href], .side-verticalmenu a[href]');
+      var x = e.clientX, y = e.clientY;
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i], r = a.getBoundingClientRect();
+        if (r.width > 5 && r.height > 5 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+          var href = a.getAttribute('href');
+          if (href && href.charAt(0) !== '#' && href.indexOf('javascript:') !== 0) {
+            e.preventDefault();
+            window.location.assign(a.href);
+          }
+          return;
+        }
+      }
+    } catch (err) {}
+  }, true);
+})();

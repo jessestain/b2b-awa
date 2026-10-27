@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Catálogo de Compra Rápida B2B — página "Comprar produtos" (/b2b/quickcatalog/).
+ *
+ * - Página dedicada 1coluna (o caminho de compra não usa a navegação lateral
+ *   da conta); a navegação de conta fica no cabeçalho do template.
+ * - cacheable="false": preços e catálogo são por cliente.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Comprar produtos</title>
+        <css src="GrupoAwamotos_B2B::css/account/pages-quickcatalog.css"/>
+    </head>
+    <body>
+        <attribute name="class" value="awa-b2b-page-contract b2b-quickcatalog-page"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceContainer name="content">
+            <block class="GrupoAwamotos\B2B\Block\QuickCatalog\Index"
+                   name="b2b.quickcatalog.main"
+                   template="GrupoAwamotos_B2B::quickcatalog/index.phtml"
+                   cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

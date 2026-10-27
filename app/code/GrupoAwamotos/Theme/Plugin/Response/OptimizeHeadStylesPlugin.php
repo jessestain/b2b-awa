@@ -166,9 +166,12 @@ class OptimizeHeadStylesPlugin
         $html = $this->appendMasterFixCacheBuster($html);
 
         if ($fullAction === self::CART_ACTION) {
-            $html = $this->stripStylesheetFragments($html, $this->manifest->cartStripFragments());
+            // 2026-10-26 B2B cart/checkout fix: NÃO otimizar o carrinho — o strip
+            // de stylesheets (cartStrip) removia CSS funcional da página e
+            // contribuía para o layout quebrado. Preservar todas as folhas;
+            // apenas garantir o align-grid (geometria do grid).
             $html = $this->injectAlignGridStylesheetIfMissing($html);
-            $subject->setHeader('X-Awa-Header-Optimize', 'v12-cart', true);
+            $subject->setHeader('X-Awa-Header-Optimize', 'v12-cart-preserve', true);
         }
 
         if (in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)) {
@@ -595,7 +598,31 @@ class OptimizeHeadStylesPlugin
                 '<link rel="stylesheet" href="https://awamotos.com/static/frontend/AWA_Custom/ayo_home5_child/pt_BR/css/awa-core-bundle.min.css">' . "</head>",
                 $html
             );
-        }        $subject->setBody($html);
+        }
+        if (in_array($fullAction, self::CHECKOUT_FOCUS_ACTIONS, true)) {
+            // 2026-10-26 B2B cart/checkout fix: colapsa a duplicação de #html-body
+            // nos blocos <style> injetados SOMENTE nestas rotas (ver método abaixo).
+            $html = $this->collapseHtmlBodySelectorDuplication($html);
+        }
+        $subject->setBody($html);
+    }
+
+    /**
+     * 2026-10-26 B2B cart/checkout fix: em seletores compostos dos blocos <style>
+     * injetados (id="awa-*"), colapsa repetições de #html-body
+     * (html body#html-body#html-body… → html body#html-body) para impedir que a
+     * guerra de especificidade dos locks quebre o layout do carrinho/checkout.
+     * Aplicado SOMENTE nas rotas de foco de checkout; home/catálogo intactos.
+     */
+    private function collapseHtmlBodySelectorDuplication(string $html): string
+    {
+        return (string) preg_replace_callback(
+            '/<style\b(?=[^>]*\bid="awa-)[^>]*>.*?<\/style>/is',
+            static function (array $match): string {
+                return preg_replace('/(?:#html-body){2,}/', '#html-body', $match[0]) ?? $match[0];
+            },
+            $html
+        );
     }
 
     

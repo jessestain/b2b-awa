@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AWA Motos — sitemap suplementar (SEO-011 e SEO-019).
+
+  Por que existe: o gerador de sitemap do Magento (Magento_Sitemap) só conhece
+  produtos, categorias e CMS pages. Ele NÃO consegue expressar:
+    - /contact            → rota nativa do Magento_Contact (não é CMS page), que é o DESTINO
+                            dos 301 de /contact-us e /contato (LegacyRouteRedirectPlugin);
+    - /catalogo/          → rota custom do módulo GrupoAwamotos\Theme (frontName `catalogo`).
+  Incluir esses dois no sitemap.xml gerado exigiria um provider custom (novo di.xml →
+  `setup:di:compile`), o que está fora desta janela. Este arquivo estático resolve agora,
+  sem compile e sem cache.
+
+  Manutenção: se as rotas mudarem, este arquivo precisa ser atualizado à mão
+  (é a limitação conhecida desta solução interina).
+
+  Declarado em pub/robots.txt:  Sitemap: https://awamotos.com/sitemap-extra.xml
+  Publicar em:                  pub/sitemap-extra.xml
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://awamotos.com/contact</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    <url>
+        <loc>https://awamotos.com/catalogo/</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+</urlset>

@@ -1,5 +1,20 @@
 (function() {
     var w = window, d = document, tid = 0, scheduleTimers = [], closeLockUntil = 0, openAtPointerDown = false;
+
+    /* AWA 2026-10-20: an absent-token classList.remove still emits a class
+     * mutation. The closed-state observer must converge after one RAF pass. */
+    function setAttributeIfChanged(node, name, value) {
+        if (node.getAttribute(name) !== value) node.setAttribute(name, value);
+    }
+    function addClassIfMissing(node, name) {
+        if (!node.classList.contains(name)) node.classList.add(name);
+    }
+    function removeClassesIfPresent(node) {
+        for (var i = 1; i < arguments.length; i += 1) {
+            if (node.classList.contains(arguments[i])) node.classList.remove(arguments[i]);
+        }
+    }
+
 function hdr(trigger) {
         if (trigger) {
             var triggerRect = trigger.getBoundingClientRect();
@@ -27,10 +42,10 @@ function hdr(trigger) {
         var shell = p.closest ? p.closest(".awa-header-minicart") : null;
         // Magento 2 owns wrap/trigger is-open (parentClass/triggerClass).
         if (shell) {
-            shell.classList.add("awa-header-minicart--expanded");
-            shell.setAttribute("data-awa-minicart-expanded", "1");
+            addClassIfMissing(shell, "awa-header-minicart--expanded");
+            setAttributeIfChanged(shell, "data-awa-minicart-expanded", "1");
         }
-        p.setAttribute("aria-hidden", "false");
+        setAttributeIfChanged(p, "aria-hidden", "false");
     }
     function unlockDialog(p) {
         if (!isOpen()) return;
@@ -54,7 +69,7 @@ function hdr(trigger) {
         if (!stickyEl || !stickyEl.style) return;
         stickyEl.style.setProperty("backdrop-filter", "none", "important");
         stickyEl.style.setProperty("-webkit-backdrop-filter", "none", "important");
-        stickyEl.setAttribute("data-awa-mc-bf", "off");
+        setAttributeIfChanged(stickyEl, "data-awa-mc-bf", "off");
     }
     function restoreStickyContainingBlock(stickyEl) {
         if (!stickyEl || !stickyEl.style) return;
@@ -91,23 +106,23 @@ function hdr(trigger) {
     }
     function clearAwaOpenClasses() {
         d.querySelectorAll(".minicart-wrapper").forEach(function (wrap) {
-            wrap.classList.remove("active", "show");
+            removeClassesIfPresent(wrap, "active", "show");
             var showcart = wrap.querySelector(".showcart, .action.showcart");
             if (showcart) {
-                showcart.classList.remove("active");
+                removeClassesIfPresent(showcart, "active");
             }
         });
         d.querySelectorAll(".awa-header-minicart").forEach(function (shell) {
-            shell.classList.remove("awa-header-minicart--expanded");
-            shell.setAttribute("data-awa-minicart-expanded", "0");
+            removeClassesIfPresent(shell, "awa-header-minicart--expanded");
+            setAttributeIfChanged(shell, "data-awa-minicart-expanded", "0");
         });
         d.querySelectorAll(".block-minicart").forEach(function (p) {
-            p.classList.remove("_active", "active", "is-open");
-            p.setAttribute("aria-hidden", "true");
+            removeClassesIfPresent(p, "_active", "active", "is-open");
+            setAttributeIfChanged(p, "aria-hidden", "true");
         });
-        d.documentElement.classList.remove("awa-minicart-overlay-active");
+        removeClassesIfPresent(d.documentElement, "awa-minicart-overlay-active");
         if (d.body) {
-            d.body.classList.remove("awa-minicart-overlay-active");
+            removeClassesIfPresent(d.body, "awa-minicart-overlay-active");
         }
     }
     function syncClosedUi() {
@@ -123,20 +138,20 @@ function hdr(trigger) {
         openAtPointerDown = false;
         cancelSchedule();
         d.querySelectorAll(".minicart-wrapper").forEach(function (wrap) {
-            wrap.classList.remove("active", "show", "is-open");
+            removeClassesIfPresent(wrap, "active", "show", "is-open");
             var showcart = wrap.querySelector(".showcart, .action.showcart");
             if (showcart) {
-                showcart.classList.remove("is-open", "active");
-                showcart.setAttribute("aria-expanded", "false");
+                removeClassesIfPresent(showcart, "is-open", "active");
+                setAttributeIfChanged(showcart, "aria-expanded", "false");
             }
         });
         d.querySelectorAll(".awa-header-minicart").forEach(function (shell) {
-            shell.classList.remove("awa-header-minicart--expanded");
-            shell.setAttribute("data-awa-minicart-expanded", "0");
+            removeClassesIfPresent(shell, "awa-header-minicart--expanded");
+            setAttributeIfChanged(shell, "data-awa-minicart-expanded", "0");
         });
         d.querySelectorAll(".block-minicart").forEach(function (p) {
-            p.classList.remove("_active", "active", "is-open");
-            p.setAttribute("aria-hidden", "true");
+            removeClassesIfPresent(p, "_active", "active", "is-open");
+            setAttributeIfChanged(p, "aria-hidden", "true");
             releaseDockStyles(p);
             // Não forçar display:none !important — isso impede o Magento de reabrir.
         });

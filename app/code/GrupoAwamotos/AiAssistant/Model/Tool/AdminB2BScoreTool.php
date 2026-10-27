@@ -18,7 +18,8 @@ use GrupoAwamotos\B2B\Api\Data\ApprovalScoreResultInterface;
 class AdminB2BScoreTool implements ToolInterface
 {
     public function __construct(
-        private readonly ApprovalScoreServiceInterface $approvalScore
+        private readonly ApprovalScoreServiceInterface $approvalScore,
+        private readonly \GrupoAwamotos\B2B\CommercialPanel\Model\PortfolioScope $portfolioScope
     ) {
     }
 
@@ -53,6 +54,13 @@ class AdminB2BScoreTool implements ToolInterface
         $customerId = (int) ($arguments['customer_id'] ?? 0);
         if ($customerId <= 0) {
             return ['error' => 'customer_id inválido.'];
+        }
+
+        /* Escopo por carteira (mesma regra do cockpit comercial). Resposta
+         * idêntica para "não existe" e "fora da carteira": anti-enumeração. */
+        if (!$this->portfolioScope->canBypassPortfolioScope()
+            && !$this->portfolioScope->canAccessCustomer($customerId)) {
+            return ['error' => 'Cliente não encontrado na sua carteira.'];
         }
 
         try {

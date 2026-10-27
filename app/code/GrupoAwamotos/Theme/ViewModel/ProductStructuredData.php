@@ -227,8 +227,8 @@ class ProductStructuredData implements ArgumentInterface
             'merchantReturnDays' => 7,
             'returnMethod' => 'https://schema.org/ReturnByMail',
             'returnFees' => 'https://schema.org/FreeReturn',
-            'merchantReturnLink' => 'https://awamotos.com/trocas-e-devolucoes',
-            'category' => 'https://schema.org/MerchantReturnNotPermitted',
+            'merchantReturnLink' => 'https://awamotos.com/trocas-devolucoes',
+            'category' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
             'description' => 'Garantia legal de 90 dias para defeitos de fabricacao. ' .
                              'Trocas por arrependimento em ate 7 dias conforme CDC.',
         ];
@@ -345,6 +345,15 @@ class ProductStructuredData implements ArgumentInterface
         if ($this->aggregateRatingResolved) {
             return $this->aggregateRating;
         }
+        // SEO-003: o widget de avaliacao da PDP e controlado por catalog/review/active.
+        // Com a config desligada o widget NAO renderiza; declarar aggregateRating sem nota visivel
+        // e marcacao nao sustentada pela pagina. Mesma config do widget => marca e tela nunca divergem.
+        if (!$this->storeManager->getStore()->getConfig("catalog/review/active")) {
+            $this->aggregateRatingResolved = true;
+
+            return null;
+        }
+
 
         try {
             $storeId = (int) $this->storeManager->getStore()->getId();

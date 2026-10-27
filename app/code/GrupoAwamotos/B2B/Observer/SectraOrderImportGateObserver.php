@@ -8,6 +8,7 @@ use GrupoAwamotos\B2B\Model\Sectra\OrderImportGate;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -22,6 +23,13 @@ use Psr\Log\LoggerInterface;
  * re-evaluates/overwrites the status on later saves (invoice, comments,
  * status changes, etc.) which are handled by OrderImportGate's cron
  * backfill/release methods instead.
+ *
+ * AJUSTE (auditoria 2026-10): a ordenação dos observers em etc/events.xml coloca
+ * o gate de ALÇADA (grupoawamotos_b2b_order_approval_trigger) ANTES deste observer.
+ * Assim, pedido B2B acima do limite já chega aqui RETIDO (state=holded) e NÃO pode ser
+ * liberado para "Importar Pedidos" no Sectra antes da aprovação interna. Como o
+ * sectra_import_status permanece NULL nesse caso, a liberação acontece naturalmente
+ * no próximo save — que é exatamente o save do unhold() feito pela aprovação.
  */
 class SectraOrderImportGateObserver implements ObserverInterface
 {
@@ -39,6 +47,12 @@ class SectraOrderImportGateObserver implements ObserverInterface
         }
 
         if ($order->getData('sectra_import_status') !== null) {
+            return;
+        }
+
+        // Pedido retido (ex.: aguardando aprovação B2B) não é liberado para importação:
+        // o status fica NULL e o próximo save (unhold da aprovação) reavalia e libera.
+        if ($order->getState() === Order::STATE_HOLDED) {
             return;
         }
 

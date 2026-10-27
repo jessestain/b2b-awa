@@ -28,6 +28,9 @@ $loginUrl     = $block->escapeUrl($block->getUrl('b2b/account/login'));
     </header>
 
     <div class="rokan-mostviewed">
+        <?php /* Nome do carrossel para o motor: o q() do awa-scroll-carousel.js le o 1o
+                 titulo dentro da raiz normalizada; sem isto o rotulo virava "Produtos". */ ?>
+        <span class="awa-section-header__title visually-hidden"><?= $block->escapeHtml((string) __('Produtos Relacionados')) ?></span>
         <div class="awa-carousel">
             <div class="awa-carousel__viewport awa-cq-card-wrapper"
                  role="region"
@@ -39,7 +42,21 @@ $loginUrl     = $block->escapeUrl($block->getUrl('b2b/account/login'));
                         <div class="item-product awa-carousel-card-slot">
                             <div class="content-item-product awa-product-card">
 
-                                <?php $productImage = $block->getImage($product, $imageType); ?>
+                                <?php
+                                // Use only this SKU's configured media roles; never persist a role change.
+                                $relatedImageType = $imageType;
+                                $smallImage = trim((string) $product->getData('small_image'));
+                                if ($smallImage === '' || $smallImage === 'no_selection') {
+                                    $mainImage = trim((string) $product->getData('image'));
+                                    $thumbnail = trim((string) $product->getData('thumbnail'));
+                                    if ($mainImage !== '' && $mainImage !== 'no_selection') {
+                                        $relatedImageType = 'product_page_main_image';
+                                    } elseif ($thumbnail !== '' && $thumbnail !== 'no_selection') {
+                                        $relatedImageType = 'category_page_grid-1';
+                                    }
+                                }
+                                $productImage = $block->getImage($product, $relatedImageType);
+                                ?>
                                 <div class="product-thumb">
                                     <a href="<?= $block->escapeUrl($product->getProductUrl()) ?>"
                                        class="product-thumb-link product photo product-item-photo"

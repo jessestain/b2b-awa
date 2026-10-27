@@ -174,11 +174,11 @@ body.awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible)
 
 @media (max-width: 991px) {
   body.awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) .page-wrapper {
-    padding-bottom: calc(var(--awa-cookie-banner-height, 72px) + var(--awa-mobile-bottom-nav-h, 84px) + 8px) !important;
+    padding-bottom: calc(var(--awa-cookie-banner-height, 72px) + var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 8px) !important;
   }
 
   #awa-cookie-banner.awa-cookie-banner--visible {
-    inset-block-end: calc(var(--awa-mobile-bottom-nav-h, 84px) + 12px + env(safe-area-inset-bottom, 0px)) !important;
+    inset-block-end: calc(var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 12px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
@@ -422,7 +422,90 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 
   @media (max-width: 991px) {
     html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:not(.b2b-auth-shell).awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) .page-wrapper {
-      padding-bottom: calc(var(--awa-cookie-banner-height, 210px) + var(--awa-mobile-bottom-nav-h, 64px) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+      padding-bottom: calc(var(--awa-cookie-banner-height, 210px) + var(--awa-mobile-bottom-nav-h, calc(64px + env(safe-area-inset-bottom, 0px))) + 16px + env(safe-area-inset-bottom, 0px)) !important;
     }
   }
+}
+
+/* =============================================================================
+   A2 — 2026-10-16 — botao permanente de reabrir preferencias de cookies.
+   LGPD Art. 8o §5 e Art. 18: revogar precisa ser tao facil quanto consentir.
+   Antes nao havia NENHUMA forma de revogar — o banner sumia para sempre no
+   primeiro clique.
+
+   Nasce OCULTO; o cookie-consent.js acende com .awa-cookie-reopen--visible.
+   Card e botao nunca coexistem.
+
+   O card NAO foi reposicionado: producao ja o afasta do FAB da IA com
+   right:96px, entao nao ha colisao a resolver aqui.
+   ========================================================================== */
+html body#html-body#html-body#html-body#html-body button#awa-cookie-reopen {
+  display: none !important;
+  position: fixed !important;
+  left: clamp(12px, 3vw, 24px) !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: calc(clamp(12px, 2vw, 20px) + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: var(--awa-layer-cookie, 850) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  border: 1px solid var(--awa-border) !important;
+  border-radius: 9999px !important;
+  background: var(--awa-bg) !important;
+  color: var(--awa-text) !important;
+  cursor: pointer;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--awa-text-primary) 12%, transparent) !important;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+html body#html-body#html-body#html-body#html-body button#awa-cookie-reopen.awa-cookie-reopen--visible {
+  display: inline-flex !important;
+}
+
+html body#html-body#html-body#html-body#html-body button#awa-cookie-reopen:hover {
+  background: var(--awa-bg-subtle, #f3f4f6) !important;
+}
+
+html body#html-body#html-body#html-body#html-body button#awa-cookie-reopen:focus-visible {
+  outline: 3px solid var(--awa-primary, var(--awa-brand)) !important;
+  outline-offset: 2px !important;
+}
+
+html body#html-body#html-body#html-body#html-body button#awa-cookie-reopen svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+/* Suppress the optional Ava teaser while consent is visible. Important and the existing cascade specificity are required to override the design-system teaser lock; the accessible Ava launcher remains available. */
+@layer awa-visual-priority {
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.awa-cookie-banner-active #awa-ai-chat-root .awa-ai-chat__toggle-label { display: none !important; }
+}
+
+/* Use existing measured consent geometry. Existing important layer locks otherwise
+ * pin Ava over the card. Scope ends automatically when the visible card closes. */
+@layer awa-visual-priority {
+ @media (max-width:640px) {
+ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) #awa-ai-chat-root { bottom: max(84px, var(--awa-cookie-banner-top-gap, 0px)) !important; }
+ }
+ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.awa-cookie-banner-active:has(#awa-cookie-banner.awa-cookie-banner--visible) #awa-ai-chat-root .awa-ai-chat__panel {
+  position: fixed !important;
+  top: 12px !important; bottom: auto !important; right: 12px !important; left: auto !important;
+  max-width: calc(100vw - 24px) !important;
+  height: min(680px, calc(100dvh - max(calc(var(--awa-cookie-banner-top-gap, 0px) + 56px), calc(var(--awa-cookie-banner-height, 0px) + 28px)) - 24px)) !important;
+  max-height: calc(100dvh - max(calc(var(--awa-cookie-banner-top-gap, 0px) + 56px), calc(var(--awa-cookie-banner-height, 0px) + 28px)) - 24px) !important;
+  min-height: 0 !important;
+ }
 }

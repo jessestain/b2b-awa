@@ -1,74 +1,27 @@
-/**
- * AWA A11y — Focus Visible (WCAG 2.4.7 / 2.4.11)
- *
- * Restore keyboard-navigation focus rings globally.
- * The existing CSS removes outline on :focus for mouse users (valid),
- * but several rules omit the :focus-visible recovery, breaking WCAG AA.
- *
- * Strategy:
- *   - :focus:not(:focus-visible) → remove indicator (mouse / touch)
- *   - :focus-visible              → show branded ring (keyboard / AT)
- *
- * Loads LAST via awa-impeccable-audit-terminal-css.phtml (default.xml).
- * Uses #html-body prefix for cascade priority without !important on the ring.
- */
-
-/* ── 1. Permit removing outline for non-keyboard interactions ─────────── */
-#html-body a:focus:not(:focus-visible),
-#html-body button:focus:not(:focus-visible),
-#html-body [role="button"]:focus:not(:focus-visible),
-#html-body [tabindex]:focus:not(:focus-visible),
-#html-body .action:focus:not(:focus-visible),
-#html-body .btn:focus:not(:focus-visible),
-#html-body select:focus:not(:focus-visible),
-#html-body details:focus:not(:focus-visible),
-#html-body summary:focus:not(:focus-visible) {
-    outline: none;
+#html-body .action:focus:not(:focus-visible),#html-body .btn:focus:not(:focus-visible),#html-body [role=button]:focus:not(:focus-visible),#html-body [tabindex]:focus:not(:focus-visible),#html-body a:focus:not(:focus-visible),#html-body button:focus:not(:focus-visible),#html-body details:focus:not(:focus-visible),#html-body select:focus:not(:focus-visible),#html-body summary:focus:not(:focus-visible) {
+  outline:0
 }
-
-/* ── 2. Always show branded focus ring for keyboard / AT users ────────── */
-#html-body a:focus-visible,
-#html-body button:focus-visible,
-#html-body [role="button"]:focus-visible,
-#html-body [tabindex]:focus-visible,
-#html-body .action:focus-visible,
-#html-body .btn:focus-visible,
-#html-body select:focus-visible,
-#html-body details:focus-visible,
-#html-body summary:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337) !important;
-    outline-offset: 3px !important;
-    border-radius: 3px;
-    /* Do not remove box-shadow — forms may use it as the focus indicator */
+#html-body .action:focus-visible,#html-body .btn:focus-visible,#html-body [role=button]:focus-visible,#html-body [tabindex]:focus-visible,#html-body a:focus-visible,#html-body button:focus-visible,#html-body details:focus-visible,#html-body select:focus-visible,#html-body summary:focus-visible {
+  outline:2px solid var(--awa-primary,var(--awa-brand))!important;
+  outline-offset:3px!important;
+  border-radius:3px
 }
-
-/* ── 3. Form inputs: keep border-color pattern but add backup ring ────── */
-#html-body input:focus-visible,
-#html-body textarea:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337) !important;
-    outline-offset: 0 !important;
-    border-radius: 3px;
+#html-body input:focus-visible,#html-body textarea:focus-visible {
+  outline:2px solid var(--awa-primary,var(--awa-brand))!important;
+  outline-offset:0!important;
+  border-radius:3px
 }
-
-/* ── 4. Skip-to-content link (screen reader / keyboard bypass) ─────────
-   If not present, this rule does nothing; if added later, it works. */
-#html-body .awa-skip-link:focus-visible,
-#html-body .skip-link:focus-visible,
-#html-body a[href="#main-content"]:focus-visible {
-    position: fixed !important;
-    top: 8px !important;
-    left: 8px !important;
-    z-index: 99999 !important;
-    padding: 8px 16px !important;
-    background: var(--awa-primary, #b73337) !important;
-    color: var(--awa-bg) !important;
-    font-weight: 700 !important;
-    border-radius: 4px !important;
-    outline: 3px solid var(--awa-bg) !important;
-    outline-offset: 2px !important;
-    text-decoration: none !important;
+#html-body .awa-skip-link:focus-visible,#html-body .skip-link:focus-visible,#html-body a[href="#main-content"]:focus-visible {
+  position:fixed!important;
+  top:8px!important;
+  left:8px!important;
+  z-index:99999!important;
+  padding:8px 16px!important;
+  background:var(--awa-primary,var(--awa-brand))!important;
+  color:var(--awa-bg)!important;
+  font-weight:700!important;
+  border-radius:4px!important;
+  outline:3px solid var(--awa-bg)!important;
+  outline-offset:2px!important;
+  text-decoration:none!important
 }
-
-/* ── 5. Navigation image links — handled by awa-a11y-nav-links.phtml JS ─
-   These image-only <a> links need aria-label via JS since they're
-   rendered by Rokanthemes (cannot override template here). */

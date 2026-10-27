@@ -27,6 +27,14 @@ if ($banners = $block->getBannerCollection()):
         'navigation' => true,
         'pagination' => true,
         'autoplay' => 12000,
+        /* VS4l: Swiper 11 tem resizeObserver=true por padrão — cada resize (inclusive
+           barra de URL no mobile) re-roda updateSize (~300ms de leituras de layout).
+           Os slides são travados via CSS (100%×100% do container) e o container tem
+           altura reservada (F47) → o swiper não precisa re-medir; desligar os dois
+           observers elimina o custo repetido. Init continua medindo 1×. */
+        'resizeObserver' => false,
+        'observer' => false,
+        'observeParents' => false,
     ];
     $booleanKeys = ['navigation', 'stopOnHover', 'pagination'];
 
@@ -211,23 +219,23 @@ if ($banners = $block->getBannerCollection()):
            slider_005_mobile.jpg.webp (52,9s). Logo os DOIS primeiros slides do
            mobile precisam ser eager. Variavel SEPARADA de $__isFirstMob, que
            controla aria-hidden e deve seguir marcando so o slide ativo. */
-        $__eagerMob = ($__mobIdx <= 1); $__mobIdx++; ?>
-            <div class="banner_item swiper-slide awa-hero__slide"
+        $__eagerMob = ($__mobIdx <= 1); $__mobIdx++;
+        $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
+        $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
+        $_mobSrc = $banner->getSlideImageMobile() ?: $banner->getSlideImage();
+        $link = $resolveSlideLink($banner->getSlideLink());
+        $__isCb300Mob = (stripos((string) $_mobSrc, 'slider_guidao_cb_300') !== false)
+            || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
+        if ($__isCb300Mob && strcasecmp($slideAlt, 'AWA Motos') === 0) {
+            $slideAlt = (string) __('Guidão CB 300 texturizado');
+        } ?>
+            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300Mob ? ' awa-hero__slide--cb300' : '' ?>"
                  role="group"
                  aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
                  aria-label="<?= $block->escapeHtmlAttr(__('Slide %1 de %2', $__mobIdx, $activeBannerCount)) ?>"
                  aria-hidden="<?= $__isFirstMob ? 'false' : 'true' ?>">
                 <div class="banner_item_bg">
                     <?php
-                    $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
-                    $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
-                    $_mobSrc = $banner->getSlideImageMobile() ?: $banner->getSlideImage();
-                    $link = $resolveSlideLink($banner->getSlideLink());
-                    $__isCb300Mob = (stripos((string) $_mobSrc, 'slider_guidao_cb_300') !== false)
-                        || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
-                    if ($__isCb300Mob && strcasecmp($slideAlt, 'AWA Motos') === 0) {
-                        $slideAlt = (string) __('Guidão CB 300 texturizado');
-                    }
                     if ($heroResponsive) {
                         // r44b: no desktop o slider mobile fica em display:none, mas eager+high
                         // ainda baixa 1920w. LCP mobile fica no preload (media max-width:767).
@@ -272,10 +280,17 @@ if ($banners = $block->getBannerCollection()):
                        16/10/2026 (C2): "data:," (data URI vazio) gerava
                        net::ERR_INVALID_URL no console do Chrome; trocado por GIF 1x1
                        transparente válido — mesmo efeito de skip, zero erro. */
-                    $html = str_replace('<picture>', '<picture><source media="(min-width:768px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=">', $html);
 echo $html;
                     ?>
                 </div>
+                <?php if ($__isCb300Mob) : ?>
+                <div class="awa-hero-mobile-caption">
+                    <span class="awa-hero-mobile-caption__badge"><?= $block->escapeHtml(__('Lançamento')) ?></span>
+                    <strong class="awa-hero-mobile-caption__title"><?= $block->escapeHtml(__('Guidão CB 300 Texturizado')) ?></strong>
+                    <span class="awa-hero-mobile-caption__meta"><?= $block->escapeHtml(__('Cód. 2398 · 2025')) ?></span>
+                    <a class="awa-hero-mobile-caption__cta" href="<?= $block->escapeUrl($link !== '' ? $link : '/guidoes.html') ?>"><?= $block->escapeHtml(__('Ver guidões')) ?></a>
+                </div>
+                <?php endif; ?>
                 <?php if ($text = $banner->getSlideText()): ?>
                 <div class="text-banner">
                     <?= $renderSafeSlideText($text) ?>
@@ -317,8 +332,14 @@ echo $html;
             el.setAttribute('aria-hidden', active ? 'false' : 'true');
             if (active) {
                 el.removeAttribute('inert');
+                /* PLANO B2B F2.2: trava de apresentação única desde o 1º paint.
+                   O CSS que esconde a variante inativa (.hidden-xs/.visible-xs) chega
+                   deferido; sem display:none inline, as DUAS variantes do hero pintam
+                   juntas e o texto do slide aparece duplicado (FOUC). */
+                el.style.removeProperty('display');
             } else {
                 el.setAttribute('inert', '');
+                el.style.setProperty('display', 'none', 'important');
             }
         });
     }

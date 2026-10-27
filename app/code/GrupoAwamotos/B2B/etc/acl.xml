@@ -49,7 +49,11 @@
                         <resource id="GrupoAwamotos_B2B::dashboard" title="Meta B2B Dashboard" sortOrder="5"/>
                         <resource id="GrupoAwamotos_B2B::customer_approval" title="Customer Approval" sortOrder="10"/>
                         <resource id="GrupoAwamotos_B2B::quotes" title="Quote Requests" sortOrder="20"/>
-                        <resource id="GrupoAwamotos_B2B::order_approval" title="Order Approval" sortOrder="25"/>
+                        <resource id="GrupoAwamotos_B2B::order_approval" title="Order Approval" sortOrder="25">
+                            <resource id="GrupoAwamotos_B2B::order_approval_manager" title="Alçada de Aprovação: Gerente (R$ 5.000+)" sortOrder="10"/>
+                            <resource id="GrupoAwamotos_B2B::order_approval_finance" title="Alçada de Aprovação: Financeiro (R$ 15.000+)" sortOrder="20"/>
+                            <resource id="GrupoAwamotos_B2B::order_approval_director" title="Alçada de Aprovação: Diretor (R$ 50.000+)" sortOrder="30"/>
+                        </resource>
                         <resource id="GrupoAwamotos_B2B::sectra_queue" title="Sectra Order Queue" sortOrder="28"/>
                         <resource id="GrupoAwamotos_B2B::companies" title="Company Management" sortOrder="26"/>
                         <resource id="GrupoAwamotos_B2B::credit" title="Credit Management" sortOrder="27"/>

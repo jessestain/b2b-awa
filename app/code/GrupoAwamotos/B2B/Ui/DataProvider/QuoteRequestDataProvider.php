@@ -13,11 +13,6 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class QuoteRequestDataProvider extends AbstractDataProvider
 {
-    /**
-     * @var array
-     */
-    protected $loadedData;
-
     public function __construct(
         $name,
         $primaryFieldName,
@@ -31,23 +26,29 @@ class QuoteRequestDataProvider extends AbstractDataProvider
     }
 
     /**
-     * Get data
+     * Get data in the format expected by UI listings.
      *
-     * @return array
+     * A listing (Magento_Ui/js/grid/provider) reads data.items and data.totalRecords.
+     * Returning a map keyed by id (form format) left data.items undefined, which made
+     * the actions column fail with "Cannot read properties of undefined (reading 'map')".
+     *
+     * @return array{totalRecords: int, items: array<int, array<string, mixed>>}
      */
     public function getData()
     {
-        if (isset($this->loadedData)) {
-            return $this->loadedData;
+        $collection = $this->getCollection();
+        if (!$collection->isLoaded()) {
+            $collection->load();
         }
 
-        $items = $this->collection->getItems();
-        $this->loadedData = [];
-
-        foreach ($items as $item) {
-            $this->loadedData[$item->getId()] = $item->getData();
+        $items = [];
+        foreach ($collection->getItems() as $item) {
+            $items[] = $item->getData();
         }
 
-        return $this->loadedData;
+        return [
+            'totalRecords' => (int) $collection->getSize(),
+            'items' => $items,
+        ];
     }
 }

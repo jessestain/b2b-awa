@@ -132,11 +132,22 @@ class CustomerPriceProvider
 
         try {
             $row = $this->connection->fetchOne(
-                "SELECT FATORPRECO FROM FN_FORNECEDORES WHERE CODIGO = ?",
+                "SELECT FATORPRECO, CKCLIENTE, ATCLIENTE FROM FN_FORNECEDORES WHERE CODIGO = ?",
                 [$erpCustomerCode]
             );
 
-            $listCode = ($row && !empty($row['FATORPRECO'])) ? (int) $row['FATORPRECO'] : null;
+            /* Auditoria de 16/10/2026 (b2b:audit:erp-readiness): 723 clientes aprovados
+             * no site estao com CKCLIENTE != 'S' ou ATCLIENTE != 'S' no Sectra, mas esta
+             * consulta devolvia a lista de preco do cliente do mesmo jeito — o cliente
+             * desativado no ERP continuava comprando com a lista especifica dele.
+             * Isto NAO bloqueia o cliente: so remove o preco de lista errado. Sem lista,
+             * getCustomerPrice() cai no preco base (NACIONAL, que ja vem sincronizado
+             * do Sectra), nunca num preco "sem ERP". */
+            $isActiveClient = $row
+                && ($row['CKCLIENTE'] ?? 'N') === 'S'
+                && ($row['ATCLIENTE'] ?? 'N') === 'S';
+
+            $listCode = ($isActiveClient && !empty($row['FATORPRECO'])) ? (int) $row['FATORPRECO'] : null;
 
             $this->customerListCache[$erpCustomerCode] = $listCode;
             $this->cache->save(

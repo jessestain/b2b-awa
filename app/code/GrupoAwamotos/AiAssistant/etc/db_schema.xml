@@ -23,6 +23,8 @@
                 comment="Modelo LLM utilizado"/>
         <column xsi:type="int" name="tokens_used" unsigned="true" nullable="true"
                 comment="Total de tokens consumidos"/>
+        <column xsi:type="int" name="latency_ms" unsigned="true" nullable="true"
+                comment="Latencia do turno em milissegundos (P0 observabilidade)"/>
         <column xsi:type="varchar" name="status" length="16" nullable="false"
                 default="ok" comment="ok | error | rate_limited | llm_error"/>
         <column xsi:type="text" name="error_detail" nullable="true"

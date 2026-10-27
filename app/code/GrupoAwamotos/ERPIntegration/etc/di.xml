@@ -320,13 +320,11 @@
     <!-- Order Status Observers (Z-API WhatsApp) -->
     <type name="GrupoAwamotos\ERPIntegration\Observer\OrderStatusChange">
         <arguments>
-            <argument name="zapiClient" xsi:type="object">GrupoAwamotos\ERPIntegration\Model\WhatsApp\ZApiClient</argument>
             <argument name="logger" xsi:type="object">GrupoAwamotos\ERPIntegration\Logger\VirtualLogger</argument>
         </arguments>
     </type>
     <type name="GrupoAwamotos\ERPIntegration\Observer\ShipmentSaveAfter">
         <arguments>
-            <argument name="zapiClient" xsi:type="object">GrupoAwamotos\ERPIntegration\Model\WhatsApp\ZApiClient</argument>
             <argument name="logger" xsi:type="object">GrupoAwamotos\ERPIntegration\Logger\VirtualLogger</argument>
         </arguments>
     </type>
@@ -373,7 +371,9 @@
                 <item name="erp_client_register" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\RegisterB2BClientCommand</item>
                 <item name="erp_orders_held" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\HeldOrdersCommand</item>
                 <item name="erp_orders_reconcile" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\ReconcileOrdersCommand</item>
+                <item name="erp_order_repair_transport" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\RepairOrderTransportCommand</item>
                 <item name="erp_sectra_status" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\SectraStatusCommand</item>
+                <item name="erp_report_products_without_image" xsi:type="object">GrupoAwamotos\ERPIntegration\Console\Command\ReportProductsWithoutImageCommand</item>
             </argument>
         </arguments>
     </type>

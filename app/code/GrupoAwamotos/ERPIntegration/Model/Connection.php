@@ -247,24 +247,6 @@ class Connection implements ConnectionInterface
             fclose($fp);
         }
 
-        // #region agent log
-        $payload = json_encode([
-            'sessionId' => '864284',
-            'runId' => 'post-fix-erp-tcp-failfast',
-            'hypothesisId' => 'AG',
-            'location' => 'Connection.php:assertTcpReachable',
-            'message' => 'erp-tcp-probe',
-            'data' => ['ok' => $ok, 'errno' => $errno, 'timeout' => self::TCP_PROBE_TIMEOUT],
-            'timestamp' => (int) round(microtime(true) * 1000),
-        ]);
-        if (is_string($payload)) {
-            @file_put_contents(
-                '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-864284.log',
-                $payload . "\n",
-                FILE_APPEND | LOCK_EX
-            );
-        }
-        // #endregion
 
         if (!$ok) {
             $this->logger->error('[ERP] TCP probe failed before PDO connect', [

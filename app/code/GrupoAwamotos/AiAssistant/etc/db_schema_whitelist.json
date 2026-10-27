@@ -10,6 +10,7 @@
             "tools_called": true,
             "model_used": true,
             "tokens_used": true,
+            "latency_ms": true,
             "status": true,
             "error_detail": true,
             "ip_hash": true,

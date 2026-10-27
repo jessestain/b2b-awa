@@ -6,7 +6,7 @@ $items = $block->getCrossSellProducts();
 if (empty($items)) {
     return;
 }
-$formKey = $block->getFormKey();
+// form_key: value vazio, hidratado via JS por-sessao (P0.2). Nao usa getBlockHtml, por isso o plugin central nao cobre este template.
 $itemCount = count($items);
 $canShowPrice = $block->canShowPrice();
 $loginUrl = $block->escapeUrl($block->getUrl('b2b/account/login'));
@@ -64,7 +64,7 @@ $loginUrl = $block->escapeUrl($block->getUrl('b2b/account/login'));
             <?php if ($canShowPrice && $product->isSaleable()): ?>
             <form action="<?= $block->escapeUrl($block->getUrl('checkout/cart/add')) ?>" method="post" class="rx-pdp-form">
                 <input type="hidden" name="product" value="<?= (int)$product->getId() ?>">
-                <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($formKey) ?>">
+                <input type="hidden" name="form_key" value="">
                 <input type="hidden" name="qty" value="1">
                 <button type="submit" class="rx-pdp-addtocart" title="<?= $block->escapeHtmlAttr(__('Adicionar ao Carrinho')) ?>">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>

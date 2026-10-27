@@ -413,7 +413,6 @@ define([
             '  padding: var(--awa-space-2, 8px) !important;',
             '  background: var(--awa-bg-surface, #fff) !important;',
             '  border: 1px solid var(--awa-border, #e5e7eb) !important;',
-            '  border-radius: 0 0 var(--awa-radius-md, 8px) var(--awa-radius-md, 8px) !important;',
             '  box-shadow: 0 8px 24px color-mix(in srgb, CanvasText 10%, transparent) !important;',
             '}',
             '#html-body .page-wrapper .navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown > li.ui-menu-item.level0 > a.level-top.navigation__link,',

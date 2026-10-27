@@ -11,11 +11,12 @@
 #   bin/deploy-full                  # deploy padrao (pt_BR + en_US)
 #   bin/deploy-full --skip-compile   # pula di:compile (apenas static)
 #
-# AVISO: NAO REINICIA PHP-FPM, NAO FAZ FLUSH DO VARNISH.
-# Esses passos devem ser feitos manualmente apos deploy:
-#   1. sudo systemctl reload php8.4-fpm
-#   2. varnishadm ban req.http.host == awamotos.com
-#   3. redis-cli -h ::1 -a 'Aw4R3d1s2026Sec' -n 2 FLUSHDB
+# AVISO: NAO REINICIA PHP-FPM automaticamente.
+# O Varnish e invalidado por TAG (PURGE X-Magento-Tags-Pattern) no step 7,
+# nao por ban global. O cache:clean ja dispara PURGE por tag via
+# module-cache-invalidate (http_cache_hosts=localhost:6081). Pos-deploy:
+#   1. sudo systemctl reload php8.4-fpm  (se necessario)
+#   (NAO usar 'varnishadm ban req.http.host == awamotos.com' — ban global proibido na P1.1)
 # ==========================================================================
 set -euo pipefail
 
@@ -146,7 +147,10 @@ echo ""
 # Step 6: Cache flush
 # ============================================
 log "Step 6/7: Cache flush..."
-if sudo -u www-data php bin/magento cache:flush 2>&1 | tail -3; then
+# P1.1: cache:clean (nao flush) — limpa todos os tipos e dispara PURGE por tag
+# via PurgeCache, SEM flush de storage (evita o bug de busca vazia OpenSearch
+# pos-flush documentado neste install em cache-clean-aquecido.sh).
+if sudo -u www-data php bin/magento cache:clean 2>&1 | tail -3; then
     ok "Magento cache flush"
 else
     warn "Cache flush falhou (continuando)"
@@ -158,14 +162,12 @@ echo ""
 # ============================================
 log "Step 7/7: Varnish purge + Redis FPC..."
 # Varnish
-if command -v varnishadm > /dev/null 2>&1; then
-    if sudo varnishadm ban req.http.host == awamotos.com 2>&1; then
-        ok "Varnish purged"
-    else
-        warn "Varnish purge falhou (continuando)"
-    fi
+# P1.1: ban global trocado por PURGE por tag seletivo. O cache:clean (step 6)
+# ja dispara PURGE por tag via module-cache-invalidate; este reforca o conteudo publico.
+if curl -sf -m 5 -X PURGE -H 'X-Magento-Tags-Pattern: cms_b|cms_p|cat_p|cat_c' http://127.0.0.1:6081/ > /dev/null 2>&1; then
+    ok "Varnish purgado por tag (seletivo)"
 else
-    warn "varnishadm nao encontrado"
+    warn "PURGE por tag falhou (cache:clean ja invalidou via PurgeCache; continuando)"
 fi
 
 # Redis FPC

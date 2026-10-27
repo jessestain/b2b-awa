@@ -25,23 +25,58 @@ class OpenRouterClient implements LlmClientInterface
 {
     private const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
+    /** DeepSeek fala o mesmo formato OpenAI (tools / tool_calls). */
+    private const DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions';
+
+    /**
+     * @param string $provider 'openrouter' (padrão) ou 'deepseek'. A mesma classe
+     *        serve os dois via virtualType em di.xml; muda só URL, chave, modelo
+     *        e timeout. Nada mais do fluxo (tools, parse, Hermes) é duplicado.
+     */
     public function __construct(
         private readonly Curl            $curl,
         private readonly Config          $config,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly string          $provider = 'openrouter'
     ) {
+    }
+
+    public function getProvider(): string
+    {
+        return $this->provider;
+    }
+
+    public function isConfigured(): bool
+    {
+        return $this->resolveApiKey() !== '';
+    }
+
+    private function isDeepSeek(): bool
+    {
+        return $this->provider === 'deepseek';
+    }
+
+    private function resolveApiKey(): string
+    {
+        return $this->isDeepSeek() ? $this->config->getDeepSeekApiKey() : $this->config->getOpenRouterApiKey();
+    }
+
+    private function resolveModel(): string
+    {
+        return $this->isDeepSeek() ? $this->config->getDeepSeekModel() : $this->config->getOpenRouterModel();
     }
 
     public function chat(array $messages, array $tools = []): LlmResponseInterface
     {
-        $apiKey = $this->config->getOpenRouterApiKey();
+        $apiKey = $this->resolveApiKey();
         if ($apiKey === '') {
             throw new LlmException(new Phrase(
-                'OpenRouter API key not configured. Go to Stores › Configuration › AWA Motos › Assistente de IA › OpenRouter.'
+                '%1 API key not configured. Go to Stores › Configuration › AWA Motos › Assistente de IA.',
+                [$this->isDeepSeek() ? 'DeepSeek' : 'OpenRouter']
             ));
         }
 
-        $model = $this->config->getOpenRouterModel();
+        $model = $this->resolveModel();
         $hermesNative = $this->isHermesModel($model) && $tools !== [];
 
         if ($hermesNative) {
@@ -73,8 +108,10 @@ class OpenRouterClient implements LlmClientInterface
                 'HTTP-Referer'  => 'https://awamotos.com',
                 'X-Title'       => 'AWA Motos AI Assistant',
             ]);
-            $this->curl->setTimeout($this->config->getOpenRouterTimeoutSeconds());
-            $this->curl->post(self::API_URL, $body);
+            $this->curl->setTimeout($this->isDeepSeek()
+                ? $this->config->getDeepSeekTimeoutSeconds()
+                : $this->config->getOpenRouterTimeoutSeconds());
+            $this->curl->post($this->isDeepSeek() ? self::DEEPSEEK_API_URL : self::API_URL, $body);
 
             $status   = $this->curl->getStatus();
             $rawBody  = (string) $this->curl->getBody();
@@ -82,17 +119,26 @@ class OpenRouterClient implements LlmClientInterface
 
             if ($status !== 200 || !is_array($response)) {
                 $errorMsg = is_array($response) ? ($response['error']['message'] ?? 'unknown') : substr($rawBody, 0, 300);
+                /* "Provider returned error" sozinho não diz nada: o motivo real
+                 * vem em error.metadata.raw (texto do provedor) e provider_name. */
+                $meta = is_array($response) ? ($response['error']['metadata'] ?? []) : [];
                 $this->logger->error('[AiAssistant] OpenRouter API error', [
-                    'status'  => $status,
-                    'error'   => $errorMsg,
-                    'model'   => $model,
+                    'llm'      => $this->provider,
+                    'status'   => $status,
+                    'error'    => $errorMsg,
+                    'model'    => $model,
+                    'provider' => is_array($meta) ? ($meta['provider_name'] ?? null) : null,
+                    'raw'      => is_array($meta) ? substr((string) ($meta['raw'] ?? ''), 0, 600) : null,
                 ]);
-                throw new LlmException(new Phrase('OpenRouter API returned status %1: %2', [$status, $errorMsg]));
+                throw new LlmException(new Phrase(
+                    '%1 API returned status %2: %3',
+                    [$this->isDeepSeek() ? 'DeepSeek' : 'OpenRouter', $status, $errorMsg]
+                ));
             }
         } catch (LlmException $e) {
             throw $e;
         } catch (\Exception $e) {
-            $this->logger->error('[AiAssistant] OpenRouter HTTP error: ' . $e->getMessage());
+            $this->logger->error('[AiAssistant] ' . $this->provider . ' HTTP error: ' . $e->getMessage());
             throw new LlmException(new Phrase('LLM HTTP error: %1', [$e->getMessage()]));
         }
 
@@ -232,7 +278,7 @@ class OpenRouterClient implements LlmClientInterface
 
         $usage       = $response['usage'] ?? [];
         $totalTokens = (int) ($usage['total_tokens'] ?? 0);
-        $model       = (string) ($response['model'] ?? $this->config->getOpenRouterModel());
+        $model       = (string) ($response['model'] ?? $this->resolveModel());
 
         return new LlmResponse($content, $toolCalls, $model, $totalTokens);
     }

@@ -37,9 +37,15 @@ $__corpGridUrl = $block->escapeUrl(
 <?php
 /** Home LCP: XML-removed on cms_index_index; print->all after LCP image (hero.preload.links). */
 $__dsRaw = $block->getViewFileUrl('css/awa-design-system.min.css');
-$__dsUrl = $block->escapeUrl($__dsRaw . (str_contains($__dsRaw, '?') ? '&' : '?') . 'v=20260902-secao51-26-chip-hover-banner-ink');
+$__dsUrl = $block->escapeUrl($__dsRaw . (str_contains($__dsRaw, '?') ? '&' : '?') . 'v=20261004-padroniza-alvos-44');
 ?>
-<link rel="stylesheet" href="<?= $__dsUrl ?>" media="print" onload="window.__awaCssQ?__awaCssQ(this):(this.media='all')" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+<link rel="stylesheet" href="<?= $__dsUrl ?>" id="awa-design-system-home" data-awa-bundle="design-system" data-awa-defer="home-lcp"/>
+<!-- PADRONIZACAO 04/10/2026: alvos de toque 44px + raio unico. Carrega por ULTIMO de proposito. -->
+<!-- PADRONIZACAO (04/10/2026): alvos de toque 44px + tokens. Carrega por ULTIMO de
+     proposito (depois do design-system) para vencer a cascata. Boas praticas aplicadas:
+     (a) media="print" + onload -> NAO bloqueia o render (mesmo padrao do design-system aqui);
+     (b) <noscript> de fallback para quem tem JS desligado — sem ele o CSS nao aplicaria;
+     (c) o arquivo vive em web/css/ (fonte), entao sobrevive a setup:static-content:deploy. -->
 <noscript><link rel="stylesheet" href="<?= $__dsUrl ?>"/></noscript>
 <?php
 /**
@@ -84,3 +90,34 @@ $__dsUrl = $block->escapeUrl($__dsRaw . (str_contains($__dsRaw, '?') ? '&' : '?'
     (d.head || d.documentElement).appendChild(s);
 }(window, document));
 </script>
+
+<?php /* SHIM TEMPORARIO (task-22) — hero em branco: empilhamento do fade. SEM atributo id porque o OptimizeHeadStylesPlugin apaga os que comecam com awa-. */ ?>
+<style>
+/* hero-fade-pos-lock (task-22) — empilhamento que o `effect: 'fade'` exige.
+ *
+ * SEM atributo id DE PROPOSITO. O `OptimizeHeadStylesPlugin` roda, na home e por
+ * ultimo, `stripHomeAwaInlineStyleTags()` (linhas 571-580, chamada na linha 486),
+ * que apaga todo bloco de estilo inline cujo atributo id comece com "awa-".
+ * As 7 tags de estilo que sobrevivem na home hoje NAO tem id — por isso este bloco
+ * tambem nao tem. Ver CAUSA-RAIZ.md secao 6.
+ *
+ * (Este comentario evita de proposito escrever a sequencia literal que o regex
+ * procura: o filtro roda sobre o HTML cru e um exemplo literal aqui dentro faria
+ * o proprio filtro casar DENTRO deste bloco e truncar o CSS.) */
+html body#html-body.cms-index-index .page-wrapper .top-home-content--above-fold .awa-hero-swiper.swiper-fade > .swiper-wrapper,
+html body#html-body.cms-index-index .page-wrapper .top-home-content--above-fold .awa-hero-swiper.swiper-fade > .awa-hero__track {
+    position: relative !important;
+}
+
+html body#html-body.cms-index-index .page-wrapper .top-home-content--above-fold .awa-hero-swiper.swiper-fade .awa-hero__slide {
+    position: absolute !important;
+    inset-block-start: 0 !important;
+    inset-inline-start: 0 !important;
+    inline-size: 100% !important;
+    max-inline-size: 100% !important;
+}</style>
+
+<?php /* SHIM TEMPORARIO (task-25) — autoplay do hero no desktop: nao esperar transicao que o tema desligou de proposito. NAO liga autoplay no mobile (manual por desenho). */ ?>
+<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-hero-autoplay-fix.js')) ?>"></script>
+
+

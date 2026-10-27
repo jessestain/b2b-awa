@@ -11,6 +11,11 @@
 
     var openPending = false;
     var warmPending = false;
+    /* CartCheckout fix 2026-10-19: quando o dropdown fecha (Escape/X/clique fora),
+       os retries pendentes do clique anterior (scheduleOpen/pollForReadyAndOpen)
+       NÃO podem reabrir o painel; e cliques SINTÉTICOS com alvo body/html
+       (awa-panel-exclusive closeOthers) não podem forçar abertura. */
+    var closeRequested = false;
 
     function isDropdownReady() {
         var jq = w.jQuery;
@@ -24,6 +29,10 @@
     function tryOpenDropdown() {
         var jq = w.jQuery;
         if (!jq) {
+            return false;
+        }
+        if (closeRequested) {
+            openPending = false;
             return false;
         }
         var $panel = jq('[data-block="minicart"] [data-role="dropdownDialog"]');
@@ -126,6 +135,10 @@
         var wrap = d.querySelector('[data-block="minicart"], .minicart-wrapper');
         var trigger = wrap ? wrap.querySelector('.showcart, .action.showcart') : null;
 
+        /* CartCheckout fix 2026-10-19: cancelar aberturas pendentes no fechamento */
+        openPending = false;
+        closeRequested = true;
+
         stripAwaMinicartExtras();
         if (wrap) {
             wrap.classList.remove('is-open');
@@ -180,6 +193,9 @@
             trigger.setAttribute('aria-expanded', 'true');
         }
         if (panel) {
+            /* CartCheckout fix: panel-exclusive pode ter escondido o conteúdo
+               com display:none inline; limpar para o shell abrir de novo. */
+            panel.style.display = '';
             panel.setAttribute('aria-hidden', 'false');
         }
         d.documentElement.classList.add('awa-minicart-overlay-active');
@@ -198,6 +214,15 @@
         var trigger = null;
         if (!target || typeof target.closest !== 'function') {
             return;
+        }
+        /* CartCheckout fix 2026-10-19: cliques SINTÉTICOS com alvo body/html
+           (awa-panel-exclusive closeOthers) não devem forçar abertura. */
+        if (event.isTrusted === false && (target === d.body || target === d.documentElement)) {
+            return;
+        }
+        /* Clique real no trigger re-arma o ciclo (abrir de novo é intencional). */
+        if (event.isTrusted !== false) {
+            closeRequested = false;
         }
         if (target.closest('[data-role="awa-vertical-menu-trigger"], .title-category-dropdown, .awa-header-categories.menu_left_home1')) {
             return;
@@ -251,6 +276,65 @@
     }
 
     d.addEventListener('click', onMinicartClick, true);
+
+    /* CartCheckout fix 2026-10-19: no caminho "shell" da home o dropdownDialog
+       não é dono do estado, então o outside-close nativo não dispara. Fechar
+       ao clicar FORA do minicart (clique real, fora do wrapper/drawer). */
+    function onMinicartOutsideClick(event) {
+        if (!event || event.isTrusted === false) {
+            return;
+        }
+        var t = event.target;
+        if (!t || typeof t.closest !== 'function') {
+            return;
+        }
+        if (t.closest('[data-block="minicart"], .minicart-wrapper, .block-minicart, .awa-header-minicart')) {
+            return;
+        }
+        var wrapNow = d.querySelector('[data-block="minicart"], .minicart-wrapper');
+        if (!wrapNow || !wrapNow.classList.contains('is-open')) {
+            return;
+        }
+        closeRequested = true;
+        openPending = false;
+        onMagentoDropdownClose();
+    }
+    d.addEventListener('click', onMinicartOutsideClick, true);
+
+    /* CartCheckout fix 2026-10-19: Escape fecha também no caminho "shell"
+       (abertura via forceMinicartOpenShell, sem o widget dropdownDialog
+       como dono do estado — nesse caminho o Escape nativo não fecha).
+       Arma SEMPRE o closeRequested: durante a hidratação defer a classe
+       is-open pode estar momentaneamente ausente e o re-open tardio ficaria
+       sem watchdog (falha intermitente medida em ~1 de 3 runs). */
+    d.addEventListener('keydown', function (e) {
+        if (!e || e.key !== 'Escape') {
+            return;
+        }
+        closeRequested = true;
+        openPending = false;
+        var wrapNow = d.querySelector('[data-block="minicart"], .minicart-wrapper');
+        if (wrapNow && wrapNow.classList.contains('is-open')) {
+            onMagentoDropdownClose();
+        }
+    }, true);
+
+    /* CartCheckout fix 2026-10-19 (watchdog): a hidratação defer da home pode
+       SUBSTITUIR o nó .minicart-wrapper por um novo já com is-open (medido:
+       remove 3x no Escape e o nó volta aberto ~600ms depois, sem classList.add
+       no nó antigo). Enquanto closeRequested estiver ativo (fechamento por
+       Escape/X sem clique real posterior), re-aplicar o estado fechado no nó
+       atual. Um clique REAL no trigger re-arma o ciclo. */
+    function closeWatchdog() {
+        if (!closeRequested) {
+            return;
+        }
+        var wrapNow = d.querySelector('[data-block="minicart"], .minicart-wrapper');
+        if (wrapNow && wrapNow.classList.contains('is-open')) {
+            onMagentoDropdownClose();
+        }
+    }
+    w.setInterval(closeWatchdog, 250);
 
     // Warm: só marca pending + preload position AMD. NÃO boot KO no hover
     // (GTmetrix/TBT — hidratação completa só no clique via onMinicartClick).

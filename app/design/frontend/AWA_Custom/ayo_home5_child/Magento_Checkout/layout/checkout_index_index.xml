@@ -19,6 +19,13 @@
         <remove src="css/awa-commerce-impeccable-refine.min.css"/>
         <remove src="css/awa-focus-visible.min.css"/>
         <remove src="css/awa-plp-final-polish.css"/>
+        <!-- AWA Perf Fase 1 (2026-10-26): CSS off-page removido só nesta rota (adicionado via
+             <css src> no head global default_head_blocks.xml; <remove src> por rota é o mecanismo
+             correto e reversível). home-cards-carousels = carrossel da HOME; ai-chat-fullscreen =
+             chat IA tela cheia. Nenhum é layout do checkout.
+             Rollback: remover estas 2 linhas (backup perf-fase1-20261026T141511Z). -->
+        <remove src="css/awa-home-cards-carousels-20261018-tbarrows-f22.css"/>
+        <remove src="css/awa-ai-chat-fullscreen-20261018.css"/>
         <css src="css/awa-checkout-layout-lock.css" order="200"/>
         <!-- SSOT 2026-08-10: awa-checkout-shell-final.css só via loader terminal
              (critical inline + link versionado). Evita dupla autoridade com <css> XML. -->
@@ -49,6 +56,14 @@
                    name="awa.align.grid.terminal.checkout"
                    template="Magento_Theme::html/awa-align-grid-terminal-loader.phtml"
                    after="awa.checkout.ux.init.standard"/>
+        </referenceContainer>
+        <!-- PLANO B2B F4.4: aviso do fluxo de confirmação comercial antes dos
+             métodos de pagamento (apresentação apenas). Rollback: remover o bloco. -->
+        <referenceContainer name="checkout.steps.billing-step.payment">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.b2b.checkout.payment.notice"
+                   template="Magento_Theme::html/awa-b2b-checkout-payment-notice.phtml"
+                   before="-"/>
         </referenceContainer>
     </body>
 </page>

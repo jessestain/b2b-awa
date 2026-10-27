@@ -1,0 +1,127 @@
+<?php $__rubik = $block->getViewFileUrl('fonts/rubik/rubik'); $__ss3 = $block->getViewFileUrl('fonts/source-sans-3/source-sans-3'); ?>
+<?php
+/**
+ * AWA — Perf/RWD fixes 2026-10-18 (missão perf-rwd: P1–P4, P7, P11, P13, auditoria minicart).
+ * INLINE de propósito: as regras equivalentes em folha linkada não vencem os <style> inline
+ * por-página da PDP (cascata medida via DevTools em 18/10 — folha linkada perde para inline
+ * de mesma origem); inline segue o padrão vencedor da casa (awa-head-preload).
+ */
+?>
+<style id="awa-perf-rwd-fixes-20261018">
+/* P1 · LCP da PDP: galeria visível antes do init do fotorama */
+html body#html-body.catalog-product-view .page-wrapper .fotorama__stage .fotorama__img,
+html body#html-body.catalog-product-view .page-wrapper .fotorama__stage{opacity:1!important;visibility:visible!important}
+html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder .fotorama{min-height:340px!important}
+/* P2 · CLS da PDP: keyframes composited */
+@keyframes awa-ai-teaser-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+html body#html-body.catalog-product-view .page-wrapper :is(.product-info-detailed,.b2b-login-to-buy-btn,.awa-ai-chat__toggle-label){animation-duration:.18s!important;animation-timing-function:ease-out!important}
+/* P3 · CLS do cart */
+html body#html-body .page-wrapper .awa-footer-trust-item{opacity:1!important;max-height:none!important;height:auto!important;visibility:visible!important}
+html body#html-body.checkout-cart-index .page-wrapper .column.main{min-height:320px!important}
+/* P4 · contraste Entrar */
+html body#html-body .page-wrapper .awa-header-account-prompt__link--login{color:#fff!important;text-decoration:underline!important;text-underline-offset:2px!important}
+/* P7 · CLS da PLP */
+html body#html-body.catalog-category-view .page-wrapper .product-content-right .product-item .product-image-photo,
+html body#html-body.catalog-category-view .page-wrapper .products-grid .product-image-photo{aspect-ratio:1/1!important;object-fit:contain!important;width:100%!important;height:auto!important;display:block!important}
+/* P11 · LCP desktop hero */
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .wrapper_slider.hidden-xs .banner_item_bg img{width:100%!important;height:auto!important;aspect-ratio:1280/353!important;object-fit:cover!important;display:block!important}
+/* MC · minicart: camadas + visuais */
+html body#html-body .page-wrapper .block-minicart{z-index:100100!important;isolation:isolate!important;background:#fff!important}
+html body#html-body .page-wrapper .block-minicart .block-title{background:#fff!important;border-bottom:1px solid var(--awa-border,#e2e8f0)!important;display:flex!important;align-items:center!important;gap:8px!important}
+html body#html-body .page-wrapper .awa-minicart-footer{background:#fff!important;border-top:1px solid var(--awa-border,#e2e8f0)!important;padding:10px 14px!important}
+html body#html-body .page-wrapper .awa-minicart-continue{color:var(--awa-text,#0f172a)!important;background:#fff!important;border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:8px!important;font-weight:600!important}
+html body#html-body .page-wrapper .awa-minicart-b2b-trust{color:var(--awa-text-secondary,#475569)!important;opacity:1!important}
+html body#html-body .page-wrapper .awa-minicart-b2b-trust svg{opacity:1!important}
+html body#html-body .page-wrapper .block-minicart .block-title .counter{font-size:12px!important;font-weight:500!important;color:var(--awa-text-secondary,#475569)!important;background:var(--awa-bg-muted,#eef2f7)!important;border-radius:999px!important;padding:2px 8px!important;margin-left:4px!important}
+html body#html-body .page-wrapper .block-minicart .action.close::before{font-size:26px!important;color:var(--awa-text,#0f172a)!important}
+html body#html-body .page-wrapper .block-minicart .action.close{border-radius:50%!important;background:var(--awa-bg-muted,#eef2f7)!important}
+html body#html-body .page-wrapper .block-minicart #mini-cart>li.item{border-bottom:1px solid var(--awa-border,#e2e8f0)!important;padding:10px 0 12px!important}
+html body#html-body .page-wrapper .block-minicart :is(.product-item-photo,.product-image-container,.product-image-wrapper){flex:0 0 72px!important;width:72px!important;min-width:72px!important;max-width:72px!important;height:72px!important;min-height:72px!important;max-height:72px!important}
+html body#html-body .page-wrapper .block-minicart :is(img.product-image-photo,.product-image-wrapper img){width:72px!important;height:72px!important;max-width:72px!important;max-height:72px!important}
+html body#html-body .page-wrapper .block-minicart :is(.awa-minicart-qty-stepper,.control.awa-qty-stepper){border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:8px!important;overflow:hidden!important}
+html body#html-body .page-wrapper .block-minicart .awa-minicart-qty-stepper .awa-qty-btn{border:0!important;background:var(--awa-bg-muted,#eef2f7)!important}
+html body#html-body .page-wrapper .block-minicart .awa-minicart-qty-stepper .cart-item-qty{border:0!important;background:#fff!important}
+html body#html-body .page-wrapper .block-minicart .product.actions :is(.action.edit,.action.delete,a.awa-minicart-item-delete){border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:6px!important;background:#fff!important;font-weight:600!important;opacity:1!important}
+html body#html-body .page-wrapper .block-minicart .product.actions .action.edit{color:var(--awa-primary,#b3121b)!important}
+html body#html-body .page-wrapper .block-minicart .product.actions :is(.action.delete,a.awa-minicart-item-delete){color:#b3121b!important;border-color:rgb(179 18 27/35%)!important}
+html body#html-body .page-wrapper .awa-minicart-coupon{margin-top:4px!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row{display:flex!important;align-items:center!important;gap:8px!important;width:100%!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row :is(input[type="text"],input:not([type])){flex:1 1 auto!important;min-width:0!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row :is(button,.action){flex:0 0 auto!important;background:var(--awa-primary,#b3121b)!important;color:#fff!important;border:0!important;border-radius:6px!important;padding:0 14px!important;height:40px!important;font-weight:700!important}
+/* P13 · setas fora dos cards nas prateleiras da PDP */
+@media (min-width:768px) and (max-width:1024px){
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-product-view) .page-wrapper :is(.awa-pdp-related,.rokan-mostviewed,.rokan-newproduct,.rokan-bestseller,.block.related,.block.upsell).awa-shelf--carousel .awa-carousel__viewport{width:calc(100% - 104px)!important;margin-inline:52px!important;padding-inline:0!important}
+html body#html-body.catalog-product-view .page-wrapper :is(.awa-pdp-related,.rokan-mostviewed,.rokan-newproduct,.rokan-bestseller,.block.related,.block.upsell).awa-shelf--carousel{--awa-carousel-button-offset:4px!important}
+
+}
+
+/* P14b · scrollbar estável (evita oscilação de largura da coluna) */
+html{scrollbar-gutter:stable!important}
+
+/* P14 · PLP: anti-CLS do lazy do MST — reserva do grid (100vh) + altura fixa do banner por banda */
+html body#html-body.catalog-category-view .page-wrapper .products-grid{min-height:100vh!important}
+html body#html-body.catalog-category-view .page-wrapper .awa-plp-b2b-gate-banner{height:193px!important;min-height:193px!important}
+@media (min-width:480px){html body#html-body.catalog-category-view .page-wrapper .awa-plp-b2b-gate-banner{height:173px!important;min-height:173px!important}}
+@media (min-width:768px){html body#html-body.catalog-category-view .page-wrapper .awa-plp-b2b-gate-banner{height:145px!important;min-height:145px!important}}
+@media (min-width:1024px){html body#html-body.catalog-category-view .page-wrapper .awa-plp-b2b-gate-banner{height:104px!important;min-height:104px!important}}
+
+/* P14c · size-adjust nas fontes (fallback com métricas iguais — swap sem reflow) */
+@font-face{font-family:Rubik;src:url('<?= $__rubik ?>-300.woff2?v=20260617') format('woff2');font-weight:300;font-style:normal;font-display:swap;size-adjust:95.67%}
+@font-face{font-family:Rubik;src:url('<?= $__rubik ?>-400.woff2?v=20260617') format('woff2');font-weight:400;font-style:normal;font-display:swap;size-adjust:95.67%}
+@font-face{font-family:Rubik;src:url('<?= $__rubik ?>-500.woff2?v=20260617') format('woff2');font-weight:500;font-style:normal;font-display:swap;size-adjust:95.67%}
+@font-face{font-family:Rubik;src:url('<?= $__rubik ?>-600.woff2?v=20260617') format('woff2');font-weight:600;font-style:normal;font-display:swap;size-adjust:95.67%}
+@font-face{font-family:Rubik;src:url('<?= $__rubik ?>-700.woff2?v=20260617') format('woff2');font-weight:700;font-style:normal;font-display:swap;size-adjust:95.67%}
+@font-face{font-family:'Source Sans 3';src:url('<?= $__ss3 ?>-300.woff2') format('woff2');font-weight:300;font-style:normal;font-display:swap;size-adjust:96.31%}
+@font-face{font-family:'Source Sans 3';src:url('<?= $__ss3 ?>-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;size-adjust:96.31%}
+@font-face{font-family:'Source Sans 3';src:url('<?= $__ss3 ?>-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;size-adjust:96.31%}
+@font-face{font-family:'Source Sans 3';src:url('<?= $__ss3 ?>-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;size-adjust:96.31%}
+@font-face{font-family:'Source Sans 3';src:url('<?= $__ss3 ?>-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;size-adjust:96.31%}
+
+
+/* P15 · pré-declaração estática das regras de geometria do css-gate (injeção tardia vira no-op) */
+'@media (max-width:767px){html body#html-body .page-wrapper .awa-site-header:not(.awa-header-condensed) .header-wrapper-sticky{height:auto!important;min-height:96px!important;max-height:none!important;overflow:visible!important;contain:none!important;padding-block:0!important}html body#html-body .page-wrapper .header-wrapper-sticky :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row]){overflow:visible!important}html body#html-body .page-wrapper .awa-site-header :is(.header.awa-main-header,.header_main.awa-main-header-inner-wrap,.awa-header-search-col,.awa-header-minicart,.minicart-wrapper){overflow:visible!important}}@media (min-width:768px) and (max-width:991px){html body#html-body .page-wrapper :is(.awa-site-header .header-wrapper-sticky,#header .header-wrapper-sticky){height:auto!important;min-height:56px!important;max-height:none!important;overflow:visible!important;contain:none!important;padding-block:0!important}}@media (min-width:992px){html body#html-body .page-wrapper :is(.awa-site-header .header-wrapper-sticky,#header .header-wrapper-sticky){height:auto!important;min-height:64px!important;max-height:64px!important;overflow:visible!important;contain:none!important;padding-block:0!important}}';
+
+        /* §SEARCH-SSOT post-gate — última camada inline (vence density/S11/polish-type legado) */
+        css += '@media (min-width:768px){html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(form#search_mini_form,form.minisearch,form.search-content){display:flex!important;align-items:stretch!important;height:44px!important;min-height:44px!important;max-height:44px!important;border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:8px!important;overflow:hidden!important;box-shadow:none!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(input#search,.input-text){height:44px!important;min-height:44px!important;max-height:44px!important;line-height:44px!important;font-size:14px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,button.awa-search-btn,form#search_mini_form button.action.search,.actions .action.search,.block-search .action.search){width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;background-color:transparent!important;color:var(--awa-primary,#b73337)!important;box-shadow:none!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,.actions .action.search) svg{stroke:var(--awa-primary,#b73337)!important;fill:none!important}}@media (max-width:767px){html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(form#search_mini_form,form.minisearch,form.search-content){display:grid!important;grid-template-columns:minmax(0,1fr) 44px!important;grid-template-areas:"field submit"!important;height:44px!important;min-height:44px!important;max-height:44px!important;border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:8px!important;overflow:hidden!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(input#search,.input-text){height:44px!important;min-height:44px!important;max-height:44px!important;line-height:44px!important;font-size:16px!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,button.awa-search-btn,form#search_mini_form button.action.search,.actions .action.search,.block-search .action.search){width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important}}';
+
+        /* §H41b — carousel card: uma caixa mensurável (vence density/impeccable pós-align-grid) */
+        css += 'html body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-carousel-section,.content-top-home .awa-shelf--carousel) .item-product.awa-carousel-card-slot>.content-item-product.awa-product-card{display:contents!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important}';
+
+        /* §IMPECCABLE v10.47 — hero contrast/inset + footer labels (terminal pós-gate) */
+        css += 'html body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer):not(.awa-footer--dark) .footer-container :is(p.awa-footer-atendimento__label,p.awa-footer-atendimento__label--social){color:#666!important}html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ay
+
+/* Q2 · PDP: reservas anti-CLS (social proof ~10-13s + logo ~3s) */
+@media (min-width:992px){
+html body#html-body.catalog-product-view .page-wrapper .product-info-main :is(.col-md-6,.product-info-main>.col-md-6){min-width:228px!important}
+html body#html-body.catalog-product-view .page-wrapper :is(.awa-logo-lockup__mark,.logo img){width:80px!important;min-width:80px!important;height:29px!important;min-height:29px!important}
+}
+html body#html-body.catalog-product-view .page-wrapper .social-proof-container{min-height:80px!important}
+
+/* Q1 · PLP: toolbar compacta desde o 1º paint (init do MST vira no-op) */
+@media (max-width:991px){
+html body#html-body.catalog-category-view .page-wrapper .toolbar.toolbar-products{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;row-gap:0!important}
+html body#html-body.catalog-category-view .page-wrapper .toolbar.toolbar-products :is(.sorter,.limiter,.modes,.field.limiter){margin:0!important;padding-block:0!important}
+}
+/* Q2 · PDP: grid final fixo desde o 1º paint (re-render do social proof vira no-op) */
+@media (min-width:992px){
+html body#html-body.catalog-product-view .page-wrapper .product-info-main > .col-md-6{width:413px!important;min-width:413px!important;max-width:413px!important}
+html body#html-body.catalog-product-view .page-wrapper .product-info-main .product.media{flex:1 1 auto!important;min-width:0!important}
+}
+
+/* Q1 · pré-declaração estática dos props do breadcrumb (awa-breadcrumb-props.js vira no-op) */
+@media (max-width:767px){
+html body#html-body .page-wrapper :is(.breadcrumbs a,.nav-breadcrumbs a){display:inline-flex!important;align-items:center!important;min-height:44px!important;min-block-size:44px!important;height:auto!important;max-height:none!important;line-height:1.4!important;padding-block:0!important;padding-top:0!important;padding-bottom:0!important;overflow:visible!important;box-sizing:border-box!important}
+html body#html-body .page-wrapper :is(.breadcrumbs ul.items,.nav-breadcrumbs ul.items,.breadcrumbs ul.items>.item,.nav-breadcrumbs ul.items>.item){min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important;align-items:center!important}
+}
+@media (min-width:768px){
+html body#html-body .page-wrapper :is(.breadcrumbs a,.nav-breadcrumbs a){display:inline-flex!important;align-items:center!important;min-height:0!important;min-block-size:0!important;height:auto!important;padding-block:2px!important;box-sizing:border-box!important}
+html body#html-body .page-wrapper :is(.breadcrumbs ul.items,.nav-breadcrumbs ul.items,.breadcrumbs ul.items>.item,.nav-breadcrumbs ul.items>.item){min-height:0!important;height:auto!important;max-height:none!important}
+}
+
+/* Q2b · PDP: pré-declaração do estado FINAL dos breadcrumbs (styles-l-alive aplica ~3s) */
+html body#html-body.catalog-product-view .page-wrapper .breadcrumbs .items li a,
+html body#html-body.catalog-product-view .page-wrapper .breadcrumbs .items li strong{max-width:140px!important;font-size:var(--awa-text-xs,12px)!important}
+html body#html-body.catalog-product-view .page-wrapper .breadcrumbs .items .item{font-size:var(--awa-text-xs,12px)!important;max-width:140px!important}
+html body#html-body.catalog-product-view .page-wrapper .nav-breadcrumbs .breadcrumbs .item:last-child :is(strong,[aria-current="page"]){white-space:normal!important;overflow:visible!important;text-overflow:unset!important}
+html body#html-body.catalog-product-view .page-wrapper .breadcrumbs .items{gap:0 8px!important}
+</style>

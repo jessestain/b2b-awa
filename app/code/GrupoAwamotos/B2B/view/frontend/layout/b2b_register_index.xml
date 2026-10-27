@@ -17,6 +17,20 @@
                        as="auth_logo"
                        template="GrupoAwamotos_B2B::html/auth-logo.phtml"/>
                 <block class="Magento\Framework\View\Element\FormKey" name="b2b.register.form.key" as="b2b_form_key"/>
+                <block class="Magento\Captcha\Block\Captcha"
+                       name="b2b.register.captcha"
+                       as="captcha"
+                       cacheable="false">
+                    <action method="setFormId">
+                        <argument name="formId" xsi:type="string">user_create</argument>
+                    </action>
+                    <action method="setImgWidth">
+                        <argument name="width" xsi:type="string">230</argument>
+                    </action>
+                    <action method="setImgHeight">
+                        <argument name="height" xsi:type="string">50</argument>
+                    </action>
+                </block>
                 <block class="GrupoAwamotos\B2B\Block\Account\SessionMessages"
                        name="b2b_register_messages"
                        as="b2b_register_messages"

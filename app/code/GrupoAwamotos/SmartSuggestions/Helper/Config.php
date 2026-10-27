@@ -258,13 +258,14 @@ class Config extends AbstractHelper
 
     public function getWhatsappApiToken(?int $storeId = null): string
     {
-        $encrypted = (string) $this->scopeConfig->getValue(
+        // FIX (19/10/2026): o campo tem backend_model Encrypted — o ScopeConfig ja
+        // devolve o valor DESCRIPTOGRAFADO; descriptografar de novo gerava lixo
+        // (quebrava a autenticacao no provedor). Nao descriptografar aqui.
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_WHATSAPP . 'api_token',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-
-        return $encrypted ? $this->encryptor->decrypt($encrypted) : '';
     }
 
     public function getWhatsappPhoneNumberId(?int $storeId = null): string
@@ -326,22 +327,23 @@ class Config extends AbstractHelper
 
     public function getZApiToken(?int $storeId = null): string
     {
-        $encrypted = (string) $this->scopeConfig->getValue(
+        // FIX (19/10/2026): campo com backend_model Encrypted — getValue ja devolve
+        // descriptografado; nao descriptografar de novo.
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_WHATSAPP . 'zapi_token',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return $encrypted ? $this->encryptor->decrypt($encrypted) : '';
     }
 
     public function getZApiClientToken(?int $storeId = null): string
     {
-        $encrypted = (string) $this->scopeConfig->getValue(
+        // FIX (19/10/2026): idem acima.
+        return (string) $this->scopeConfig->getValue(
             self::XML_PATH_WHATSAPP . 'zapi_client_token',
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        return $encrypted ? $this->encryptor->decrypt($encrypted) : '';
     }
 
     public function isRfmCronEnabled(): bool

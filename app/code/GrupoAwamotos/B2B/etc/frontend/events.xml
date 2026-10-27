@@ -7,32 +7,31 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
 
-    <event name="customer_register_success">
-        <observer name="grupoawamotos_b2b_customer_register"
-                  instance="GrupoAwamotos\B2B\Observer\CustomerRegisterObserver"/>
-        <observer name="grupoawamotos_b2b_erp_registration_check"
-                  instance="GrupoAwamotos\B2B\Observer\ErpRegistrationCheckObserver"/>
-        <observer name="grupoawamotos_b2b_registration_notification"
-                  instance="GrupoAwamotos\B2B\Observer\CustomerRegistrationNotification"/>
-    </event>
-
     <event name="grupoawamotos_b2b_registration_submitted">
         <observer name="grupoawamotos_b2b_registration_enrichment"
                   instance="GrupoAwamotos\B2B\Observer\B2bRegistrationEnrichmentObserver"/>
         <observer name="grupoawamotos_b2b_form_registration_notification"
                   instance="GrupoAwamotos\B2B\Observer\CustomerRegistrationNotification"/>
+        <!-- Cópia do novo cadastro para o grupo operacional de WhatsApp (se configurado) -->
+        <observer name="grupoawamotos_b2b_registration_group_notification"
+                  instance="GrupoAwamotos\B2B\Observer\RegistrationGroupNotificationObserver"/>
     </event>
 
     <event name="customer_login">
         <observer name="grupoawamotos_b2b_customer_login"
                   instance="GrupoAwamotos\B2B\Observer\CustomerLoginObserver"/>
+        <!-- Login -> aviso de WhatsApp para a vendedora atribuida (flag
+             grupoawamotos_b2b/whatsapp/notify_attendant_on_login; dedupe 1/dia) -->
+        <observer name="grupoawamotos_b2b_customer_login_attendant_notification"
+                  instance="GrupoAwamotos\B2B\Observer\CustomerLoginAttendantNotification"/>
     </event>
 
     <event name="sales_order_place_after">
         <observer name="grupoawamotos_b2b_order_notification"
                   instance="GrupoAwamotos\B2B\Observer\OrderNotification"/>
-        <observer name="grupoawamotos_b2b_order_approval_trigger"
-                  instance="GrupoAwamotos\B2B\Observer\OrderPlaceAfterObserver"/>
+        <!-- A alça de aprovação B2B NÃO fica mais aqui: sales_order_place_after dispara antes
+             de o pedido ter entity_id e etc/frontend/events.xml não é carregado no admin/API.
+             O gatilho foi movido para sales_order_save_after em etc/events.xml (área global). -->
     </event>
 
     <event name="checkout_submit_all_after">
@@ -48,6 +47,9 @@
     <event name="checkout_cart_product_add_after">
         <observer name="grupoawamotos_b2b_clear_order_success_empty_cart"
                   instance="GrupoAwamotos\B2B\Observer\ClearOrderSuccessEmptyCartObserver"/>
+        <!-- Aviso em tempo real para a vendedora quando o cliente coloca no carrinho -->
+        <observer name="grupoawamotos_b2b_cart_add_attendant_notification"
+                  instance="GrupoAwamotos\B2B\Observer\CartAddAttendantNotificationObserver"/>
     </event>
 
     <event name="catalog_product_collection_load_after">
@@ -60,6 +62,12 @@
                   instance="GrupoAwamotos\B2B\Observer\CustomerGroupRefresh"/>
         <observer name="grupoawamotos_b2b_express_checkout_empty_cart_flag"
                   instance="GrupoAwamotos\B2B\Observer\ExpressCheckoutEmptyCartFlagObserver"/>
+    </event>
+
+    <!-- Captura a busca do cliente logado (atividade para o digest + alerta de busca sem resultado) -->
+    <event name="controller_action_postdispatch_catalogsearch_result_index">
+        <observer name="grupoawamotos_b2b_customer_search_activity"
+                  instance="GrupoAwamotos\B2B\Observer\CustomerSearchActivityObserver"/>
     </event>
 
 </config>

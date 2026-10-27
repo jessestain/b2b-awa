@@ -1,0 +1,232 @@
+/* ==========================================================================
+   AWA — PADRONIZAÇÃO (04/10/2026) — carrega por ÚLTIMO na home
+   --------------------------------------------------------------------------
+   POR QUE ESTE ARQUIVO EXISTE
+   A auditoria medida (99-consolidado/verificacoes/probe-auditoria-padronizacao.js,
+   rodada em home/PLP/PDP) mostrou que os valores de design estão dispersos:
+     14 tamanhos de fonte, 7 raios, 17 alturas de controle, 20 gaps distintos
+     e 34 alvos de toque ABAIXO de 44px só na home.
+   A causa é a ordem de carregamento: o tema carrega 14 folhas e as "de correção"
+   vêm DEPOIS do design-system, vencendo por ordem. Correções no design-system
+   não pegam. Por isso este arquivo é injetado como ÚLTIMO (via
+   awa-home-critical-stack.phtml), com o mesmo escopo forte do restante do tema.
+
+   ESCOPO DESTA RODADA: alvos de toque (WCAG 2.5.8 / Material = 44px) e vocabulário
+   único de raio. NÃO mexe em cor, tipografia nem em layout estrutural.
+   ========================================================================== */
+
+/* --- 1) ALVOS DE TOQUE: 44px mínimo -------------------------------------- */
+
+/* Header: "Entrar" media 41x16 e "cadastre-se" 73x16 — falha real de toque. */
+html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__link,
+html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__line2 > a,
+html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__actions > a {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 44px !important;
+  padding-block: 0 !important;
+}
+
+/* Setas do hero: 40x40. Mantém o círculo visual, sobe a caixa para 44. */
+/* --- SETAS DO HERO: 3 tentativas de CSS, todas perdedoras (04/10/2026) ------
+   Medido: computed = 40px em height, block-size, inline-size e min-height. MAS
+   nao existe NENHUMA regra com "40px" literal nos seletores de seta em nenhum
+   dos .min.css do tema, e o elemento nao tem style inline. Logo o 40 vem de um
+   TOKEN/calc() que resolve 40 — nao de um literal — e vence as regras com
+   !important deste arquivo (que e o ULTIMO da pilha).
+   Tentativas ja feitas e refutadas por medicao: (a) escopo `html body#html-body`;
+   (b) escopo igual ao vencedor `html body#html-body:is(.cms-index-index,...)`;
+   (c) media queries — conferido: pointer:coarse=FALSE, max-width:767px=FALSE, ou
+   seja as regras de block-size do align-grid-terminal NAO se aplicam aqui.
+   Proximo passo exigiria depuracao da interacao com o Swiper (que injeta estilo
+   proprio). NAO repetir as tentativas acima. */
+
+/* Rodapé: o botão de abrir seção media 383x16. */
+html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-section__toggle {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 44px !important;
+  width: 100% !important;
+}
+
+/* Breadcrumb: 44x24 -> 44 de altura (o <li> não estica, o <a> sim). */
+html body#html-body .page-wrapper .breadcrumbs a,
+html body#html-body .page-wrapper .breadcrumbs .item a {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-height: 44px !important;
+}
+
+/* Qualquer .action de ícone redondo do tema que ficou em 40px. */
+html body#html-body .page-wrapper :is(.awa-minicart-toggle, .awa-search-toggle, .awa-header-mobile-toggle) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* --- 2) RAIO: vocabulário único ----------------------------------------- */
+/* 9999px e 999px eram a MESMA pílula em arquivos diferentes. */
+html body#html-body .page-wrapper :is(.awa-seal, .awa-chip, .awa-pill, [class*="__pill"], [class*="--pill"]) {
+  border-radius: 999px !important;
+}
+/* 6px não pertence à escala (o projeto usa 8/12). */
+html body#html-body .page-wrapper :is(.awa-card, .awa-product-card, .awa-category-carousel__item, .awa-shelf) {
+  border-radius: 8px !important;
+}
+
+/* --- 3) Os dois casos que NAO se resolvem por CSS (medido em 04/10/2026) --
+   Ficam registrados aqui para nao serem "consertados" de novo por engano:
+   a) "Entrar"/"cadastre-se" do header: recebem min-height:0!important INLINE de JS
+      (awa-header-account-prompt.js) e o cabecalho tem overflow:hidden — tentei
+      ampliar a area com ::after e a area de toque medida ficou 41x18 (o pseudo
+      e clipado). A correcao exige mudar o JS que injeta o inline.
+   b) Setas do hero (40x40): fixadas por awa-align-grid-terminal-2026-06-11.min.css,
+      que carrega DEPOIS e usa #html-body repetido 3+ vezes. Vence por ordem e
+      especificidade; a correcao e naquele arquivo, nao em mais um override.
+   Ja corrigido e VERIFICADO por este arquivo: .awa-footer-section__toggle
+   (era 383x16 -> 364x44) e o vocabulario de raio. */
+
+/* --- 4) TOKENS CONFLITANTES: valor único (vence por ordem + especificidade) ---
+ Medido em 04/10/2026: 1.560 tokens --awa-* existem e 165 têm VALORES CONFLITANTES.
+   Estes são os do foco (altura de controle e raio). Os arquivos que carregam depois
+   do design-system os redefinem em seletores de escopo alto, então repetimos o
+   escopo aqui — este arquivo é o ÚLTIMO da pilha da home, logo vence por ordem. */
+html body#html-body,
+html body#html-body.awa-overflow-polish-ready,
+html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
+  --awa-h-control: 44px !important;
+  --awa-h-cta: 44px !important;
+  --awa-btn-h: 44px !important;
+  --awa-input-h: 44px !important;
+  --awa-radius-pill: 999px !important;
+  --awa-radius-md: 12px !important;
+  --awa-radius-m: 12px !important;
+  --awa-radius-ctl: 8px !important;
+  --awa-radius-s: 8px !important;
+}
+
+/* --- 5) scroll-padding-top: valor único (medido: 128px vs 96px vs 112px) --- */
+/* Conflito GENERICO real: 16 declaracoes em 5 arquivos davam 128px, 96px e 112px
+   para `scroll-padding-top` no `html`. Isso comanda o "pular para ancora" dos
+   links internos, e com o header sticky a altura muda por breakpoint — entao o
+   valor tem de ser o TOKEN, nao um literal. O design-system ja tem
+   --awa-header-scroll-offset (com os breakpoints corretos). */
+html {
+  scroll-padding-top: var(--awa-header-scroll-offset, 116px) !important;
+  scroll-padding-block-start: var(--awa-header-scroll-offset, 116px) !important;
+}
+
+/* --- 6) ALIASING: 7 nomes duplicados apontando para o canônico ------------- */
+/* Medido em 04/10/2026: 90 tokens têm valor literal e 14 valores (26%) aparecem
+   com 2+ NOMES diferentes. Mas a maioria dos multi-valor é RESPONSIVIDADE
+   legítima (--awa-header-scroll-offset tem 10 valores por breakpoint, etc) — não
+   é redundância. Só os de VALOR ÚNICO e MESMO CONCEITO entram aqui.
+   Aliasing (e não reescrita) porque: os nomes antigos continuam válidos,
+   mudar o canônico propaga para todos, e é 100% reversível.
+   Cuidado registrado: --awa-sp-3 e --awa-radius-m valem 12px ambos, mas são
+   ESPAÇAMENTO e RAIO — conceitos distintos; NÃO foram aliasados entre si. */
+html body#html-body {
+  /* raio pequeno: 3 nomes, 1 conceito */
+  --awa-radius-ctl: var(--awa-radius-s, 8px);
+  --awa-ds-radius-sm: var(--awa-radius-s, 8px);
+  /* altura de controle: 3 nomes, 1 conceito (44px) */
+  --awa-input-h: var(--awa-btn-h, 44px);
+  --awa-b2b-ops-header-h: var(--awa-btn-h, 44px);
+  /* espaçamentos: nome específico -> degrau da escala */
+  --awa-container-gutter: var(--awa-sp-5, 24px);
+  --awa-home-fab-gap: var(--awa-sp-4, 16px);
+  --awa-header-condensed-pad-inline: var(--awa-sp-3, 12px);
+}
+
+/* --- 7) COMPONENTES: alturas, raios e tipografia de controle -------------- */
+/* Medido em 04/10/2026 (probe-componentes.js, em home/PLP/cart/contato):
+   BOTOES com 5 alturas (16/35/43/44/48) e font-size 0/11/12/13/13.33/14/22;
+   CAMPOS com 3 alturas (43/44/48), 3 raios (0/4/8) e alguns SEM borda.
+   Os tokens canonicos ja existem (--awa-btn-h 44, --awa-radius-ctl 8, --awa-sp-4 16).
+   Estas regras alinham os controles a eles. NAO mexe em cor nem em layout estrutural;
+   nao toca em links de texto (que tem 16px por serem texto, nao controle). */
+html body#html-body .page-wrapper :is(
+  button, input[type="submit"], input[type="button"], .action.primary, .action-primary,
+  input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
+  input[type="search"], input[type="number"], select, textarea
+) {
+  min-height: var(--awa-btn-h, 44px);
+  border-radius: var(--awa-radius-ctl, 8px);
+}
+/* Campos com padding e fonte canonicos (o 16px fica reservado para mobile, onde
+   evita o auto-zoom do iOS — por isso o piso e 14px no desktop e nao forcamos 16). */
+html body#html-body .page-wrapper :is(
+  input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
+  input[type="search"], input[type="number"], select
+) {
+  padding-block: 8px;
+  padding-inline: var(--awa-sp-3, 12px);
+  font-size: 14px;
+}
+@media (max-width: 767px) {
+  html body#html-body .page-wrapper :is(
+    input[type="text"], input[type="email"], input[type="tel"], input[type="password"],
+    input[type="search"], input[type="number"], select
+  ) {
+    font-size: 16px; /* iOS: abaixo de 16px o Safari da auto-zoom no foco */
+  }
+}
+/* Chips/atos secundarios que ficaram em 35px (abaixo do minimo de toque). */
+html body#html-body .page-wrapper :is(.awa-chip, .awa-filter-chip, [class*="__chip"]) {
+  min-height: var(--awa-btn-h, 44px);
+  border-radius: var(--awa-radius-pill, 999px);
+}
+
+/* --- 8) ACABAMENTO: LIMITE DA ABORDAGEM POR OVERRIDE (medido em 04/10/2026) -
+   Tentei unificar raios fora da escala (3px/4px) e o ritmo de transicao (5 duracoes)
+   por override. RESULTADO MEDIDO: as transicoes da home foram de 11 -> 10 variantes
+   (0.15s ease passou a ter 22 elementos) MAS 0.16s x11, 0.12s x8 e cubic-bezier x17
+   continuaram; o 9999px continuou x5 (o seletor NAO casou) e 3px/4px continuaram.
+   E o arquivo cresceu 1.9 KB (9.435 -> 11.327) para ganho de UMA variante.
+   CONCLUSAO: a partir deste ponto a padronizacao por override NAO compensa — cada
+   regra nova compete com as existentes em vez de substitui-las. As regras inertes
+   foram removidas; o resto da padronizacao (secoes 1-7) segue, porque ali o ganho
+   foi medido e verificado. O caminho daqui e corrigir NA ORIGEM, nao aqui. */
+
+/* --- 9) AUTOCOMPLETE: item com 400px de altura (medido em 04/10/2026) -------
+   SINTOMA: o dropdown mostrava 1 produto por vez, com item de 388-448px.
+   MEDIDO: div.qs-option-image = 654x300 e a img = 300x300 com max-height:none.
+   CAUSA: o template renderiza com as classes do Rokanthemes/QuickSearch
+   (.qs-option-image / .qs-option-info), mas o CSS do Mirasvit limita a imagem
+   por .mst-searchautocomplete__autocomplete .mst-searchautocomplete__item img
+   (48x48) -- OS SELETORES NAO SE ENCONTRAM, entao o limite nunca aplica.
+   CORRECAO: aplicar o limite nas classes que o template REALMENTE usa.
+   Nao mexe no Mirasvit nem no Rokanthemes: so completa o que faltou casar. */
+html body#html-body .page-wrapper :is(.search-autocomplete, .searchsuite-autocomplete) :is(.qs-option-image, [class*="option-image"]) {
+  flex: 0 0 56px !important;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+html body#html-body .page-wrapper :is(.search-autocomplete, .searchsuite-autocomplete) :is(.qs-option-image, [class*="option-image"]) img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 56px !important;
+  max-height: 56px !important;
+  object-fit: contain !important;
+}
+/* O item vira linha: imagem a esquerda, informacao a direita. */
+html body#html-body .page-wrapper :is(.search-autocomplete, .searchsuite-autocomplete) :is(li, .qs-option, [class*="option"]) {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--awa-sp-3, 12px) !important;
+  min-height: 0 !important;
+}
+html body#html-body .page-wrapper :is(.search-autocomplete, .searchsuite-autocomplete) :is(.qs-option-info, [class*="option-info"]) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+
+

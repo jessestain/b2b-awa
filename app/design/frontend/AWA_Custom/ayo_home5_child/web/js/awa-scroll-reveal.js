@@ -118,8 +118,20 @@ define([], function () {
                 }
             }
         };
-        window.addEventListener('scroll', revealVisible, { passive: true });
-        window.addEventListener('wheel', revealVisible, { passive: true });
+        /* PERF-2026-10-26 (INP): coalesce scroll/wheel em 1 batida por frame —
+           revealVisible lia getBoundingClientRect de todos os alvos pendentes a
+           CADA evento de scroll/wheel (rajada) sem throttling. */
+        var rafPending = false;
+        var scheduleReveal = function () {
+            if (rafPending) { return; }
+            rafPending = true;
+            window.requestAnimationFrame(function () {
+                rafPending = false;
+                revealVisible();
+            });
+        };
+        window.addEventListener('scroll', scheduleReveal, { passive: true });
+        window.addEventListener('wheel', scheduleReveal, { passive: true });
     }
 
     return function () {

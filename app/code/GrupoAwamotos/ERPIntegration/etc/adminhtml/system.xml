@@ -218,6 +218,32 @@
                         <field id="enabled">1</field>
                     </depends>
                 </field>
+                <field id="publication_gate_enabled" translate="label comment" type="select" sortOrder="40"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Portao de Publicacao</label>
+                    <comment>Desabilita produtos visiveis que nao existem no Sectra ou estao com preco de placeholder (R$ 0,01). Nunca apaga: desabilita.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="publication_gate_dry_run" translate="label comment" type="select" sortOrder="50"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Portao em Dry-run</label>
+                    <comment>Sim = apenas registra no log o que seria desabilitado. Revise o log antes de mudar para Nao.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="publication_gate_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="publication_gate_max_percent" translate="label comment" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Limite de Seguranca (%)</label>
+                    <comment>Se o portao fosse desabilitar mais que este percentual do catalogo habilitado numa passada, nada e alterado (indica falha de consulta). Padrao 10.</comment>
+                    <depends>
+                        <field id="publication_gate_enabled">1</field>
+                    </depends>
+                </field>
             </group>
 
             <!-- Category Sync -->
@@ -835,35 +861,8 @@
                     </depends>
                 </field>
 
-                <field id="new_order_enabled" translate="label comment" type="select" sortOrder="45"
-                       showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Notificar Novo Pedido</label>
-                    <comment>Envia confirmacao quando pedido e realizado</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="payment_enabled" translate="label comment" type="select" sortOrder="50"
-                       showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Notificar Pagamento</label>
-                    <comment>Envia confirmacao quando pagamento e aprovado</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="shipping_enabled" translate="label comment" type="select" sortOrder="55"
-                       showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Notificar Envio</label>
-                    <comment>Envia codigo de rastreio quando pedido e enviado</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
                 <field id="reengagement_enabled" translate="label comment" type="select" sortOrder="60"
                        showInDefault="1" showInWebsite="0" showInStore="0">

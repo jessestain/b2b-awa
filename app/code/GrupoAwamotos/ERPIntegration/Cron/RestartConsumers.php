@@ -16,6 +16,7 @@ class RestartConsumers
         'erp.order.sync.consumer',
         'erp.order.sync.retry.consumer',
         'grupoawamotos.b2b.whatsapp.consumer',
+        'product_alert',
     ];
 
     public function __construct(
@@ -82,7 +83,14 @@ class RestartConsumers
                 continue;
             }
 
-            $cmdline = file_get_contents($cmdlinePath);
+            // O processo pode terminar entre is_readable() e a leitura (corrida em /proc).
+            // O handler de erros do Magento transforma esse warning em excecao e o job
+            // passava a "error" no cron_schedule; um processo que sumiu nao e consumer ativo.
+            try {
+                $cmdline = file_get_contents($cmdlinePath);
+            } catch (\Throwable) {
+                continue;
+            }
             if ($cmdline === false || $cmdline === '') {
                 continue;
             }

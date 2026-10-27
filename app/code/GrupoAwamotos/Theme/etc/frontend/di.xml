@@ -33,12 +33,27 @@
     </type>
 
     <type name="Magento\Framework\HTTP\PhpEnvironment\Response">
+        <!--
+          sortOrder 9999 = roda DEPOIS do OptimizeHeadStylesPlugin (998), no MESMO tipo.
+          Precisa ser o mesmo tipo: `Magento\Framework\App\Response\Http` ESTENDE
+          `PhpEnvironment\Response`, e sortOrder NAO ordena plugins entre pai e filho.
+          Registrando em `Http`, o crosspage-shell-lock-r68 (que vem do plugin de 998)
+          continuava aparecendo DEPOIS do meu bloco.
+        -->
+        <plugin name="grupoawamotos_theme_clamp_send_response"
+                type="GrupoAwamotos\Theme\Plugin\Response\CorrigirClampNomePlugin"
+                sortOrder="9999"/>
         <plugin name="grupoawamotos_theme_patch_home_header_on_set_body"
                 type="GrupoAwamotos\Theme\Plugin\Response\PatchHomeHeaderHtmlPlugin"
                 sortOrder="50"/>
         <plugin name="grupoawamotos_theme_optimize_head_styles"
                 type="GrupoAwamotos\Theme\Plugin\Response\OptimizeHeadStylesPlugin"
                 sortOrder="998"/>
+        <!-- Minifica os <script> INLINE (162 KB -> 116 KB medidos): roda DEPOIS de tudo.
+             Reverter = remover este bloco + cache:flush. Nada e persistido. -->
+        <plugin name="grupoawamotos_theme_minify_inline_scripts"
+                type="GrupoAwamotos\Theme\Plugin\Response\MinifyInlineScriptsPlugin"
+                sortOrder="10000"/>
     </type>
 
     <type name="Magento\Framework\App\Response\Http">
@@ -58,4 +73,16 @@
                 type="GrupoAwamotos\Theme\Plugin\Mirasvit\SearchAutocompleteResultPlugin"
                 sortOrder="10"/>
     </type>
+<!--
+  Normaliza a especificidade do CSS inline: colapsa `#html-body` repetido.
+  Medido em 06/10/2026: 1.218 de 1.596 regras (76%) repetiam o id, ate 6 vezes,
+  custando 98,8 KB de HTML por pagina SEM efeito na cascata
+  (tools/checar-especificidade.py prova: 0 disputas por contagem de id).
+  sortOrder 999 roda depois do OptimizeHeadStylesPlugin (998).
+-->
+<type name="Magento\Framework\HTTP\PhpEnvironment\Response">
+    <plugin name="grupoawamotos_theme_css_specificity_normalizer"
+            type="GrupoAwamotos\Theme\Plugin\Response\CssSpecificityNormalizerPlugin"
+            sortOrder="999"/>
+</type>
 </config>

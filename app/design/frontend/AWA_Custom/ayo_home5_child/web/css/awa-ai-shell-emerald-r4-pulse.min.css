@@ -1,0 +1,8 @@
+#awa-ai-chat-root.awa-ai-shell-emerald .awa-ai-chat__toggle--pulse{animation:awa-ai-coach-pulse 1.6s ease-in-out 2;}/* AWA-B11-F1-CONTRAST-3 (2026-10-26): override FINAL do titulo do hero de
+   categoria/busca SEM imagem — branco sobre fundo branco. */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero:not(.awa-category-hero--has-image) h1.awa-category-hero__title {
+  color: #1a1a1a !important;
+  -webkit-text-fill-color: #1a1a1a !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}

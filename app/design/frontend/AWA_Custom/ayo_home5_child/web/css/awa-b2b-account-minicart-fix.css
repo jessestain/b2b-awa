@@ -1,173 +1,113 @@
-/* Minicart conta B2B — override de awa-ui-simplify-terminal (stroke #fff no path)
-   e structural (stroke var(--awa-bg)). Exige ID repetido para ganhar a cascata. */
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart {
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--awa-primary) !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart,html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart {
+  background:0 0!important;
+  background-color:transparent!important;
+  color:var(--awa-primary)!important;
+  border:0!important;
+  box-shadow:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important
 }
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart
-  :is(svg, .awa-minicart-icon, path, circle),
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart
-  :is(svg, .awa-minicart-icon, path, circle) {
-  color: var(--awa-primary) !important;
-  stroke: var(--awa-primary) !important;
-  fill: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart :is(svg,.awa-minicart-icon,path,circle),html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart :is(svg,.awa-minicart-icon,path,circle) {
+  color:var(--awa-primary)!important;
+  stroke:var(--awa-primary)!important;
+  fill:none!important;
+  opacity:1!important;
+  visibility:visible!important
 }
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart
-  .awa-minicart-icon circle,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart
-  .awa-minicart-icon circle {
-  fill: var(--awa-primary) !important;
-  stroke: none !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart .awa-minicart-icon circle,html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart .awa-minicart-icon circle {
+  fill:var(--awa-primary)!important;
+  stroke:none!important
 }
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart
-  .counter.qty:not(.empty),
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart
-  .counter.qty:not(.empty) {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  min-width: 18px !important;
-  min-height: 18px !important;
-  padding: 0 4px !important;
-  margin: 0 !important;
-  border-radius: var(--awa-radius-pill, 999px) !important;
-  background: var(--awa-primary) !important;
-  color: var(--awa-bg) !important;
-  font-size: 10px !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 2 !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper .action.showcart.header-mini-cart .counter.qty:not(.empty),html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .awa-account-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart .counter.qty:not(.empty) {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  position:absolute!important;
+  top:0!important;
+  right:0!important;
+  min-width:18px!important;
+  min-height:18px!important;
+  padding:0 4px!important;
+  margin:0!important;
+  border-radius:var(--awa-radius-pill,999px)!important;
+  background:var(--awa-primary)!important;
+  color:var(--awa-bg)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  opacity:1!important;
+  visibility:visible!important;
+  z-index:2!important
 }
-
-
-/* ── Drawer aberto na conta B2B ─────────────────────────────────────────────
-   Evidência (20260731 CDP caa210):
-   - .header-wrapper-sticky tem backdrop-filter → containing block de position:fixed
-   - bottom:0 + height:auto resolve contra o sticky (~68px), não a viewport
-   - Resultado: panelH≈220, itemsWrapH≈1 (lista colapsada)
-   - A/B: backdrop-filter:none → panelH 838, itemsH 427, pastBottom 0
-   Fix: altura em unidades de viewport (vh/dvh), NÃO bottom:0 no CB do sticky.
-   v7: :has() desliga backdrop-filter no sticky enquanto o drawer está aberto
-        (remove o CB sem depender só de JS).
-   ─────────────────────────────────────────────────────────────────────────── */
-html body#html-body .page-wrapper .header-wrapper-sticky:has(.minicart-wrapper:is(.active,.is-open,.show)),
-html body#html-body .page-wrapper .header-wrapper-sticky:has(.awa-header-minicart--expanded),
-html body#html-body .page-wrapper .awa-site-header:has(.minicart-wrapper:is(.active,.is-open,.show)) .header-wrapper-sticky,
-html body#html-body .page-wrapper .awa-site-header:has(.awa-header-minicart--expanded) .header-wrapper-sticky {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .block-minicart:is(._active,.active,.is-open),html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart {
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  position:fixed!important;
+  top:var(--awa-header-desktop-bottom,68px)!important;
+  right:0!important;
+  bottom:auto!important;
+  left:auto!important;
+  width:min(380px,100vw)!important;
+  min-width:0!important;
+  max-width:min(380px,100vw)!important;
+  height:calc(100vh - var(--awa-header-desktop-bottom,68px))!important;
+  height:calc(100dvh - var(--awa-header-desktop-bottom,68px))!important;
+  max-height:calc(100vh - var(--awa-header-desktop-bottom,68px))!important;
+  max-height:calc(100dvh - var(--awa-header-desktop-bottom,68px))!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  background:var(--awa-bg-surface,var(--awa-bg,#fff))!important;
+  background-color:var(--awa-bg-surface,var(--awa-bg,#fff))!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important;
+  z-index:100130!important;
+  box-shadow:-4px 0 24px color-mix(in srgb,CanvasText 18%,transparent)!important;
+  border-radius:0!important;
+  contain:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important
 }
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .block-minicart:is(._active,.active,.is-open) {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  justify-content: flex-start !important;
-  position: fixed !important;
-  top: var(--awa-header-desktop-bottom, 68px) !important;
-  right: 0 !important;
-  bottom: auto !important;
-  left: auto !important;
-  width: min(380px, 100vw) !important;
-  min-width: 0 !important;
-  max-width: min(380px, 100vw) !important;
-  /* vh/dvh são da viewport — sobrevivem ao containing block do backdrop-filter */
-  height: calc(100vh - var(--awa-header-desktop-bottom, 68px)) !important;
-  height: calc(100dvh - var(--awa-header-desktop-bottom, 68px)) !important;
-  max-height: calc(100vh - var(--awa-header-desktop-bottom, 68px)) !important;
-  max-height: calc(100dvh - var(--awa-header-desktop-bottom, 68px)) !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  transform: none !important;
-  background: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
-  background-color: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain !important;
-  z-index: 100130 !important;
-  box-shadow: -4px 0 24px color-mix(in srgb, CanvasText 18%, transparent) !important;
-  border-radius: 0 !important;
-  contain: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .block-minicart:is(._active,.active,.is-open)::before,html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart::before {
+  content:""!important;
+  display:block!important;
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:rgb(15 23 42 / 45%)!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  z-index:-1!important;
+  transform:none!important
 }
-
-/* Backdrop — vence head-tail content:none no ::before quando aberto */
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart::before,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .block-minicart:is(._active,.active,.is-open)::before {
-  content: "" !important;
-  display: block !important;
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  background: rgb(15 23 42 / 45%) !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  z-index: -1 !important;
-  transform: none !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .block-minicart:is(._active,.active,.is-open) .block-content,html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart .block-content {
+  display:flex!important;
+  flex-direction:column!important;
+  flex:1 1 auto!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  min-height:0!important;
+  background:var(--awa-bg-surface,var(--awa-bg,#fff))!important
 }
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .block-minicart .block-content,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .block-minicart:is(._active,.active,.is-open) .block-content {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 1 auto !important;
-  align-items: stretch !important;
-  justify-content: flex-start !important;
-  min-height: 0 !important;
-  background: var(--awa-bg-surface, var(--awa-bg, #fff)) !important;
-}
-
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .ui-dialog.mage-dropdown-dialog,
-html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*="b2b-"])
-  .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .ui-dialog {
-  display: block !important;
-  position: static !important;
-  width: auto !important;
-  height: auto !important;
-  overflow: visible !important;
-  inset: auto !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
+html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .ui-dialog,html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.account,.b2b-account-shell,.awa-account-operational,.b2b-account-dashboard,[class*=b2b-]) .page-wrapper .minicart-wrapper:is(.active,.is-open,.show) .ui-dialog.mage-dropdown-dialog {
+  display:block!important;
+  position:static!important;
+  width:auto!important;
+  height:auto!important;
+  overflow:visible!important;
+  inset:auto!important;
+  background:0 0!important;
+  border:0!important;
+  box-shadow:none!important
 }

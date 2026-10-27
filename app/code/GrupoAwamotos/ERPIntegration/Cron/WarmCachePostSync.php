@@ -85,6 +85,14 @@ class WarmCachePostSync
                 "SELECT CONCAT('" . self::BASE_URL . "/', ur.request_path)
                  FROM url_rewrite ur
                  JOIN catalog_category_entity cce ON cce.entity_id = ur.entity_id AND cce.level >= 2
+                 JOIN catalog_category_entity_int ccei
+                     ON ccei.entity_id = ur.entity_id
+                    AND ccei.attribute_id = (
+                            SELECT attribute_id FROM eav_attribute
+                            WHERE attribute_code = 'is_active' AND entity_type_id = 3
+                        )
+                    AND ccei.store_id = 1
+                    AND ccei.value = 1
                  WHERE ur.entity_type = 'category'
                    AND ur.store_id = 1
                    AND ur.redirect_type = 0
@@ -105,6 +113,14 @@ class WarmCachePostSync
                         )
                     AND cpes.store_id = 0
                     AND cpes.value = 1
+                 JOIN catalog_product_entity_int cpev
+                     ON cpev.entity_id = ur.entity_id
+                    AND cpev.attribute_id = (
+                            SELECT attribute_id FROM eav_attribute
+                            WHERE attribute_code = 'visibility' AND entity_type_id = 4
+                        )
+                    AND cpev.store_id = 0
+                    AND cpev.value IN (2, 3, 4)
                  WHERE ur.entity_type = 'product'
                    AND ur.store_id = 1
                    AND ur.redirect_type = 0

@@ -9,11 +9,11 @@
     <!-- WhatsApp Order Status Notifications -->
     <event name="sales_order_save_after">
         <observer name="grupoawamotos_erp_order_status_change"
-                  instance="GrupoAwamotos\ERPIntegration\Observer\OrderStatusChange"/>
+                  instance="GrupoAwamotos\ERPIntegration\Observer\ConsentedOrderStatusChange"/>
     </event>
 
     <event name="sales_order_shipment_save_after">
         <observer name="grupoawamotos_erp_shipment_save_after"
-                  instance="GrupoAwamotos\ERPIntegration\Observer\ShipmentSaveAfter"/>
+                  instance="GrupoAwamotos\ERPIntegration\Observer\ConsentedShipmentSaveAfter"/>
     </event>
 </config>

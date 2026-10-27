@@ -10,6 +10,11 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar;
 
 $toolbarSlot = (string) ($block->getData('awa_toolbar_slot') ?: 'top');
 $isBottomSlim = $toolbarSlot === 'bottom';
+$toolbarInit = [];
+if (!$isBottomSlim) {
+    $toolbarInit = json_decode($block->getWidgetOptionsJson(), true, 512, JSON_THROW_ON_ERROR);
+    $toolbarInit['js/awa-grid-density-r2'] = [];
+}
 ?>
 <?php if ($block->getCollection()->getSize()): ?>
     <?php
@@ -20,7 +25,7 @@ $isBottomSlim = $toolbarSlot === 'bottom';
     ?>
     <div class="toolbar toolbar-products<?= $isBottomSlim ? ' toolbar-products--bottom-slim' : '' ?>"
         <?php if (!$isBottomSlim): ?>
-         data-mage-init='<?= /* @noEscape */ $block->getWidgetOptionsJson() ?>'
+         data-mage-init='<?= $block->escapeHtmlAttr(json_encode($toolbarInit, JSON_THROW_ON_ERROR)) ?>'
         <?php endif; ?>>
         <div class="center">
         <?php if ($isBottomSlim): ?>
@@ -34,8 +39,7 @@ $isBottomSlim = $toolbarSlot === 'bottom';
                 <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml') ?>
             <?php endif; ?>
             <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml') ?>
-            <?= $block->getPagerHtml() ?>
-            <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml') ?>
+            <?php // Pagination and amount belong only to the bottom toolbar slot. ?>
         <?php endif; ?>
         </div>
         <?php if (!$isBottomSlim): ?>
@@ -48,7 +52,7 @@ $isBottomSlim = $toolbarSlot === 'bottom';
                    role="button"
                    aria-pressed="<?= $isActive ? 'true' : 'false' ?>"
                    aria-label="<?= $block->escapeHtmlAttr(__('Exibir %1 colunas', $columns)) ?>">
-                    <?= (int) $columns ?>
+                    <span class="awa-grid-density__value" aria-hidden="true"><?= (int) $columns ?></span>
                 </a>
             <?php endforeach; ?>
         </div>

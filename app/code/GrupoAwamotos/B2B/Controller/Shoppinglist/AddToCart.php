@@ -44,13 +44,28 @@ class AddToCart implements HttpPostActionInterface
         }
         try {
             $result = $this->shoppingListService->addToCart($listId);
-            $added = count($result['added'] ?? []);
-            $errors = $result['errors'] ?? [];
+
+            // O service devolve 'added' como INTEIRO (a contagem), nao como lista. O
+            // `count($result['added'] ?? [])` anterior so cobria chave ausente/null e
+            // estourava TypeError no PHP 8 ("count(): Argument #1 ... int given").
+            // Medido no exception.log: 3 ocorrencias em 03/10/2026 (listas 16 e 17),
+            // derrubando a lista de compras inteira para o cliente.
+            $added = (int) ($result['added'] ?? 0);
+
+            // E a chave de falhas do service e 'failed', nao 'errors'. Com o nome errado,
+            // os erros por item eram DESCARTADOS em silencio e o cliente nunca sabia qual
+            // produto falhou.
+            $errors = $result['failed'] ?? [];
             if ($added > 0) {
                 $this->messageManager->addSuccessMessage(__('%1 produto(s) adicionado(s) ao carrinho.', $added));
             }
             foreach ($errors as $err) {
-                $this->messageManager->addWarningMessage($err);
+                $msg = is_array($err)
+                    ? trim(($err['sku'] ?? '') . ': ' . ($err['error'] ?? ''), ': ')
+                    : (string) $err;
+                if ($msg !== '') {
+                    $this->messageManager->addWarningMessage($msg);
+                }
             }
         } catch (LocalizedException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());

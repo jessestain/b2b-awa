@@ -81,7 +81,7 @@ body.catalogo-revista-index .page-main {
 .awa-catalog-nav__link:focus-visible {
     background: var(--awa-neutral-50, #f8f9fa);
     border-color: var(--awa-border, #e6e6e6);
-    color: var(--awa-red, #b73337);
+    color: var(--awa-brand, #b73337);
     outline: none;
     text-decoration: none;
 }
@@ -89,7 +89,7 @@ body.catalogo-revista-index .page-main {
 .awa-catalog-nav__link.is-active {
     background: rgba(183, 51, 55, 0.08);
     border-color: rgba(183, 51, 55, 0.18);
-    color: var(--awa-red, #b73337);
+    color: var(--awa-brand, #b73337);
     font-weight: 600;
 }
 
@@ -99,8 +99,8 @@ body.catalogo-revista-index .page-main {
 }
 
 .awa-catalog-nav__link.is-highlight.is-active {
-    background: var(--awa-red, #b73337);
-    border-color: var(--awa-red, #b73337);
+    background: var(--awa-brand, #b73337);
+    border-color: var(--awa-brand, #b73337);
     color: #fff;
 }
 
@@ -171,7 +171,7 @@ body.catalogo-revista-index .page-main {
 }
 
 .awa-catalogo-page__eyebrow {
-    color: var(--awa-red, #b73337);
+    color: var(--awa-brand, #b73337);
     font-size: 0.875rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -232,7 +232,7 @@ body.catalogo-revista-index .page-main {
 }
 
 .awa-catalog-revista-header__eyebrow {
-    color: var(--awa-red, #b73337);
+    color: var(--awa-brand, #b73337);
     font-size: 0.8125rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -279,7 +279,7 @@ body.catalogo-revista-index .page-main {
     animation: awa-catalogo-spin 0.8s linear infinite;
     border: 3px solid rgba(183, 51, 55, 0.18);
     border-radius: 50%;
-    border-top-color: var(--awa-red, #b73337);
+    border-top-color: var(--awa-brand, #b73337);
     height: 36px;
     width: 36px;
 }

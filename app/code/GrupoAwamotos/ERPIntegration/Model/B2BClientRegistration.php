@@ -1100,19 +1100,14 @@ class B2BClientRegistration
 
         $sql = "-- SQL gerado automaticamente pelo Magento B2B\n";
         $sql .= "-- Data: " . date('Y-m-d H:i:s') . "\n";
-        $sql .= "-- Executar no SQL Server Management Studio com permissao de escrita\n\n";
+        $sql .= "-- Executar no SQL Server Management Studio com permissao de escrita\n";
+        $sql .= "-- Contrato: 1 linha Cadastro (7D4C6FBD) + 1 linha Endereco (FEB11981) por cliente\n";
+        $sql .= "--   no GR_INTEGRACAOVALIDADOR, e completacao idempotente de FN_FORNECEDORESCOMP\n";
+        $sql .= "--   (uma linha por filial de GR_FILIAL). Idempotente: pode ser re-executado.\n";
+        $sql .= "-- Nao cria vendedora (FN_FORNECEDORESVENDPREF) nem preco (FATORPRECO):\n";
+        $sql .= "--   esses vinculos ja existem para os clientes ou sao decisao comercial.\n\n";
+        $sql .= "SET XACT_ABORT ON;\n";
         $sql .= "BEGIN TRANSACTION;\n\n";
-
-        // Get next address CHAVEEXTERNA
-        try {
-            $maxExt = (int) $this->readConnection->fetchColumn(
-                "SELECT MAX(CAST(CHAVEEXTERNA AS INT)) FROM GR_INTEGRACAOVALIDADOR WHERE INTEGRACAOORIGEM = :o",
-                [':o' => self::ORIGEM_ENDERECO]
-            );
-        } catch (\Exception $e) {
-            $maxExt = 19999;
-        }
-        $nextExt = $maxExt + 1;
 
         foreach ($unregistered as $c) {
             $code = $c['erp_code'];
@@ -1120,11 +1115,31 @@ class B2BClientRegistration
             $hashEnd = $this->getAddressValidatorHash($code);
 
             $sql .= "-- Cliente: " . $c['razao'] . " (CNPJ: " . $c['cgc'] . ")\n";
+
+            // 1. Cadastro de Cliente — idempotente (guarda por CHAVE)
             $sql .= "INSERT INTO GR_INTEGRACAOVALIDADOR (INTEGRACAOORIGEM, CHAVE, VALIDADOR, CHAVEEXTERNA, DTSINCRONIZACAO)\n";
-            $sql .= "VALUES ('" . self::ORIGEM_CLIENTE . "', '$code', '$hash', '$code', GETDATE());\n";
+            $sql .= "SELECT '" . self::ORIGEM_CLIENTE . "', '$code', '$hash', '$code', GETDATE()\n";
+            $sql .= "WHERE NOT EXISTS (SELECT 1 FROM GR_INTEGRACAOVALIDADOR v\n";
+            $sql .= "                  WHERE v.INTEGRACAOORIGEM = '" . self::ORIGEM_CLIENTE . "' AND v.CHAVE = '$code');\n";
+
+            // 2. Endereco — CHAVEEXTERNA calculada na hora da execucao (MAX+1),
+            //    para nunca colidir com linhas criadas pelo desktop apos a geracao.
             $sql .= "INSERT INTO GR_INTEGRACAOVALIDADOR (INTEGRACAOORIGEM, CHAVE, VALIDADOR, CHAVEEXTERNA, DTSINCRONIZACAO)\n";
-            $sql .= "VALUES ('" . self::ORIGEM_ENDERECO . "', '$code;1', '$hashEnd', '$nextExt', GETDATE());\n\n";
-            $nextExt++;
+            $sql .= "SELECT '" . self::ORIGEM_ENDERECO . "', '$code;1', '$hashEnd',\n";
+            $sql .= "       CAST(COALESCE((SELECT MAX(CAST(v.CHAVEEXTERNA AS INT))\n";
+            $sql .= "                        FROM GR_INTEGRACAOVALIDADOR v\n";
+            $sql .= "                       WHERE v.INTEGRACAOORIGEM = '" . self::ORIGEM_ENDERECO . "'), 19999) + 1 AS VARCHAR(50)),\n";
+            $sql .= "       GETDATE()\n";
+            $sql .= "WHERE NOT EXISTS (SELECT 1 FROM GR_INTEGRACAOVALIDADOR v\n";
+            $sql .= "                  WHERE v.INTEGRACAOORIGEM = '" . self::ORIGEM_ENDERECO . "' AND v.CHAVE = '$code;1');\n";
+
+            // 3. Completar linhas de empresa (uma por filial) — mesmo contrato do
+            //    ensureClientCompanyRows(); nao toca em vendedora nem em preco.
+            $sql .= "INSERT INTO FN_FORNECEDORESCOMP (FORNECEDOR, FILIAL, PERCFRETE)\n";
+            $sql .= "SELECT $code, f.CODIGO, 0\n";
+            $sql .= "  FROM GR_FILIAL f\n";
+            $sql .= " WHERE NOT EXISTS (SELECT 1 FROM FN_FORNECEDORESCOMP e\n";
+            $sql .= "                    WHERE e.FORNECEDOR = $code AND e.FILIAL = f.CODIGO);\n\n";
         }
 
         $sql .= "COMMIT;\n";
@@ -1341,7 +1356,11 @@ class B2BClientRegistration
      */
     private function buildValidatorHash(array $payload): string
     {
-        return strtoupper(hash('sha256', (string) json_encode($payload)));
+        // GR_INTEGRACAOVALIDADOR.VALIDADOR e varchar(50). Valores de 64 chars
+        // falham com "String or binary data would be truncated" (ANSI_WARNINGS ON)
+        // ou sao truncados silenciosamente. Mantemos o fingerprint determinista
+        // em 50 chars, no mesmo formato (hex maiusculo) das linhas do desktop.
+        return substr(strtoupper(hash('sha256', (string) json_encode($payload))), 0, 50);
     }
 
     /**

@@ -18,12 +18,11 @@ use GrupoAwamotos\Theme\Model\HeaderImpeccableCascadeLockCss;
 
 // === Preconnect (economiza handshake DNS + TCP + TLS — ~200-400ms por domínio) ===
 $preconnect = [
-    'https://www.googletagmanager.com',
-    'https://www.google-analytics.com',
+    // OPT-20261024: hints de marketing removidos — os domínios só carregam após
+    // consentimento (GA4) ou estão desativados (pixel FB). Mantido o esqueleto.
 ];
 // === DNS Prefetch (outros domínios externos — menor benefício que preconnect) ===
 $dnsPrefetch = [
-    '//connect.facebook.net',
 ];
 
 // === CSS Preload ===
@@ -384,7 +383,7 @@ width:max-content!important;
 </style>
 <style id="awa-home-cls-critical-opt21">
 /* opt21 CLS — sync 1º paint (critical-home.min.css é async; gate ~5s dispara reflow) */
-html,body#html-body{margin:0!important;padding:0!important}
+html,body#html-body{margin:0!important;padding:0!important} html body#html-body .page-wrapper .awa-header-account-prompt{--awa-text:#ffffff!important}
 html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(footer.page-footer,.page-footer,.page_footer,.footer-bottom){content-visibility:visible!important;contain-intrinsic-size:unset!important;height:auto!important;max-height:none!important}
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .content-top-home .product-thumb,
 :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .content-top-home .product-image-container{aspect-ratio:1/1!important;min-height:var(--awa-home-product-media-min,120px)!important;display:block!important;width:100%!important;contain:layout!important}
@@ -580,7 +579,7 @@ html body#html-body .page-wrapper :not(.awa-site-header) .logo img{display:block
 .awa-category-carousel__icon img,.awa-category-carousel__icon picture img{width:88px!important;height:88px!important;min-width:88px!important;min-height:88px!important;object-fit:contain!important}
 @media(max-width:991px){.awa-category-carousel__icon img,.awa-category-carousel__icon picture img{width:88px!important;height:88px!important;min-width:88px!important;min-height:88px!important}}
 /* Design tokens inline — elimina 1 HTTP request bloqueante (tokens + grid-system legados, inlinados 2026-04) */
-:root{--awa-primary:#b73337;--awa-red:#dc2626;--awa-primary-hover:#8e2629;--awa-primary-dark:#8e2629;--awa-primary-light:#f9eeee;--awa-primary-subtle:rgba(183,51,55,0.08);--awa-text:#111111;--awa-text-secondary:#555555;--awa-text-muted:#6b7280;--awa-touch-target:44px;--awa-header-row-h:68px;--awa-header-main-row-h:68px;--awa-header-nav-h:48px;--awa-header-scroll-offset:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-site-shell-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-sticky-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-nav-bar-h:48px;--gap-tight:0.75rem;--gap-base:1rem;--surface-hover:color-mix(in srgb,currentColor 8%,transparent);--border-subtle:color-mix(in srgb,currentColor 8%,transparent);--awa-text-disabled:#bbb;--awa-text-inverse:var(--head-preload-c2);--awa-bg:var(--head-preload-c2);--awa-bg-subtle:#f7f7f7;--awa-bg-muted:#eeeeee;--awa-border:#e5e5e5;--awa-border-strong:#d0d0d0;--awa-radius-xs:4px;--awa-radius-sm:6px;--awa-radius-md:8px;--awa-radius-lg:12px;--awa-radius-xl:16px;--awa-radius-pill:9999px;--awa-shadow-xs:0 1px 2px rgba(0,0,0,0.05);--awa-shadow-sm:0 2px 8px rgba(0,0,0,0.08);--awa-shadow-md:0 4px 16px rgba(0,0,0,0.10);--awa-shadow-lg:0 8px 24px rgba(0,0,0,0.12);--awa-shadow-xl:0 16px 40px rgba(0,0,0,0.15);--awa-shadow-brand:0 4px 16px rgba(183,51,55,0.25);--awa-font-2xs:12px;--awa-font-xs:11px;--awa-font-sm:12px;--awa-font-base:14px;--awa-font-md:15px;--awa-font-lg:16px;--awa-font-xl:18px;--awa-font-2xl:20px;--awa-font-3xl:24px;--awa-font-4xl:28px;--awa-weight-normal:400;--awa-weight-medium:500;--awa-weight-semibold:600;--awa-weight-bold:700;--awa-weight-extrabold:800;--awa-space-1:4px;--awa-space-2:8px;--awa-space-3:12px;--awa-space-4:16px;--awa-space-5:20px;--awa-space-6:24px;--awa-space-8:32px;--awa-space-10:40px;--awa-space-12:48px;--awa-ease:cubic-bezier(0.4,0,0.2,1);--awa-ease-out:cubic-bezier(0,0,0.2,1);--awa-duration-fast:0.15s;--awa-duration:0.25s;--awa-duration-slow:0.4s;--awa-z-base:1;--awa-z-overlay:100;--awa-z-drawer:200;--awa-z-modal:300;--awa-z-toast:400;--awa-container-max:1440px;--awa-container-catalog:1440px;--awa-container:var(--awa-container-max);--awa-container-pad:20px;--awa-container-narrow:960px;--awa-container-wide:1440px;--awa-container-content:1400px;--awa-page-catalog:1440px;--awa-page-pad-catalog:20px;--awa-grid-gap:clamp(12px,2vw,24px);--awa-grid-gap-sm:clamp(8px,1.5vw,16px);--awa-grid-gap-lg:clamp(16px,3vw,32px);--awa-grid-item-min:240px;--awa-grid-item-min-sm:180px;--awa-grid-item-min-lg:320px;--awa-font-weight-bold:700;--awa-font-weight-semibold:600;--awa-font-weight-extrabold:800;--awa-font-size-10:0.625rem;--awa-font-size-11:0.6875rem;--awa-font-size-13:0.8125rem;--awa-font-size-3xl:1.5rem;--awa-accent-hover:#8e2629;--awa-b2b-accent-current:#b73337;--awa-color-bg-soft:#f7f7f7;--awa-color-border:#e5e5e5;--awa-color-primary-dark:#8e2629;--awa-color-text-primary:#111111;--awa-neutral-100:#f5f5f5;--awa-surface:#ffffff;--awa-text-1:#111111;--awa-text-2:#666666;--awa-text-main:#111111;--awa-text-on-dark-muted-solid:rgba(255,255,255,0.65);--awa-gap-2xs:0.25rem;--awa-size-11:0.6875rem;--awa-size-18:1.125rem;--awa-size-22:1.375rem;--awa-size-28:1.75rem;--awa-size-30:1.875rem;--awa-size-32:2rem;--awa-size-40:2.5rem;--awa-section-pad:clamp(1.5rem,1.2rem + 2vw,3rem);--awa-page-section-gap:2rem;--awa-page-section-gap-lg:3rem;--awa-shell-gap:1rem;--awa-shell-sidebar:280px;--awa-shell-checkout-sidebar:380px;--awa-cat-item-w:clamp(120px,20%,220px);--awa-focus-outline:2px solid #b73337;--awa-focus-offset:2px;--awa-home-transition:0.2s ease-out;--awa-round2-transition:0.2s ease-out;--awa-glass-blur:12px;--awa-cc-surface-1:#ffffff;--awa-cc-surface-2:#f9f9f9;--awa-cc-text-1:#111111;--awa-cc-text-2:#555555;--awa-cc-text-3:#666666;--awa-cc-border:#e5e5e5;--awa-cc-border-strong:#d0d0d0;--awa-cc-focus-ring:#b73337;--awa-cc-shadow-1:0 2px 8px rgba(0,0,0,0.08);--awa-cc-shadow-2:0 4px 16px rgba(0,0,0,0.12);--awa-cc-status-error-text:#dc2626;--awa-cc-transition:0.2s ease-out;--awa-footer-border-medium:rgba(255,255,255,0.2);--awa-footer-border-soft:rgba(255,255,255,0.1);--awa-footer-border-strong:rgba(255,255,255,0.3);--awa-footer-chip-bg:rgba(255,255,255,0.08);--awa-footer-chip-bg-hover:rgba(255,255,255,0.15);--awa-footer-chip-border:rgba(255,255,255,0.15);--awa-footer-chip-border-strong:rgba(255,255,255,0.30);--awa-footer-label-soft:rgba(255,255,255,0.6);--awa-footer-text-body:rgba(255,255,255,0.85);--awa-footer-text-high:#ffffff;--awa-footer-text-muted:rgba(255,255,255,0.55);--awa-footer-trust-bg:rgba(255,255,255,0.06);--awa-footer-trust-border:rgba(255,255,255,0.12);--awa-footer-trust-muted:rgba(255,255,255,0.6);--awa-ft-border:rgba(255,255,255,0.12);--awa-ft-border-accent:rgba(183,51,55,0.4);--awa-ft-grad-from:#111111;--awa-ft-grad-mid:#111111;--awa-ft-grad-to:#0a0a0a;--awa-ft-surface-2:rgba(255,255,255,0.04);--awa-ft-text-1:#ffffff;--awa-ft-text-2:rgba(255,255,255,0.85);--awa-ft-text-3:rgba(255,255,255,0.6);--awa-ft-transition:0.2s ease-out;--awa-hc-border-strong:#d0d0d0;--awa-hc-surface-2:#f9f9f9;--awa-hc-text-1:#333333;--awa-hc-text-2:#666666;--awa-header-gutter:1rem;--awa-header-search-gap-icon:0.5rem;--awa-header-search-gap-inner:0.5rem;--awa-header-search-gap-outer:0.75rem;--awa-header-search-padding-inline-end:0.75rem;--awa-header-search-padding-inline-start:1rem;--awa-home-carousel-radius-lg:12px;--awa-home-carousel-radius-sm:8px;--awa-home-carousel-shadow-cta:0 4px 16px rgba(183,51,55,0.32);--awa-home-final-border:rgba(183,51,55,0.2);--awa-home-final-gap:1.5rem;--awa-home-final-radius:12px;--awa-home-final-surface:rgba(183,51,55,0.04);--awa-home-product-gap-desktop:1.5rem;--awa-home-product-gap-mobile:1rem;--awa-home-product-gap-tablet:1.25rem;--awa-home-product-media-min:120px;--awa-main-nav-link-min-h:44px;--awa-main-nav-link-pad-x:1rem;--awa-main-nav-link-radius:6px;--awa-safe-chip-bg:rgba(255,255,255,0.08);--awa-safe-chip-border:rgba(255,255,255,0.15);--awa-safe-search-border:#e5e5e5;--awa-safe-search-button-size:44px;--awa-safe-search-control-height:44px;--awa-safe-search-gap-icon:0.5rem;--awa-safe-search-gap-inner:0.5rem;--awa-safe-search-gap-outer:0.75rem;--awa-safe-search-input-pad-end:0.75rem;--awa-safe-search-input-pad-start:1rem;--awa-safe-search-shell-height:44px;--awa-safe-search-shell-radius:22px;--awa-safe-topbar-bg:#111111;--awa-safe-topbar-border:rgba(255,255,255,0.1);--awa-safe-topbar-text:rgba(255,255,255,0.85);--awa-top-account-link-min-height:44px;--awa-top-account-link-padding-inline:0.5rem;--awa-top-account-links-gap:0.25rem;--awa-ui-border-width-default:1px;--awa-ui-border-width-medium:2px;--awa-ui-radius-input:8px;--awa-ui-radius-tag:4px}
+:root{--awa-primary:#b73337;--awa-red:#dc2626;--awa-primary-hover:#8e2629;--awa-primary-dark:#8e2629;--awa-primary-light:#f9eeee;--awa-primary-subtle:rgba(183,51,55,0.08);--awa-text:#111111;--awa-text-secondary:#555555;--awa-text-muted:#6b7280;--awa-touch-target:44px;--awa-header-row-h:68px;--awa-header-main-row-h:68px;--awa-header-nav-h:48px;--awa-header-scroll-offset:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-site-shell-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-header-sticky-h:calc(var(--awa-header-main-row-h) + var(--awa-header-nav-h));--awa-nav-bar-h:48px;--gap-tight:0.75rem;--gap-base:1rem;--surface-hover:color-mix(in srgb,currentColor 8%,transparent);--border-subtle:color-mix(in srgb,currentColor 8%,transparent);--awa-text-disabled:#bbb;--awa-text-inverse:var(--head-preload-c2);--awa-bg:var(--head-preload-c2);--awa-bg-subtle:#f7f7f7;--awa-bg-muted:#eeeeee;--awa-border:#e5e5e5;--awa-border-strong:#d0d0d0;--awa-radius-xs:4px;--awa-radius-sm:6px;--awa-radius-md:12px;--awa-radius-lg:12px;--awa-radius-xl:16px;--awa-radius-pill:9999px;--awa-shadow-xs:0 1px 2px rgba(0,0,0,0.05);--awa-shadow-sm:0 2px 8px rgba(0,0,0,0.08);--awa-shadow-md:0 4px 16px rgba(0,0,0,0.10);--awa-shadow-lg:0 8px 24px rgba(0,0,0,0.12);--awa-shadow-xl:0 16px 40px rgba(0,0,0,0.15);--awa-shadow-brand:0 4px 16px rgba(183,51,55,0.25);--awa-font-2xs:12px;--awa-font-xs:11px;--awa-font-sm:12px;--awa-font-base:14px;--awa-font-md:15px;--awa-font-lg:16px;--awa-font-xl:18px;--awa-font-2xl:20px;--awa-font-3xl:24px;--awa-font-4xl:28px;--awa-weight-normal:400;--awa-weight-medium:500;--awa-weight-semibold:600;--awa-weight-bold:700;--awa-weight-extrabold:800;--awa-space-1:4px;--awa-space-2:8px;--awa-space-3:12px;--awa-space-4:16px;--awa-space-5:20px;--awa-space-6:24px;--awa-space-8:32px;--awa-space-10:40px;--awa-space-12:48px;--awa-ease:cubic-bezier(0.4,0,0.2,1);--awa-ease-out:cubic-bezier(0,0,0.2,1);--awa-duration-fast:0.15s;--awa-duration:0.25s;--awa-duration-slow:0.4s;--awa-z-base:1;--awa-z-overlay:100;--awa-z-drawer:200;--awa-z-modal:300;--awa-z-toast:400;--awa-container-max:1440px;--awa-container-catalog:1440px;--awa-container:var(--awa-container-max);--awa-container-pad:20px;--awa-container-narrow:960px;--awa-container-wide:1440px;--awa-container-content:1400px;--awa-page-catalog:1440px;--awa-page-pad-catalog:20px;--awa-grid-gap:clamp(12px,2vw,24px);--awa-grid-gap-sm:clamp(8px,1.5vw,16px);--awa-grid-gap-lg:clamp(16px,3vw,32px);--awa-grid-item-min:240px;--awa-grid-item-min-sm:180px;--awa-grid-item-min-lg:320px;--awa-font-weight-bold:700;--awa-font-weight-semibold:600;--awa-font-weight-extrabold:800;--awa-font-size-10:0.625rem;--awa-font-size-11:0.6875rem;--awa-font-size-13:0.8125rem;--awa-font-size-3xl:1.5rem;--awa-accent-hover:#8e2629;--awa-b2b-accent-current:#b73337;--awa-color-bg-soft:#f7f7f7;--awa-color-border:#e5e5e5;--awa-color-primary-dark:#8e2629;--awa-color-text-primary:#111111;--awa-neutral-100:#f5f5f5;--awa-surface:#ffffff;--awa-text-1:#111111;--awa-text-2:#666666;--awa-text-main:#111111;--awa-text-on-dark-muted-solid:rgba(255,255,255,0.65);--awa-gap-2xs:0.25rem;--awa-size-11:0.6875rem;--awa-size-18:1.125rem;--awa-size-22:1.375rem;--awa-size-28:1.75rem;--awa-size-30:1.875rem;--awa-size-32:2rem;--awa-size-40:2.5rem;--awa-section-pad:clamp(1.5rem,1.2rem + 2vw,3rem);--awa-page-section-gap:2rem;--awa-page-section-gap-lg:3rem;--awa-shell-gap:1rem;--awa-shell-sidebar:280px;--awa-shell-checkout-sidebar:380px;--awa-cat-item-w:clamp(120px,20%,220px);--awa-focus-outline:2px solid #b73337;--awa-focus-offset:2px;--awa-home-transition:0.2s ease-out;--awa-round2-transition:0.2s ease-out;--awa-glass-blur:12px;--awa-cc-surface-1:#ffffff;--awa-cc-surface-2:#f9f9f9;--awa-cc-text-1:#111111;--awa-cc-text-2:#555555;--awa-cc-text-3:#666666;--awa-cc-border:#e5e5e5;--awa-cc-border-strong:#d0d0d0;--awa-cc-focus-ring:#b73337;--awa-cc-shadow-1:0 2px 8px rgba(0,0,0,0.08);--awa-cc-shadow-2:0 4px 16px rgba(0,0,0,0.12);--awa-cc-status-error-text:#dc2626;--awa-cc-transition:0.2s ease-out;--awa-footer-border-medium:rgba(255,255,255,0.2);--awa-footer-border-soft:rgba(255,255,255,0.1);--awa-footer-border-strong:rgba(255,255,255,0.3);--awa-footer-chip-bg:rgba(255,255,255,0.08);--awa-footer-chip-bg-hover:rgba(255,255,255,0.15);--awa-footer-chip-border:rgba(255,255,255,0.15);--awa-footer-chip-border-strong:rgba(255,255,255,0.30);--awa-footer-label-soft:rgba(255,255,255,0.6);--awa-footer-text-body:rgba(255,255,255,0.85);--awa-footer-text-high:#ffffff;--awa-footer-text-muted:rgba(255,255,255,0.55);--awa-footer-trust-bg:rgba(255,255,255,0.06);--awa-footer-trust-border:rgba(255,255,255,0.12);--awa-footer-trust-muted:rgba(255,255,255,0.6);--awa-ft-border:rgba(255,255,255,0.12);--awa-ft-border-accent:rgba(183,51,55,0.4);--awa-ft-grad-from:#111111;--awa-ft-grad-mid:#111111;--awa-ft-grad-to:#0a0a0a;--awa-ft-surface-2:rgba(255,255,255,0.04);--awa-ft-text-1:#ffffff;--awa-ft-text-2:rgba(255,255,255,0.85);--awa-ft-text-3:rgba(255,255,255,0.6);--awa-ft-transition:0.2s ease-out;--awa-hc-border-strong:#d0d0d0;--awa-hc-surface-2:#f9f9f9;--awa-hc-text-1:#333333;--awa-hc-text-2:#666666;--awa-header-gutter:1rem;--awa-header-search-gap-icon:0.5rem;--awa-header-search-gap-inner:0.5rem;--awa-header-search-gap-outer:0.75rem;--awa-header-search-padding-inline-end:0.75rem;--awa-header-search-padding-inline-start:1rem;--awa-home-carousel-radius-lg:12px;--awa-home-carousel-radius-sm:8px;--awa-home-carousel-shadow-cta:0 4px 16px rgba(183,51,55,0.32);--awa-home-final-border:rgba(183,51,55,0.2);--awa-home-final-gap:1.5rem;--awa-home-final-radius:12px;--awa-home-final-surface:rgba(183,51,55,0.04);--awa-home-product-gap-desktop:1.5rem;--awa-home-product-gap-mobile:1rem;--awa-home-product-gap-tablet:1.25rem;--awa-home-product-media-min:120px;--awa-main-nav-link-min-h:44px;--awa-main-nav-link-pad-x:1rem;--awa-main-nav-link-radius:6px;--awa-safe-chip-bg:rgba(255,255,255,0.08);--awa-safe-chip-border:rgba(255,255,255,0.15);--awa-safe-search-border:#e5e5e5;--awa-safe-search-button-size:44px;--awa-safe-search-control-height:44px;--awa-safe-search-gap-icon:0.5rem;--awa-safe-search-gap-inner:0.5rem;--awa-safe-search-gap-outer:0.75rem;--awa-safe-search-input-pad-end:0.75rem;--awa-safe-search-input-pad-start:1rem;--awa-safe-search-shell-height:44px;--awa-safe-search-shell-radius:22px;--awa-safe-topbar-bg:#111111;--awa-safe-topbar-border:rgba(255,255,255,0.1);--awa-safe-topbar-text:rgba(255,255,255,0.85);--awa-top-account-link-min-height:44px;--awa-top-account-link-padding-inline:0.5rem;--awa-top-account-links-gap:0.25rem;--awa-ui-border-width-default:1px;--awa-ui-border-width-medium:2px;--awa-ui-radius-input:8px;--awa-ui-radius-tag:4px}
 @media(min-width:768px) and (max-width:991px){:root{--awa-header-row-h:56px;--awa-header-scroll-offset:128px;--awa-header-site-shell-h:128px;}}
 
 /* BUG-3/5/6/7 fix: rokan grid constraining swipers to 254px — force block before JS */
@@ -606,1031 +605,9 @@ if (is_file($__h1_fix)) {
 }
 unset($__h1_fix);
 ?>
-/* Header alignment fix */
-#html-body .page-wrapper .header-control.awa-nav-bar .awa-nav-bar__inner,#html-body .page-wrapper .awa-site-header .awa-nav-bar__inner{width:100%!important;max-width:none!important;max-inline-size:none!important;margin-inline:0!important;padding-inline:max(24px,calc((100% - 1280px)/2 + 24px))!important;box-sizing:border-box!important;}
-/* Nav full-bleed; inner trilho 1280 alinhado ao logo. First-paint = estado final. */
-@media (min-width: 992px){
-  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell)
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar){
-    width:100%!important;
-    max-width:none!important;
-    margin-inline:0!important;
-    margin-left:0!important;
-    margin-right:0!important;
-    padding-inline:0!important;
-    padding-left:0!important;
-    padding-right:0!important;
-    box-sizing:border-box!important;
-    background:var(--awa-bg,var(--awa-white,Canvas))!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell)
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar>.container,.header-control.header-nav.awa-nav-bar>.container){
-    width:100%!important;
-    max-width:none!important;
-    margin-inline:0!important;
-    margin-left:0!important;
-    margin-right:0!important;
-    padding-inline:0!important;
-    padding-left:0!important;
-    padding-right:0!important;
-    box-sizing:border-box!important;
-    background:transparent!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell)
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar .awa-nav-bar__inner,.header-control.header-nav.awa-nav-bar .awa-nav-bar__inner){
-    width:100%!important;
-    max-width:none!important;
-    max-inline-size:none!important;
-    margin-inline:0!important;
-    margin-left:0!important;
-    margin-right:0!important;
-    padding-inline:max(24px,calc((100% - 1280px)/2 + 24px))!important;
-    box-sizing:border-box!important;
-    background:transparent!important;
-  }
-}
-/* awa-header-unify-lock-20260814 */
-/* Header unify 2026-08-14 — global (não só home). !important: vence styles-l, align-grid 9–11 ids e cart-checkout-critical. */
-html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body{
-  --awa-header-main-row-h:68px;
-  --awa-header-nav-h:48px;
-  --awa-header-promo-h:44px;
-}
-@media (min-width:992px){
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
-    .page-wrapper .awa-site-header .header.awa-main-header{
-    width:min(100%,1280px)!important;
-    max-width:1280px!important;
-    margin-inline:auto!important;
-    margin-left:auto!important;
-    margin-right:auto!important;
-    padding-inline:0!important;
-    box-sizing:border-box!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
-    .page-wrapper .awa-site-header :is(.header_main.awa-main-header-inner-wrap,.header-main,.header-main>.container,.awa-main-header__inner.wp-header){
-    width:100%!important;
-    max-width:100%!important;
-    margin-inline:0!important;
-    box-sizing:border-box!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)
-    .page-wrapper .awa-site-header .awa-main-header__inner.wp-header{
-    padding-inline:24px!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell)
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar>.container,.header-control.header-nav.awa-nav-bar>.container){
-    width:100%!important;
-    max-width:none!important;
-    margin-inline:0!important;
-    padding-inline:0!important;
-    box-sizing:border-box!important;
-    background:transparent!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell)
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar .awa-nav-bar__inner,.header-control.header-nav.awa-nav-bar .awa-nav-bar__inner){
-    width:100%!important;
-    max-width:none!important;
-    max-inline-size:none!important;
-    margin-inline:0!important;
-    padding-inline:max(24px,calc((100% - 1280px)/2 + 24px))!important;
-    box-sizing:border-box!important;
-    background:transparent!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index
-    .page-wrapper .awa-site-header :is(#header.header-container>.header-content,#awa-b2b-promo-bar){
-    width:min(100%,1280px)!important;
-    max-width:1280px!important;
-    margin-inline:auto!important;
-    padding-inline:0!important;
-    box-sizing:border-box!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.checkout-cart-index
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout){
-    width:100%!important;
-    max-width:1280px!important;
-    margin-inline:0!important;
-    padding-inline:24px 52px!important;
-    box-sizing:border-box!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index)
-    .page-wrapper .awa-site-header .awa-header-categories.menu_left_home1{
-    padding-inline:0!important;
-    padding-left:0!important;
-    padding-right:0!important;
-    margin-inline:0!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"]
-    :is(.awa-header-account-prompt__text,.awa-header-account-prompt__guest){
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:flex-start!important;
-    justify-content:center!important;
-    gap:2px!important;
-    height:44px!important;
-    min-height:44px!important;
-    max-height:44px!important;
-    overflow:visible!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-header-account-prompt[data-awa-auth-state="guest"] .awa-header-account-prompt__line1{
-    display:block!important;
-    visibility:visible!important;
-    height:auto!important;
-    max-height:none!important;
-    overflow:visible!important;
-    opacity:1!important;
-    font-size:12px!important;
-    font-weight:600!important;
-    line-height:1.2!important;
-    white-space:nowrap!important;
-    color:var(--awa-text,var(--awa-text-muted,#334155))!important;
-  }
-  /* awa-header-unify-lock-20260814-chrome — sem card, sem pílula, uma borda */
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(.awa-header-contact-links.awa-header-account-prompt,.awa-header-account-prompt){
-    border:0!important;
-    border-radius:0!important;
-    outline:0!important;
-    background:transparent!important;
-    background-image:none!important;
-    box-shadow:none!important;
-    padding:0!important;
-    min-width:0!important;
-    max-width:none!important;
-    width:max-content!important;
-    height:44px!important;
-    min-height:44px!important;
-    max-height:44px!important;
-    overflow:visible!important;
-    gap:8px!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__icon{
-    background:transparent!important;
-    border:0!important;
-    border-radius:0!important;
-    box-shadow:none!important;
-    width:24px!important;
-    min-width:24px!important;
-    max-width:24px!important;
-    height:44px!important;
-    min-height:44px!important;
-    padding:0!important;
-    flex:0 0 24px!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header a.awa-header-account-prompt__link--register,
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-header-account-prompt a.awa-header-account-prompt__link--register{
-    background:transparent!important;
-    background-color:transparent!important;
-    color:var(--awa-text,CanvasText)!important;
-    border:0!important;
-    border-radius:0!important;
-    padding:0 2px!important;
-    min-height:0!important;
-    height:auto!important;
-    max-height:none!important;
-    box-shadow:none!important;
-    font-size:12px!important;
-    font-weight:700!important;
-    line-height:1.2!important;
-    text-decoration:none!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-header-right-col{
-    gap:8px!important;
-    min-width:0!important;
-    overflow:visible!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header{
-    border-bottom:0!important;
-    box-shadow:none!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .header-wrapper-sticky{
-    border-bottom:0!important;
-    box-shadow:none!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .header.awa-main-header{
-    border-bottom:0!important;
-    box-shadow:none!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar){
-    border-block-start:1px solid var(--awa-border-subtle,var(--awa-border,color-mix(in srgb,CanvasText 10%,Canvas)))!important;
-    border-block-end:0!important;
-    border-inline:0!important;
-    box-shadow:none!important;
-  }
-  /* Promo B2B: casco + barra + texto = 44px (mata lock 32px do css-gate/vtex-clean). */
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header{--awa-header-promo-h:44px!important;--awa-header-stack-h:160px!important}
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header:has(#awa-b2b-promo-bar:not([aria-hidden="true"])){
-    height:160px!important;min-height:160px!important;max-height:160px!important
-  }
-  html.awa-b2b-promo-dismissed body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header,
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header:has(#awa-b2b-promo-bar[aria-hidden="true"]){
-    height:116px!important;min-height:116px!important;max-height:116px!important;
-    --awa-header-promo-h:0px!important;--awa-header-stack-h:116px!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header:has(.b2b-status-panel){
-    height:auto!important;min-height:0!important;max-height:none!important;
-    --awa-header-promo-h:0px!important;--awa-header-stack-h:auto!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(#header.header-container,#header.header-container>.header-content,#awa-b2b-promo-bar){
-    height:44px!important;min-height:44px!important;max-height:44px!important;
-    padding:0!important;padding-block:0!important;padding-inline:0!important;
-    margin:0!important;box-sizing:border-box!important;
-    width:100%!important;max-width:none!important;
-    border:0!important;border-bottom:0!important;overflow:hidden!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(#header.header-container,#awa-b2b-promo-bar){
-    background:var(--awa-primary,oklch(48% .14 20))!important;
-    background-color:var(--awa-primary,oklch(48% .14 20))!important;
-    color:var(--awa-text-inverse,oklch(99% .002 20))!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #header.header-container>.header-content{
-    background:transparent!important;width:100%!important;max-width:none!important;
-    display:flex!important;align-items:center!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar:not([aria-hidden="true"]){
-    display:flex!important;align-items:center!important;justify-content:center!important;
-    width:100%!important;max-width:none!important;padding:0!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout){
-    height:44px!important;min-height:44px!important;max-height:44px!important;
-    display:flex!important;align-items:center!important;justify-content:center!important;
-    width:min(100%,1280px)!important;max-width:1280px!important;margin-inline:auto!important;
-    padding:0 52px 0 24px!important;box-sizing:border-box!important;line-height:1.2!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__text{
-    height:44px!important;min-height:44px!important;max-height:44px!important;align-items:center!important;
-    width:100%!important;max-width:none!important;margin:0!important;padding:0!important;
-    box-sizing:border-box!important;line-height:1.2!important;
-    color:var(--awa-text-inverse,oklch(99% .002 20))!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout,.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__lead,.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__lead-short,.awa-b2b-promo-bar__tail,.awa-b2b-promo-bar__separator,span,p){
-    color:var(--awa-text-inverse,oklch(99% .002 20))!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__cta,.awa-b2b-promo-bar__cta strong){
-    color:var(--awa-text-inverse,oklch(99% .002 20))!important;
-    background:transparent!important;background-color:transparent!important;background-image:none!important;
-    box-shadow:none!important;border:0!important;border-radius:0!important;height:44px!important;min-height:44px!important;
-    max-height:44px!important;padding:0 12px!important;max-width:none!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-close{
-    position:absolute!important;inset-block:0!important;inset-inline-end:0!important;
-    top:0!important;right:0!important;transform:none!important;
-    height:44px!important;min-height:44px!important;max-height:44px!important;
-    width:44px!important;min-width:44px!important;max-width:44px!important;
-    padding:0!important;margin:0!important;border-radius:0!important;
-    background:transparent!important;background-color:transparent!important;
-    border:0!important;
-    border-inline-start:1px solid color-mix(in srgb,var(--awa-text-inverse,oklch(99% .002 20)) 28%,transparent)!important;
-    color:var(--awa-text-inverse,oklch(99% .002 20))!important
-  }
-  html.awa-b2b-promo-dismissed body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(#header.header-container,#header.header-container>.header-content,#awa-b2b-promo-bar),
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #header.header-container.awa-b2b-promo-shell--collapsed,
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #header.header-container.awa-b2b-promo-shell--collapsed .header-content,
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #header.header-container:has(#awa-b2b-promo-bar[aria-hidden="true"]),
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header #header.header-container:has(#awa-b2b-promo-bar[aria-hidden="true"]) .header-content{
-    height:0!important;min-height:0!important;max-height:0!important;padding:0!important;margin:0!important;
-    border:0!important;overflow:hidden!important;line-height:0!important
-  }
-  /* Magento 2 search = 1 chrome no form (Luma). !important: vence refine 2px+sombra e .input-text. */
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header,
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header.awa-main-header,.header-control.awa-nav-bar,.header-control.header-nav.awa-nav-bar){
-    background:var(--awa-bg,var(--awa-white,Canvas))!important;
-    background-color:var(--awa-bg,var(--awa-white,Canvas))!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header form#search_mini_form{
-    align-items:stretch!important;
-    border:1px solid var(--awa-border,color-mix(in srgb,CanvasText 12%,Canvas))!important;
-    box-shadow:none!important;box-sizing:border-box!important;
-    background:var(--awa-bg,var(--awa-white,Canvas))!important;
-    background-color:var(--awa-bg,var(--awa-white,Canvas))!important;
-    overflow:visible!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header form#search_mini_form:focus-within{
-    border-color:var(--awa-primary,oklch(48% .14 20))!important;
-    box-shadow:0 0 0 3px color-mix(in srgb,var(--awa-primary,oklch(48% .14 20)) 18%,transparent)!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header form#search_mini_form :is(.field.search,.field.search .control,.actions,input#search,input#search.input-text,button.action.search){
-    border:0!important;box-shadow:none!important;border-radius:0!important;
-    height:auto!important;min-height:0!important;max-height:none!important;
-    align-self:stretch!important;box-sizing:border-box!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header form#search_mini_form :is(input#search,input#search.input-text){
-    background:transparent!important;background-color:transparent!important;
-    padding-block:0!important;line-height:normal!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header form#search_mini_form .field.search .control{
-    overflow-x:hidden!important;overflow-y:visible!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(button.our_categories,button.title-category-dropdown.our_categories,.our_categories.title-category-dropdown){
-    border:0!important;border-color:transparent!important;box-shadow:none!important
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(.minicart-wrapper,.mini-carts){
-    border-radius:0!important;background:transparent!important;box-shadow:none!important
-  }
-}
-html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-  .page-wrapper .awa-site-header :is(.awa-header-primary-row>.awa-header-cart-link,.header .awa-header-cart-link,a.awa-header-cart-link){
-  display:none!important;
-  visibility:hidden!important;
-  width:0!important;
-  height:0!important;
-  min-width:0!important;
-  min-height:0!important;
-  max-width:0!important;
-  max-height:0!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:hidden!important;
-  pointer-events:none!important;
-  position:absolute!important;
-  opacity:0!important;
-}
-@media (max-width:767px){
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar){
-    height:44px!important;
-    min-height:44px!important;
-    max-height:44px!important;
-    overflow:visible!important;
-    line-height:1.2!important;
-    align-items:center!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar)
-    :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout,.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__cta){
-    height:44px!important;
-    min-height:44px!important;
-    max-height:44px!important;
-    overflow:visible!important;
-    line-height:1.2!important;
-    align-items:center!important;
-  }
-  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body
-    .page-wrapper .awa-site-header .awa-b2b-promo-close{
-    height:44px!important;
-    min-height:44px!important;
-    max-height:44px!important;
-  }
-}
-/* Home header desktop grid: SSOT em awa-header-desktop-grid-critical-fragment.phtml (v10 + cls-nav-fix) */
-/* Header layering fix (desktop): trigger acima da nav (z10); painel KO acima de tudo (z1301). */
-@media (min-width: 992px){
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .header_main,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .top-search,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .mini-cart-wrapper,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .minicart-wrapper,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .awa-header-minicart,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .awa-header-minicart .minicart-wrapper{
-    position: relative !important;
-    z-index: 1200 !important;
-    overflow: visible !important;
-  }
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .minicart-wrapper .block-minicart,
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .minicart-wrapper .mage-dropdown-dialog{
-    z-index: 1301 !important;
-  }
-  #html-body .page-wrapper #header.header-container[data-awa-header-shell="true"] .header-control.awa-nav-bar{
-    z-index: 10 !important;
-  }
-}
-/* cart-fallback SEMPRE oculto — minicart real via KO.js (guard para refinements.css async) */
-/* BUG-1: Header right-col overflow — extraído inline antes de awa-visual-bugfix.css ir async */
-@media(min-width:992px){.awa-site-header .awa-header-right-col{overflow:visible!important;min-width:0!important;gap:12px!important;flex-wrap:nowrap!important}.awa-site-header .awa-header-right-col .awa-header-contact-links,.awa-site-header .awa-header-right-col .awa-header-account-prompt{flex:0 1 auto!important;min-width:0!important;overflow:visible!important}.awa-header-account-prompt .awa-header-account-prompt__line2{display:inline-flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important}.awa-header-account-prompt .awa-header-account-prompt__separator{margin-inline:4px!important;padding-inline:2px!important;white-space:nowrap!important}.awa-header-account-prompt .awa-header-account-prompt__text,.awa-header-account-prompt .awa-header-account-prompt__cta-text{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;max-width:100%!important;font-size:inherit!important;line-height:1.3!important}.awa-site-header .awa-header-right-col .awa-header-cart,.awa-site-header .awa-header-right-col .mini-cart-wrapper{flex-shrink:0!important}}
-/* BUG-31 (2026-05-19): Desktop header account must not be constrained to 44x44.
-   Touch-target 44x44 remains valid on mobile only. */
-@media (min-width: 992px) {
-  #html-body body .page-wrapper #header .awa-header-right-col .awa-header-account-prompt__link,
-  #html-body body .page-wrapper #header .awa-header-right-col .awa-header-account-prompt__link--register,
-  #html-body body .page-wrapper #header .awa-header-right-col .awa-account-dropdown__trigger,
-  #html-body .page-wrapper .awa-site-header .awa-header-right-col .awa-account-dropdown__trigger {
-    inline-size: auto !important;
-    block-size: auto !important;
-    min-inline-size: 0 !important;
-    width: auto !important;
-    height: auto !important;
-    min-height: 24px !important;
-  }
-
-  #html-body body .page-wrapper #header .awa-header-right-col .awa-account-dropdown__trigger {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    white-space: nowrap !important;
-    gap: 6px !important;
-    padding-inline: 8px !important;
-  }
-}
-.awa-header-cart-fallback{display:none!important;visibility:hidden!important;pointer-events:none!important}
-/* Phase 17 — header FOUC: nav Magento duplicado + dropdown conta só no clique (sync, pré CSS gate) */
-#html-body .page-wrapper .awa-site-header .top-account.awa-header-account-nav,
-#html-body .page-wrapper .awa-site-header .awa-header-right-col .awa-force-hidden{display:none!important;visibility:hidden!important;height:0!important;overflow:hidden!important;pointer-events:none!important}
-#html-body .page-wrapper .awa-site-header .awa-account-dropdown__menu{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:none!important;box-shadow:0 2px 8px rgba(15,23,42,.1)!important}
-#html-body .page-wrapper .awa-site-header .awa-account-dropdown:hover .awa-account-dropdown__menu{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-#html-body .page-wrapper .awa-site-header .awa-account-dropdown__trigger[aria-expanded="true"] + .awa-account-dropdown__menu{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
-/* B2B logado: painel único — esconde guest FPC + dropdown duplicado */
-#html-body .page-wrapper .awa-header-right-col:has(.b2b-status-panel) .awa-header-account-prompt{display:none!important;visibility:hidden!important;pointer-events:none!important;width:0!important;min-width:0!important;overflow:hidden!important}
-#html-body .page-wrapper .b2b-status-dropdown[aria-hidden="true"]{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-#html-body .page-wrapper .awa-site-header{box-shadow:0 1px 0 var(--awa-border,#e5e5e5)!important}
-/* Header cart icon fix: avoid duplicated cart link + force KO minicart SVG icon */
-#html-body .page-wrapper .awa-site-header .awa-header-primary-row>.awa-header-cart-link{display:none!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart{background-image:none!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart::before{content:none!important;display:none!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart{background:transparent!important;background-color:transparent!important;color:var(--awa-primary,#b73337)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart .awa-minicart-icon{display:inline-block!important;width:24px!important;height:24px!important;fill:none!important;stroke:var(--awa-primary,#b73337)!important;color:var(--awa-primary,#b73337)!important;opacity:1!important;visibility:visible!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart .awa-minicart-icon circle{fill:var(--awa-primary,#b73337)!important;stroke:none!important}
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .showcart.header-mini-cart>span:not(.counter){position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
-/* Minicart fechado no 1º paint — evita painel "Carregando carrinho" antes do KO */
-#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper:not(.active):not(.is-open):not(.show) .block-minicart:not(._active),
-#html-body .page-wrapper .awa-site-header .awa-header-minicart:not(.awa-header-minicart--expanded) .minicart-wrapper:not(.active):not(.is-open):not(.show) .block-minicart:not(._active){
-  display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;
-}
-/* BUG-MINICART-2026-05-20: reverte visual-bugfix que colapsa .mini-carts (position:absolute + parent 0×0).
-   Inline síncrono — vence awa-visual-bugfix async em todas as páginas. */
-@media (min-width: 992px) {
-  #html-body .page-wrapper .awa-site-header .awa-header-right-col {
-    overflow: visible !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    gap: clamp(8px, 1.2vw, 16px) !important;
-    flex-shrink: 0 !important;
-    min-width: 0 !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-right-col .awa-header-minicart {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 44px !important;
-    min-width: 44px !important;
-    height: 44px !important;
-    min-height: 44px !important;
-    flex-shrink: 0 !important;
-    position: relative !important;
-    overflow: visible !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart.shadowcart .mini-carts {
-    position: relative !important;
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    height: auto !important;
-    display: flex !important;
-    align-items: center !important;
-    pointer-events: auto !important;
-    overflow: visible !important;
-    font-size: 1rem !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper.awa-minicart-modern {
-    width: 44px !important;
-    min-width: 44px !important;
-    height: 44px !important;
-    min-height: 44px !important;
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: visible !important;
-    pointer-events: auto !important;
-    font-size: 1rem !important;
-    padding: 0 !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .action.showcart.awa-minicart-trigger,
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    color: var(--awa-primary, #b73337) !important;
-    border-radius: 0 !important;
-    border: 0 !important;
-    cursor: pointer !important;
-    flex-shrink: 0 !important;
-    pointer-events: auto !important;
-    z-index: 41 !important;
-    padding: 0 !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .action.showcart.awa-minicart-trigger:hover,
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart:hover {
-    background: transparent !important;
-    background-color: transparent !important;
-    opacity: 0.88;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart {
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-  #html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart .awa-minicart-icon {
-    width: 28px !important;
-    height: 28px !important;
-    stroke: var(--awa-primary, #b73337) !important;
-    color: var(--awa-primary, #b73337) !important;
-  }
-}
-/* BUG-MINICART-MOBILE-2026-05-24: vence themes.min.css (FIX-M01 legado em _awa-ux-audit-fixes.less)
-   que aplica pointer-events:none + position:absolute na coluna direita inteira no mobile. */
-@media (max-width: 767px) {
-  body#html-body .page-wrapper .awa-site-header .awa-header-right-col {
-    display: contents !important;
-    position: static !important;
-    visibility: visible !important;
-    width: auto !important;
-    height: auto !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-    pointer-events: auto !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .awa-header-right-col > :not(.awa-header-minicart):not(.awa-header-account-prompt):not(.b2b-status-panel) {
-    display: none !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper .action.showcart.awa-minicart-trigger,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper a.showcart.header-mini-cart,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .action.showcart {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    color: var(--awa-primary, #b73337) !important;
-    border-radius: 0 !important;
-    border: 0 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .mini-carts,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .action.showcart {
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    left: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    pointer-events: auto !important;
-    z-index: 3 !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .awa-main-header__inner.wp-header,
-  body#html-body .page-wrapper .awa-site-header .awa-main-header__inner[data-awa-header-row],
-  body#html-body .page-wrapper .awa-site-header .header_main.awa-main-header-inner-wrap {
-    overflow: visible !important;
-  }
-}
-@media (min-width: 992px) {
-  body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky :is(.awa-main-header__inner[data-awa-header-row], .wp-header[data-awa-header-row], .header_main.awa-main-header-inner-wrap) {
-    position: relative !important;
-    z-index: 20 !important;
-    overflow: visible !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .minicart-wrapper,
-  body#html-body .page-wrapper .awa-site-header .awa-header-minicart .action.showcart {
-    position: relative !important;
-    z-index: 41 !important;
-    pointer-events: auto !important;
-  }
-  body#html-body .page-wrapper .awa-site-header .header-control.awa-nav-bar,
-  body#html-body .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar {
-    position: relative !important;
-    z-index: 10 !important;
-  }
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar {
-    display: flex !important;
-    visibility: visible !important;
-    align-items: stretch !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    max-height: 48px !important;
-    overflow: visible !important;
-    background: var(--awa-bg, Canvas) !important;
-    background-color: var(--awa-bg, Canvas) !important;
-    border-block-start: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas)) !important;
-    border-block-end: 1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas)) !important;
-  }
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-quick-links__link {
-    color: var(--awa-text-secondary, CanvasText) !important;
-    -webkit-text-fill-color: var(--awa-text-secondary, CanvasText) !important;
-    background: transparent !important;
-  }
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar > .container {
-    display: block !important;
-    visibility: visible !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    max-height: 48px !important;
-    overflow: visible !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    border: 0 !important;
-  }
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner {
-    display: flex !important;
-    visibility: visible !important;
-    align-items: center !important;
-    min-height: 48px !important;
-    height: 48px !important;
-    max-height: 48px !important;
-    overflow: visible !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    border: 0 !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .menu_left_home1,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .awa-header-categories.menu_left_home1 {
-    display: flex !important;
-    visibility: visible !important;
-    width: 206px !important;
-    min-width: 206px !important;
-    max-width: 206px !important;
-    flex: 0 0 206px !important;
-    min-height: 40px !important;
-    height: 40px !important;
-    overflow: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .our_categories.title-category-dropdown,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-header-categories button.our_categories.title-category-dropdown {
-    display: flex !important;
-    visibility: visible !important;
-    min-height: 48px !important;
-    width: 100% !important;
-    background: var(--awa-primary, #b73337) !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    color: #ffffff !important;
-    cursor: pointer !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .title-category-dropdown .vm-icon,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .title-category-dropdown .icon-menu {
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    color: #ffffff !important;
-  }
-
-  /* S15-critical — Remove white shell under Departamentos (category-dropdown wrappers) */
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .awa-nav-categories,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .sections.nav-sections.category-dropdown,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .section-items.nav-sections.category-dropdown-items,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .section-item-content.nav-sections.category-dropdown-item-content,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .navigation.verticalmenu.side-verticalmenu {
-    background: transparent !important;
-    height: 40px !important;
-    max-height: 40px !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-header-categories .navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown:not([aria-hidden="false"]):not([data-awa-menu-state="open"]):not(.vmm-open):not(.menu-open) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-  }
-
-  /* S16-critical — Account prompt compact + register pill AWA red */
-  .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__mobile-link {
-    display: none !important;
-  }
-  .awa-site-header .awa-header-account-prompt :is(.awa-header-account-prompt__text, .awa-header-account-prompt__guest) {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    gap: 2px !important;
-    text-align: start !important;
-  }
-  .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line1 {
-    font-size: max(12px, 0.75rem) !important;
-    line-height: 1.2 !important;
-    white-space: nowrap !important;
-    text-align: start !important;
-    color: #64748b !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__line2 {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-    white-space: nowrap !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-  }
-  .awa-site-header .awa-header-account-prompt :is(.awa-header-account-prompt__link--login, .awa-header-account-prompt__link--register) {
-    height: auto !important;
-    min-height: 0 !important;
-    line-height: 1.2 !important;
-  }
-  .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__separator {
-    display: inline-flex !important;
-    align-items: center !important;
-    margin: 0 2px !important;
-    padding: 0 !important;
-    line-height: 1.2 !important;
-  }
-
-  .awa-site-header .awa-header-account-prompt .awa-header-account-prompt__link--register {
-    background: transparent !important;
-    background-color: transparent !important;
-    color: var(--awa-text) !important;
-    border-radius: 0 !important;
-    padding: 0 2px !important;
-    font-size: max(12px, 0.75rem) !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-quick-links,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-quick-links__list {
-    display: flex !important;
-    visibility: visible !important;
-    align-items: center !important;
-    flex-wrap: nowrap !important;
-    gap: var(--awa-space-4, 16px) !important;
-    list-style: none !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell)
-    .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-quick-links__link {
-    display: inline-flex !important;
-    align-items: center !important;
-    padding-inline: var(--awa-space-4, 16px) !important;
-    color: var(--awa-text-inverse, #ffffff) !important;
-    white-space: nowrap !important;
-    text-decoration: none !important;
-  }
-
-
-  #html-body .page-wrapper .awa-site-header form#search_mini_form,
-  #html-body .page-wrapper .awa-site-header .block-search form.minisearch {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: stretch !important;
-  }
-
-  #html-body .page-wrapper .awa-site-header form#search_mini_form .field.search,
-  #html-body .page-wrapper .awa-site-header form#search_mini_form .field.search .control {
-    display: flex !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  #html-body .page-wrapper .awa-site-header form#search_mini_form input#search {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  #html-body .page-wrapper .awa-site-header form#search_mini_form .actions {
-    display: flex !important;
-    flex: 0 0 auto !important;
-  }
-
-  #html-body .page-wrapper .awa-site-header .block-search .label {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-  }
-
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell):not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
-    .page-wrapper .navigation.verticalmenu.side-verticalmenu:hover > ul.togge-menu.list-category-dropdown,
-  html body:not(.checkout-index-index):not(.onepagecheckout-index-index):not(.b2b-auth-shell):not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5)
-    .page-wrapper .navigation.verticalmenu.side-verticalmenu:focus-within > ul.togge-menu.list-category-dropdown {
-    display: flex !important;
-    flex-direction: column !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-}
-/* FIX-HOME-MAIN-CRITICAL: themes5.min.css define .cms-index-index .page-main.container{display:none} — fix inline síncrono garante lazy-load de imagens. */
-body.cms-index-index .page-main.container,body.cms-home .page-main.container,body.cms-homepage_ayo_home5 .page-main.container{display:block!important}
-/* FIX-SECURITY-CRITICAL */
-body.cms-index-index .page-wrapper .column.main .awa-security-section,body.cms-home .page-wrapper .column.main .awa-security-section{display:block!important}
-/* FIX-SCROLL-TOP-CRITICAL */
-.fixed-right .fixed-right-ul li.scroll-top:not(.show){opacity:0!important;visibility:hidden!important;pointer-events:none!important}
-
-/* ── Phase 20 — Carousel card compact (síncrono; vence awa-super-home display:flex!important)
-   awa-super-home tem especificidade (0,4,1) com !important. Usamos #html-body (ID=1,0,0)
-   para garantir vitória: (1,2,0) > (0,4,1) independente da ordem de carregamento CSS.
-   max-height:max-content anula OWL JS inline min-height:579px (spec: max-h < min-h → usa max-h).
-   ─────────────────────────────────────────────────────────────────────────────────────────── */
-/* Guest compact: hide tocart. Home FPC omits .customer-logged-in until interaction;
-   logged B2B is signaled by .b2b-status-panel / data-awa-auth-state=customer (header private). */
-#html-body:not(.customer-logged-in):not(.awa-customer-known):not(:has(.b2b-status-panel)):not(:has([data-awa-auth-state="customer"])) .awa-carousel-section .product-info-cart,
-#html-body:not(.customer-logged-in):not(.awa-customer-known):not(:has(.b2b-status-panel)):not(:has([data-awa-auth-state="customer"])) .awa-shelf--carousel .product-info-cart{display:none!important}
-#html-body .awa-carousel-section .b2b-login-to-buy-btn,
-#html-body .awa-shelf--carousel .b2b-login-to-buy-btn{display:none!important}
-html body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper :is(.awa-shelf--carousel,.awa-carousel-section) .product-info-cart{display:flex!important;flex-direction:column!important;position:static!important;width:100%!important;margin-block-start:var(--awa-space-2,8px)!important}
-html body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .awa-card-view-product{display:none!important}
-html body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .item-product :is(.info-price .price,.price-box .price,.price-final_price .price){font-size:var(--awa-font-size-lg,18px)!important;font-weight:700!important;line-height:1.2!important;color:var(--awa-text)!important;font-variant-numeric:tabular-nums!important}
-html body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5):is(.customer-logged-in,.awa-customer-known,:has(.b2b-status-panel),:has([data-awa-auth-state="customer"])) .page-wrapper .awa-shelf--carousel .item-product :is(.action.tocart,button.tocart,.tocart,.btn-add-to-cart){box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important;height:44px!important;max-height:44px!important;width:100%!important;margin:0!important;font-size:var(--awa-font-size-sm,14px)!important;font-weight:700!important;line-height:1.2!important;background:var(--awa-primary)!important;color:var(--awa-text-inverse)!important;border-radius:var(--awa-radius-sm)!important}
-/* H-home-b2b-gate-clean (shell23): alinhado PLP/PDP quiet — sem card/borda (dormante se show_price off). */
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-shelf--carousel .info-price .b2b-login-to-see-price{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:flex-start!important;gap:2px!important;padding:0!important;min-height:0!important;max-height:none!important;height:auto!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;font-size:clamp(0.8125rem,0.75rem + 0.3vw,0.875rem)!important;line-height:1.35!important}
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-shelf--carousel .info-price .b2b-login-to-see-price .price-label,#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-shelf--carousel .info-price .b2b-login-to-see-price .b2b-login-to-see-price__title,#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-shelf--carousel .info-price .b2b-login-to-see-price .b2b-login-to-see-price__message{display:block!important;min-height:0!important;font-size:inherit!important;line-height:1.35!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .awa-shelf--carousel .info-price .b2b-login-to-see-price a{display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;min-height:0!important;min-width:0!important;padding:0!important;font-size:inherit!important;font-weight:600!important;white-space:nowrap!important;color:var(--awa-primary)!important;box-sizing:border-box!important}
-#html-body .awa-carousel-section .item-product,#html-body .awa-carousel-section .awa-carousel-card-slot{min-height:0!important;height:auto!important}
-/* Passo 3: card/shell/imagem dos carrosséis → _awa-shelf-carousel.less (removido critical duplicado Phase 20) */
-
-/* LCP / Rendering Optimization (Item 4 of UX_UI_IMPROVEMENT_PLAN) */
-.page_footer, .page-footer, footer, .footer-container { content-visibility: visible; contain-intrinsic-size: unset; }
-/* below-fold: visible imediato — content-visibility:auto em bundles gated causava branco ao scroll */
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .top-home-content,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .top-home-content.awa-carousel-section,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-home-section--below-fold,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-grid-section--featured,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .products-wrapper,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .products-grid,
-#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .products-list {
-  content-visibility: visible !important;
-  contain-intrinsic-size: unset !important;
-  contain: none !important;
-}
-
-/* A11Y: WCAG AA Focus Ring Global (Item 5 of UX_UI_IMPROVEMENT_PLAN) */
-:focus-visible { outline: 2px solid var(--awa-primary, var(--head-preload-c4)) !important; outline-offset: 3px !important; transition: outline-offset 0.15s ease-out; }
-input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--awa-primary, var(--head-preload-c4)) !important; outline-offset: 0 !important; }
-
-/* VISUAL-CRAWL-CLS-STABILITY-20260604
-   Reserva geometria crítica antes dos bundles/JS tardios: promo/header/breadcrumb,
-   hero de categoria, sticky bar PDP e galeria mobile. Evita layout-shift sem
-   esconder conteúdo ou alterar ordem visual final. */
-html body#html-body .page-wrapper :is(.top-header,#awa-b2b-promo-bar,.header-content){box-sizing:border-box!important;min-height:44px!important}
-@media (min-width:992px){
-html body#html-body .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){box-sizing:border-box!important;min-height:var(--awa-header-row-h,64px)!important;max-height:var(--awa-header-row-h,64px)!important;overflow:visible!important}
-}
-@media (max-width:991px){
-html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){box-sizing:border-box!important;min-height:104px!important;max-height:104px!important;overflow:visible!important}
-html body#html-body .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){box-sizing:border-box!important;min-height:96px!important;overflow:visible!important}
-}
-@media (min-width:768px) and (max-width:991px){
-html body#html-body .page-wrapper .awa-site-header :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row],.header_main.awa-main-header-inner-wrap){min-height:56px!important;max-height:56px!important}
-}
-html body#html-body .page-wrapper .awa-site-header :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row],.header_main.awa-main-header-inner-wrap){box-sizing:border-box!important;min-height:var(--awa-header-row-h,64px)!important;max-height:var(--awa-header-row-h,64px)!important}
-@media (min-width:992px){
-html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){box-sizing:border-box!important;display:flex!important;flex-direction:column!important;min-height:196px!important;height:196px!important;max-height:196px!important;padding:8px 16px!important;overflow:visible!important}
-html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header.awa-main-header{box-sizing:border-box!important;min-height:104px!important;height:104px!important;max-height:104px!important;padding:8px 16px!important;overflow:visible!important}
-html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.awa-nav-bar{box-sizing:border-box!important;min-height:76px!important;height:76px!important;max-height:76px!important;padding:4px 16px!important;overflow:visible!important}
-html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row],.header_main.awa-main-header-inner-wrap){min-height:84px!important;height:84px!important;max-height:84px!important}
-}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper .nav-breadcrumbs{box-sizing:border-box!important;min-height:0!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .category-view-move{box-sizing:border-box!important;min-height:0!important}
-@media (min-width:768px){html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .mst_categorySearch{display:block!important;min-height:0!important;height:auto!important;box-sizing:border-box!important}}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero__overlay{box-sizing:border-box!important;position:absolute!important;inset:0!important;min-height:0!important}
-/* Bug B fix: hero da categoria limitado a 220px no mobile para não dominar o viewport */
-@media (max-width:767px){
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero__bg-image{width:100%!important;height:240px!important;object-fit:cover!important;object-position:center 35%!important;display:block!important}
-}
-@media (max-width:767px){
-html body#html-body .page-wrapper :is(.top-header,#awa-b2b-promo-bar,.header-content){min-height:44px!important}
-html body#html-body .page-wrapper .awa-site-header :is(.header-wrapper-sticky,.header-wrapper-sticky.is-sticky){min-height:112px!important}
-html body#html-body .page-wrapper .awa-site-header :is(.awa-main-header__inner[data-awa-header-row],.wp-header[data-awa-header-row],.header_main.awa-main-header-inner-wrap){min-height:58px!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper .nav-breadcrumbs{box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important}
-/* Alvo de toque do breadcrumb no mobile (WCAG 2.5.8). Antes: min-height:0!important aqui
-   anulava a Onda 5F (SEÇÃO 22 do design system) — medido 28x17px em 05/10/2026.
-   O <a> é display:inline, onde min-height NÃO se aplica: precisa inline-flex.
-   A cadeia ul>li também trava por overflow:hidden + height fixo. */
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) :is(ul.items,.items){box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important;align-items:center!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) .items>.item{box-sizing:border-box!important;min-height:44px!important;height:auto!important;max-height:none!important;overflow:visible!important;display:flex!important;align-items:center!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) a{box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;min-height:44px!important;height:auto!important;max-height:none!important;min-block-size:44px!important;line-height:44px!important;padding-block:0!important;padding-top:0!important;padding-bottom:0!important;overflow:visible!important;flex-shrink:0!important}
-html body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view) .page-wrapper :is(.nav-breadcrumbs,.breadcrumbs) a span{display:inline-block!important;line-height:44px!important;padding-block:0!important}
-html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder:not(:has(.fotorama-item)){box-sizing:border-box!important;min-height:min(374px,calc(100vw - 16px))!important}
-/* H-pdp-gallery-lcp (2026-08-02): nao esconder LCP enquanto _block-content-loading */
-html body#html-body.catalog-product-view .page-wrapper .product.media .gallery-placeholder._block-content-loading{min-height:clamp(300px,82vw,460px)!important;height:auto!important;overflow:hidden!important}
-html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product.media .gallery-placeholder._block-content-loading,html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-main .product.media .gallery-placeholder._block-content-loading{min-height:clamp(300px,82vw,460px)!important;height:auto!important;overflow:hidden!important;display:block!important}html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product.media .gallery-placeholder._block-content-loading>:is(img.gallery-placeholder__image,.gallery-placeholder__image),html body#html-body#html-body#html-body#html-body#html-body.catalog-product-view .page-main .product.media .gallery-placeholder._block-content-loading>:is(img.gallery-placeholder__image,.gallery-placeholder__image){display:block!important;width:100%!important;height:auto!important;max-width:100%!important;max-height:none!important;min-height:0!important;opacity:1!important;visibility:visible!important;overflow:visible!important;object-fit:contain!important}
-html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder:has(.fotorama__img){box-sizing:border-box!important;min-height:0!important;height:auto!important;display:block!important}
-html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder:has(.fotorama__img)>:is(img.gallery-placeholder__image,.gallery-placeholder__image){display:none!important;height:0!important;min-height:0!important;max-height:0!important;visibility:hidden!important;overflow:hidden!important}
-html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder:has(.fotorama__img) .fotorama-item{box-sizing:border-box!important;min-height:min(374px,calc(100vw - 16px))!important}
-html body#html-body.catalog-product-view .page-wrapper #maincontent#maincontent.page-main.container,html body#html-body.catalog-product-view .page-wrapper .page-main.container{width:100%!important;max-width:100%!important;margin-inline:auto!important;padding-inline:var(--awa-container-pdp-pad,clamp(16px,2.5vw,48px))!important;box-sizing:border-box!important}
-html body#html-body.catalog-product-view .page-wrapper .columns{display:flex!important;flex-direction:column!important;width:100%!important;max-width:100%!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}
-html body#html-body.catalog-product-view .page-wrapper .column.main{width:100%!important;max-width:100%!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}
-html body#html-body{--awa-mobile-nav-h:72px;--awa-mobile-bottom-nav-h:72px}
-html body#html-body .page-wrapper nav.fixed-bottom,html body#html-body nav.fixed-bottom{position:fixed!important;inset-inline:12px!important;inset-block-end:calc(16px + env(safe-area-inset-bottom,0px))!important;width:auto!important;max-width:calc(100% - 24px)!important;height:72px!important;min-height:72px!important;box-sizing:border-box!important;overflow:hidden!important}
-html body#html-body nav.fixed-bottom .mobile-bottom-link{height:64px!important;min-height:64px!important;margin:0!important;padding:4px 0!important;box-sizing:border-box!important}
-html body#html-body nav.fixed-bottom .mobile-bottom-link .icon.icon-home,html body#html-body nav.fixed-bottom .mobile-bottom-link .icon-home{font-family:'simple-line-icons'!important}
-html body#html-body nav.fixed-bottom .mobile-bottom-link .icon-home::before{content:'\e069'!important;font-family:'simple-line-icons'!important}
-html body#html-body nav.fixed-bottom .mobile-bottom-link>li.active>a,html body#html-body nav.fixed-bottom .mobile-bottom-link>li.active>a .icon{color:var(--awa-primary,#b73337)!important}
-html body#html-body nav.fixed-bottom .mobile-bottom-link>li.active>a{font-weight:600!important}
-html body#html-body.catalog-product-view #awa-pdp-sticky-bar.awa-pdp-sticky-bar{position:fixed!important;inset-inline:12px!important;inset-block-end:calc(var(--awa-mobile-nav-h,72px) + env(safe-area-inset-bottom,0px) + 12px)!important;width:auto!important;max-width:calc(100% - 24px)!important;z-index:520!important;box-sizing:border-box!important;transform:translateY(calc(200% + 160px))!important;visibility:hidden!important;opacity:0!important}
-html body#html-body.catalog-product-view #awa-pdp-sticky-bar.awa-pdp-sticky-bar:is(.awa-pdp-sticky-bar--visible,.is-visible){transform:translateY(0)!important;visibility:visible!important;opacity:1!important}
-}
-/* Guard inline: bottom-nav mobile nunca renderiza no desktop (hidden-sm/md/lg vivem em CSS externo) */
-@media (min-width:768px){html body#html-body nav.fixed-bottom,html body#html-body .awa-mobile-bottom-nav{display:none!important}}
-/* Global impeccable: sombras únicas — sem hairline+border (AI tell) */
-html body#html-body .page-wrapper [id^="submenu-menu-"]{border:0!important;box-shadow:0 4px 12px rgb(15 23 42 / 10%)!important}
-html body#html-body .page-wrapper nav.fixed-bottom,html body#html-body .page-wrapper .fixed-bottom,html body#html-body .page-wrapper .awa-mobile-bottom-nav{box-shadow:0 -1px 4px rgb(15 23 42 / 5%)!important;border-top:0!important}
-html body#html-body .block.block-customer-login{box-shadow:none!important;border:1px solid var(--awa-border,#e5e7eb)!important}
-html body#html-body .block.block-customer-login :is(.block-content,fieldset,.fieldset){border:0!important;box-shadow:none!important;background:transparent!important}
-/* Auth popup KO shell — nunca card inline fora das páginas de login */
-html body#html-body:not(.customer-account-login):not(.customer-account-create):not(.b2b-account-login) #authenticationPopup{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;margin:0!important;padding:0!important;border:0!important}
-html body#html-body:not(.customer-account-login):not(.customer-account-create):not(.b2b-account-login) #authenticationPopup .block-authentication{display:none!important}
-html body#html-body .modal-popup.popup-authentication:not(._show){display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;overflow:hidden!important;pointer-events:none!important}
-html body#html-body._has-modal .modal-popup.popup-authentication._show{display:block!important;visibility:visible!important;position:fixed!important;inset:0!important;z-index:100006!important;height:auto!important;max-height:none!important;overflow:visible!important}
-html body#html-body._has-modal .modal-popup.popup-authentication._show .block-authentication{display:block!important;visibility:visible!important;height:auto!important;max-height:none!important;overflow:visible!important}
-html body#html-body:not(.customer-account-login):not(.customer-account-create):not(.b2b-account-login):not(.checkout-index-index):not(.checkout-cart-index) .page-wrapper :is(.page-footer,.page_footer)~:is(#authenticationPopup,.block-authentication,.block.block-customer-login),html body#html-body:not(.customer-account-login):not(.customer-account-create):not(.b2b-account-login):not(.checkout-index-index):not(.checkout-cart-index) .page-wrapper :is(.page-footer,.page_footer)+:is(#authenticationPopup,.block-authentication,.block.block-customer-login){display:none!important}
+</style>
+<link rel="stylesheet" href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-head-preload-storefront-core.css')) ?>"/>
+<style>
 
 <?php if ($isProductPage): ?>
 /* PDP critical: eixo 1280px + spacing corporativo 4–16px */
@@ -1710,18 +687,6 @@ html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page
 #html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid .item-product .info-price .b2b-login-to-see-price{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:0.25rem!important;min-height:2.75rem!important;padding:0.5rem 0.625rem!important;margin-top:auto!important;background:var(--awa-bg,var(--head-preload-c2,#fff))!important;border:1px solid var(--awa-border,var(--head-preload-c3,#e5e5e5))!important;border-radius:6px!important;font-size:0.8125rem!important;line-height:1.35!important;color:var(--awa-text-secondary,var(--head-preload-c1,#666))!important;box-sizing:border-box!important;width:100%!important}
 #html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid .item-product .info-price .b2b-login-to-see-price .price-label{display:block!important;margin:0!important;font-size:inherit!important;line-height:1.35!important}
 #html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid .item-product .info-price .b2b-login-to-see-price a{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:2.75rem!important;min-width:2.75rem!important;padding:0.5rem 0.75rem!important;border:1.5px solid var(--head-preload-c4,#b73337)!important;border-radius:6px!important;font-size:0.75rem!important;font-weight:600!important;color:var(--head-preload-c4,#b73337)!important;text-decoration:none!important;cursor:pointer!important;box-sizing:border-box!important;background:transparent!important}
-<?php endif; ?>
-<?php if ($isHomePage): ?>
-/* Layout crítico home — eixo 1280px; gutter no .container (SSOT align-grid) */
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home{padding-inline:0!important;max-width:100%!important;margin-inline:0!important;box-sizing:border-box!important;width:100%!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>:is(.ayo-home5-wrapper,.ayo-home5-wrapper--template-driven){display:flex!important;flex-direction:column!important;gap:clamp(1.5rem,1.2rem + 1.5vw,2.5rem)!important;width:100%!important;max-width:100%!important;padding-inline:0!important;margin-inline:0!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content.awa-carousel-section{padding-inline:0!important;padding-block:0!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content.awa-carousel-section>.container{padding-inline:16px!important;max-width:min(100%,1280px)!important;margin-inline:0!important;box-sizing:border-box!important;width:100%!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content.awa-carousel-section>.container>header.awa-section-header{display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;align-items:flex-end!important;justify-content:space-between!important;text-align:start!important;margin-block-end:0!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content.awa-carousel-section .awa-section-header__link{align-self:flex-end!important;margin-inline-start:auto!important;flex-shrink:0!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content .container:has(>header.awa-section-header) .rokan-product-heading,#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-home-section:has(.awa-section-header) .rokan-product-heading{display:none!important;visibility:hidden!important;height:0!important;max-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-carousel-section :is(.rokan-bestseller,.rokan-newproduct,.rokan-featuredproduct){display:flex!important;flex-direction:column!important;grid-template-columns:none!important;gap:clamp(.75rem,.65rem + .45vw,1.25rem)!important;margin:0!important;padding:0!important;width:100%!important}
-#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-benefits-bar .awa-benefits-container{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:.75rem!important;padding:0!important}
 <?php endif; ?>
 @layer awa-fixes{
 @media (max-width:767px){
@@ -1886,18 +851,15 @@ $__emitDeferredCss = static function (
        NÃO usar interactionGate (CLS ~5s). */ ?>
 <?php if ($isHomePage): ?>
 <?php
-    $__homePolishCriticalUrl = $block->getViewFileUrl('css/awa-home-polish-critical.min.css');
+    /* B3 (CICLO 4): bundle unico (polish + launches) — 1 request a menos, mesma posicao/cascata.
+       Fontes originais permanecem em web/css/ (rollback restaura este phtml e as URLs antigas). */
+    $__homeLegacyBundleUrl = $block->getViewFileUrl('css/awa-home-small-legacy-20261018.min.css') . '?v=20261018-b3s2';
 ?>
 <link rel="stylesheet" href="<?= $block->escapeUrl($__criticalHomeCssUrl) ?>" media="print" onload="<?= /* @noEscape */ $__cssStagger ?>" data-awa-first-paint-critical="home"/>
-<link rel="stylesheet" href="<?= $block->escapeUrl($__homePolishCriticalUrl) ?>" media="print" onload="<?= /* @noEscape */ $__cssStagger ?>" data-awa-first-paint-critical="polish"/>
-<?php
-    $__launchesToggleUrl = $block->getViewFileUrl('css/awa-home-launches-toggle-fix.min.css');
-?>
-<link rel="stylesheet" href="<?= $block->escapeUrl($__launchesToggleUrl) ?>" media="print" onload="<?= /* @noEscape */ $__cssStagger ?>" data-awa-home-launches-toggle="1"/>
+<link rel="stylesheet" href="<?= $block->escapeUrl($__homeLegacyBundleUrl) ?>" media="print" onload="<?= /* @noEscape */ $__cssStagger ?>" data-awa-first-paint-critical="polish" data-awa-home-launches-toggle="1"/>
 <noscript>
 <link rel="stylesheet" href="<?= $block->escapeUrl($__criticalHomeCssUrl) ?>"/>
-<link rel="stylesheet" href="<?= $block->escapeUrl($__homePolishCriticalUrl) ?>"/>
-<link rel="stylesheet" href="<?= $block->escapeUrl($__launchesToggleUrl) ?>"/>
+<link rel="stylesheet" href="<?= $block->escapeUrl($__homeLegacyBundleUrl) ?>"/>
 </noscript>
 <?php endif; ?>
 <?php /* Auth B2B: login.css + critical inline — omitir styles-m/l (~12MB). */ ?>
@@ -1939,7 +901,7 @@ html body#html-body.catalog-product-view .page-main .product.media .gallery-plac
          Em desktop (>= 768px), carrega como blocking (correto: CSS critical para layout desktop).
          Requer <remove src="css/styles-l.css"/> em default_head_blocks.xml (já adicionado).
          Reduz merged bundle de 9.5MB → ~5.2MB (retira 4.3MB de CSS desktop do blocking path). */ ?>
-<?php $__stylesLUrl = $block->getViewFileUrl('css/styles-l.css'); ?>
+<?php $__stylesLUrl = $block->getViewFileUrl('css/awa-stylesl-alive-20261018.css'); ?>
 <?php /* Home + cart mobile: sem <link>/preload styles-l — Chrome ainda baixa CSS desktop
          com media query. Desktop: idle + print→screen (boas práticas Magento / PSI). */ ?>
 <?php if ($isHomePage || $isCartPageOnly): ?>
@@ -2034,42 +996,16 @@ html body#html-body.catalog-product-view .page-main .product.media .gallery-plac
 </script>
 <noscript><link rel="stylesheet" href="<?= $block->escapeUrl($__stylesLUrl) ?>" media="screen and (min-width: 768px)"/></noscript>
 <?php elseif ($isCatalogCssGate || $isProductPage): ?>
-<?php /* PLP/PDP: não emitir <link>/preload de styles-l — Chrome baixa ~2MB mesmo com
-         media=min-width:768px (Lighthouse mobile: 145KB transfer / 2MB decode, 100% unused).
-         Desktop: injeta no head imediatamente. Mobile: só se o viewport cruzar 768px. */ ?>
-<script>
-(function (w, d) {
-    'use strict';
-    var href = <?= /* @noEscape */ json_encode($__stylesLUrl, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
-
-    function inject() {
-        if (!w.matchMedia('(min-width: 768px)').matches) {
-            return;
-        }
-        if (d.querySelector('link[data-awa-styles-l]')) {
-            return;
-        }
-        var link = d.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.media = 'screen and (min-width: 768px)';
-        link.setAttribute('data-awa-styles-l', 'catalog');
-        d.head.appendChild(link);
-    }
-
-    if (w.matchMedia('(min-width: 768px)').matches) {
-        inject();
-    } else {
-        w.matchMedia('(min-width: 768px)').addEventListener('change', function (e) {
-            if (e.matches) {
-                inject();
-            }
-        });
-    }
-})(window, document);
-</script>
-<noscript><link rel="stylesheet" href="<?= $block->escapeUrl($__stylesLUrl) ?>" media="screen and (min-width: 768px)"/></noscript>
-<?php elseif ($isCheckoutFlow || $isLightCssGate || $isCheckoutPath): ?>
+<?php /* PLP/PDP: styles-l STATIC blocking (media min-width:768px) — C2: o inject JS aplicava o
+         grid desktop em ~13s no frio (flip col-md-6 203->413 = CLS medido 19/10). Mobile não bloqueia. */ ?>
+<link rel="preload"
+      href="<?= $block->escapeUrl($__stylesLUrl) ?>"
+      as="style"
+      media="screen and (min-width: 768px)"/>
+<link rel="stylesheet"
+      href="<?= $block->escapeUrl($__stylesLUrl) ?>"
+      media="screen and (min-width: 768px)"/>
+<noscript><link rel="stylesheet" href="<?= $block->escapeUrl($__stylesLUrl) ?>" media="screen and (min-width: 768px)"/></noscript><?php elseif ($isCheckoutFlow || $isLightCssGate || $isCheckoutPath): ?>
 <?php /* Cart/checkout: styles-l blocking — grid/tabela do carrinho vivem aqui; async quebrava layout */ ?>
 <link rel="preload"
       href="<?= $block->escapeUrl($__stylesLUrl) ?>"
@@ -2102,7 +1038,7 @@ html body#html-body.catalog-product-view .page-main .product.media .gallery-plac
        Correção: media=print onload (igual demais páginas). NÃO usar interactionGate —
        isso atrasava o CSS até clique e quebrava minicart no 1º click (UX 2026-07-17).
        Minicart above-fold já tem CSS critical inline neste head-preload. */
-    $__themesUrl = $block->getViewFileUrl('css/themes.css') . '?v=20260805-main-auto-height-r15';
+    $__themesUrl = $block->getViewFileUrl('css/awa-themes-alive-20261018.css') . '?v=20261018-m3a';
     if ($isHomePage) {
         // freeze-fix-r7 paint: do not enqueue 2.3MB themes.min.css or third-party-bundle on cms-index-index.
         // Home already has design-system + critical-stack + footer-lock.
@@ -2889,341 +1825,7 @@ html body#html-body#html-body#html-body#html-body .page-wrapper #header :is(butt
 }
 </style>
 <?php endif; ?>
-<script id="awa-header-chrome-clean-lock">
-(function(d,w){
-    'use strict';
-    var path = (w.location && w.location.pathname) ? w.location.pathname : '';
-    var isHomeLockPage = path === '/' || path === '/index.php' || path === '/index.php/';
-    if (!isHomeLockPage) {
-        return;
-    }
-    function setImportant(el, prop, value){
-        if (el && el.style) {
-            el.style.setProperty(prop, value, 'important');
-        }
-    }
-    function lockPromoRow(){
-        var bar = d.getElementById('awa-b2b-promo-bar');
-        var dismissed = !!(d.documentElement && d.documentElement.classList.contains('awa-b2b-promo-dismissed'));
-        var b2bKnown = !!(d.querySelector('.page-wrapper .awa-site-header .b2b-status-panel'));
-        var hidden = dismissed || b2bKnown || (bar && (
-            bar.getAttribute('aria-hidden') === 'true'
-            || bar.getAttribute('data-awa-promo-hidden') === '1'
-        ));
-        var shell = d.querySelector('.page-wrapper .awa-site-header #header.header-container');
-        var content = d.querySelector('.page-wrapper .awa-site-header #header.header-container > .header-content');
-        var inner = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__inner');
-        var text = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__text');
-        var cta = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__cta');
-        var close = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-close');
-        var site = d.querySelector('.page-wrapper .awa-site-header');
-        var rowH = hidden ? '0px' : '44px';
-        var fill = 'var(--awa-primary, oklch(48% .14 20))';
-        var ink = 'var(--awa-white, #fff)';
-        [shell, content, bar, inner, text].forEach(function(el){
-            if (!el) {
-                return;
-            }
-            setImportant(el, 'height', rowH);
-            setImportant(el, 'min-height', rowH);
-            setImportant(el, 'max-height', rowH);
-            setImportant(el, 'padding-top', '0');
-            setImportant(el, 'padding-bottom', '0');
-            setImportant(el, 'margin-top', '0');
-            setImportant(el, 'margin-bottom', '0');
-            setImportant(el, 'border-bottom', '0');
-            setImportant(el, 'overflow', 'hidden');
-            setImportant(el, 'box-sizing', 'border-box');
-        });
-        if (shell) {
-            setImportant(shell, 'background', hidden ? 'transparent' : fill);
-            setImportant(shell, 'background-color', hidden ? 'transparent' : fill);
-        }
-        if (content) {
-            setImportant(content, 'background', 'transparent');
-            setImportant(content, 'align-items', 'center');
-        }
-        if (bar) {
-            setImportant(bar, 'background', hidden ? 'transparent' : fill);
-            setImportant(bar, 'background-color', hidden ? 'transparent' : fill);
-            setImportant(bar, 'color', ink);
-            setImportant(bar, '-webkit-text-fill-color', ink);
-            setImportant(bar, 'display', hidden ? 'none' : 'flex');
-            setImportant(bar, 'align-items', 'center');
-            setImportant(bar, 'padding', '0');
-            setImportant(bar, 'padding-left', '0');
-            setImportant(bar, 'padding-right', '0');
-            setImportant(bar, 'width', '100%');
-            setImportant(bar, 'max-width', 'none');
-        }
-        if (inner) {
-            setImportant(inner, 'width', hidden ? '0px' : 'min(100%, 1280px)');
-            setImportant(inner, 'max-width', hidden ? '0px' : '1280px');
-            setImportant(inner, 'margin-left', 'auto');
-            setImportant(inner, 'margin-right', 'auto');
-            setImportant(inner, 'padding', hidden ? '0' : '0 52px 0 24px');
-            setImportant(inner, 'padding-left', hidden ? '0' : '24px');
-            setImportant(inner, 'padding-right', hidden ? '0' : '52px');
-        }
-        if (text) {
-            setImportant(text, 'color', ink);
-            setImportant(text, '-webkit-text-fill-color', ink);
-            setImportant(text, 'line-height', '1.2');
-            setImportant(text, 'padding', '0');
-            setImportant(text, 'padding-left', '0');
-            setImportant(text, 'padding-right', '0');
-            setImportant(text, 'width', '100%');
-            setImportant(text, 'max-width', 'none');
-        }
-        d.querySelectorAll('#awa-b2b-promo-bar .awa-b2b-promo-bar__inner, #awa-b2b-promo-bar .awa-b2b-promo-bar__lead, #awa-b2b-promo-bar .awa-b2b-promo-bar__lead-long, #awa-b2b-promo-bar .awa-b2b-promo-bar__lead-short, #awa-b2b-promo-bar .awa-b2b-promo-bar__tail, #awa-b2b-promo-bar .awa-b2b-promo-bar__separator, #awa-b2b-promo-bar .awa-b2b-promo-bar__cta strong').forEach(function(el){
-            setImportant(el, 'color', ink);
-            setImportant(el, '-webkit-text-fill-color', ink);
-        });
-        if (cta) {
-            setImportant(cta, 'background', 'transparent');
-            setImportant(cta, 'background-color', 'transparent');
-            setImportant(cta, 'background-image', 'none');
-            setImportant(cta, 'color', ink);
-            setImportant(cta, '-webkit-text-fill-color', ink);
-            setImportant(cta, 'border', '0');
-            setImportant(cta, 'border-radius', '0');
-            setImportant(cta, 'height', hidden ? '0px' : '44px');
-            setImportant(cta, 'padding', hidden ? '0' : '0 12px');
-            setImportant(cta, 'box-shadow', 'none');
-            setImportant(cta, 'max-width', 'none');
-        }
-        if (close) {
-            setImportant(close, 'height', hidden ? '0px' : '44px');
-            setImportant(close, 'width', hidden ? '0px' : '44px');
-            setImportant(close, 'min-height', hidden ? '0px' : '44px');
-            setImportant(close, 'min-width', hidden ? '0px' : '44px');
-            setImportant(close, 'color', ink);
-            setImportant(close, '-webkit-text-fill-color', ink);
-            setImportant(close, 'position', 'absolute');
-            setImportant(close, 'top', '0');
-            setImportant(close, 'right', '0');
-            setImportant(close, 'inset-inline-end', '0');
-            setImportant(close, 'transform', 'none');
-            setImportant(close, 'border-radius', '0');
-            setImportant(close, 'background', 'transparent');
-            setImportant(close, 'background-color', 'transparent');
-            setImportant(close, 'padding', '0');
-        }
-        if (site) {
-            if (b2bKnown) {
-                setImportant(site, 'height', 'auto');
-                setImportant(site, 'min-height', '0px');
-                setImportant(site, 'max-height', 'none');
-                setImportant(site, '--awa-header-promo-h', '0px');
-                setImportant(site, '--awa-header-stack-h', 'auto');
-            } else {
-                setImportant(site, 'height', hidden ? '116px' : '160px');
-                setImportant(site, 'min-height', hidden ? '116px' : '160px');
-                setImportant(site, '--awa-header-promo-h', hidden ? '0px' : '44px');
-                setImportant(site, '--awa-header-stack-h', hidden ? '116px' : '160px');
-            }
-        }
-    }
-    function lock(){
-        if (w.matchMedia && !w.matchMedia('(min-width: 992px)').matches) {
-            return;
-        }
-        var prompt = d.querySelector('.page-wrapper .awa-site-header .awa-header-account-prompt');
-        var reg = d.querySelector('.page-wrapper .awa-site-header a.awa-header-account-prompt__link--register');
-        var sticky = d.querySelector('.page-wrapper .awa-site-header .header-wrapper-sticky');
-        var site = d.querySelector('.page-wrapper .awa-site-header');
-        var header = d.querySelector('.page-wrapper .awa-site-header .header.awa-main-header');
-        var nav = d.querySelector('.page-wrapper .awa-site-header .header-control.awa-nav-bar, .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar');
-        if (prompt) {
-            setImportant(prompt, 'border', '0');
-            setImportant(prompt, 'border-radius', '0');
-            setImportant(prompt, 'background', 'transparent');
-            setImportant(prompt, 'padding', '0');
-            setImportant(prompt, 'box-shadow', 'none');
-        }
-        if (reg) {
-            setImportant(reg, 'background', 'transparent');
-            setImportant(reg, 'background-color', 'transparent');
-            setImportant(reg, 'color', 'var(--awa-text, CanvasText)');
-            setImportant(reg, 'border', '0');
-            setImportant(reg, 'border-radius', '0');
-            setImportant(reg, 'padding', '0 2px');
-            setImportant(reg, 'box-shadow', 'none');
-        }
-        var surface = 'var(--awa-bg, var(--awa-white, Canvas))';
-        var searchBorder = '1px solid var(--awa-border, color-mix(in srgb, CanvasText 12%, Canvas))';
-        if (site) {
-            setImportant(site, 'border-bottom', '0');
-            setImportant(site, 'background', surface);
-            setImportant(site, 'background-color', surface);
-        }
-        if (sticky) {
-            setImportant(sticky, 'border-bottom', '0');
-            setImportant(sticky, 'background', surface);
-            setImportant(sticky, 'background-color', surface);
-        }
-        if (header) {
-            setImportant(header, 'border-bottom', '0');
-            setImportant(header, 'background', surface);
-            setImportant(header, 'background-color', surface);
-        }
-        if (nav && nav.style) {
-            /* Contrato: fundo da nav vem do CSS. O shorthand background gerava
-             * style="" com background-* vazios !important (evidência b7c731). */
-            ['background', 'background-image', 'background-position', 'background-position-x',
-             'background-position-y', 'background-size', 'background-repeat', 'background-attachment',
-             'background-origin', 'background-clip', 'background-color', 'border-bottom', 'border-block-end']
-                .forEach(function (prop) {
-                    nav.style.removeProperty(prop);
-                });
-        }
-        var searchForm = d.querySelector('.page-wrapper .awa-site-header form#search_mini_form');
-        if (searchForm) {
-            var searchFocused = searchForm.contains(d.activeElement);
-            setImportant(searchForm, 'border', searchFocused
-                ? '1px solid var(--awa-primary, oklch(48% .14 20))'
-                : searchBorder);
-            setImportant(searchForm, 'box-shadow', searchFocused
-                ? '0 0 0 3px color-mix(in srgb, var(--awa-primary, oklch(48% .14 20)) 18%, transparent)'
-                : 'none');
-            setImportant(searchForm, 'background', surface);
-            setImportant(searchForm, 'background-color', surface);
-            setImportant(searchForm, 'overflow', 'visible');
-            setImportant(searchForm, 'align-items', 'stretch');
-            var innerH = 'var(--awa-search-height, 44px)';
-            var fitId = 'awa-search-inner-fit-20260814';
-            var fit = d.getElementById(fitId);
-            if (!fit) {
-                fit = d.createElement('style');
-                fit.id = fitId;
-                d.head.appendChild(fit);
-            }
-            fit.textContent = '@media(min-width:992px){html body'
-                + '#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
-                + '#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body'
-                + '#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header form#search_mini_form '
-                + ':is(input#search,input#search.input-text,.field.search,.field.search .control,.actions,button.action.search){'
-                + 'height:' + innerH + '!important;max-height:' + innerH + '!important;min-height:' + innerH + '!important;'
-                + 'border:0!important;box-shadow:none!important;border-radius:0!important}}';
-            searchForm.querySelectorAll('.field.search, .field.search .control, .actions, input#search, button.action.search').forEach(function(el){
-                setImportant(el, 'border', '0');
-                setImportant(el, 'box-shadow', 'none');
-                setImportant(el, 'border-radius', '0');
-                setImportant(el, 'height', innerH);
-                setImportant(el, 'min-height', innerH);
-                setImportant(el, 'max-height', innerH);
-                setImportant(el, 'align-self', 'stretch');
-            });
-            var searchInput = searchForm.querySelector('input#search');
-            if (searchInput) {
-                setImportant(searchInput, 'background', 'transparent');
-                setImportant(searchInput, 'background-color', 'transparent');
-                setImportant(searchInput, 'padding-top', '0');
-                setImportant(searchInput, 'padding-bottom', '0');
-                setImportant(searchInput, 'height', innerH);
-                setImportant(searchInput, 'max-height', innerH);
-                setImportant(searchInput, 'min-height', innerH);
-                setImportant(searchInput, 'border', '0');
-            }
-        }
-        var dept = d.querySelector('.page-wrapper .awa-site-header button.our_categories, .page-wrapper .awa-site-header .our_categories.title-category-dropdown');
-        if (dept) {
-            setImportant(dept, 'border', '0');
-            setImportant(dept, 'box-shadow', 'none');
-        }
-        var mini = d.querySelector('.page-wrapper .awa-site-header .minicart-wrapper');
-        if (mini) {
-            setImportant(mini, 'border-radius', '0');
-            setImportant(mini, 'background', 'transparent');
-            setImportant(mini, 'box-shadow', 'none');
-        }
-        lockPromoRow();
-    }
-    var lockQueued = false;
-    var lockLastRunTs = 0;
-    var lockRearmTimer = null;
-    function queueLock() {
-        var now = Date.now();
-        if (lockQueued) {
-            return;
-        }
-        if (now - lockLastRunTs < 240) {
-            if (lockRearmTimer) {
-                return;
-            }
-            lockRearmTimer = w.setTimeout(function () {
-                lockRearmTimer = null;
-                queueLock();
-            }, 280);
-            return;
-        }
-        lockQueued = true;
-        var run = function () {
-            lockQueued = false;
-            lockLastRunTs = Date.now();
-            lock();
-        };
-        if (typeof w.requestAnimationFrame === 'function') {
-            w.requestAnimationFrame(run);
-            return;
-        }
-        w.setTimeout(run, 0);
-    }
-    if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', queueLock, {once: true});
-    } else {
-        queueLock();
-    }
-    w.addEventListener('load', queueLock, {once: true, passive: true});
-    w.setTimeout(queueLock, 400);
-    w.setTimeout(queueLock, 800);
-    w.setTimeout(queueLock, 1800);
-    w.setTimeout(queueLock, 3200);
-    w.setTimeout(queueLock, 5000);
-    w.setTimeout(queueLock, 8000);
-    w.__awaQueueHeaderLock = queueLock;
-    d.addEventListener('click', function(ev){
-        var t = ev.target;
-        if (t && t.closest && t.closest('.awa-b2b-promo-close, #awa-b2b-promo-close')) {
-            w.setTimeout(queueLock, 0);
-            w.setTimeout(queueLock, 50);
-        }
-    }, true);
-    d.addEventListener('focusin', function(ev){
-        var t = ev.target;
-        if (t && t.closest && t.closest('.page-wrapper .awa-site-header form#search_mini_form')) {
-            queueLock();
-        }
-    }, true);
-    d.addEventListener('focusout', function(ev){
-        var t = ev.target;
-        if (t && t.closest && t.closest('.page-wrapper .awa-site-header form#search_mini_form')) {
-            w.setTimeout(queueLock, 0);
-        }
-    }, true);
-    if (w.MutationObserver && !isHomeLockPage) {
-        var moTarget = d.querySelector('.page-wrapper .awa-site-header') || d.body;
-        var mo = null;
-        if (moTarget) {
-            mo = new MutationObserver(function (mutations) {
-                for (var i = 0; i < mutations.length; i += 1) {
-                    if (mutations[i].type === 'attributes' && mutations[i].attributeName === 'class') {
-                        queueLock();
-                        break;
-                    }
-                }
-            });
-            mo.observe(moTarget, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['class', 'aria-hidden', 'hidden']
-            });
-            w.setTimeout(function(){ if (mo) { mo.disconnect(); mo = null; } }, 7000);
-        }
-    }
-}(document, window));
-</script>
+<script id="awa-header-chrome-clean-lock" src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-header-chrome-clean-lock.js')) ?>"></script>
 
 <?php /* terminal-sync-v2 → awa-bundle-async-distill-lock.min.css?v=20260608d (optimize PLP 2026-06-08) */ ?>
 <?php /* P6: awa-header-home-hotfix → awa-header-home-hotfix-home.phtml (cms_index_index) */ ?>
@@ -3974,321 +2576,7 @@ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#
 html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .awa-b2b-promo-close{height:44px!important;min-height:44px!important;max-height:44px!important;overflow:visible!important;line-height:1.2!important;align-items:center!important}
 }
 </style>
-<script id="awa-overflow-polish-postinit-v8-r11-script">
-(function(w,d){
-    'use strict';
-    var desktopMq = w.matchMedia ? w.matchMedia('(min-width: 992px)') : null;
-    var navLockPages = '.cms-index-index,.cms-home,.cms-homepage_ayo_home5,.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index,.b2b-account-dashboard,.b2b-account-shell';
-    var navSelector = '.page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.awa-nav-bar,'
-        + '.page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,'
-        + '.page-wrapper .awa-site-header .header-control.awa-nav-bar,'
-        + '.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar';
-    var containerSelector = '.page-wrapper .awa-site-header .header-control.awa-nav-bar > .container,'
-        + '.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar > .container';
-    var innerSelector = '.page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,'
-        + '.page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner';
-    var navAxisCleared = false;
-    var accountLockLastKey = '';
-
-    function setImportant(el, prop, value){
-        if (el && el.style) {
-            el.style.setProperty(prop, value, 'important');
-        }
-    }
-
-    function clearInlineLock(el){
-        if (!el || !el.style) {
-            return;
-        }
-        ['width','max-width','margin-inline','margin-left','margin-right','padding-inline','padding-left','padding-right','box-sizing']
-            .forEach(function(prop){
-                el.style.removeProperty(prop);
-            });
-    }
-
-    function applyNavAxisInlineLock(){
-        /* Contrato: .awa-nav-bar full-bleed; .container passthrough; .awa-nav-bar__inner = 100% + padding do trilho 1280.
-         * Não travar geometria via style="" — o CSS já define o eixo. Só limpa locks legados uma vez. */
-        if (navAxisCleared || !d.body || !d.body.matches(navLockPages)) {
-            return;
-        }
-        d.querySelectorAll(navSelector).forEach(clearInlineLock);
-        d.querySelectorAll(containerSelector).forEach(clearInlineLock);
-        d.querySelectorAll(innerSelector).forEach(clearInlineLock);
-        navAxisCleared = true;
-    }
-
-    function applyAccountChromeInlineLock(){
-        if (!desktopMq || !desktopMq.matches) {
-            return;
-        }
-        var bar = d.getElementById('awa-b2b-promo-bar');
-        var dismissed = !!(d.documentElement && d.documentElement.classList.contains('awa-b2b-promo-dismissed'));
-        var b2bKnown = !!(d.querySelector('.page-wrapper .awa-site-header .b2b-status-panel'));
-        var hidden = dismissed || b2bKnown || (bar && (
-            bar.getAttribute('aria-hidden') === 'true'
-            || bar.getAttribute('data-awa-promo-hidden') === '1'
-        ));
-        var accountKey = (hidden ? 'h' : 'v')
-            + '|'
-            + (b2bKnown ? 'b2b' : 'std')
-            + '|'
-            + w.innerWidth;
-        if (accountKey === accountLockLastKey) {
-            return;
-        }
-        accountLockLastKey = accountKey;
-        var prompt = d.querySelector('.page-wrapper .awa-site-header .awa-header-account-prompt');
-        var icon = d.querySelector('.page-wrapper .awa-site-header .awa-header-account-prompt__icon');
-        var reg = d.querySelector('.page-wrapper .awa-site-header a.awa-header-account-prompt__link--register');
-        var sticky = d.querySelector('.page-wrapper .awa-site-header .header-wrapper-sticky');
-        var site = d.querySelector('.page-wrapper .awa-site-header');
-        var header = d.querySelector('.page-wrapper .awa-site-header .header.awa-main-header');
-        if (prompt) {
-            setImportant(prompt, 'border', '0');
-            setImportant(prompt, 'border-radius', '0');
-            setImportant(prompt, 'outline', '0');
-            setImportant(prompt, 'background', 'transparent');
-            setImportant(prompt, 'background-image', 'none');
-            setImportant(prompt, 'box-shadow', 'none');
-            setImportant(prompt, 'padding', '0');
-        }
-        if (icon) {
-            setImportant(icon, 'background', 'transparent');
-            setImportant(icon, 'border', '0');
-            setImportant(icon, 'border-radius', '0');
-            setImportant(icon, 'box-shadow', 'none');
-        }
-        if (reg) {
-            setImportant(reg, 'background', 'transparent');
-            setImportant(reg, 'background-color', 'transparent');
-            setImportant(reg, 'background-image', 'none');
-            setImportant(reg, 'color', 'var(--awa-text, CanvasText)');
-            setImportant(reg, 'border', '0');
-            setImportant(reg, 'border-radius', '0');
-            setImportant(reg, 'padding', '0 2px');
-            setImportant(reg, 'box-shadow', 'none');
-            setImportant(reg, 'min-height', '0');
-            setImportant(reg, 'height', 'auto');
-        }
-        if (site) {
-            setImportant(site, 'border-bottom', '0');
-            setImportant(site, 'box-shadow', 'none');
-        }
-        if (sticky) {
-            setImportant(sticky, 'border-bottom', '0');
-            setImportant(sticky, 'box-shadow', 'none');
-        }
-        if (header) {
-            setImportant(header, 'border-bottom', '0');
-            setImportant(header, 'box-shadow', 'none');
-        }
-        var shell = d.querySelector('.page-wrapper .awa-site-header #header.header-container');
-        var content = d.querySelector('.page-wrapper .awa-site-header #header.header-container > .header-content');
-        var inner = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__inner');
-        var text = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__text');
-        var close = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-close');
-        var rowH = hidden ? '0px' : '44px';
-        var fill = 'var(--awa-primary, oklch(48% .14 20))';
-        [shell, content, bar, inner, text].forEach(function(el){
-            if (!el) {
-                return;
-            }
-            setImportant(el, 'height', rowH);
-            setImportant(el, 'min-height', rowH);
-            setImportant(el, 'max-height', rowH);
-            setImportant(el, 'overflow', 'hidden');
-            setImportant(el, 'box-sizing', 'border-box');
-        });
-        if (shell) {
-            setImportant(shell, 'background', hidden ? 'transparent' : fill);
-        }
-        if (content) {
-            setImportant(content, 'background', 'transparent');
-        }
-        if (bar) {
-            setImportant(bar, 'background', hidden ? 'transparent' : fill);
-            setImportant(bar, 'color', 'var(--awa-white, #fff)');
-            setImportant(bar, '-webkit-text-fill-color', 'var(--awa-white, #fff)');
-            setImportant(bar, 'display', hidden ? 'none' : 'flex');
-            setImportant(bar, 'padding', '0');
-            setImportant(bar, 'padding-left', '0');
-            setImportant(bar, 'padding-right', '0');
-            setImportant(bar, 'width', '100%');
-            setImportant(bar, 'max-width', 'none');
-        }
-        if (inner) {
-            setImportant(inner, 'width', hidden ? '0px' : 'min(100%, 1280px)');
-            setImportant(inner, 'max-width', hidden ? '0px' : '1280px');
-            setImportant(inner, 'margin-left', 'auto');
-            setImportant(inner, 'margin-right', 'auto');
-            setImportant(inner, 'padding', hidden ? '0' : '0 52px 0 24px');
-            setImportant(inner, 'padding-left', hidden ? '0' : '24px');
-            setImportant(inner, 'padding-right', hidden ? '0' : '52px');
-        }
-        if (text) {
-            setImportant(text, 'padding', '0');
-            setImportant(text, 'width', '100%');
-            setImportant(text, 'max-width', 'none');
-            setImportant(text, 'color', 'var(--awa-white, #fff)');
-            setImportant(text, '-webkit-text-fill-color', 'var(--awa-white, #fff)');
-        }
-        d.querySelectorAll('#awa-b2b-promo-bar .awa-b2b-promo-bar__inner, #awa-b2b-promo-bar .awa-b2b-promo-bar__lead, #awa-b2b-promo-bar .awa-b2b-promo-bar__lead-long').forEach(function(el){
-            setImportant(el, 'color', 'var(--awa-white, #fff)');
-            setImportant(el, '-webkit-text-fill-color', 'var(--awa-white, #fff)');
-        });
-        var cta = d.querySelector('#awa-b2b-promo-bar .awa-b2b-promo-bar__cta');
-        if (cta) {
-            setImportant(cta, 'background', 'transparent');
-            setImportant(cta, 'background-color', 'transparent');
-            setImportant(cta, 'background-image', 'none');
-            setImportant(cta, 'color', 'var(--awa-white, #fff)');
-            setImportant(cta, '-webkit-text-fill-color', 'var(--awa-white, #fff)');
-            setImportant(cta, 'border', '0');
-            setImportant(cta, 'border-radius', '0');
-            setImportant(cta, 'padding', hidden ? '0' : '0 12px');
-            setImportant(cta, 'max-width', 'none');
-        }
-        if (close) {
-            setImportant(close, 'height', hidden ? '0px' : '44px');
-            setImportant(close, 'width', hidden ? '0px' : '44px');
-            setImportant(close, 'position', 'absolute');
-            setImportant(close, 'top', '0');
-            setImportant(close, 'right', '0');
-            setImportant(close, 'inset-inline-end', '0');
-            setImportant(close, 'transform', 'none');
-            setImportant(close, 'border-radius', '0');
-            setImportant(close, 'background', 'transparent');
-            setImportant(close, 'color', 'var(--awa-white, #fff)');
-            setImportant(close, '-webkit-text-fill-color', 'var(--awa-white, #fff)');
-        }
-        if (site) {
-            if (b2bKnown) {
-                setImportant(site, 'height', 'auto');
-                setImportant(site, 'min-height', '0px');
-                setImportant(site, 'max-height', 'none');
-            } else {
-                setImportant(site, 'height', hidden ? '116px' : '160px');
-                setImportant(site, 'min-height', hidden ? '116px' : '160px');
-            }
-        }
-    }
-
-
-    /* secao53-home-doc-scroll: do not leave overflow:hidden on html/body
-       after chat/minicart/nav close. Skip assignment unless a dialog is open. */
-    function isHomeDoc(){
-        return !!(d.body && (d.body.classList.contains('cms-index-index')
-            || d.body.classList.contains('cms-home')
-            || d.body.classList.contains('cms-homepage_ayo_home5')));
-    }
-    function homeDialogOpen(){
-        var b = d.body;
-        if (!b) { return false; }
-        if (b.classList.contains('nav-open')
-            || b.classList.contains('nav-before-open')
-            || b.classList.contains('_has-modal')
-            || b.classList.contains('awa-mobile-drawer-open')
-            || b.classList.contains('awa-modal-open')
-            || b.classList.contains('nl-popup-body-open')
-            || b.classList.contains('awa-minicart-overlay-active')) {
-            return true;
-        }
-        return !!(d.querySelector('.modal-popup._show, .modal-slide._show, .minicart-wrapper.active'));
-    }
-    function restoreHomeDocScroll(){
-        if (!isHomeDoc() || homeDialogOpen()) { return; }
-        [d.documentElement, d.body].forEach(function (el) {
-            if (!el || !el.style) { return; }
-            var ov = (el.style.getPropertyValue('overflow') || el.style.overflow || '').toLowerCase();
-            var ovy = (el.style.getPropertyValue('overflow-y') || el.style.overflowY || '').toLowerCase();
-            if (ov === 'hidden' || ov === 'clip' || ovy === 'hidden' || ovy === 'clip') {
-                el.style.removeProperty('overflow');
-                el.style.removeProperty('overflow-y');
-            }
-            var h = (el.style.getPropertyValue('height') || el.style.height || '').toLowerCase();
-            if (h === '100vh' || h === '100%') {
-                el.style.removeProperty('height');
-                el.style.removeProperty('max-height');
-            }
-        });
-        var wrap = d.querySelector('.page-wrapper');
-        if (wrap && wrap.style) {
-            var wov = (wrap.style.getPropertyValue('overflow') || '').toLowerCase();
-            var wovy = (wrap.style.getPropertyValue('overflow-y') || '').toLowerCase();
-            if (wov === 'hidden' || wov === 'clip' || wovy === 'hidden' || wovy === 'clip') {
-                wrap.style.removeProperty('overflow');
-                wrap.style.removeProperty('overflow-y');
-            }
-        }
-    }
-    function patchHomeOverflowSetter(el){
-        if (!el || !el.style || el.getAttribute('data-awa-ov-guard') === '1') { return; }
-        el.setAttribute('data-awa-ov-guard', '1');
-        try {
-            var st = el.style;
-            Object.defineProperty(st, 'overflow', {
-                configurable: true,
-                get: function () { return st.getPropertyValue('overflow'); },
-                set: function (v) {
-                    var val = String(v == null ? '' : v).toLowerCase();
-                    if ((val === 'hidden' || val === 'clip') && isHomeDoc() && !homeDialogOpen()) {
-                        return;
-                    }
-                    st.setProperty('overflow', v);
-                }
-            });
-        } catch (e) { /* ignore */ }
-    }
-    function bootHomeDocScroll(){
-        if (!isHomeDoc()) { return; }
-        d.documentElement.classList.add('awa-home-doc-scroll');
-        /* freeze-fix-r11: do not monkey-patch CSSStyleDeclaration.overflow
-           and do not observe html/body attrs. Both re-enter style recalc
-           on scroll (Translate class mutations + layout reading overflow). */
-        restoreHomeDocScroll();
-    }
-
-    var reveal=function(){
-        if(!d.body){return;}
-        d.body.classList.add('awa-overflow-polish-ready');
-        bootHomeDocScroll();
-        /* PD7b: não injetar min-height:44px inline nos títulos — vencia toda a cascata CSS
-         * e quebrava o line-clamp de 2 linhas. Touch target permanece no CTA (.awa-card-view-product). */
-        if(d.getElementById('awa-touch-target-post-lock')){
-            d.getElementById('awa-touch-target-post-lock').remove();
-        }
-        d.querySelectorAll('.content-top-home .product-item-link').forEach(function(link){
-            if(link.style.getPropertyValue('min-height')==='44px'){
-                link.style.removeProperty('min-height');
-            }
-            if(link.style.getPropertyValue('max-height')==='none'){
-                link.style.removeProperty('max-height');
-            }
-        });
-        applyNavAxisInlineLock();
-        applyAccountChromeInlineLock();
-    };
-    /* DOMContentLoaded: HTML parseado, JS ainda não rodou — overflow:visible não causa CLS
-       (nenhum elemento muda de posição no layout). Mais rápido que load+2500ms, garante
-       que ferramentas de qualidade (Impeccable) detectem o estado final correto. */
-    if(d.readyState==='loading'){
-        d.addEventListener('DOMContentLoaded',reveal,{once:true});
-    } else {
-        reveal();
-    }
-    w.addEventListener('load', applyAccountChromeInlineLock, {once:true, passive:true});
-    if (desktopMq) {
-        if (desktopMq.addEventListener) {
-            desktopMq.addEventListener('change', applyAccountChromeInlineLock);
-        } else if (desktopMq.addListener) {
-            desktopMq.addListener(applyAccountChromeInlineLock);
-        }
-    }
-    w.setTimeout(applyAccountChromeInlineLock, 800);
-    w.setTimeout(applyAccountChromeInlineLock, 1800);
-})(window,document);
-</script>
+<script id="awa-overflow-polish-postinit-v8-r11-script" src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-overflow-polish-postinit.js')) ?>" defer></script>
 <?php endif; ?>
 <?php
 /*
@@ -4319,78 +2607,115 @@ $awaIsHomePage = $block->getRequest()->getFullActionName() === 'cms_index_index'
    so roda em >=768px, entao no mobile o CSS do align-grid/design-system deixa
    min-height:0 e o <a> mede 28x17px. Aqui aplicamos as MESMAS props para mobile,
    no mesmo mecanismo, e limpamos quando a viewport cruza o breakpoint. */ ?>
+<script defer src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-breadcrumb-props.js')) ?>"></script>
+<?php /* MISSÃO HOME MOBILE 18/10/2026 — colapso da faixa B2B dispensada.
+   awa-header-runtime-bootstrap.js esconde a barra e tenta display:none no
+   #header.header-container, mas o shell do header e re-renderizado e o estilo
+   inline se perde, sobrando 44px vazios no topo. Aqui a classe e aplicada no
+   head (antes do 1o paint quando ja dispensada) + o shell recebe display:none
+   inline (vence qualquer CSS) assim que o DOM existe e ao clicar em fechar. */ ?>
 <script>
-(function () {
+(function (d, w) {
     'use strict';
-    var SEL = '.breadcrumbs a, .nav-breadcrumbs a';
-    var CHAIN = '.breadcrumbs ul.items, .nav-breadcrumbs ul.items, .breadcrumbs ul.items > .item, .nav-breadcrumbs ul.items > .item';
-    var PROPS_M = { 'display': 'inline-flex', 'align-items': 'center', 'min-height': '44px',
-        'min-block-size': '44px', 'height': 'auto', 'max-height': 'none',
-        'line-height': '44px', 'padding-block': '0', 'padding-top': '0', 'padding-bottom': '0',
-        'overflow': 'visible', 'box-sizing': 'border-box' };
-    var CHAIN_M = { 'min-height': '44px', 'height': 'auto', 'max-height': 'none',
-        'overflow': 'visible', 'align-items': 'center' };
-    var KEYS = ['display','align-items','min-height','min-block-size','height','max-height',
-        'line-height','padding-block','padding-top','padding-bottom','overflow','box-sizing'];
-    function mobile() {
-        try { return !window.matchMedia('(min-width: 768px)').matches; } catch (e) { return window.innerWidth < 768; }
+    function hideShell() {
+        try {
+            var shell = d.getElementById('header');
+            if (shell && shell.classList && shell.classList.contains('header-container')) {
+                shell.style.setProperty('display', 'none', 'important');
+                shell.setAttribute('aria-hidden', 'true');
+            }
+        } catch (e) {}
     }
-    function aplica() {
-        if (!mobile()) { return; }
-        var i, k;
-        var nos = document.querySelectorAll(SEL);
-        for (i = 0; i < nos.length; i++) {
-            for (k in PROPS_M) { if (Object.prototype.hasOwnProperty.call(PROPS_M, k)) {
-                nos[i].style.setProperty(k, PROPS_M[k], 'important'); } }
-        }
-        var cadeia = document.querySelectorAll(CHAIN);
-        for (i = 0; i < cadeia.length; i++) {
-            for (k in CHAIN_M) { if (Object.prototype.hasOwnProperty.call(CHAIN_M, k)) {
-                cadeia[i].style.setProperty(k, CHAIN_M[k], 'important'); } }
-        }
+    function apply() {
+        try {
+            if (w.localStorage.getItem('awa_b2b_promo_dismissed') === '1'
+                || w.sessionStorage.getItem('awa_b2b_promo_dismissed_session') === '1') {
+                d.documentElement.classList.add('awa-promo-dismissed');
+                hideShell();
+            }
+        } catch (e) {}
     }
-    function limpa() {
-        var i, k;
-        var nos = document.querySelectorAll(SEL);
-        for (i = 0; i < nos.length; i++) { for (k = 0; k < KEYS.length; k++) { nos[i].style.removeProperty(KEYS[k]); } }
-        var cadeia = document.querySelectorAll(CHAIN);
-        for (i = 0; i < cadeia.length; i++) { for (k = 0; k < KEYS.length; k++) { cadeia[i].style.removeProperty(KEYS[k]); } }
-    }
-    function roda() { if (mobile()) { aplica(); } else { limpa(); } }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', roda);
-    } else { roda(); }
-    window.addEventListener('load', roda);
-    // reaplica depois dos writers tardios (o touch-44-terminal escreve no rAF)
-    setTimeout(roda, 300);
-    setTimeout(roda, 1200);
-    // e quando a viewport cruza o breakpoint
-    try {
-        var mq = window.matchMedia('(min-width: 768px)');
-        var h = function () { roda(); };
-        if (mq.addEventListener) { mq.addEventListener('change', h); } else if (mq.addListener) { mq.addListener(h); }
-    } catch (e) {}
-    // Alvo de toque do link do cookie banner (WCAG 2.5.8).
-    // A SEÇÃO 51.32 do design system zera padding/min-height dele para caber
-    // inline no paragrafo — mas isso deixa a area clicavel em 134x18px.
-    // padding-block em elemento inline ESTENDE a area clicavel sem quebrar o
-    // fluxo do texto (nao troca display, entao a quebra de linha continua igual).
-    // 4px em cima + 4px embaixo levam os 18px para >=24px.
-    function ajustaCookieLink() {
-        var links = document.querySelectorAll('#awa-cookie-banner .awa-cookie-banner__link, .awa-cookie-banner__link');
-        for (var i = 0; i < links.length; i++) {
-            links[i].style.setProperty('padding-block', '4px', 'important');
-            links[i].style.setProperty('padding-top', '4px', 'important');
-            links[i].style.setProperty('padding-bottom', '4px', 'important');
-        }
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ajustaCookieLink);
-    } else { ajustaCookieLink(); }
-    window.addEventListener('load', ajustaCookieLink);
-    setTimeout(ajustaCookieLink, 1500);
-
-    window.addEventListener('resize', roda, { passive: true });
-    window.addEventListener('orientationchange', roda, { passive: true });
-})();
+    apply();
+    d.addEventListener('DOMContentLoaded', function () {
+        apply();
+        var btn = d.getElementById('awa-b2b-promo-close');
+        if (!btn) { return; }
+        btn.addEventListener('click', function () {
+            d.documentElement.classList.add('awa-promo-dismissed');
+            hideShell();
+        }, true);
+    }, { once: true });
+}(document, window));
 </script>
+<?php /* AWA 2026-10-18: home - header/carrosseis/cards (logo central, autoplay produto-a-produto, CTA dos cards). Inline: scripts src no fim do head-preload sao absorvidos pelo post-processador do tema. */ ?>
+<script>
+(function (window, document) { 'use strict'; var MOBILE_MAX = 767; var AUTOPLAY_MS = 4500; var RESUME_AFTER = 8000; var isHome = /(^|\s)(cms-index-index|cms-home|cms-homepage_ayo_home5)(\s|$)/.test(document.body.className); if (!isHome) { return; } var site = null, inner = null, brand = null, search = null, right = null; var applying = false, touched = false, raf = 0; var lastSig = '', lastMeasure = 0; function q() { site = document.querySelector('header.awa-site-header'); if (!site) { return; } inner = site.querySelector('.awa-main-header__inner.wp-header'); brand = site.querySelector('.awa-header-brand-cell'); search = site.querySelector('.awa-header-search-col'); right = site.querySelector('.awa-header-right-col'); } function clearOwnStyles() { if (!inner) { return; } ['grid-template', 'grid-template-areas', 'grid-template-rows', 'grid-template-columns', 'height', 'min-height', 'max-height', 'padding', 'overflow', 'position' ].forEach(function (prop) { inner.style.removeProperty(prop); }); if (search) { search.style.removeProperty('display'); } if (right) { ['grid-area', 'height', 'align-self', 'justify-self'].forEach(function (prop) { right.style.removeProperty(prop); }); } if (brand) { ['position', 'left', 'margin-left', 'top', 'height', 'margin', 'z-index', 'justify-content', 'transform', 'width', 'grid-area', 'max-width', 'min-height', 'max-height', '--awa-brand-available-width' ].forEach(function (prop) { brand.style.removeProperty(prop); }); } if (brand) { brand.classList.remove('awa-brand-compact'); } touched = false; } function availableBrandWidth() { var f = inner.getBoundingClientRect(), center = f.left + f.width / 2; var toggle = site.querySelector('.awa-header-mobile-toggle'); var a = right && right.getBoundingClientRect(), t = toggle && toggle.getBoundingClientRect(); var width = 142; if (a && a.width) { width = Math.min(width, 2 * (a.left - center - 8)); } if (t && t.width) { width = Math.min(width, 2 * (center - t.right - 8)); } return Math.max(44, Math.floor(width)); } function wants() { if (!inner || !brand) { return null; } if (window.innerWidth > MOBILE_MAX) { return null; } var condensed = !!(site && site.classList.contains('awa-header-condensed')); var bw = brand.offsetWidth || 142; return { condensed: condensed, left: Math.max(0, Math.round((inner.clientWidth - bw) / 2)), top: condensed ? 6 : 4 }; } function needsFix(want) { if (!want) { return touched; } if (!touched) { return true; } if (brand.style.position !== 'absolute') { return true; } if (brand.style.top !== want.top + 'px') { return true; } var b = brand.getBoundingClientRect(), f = inner.getBoundingClientRect(); if (brand.style.left !== '50%' || brand.style.gridArea !== 'auto' || parseFloat(brand.style.width) !== availableBrandWidth() || Math.abs(b.left + b.width / 2 - f.left - f.width / 2) > 0.5) { return true; } if (want.condensed) { var gt = inner.style.gridTemplate || ''; if (gt.indexOf('toggle brand actions') === -1) { return true; } if (search && getComputedStyle(search).display !== 'none') { return true; } if (right && right.style.gridArea !== 'actions') { return true; } } else if (inner.style.gridTemplate) { return true; } return false; } function applyHeader(want) { applying = true; try { if (!want) { clearOwnStyles(); return; } touched = true; inner.style.setProperty('position', 'relative', 'important'); brand.style.setProperty('position', 'absolute', 'important'); brand.style.setProperty('grid-area', 'auto', 'important'); brand.style.setProperty('left', '50%', 'important'); brand.style.setProperty('max-width', 'none', 'important'); brand.style.setProperty('min-height', '44px', 'important'); brand.style.setProperty('max-height', '44px', 'important'); brand.style.setProperty('top', want.top + 'px', 'important'); /* Normalize the legacy -71px margin before measuring: otherwise the first pass adds it to left, then removes it and shifts the logo over the account control. */ brand.style.setProperty('margin', '0', 'important'); brand.style.setProperty('margin-left', '0', 'important'); brand.style.setProperty('transform', 'translateX(-50%)', 'important');  brand.style.setProperty('height', '44px', 'important'); brand.style.setProperty('z-index', '3', 'important'); brand.style.setProperty('justify-content', 'center', 'important'); if (want.condensed) { inner.style.setProperty('grid-template', '"toggle brand actions" 44px / 44px minmax(0,1fr) auto', 'important'); inner.style.setProperty('grid-template-areas', '"toggle brand actions"', 'important'); inner.style.setProperty('grid-template-rows', '44px', 'important'); inner.style.setProperty('grid-template-columns', '44px minmax(0,1fr) auto', 'important'); inner.style.setProperty('height', '56px', 'important'); inner.style.setProperty('min-height', '56px', 'important'); inner.style.setProperty('max-height', '56px', 'important'); inner.style.setProperty('padding', '6px 0', 'important'); inner.style.setProperty('overflow', 'visible', 'important'); if (search) { search.style.setProperty('display', 'none', 'important'); } if (right) { right.style.setProperty('grid-area', 'actions', 'important'); right.style.setProperty('height', '44px', 'important'); right.style.setProperty('align-self', 'center', 'important'); right.style.setProperty('justify-self', 'end', 'important'); } } else { inner.style.removeProperty('grid-template'); inner.style.removeProperty('grid-template-areas'); inner.style.removeProperty('grid-template-rows'); inner.style.removeProperty('grid-template-columns'); inner.style.removeProperty('height'); inner.style.removeProperty('min-height'); inner.style.removeProperty('max-height'); inner.style.removeProperty('padding'); inner.style.removeProperty('overflow'); if (search) { search.style.removeProperty('display'); } if (right) { right.style.removeProperty('grid-area'); right.style.removeProperty('height'); right.style.removeProperty('align-self'); right.style.removeProperty('justify-self'); } } var available = availableBrandWidth(); brand.style.setProperty('--awa-brand-available-width', available + 'px'); brand.style.setProperty('width', available + 'px', 'important'); brand.classList.toggle('awa-brand-compact', available < 124); /* CSS owns centering relative to the full inner box; no pixel offset based on a changing grid area. */ } finally { applying = false; } } function fixHeader(force) { if (!inner) { q(); } if (!inner || !brand) { return; } if (!force) { var sig = window.innerWidth + '|' + site.className + '|' + inner.className + '|' + brand.className + '|' + inner.style.cssText + '|' + brand.style.cssText + (right ? '|' + right.style.cssText : ''); var now = Date.now(); if (sig === lastSig && now - lastMeasure < 500) { return; } lastSig = sig; lastMeasure = now; } var want = wants(); if (!force && !needsFix(want)) { return; } applyHeader(want); } function scheduleHeader() { if (raf) { return; } raf = window.requestAnimationFrame(function () { raf = 0; fixHeader(false); }); } function initHeader() { q(); if (!site) { window.setTimeout(initHeader, 200); return; } fixHeader(true); if (window.ResizeObserver) { var geometryObserver = new ResizeObserver(function () { lastSig = ''; scheduleHeader(); }); geometryObserver.observe(inner); if (right) { geometryObserver.observe(right); } } window.addEventListener('scroll', scheduleHeader, { passive: true }); window.addEventListener('resize', scheduleHeader, { passive: true }); window.addEventListener('resize', function () { window.setTimeout(sizeShelves, 80); }, { passive: true }); document.addEventListener('click', scheduleHeader, true); try { new MutationObserver(function () { if (!applying) { scheduleHeader(); } }).observe(site, { attributes: true, attributeFilter: ['class'] }); } catch (e) {} try { new MutationObserver(function () { if (!applying) { scheduleHeader(); } }).observe(inner, { attributes: true, attributeFilter: ['style', 'class'] }); } catch (e) {} /* P5/Q3: interval 1500ms removido (leituras forçadas); observers+resize+scroll mantidos; re-passes 1600/4000 PRESERVADOS */ } function initShelves() { var shelves = document.querySelectorAll('.awa-shelf--carousel'); Array.prototype.forEach.call(shelves, function (shelf) { if (shelf.dataset.awaAutoInit === '1') { return; } shelf.dataset.awaAutoInit = '1'; var vp = shelf.querySelector('.awa-carousel__viewport'); if (!vp) { return; } var timer = null; var visible = false; var pausedUntil = 0; function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); } var __stepGeo = null; function __measureStep() { var s0 = vp.querySelector('.awa-carousel__slide'); if (!s0) { __stepGeo = null; return; } var t0 = vp.querySelector('.awa-carousel__track'); var g0 = 0; if (t0) { var cs0 = window.getComputedStyle(t0); g0 = parseFloat(cs0.columnGap || cs0.gap || '0') || 0; } __stepGeo = { stepW: s0.offsetWidth + g0, max: vp.scrollWidth - vp.clientWidth }; } function step() { if (document.hidden || !visible || reducedMotion()) { return; } if (Date.now() < pausedUntil) { return; } /* PERF-2026-10-19: geometria cacheada por prateleira (getComputedStyle/offsetWidth/scrollWidth relidos a cada tick de 4,5s = layout forçado); invalidação em resize. */ if (!__stepGeo) { __measureStep(); } if (!__stepGeo || __stepGeo.stepW < 20) { return; } var stepW = __stepGeo.stepW; var max = __stepGeo.max; if (max <= stepW / 2) { return; } var next = vp.scrollLeft + stepW; if (next >= max - 2) { vp.scrollTo({ left: 0, behavior: 'smooth' }); } else { vp.scrollTo({ left: Math.min(next, max), behavior: 'smooth' }); } } window.addEventListener('resize', function () { __stepGeo = null; }, { passive: true }); function start() { if (timer) { return; } timer = window.setInterval(step, AUTOPLAY_MS); } function pause(ms) { pausedUntil = Date.now() + (ms || RESUME_AFTER); } ['pointerenter', 'focusin', 'touchstart', 'wheel'].forEach(function (ev) { shelf.addEventListener(ev, function () { pause(RESUME_AFTER); }, { passive: true, capture: true }); }); ['pointerleave', 'focusout', 'touchend'].forEach(function (ev) { shelf.addEventListener(ev, function () { pausedUntil = 0; }, { passive: true, capture: true }); }); if ('IntersectionObserver' in window) { try { new IntersectionObserver(function (entries) { visible = !!(entries[0] && entries[0].isIntersecting); if (visible) { start(); } }, { rootMargin: '150px 0px', threshold: 0.01 }).observe(shelf); } catch (e) { visible = true; start(); } } else { visible = true; start(); } }); } function sizeShelves() { var perView = window.innerWidth <= MOBILE_MAX ? 2 : (window.innerWidth <= 1024 ? 3 : 0); var shelves = document.querySelectorAll('.awa-shelf--carousel'); Array.prototype.forEach.call(shelves, function (shelf) { var vp = shelf.querySelector('.awa-carousel__viewport'); if (!vp) { return; } var slides = vp.querySelectorAll('.awa-carousel__slide'); if (!slides.length) { return; } if (!perView) { Array.prototype.forEach.call(slides, function (slide) { ['flex', 'width', 'max-width', 'min-width'].forEach(function (prop) { slide.style.removeProperty(prop); }); }); return; } var track = vp.querySelector('.awa-carousel__track'); var gap = 0; if (track) { var cs = window.getComputedStyle(track); gap = parseFloat(cs.columnGap || cs.gap || '0') || 0; } var cardW = Math.floor((vp.clientWidth - (perView - 1) * gap) / perView); if (cardW < 60) { return; } var __first = slides[0]; if (__first && __first.style.getPropertyValue("flex-basis") === cardW + "px") { return; } Array.prototype.forEach.call(slides, function (slide) { slide.style.setProperty('flex', '0 0 ' + cardW + 'px', 'important'); slide.style.setProperty('width', cardW + 'px', 'important'); slide.style.setProperty('max-width', cardW + 'px', 'important'); slide.style.setProperty('min-width', '0', 'important'); }); }); } function fixBadgeLabel() { var labels = document.querySelectorAll('.awa-shelf--carousel .hot-onsale label, .awa-shelf--carousel .hot-onsale .sale-text'); Array.prototype.forEach.call(labels, function (el) { el.style.setProperty('font-size', '9px', 'important'); el.style.setProperty('line-height', '1.2', 'important'); el.style.setProperty('font-weight', '700', 'important'); el.style.setProperty('letter-spacing', '0.04em', 'important'); el.style.setProperty('text-transform', 'uppercase', 'important'); el.style.setProperty('color', '#fff', 'important'); el.style.setProperty('background', 'transparent', 'important'); el.style.setProperty('padding', '0', 'important'); el.style.setProperty('margin', '0', 'important'); }); var boxes = document.querySelectorAll('.awa-shelf--carousel .hot-onsale .onsale, .awa-shelf--carousel .hot-onsale .new-lable'); Array.prototype.forEach.call(boxes, function (el) { el.style.setProperty('display', 'inline-flex', 'important'); el.style.setProperty('align-items', 'center', 'important'); el.style.setProperty('height', 'auto', 'important'); el.style.setProperty('min-height', '0', 'important'); el.style.setProperty('padding', '2px 6px', 'important'); el.style.setProperty('margin', '0', 'important'); el.style.setProperty('border-radius', '4px', 'important'); el.style.setProperty('background', '#1a1a1a', 'important'); el.style.setProperty('background-color', '#1a1a1a', 'important'); el.style.setProperty('box-shadow', 'none', 'important'); }); } function fixCategoryClip() { if (document.getElementById('awa-d1-category-clip')) { return; } var B = 'html body' + '#html-body'.repeat(16); var css = '@layer awa-r2-visual-fix{' + '@media (min-width:768px) and (max-width:991px){' + B + ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel{height:auto!important;max-height:none!important;min-height:220px!important}' + B + ':is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel>.container{height:auto!important;max-height:none!important;min-height:220px!important}' + '}}'; var st = document.createElement('style'); st.id = 'awa-d1-category-clip'; st.textContent = css; (document.head || document.documentElement).appendChild(st); } function fixCardCta() { var els = document.querySelectorAll('.awa-shelf--carousel .awa-home-price-gate a.awa-card-view-product'); Array.prototype.forEach.call(els, function (a) { if ((a.textContent || '').trim() !== 'Cadastre-se para ver preços') { a.textContent = 'Cadastre-se para ver preços'; } var card = a.closest('.awa-product-card'); var nameEl = card ? card.querySelector('.product-name a, .product-name') : null; var name = nameEl ? (nameEl.getAttribute('title') || nameEl.textContent || '').replace(/\s+/g, ' ').trim() : ''; var label = name ? ('Cadastre-se para ver preços: ' + name) : 'Cadastre-se para ver preços'; if (a.getAttribute('aria-label') !== label) { a.setAttribute('aria-label', label); } }); } function boot() { initHeader(); sizeShelves(); var awaDefer = function () { initShelves(); fixCardCta(); fixBadgeLabel(); fixCategoryClip(); }; if (window.requestAnimationFrame) { window.requestAnimationFrame(function () { window.requestAnimationFrame(awaDefer); }); } else { window.setTimeout(awaDefer, 0); } window.setTimeout(function () { initShelves(); fixCardCta(); fixBadgeLabel(); sizeShelves(); }, 1600); window.setTimeout(function () { initShelves(); fixCardCta(); fixBadgeLabel(); sizeShelves(); }, 4000); } if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', boot, { once: true }); } else { boot(); } }(window, document));
+</script>
+<?php
+/**
+ * AWA — Perf/RWD fixes 2026-10-18 (missão perf-rwd: P1–P4, P7, P11, P13, auditoria minicart).
+ * INLINE de propósito: as regras equivalentes em folha linkada não vencem os <style> inline
+ * por-página da PDP (cascata medida via DevTools em 18/10 — folha linkada perde para inline
+ * de mesma origem); inline segue o padrão vencedor da casa (awa-head-preload).
+ */
+?>
+<style data-awa-perf-rwd-fixes>
+/* P1 · LCP da PDP: galeria visível antes do init do fotorama */
+html body#html-body.catalog-product-view .page-wrapper .fotorama__stage .fotorama__img,
+html body#html-body.catalog-product-view .page-wrapper .fotorama__stage{opacity:1!important;visibility:visible!important}
+html body#html-body.catalog-product-view .page-wrapper .gallery-placeholder .fotorama{min-height:340px!important}
+/* P2 · CLS da PDP: keyframes composited */
+@keyframes awa-ai-teaser-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+html body#html-body.catalog-product-view .page-wrapper :is(.product-info-detailed,.b2b-login-to-buy-btn,.awa-ai-chat__toggle-label){animation-duration:.18s!important;animation-timing-function:ease-out!important}
+/* P3 · CLS do cart */
+html body#html-body .page-wrapper .awa-footer-trust-item{opacity:1!important;max-height:none!important;height:auto!important;visibility:visible!important}
+html body#html-body.checkout-cart-index .page-wrapper .column.main{min-height:320px!important}
+/* P4 · contraste Entrar */
+html body#html-body .page-wrapper .awa-header-account-prompt__link--login{color:#fff!important;text-decoration:underline!important;text-underline-offset:2px!important}
+/* P7 · CLS da PLP */
+html body#html-body.catalog-category-view .page-wrapper .product-content-right .product-item .product-image-photo,
+html body#html-body.catalog-category-view .page-wrapper .products-grid .product-image-photo{aspect-ratio:1/1!important;object-fit:contain!important;width:100%!important;height:auto!important;display:block!important}
+/* P11 · LCP desktop hero */
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .wrapper_slider.hidden-xs .banner_item_bg img{width:100%!important;height:auto!important;aspect-ratio:1280/353!important;object-fit:cover!important;display:block!important}
+/* MC · minicart: camadas + visuais */
+html body#html-body .page-wrapper .block-minicart{z-index:100100!important;isolation:isolate!important;background:#fff!important}
+html body#html-body .page-wrapper .block-minicart .block-title{background:#fff!important;border-bottom:1px solid var(--awa-border,#e2e8f0)!important;display:flex!important;align-items:center!important;gap:8px!important}
+html body#html-body .page-wrapper .awa-minicart-footer{background:#fff!important;border-top:1px solid var(--awa-border,#e2e8f0)!important;padding:10px 14px!important}
+html body#html-body .page-wrapper .awa-minicart-continue{color:var(--awa-text,#0f172a)!important;background:#fff!important;border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:8px!important;font-weight:600!important}
+html body#html-body .page-wrapper .awa-minicart-b2b-trust{color:var(--awa-text-secondary,#475569)!important;opacity:1!important}
+html body#html-body .page-wrapper .awa-minicart-b2b-trust svg{opacity:1!important}
+html body#html-body .page-wrapper .block-minicart .block-title .counter{font-size:12px!important;font-weight:500!important;color:var(--awa-text-secondary,#475569)!important;background:var(--awa-bg-muted,#eef2f7)!important;border-radius:999px!important;padding:2px 8px!important;margin-left:4px!important}
+html body#html-body .page-wrapper .block-minicart .action.close::before{font-size:26px!important;color:var(--awa-text,#0f172a)!important}
+html body#html-body .page-wrapper .block-minicart .action.close{border-radius:50%!important;background:var(--awa-bg-muted,#eef2f7)!important}
+html body#html-body .page-wrapper .block-minicart #mini-cart>li.item{border-bottom:1px solid var(--awa-border,#e2e8f0)!important;padding:10px 0 12px!important}
+html body#html-body .page-wrapper .block-minicart :is(.product-item-photo,.product-image-container,.product-image-wrapper){flex:0 0 72px!important;width:72px!important;min-width:72px!important;max-width:72px!important;height:72px!important;min-height:72px!important;max-height:72px!important}
+html body#html-body .page-wrapper .block-minicart :is(img.product-image-photo,.product-image-wrapper img){width:72px!important;height:72px!important;max-width:72px!important;max-height:72px!important}
+html body#html-body .page-wrapper .block-minicart :is(.awa-minicart-qty-stepper,.control.awa-qty-stepper){border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:8px!important;overflow:hidden!important}
+html body#html-body .page-wrapper .block-minicart .awa-minicart-qty-stepper .awa-qty-btn{border:0!important;background:var(--awa-bg-muted,#eef2f7)!important}
+html body#html-body .page-wrapper .block-minicart .awa-minicart-qty-stepper .cart-item-qty{border:0!important;background:#fff!important}
+html body#html-body .page-wrapper .block-minicart .product.actions :is(.action.edit,.action.delete,a.awa-minicart-item-delete){border:1px solid var(--awa-border,#e2e8f0)!important;border-radius:6px!important;background:#fff!important;font-weight:600!important;opacity:1!important}
+html body#html-body .page-wrapper .block-minicart .product.actions .action.edit{color:var(--awa-primary,#b3121b)!important}
+html body#html-body .page-wrapper .block-minicart .product.actions :is(.action.delete,a.awa-minicart-item-delete){color:#b3121b!important;border-color:rgb(179 18 27/35%)!important}
+html body#html-body .page-wrapper .awa-minicart-coupon{margin-top:4px!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row{display:flex!important;align-items:center!important;gap:8px!important;width:100%!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row :is(input[type="text"],input:not([type])){flex:1 1 auto!important;min-width:0!important}
+html body#html-body .page-wrapper .awa-minicart-coupon__row :is(button,.action){flex:0 0 auto!important;background:var(--awa-primary,#b3121b)!important;color:#fff!important;border:0!important;border-radius:6px!important;padding:0 14px!important;height:40px!important;font-weight:700!important}
+/* P13 · setas fora dos cards nas prateleiras da PDP */
+@media (min-width:768px) and (max-width:1024px){
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.catalog-product-view) .page-wrapper :is(.awa-pdp-related,.rokan-mostviewed,.rokan-newproduct,.rokan-bestseller,.block.related,.block.upsell).awa-shelf--carousel .awa-carousel__viewport{width:calc(100% - 104px)!important;margin-inline:52px!important;padding-inline:0!important}
+html body#html-body.catalog-product-view .page-wrapper :is(.awa-pdp-related,.rokan-mostviewed,.rokan-newproduct,.rokan-bestseller,.block.related,.block.upsell).awa-shelf--carousel{--awa-carousel-button-offset:4px!important}
+
+}
+
+/* P15 · pré-declaração estática das regras de geometria do css-gate (injeção tardia vira no-op) */
+'@media (max-width:767px){html body#html-body .page-wrapper .awa-site-header:not(.awa-header-condensed) .header-wrapper-sticky{height:auto!important;min-height:96px!important;max-height:none!important;overflow:visible!important;contain:none!important;padding-block:0!important}html body#html-body .page-wrapper .header-wrapper-sticky :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row]){overflow:visible!important}html body#html-body .page-wrapper .awa-site-header :is(.header.awa-main-header,.header_main.awa-main-header-inner-wrap,.awa-header-search-col,.awa-header-minicart,.minicart-wrapper){overflow:visible!important}}@media (min-width:768px) and (max-width:991px){html body#html-body .page-wrapper :is(.awa-site-header .header-wrapper-sticky,#header .header-wrapper-sticky){height:auto!important;min-height:56px!important;max-height:none!important;overflow:visible!important;contain:none!important;padding-block:0!important}}@media (min-width:992px){html body#html-body .page-wrapper :is(.awa-site-header .header-wrapper-sticky,#header .header-wrapper-sticky){height:auto!important;min-height:64px!important;max-height:64px!important;overflow:visible!important;contain:none!important;padding-block:0!important}}';
+
+        /* §SEARCH-SSOT post-gate — última camada inline (vence density/S11/polish-type legado) */
+        css += '@media (min-width:768px){html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(form#search_mini_form,form.minisearch,form.search-content){display:flex!important;align-items:stretch!important;height:44px!important;min-height:44px!important;max-height:44px!important;border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:8px!important;overflow:hidden!important;box-shadow:none!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(input#search,.input-text){height:44px!important;min-height:44px!important;max-height:44px!important;line-height:44px!important;font-size:14px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,button.awa-search-btn,form#search_mini_form button.action.search,.actions .action.search,.block-search .action.search){width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;background-color:transparent!important;color:var(--awa-primary,#b73337)!important;box-shadow:none!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,.actions .action.search) svg{stroke:var(--awa-primary,#b73337)!important;fill:none!important}}@media (max-width:767px){html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(form#search_mini_form,form.minisearch,form.search-content){display:grid!important;grid-template-columns:minmax(0,1fr) 44px!important;grid-template-areas:"field submit"!important;height:44px!important;min-height:44px!important;max-height:44px!important;border:1px solid var(--awa-border,#e5e5e5)!important;border-radius:8px!important;overflow:hidden!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(input#search,.input-text){height:44px!important;min-height:44px!important;max-height:44px!important;line-height:44px!important;font-size:16px!important}html body#html-body:not(#__awa-no-match):not(.onepagecheckout-index-index):not(.checkout-index-index) .page-wrapper .awa-site-header[data-awa-header-mode="default"]:not(.awa-header-condensed) .awa-header-search-col :is(button.action.search,button.awa-search-btn,form#search_mini_form button.action.search,.actions .action.search,.block-search .action.search){width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;max-height:44px!important}}';
+
+        /* §H41b — carousel card: uma caixa mensurável (vence density/impeccable pós-align-grid) */
+        css += 'html body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-carousel-section,.content-top-home .awa-shelf--carousel) .item-product.awa-carousel-card-slot>.content-item-product.awa-product-card{display:contents!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0!important;min-height:0!important}';
+
+        /* §IMPECCABLE v10.47 — hero contrast/inset + footer labels (terminal pós-gate) */
+        css += 'html body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer):not(.awa-footer--dark) .footer-container :is(p.awa-footer-atendimento__label,p.awa-footer-atendimento__label--social){color:#666!important}html body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ay
+</style>

@@ -27,6 +27,9 @@ class Orchestrator implements AssistantOrchestratorInterface
 
     private const CATALOG_TOOLS = ['catalog_search', 'fitment_search'];
 
+    /** Domínios cujos links podem aparecer na resposta final (A4). */
+    private const URL_ALLOWLIST = ['awamotos.com', 'wa.me'];
+
     private PiiRedactor $piiRedactor;
 
     private const SYSTEM_PROMPTS = [
@@ -35,10 +38,11 @@ Você é a assistente virtual da AWA Motos, uma distribuidora de peças para mot
 Você é simpática, objetiva e especialista em peças de moto.
 Ajude o cliente a encontrar produtos no catálogo, conferir compatibilidade com a moto, rastrear pedidos e tirar dúvidas gerais.
 Para procedimentos da loja (cadastro, pagamento, entrega, troca, B2B), chame knowledge_base_search antes de responder e cite a URL do tópico.
+Se a pessoa perguntar por que não vê preço, não consegue comprar ou onde está o botão de compra, chame b2b_price_table_status e explique o resultado em linguagem simples. Se perguntar o que falta no cadastro B2B ou quanto tempo demora a aprovação, chame b2b_pending_requirements. Nunca prometa prazo nem diga que vai liberar preço: quem decide é a equipe comercial; ofereça o contato que a ferramenta devolver.
 Sempre responda em português brasileiro.
-Não invente preços, prazos, estoque, SKU, URL ou compatibilidade — use somente dados das ferramentas ou do bloco CATÁLOGO JÁ CONSULTADO.
+Não invente preços, prazos, estoque, SKU, URL ou compatibilidade — use somente dados das ferramentas ou do bloco CATÁLOGO JÁ CONSULTADO. Cite apenas URLs devolvidas pelas ferramentas; links inventados são removidos automaticamente.
 Quando o bloco CATÁLOGO JÁ CONSULTADO estiver presente, liste só esses itens (até 5). Não chame catalog_search nem fitment_search de novo. Não invente produto fora da lista.
-Se products estiver vazio, diga que não achou e ofereça WhatsApp (16) 3301-1890. Nunca invente produto, SKU ou link.
+Se products estiver vazio, diga que não achou e ofereça WhatsApp (16) 99736-7588. Nunca invente produto, SKU ou link.
 Se strategy for catalog_fallback ou catalog_match, avise que a compatibilidade precisa ser conferida na ficha do produto.
 Não envie brand Yamaha para Biz, CG, Titan, Bros, Fan, Pop, XRE ou CB — esses modelos são Honda, salvo o cliente dizer outra marca.
 Fazer, Factor e YBR são Yamaha. Ninja é Kawasaki.
@@ -50,11 +54,12 @@ Você é a assistente comercial B2B da AWA Motos.
 Você atende revendedores e empresas com CNPJ cadastrado na plataforma.
 Auxilie com: busca de produtos, compatibilidade peça × moto, cotações, reposição de pedidos anteriores e consulta de status de cadastro CNPJ.
 Para políticas e procedimentos (cadastro CNPJ, crédito, pedidos, entrega), chame knowledge_base_search e cite a URL do tópico.
+Se o cliente aprovado não vê preço ou não consegue comprar, chame b2b_price_table_status; se perguntar o que falta no cadastro, chame b2b_pending_requirements. Explique em linguagem simples, sem prometer prazo: liberar tabela de preços é decisão da equipe comercial.
 Quando o bloco CATÁLOGO JÁ CONSULTADO estiver presente, use SOMENTE esses produtos. Não invente SKU, preço ou URL.
 Você NUNCA aprova ou reprova crédito — apenas informa o status calculado pelo sistema.
 Decisões de aprovação são sempre da equipe comercial humana.
 Responda de forma profissional e objetiva em português brasileiro.
-Não invente preços, prazos, compatibilidade, SKU ou URL.
+Não invente preços, prazos, compatibilidade, SKU ou URL. Cite apenas URLs devolvidas pelas ferramentas; links inventados são removidos automaticamente.
 PROMPT,
         self::CHANNEL_ADMIN => <<<'PROMPT'
 Você é o copiloto interno da equipe AWA Motos no painel administrativo.
@@ -89,6 +94,9 @@ PROMPT,
     ): array {
         $context['channel'] = $channel;
         $systemPrompt  = self::SYSTEM_PROMPTS[$channel] ?? self::SYSTEM_PROMPTS[self::CHANNEL_STOREFRONT];
+        if ($channel === self::CHANNEL_ADMIN) {
+            $systemPrompt .= $this->buildAdminScopeNote($context);
+        }
         $channelTools  = $this->getToolsForChannel($channel);
         $toolSchemas   = $this->buildToolSchemas($channelTools);
         $parser        = new ProductQueryParser();
@@ -99,6 +107,7 @@ PROMPT,
         $isB2b         = !empty($context['is_b2b']);
         $guideState    = $slotGuide->sanitize(is_array($context['guide'] ?? null) ? $context['guide'] : []);
         $guideSkipLlm  = false;
+        $turnStartedAt = microtime(true);
 
         if ($this->piiRedactor->containsSecret($userMessage)) {
             $reply = 'Por segurança, não envie senha, dados de cartão ou tokens neste chat. '
@@ -113,6 +122,7 @@ PROMPT,
                 tokensUsed: 0,
                 status: 'blocked',
                 errorDetail: 'secret_payload',
+                latencyMs: $this->elapsedMs($turnStartedAt),
                 customerId: isset($context['customer_id']) ? (int) $context['customer_id'] : null,
                 ipAddress: $context['ip_address'] ?? null
             );
@@ -146,6 +156,7 @@ PROMPT,
                     tokensUsed: 0,
                     status: 'ok',
                     errorDetail: null,
+                    latencyMs: $this->elapsedMs($turnStartedAt),
                     customerId: isset($context['customer_id']) ? (int) $context['customer_id'] : null,
                     ipAddress: $context['ip_address'] ?? null
                 );
@@ -296,14 +307,21 @@ PROMPT,
                 $reply = $this->reconcileReplyWithProducts($reply, $productsOut);
             }
         } catch (LlmException $e) {
-            $reply       = 'No momento o assistente está temporariamente indisponível. Por favor, use nosso chat ao vivo ou entre em contato pelo WhatsApp.';
+            // P0: degradação graciosa — sem LLM, o guia roteirizado (100% PHP)
+            // continua funcionando; o cliente recebe os chips do guia + WhatsApp.
+            $reply       = 'No momento meu modo inteligente está temporariamente indisponível. '
+                . 'Sem problema: toque numa opção abaixo que eu te guio na busca da peça, '
+                . 'ou fale com a gente no WhatsApp (16) 99736-7588.';
             $status      = 'llm_error';
             $errorDetail = 'llm_exception';
+            $guideState  = $slotGuide->start();
             $this->log->error('[AiAssistant] LlmException: ' . $this->piiRedactor->redact($e->getMessage()));
         } catch (\Exception $e) {
-            $reply       = 'Ocorreu um erro inesperado. Por favor, tente novamente.';
+            $reply       = 'Ocorreu um erro inesperado. Toque numa opção abaixo para eu te guiar na busca, '
+                . 'ou fale com a gente no WhatsApp (16) 99736-7588.';
             $status      = 'error';
             $errorDetail = $e::class;
+            $guideState  = $slotGuide->start();
             $this->log->error('[AiAssistant] Unexpected error: ' . $this->piiRedactor->redact($e->getMessage()));
         }
 
@@ -323,6 +341,10 @@ PROMPT,
             $reply = $this->stripUrlsWhenCardsPresent($reply, $hidePrices);
         }
 
+        // A4: allowlist de URLs em TODA resposta (com ou sem cards) — links
+        // alucinados são substituídos pelo handoff humano.
+        $reply = $this->sanitizeUrls($reply);
+
         $this->logger->log(
             sessionId: $sessionId,
             channel: $channel,
@@ -333,6 +355,7 @@ PROMPT,
             tokensUsed: $totalTokens,
             status: $status,
             errorDetail: $errorDetail,
+            latencyMs: $this->elapsedMs($turnStartedAt),
             customerId: isset($context['customer_id']) ? (int) $context['customer_id'] : null,
             ipAddress: $context['ip_address'] ?? null
         );
@@ -420,8 +443,26 @@ PROMPT,
 
         $result = [];
         $tool = '';
+        $skuMode = !empty($intent['sku']);
 
-        if (!empty($intent['prefers_fitment'])) {
+        if ($skuMode) {
+            // SKU detectado: product_detail (match exato). Sem fallback fuzzy —
+            // se não existir, o prompt aterrado manda dizer "não encontrei".
+            $tool = 'product_detail';
+            $result = $this->executeTool('product_detail', [
+                'sku' => (string) $intent['sku'],
+            ], $context, $channelTools);
+            if (is_array($result) && !empty($result['sku']) && !isset($result['products'])) {
+                $result = ['products' => [$result], 'total' => 1, 'strategy' => 'sku_exact'];
+            } elseif (is_array($result) && isset($result['error'])) {
+                $result = [
+                    'products' => [],
+                    'total' => 0,
+                    'strategy' => 'sku_exact',
+                    'note' => (string) $result['error'],
+                ];
+            }
+        } elseif (!empty($intent['prefers_fitment'])) {
             $tool = 'fitment_search';
             $result = $this->executeTool('fitment_search', [
                 'brand' => (string) ($intent['brand'] ?? ''),
@@ -431,7 +472,7 @@ PROMPT,
             ], $context, $channelTools);
         }
 
-        if ($this->productCount($result) === 0) {
+        if (!$skuMode && $this->productCount($result) === 0) {
             $tool = 'catalog_search';
             $query = trim((string) ($intent['search_query'] ?? ''));
             $result = $this->executeTool('catalog_search', [
@@ -474,6 +515,16 @@ PROMPT,
                 break;
             }
         }
+        // product_detail devolve in_stock/qty fora da apresentação dos cards;
+        // injetamos no prompt aterrado para o modelo poder responder estoque real.
+        $stockSentence = '';
+        if ($tool === 'product_detail' && !empty($result['products'][0]) && is_array($result['products'][0])) {
+            $first = $result['products'][0];
+            if (array_key_exists('in_stock', $first)) {
+                $stockSentence = ' Estoque real deste item: ' . (!empty($first['in_stock']) ? 'em estoque' : 'sem estoque')
+                    . (isset($first['qty']) ? ' (' . (int) $first['qty'] . ' un).' : '.');
+            }
+        }
         $priceRule = $hasPrice
             ? 'Pode citar só o preço que estiver no JSON.'
             : 'Não cite preço (visitante / sem price_formatted).';
@@ -481,13 +532,14 @@ PROMPT,
             ? "Há {$count} produto(s) real(is) no JSON abaixo. É PROIBIDO dizer que não encontrou. "
                 . 'Fale só desses itens, sem inventar SKU, preço ou URL. '
                 . 'Não use markdown. Não despeje lista de SKU/preço/URL: o card já mostra. '
+                . $stockSentence
                 . $priceRule
-            : 'products está vazio. Diga que não encontrou e ofereça WhatsApp (16) 3301-1890. Não invente produto.';
+            : 'products está vazio. Diga que não encontrou e ofereça WhatsApp (16) 99736-7588. Não invente produto.';
 
         return "CATÁLOGO JÁ CONSULTADO pelo Magento (fonte única de SKU/URL/preço).\n"
             . $lead . "\n"
             . json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-            . "\nNão chame catalog_search nem fitment_search nesta resposta.";
+            . "\nNão chame catalog_search, fitment_search nem product_detail nesta resposta (dados já estão no JSON).";
     }
 
     /**
@@ -514,6 +566,15 @@ PROMPT,
             if (!$hidePrices) {
                 $row['price'] = $product['price'] ?? null;
                 $row['price_formatted'] = $product['price_formatted'] ?? null;
+            }
+            if (!empty($context['is_b2b']) && array_key_exists('in_stock', $product)) {
+                $inStock = (bool) $product['in_stock'];
+                $qty = isset($product['qty']) ? (int) $product['qty'] : null;
+                $row['in_stock'] = $inStock;
+                $row['qty'] = $qty;
+                $row['stock_label'] = $inStock
+                    ? (($qty !== null && $qty > 0) ? $qty . ' un.' : 'Em estoque')
+                    : 'Sem estoque';
             }
             if ($row['name'] === '' && $row['sku'] === '') {
                 continue;
@@ -551,6 +612,36 @@ PROMPT,
     }
 
     /**
+     * P0: latência do turno em ms (observabilidade por conversa).
+     */
+    private function elapsedMs(float $startedAt): int
+    {
+        return (int) round((microtime(true) - $startedAt) * 1000);
+    }
+
+    /**
+     * Quem está falando e até onde enxerga. As tools aplicam o escopo de
+     * verdade (PortfolioScope); aqui só evitamos que o modelo prometa o que
+     * não pode entregar.
+     *
+     * @param array<string, mixed> $context
+     */
+    private function buildAdminScopeNote(array $context): string
+    {
+        $role = trim((string) ($context['admin_role'] ?? ''));
+        $name = trim((string) ($context['attendant_name'] ?? ''));
+        $note = "\nUsuário atual: " . ($role !== '' ? 'papel "' . $role . '"' : 'usuário do painel');
+        if ($name !== '') {
+            $note .= ', atendente "' . $name . '"';
+        }
+        $note .= !empty($context['portfolio_restricted'])
+            ? '. Escopo: somente a própria carteira de clientes — pedidos, scores e vendas de clientes '
+                . 'fora da carteira não estão disponíveis; se pedirem, explique o limite sem revelar dados.'
+            : '. Escopo: sem restrição de carteira.';
+        return $note;
+    }
+
+    /**
      * @param ToolInterface[] $channelTools
      * @return array<int, array{type: string, function: array<string, mixed>}>
      */
@@ -558,12 +649,21 @@ PROMPT,
     {
         $schemas = [];
         foreach ($channelTools as $tool) {
+            $parameters = $tool->getParametersSchema();
+            /* JSON Schema exige que `properties` seja objeto. Em PHP, um array
+             * vazio serializa como `[]` e todo provedor com tools nativas
+             * (Anthropic, OpenAI, Google) rejeita com 400
+             * "properties: Input should be an object". O Hermes, por usar
+             * prompt XML, nunca expôs o problema. */
+            if (isset($parameters['properties']) && $parameters['properties'] === []) {
+                $parameters['properties'] = new \stdClass();
+            }
             $schemas[] = [
                 'type'     => 'function',
                 'function' => [
                     'name'        => $tool->getName(),
                     'description' => $tool->getDescription(),
-                    'parameters'  => $tool->getParametersSchema(),
+                    'parameters'  => $parameters,
                 ],
             ];
         }
@@ -717,6 +817,44 @@ PROMPT,
         $lines[] = 'Confira a compatibilidade na ficha do produto. Toque no card para abrir a página.';
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * Pós-validação de URL (A4): só sobrevivem links de domínios da allowlist
+     * (awamotos.com e wa.me). Qualquer outro link — alucinado pelo modelo — é
+     * substituído pelo handoff humano (WhatsApp). URLs vindas das tools já são
+     * reais e passam sem mudança.
+     */
+    private function sanitizeUrls(string $reply): string
+    {
+        if ($reply === '') {
+            return $reply;
+        }
+        $handoff = trim((string) $this->config->getHumanHandoffUrl());
+        if ($handoff === '') {
+            $handoff = 'https://wa.me/5516997367588';
+        }
+        $pattern = '~((?:https?://)[^\s<>"\']+|(?:www\.)[\w.-]+(?:/[^\s<>"\']*)?|'
+            . '(?<![\w@./-])[\w-]+\.(?:com|com\.br|net|org|io|store)(?:/[^\s<>"\']*)?)~iu';
+
+        return (string) preg_replace_callback(
+            $pattern,
+            static function (array $match) use ($handoff): string {
+                $url = $match[0];
+                $host = (string) (parse_url(
+                    'http://' . preg_replace('~^https?://~i', '', $url),
+                    PHP_URL_HOST
+                ) ?? '');
+                foreach (self::URL_ALLOWLIST as $allowed) {
+                    if ($host === $allowed || str_ends_with($host, '.' . $allowed)) {
+                        return $url;
+                    }
+                }
+
+                return $handoff;
+            },
+            $reply
+        );
     }
 
     /**

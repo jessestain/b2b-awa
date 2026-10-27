@@ -19,8 +19,7 @@
             <a class="awa-cookie-banner__link"
                href="<?= $block->escapeUrl($block->getPolicyUrl()) ?>"
                target="_blank" rel="noopener">
-                <?= $block->escapeHtml(__('Política de Privacidade')) ?>
-            </a>.
+                <?= $block->escapeHtml(__('Política de Privacidade')) ?>.</a>
         </p>
         <div class="awa-cookie-banner__actions"
              role="group"
@@ -40,6 +39,24 @@
         </div>
     </div>
 </div>
+
+<?php /* A2 — reabrir preferências (LGPD Art. 8º §5 e Art. 18: revogar precisa
+   ser tão fácil quanto consentir). Nasce oculto; o JS liga quando já existe
+   consentimento gravado. Nunca fica visível junto com o banner. */ ?>
+<button type="button"
+        id="awa-cookie-reopen"
+        class="awa-cookie-reopen"
+        hidden
+        aria-hidden="true"
+        aria-haspopup="dialog"
+        aria-controls="awa-cookie-banner"
+        title="<?= $block->escapeHtmlAttr(__('Preferências de cookies')) ?>"
+        aria-label="<?= $block->escapeHtmlAttr(__('Abrir preferências de cookies')) ?>">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V6a3 3 0 0 1 3-3zm0 10a2 2 0 0 1 1 3.73V19a1 1 0 0 1-2 0v-2.27A2 2 0 0 1 12 13z"
+              fill="currentColor"/>
+    </svg>
+</button>
 <script>
 (function () {
     function loadCookieConsent() {

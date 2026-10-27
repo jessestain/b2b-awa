@@ -19,7 +19,7 @@
              parent="GrupoAwamotos_ProductIntelligence::main"/>
 
         <add id="GrupoAwamotos_ProductIntelligence::recommendations"
-             title="Recomendacoes"
+             title="Recomendações"
              module="GrupoAwamotos_ProductIntelligence"
              sortOrder="20"
              action="rexisml/recommendations/index"

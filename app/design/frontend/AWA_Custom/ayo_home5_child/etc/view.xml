@@ -54,6 +54,11 @@
                 <width>400</width>
                 <height>400</height>
             </image>
+            <!-- VS4j: variante mobile das prateleiras da home (srcset ~170px @2x ≈ 340 → 320px). -->
+            <image id="awa_home_shelf_sm" type="small_image">
+                <width>320</width>
+                <height>320</height>
+            </image>
         </images>
     </media>
     <vars module="Magento_Catalog">

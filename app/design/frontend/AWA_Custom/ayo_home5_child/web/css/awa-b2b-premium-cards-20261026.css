@@ -1,0 +1,147 @@
+/* ============================================================================
+ * AWA B2B — Premium Clean cards (Plano Diretor de Padronização B2B · Fase 3)
+ * Arquivo: web/css/awa-b2b-premium-cards-20261026.css (+ .min derivado)
+ * Registrado em Magento_Theme/layout/default_head_blocks.xml APÓS os killers
+ * dos cards da home.
+ * CASCATA: regras dentro de @layer awa-r2-visual-fix (PRIMEIRA camada declarada
+ * em awa-layer-order.css) — no modelo de camadas deste tema, !important da
+ * primeira camada vence !important sem camada INDEPENDENTE de especificidade
+ * (lição medida no site). Especificidade 30×#html-body como segunda barreira.
+ * Sem mexer em regras de negócio.
+ * ========================================================================== */
+@layer awa-r2-visual-fix {
+
+/* --- F3.2 · Título: clamp de 2 linhas + altura mínima fixa (alinhamento
+   horizontal matemático entre cards da mesma prateleira).
+   Nota: o R27 (head-preload) desligava clamp/overflow de propósito (títulos
+   completos); o Plano Diretor restaura clamp visual de 2 linhas — o nome
+   completo permanece em title/aria-label. ---------------------------------- */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card .product-name {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    overflow: hidden !important;
+    min-height: 2.75em !important;
+    max-height: none !important;
+}
+
+/* --- F3.2 · REF: pill técnica monoespaçada (container + filhos) ------------- */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card :is(.awa-b2b-sku,.awa-b2b-sku__label,.awa-b2b-sku__value) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.2 !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card .awa-b2b-sku {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    background: #F1F5F9 !important;
+}
+
+/* --- F3.3 · CTA compacto "Ver Preço CNPJ" na base do card --------------------
+   Estilo AUTOCONTIDO: o markup usa só a classe awa-price-gate-cta (sem
+   awa-card-view-product) para o JS inline da home (fixCardCta) não reescrever
+   o texto/aria-label do CTA. Mesma geometria do CTA compacto dos cards. ------ */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card .awa-home-price-gate a.awa-price-gate-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+    min-height: var(--awa-h-control-compact, 36px) !important;
+    height: var(--awa-h-control-compact, 36px) !important;
+    box-sizing: border-box !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: var(--awa-radius-ctl-compact, 6px) !important;
+    background: var(--awa-primary, #b3121b) !important;
+    color: #fff !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+}
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card .awa-home-price-gate .awa-price-gate-cta__icon {
+    font-size: 12px !important;
+    line-height: 1 !important;
+}
+/* O CTA "Ver produto" (clientes com preço visível) alinha na mesma base */
+html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-shelf--carousel .awa-product-card a.awa-card-view-product.action.secondary {
+    margin-top: auto !important;
+}
+
+/* ============================================================================
+ * PLP / Busca (Listagens) — mesma família Premium Clean
+ * ========================================================================== */
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product :is(.awa-b2b-sku,.awa-b2b-sku__label,.awa-b2b-sku__value) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.2 !important;
+}
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product .awa-b2b-sku {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 0 0 6px !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    background: #F1F5F9 !important;
+}
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product .product-name {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    min-height: 2.75em !important;
+}
+/* Compacta o gate repetido dentro do card (o banner institucional do topo da
+   PLP já carrega o headline) — mensagem vira CTA outline clicável na base */
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product .b2b-login-to-see-price__title {
+    display: none !important;
+}
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product .b2b-login-to-see-price {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    justify-content: flex-end !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+html body#html-body:is(.catalog-category-view, .catalogsearch-result-index) .page-wrapper .products-grid .item-product .b2b-login-to-see-price__message {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 36px !important;
+    box-sizing: border-box !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    border: 1px solid var(--awa-primary, #b3121b) !important;
+    border-radius: 6px !important;
+    background: transparent !important;
+    color: var(--awa-primary, #b3121b) !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+}
+}

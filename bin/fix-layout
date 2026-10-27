@@ -181,7 +181,9 @@ run_static_deploy() {
 
 purge_caches() {
   info "Limpando cache Magento..."
-  sudo -u www-data php bin/magento cache:flush
+  # P1.1: cache:clean (nao flush) — dispara PURGE por tag sem flush de storage
+  # (evita o bug OpenSearch pos-flush deste install).
+  sudo -u www-data php bin/magento cache:clean
 
   info "Limpando Redis FPC (DB2)..."
   if redis-cli -h ::1 -a "$REDIS_PASS" -n 2 FLUSHDB >/dev/null 2>&1; then
@@ -191,12 +193,12 @@ purge_caches() {
   fi
 
   info "Purgando Varnish..."
-  if sudo varnishadm 'ban req.url ~ .' >/dev/null 2>&1; then
-    ok "Varnish purgado"
-  elif curl -sf -m 5 -X PURGE -H 'X-Magento-Tags-Pattern: .*' http://127.0.0.1:6081/ >/dev/null 2>&1; then
-    ok "Varnish purgado (curl PURGE)"
+  # P1.1: ban global ('req.url ~ .') removido. O cache:clean acima ja dispara PURGE
+  # por tag via module-cache-invalidate; este PURGE por tag reforca layout/blocos publicos.
+  if curl -sf -m 5 -X PURGE -H 'X-Magento-Tags-Pattern: cms_b|cms_p|cat_p|cat_c' http://127.0.0.1:6081/ >/dev/null 2>&1; then
+    ok "Varnish purgado por tag (seletivo)"
   else
-    warn "Varnish indisponível"
+    warn "PURGE por tag falhou (cache:clean ja invalidou; continuando)"
   fi
 
   info "Recarregando PHP-FPM..."

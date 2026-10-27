@@ -23,8 +23,14 @@
         <remove src="css/awa-impeccable-audit-2026-05-28.min.css"/>
         <remove src="css/awa-impeccable-audit-2026-05-28.css"/>
         <remove src="css/awa-commerce-impeccable-refine.min.css"/>
-        <!-- AWA vfix scope: PDP only -->
-        <css src="css/awa-vfix-pdp.css"/>
+        <!--
+            PERF-2026-10-13 (probe CDP validado): styles-l (2,0 MB) e awa-vfix-pdp
+            deixam o head bloqueante e passam a carregar via print-swap no
+            awa-pdp-defer-legacy.phtml (head.additional). Probe: bloquear
+            styles-l altera 1 px nas âncoras da PDP; bloquear vfix-pdp altera 0.
+        -->
+        <remove src="css/styles-l.css"/>
+        <remove src="css/awa-vfix-pdp.css"/>
         <!-- awa-pdp-shell-final.css: arquivo movido para _deprecated/ em Jun-2026; referência removida (404 ativo). Estilos cobertos por awa-pdp-premium.css + critical inline. -->
     </head>
     <body>
@@ -32,11 +38,20 @@
         <!-- Rokanthemes PriceCountdown declara cacheable="false" na PDP — remove para FPC/Varnish -->
         <referenceBlock name="product.info.pricecountdown.product.page" remove="true"/>
         <referenceBlock name="awa.header.impeccable.critical.global" remove="true"/>
+        <!-- PDP-2COL (19/10/2026): remove o widget nativo "Pedidos feitos recentemente"
+             (sale.reorder.sidebar) — MESMO padrão já aplicado na PLP (catalog_category_view.xml)
+             e na Home (cms_index_index.xml). A PDP passa a ter 2 colunas (mídia | info), sem a
+             sidebar de recompra; elimina o CTA duplicado de "adicionar ao carrinho" na mesma dobra. -->
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
         <!-- Terminal lock — align-grid após pdp-shell (§41 PDP mobile + badges) -->
         <referenceBlock name="head.additional">
             <block class="Magento\Framework\View\Element\Template"
                    name="awa.align.grid.terminal.pdp"
                    template="Magento_Theme::html/awa-align-grid-terminal-loader.phtml"
+                   after="-"/>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.pdp.defer.legacy"
+                   template="Magento_Theme::html/awa-pdp-defer-legacy.phtml"
                    after="-"/>
         </referenceBlock>
         <!--
@@ -50,6 +65,18 @@
             <arguments>
                 <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
                 <argument name="addto_view_model" xsi:type="object">GrupoAwamotos\Theme\ViewModel\BestsellerCardViewModel</argument>
+            </arguments>
+        </referenceBlock>
+
+        <!--
+            ACHADO SEO-001: o core publica items.<id>.price_info no JSON do bloco
+            product_viewed_counter (vendor/.../product/view/counter.phtml). Passamos o gate
+            por argumento de layout para o override do tema poder remover as chaves de preço.
+            Sem construtor novo => sem setup:di:compile.
+        -->
+        <referenceBlock name="product_viewed_counter">
+            <arguments>
+                <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="catalog.product.related">
@@ -211,6 +238,21 @@
                    name="awa.product.faq"
                    template="GrupoAwamotos_SchemaOrg::product_faq.phtml"
                    after="product.info.details"/>
+        </referenceContainer>
+        <referenceBlock name="product.info.addtocart">
+            <arguments>
+                <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="product.info.main">
+            <!-- B2B Densidade: garante o bloco de preço por quantidade (tier) na PDP -->
+            <block class="Magento\Catalog\Pricing\Render" name="product.price.tier" after="product.info.price">
+                <arguments>
+                    <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                    <argument name="price_type_code" xsi:type="string">tier_price</argument>
+                    <argument name="zone" xsi:type="string">item_view</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -32,6 +32,8 @@ use GrupoAwamotos\B2B\Model\Cnpj\RequestRateLimiter;
 use GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ErpCustomerSyncStatus;
 use GrupoAwamotos\B2B\Model\Registration\AttributionResolver;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Captcha\Observer\CaptchaStringResolver;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
@@ -164,6 +166,16 @@ class Save implements HttpPostActionInterface
      */
     private CustomerCollectionFactory $customerCollectionFactory;
 
+    /**
+     * @var CaptchaHelper
+     */
+    private CaptchaHelper $captchaHelper;
+
+    /**
+     * @var CaptchaStringResolver
+     */
+    private CaptchaStringResolver $captchaStringResolver;
+
     public function __construct(
         RequestInterface $request,
         RedirectFactory $resultRedirectFactory,
@@ -188,7 +200,9 @@ class Save implements HttpPostActionInterface
         B2BConfig $b2bConfig,
         RequestRateLimiter $rateLimiter,
         RemoteAddress $remoteAddress,
-        CustomerCollectionFactory $customerCollectionFactory
+        CustomerCollectionFactory $customerCollectionFactory,
+        CaptchaHelper $captchaHelper,
+        CaptchaStringResolver $captchaStringResolver
     ) {
         $this->request = $request;
         $this->resultRedirectFactory = $resultRedirectFactory;
@@ -214,6 +228,8 @@ class Save implements HttpPostActionInterface
         $this->rateLimiter = $rateLimiter;
         $this->remoteAddress = $remoteAddress;
         $this->customerCollectionFactory = $customerCollectionFactory;
+        $this->captchaHelper = $captchaHelper;
+        $this->captchaStringResolver = $captchaStringResolver;
     }
 
     /**
@@ -261,6 +277,21 @@ class Save implements HttpPostActionInterface
                 'Muitas tentativas de cadastro em pouco tempo. Aguarde %1 minutos e tente novamente.',
                 (int) ceil($retryAfter / 60)
             ));
+            return $resultRedirect->setPath('*/*/');
+        }
+
+        // Captcha: barreira contra bots. O formulario B2B e CUSTOM, entao o observer
+        // nativo (CheckUserCreateObserver) NAO alcanca este controller — sem validar
+        // aqui, o captcha renderizado seria puramente decorativo.
+        $captchaWord = (string) $this->captchaStringResolver->resolve($this->request, 'user_create');
+        if (!$this->validateCaptcha($captchaWord)) {
+            $this->logger->warning('[B2B] Captcha invalido/ausente no cadastro', [
+                'ip' => $clientIp,
+                'user_agent' => $this->request->getServer('HTTP_USER_AGENT')
+            ]);
+            $this->messageManager->addErrorMessage(
+                __('A verificacao de seguranca esta incorreta. Tente novamente.')
+            );
             return $resultRedirect->setPath('*/*/');
         }
 
@@ -410,24 +441,6 @@ class Save implements HttpPostActionInterface
             return $this->redirectWithPersistedForm($resultRedirect);
         } catch (\Throwable $e) {
             $this->logger->error('B2B Registration Error: ' . $e->getMessage());
-            // #region agent log
-            $payload = json_encode([
-                'sessionId' => '419192',
-                'runId' => 'post-fix',
-                'hypothesisId' => 'P0',
-                'location' => 'Register/Save.php',
-                'message' => 'registration-throwable',
-                'data' => ['error' => $e->getMessage(), 'type' => $e::class],
-                'timestamp' => (int) round(microtime(true) * 1000),
-            ], JSON_UNESCAPED_UNICODE);
-            if (is_string($payload)) {
-                @file_put_contents(
-                    '/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-419192.log',
-                    $payload . "\n",
-                    FILE_APPEND
-                );
-            }
-            // #endregion
             $this->messageManager->addErrorMessage(
                 __('Ocorreu um erro ao processar seu cadastro. Por favor, tente novamente.')
             );
@@ -773,9 +786,24 @@ class Save implements HttpPostActionInterface
     private function isIdempotencyTokenValid(): bool
     {
         $token = (string) $this->request->getParam('b2b_idempotency', '');
-        $sessionToken = (string) $this->customerSession->getData('b2b_register_idempotency_token');
+        if ($token === '') {
+            return false;
+        }
 
-        return $token !== '' && $sessionToken !== '' && hash_equals($sessionToken, $token);
+        $sessionToken = (string) $this->customerSession->getData('b2b_register_idempotency_token');
+        if ($sessionToken !== '') {
+            return hash_equals($sessionToken, $token);
+        }
+
+        // FIX F-01 (2026-10-14): quando o token não pôde ser persistido na sessão do
+        // visitante (SessionFpcGuardPlugin do CatalogFix bloqueia o start da sessão de
+        // cliente em GET sem cookie PHPSESSID — decisão de arquitetura para FPC/Varnish),
+        // não há valor em sessão para comparar. A submissão continua exigindo o token
+        // (não vazio) e já passou por form_key (CSRF), captcha, honeypot e rate limit;
+        // a proteção contra duplo envio segue em isConsumedRegistration().
+        // Ver Block\Register\Form::getIdempotencyToken(), que grava o token também em
+        // $_SESSION['customer'] — quando isso funciona, o hash_equals acima é aplicado.
+        return true;
     }
 
     /**
@@ -906,5 +934,23 @@ class Save implements HttpPostActionInterface
 
         $customer->setCustomAttribute('b2b_receita_situacao', mb_substr($situacao, 0, 255));
         $customer->setCustomAttribute('b2b_receita_validated', '1');
+    }
+
+    /**
+     * Valida o captcha do Magento para o formulario user_create.
+     * Usa a engine oficial (mesma imagem/validade/expiração do captcha nativo).
+     */
+    private function validateCaptcha(string $word): bool
+    {
+        try {
+            $captcha = $this->captchaHelper->getCaptcha('user_create');
+            if (!$captcha->isRequired()) {
+                return true; // captcha nao exigido por configuracao
+            }
+            return (bool) $captcha->isCorrect($word);
+        } catch (\Throwable $e) {
+            $this->logger->error('[B2B] Erro ao validar captcha: ' . $e->getMessage());
+            return false;
+        }
     }
 }

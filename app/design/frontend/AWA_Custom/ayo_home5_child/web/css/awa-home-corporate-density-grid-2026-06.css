@@ -1,1019 +1,926 @@
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper {
-  --awa-home-corp-space-1: 4px;
-  --awa-home-corp-space-2: 8px;
-  --awa-home-corp-space-3: 12px;
-  --awa-home-corp-space-4: 14px;
-  --awa-home-corp-shell: min(100%, 1280px);
-  --awa-home-corp-gutter: 16px;
-  --awa-home-corp-gap: 10px;
-  --awa-home-corp-gap-wide: 12px;
-  --awa-home-corp-section-pad: 8px;
-  --awa-home-corp-section-pad-tight: 6px;
-  --awa-home-corp-card-radius: 8px;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper {
+  --awa-home-corp-space-1:4px;
+  --awa-home-corp-space-2:8px;
+  --awa-home-corp-space-3:12px;
+  --awa-home-corp-space-4:14px;
+  --awa-home-corp-shell:min(100%, 1280px);
+  --awa-home-corp-gutter:16px;
+  --awa-home-corp-gap:10px;
+  --awa-home-corp-gap-wide:12px;
+  --awa-home-corp-section-pad:8px;
+  --awa-home-corp-section-pad-tight:6px;
+  --awa-home-corp-card-radius:8px
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header {
-  isolation: isolate;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header {
+  isolation:isolate
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-wrapper-sticky,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header.awa-main-header,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header_main.awa-main-header-inner-wrap,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-main,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-main-header__inner,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-primary-row,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col {
-  box-sizing: border-box !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-primary-row,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-main-header__inner,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-main,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-wrapper-sticky,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header.awa-main-header,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header_main.awa-main-header-inner-wrap {
+  box-sizing:border-box!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-main-header__inner {
-  align-items: center !important;
-  column-gap: var(--awa-home-corp-gap-wide) !important;
-  min-height: 64px;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-main-header__inner {
+  align-items:center!important;
+  column-gap:var(--awa-home-corp-gap-wide)!important;
+  min-height:64px
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-primary-row,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col {
-  align-self: center !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-primary-row,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col {
+  align-self:center!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell .logo,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell .logo a {
-  align-items: center;
-  display: inline-flex;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell .logo,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-brand-cell .logo a {
+  align-items:center;
+  display:inline-flex
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col {
-  min-width: 0 !important;
-  position: relative;
-  z-index: 60;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col {
+  min-width:0!important;
+  position:relative;
+  z-index:60
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form {
-  align-items: center;
-  min-height: 44px;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col form#search_mini_form {
+  align-items:center;
+  min-height:44px
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col :is(form#search_mini_form, form#search_mini_form .field, form#search_mini_form .control, input#search) {
-  border-radius: var(--awa-search-radius, 8px) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-search-col :is(form#search_mini_form,form#search_mini_form .field,form#search_mini_form .control,input#search) {
+  border-radius:var(--awa-search-radius,8px)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col {
-  align-items: center !important;
-  gap: var(--awa-home-corp-space-3) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-right-col {
+  align-items:center!important;
+  gap:var(--awa-home-corp-space-3)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__guest {
-  display: grid;
-  gap: var(--awa-home-corp-space-1);
-  line-height: 1.1;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__guest {
+  display:grid;
+  gap:var(--awa-home-corp-space-1);
+  line-height:1.1
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__line1 {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1.1;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__line1 {
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.01em;
+  line-height:1.1
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__line2 {
-  align-items: baseline;
-  display: inline-flex;
-  gap: var(--awa-home-corp-space-2);
-  line-height: 1.1;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .awa-header-account-prompt__line2 {
+  align-items:baseline;
+  display:inline-flex;
+  gap:var(--awa-home-corp-space-2);
+  line-height:1.1
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav .awa-nav-bar__inner {
-  align-items: center !important;
-  min-height: 44px;
-  padding-block: var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header .header-control.header-nav .awa-nav-bar__inner {
+  align-items:center!important;
+  min-height:44px;
+  padding-block:var(--awa-home-corp-space-2)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#search_autocomplete, .search-autocomplete, .searchsuite-autocomplete):not(.has-results),
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form.is-empty :is(#search_autocomplete, .search-autocomplete, .searchsuite-autocomplete):not(.has-results) {
-  border: 0 !important;
-  box-shadow: none !important;
-  display: none !important;
-  height: 0 !important;
-  max-height: 0 !important;
-  min-height: 0 !important;
-  opacity: 0 !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#search_autocomplete,.search-autocomplete,.searchsuite-autocomplete):not(.has-results),body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form.is-empty :is(#search_autocomplete,.search-autocomplete,.searchsuite-autocomplete):not(.has-results) {
+  border:0!important;
+  box-shadow:none!important;
+  display:none!important;
+  height:0!important;
+  max-height:0!important;
+  min-height:0!important;
+  opacity:0!important;
+  overflow:hidden!important;
+  padding:0!important;
+  pointer-events:none!important;
+  visibility:hidden!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form.has-results :is(#search_autocomplete, .search-autocomplete, .searchsuite-autocomplete).is-open,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form:not(.is-empty) :is(#search_autocomplete, .search-autocomplete, .searchsuite-autocomplete).has-results {
-  display: block !important;
-  height: auto !important;
-  max-height: min(62vh, 520px) !important;
-  opacity: 1 !important;
-  overflow: auto !important;
-  pointer-events: auto !important;
-  visibility: visible !important;
-  z-index: 80;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form.has-results :is(#search_autocomplete,.search-autocomplete,.searchsuite-autocomplete).is-open,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header form#search_mini_form:not(.is-empty) :is(#search_autocomplete,.search-autocomplete,.searchsuite-autocomplete).has-results {
+  display:block!important;
+  height:auto!important;
+  max-height:min(62vh,520px)!important;
+  opacity:1!important;
+  overflow:auto!important;
+  pointer-events:auto!important;
+  visibility:visible!important;
+  z-index:80
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .page-main,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper #maincontent,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .columns,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .column.main,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home {
-  box-sizing: border-box !important;
-  margin-inline: auto !important;
-  max-width: var(--awa-home-corp-shell) !important;
-  padding-inline: 0 !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #maincontent,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .column.main,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .columns,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .page-main {
+  box-sizing:border-box!important;
+  margin-inline:auto!important;
+  max-width:var(--awa-home-corp-shell)!important;
+  padding-inline:0!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .page-main,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .columns,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .column.main {
-  padding-block: 0 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .column.main,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .columns,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .page-main {
+  padding-block:0!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow-x: hidden;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home {
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  overflow-x:hidden
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header, .awa-shelf__header, .awa-category-carousel__header) {
-  margin-bottom: var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header,.awa-shelf__header,.awa-category-carousel__header) {
+  margin-bottom:var(--awa-home-corp-space-2)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home-content--above-fold,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .ayo-home5-wrapper--template-driven,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home-content,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .awa-home-section,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .awa-carousel-section,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > #awa-home-niche-shelves {
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  max-width: 100% !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>#awa-home-niche-shelves,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.awa-carousel-section,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.awa-home-section,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.ayo-home5-wrapper--template-driven,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.top-home-content,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.top-home-content--above-fold {
+  box-sizing:border-box!important;
+  margin:0!important;
+  max-width:100%!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home-content--above-fold {
-  padding: var(--awa-home-corp-space-1) var(--awa-home-corp-gutter) var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.top-home-content--above-fold {
+  padding:var(--awa-home-corp-space-1) var(--awa-home-corp-gutter) var(--awa-home-corp-space-2)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .ayo-home5-wrapper--template-driven {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important;
-  padding: 0 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.ayo-home5-wrapper--template-driven {
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  padding:0!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven > :is(
-        .top-home-content,
-        .awa-home-section,
-        .awa-carousel-section,
-        .awa-grid-section,
-        .awa-home-recent-orders,
-        #awa-home-niche-shelves
-    ),
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-home-pricing-notice,
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta {
-  box-sizing: border-box !important;
-  margin-block: 0 !important;
-  padding-block: var(--awa-home-corp-section-pad-tight) !important;
-  padding-inline: var(--awa-home-corp-gutter) !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-home-pricing-notice,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven>:is(
+.top-home-content,.awa-home-section,.awa-carousel-section,.awa-grid-section,.awa-home-recent-orders,#awa-home-niche-shelves
+) {
+  box-sizing:border-box!important;
+  margin-block:0!important;
+  padding-block:var(--awa-home-corp-section-pad-tight)!important;
+  padding-inline:var(--awa-home-corp-gutter)!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven > :is(
-        .top-home-content,
-        .awa-home-section,
-        .awa-carousel-section,
-        .awa-grid-section,
-        .awa-home-recent-orders,
-        #awa-home-niche-shelves
-    ) + :is(
-        .top-home-content,
-        .awa-home-section,
-        .awa-carousel-section,
-        .awa-grid-section,
-        .awa-home-recent-orders,
-        #awa-home-niche-shelves
-    ) {
-  border-top: 1px solid var(--awa-border, var(--awa-border));
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .ayo-home5-wrapper--template-driven>:is(
+.top-home-content,.awa-home-section,.awa-carousel-section,.awa-grid-section,.awa-home-recent-orders,#awa-home-niche-shelves
+)+:is(
+.top-home-content,.awa-home-section,.awa-carousel-section,.awa-grid-section,.awa-home-recent-orders,#awa-home-niche-shelves
+) {
+  border-top:1px solid var(--awa-border,var(--awa-border))
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(
-        .container,
-        .row,
-        .awa-hero-b2b-cta__inner,
-        .awa-category-carousel,
-        .awa-shelf,
-        .awa-shelf--carousel,
-        .awa-home-niche-shelves,
-        .awa-home-recent-orders__inner
-    ) {
-  box-sizing: border-box !important;
-  margin-inline: 0 !important;
-  max-width: 100% !important;
-  padding-inline: 0 !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(
+.container,.row,.awa-hero-b2b-cta__inner,.awa-category-carousel,.awa-shelf,.awa-shelf--carousel,.awa-home-niche-shelves,.awa-home-recent-orders__inner
+) {
+  box-sizing:border-box!important;
+  margin-inline:0!important;
+  max-width:100%!important;
+  padding-inline:0!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.row) {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.row) {
+  margin-left:0!important;
+  margin-right:0!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header, .awa-shelf__header, .awa-category-carousel__header) {
-  align-items: center !important;
-  display: flex !important;
-  flex-wrap: nowrap;
-  gap: var(--awa-home-corp-space-2) var(--awa-home-corp-gap) !important;
-  justify-content: space-between !important;
-  margin: 0 0 var(--awa-home-corp-space-2) !important;
-  min-height: 0 !important;
-  padding: var(--awa-home-corp-space-1) 0 var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header,.awa-shelf__header,.awa-category-carousel__header) {
+  align-items:center!important;
+  display:flex!important;
+  flex-wrap:nowrap;
+  gap:var(--awa-home-corp-space-2) var(--awa-home-corp-gap)!important;
+  justify-content:space-between!important;
+  margin:0 0 var(--awa-home-corp-space-2)!important;
+  min-height:0!important;
+  padding:var(--awa-home-corp-space-1) 0 var(--awa-home-corp-space-2)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__left, .awa-shelf__heading, .awa-category-carousel__heading) {
-  align-items: flex-start;
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  gap: var(--awa-home-corp-space-1) var(--awa-home-corp-space-2);
-  max-width: calc(100% - 8rem);
-  min-width: 0;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__left,.awa-shelf__heading,.awa-category-carousel__heading) {
+  align-items:flex-start;
+  display:flex;
+  flex:1 1 auto;
+  flex-direction:column;
+  flex-wrap:nowrap;
+  gap:var(--awa-home-corp-space-1) var(--awa-home-corp-space-2);
+  max-width:calc(100% - 8rem);
+  min-width:0
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__title, .awa-shelf__title, .awa-category-carousel__header h2) {
-  color: var(--awa-text, var(--awa-text));
-  font-size: 16px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-  margin: 0 !important;
-  text-wrap: balance;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__title,.awa-shelf__title,.awa-category-carousel__header h2) {
+  color:var(--awa-text,var(--awa-text));
+  font-size:16px;
+  font-weight:650;
+  letter-spacing:-.01em;
+  line-height:1.25;
+  margin:0!important;
+  text-wrap:balance
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__subtitle, .awa-shelf__subtitle, .awa-category-carousel__subtitle) {
-  color: var(--awa-text-muted, var(--awa-text-secondary));
-  font-size: 12px;
-  line-height: 1.35;
-  margin: 0 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__subtitle,.awa-shelf__subtitle,.awa-category-carousel__subtitle) {
+  color:var(--awa-text-muted,var(--awa-text-secondary));
+  font-size:12px;
+  line-height:1.35;
+  margin:0!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__link, .awa-shelf__view-all, .awa-category-carousel__view-all) {
-  align-items: center;
-  color: var(--awa-primary, var(--awa-primary));
-  display: inline-flex;
-  flex: 0 0 auto;
-  font-size: 12px;
-  font-weight: 600;
-  gap: var(--awa-home-corp-space-1);
-  line-height: 1.2;
-  min-height: 44px;
-  padding: var(--awa-home-corp-space-2);
-  text-decoration: none;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__link,.awa-shelf__view-all,.awa-category-carousel__view-all) {
+  align-items:center;
+  color:var(--awa-primary,var(--awa-primary));
+  display:inline-flex;
+  flex:0 0 auto;
+  font-size:12px;
+  font-weight:600;
+  gap:var(--awa-home-corp-space-1);
+  line-height:1.2;
+  min-height:44px;
+  padding:var(--awa-home-corp-space-2);
+  text-decoration:none
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-owl-nav--header-slot {
-  align-items: center;
-  display: inline-flex !important;
-  flex: 0 0 auto;
-  gap: var(--awa-home-corp-space-1);
-  margin-inline: 0 !important;
-  position: static !important;
-  transform: none !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-owl-nav--header-slot {
+  align-items:center;
+  display:inline-flex!important;
+  flex:0 0 auto;
+  gap:var(--awa-home-corp-space-1);
+  margin-inline:0!important;
+  position:static!important;
+  transform:none!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-owl-nav--header-slot :is(.awa-owl-nav__btn, button, span) {
-  flex: 0 0 auto;
-  inset: auto !important;
-  margin: 0 !important;
-  position: static !important;
-  transform: none !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-owl-nav--header-slot :is(.awa-owl-nav__btn,button,span) {
+  flex:0 0 auto;
+  inset:auto!important;
+  margin:0!important;
+  position:static!important;
+  transform:none!important
 }
-@media (max-width: 767px) {
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header, .awa-shelf__header, .awa-category-carousel__header) {
-    align-items: flex-start !important;
-    height: auto !important;
-    justify-content: flex-start !important;
-    min-height: 0 !important;
+@media (max-width:767px) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header,.awa-shelf__header,.awa-category-carousel__header) {
+    align-items:flex-start!important;
+    height:auto!important;
+    justify-content:flex-start!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__left, .awa-shelf__heading, .awa-category-carousel__heading) {
-    flex: 1 1 auto !important;
-    flex-basis: auto !important;
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__left,.awa-shelf__heading,.awa-category-carousel__heading) {
+    flex:1 1 auto!important;
+    flex-basis:auto!important;
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel, .awa-carousel-section, .awa-grid-section, .awa-home-niche-shelves) :is(.awa-carousel, .awa-carousel__viewport, .awa-carousel__track) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-carousel-section,.awa-grid-section,.awa-home-niche-shelves) :is(.awa-carousel,.awa-carousel__viewport,.awa-carousel__track) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel, .awa-carousel-section, .awa-grid-section, .awa-home-niche-shelves) :is(.item-product, .content-item-product, .product-item-info, .awa-product-card) {
-    height: auto !important;
-    min-height: 236px !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-carousel-section,.awa-grid-section,.awa-home-niche-shelves) :is(.item-product,.content-item-product,.product-item-info,.awa-product-card) {
+    height:auto!important;
+    min-height:236px!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel, .awa-carousel-section, .awa-grid-section, .awa-home-niche-shelves) :is(.product-info, .product-details, .product-item-details) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-shelf--carousel,.awa-carousel-section,.awa-grid-section,.awa-home-niche-shelves) :is(.product-info,.product-details,.product-item-details) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(.awa-category-carousel__prev, .awa-category-carousel__next) {
-    align-self: center !important;
-    flex: 0 0 44px !important;
-    height: 44px !important;
-    max-height: 44px !important;
-    min-height: 44px !important;
-    padding: 0 !important;
-    width: 44px !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(.awa-category-carousel__prev,.awa-category-carousel__next) {
+    align-self:center!important;
+    flex:0 0 44px!important;
+    height:44px!important;
+    max-height:44px!important;
+    min-height:44px!important;
+    padding:0!important;
+    width:44px!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) {
-    align-items: center !important;
-    box-sizing: border-box !important;
-    height: 44px !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 44px !important;
-    overflow: hidden !important;
-    padding: 0 44px 0 12px !important;
-    width: 100% !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) {
+    align-items:center!important;
+    box-sizing:border-box!important;
+    height:44px!important;
+    justify-content:center!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:44px!important;
+    overflow:hidden!important;
+    padding:0 44px 0 12px!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__inner, .awa-b2b-promo-bar__layout) {
-    align-items: center !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    gap: var(--awa-home-corp-space-2) !important;
-    height: 44px !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 44px !important;
-    padding: 0 !important;
-    position: static !important;
-    width: 100% !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout) {
+    align-items:center!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    gap:var(--awa-home-corp-space-2)!important;
+    height:44px!important;
+    justify-content:center!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:44px!important;
+    padding:0!important;
+    position:static!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__text, .awa-b2b-promo-bar__lead, .awa-b2b-promo-bar__cta) {
-    align-items: center !important;
-    display: inline-flex !important;
-    height: auto !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    width: auto !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__lead,.awa-b2b-promo-bar__cta) {
+    align-items:center!important;
+    display:inline-flex!important;
+    height:auto!important;
+    line-height:1.2!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    padding:0!important;
+    white-space:nowrap!important;
+    width:auto!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-long, .awa-b2b-promo-bar__cta-long, .awa-b2b-promo-bar__separator, .awa-b2b-promo-bar__tail) {
-    display: none !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__cta-long,.awa-b2b-promo-bar__separator,.awa-b2b-promo-bar__tail) {
+    display:none!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-short, .awa-b2b-promo-bar__cta-short) {
-    display: inline !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-short,.awa-b2b-promo-bar__cta-short) {
+    display:inline!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__cta {
-    flex: 0 0 auto !important;
-    min-height: 32px !important;
-    padding: 0 var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) .awa-b2b-promo-bar__cta {
+    flex:0 0 auto!important;
+    min-height:32px!important;
+    padding:0 var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-close {
-    height: 36px !important;
-    inset: 4px 4px auto auto !important;
-    min-height: 36px !important;
-    min-width: 36px !important;
-    position: absolute !important;
-    transform: none !important;
-    width: 36px !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) .awa-b2b-promo-close {
+    height:36px!important;
+    inset:4px 4px auto auto!important;
+    min-height:36px!important;
+    min-width:36px!important;
+    position:absolute!important;
+    transform:none!important;
+    width:36px!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) :is(.footer-container, .footer-static, .awa-footer-newsletter, .footer-bottom, .footer-copyright) {
-    padding-block: var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) :is(.footer-container,.footer-static,.awa-footer-newsletter,.footer-bottom,.footer-copyright) {
+    padding-block:var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) .awa-footer-newsletter {
-    height: auto !important;
-    padding-inline: var(--awa-home-corp-space-3) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) .awa-footer-newsletter {
+    height:auto!important;
+    padding-inline:var(--awa-home-corp-space-3)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) :is(.awa-newsletter-wrapper, .awa-newsletter-info, .awa-newsletter-form-container, .newsletter-footer, form.subscribe, .field.newsletter) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) :is(.awa-newsletter-wrapper,.awa-newsletter-info,.awa-newsletter-form-container,.newsletter-footer,form.subscribe,.field.newsletter) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) :is(.footer-container .row, .footer-static .row) {
-    gap: var(--awa-home-corp-space-2) !important;
-    padding-block: var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) :is(.footer-container .row,.footer-static .row) {
+    gap:var(--awa-home-corp-space-2)!important;
+    padding-block:var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) .velaFooterTitle {
-    height: auto !important;
-    margin: 0 !important;
-    min-height: 44px !important;
-    padding: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) .velaFooterTitle {
+    height:auto!important;
+    margin:0!important;
+    min-height:44px!important;
+    padding:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) :is(.footer-bottom, .footer-bottom-inner, .awa-footer-bottom__row, .awa-footer-bottom__row > [class*=col-], .awa-footer-bottom__copyright) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) :is(.footer-bottom,.footer-bottom-inner,.awa-footer-bottom__row,.awa-footer-bottom__row > [class*=col-],.awa-footer-bottom__copyright) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) :is(.footer-bottom-inner, .awa-footer-bottom__row) {
-    align-items: start !important;
-    gap: var(--awa-home-corp-space-3) !important;
-    justify-content: start !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) :is(.footer-bottom-inner,.awa-footer-bottom__row) {
+    align-items:start!important;
+    gap:var(--awa-home-corp-space-3)!important;
+    justify-content:start!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) .awa-footer-cnpj-badge {
-    display: inline-flex !important;
-    min-height: 32px !important;
-    padding: 6px 10px !important;
-    width: auto !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) .awa-footer-cnpj-badge {
+    display:inline-flex!important;
+    min-height:32px!important;
+    padding:6px 10px!important;
+    width:auto!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer, .page-footer) .awa-footer-copyright__disclaimer {
-    font-size: 11px !important;
-    line-height: 1.45 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.page_footer,.page-footer) .awa-footer-copyright__disclaimer {
+    font-size:11px!important;
+    line-height:1.45!important
   }
 }
-@media (max-width: 767px) {
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) {
-    align-items: center !important;
-    box-sizing: border-box !important;
-    height: 44px !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 44px !important;
-    overflow: hidden !important;
-    padding: 0 44px 0 12px !important;
-    width: 100% !important;
+@media (max-width:767px) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) {
+    align-items:center!important;
+    box-sizing:border-box!important;
+    height:44px!important;
+    justify-content:center!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:44px!important;
+    overflow:hidden!important;
+    padding:0 44px 0 12px!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__inner, .awa-b2b-promo-bar__layout) {
-    align-items: center !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    gap: var(--awa-home-corp-space-2) !important;
-    height: 44px !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 44px !important;
-    padding: 0 !important;
-    position: static !important;
-    width: 100% !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__inner,.awa-b2b-promo-bar__layout) {
+    align-items:center!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    gap:var(--awa-home-corp-space-2)!important;
+    height:44px!important;
+    justify-content:center!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:44px!important;
+    padding:0!important;
+    position:static!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__text, .awa-b2b-promo-bar__lead, .awa-b2b-promo-bar__cta) {
-    align-items: center !important;
-    display: inline-flex !important;
-    height: auto !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-    width: auto !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__text,.awa-b2b-promo-bar__lead,.awa-b2b-promo-bar__cta) {
+    align-items:center!important;
+    display:inline-flex!important;
+    height:auto!important;
+    line-height:1.2!important;
+    margin:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    padding:0!important;
+    white-space:nowrap!important;
+    width:auto!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-long, .awa-b2b-promo-bar__cta-long, .awa-b2b-promo-bar__separator, .awa-b2b-promo-bar__tail) {
-    display: none !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__cta-long,.awa-b2b-promo-bar__separator,.awa-b2b-promo-bar__tail) {
+    display:none!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-short, .awa-b2b-promo-bar__cta-short) {
-    display: inline !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__lead-short,.awa-b2b-promo-bar__cta-short) {
+    display:inline!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__cta {
-    flex: 0 0 auto !important;
-    min-height: 32px !important;
-    padding: 0 var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) .awa-b2b-promo-bar__cta {
+    flex:0 0 auto!important;
+    min-height:32px!important;
+    padding:0 var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-close {
-    height: 36px !important;
-    inset: 4px 4px auto auto !important;
-    min-height: 36px !important;
-    min-width: 36px !important;
-    position: absolute !important;
-    transform: none !important;
-    width: 36px !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) .awa-b2b-promo-close {
+    height:36px!important;
+    inset:4px 4px auto auto!important;
+    min-height:36px!important;
+    min-width:36px!important;
+    position:absolute!important;
+    transform:none!important;
+    width:36px!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container, .footer-static, .awa-footer-newsletter, .footer-bottom, .footer-copyright) {
-    padding-block: var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container,.footer-static,.awa-footer-newsletter,.footer-bottom,.footer-copyright) {
+    padding-block:var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-newsletter {
-    height: auto !important;
-    padding-inline: var(--awa-home-corp-space-3) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-newsletter {
+    height:auto!important;
+    padding-inline:var(--awa-home-corp-space-3)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.awa-newsletter-wrapper, .awa-newsletter-info, .awa-newsletter-form-container, .newsletter-footer, form.subscribe, .field.newsletter) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.awa-newsletter-wrapper,.awa-newsletter-info,.awa-newsletter-form-container,.newsletter-footer,form.subscribe,.field.newsletter) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container .row, .footer-static .row) {
-    gap: var(--awa-home-corp-space-2) !important;
-    padding-block: var(--awa-home-corp-space-2) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container .row,.footer-static .row) {
+    gap:var(--awa-home-corp-space-2)!important;
+    padding-block:var(--awa-home-corp-space-2)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .velaFooterTitle {
-    height: auto !important;
-    margin: 0 !important;
-    min-height: 44px !important;
-    padding: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .velaFooterTitle {
+    height:auto!important;
+    margin:0!important;
+    min-height:44px!important;
+    padding:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-bottom, .footer-bottom-inner, .awa-footer-bottom__row, .awa-footer-bottom__row > [class*=col-], .awa-footer-bottom__copyright) {
-    height: auto !important;
-    min-height: 0 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-bottom,.footer-bottom-inner,.awa-footer-bottom__row,.awa-footer-bottom__row > [class*=col-],.awa-footer-bottom__copyright) {
+    height:auto!important;
+    min-height:0!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-bottom-inner, .awa-footer-bottom__row) {
-    align-items: start !important;
-    gap: var(--awa-home-corp-space-3) !important;
-    justify-content: start !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-bottom-inner,.awa-footer-bottom__row) {
+    align-items:start!important;
+    gap:var(--awa-home-corp-space-3)!important;
+    justify-content:start!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-cnpj-badge {
-    display: inline-flex !important;
-    min-height: 32px !important;
-    padding: 6px 10px !important;
-    width: auto !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-cnpj-badge {
+    display:inline-flex!important;
+    min-height:32px!important;
+    padding:6px 10px!important;
+    width:auto!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-copyright__disclaimer {
-    font-size: 11px !important;
-    line-height: 1.45 !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-copyright__disclaimer {
+    font-size:11px!important;
+    line-height:1.45!important
   }
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(
-        .banner-slider,
-        .banner-slider2,
-        .wrapper_slider,
-        .owl-wrapper-outer,
-        .swiper,
-        .awa-hero-swiper
-    ) {
-  box-sizing: border-box !important;
-  margin-inline: 0 !important;
-  max-width: 100% !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(
+.banner-slider,.banner-slider2,.wrapper_slider,.owl-wrapper-outer,.swiper,.awa-hero-swiper
+) {
+  box-sizing:border-box!important;
+  margin-inline:0!important;
+  max-width:100%!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel {
-  padding-block: var(--awa-home-corp-section-pad) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel {
+  padding-block:var(--awa-home-corp-section-pad)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(
-        .awa-category-carousel__viewport,
-        .owl-wrapper-outer,
-        .swiper,
-        .slick-list
-    ) {
-  margin-inline: 0 !important;
-  overflow-x: auto !important;
-  overflow-y: hidden;
-  overscroll-behavior-inline: contain;
-  padding-inline: 0 !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(
+.awa-category-carousel__viewport,.owl-wrapper-outer,.swiper,.slick-list
+) {
+  margin-inline:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  overscroll-behavior-inline:contain;
+  padding-inline:0!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-category-card, .awa-category-carousel__item) {
-  border: 1px solid var(--awa-border, var(--awa-border));
-  border-radius: var(--awa-home-corp-card-radius);
-  min-height: 104px;
-  padding: var(--awa-home-corp-space-3) var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-category-card,.awa-category-carousel__item) {
+  border:1px solid var(--awa-border,var(--awa-border));
+  border-radius:var(--awa-home-corp-card-radius);
+  min-height:104px;
+  padding:var(--awa-home-corp-space-3) var(--awa-home-corp-space-2)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-carousel-section {
-  --awa-home-carousel-gap: var(--awa-home-corp-gap);
-  overflow-x: hidden;
-  padding-block: var(--awa-home-corp-section-pad) !important;
-  padding-inline: var(--awa-home-corp-gutter) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-carousel-section {
+  --awa-home-carousel-gap:var(--awa-home-corp-gap);
+  overflow-x:hidden;
+  padding-block:var(--awa-home-corp-section-pad)!important;
+  padding-inline:var(--awa-home-corp-gutter)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel, .awa-shelf--carousel, .rokan-bestseller, .rokan-newproduct, .awa-home-niche-shelves__panel) {
-  overflow-x: hidden;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel,.awa-shelf--carousel,.rokan-bestseller,.rokan-newproduct,.awa-home-niche-shelves__panel) {
+  overflow-x:hidden
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel__viewport, .awa-shelf__viewport, .owl-wrapper-outer, .slick-list, .swiper) {
-  margin-inline: 0 !important;
-  overflow-x: auto !important;
-  overflow-y: hidden;
-  overscroll-behavior-inline: contain;
-  padding-inline: 0 !important;
-  width: 100% !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel__viewport,.awa-shelf__viewport,.owl-wrapper-outer,.slick-list,.swiper) {
+  margin-inline:0!important;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  overscroll-behavior-inline:contain;
+  padding-inline:0!important;
+  width:100%!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel__track, .awa-shelf__track, .owl-stage, .slick-track, .swiper-wrapper) {
-  column-gap: var(--awa-home-corp-gap) !important;
-  row-gap: var(--awa-home-corp-gap) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel__track,.awa-shelf__track,.owl-stage,.slick-track,.swiper-wrapper) {
+  column-gap:var(--awa-home-corp-gap)!important;
+  row-gap:var(--awa-home-corp-gap)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.newproductslider-item, .product-item, .owl-item, .swiper-slide, .slick-slide, .awa-carousel__slide) {
-  box-sizing: border-box !important;
-  padding-inline: 0 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.newproductslider-item,.product-item,.owl-item,.swiper-slide,.slick-slide,.awa-carousel__slide) {
+  box-sizing:border-box!important;
+  padding-inline:0!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-product-card, .content-item-product, .item-product, .product-item-info) {
-  align-content: stretch;
-  background: var(--awa-bg-surface, var(--awa-bg));
-  border: 1px solid var(--awa-border, var(--awa-border));
-  border-radius: var(--awa-home-corp-card-radius);
-  box-sizing: border-box !important;
-  display: flex !important;
-  flex-direction: column;
-  gap: var(--awa-home-corp-space-2);
-  height: 100%;
-  min-height: 236px;
-  padding: var(--awa-home-corp-space-2) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-product-card,.content-item-product,.item-product,.product-item-info) {
+  align-content:stretch;
+  background:var(--awa-bg-surface,var(--awa-bg));
+  border:1px solid var(--awa-border,var(--awa-border));
+  border-radius:var(--awa-home-corp-card-radius);
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column;
+  gap:var(--awa-home-corp-space-2);
+  height:100%;
+  min-height:236px;
+  padding:var(--awa-home-corp-space-2)!important
 }
-/* FIX 2026-07-06 (Impeccable "Nested cards" — carrosseis mobile/home-critical-bundle):
-   a regra acima aplica border+background+radius tambem no WRAPPER
-   .item-product.awa-carousel-card-slot (via .item-product na lista :is()), que ja tem
-   um .content-item-product.awa-product-card FILHO com a mesma casca visual — resultado
-   e cartao duplicado. Este bundle carrega em vez de styles-l/m.css na home (critical
-   path), entao a excecao precisa estar aqui tambem. */
-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .item-product.awa-carousel-card-slot:has(> .content-item-product, > .awa-product-card) {
+body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .item-product.awa-carousel-card-slot:has(> .content-item-product,> .awa-product-card) {
+  border:0!important;
+  border-radius:0!important;
+  background:0 0!important;
+  box-shadow:none!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-thumb,.product-image,.product-image-container,.product-item-photo) {
+  align-items:center;
+  aspect-ratio:1/0.82;
+  background:var(--awa-bg-subtle,#f8fafc);
+  border-radius:var(--awa-home-corp-card-radius);
+  display:flex;
+  justify-content:center;
+  margin:0!important;
+  min-height:132px;
+  overflow:hidden;
+  padding:var(--awa-home-corp-space-2)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-thumb img,.product-image-photo,.product-item-photo img) {
+  height:100%;
+  max-height:100%;
+  max-width:100%;
+  object-fit:contain;
+  width:auto
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-info,.product-details,.product-item-details) {
+  display:flex!important;
+  flex:1 1 auto;
+  flex-direction:column;
+  gap:var(--awa-home-corp-space-1);
+  padding:0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name,.product-item-name,.product-item-link) {
+  color:var(--awa-text,var(--awa-text));
+  font-size:12px;
+  font-weight:600;
+  line-height:1.35;
+  margin:0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a,.product-item-name a,.product-item-link) {
+  color:inherit;
+  display:-webkit-box;
+  overflow:hidden;
+  text-decoration:none;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a,.product-item-name a,.product-item-link,.product-item .product-item-link) {
+  min-height:40px;
+  padding-block:2px
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.price-box,.product-reviews-summary,.product-item-actions,.actions-primary,.actions-secondary) {
+  margin-block:var(--awa-home-corp-space-1) 0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel-section,.awa-grid-section,.awa-home-niche-shelves,.awa-shelf--carousel) :is(.product-name a,.product-item-name a,.product-item-link,.product-item .product-item-link) {
+  min-height:44px!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-item-actions,.actions-primary) {
+  margin-top:auto!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-home-recent-orders,.awa-home-pricing-notice,.awa-hero-b2b-cta) {
+  border-radius:0
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-home-recent-orders__panel,.awa-home-pricing-notice__inner,.awa-hero-b2b-cta__inner) {
+  align-items:center;
+  border:1px solid var(--awa-border,var(--awa-border));
+  border-radius:var(--awa-home-corp-card-radius);
+  box-sizing:border-box;
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--awa-home-corp-gap);
+  justify-content:space-between;
+  margin:0!important;
+  min-height:56px;
+  padding:var(--awa-home-corp-space-3) var(--awa-home-corp-space-4)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta__inner {
+  border-color:transparent;
+  border-image:none;
+  border-width:0;
+  padding-block:0!important;
+  padding-inline:unset!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) {
+  box-sizing:border-box;
+  margin-top:var(--awa-home-corp-space-4)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container,#footer,.footer-static,.footer-bottom,.footer-copyright,.awa-footer-newsletter,.awa-footer-categories-expand) {
+  box-sizing:border-box!important;
+  margin-inline:auto!important;
+  max-width:var(--awa-home-corp-shell)!important;
+  padding-inline:var(--awa-home-corp-gutter)!important;
+  width:100%!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container,.footer-static) {
+  padding-block:var(--awa-home-corp-space-4)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-categories-expand {
+  padding-block:var(--awa-home-corp-space-4)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.awa-footer-newsletter,.awa-footer-business-contact) {
+  padding-block:var(--awa-home-corp-space-4)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.awa-footer-newsletter > .container,.footer-container .container,.footer-static .container) {
+  box-sizing:border-box!important;
+  margin-inline:0!important;
+  max-width:100%!important;
+  padding-inline:0!important;
+  width:100%!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container .row,.footer-static .row) {
+  align-items:start;
+  display:grid!important;
+  gap:var(--awa-home-corp-gap-wide)!important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  margin:0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container [class*=col-],.footer-static [class*=col-]) {
+  max-width:none!important;
+  padding-inline:0!important;
+  width:auto!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-block-title,.velaFooterTitle,.awa-footer-section__toggle) {
+  margin:0 0 var(--awa-home-corp-space-2)!important;
+  padding-block:0 var(--awa-home-corp-space-2)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.velaContent,.footer-links,.links,ul) {
+  margin-block:0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.velaContent li,.footer-links li,.links li)+:is(li) {
+  margin-top:var(--awa-home-corp-space-2)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .footer-bottom {
+  padding-block:var(--awa-home-corp-space-3)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-bottom-inner,.awa-footer-bottom__row) {
+  align-items:center;
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:var(--awa-home-corp-gap);
+  justify-content:space-between;
+  margin:0!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .footer-copyright {
+  padding-block:var(--awa-home-corp-space-3)!important
+}
+@media (max-width:1023px) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5),html:has(body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5)) {
+    overflow-x:hidden!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container .row,.footer-static .row) {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+}
+@media (max-width:767px) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper {
+    --awa-home-corp-gutter:16px;
+    --awa-home-corp-section-pad:8px;
+    --awa-home-corp-section-pad-tight:8px
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header,.awa-shelf__header,.awa-category-carousel__header) {
+    align-items:flex-start!important;
+    gap:var(--awa-home-corp-space-1) var(--awa-home-corp-space-2)!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__link,.awa-shelf__view-all,.awa-category-carousel__view-all) {
+    margin-left:calc(var(--awa-home-corp-space-2) * -1)
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-product-card,.content-item-product,.item-product,.product-item-info) {
+    min-height:236px
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a,.product-item-name a,.product-item-link,.product-item .product-item-link) {
+    min-height:44px!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home>.top-home-content--above-fold {
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    padding-block-end:var(--awa-home-corp-space-2)!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(
+.banner-slider,picture
+) {
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold .banner_item_bg :is(picture,img) {
+    display:block!important;
+    width:100%!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold .banner_item_bg img {
+    aspect-ratio:auto!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    object-fit:contain!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(.awa-hero-swiper__nav,.swiper-button-prev,.swiper-button-next) {
+    top:50%!important;
+    transform:translateY(-50%)!important
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container .row,.footer-static .row) {
+    grid-template-columns:1fr
+  }
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.footer-container,.footer-static,.awa-footer-newsletter,.footer-bottom,.footer-copyright) {
+    padding-block:var(--awa-home-corp-space-3)!important
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper * {
+    scroll-behavior:auto;
+    transition-duration:0s!important
+  }
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta {
+  background:0 0;
+  color:var(--awa-text)
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits {
+  gap:var(--awa-home-corp-gap)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta :is(.awa-hero-benefits__item,.awa-hero-benefits__link) {
+  align-items:flex-start!important;
+  background:var(--awa-bg-surface)!important;
+  border:1px solid var(--awa-border)!important;
+  border-radius:var(--awa-home-corp-card-radius)!important;
+  color:var(--awa-text)!important;
+  min-height:92px!important;
+  padding:var(--awa-home-corp-space-3)!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__icon {
+  color:var(--awa-primary)!important;
+  opacity:1!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__title {
+  color:var(--awa-text)!important;
+  font-weight:700!important
+}
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__text {
+  color:var(--awa-text-muted)!important;
+  line-height:1.42!important
+}
+body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand  {
+  background: #fff !important;
+  background-color: #fff !important;
   border: 0 !important;
   border-radius: 0 !important;
-  background: transparent !important;
   box-shadow: none !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-thumb, .product-image, .product-image-container, .product-item-photo) {
-  align-items: center;
-  aspect-ratio: 1 / 0.82;
-  background: var(--awa-bg-subtle, #f8fafc);
-  border-radius: var(--awa-home-corp-card-radius);
-  display: flex;
-  justify-content: center;
-  margin: 0 !important;
-  min-height: 132px;
-  overflow: hidden;
-  padding: var(--awa-home-corp-space-2) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-thumb img, .product-image-photo, .product-item-photo img) {
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  width: auto;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-info, .product-details, .product-item-details) {
-  display: flex !important;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: var(--awa-home-corp-space-1);
-  padding: 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name, .product-item-name, .product-item-link) {
-  color: var(--awa-text, var(--awa-text));
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a, .product-item-name a, .product-item-link) {
-  color: inherit;
-  display: -webkit-box;
-  overflow: hidden;
-  text-decoration: none;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a, .product-item-name a, .product-item-link, .product-item .product-item-link) {
-  min-height: 40px;
-  padding-block: 2px;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.price-box, .product-reviews-summary, .product-item-actions, .actions-primary, .actions-secondary) {
-  margin-block: var(--awa-home-corp-space-1) 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-carousel-section, .awa-grid-section, .awa-home-niche-shelves, .awa-shelf--carousel) :is(.product-name a, .product-item-name a, .product-item-link, .product-item .product-item-link) {
-  min-height: 44px !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-item-actions, .actions-primary) {
-  margin-top: auto !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-home-recent-orders, .awa-home-pricing-notice, .awa-hero-b2b-cta) {
-  border-radius: 0;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-home-recent-orders__panel, .awa-home-pricing-notice__inner, .awa-hero-b2b-cta__inner) {
-  align-items: center;
-  border: 1px solid var(--awa-border, var(--awa-border));
-  border-radius: var(--awa-home-corp-card-radius);
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--awa-home-corp-gap);
-  justify-content: space-between;
-  margin: 0 !important;
-  min-height: 56px;
-  padding: var(--awa-home-corp-space-3) var(--awa-home-corp-space-4) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta__inner {
-  border-color: transparent;
-  border-image: none;
-  border-width: 0;
-  padding-block: 0 !important;
-  padding-inline: unset !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) {
-  box-sizing: border-box;
-  margin-top: var(--awa-home-corp-space-4) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container, #footer, .footer-static, .footer-bottom, .footer-copyright, .awa-footer-newsletter, .awa-footer-categories-expand) {
-  box-sizing: border-box !important;
-  margin-inline: auto !important;
-  max-width: var(--awa-home-corp-shell) !important;
-  padding-inline: var(--awa-home-corp-gutter) !important;
-  width: 100% !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container, .footer-static) {
-  padding-block: var(--awa-home-corp-space-4) !important;
-}
-/* FIX 2026-07-06 (Impeccable "cramped padding" section.awa-footer-categories-expand: children
-   flush against border+bg no topo/rodape, sem inset): esta secao tem bg/border-radius de card
-   (linha ~793) mas so herdava padding-inline do grupo compartilhado acima — faltava entrar no
-   grupo de padding-block, ao contrario de .footer-container/.awa-footer-newsletter que ja tem.
-   Usa o mesmo token de espaco vertical para manter a densidade consistente do footer. */
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand {
-  padding-block: var(--awa-home-corp-space-4) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.awa-footer-newsletter, .awa-footer-business-contact) {
-  padding-block: var(--awa-home-corp-space-4) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.awa-footer-newsletter > .container, .footer-container .container, .footer-static .container) {
-  box-sizing: border-box !important;
-  margin-inline: 0 !important;
-  max-width: 100% !important;
-  padding-inline: 0 !important;
-  width: 100% !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container .row, .footer-static .row) {
-  align-items: start;
-  display: grid !important;
-  gap: var(--awa-home-corp-gap-wide) !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container [class*='col-'], .footer-static [class*='col-']) {
-  max-width: none !important;
-  padding-inline: 0 !important;
-  width: auto !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-block-title, .velaFooterTitle, .awa-footer-section__toggle) {
-  margin: 0 0 var(--awa-home-corp-space-2) !important;
-  padding-block: 0 var(--awa-home-corp-space-2) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.velaContent, .footer-links, .links, ul) {
-  margin-block: 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.velaContent li, .footer-links li, .links li) + :is(li) {
-  margin-top: var(--awa-home-corp-space-2) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .footer-bottom {
-  padding-block: var(--awa-home-corp-space-3) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-bottom-inner, .awa-footer-bottom__row) {
-  align-items: center;
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: var(--awa-home-corp-gap);
-  justify-content: space-between;
-  margin: 0 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .footer-copyright {
-  padding-block: var(--awa-home-corp-space-3) !important;
-}
-@media (max-width: 1023px) {
-  html:has(body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)),
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) {
-    overflow-x: hidden !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container .row, .footer-static .row) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (max-width: 767px) {
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper {
-    --awa-home-corp-gutter: 16px;
-    --awa-home-corp-section-pad: 8px;
-    --awa-home-corp-section-pad-tight: 8px;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header, .awa-shelf__header, .awa-category-carousel__header) {
-    align-items: flex-start !important;
-    gap: var(--awa-home-corp-space-1) var(--awa-home-corp-space-2) !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-section-header__link, .awa-shelf__view-all, .awa-category-carousel__view-all) {
-    margin-left: calc(var(--awa-home-corp-space-2) * -1);
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.awa-product-card, .content-item-product, .item-product, .product-item-info) {
-    min-height: 236px;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home :is(.product-name a, .product-item-name a, .product-item-link, .product-item .product-item-link) {
-    min-height: 44px !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home > .top-home-content--above-fold {
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-    padding-block-end: var(--awa-home-corp-space-2) !important;
-  }
-  /* FIX 2026-07-07: removidos .awa-hero-swiper, .swiper-wrapper, .swiper-slide,
-     .banner_item_bg e .banner_item_bg > a desta lista. Esses elementos dependem da
-     cadeia height:100% (ver awa-hero-lcp-critical) alimentada pelo
-     min-height:288px!important do awa-align-grid-inline-lock-20260626-phase3d22b.
-     Zerar a altura aqui (height:auto + min-height:0) vencia a regra de 288px no
-     Chromium (mesma especificidade, este arquivo carregado depois no cascade) e
-     colapsava o hero inteiro para ~0px no mobile, deixando paginacao/botao de pausa
-     flutuando sobre espaco em branco — causa raiz do gap excessivo pos-hero. */
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(
-            .banner-slider,
-            picture
-        ) {
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold .banner_item_bg :is(picture, img) {
-    display: block !important;
-    width: 100% !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold .banner_item_bg img {
-    aspect-ratio: auto !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-    object-fit: contain !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--above-fold :is(.awa-hero-swiper__nav, .swiper-button-prev, .swiper-button-next) {
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container .row, .footer-static .row) {
-    grid-template-columns: 1fr;
-  }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.footer-container, .footer-static, .awa-footer-newsletter, .footer-bottom, .footer-copyright) {
-    padding-block: var(--awa-home-corp-space-3) !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper * {
-    scroll-behavior: auto;
-    transition-duration: 0.001ms !important;
-  }
-}
-
-/* 2026-06-29 product-design-audit-polish: terminal home overrides for contrast, footer and mobile drawer. */
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta {
-  background: transparent;
-  color: var(--awa-text);
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits {
-  gap: var(--awa-home-corp-gap) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta :is(.awa-hero-benefits__item, .awa-hero-benefits__link) {
-  align-items: flex-start !important;
-  background: var(--awa-bg-surface) !important;
-  border: 1px solid var(--awa-border) !important;
-  border-radius: var(--awa-home-corp-card-radius) !important;
   color: var(--awa-text) !important;
-  min-height: 92px !important;
-  padding: var(--awa-home-corp-space-3) !important;
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__icon {
-  color: var(--awa-primary) !important;
-  opacity: 1 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-categories-expand :is(a,button) {
+  color:var(--awa-text)!important;
+  opacity:1!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__title {
-  color: var(--awa-text) !important;
-  font-weight: 700 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-categories-expand :is(a:hover,a:focus-visible,button:hover,button:focus-visible) {
+  color:var(--awa-primary)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .awa-hero-b2b-cta .awa-hero-benefits__text {
-  color: var(--awa-text-muted) !important;
-  line-height: 1.42 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-cnpj-badge {
+  display:inline-flex!important;
+  min-height:32px!important;
+  padding:6px 10px!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand {background: #fff !important;background-color: #fff !important;border: 0 !important;border-radius: 0 !important;box-shadow: none !important;color: var(--awa-text) !important;}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand :is(a, button) {
-  color: var(--awa-text) !important;
-  opacity: 1 !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.awa-footer-pay-sec,.awa-footer-sec-seals,.awa-footer-devby,.footer-bottom) img {
+  opacity:1!important;
+  visibility:visible!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-categories-expand :is(a:hover, a:focus-visible, button:hover, button:focus-visible) {
-  color: var(--awa-primary) !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) :is(.awa-seal,.awa-footer-sec-seals li,.awa-footer-devby__logo) {
+  background:var(--awa-bg-surface)!important;
+  border:1px solid var(--awa-border)!important;
+  border-radius:var(--awa-home-corp-card-radius)!important
 }
-/* FIX 2026-07-06 (Impeccable "cramped padding" span.awa-footer-cnpj-badge: children flush
-   against border+bg no topo/rodape, sem inset): o badge tem border+background de pill (regra
-   acima em .content-top-home nao se aplica aqui, e o `@media(max-width:767px)` mais abaixo so
-   cobria mobile) — faltava o equivalente para desktop. Mesmo valor do breakpoint mobile para
-   manter o badge com a mesma proporcao em qualquer tela. */
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-cnpj-badge {
-  display: inline-flex !important;
-  min-height: 32px !important;
-  padding: 6px 10px !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-seal__img {
+  filter:none!important;
+  opacity:1!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.awa-footer-pay-sec, .awa-footer-sec-seals, .awa-footer-devby, .footer-bottom) img {
-  opacity: 1 !important;
-  visibility: visible !important;
+body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.page_footer,.page-footer) .awa-footer-devby {
+  align-items:center!important;
+  color:var(--awa-text)!important;
+  display:flex!important;
+  gap:var(--awa-home-corp-space-3)!important
 }
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) :is(.awa-seal, .awa-footer-sec-seals li, .awa-footer-devby__logo) {
-  background: var(--awa-bg-surface) !important;
-  border: 1px solid var(--awa-border) !important;
-  border-radius: var(--awa-home-corp-card-radius) !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-seal__img {
-  filter: none !important;
-  opacity: 1 !important;
-}
-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.page_footer, .page-footer) .awa-footer-devby {
-  align-items: center !important;
-  color: var(--awa-text) !important;
-  display: flex !important;
-  gap: var(--awa-home-corp-space-3) !important;
-}
-@media (max-width: 767px) {
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-category-carousel__header {
-    align-items: start !important;
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    row-gap: var(--awa-home-corp-space-1) !important;
+@media (max-width:767px) {
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-category-carousel__header {
+    align-items:start!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    row-gap:var(--awa-home-corp-space-1)!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-section-header__left {
-    align-items: start !important;
-    display: block !important;
-    min-width: 0 !important;
-    width: 100% !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-section-header__left {
+    align-items:start!important;
+    display:block!important;
+    min-width:0!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-category-carousel__subtitle {
-    display: block !important;
-    margin-top: var(--awa-home-corp-space-1) !important;
-    max-width: 22ch !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel .awa-category-carousel__subtitle {
+    display:block!important;
+    margin-top:var(--awa-home-corp-space-1)!important;
+    max-width:22ch!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(.awa-category-carousel__cta-link, .awa-section-header__link, .awa-shelf__view-all) {
-    grid-column: 2 !important;
-    grid-row: 1 / span 2 !important;
-    justify-self: end !important;
-    margin-left: 0 !important;
-    max-width: 112px !important;
-    min-height: 44px !important;
-    padding-inline: var(--awa-home-corp-space-2) !important;
-    white-space: nowrap !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .top-home-content--category-carousel :is(.awa-category-carousel__cta-link,.awa-section-header__link,.awa-shelf__view-all) {
+    grid-column:2!important;
+    grid-row:1/span 2!important;
+    justify-self:end!important;
+    margin-left:0!important;
+    max-width:112px!important;
+    min-height:44px!important;
+    padding-inline:var(--awa-home-corp-space-2)!important;
+    white-space:nowrap!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm, nav.fixed-bottom.hidden-sm) {
-    overflow: visible !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm,nav.fixed-bottom.hidden-sm) {
+    overflow:visible!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm, nav.fixed-bottom.hidden-sm) .mobile-bottom-link {
-    align-items: stretch !important;
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm,nav.fixed-bottom.hidden-sm) .mobile-bottom-link {
+    align-items:stretch!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    margin:0!important;
+    padding:0!important;
+    width:100%!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm, nav.fixed-bottom.hidden-sm) .mobile-bottom-link > li,
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm, nav.fixed-bottom.hidden-sm) .mobile-bottom-link > li > :is(a, button) {
-    min-width: 0 !important;
-    width: auto !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm,nav.fixed-bottom.hidden-sm) .mobile-bottom-link>li,body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm,nav.fixed-bottom.hidden-sm) .mobile-bottom-link>li>:is(a,button) {
+    min-width:0!important;
+    width:auto!important
   }
-  body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm, nav.fixed-bottom.hidden-sm) .mobile-bottom-link > li > :is(a, button) {
-    align-items: center !important;
-    display: inline-flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    min-height: 56px !important;
-    padding: var(--awa-home-corp-space-1) !important;
+  body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.fixed-bottom.hidden-sm,nav.fixed-bottom.hidden-sm) .mobile-bottom-link>li>:is(a,button) {
+    align-items:center!important;
+    display:inline-flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-height:56px!important;
+    padding:var(--awa-home-corp-space-1)!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open {
-    background: var(--awa-bg-surface) !important;
-    box-shadow: var(--awa-shadow-md, none) !important;
-    left: 0 !important;
-    max-width: min(88vw, 344px) !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    padding: var(--awa-home-corp-space-4) var(--awa-home-corp-space-3) calc(72px + env(safe-area-inset-bottom)) !important;
-    top: 44px !important;
-    width: min(88vw, 344px) !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open {
+    background:var(--awa-bg-surface)!important;
+    box-shadow:var(--awa-shadow-md,none)!important;
+    left:0!important;
+    max-width:min(88vw,344px)!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    padding:var(--awa-home-corp-space-4) var(--awa-home-corp-space-3) calc(72px + env(safe-area-inset-bottom))!important;
+    top:44px!important;
+    width:min(88vw,344px)!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .section-item-content,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .section-item-content {
-    display: block !important;
-    height: auto !important;
-    min-height: calc(100vh - 96px) !important;
-    overflow: visible !important;
-    padding: 0 !important;
-    position: static !important;
-    width: 100% !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .section-item-content,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .section-item-content {
+    display:block!important;
+    height:auto!important;
+    min-height:calc(100vh - 96px)!important;
+    overflow:visible!important;
+    padding:0!important;
+    position:static!important;
+    width:100%!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .navigation.verticalmenu.side-verticalmenu,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .navigation.verticalmenu.side-verticalmenu {
-    display: block !important;
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    position: static !important;
-    width: 100% !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .navigation.verticalmenu.side-verticalmenu,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .navigation.verticalmenu.side-verticalmenu {
+    display:block!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+    position:static!important;
+    width:100%!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown),
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    display: block !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: 0 !important;
-    opacity: 1 !important;
-    overflow: visible !important;
-    padding: var(--awa-home-corp-space-2) 0 0 !important;
-    position: static !important;
-    visibility: visible !important;
-    width: 100% !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown),body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown) {
+    background:0 0!important;
+    border:0!important;
+    box-shadow:none!important;
+    display:block!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    opacity:1!important;
+    overflow:visible!important;
+    padding:var(--awa-home-corp-space-2) 0 0!important;
+    position:static!important;
+    visibility:visible!important;
+    width:100%!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li {
-    border-bottom: 1px solid var(--awa-border) !important;
-    display: block !important;
-    margin: 0 !important;
-    min-height: 44px !important;
-    opacity: 1 !important;
-    position: relative !important;
-    visibility: visible !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li {
+    border-bottom:1px solid var(--awa-border)!important;
+    display:block!important;
+    margin:0!important;
+    min-height:44px!important;
+    opacity:1!important;
+    position:relative!important;
+    visibility:visible!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a {
-    align-items: center !important;
-    color: var(--awa-text) !important;
-    display: flex !important;
-    font-weight: 650 !important;
-    gap: var(--awa-home-corp-space-2) !important;
-    min-height: 44px !important;
-    padding: var(--awa-home-corp-space-2) 0 !important;
-    text-decoration: none !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a {
+    align-items:center!important;
+    color:var(--awa-text)!important;
+    display:flex!important;
+    font-weight:650!important;
+    gap:var(--awa-home-corp-space-2)!important;
+    min-height:44px!important;
+    padding:var(--awa-home-corp-space-2) 0!important;
+    text-decoration:none!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a:hover,
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a:focus-visible,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a:hover,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu, .list-category-dropdown) > li > a:focus-visible {
-    color: var(--awa-primary) !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a:focus-visible,body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a:hover,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a:focus-visible,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open :is(.togge-menu,.list-category-dropdown)>li>a:hover {
+    color:var(--awa-primary)!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .section-item-title,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .section-item-title {
-    display: none !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .section-item-title,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .section-item-title {
+    display:none!important
   }
-  body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .nav-toggle,
-  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .nav-toggle {
-    position: absolute !important;
-    right: var(--awa-home-corp-space-3) !important;
-    top: var(--awa-home-corp-space-2) !important;
+  body#html-body.awa-menu-drawer-open .category-dropdown-items.is-awa-mobile-open .nav-toggle,body#html-body.nav-open .category-dropdown-items.is-awa-mobile-open .nav-toggle {
+    position:absolute!important;
+    right:var(--awa-home-corp-space-3)!important;
+    top:var(--awa-home-corp-space-2)!important
   }
 }
-
-/* PD7-TOUCH-LOCK (2026-07-10): garante alvo mínimo de clique nos títulos dos cards da Home. */
-html body#html-body#html-body#html-body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-.page-wrapper .content-top-home .product-item-link {
-  min-height: 44px !important;
+html body#html-body#html-body#html-body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .content-top-home .product-item-link {
+  min-height:44px!important
 }

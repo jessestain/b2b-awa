@@ -4,7 +4,7 @@
     <menu>
         <!-- SmartSuggestions under Grupo Awamotos (to be deprecated) -->
         <add id="GrupoAwamotos_SmartSuggestions::smart"
-             title="Sugestoes Inteligentes"
+             title="Sugestões Inteligentes"
              module="GrupoAwamotos_SmartSuggestions"
              parent="GrupoAwamotos_ERPIntegration::grupo_awamotos"
              sortOrder="40"
@@ -19,7 +19,7 @@
              resource="GrupoAwamotos_SmartSuggestions::dashboard"/>
 
         <add id="GrupoAwamotos_SmartSuggestions::rfm"
-             title="Analise RFM"
+             title="Análise RFM"
              module="GrupoAwamotos_SmartSuggestions"
              parent="GrupoAwamotos_SmartSuggestions::smart"
              sortOrder="5"
@@ -27,7 +27,7 @@
              resource="GrupoAwamotos_SmartSuggestions::rfm"/>
 
         <add id="GrupoAwamotos_SmartSuggestions::suggestions"
-             title="Sugestoes de Carrinho"
+             title="Sugestões de Carrinho"
              module="GrupoAwamotos_SmartSuggestions"
              parent="GrupoAwamotos_SmartSuggestions::smart"
              sortOrder="10"
@@ -35,7 +35,7 @@
              resource="GrupoAwamotos_SmartSuggestions::suggestions"/>
 
         <add id="GrupoAwamotos_SmartSuggestions::forecast"
-             title="Projecoes"
+             title="Projeções"
              module="GrupoAwamotos_SmartSuggestions"
              parent="GrupoAwamotos_SmartSuggestions::smart"
              sortOrder="15"
@@ -43,7 +43,7 @@
              resource="GrupoAwamotos_SmartSuggestions::forecast"/>
 
         <add id="GrupoAwamotos_SmartSuggestions::history"
-             title="Historico"
+             title="Histórico"
              module="GrupoAwamotos_SmartSuggestions"
              parent="GrupoAwamotos_SmartSuggestions::smart"
              sortOrder="20"

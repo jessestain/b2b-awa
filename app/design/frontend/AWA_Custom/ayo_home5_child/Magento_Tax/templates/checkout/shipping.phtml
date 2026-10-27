@@ -1,0 +1,95 @@
+<?php
+/**
+ * Missão estabilização 2026-10-22 — override do totals de frete no carrinho (SSR).
+ * O método "Frete a combinar" (CarrierSelect, preço 0 POR DESIGN) não deve ser
+ * exibido como "R$ 0,00": mostra "A combinar" + nota de que o frete não está
+ * incluído no total. Nenhum valor financeiro é alterado.
+ *
+ * @var $block \Magento\Tax\Block\Checkout\Shipping
+ * @see \Magento\Tax\Block\Checkout\Shipping
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php if ($block->displayShipping()): ?>
+    <?php
+        $style = $block->escapeHtmlAttr($block->getStyle());
+        $colspan = (int) $block->getColspan();
+        /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+        $checkoutHelper = $block->getData('checkoutHelper');
+        $shippingTitle = (string) $block->getTotal()->getTitle();
+        $isACombinar = (bool) preg_match('/combinar/ui', $shippingTitle);
+    ?>
+    <?php if ($block->displayBoth()): ?>
+    <tr class="totals shipping excl">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+            <?= $block->escapeHtml($block->getExcludeTaxLabel()) ?>
+        </th>
+
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getExcludeTaxLabel()) ?>">
+            <?php if ($isACombinar): ?>
+                <span class="price"><?= $block->escapeHtml(__('A combinar')) ?></span>
+                <span class="shipping-not-included"><?= $block->escapeHtml(__('(não incluído no total)')) ?></span>
+            <?php else: ?>
+                <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl td.amount') ?>
+        <?php endif; ?>
+    <tr class="totals shipping incl">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+            <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
+        </th>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getIncludeTaxLabel()) ?>">
+            <?php if ($isACombinar): ?>
+                <span class="price"><?= $block->escapeHtml(__('A combinar')) ?></span>
+                <span class="shipping-not-included"><?= $block->escapeHtml(__('(não incluído no total)')) ?></span>
+            <?php else: ?>
+                <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl td.amount') ?>
+        <?php endif; ?>
+    <?php elseif ($block->displayIncludeTax()): ?>
+    <tr class="totals shipping incl">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        </th>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+            <?php if ($isACombinar): ?>
+                <span class="price"><?= $block->escapeHtml(__('A combinar')) ?></span>
+                <span class="shipping-not-included"><?= $block->escapeHtml(__('(não incluído no total)')) ?></span>
+            <?php else: ?>
+                <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl td.amount') ?>
+        <?php endif; ?>
+    <?php else: ?>
+    <tr class="totals shipping excl">
+        <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        </th>
+        <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+            <?php if ($isACombinar): ?>
+                <span class="price"><?= $block->escapeHtml(__('A combinar')) ?></span>
+                <span class="shipping-not-included"><?= $block->escapeHtml(__('(não incluído no total)')) ?></span>
+            <?php else: ?>
+                <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl td.amount') ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

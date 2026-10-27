@@ -99,6 +99,16 @@
                     <comment>Exibida ao cliente após cadastro</comment>
                 </field>
 
+                <field id="rejected_message" translate="label comment" type="textarea" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mensagem para Cadastro Rejeitado</label>
+                    <comment>Exibida quando o cadastro B2B é recusado. Aceita HTML (ex.: link do WhatsApp).</comment>
+                </field>
+
+                <field id="suspended_message" translate="label comment" type="textarea" sortOrder="36" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mensagem para Conta Suspensa</label>
+                    <comment>Exibida quando a conta B2B está suspensa/bloqueada. Aceita HTML (ex.: link do WhatsApp).</comment>
+                </field>
+
                 <field id="send_approval_email" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enviar E-mail de Aprovação</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -526,49 +536,10 @@
                     <comment>ativa notificações via whatsapp</comment>
                 </field>
 
-                <field id="provider" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>provedor de api</label>
-                    <source_model>GrupoAwamotos\B2B\Model\Config\Source\WhatsAppProvider</source_model>
-                    <comment>escolha o provedor de api do whatsapp</comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="api_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>url da api</label>
-                    <comment>url base da api (ex: https://api.z-api.io)</comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="instance_id" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>id da instância / phone number id</label>
-                    <comment>id da instância (z-api/evolution) ou phone number id (meta)</comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="api_key" translate="label comment" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>token / api key</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <comment>token de autenticação da api</comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
 
-                <field id="client_token" translate="label comment" type="obscure" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>client token (z-api)</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <comment>security token da conta z-api (obrigatório). encontre em app.z-api.io → sua instância → segurança.</comment>
-                    <depends>
-                        <field id="enabled">1</field>
-                        <field id="provider">zapi</field>
-                    </depends>
-                </field>
 
                 <field id="default_number" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>número padrão (remetente)</label>
@@ -642,6 +613,37 @@
                     <depends>
                         <field id="enabled">1</field>
                     </depends>
+                </field>
+
+                <field id="notify_attendant_on_login" translate="label comment" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>notificar vendedora no login do cliente</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>envia whatsapp para a vendedora atribuida quando o cliente B2B faz login (maximo 1 aviso por cliente por dia)</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+                <field id="notify_attendant_activity_realtime" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>notificar vendedora em tempo real (carrinho / busca sem resultado)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>avisa a vendedora quando o cliente dela coloca produto no carrinho ou busca algo sem resultado (dedupe diario)</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="notify_attendant_activity_digest" translate="label comment" type="select" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>resumo diario de atividade para a vendedora (17:30)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>envia um resumo diario com buscas e produtos vistos dos clientes de cada vendedora</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="notify_group_id" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>grupo de notificações (WhatsApp) — ID do grupo</label>
+                    <comment>quando preenchido, envia cópia das notificações (cadastros, buscas, carrinho, login e digest) para este grupo. Use o ID retornado pela API do Z-API (formato 1203...-group).</comment>
                 </field>
             </group>
 
@@ -878,6 +880,34 @@
                     <label>Dashboard Executivo B2B (Fase 3)</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Ativa o dashboard read-only em awa_b2b/dashboard/index. Rollback: defina como Não e limpe cache.</comment>
+                </field>
+            </group>
+
+            <group id="customer_erp_status" translate="label comment" type="text" sortOrder="260" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Status do Cliente x Sectra</label>
+                <comment><![CDATA[Marca (nao bloqueia) clientes aprovados no site que o Sectra diz inativos ou nao encontrados. Grava uma nota em "Observações do Admin" do cliente, nunca altera aprovação, grupo ou preço.]]></comment>
+
+                <field id="flag_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Marcação Automática</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Quando ativo, roda diariamente e marca os clientes encontrados. Nunca bloqueia checkout nem altera preço/grupo.</comment>
+                </field>
+
+                <field id="flag_dry_run" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Marcação em Dry-run</label>
+                    <comment>Sim = apenas registra no log quem seria marcado. Revise o log antes de mudar para Não.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="flag_enabled">1</field>
+                    </depends>
+                </field>
+
+                <field id="flag_max_percent" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Limite de Segurança (%)</label>
+                    <comment>Se a marcação atingisse mais que este percentual dos clientes aprovados checados numa passada, nada é gravado (indica falha de consulta ao Sectra). Padrão 15.</comment>
+                    <depends>
+                        <field id="flag_enabled">1</field>
+                    </depends>
                 </field>
             </group>
 

@@ -263,6 +263,9 @@ class CategoryProductCarousel extends \Rokanthemes\BestsellerProduct\Block\Bests
         $collection = $this->productCollectionFactory->create()->setStoreId($storeId);
         $collection
             ->addAttributeToSelect($this->catalogConfig->getProductAttributes())
+            // awa_home_shelf usa type="small_image": sem estes atributos o
+            // getImage() cai no placeholder (mesmo o produto tendo foto).
+            ->addAttributeToSelect(['image', 'small_image', 'thumbnail'])
             ->addCategoriesFilter(['in' => $categoryIds])
             ->addMinimalPrice()
             ->addFinalPrice()
@@ -295,6 +298,9 @@ class CategoryProductCarousel extends \Rokanthemes\BestsellerProduct\Block\Bests
         $collection = $this->productCollectionFactory->create()->setStoreId($storeId);
         $collection
             ->addAttributeToSelect($this->catalogConfig->getProductAttributes())
+            // awa_home_shelf usa type="small_image": sem estes atributos o
+            // getImage() cai no placeholder (mesmo o produto tendo foto).
+            ->addAttributeToSelect(['image', 'small_image', 'thumbnail'])
             ->addCategoriesFilter(['in' => $categoryIds])
             ->addMinimalPrice()
             ->addFinalPrice()

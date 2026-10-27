@@ -38,7 +38,7 @@ class FooterData implements ArgumentInterface
     private const DEFAULT_INSTAGRAM_URL = 'https://www.instagram.com/awamotos';
     private const DEFAULT_FACEBOOK_URL = 'https://www.facebook.com/awamotos';
     private const DEFAULT_YOUTUBE_URL = 'https://www.youtube.com/@awamotos';
-    private const DEFAULT_PINTEREST_URL = 'https://www.pinterest.com.br/awamotos/';
+    private const DEFAULT_PINTEREST_URL = 'https://br.pinterest.com/awamotos/';
     private const DEFAULT_FOOTER_EXPERIMENT_SEED = 'home5_footer_v1';
 
     public function __construct(

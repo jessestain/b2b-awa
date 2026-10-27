@@ -40,7 +40,32 @@ class ValidateB2bOrderErpReadinessObserver implements ObserverInterface
             return;
         }
 
-        if (!$this->validatorChecker->isCustomerValidatedInSectra($customerId)) {
+        // FIX 2026-10-20 (incidente Sigma, 400 em payment-information 16:55:57Z):
+        // esta checagem é INFORMATIVA — registra o cliente como não validado no log
+        // do Sectra, mas não bloqueia o pedido. Uma falha de CONECTIVIDADE com o ERP
+        // (RuntimeException "ERP TCP unreachable", circuit breaker aberto ou PDOException)
+        // NÃO é estado de validação e não pode derrubar o checkout com 400.
+        //
+        // O gate real de importação continua intacto e roda no primeiro save do pedido
+        // (SectraOrderImportGateObserver -> OrderImportGate::applyOnOrderPlace): sem
+        // sectra_import_status='ready_for_import' o pedido NÃO é exposto ao Sectra
+        // (view oc_order exige state in (new,pending_payment,processing) AND
+        // sectra_import_status='ready_for_import' AND cliente em oc_customer_b2b_confirmed),
+        // e o cron de backfill reavalia o status quando o ERP volta. Nenhuma validação
+        // B2B/ERP é desativada por esta mudança.
+        $sectraValidated = null;
+        try {
+            $sectraValidated = $this->validatorChecker->isCustomerValidatedInSectra($customerId);
+        } catch (\RuntimeException | \Magento\Framework\Exception\LocalizedException | \PDOException $e) {
+            $this->logger->warning(sprintf(
+                '[B2B-ERP-Pull] ERP indisponível durante o checkout — customer #%d: %s: %s',
+                $customerId,
+                get_class($e),
+                $e->getMessage()
+            ));
+        }
+
+        if ($sectraValidated === false) {
             $sectraChave = $this->validatorChecker->resolveSectraChave($customerId);
             $this->syncLogger->log(
                 ProspectEvent::CHECKOUT_BLOCKED_CUSTOMER_NOT_VALIDATED,

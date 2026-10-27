@@ -51,8 +51,8 @@ class Index implements HttpGetActionInterface
 
     public function execute()
     {
-        // Pedido Rápido desativado
-        $redirect = $this->redirectFactory->create();
-        return $redirect->setPath('customer/account');
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->set((string) __('Pedido Rápido'));
+        return $resultPage;
     }
 }

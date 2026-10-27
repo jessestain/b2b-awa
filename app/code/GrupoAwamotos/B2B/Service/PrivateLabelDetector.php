@@ -143,6 +143,7 @@ class PrivateLabelDetector
             $rows = $this->erpConnection->query(
                 "SELECT DISTINCT m.MATERIAL
                  FROM MT_MATERIALLISTA m
+                 INNER JOIN MT_MATERIAL mat ON mat.CODIGO = m.MATERIAL AND mat.CCKATIVO = 'S'
                  WHERE m.FATORPRECO = ?
                    AND m.FILIAL = ?
                    AND m.VLRVDSUG > 0
@@ -167,8 +168,10 @@ class PrivateLabelDetector
     {
         try {
             $result = $this->erpConnection->fetchOne(
-                "SELECT TOP 1 MATERIAL FROM MT_MATERIALLISTA
-                 WHERE MATERIAL = ? AND FATORPRECO = ? AND FILIAL = ? AND VLRVDSUG > 0",
+                "SELECT TOP 1 ml.MATERIAL
+                 FROM MT_MATERIALLISTA ml
+                 INNER JOIN MT_MATERIAL mat ON mat.CODIGO = ml.MATERIAL AND mat.CCKATIVO = 'S'
+                 WHERE ml.MATERIAL = ? AND ml.FATORPRECO = ? AND ml.FILIAL = ? AND ml.VLRVDSUG > 0",
                 [$sku, $listCode, self::ERP_FILIAL]
             );
             return !empty($result);

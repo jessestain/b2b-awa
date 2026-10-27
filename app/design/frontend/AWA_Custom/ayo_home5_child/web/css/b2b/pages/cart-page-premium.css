@@ -1406,3 +1406,36 @@ html body#html-body.checkout-cart-index .page-wrapper .cart-summary
     min-inline-size: 0 !important;
     min-width: 0 !important;
 }
+
+/* AWA-B1-CART-TOTALS-FIX (2026-10-26): totais do resumo do carrinho eram
+   recortados pelo .table-wrapper (292px) porque a tabela ficava com 368px
+   (table-layout:auto). Forca a tabela a caber no card, libera o clip e
+   permite quebra nas celulas. Escopo: carrinho, >=992px (mobile ja ok). */
+@media (min-width: 992px) {
+  body.checkout-cart-index .cart-summary .cart-totals .table-wrapper { overflow: visible !important; }
+  body.checkout-cart-index .cart-summary .cart-totals table.totals {
+    width: 100% !important; table-layout: fixed !important;
+  }
+  body.checkout-cart-index .cart-summary .cart-totals table.totals th.mark {
+    width: auto !important; padding-inline: 8px !important;
+    white-space: normal !important; overflow-wrap: anywhere !important;
+  }
+  body.checkout-cart-index .cart-summary .cart-totals table.totals td.amount {
+    width: 112px !important; padding-inline: 8px !important;
+    white-space: normal !important; text-align: right !important;
+  }
+  body.checkout-cart-index .cart-summary .cart-totals table.totals td.amount .price {
+    white-space: nowrap !important;
+  }
+}
+
+/* AWA-B1-CART-TOTALS-FIX-2 (2026-10-26): o span "(nao incluido no total)" do
+   frete nao quebrava linha dentro do td.amount (112px) e vazava do card. */
+@media (min-width: 992px) {
+  body.checkout-cart-index .cart-summary .cart-totals table.totals td.amount,
+  body.checkout-cart-index .cart-summary .cart-totals table.totals td.amount .price,
+  body.checkout-cart-index .cart-summary .cart-totals table.totals td.amount .shipping-not-included {
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+  }
+}

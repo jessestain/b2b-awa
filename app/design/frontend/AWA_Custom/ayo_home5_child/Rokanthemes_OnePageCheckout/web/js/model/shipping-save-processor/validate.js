@@ -60,6 +60,8 @@ define([
     /**
      * @returns {void}
      */
+    var ensureBillingSyncGuard = false;
+
     function ensureBillingFromShipping() {
         var shippingAddress = quote.shippingAddress();
 
@@ -67,8 +69,19 @@ define([
             return;
         }
 
+        // Guarda de reentrancia (23/10): selectBillingAddressAction muta quote.billingAddress(),
+        // re-disparando subscriptions/computed (loop infinito -> RangeError).
+        if (ensureBillingSyncGuard || !isBillingAddressUsable(shippingAddress)) {
+            return;
+        }
+
         if (!isBillingAddressUsable(quote.billingAddress())) {
-            selectBillingAddressAction(shippingAddress);
+            ensureBillingSyncGuard = true;
+            try {
+                selectBillingAddressAction(shippingAddress);
+            } finally {
+                ensureBillingSyncGuard = false;
+            }
         }
     }
 

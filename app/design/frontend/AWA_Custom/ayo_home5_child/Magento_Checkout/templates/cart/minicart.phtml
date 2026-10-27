@@ -99,21 +99,25 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
                         </button>
                     </div>
                     <div class="block-content">
-                        <div class="awa-minicart-empty" role="status" aria-live="polite">
-                            <div class="awa-minicart-empty__icon" aria-hidden="true">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                                    <circle cx="9" cy="20" r="1"></circle>
-                                    <circle cx="18" cy="20" r="1"></circle>
-                                    <path d="M3.5 4h2l2.2 10.2a1 1 0 0 0 1 .8h8.6a1 1 0 0 0 1-.8L20 7H7.1"></path>
-                                </svg>
-                            </div>
-                            <strong class="subtitle empty"><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></strong>
-                            <p class="awa-minicart-empty__hint"><?= $block->escapeHtml(__('Browse the catalog or use search to find parts.')) ?></p>
+                        <style>
+                        /* Missão estabilização 2026-10-22: estado neutro do minicart na home (pré-hidratação). */
+                        .awa-minicart-defer-shell .awa-minicart-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:8px 0 16px;text-align:center}
+                        .awa-minicart-defer-shell .awa-minicart-loading__dots{display:inline-flex;gap:5px}
+                        .awa-minicart-defer-shell .awa-minicart-loading__dots span{width:7px;height:7px;border-radius:50%;background:var(--awa-text-muted,#6b7280);animation:awa-minicart-pulse 1.2s infinite ease-in-out}
+                        .awa-minicart-defer-shell .awa-minicart-loading__dots span:nth-child(2){animation-delay:.2s}
+                        .awa-minicart-defer-shell .awa-minicart-loading__dots span:nth-child(3){animation-delay:.4s}
+                        @keyframes awa-minicart-pulse{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+                        @media (prefers-reduced-motion: reduce){.awa-minicart-defer-shell .awa-minicart-loading__dots span{animation:none;opacity:.6}}
+                        </style>
+                        <div class="awa-minicart-loading" role="status" aria-live="polite" aria-busy="true">
+                            <span class="awa-minicart-loading__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                            <strong class="subtitle"><?= $block->escapeHtml(__('Carregando seu carrinho…')) ?></strong>
+                            <p class="awa-minicart-empty__hint"><?= $block->escapeHtml(__('Aguarde um instante.')) ?></p>
                             <div class="actions awa-minicart-empty__actions">
                                 <div class="primary">
                                     <a class="action primary awa-minicart-browse"
-                                       href="<?= $block->escapeUrl($block->getUrl('catalogo')) ?>">
-                                        <span><?= $block->escapeHtml(__('Browse our catalog')) ?></span>
+                                       href="<?= $block->escapeUrl($block->getUrl('checkout/cart')) ?>">
+                                        <span><?= $block->escapeHtml(__('Ver carrinho')) ?></span>
                                     </a>
                                 </div>
                             </div>
@@ -122,7 +126,6 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
                 </div>
             <?php endif; ?>
             <div id="minicart-content-wrapper"
-                 role="dialog"
                  aria-modal="true"
                  aria-label="<?= $block->escapeHtmlAttr(__('Meu Carrinho')) ?>"
                  <?= $isHomeUiDefer ? 'data-awa-minicart-defer="content" aria-hidden="true"' : 'data-bind="scope: \'minicart_content\'"' ?>>
@@ -194,4 +197,78 @@ $blockLoaderUrl = $sanitizeUrl($block->getViewFileUrl('images/loader-1.gif'));
     }
     </script>
     <?php endif; ?>
+<?php /* SHIM TEMPORÁRIO (task-17) — fora dos condicionais: precisa rodar na HOME, que é a página do sintoma. Ver shim-minicart-defer-shell.js e PATCH.md. Remover quando o pipeline estático for corrigido. */ ?>
+<script>
+/* ============================================================================
+ * SHIM TEMPORÁRIO — duplicação no painel do minicart (task-17) — REMOVER quando o
+ * pipeline de asset estático do tema for corrigido.
+ *
+ * SINTOMA: ao abrir o minicart, o estado vazio (e, com itens, o conteúdo) aparece
+ * DUAS vezes — uma do shell SSR `awa-minicart-defer-shell` e outra do conteúdo ko
+ * `#minicart-content-wrapper`. Medido em 02/10/2026, clique real:
+ *   sem shim  -> 2 blocos `.awa-minicart-empty` visíveis (905,153) e (905,381)
+ *   com shim  -> 1 bloco visível
+ *
+ * CAUSA: o CSS do tema mantém o shell SSR visível mesmo depois que o conteúdo real
+ * monta — em `awa-design-system.css` há duas regras com o MESMO seletor e a MESMA
+ * especificidade:
+ *     ...block-minicart > .awa-minicart-defer-shell{display:none!important}
+ *     ...block-minicart > .awa-minicart-defer-shell{display:flex!important}   <- vence
+ * e o runtime (`web/js/awa-minicart-ui-bootstrap.js`) nunca toca no defer-shell
+ * (0 referências). Corrigir só por CSS NÃO funciona: a regra vencedora vive dentro
+ * de `@layer awa-fixes`, e `!important` dentro de layer vence `!important` sem layer
+ * independentemente de especificidade (medido: um <style> injetado com :has(#id),
+ * que casava, perdeu para o `display:flex`).
+ *
+ * O QUE ESTE SHIM FAZ: remove o shell SSR quando — e só quando — o conteúdo ko já
+ * foi renderizado (`#minicart-content-wrapper` com filhos). Enquanto o ko não
+ * renderizou, o shell continua no lugar (senão o painel abriria vazio).
+ * Não grava nada, não decide estado, não mexe no carrinho.
+ *
+ * IDEMPOTENTE: guarda global, observer desconectado após a remoção, e inerte se o
+ * minicart não existir na página.
+ * ========================================================================== */
+(function (w, d) {
+    'use strict';
+
+    if (w.__awaMiniShellShim) {
+        return;
+    }
+    w.__awaMiniShellShim = true;
+
+    function removerShellSsr() {
+        var ko = d.getElementById('minicart-content-wrapper');
+        if (!ko || ko.children.length === 0) {
+            return false;
+        }
+        var shell = d.querySelector('.block-minicart > .awa-minicart-defer-shell');
+        if (shell && shell.parentNode) {
+            shell.parentNode.removeChild(shell);
+        }
+        return true;
+    }
+
+    if (removerShellSsr()) {
+        return;
+    }
+
+    if (w.MutationObserver) {
+        var obs = new w.MutationObserver(function () {
+            if (removerShellSsr()) {
+                obs.disconnect();
+            }
+        });
+        obs.observe(d.documentElement, { childList: true, subtree: true });
+        return;
+    }
+
+    var iv = w.setInterval(function () {
+        if (removerShellSsr()) {
+            w.clearInterval(iv);
+        }
+    }, 400);
+}(window, document));
+</script>
+
 </div>
+

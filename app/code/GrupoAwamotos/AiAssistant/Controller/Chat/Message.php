@@ -55,8 +55,18 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
         }
 
         $ipAddress = (string) $this->request->getServer('REMOTE_ADDR', '0.0.0.0');
+        $loggedCustomerId = $this->customerSession->isLoggedIn()
+            ? (int) $this->customerSession->getCustomerId()
+            : 0;
 
-        if (!$this->rateLimiter->checkAndIncrement($ipAddress)) {
+        if (!$this->rateLimiter->checkAndIncrement(
+            $ipAddress,
+            $loggedCustomerId > 0 ? $loggedCustomerId : null
+        )) {
+            /* 429 real: antes respondia 200 com `error` no corpo, o que escondia
+             * bloqueios nas métricas e impedia o widget de tratar o caso. */
+            $result->setHttpResponseCode(429);
+            $result->setHeader('Retry-After', '600', true);
             return $result->setData([
                 'reply'   => null,
                 'history' => [],
@@ -94,6 +104,38 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
         }
 
         $history = $this->sanitizeHistory(is_array($body['history'] ?? null) ? (array) $body['history'] : []);
+
+        // RODADA D 14/10/2026 — handoff humano em QUALQUER ponto do fluxo
+        // roteirizado. Antes, "quero falar com minha vendedora" no meio do
+        // fluxo era ignorado e o script repetia a pergunta ("Qual é a moto?").
+        $guideContext = $this->sanitizeGuide($body['guide'] ?? null);
+        if (!empty($guideContext['active']) && $this->isHandoffIntent($userMessage)) {
+            return $result->setData([
+                'reply' => 'Certo! Vou te encaminhar para atendimento humano. Toque no botão abaixo para falar com nossa equipe no WhatsApp.',
+                'history' => $history,
+                'products' => [],
+                'confirmation' => null,
+                'guide' => [
+                    'active' => false,
+                    'step' => 'part',
+                    'part' => '',
+                    'brand' => '',
+                    'model' => '',
+                    'year' => '',
+                    'skipped_part' => false,
+                    'chips' => [
+                        [
+                            'id' => 'handoff',
+                            'caption' => 'Falar no WhatsApp',
+                            'value' => '',
+                            'action' => 'handoff',
+                            'primary' => true,
+                        ],
+                    ],
+                ],
+                'error' => null,
+            ]);
+        }
 
         $isB2BApproved = false;
         if ($this->customerSession->isLoggedIn()) {
@@ -271,6 +313,40 @@ class Message implements HttpPostActionInterface, CsrfAwareActionInterface
         }
 
         return $out;
+    }
+
+    /**
+     * Reconhece intenção de handoff humano ("falar com vendedora/atendente…").
+     */
+    private function isHandoffIntent(string $text): bool
+    {
+        $normalized = ' ' . mb_strtolower(
+            preg_replace('/\s+/u', ' ', trim(strip_tags($text))) ?: ''
+        ) . ' ';
+        $plain = @iconv('UTF-8', 'ASCII//TRANSLIT', $normalized);
+        if (is_string($plain) && $plain !== '') {
+            $normalized = $plain;
+        }
+        $normalized = strtolower($normalized);
+
+        if (!preg_match('/(falar|fala|atend|vendedora?|humano|pessoa|consultor|whatsapp)/i', $normalized)) {
+            return false;
+        }
+        $intents = [
+            '/falar com (a |minha |o |meu )?(vendedora|vendedor|atendente|consultor)/',
+            '/falar com (um |uma |alguem|humano|pessoa|atendente)/',
+            '/(quero|queria|preciso|gostaria de|posso) (falar com|atendimento|ser atendido)/',
+            '/(atendente|atendimento (humano|pessoal|real))/',
+            '/vendedora? (por favor|agora|ja|!)/',
+            '/whatsapp/',
+            '/(humano|pessoa real|gente de verdade)/',
+        ];
+        foreach ($intents as $pattern) {
+            if (preg_match($pattern, $normalized)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

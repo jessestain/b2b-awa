@@ -183,6 +183,14 @@ class ImageSync implements ImageSyncInterface
         // Phase 1: Download all ERP images to tmp and compute hashes
         // This determines which images need updating BEFORE touching the product
         $pendingImages = [];
+        /* DEDUP INTRA-LOTE (04/10/2026). O ERP frequentemente devolve a MESMA imagem em
+           varios indices (medido: 403 grupos de conteudo identico e 838 arquivos excedentes
+           em 1407 = 60% do catalogo; ex. 11398_1.jpg == _2.jpg == _3.jpg com md5 identico).
+           A checagem imageExistsOnProduct() olha o PRODUTO, mas na Fase 1 as imagens novas
+           ainda NAO foram gravadas nele -- entao imagens irmas do MESMO lote nao se enxergavam
+           e todas entravam, virando _1/_2/_3 na galeria. Este mapa fecha essa brecha.
+           Nao substitui a checagem no produto: as duas se somam. */
+        $hashesVistosNoLote = [];
         foreach ($erpImages as $index => $imageData) {
             try {
                 $imagePath = $this->resolveImagePath($imageData);
@@ -196,6 +204,19 @@ class ImageSync implements ImageSyncInterface
                 }
 
                 $imageHash = md5_file($tmpFile);
+                if (isset($hashesVistosNoLote[$imageHash])) {
+                    // Mesma imagem ja enfileirada neste lote: nao duplicar na galeria.
+                    $this->ioFile->rm($tmpFile);
+                    $this->logger->info(sprintf(
+                        '[ERP] SKU %s: imagem %d tem o mesmo conteudo da imagem %d (md5 %s) -- ignorada.',
+                        $productSku,
+                        $index,
+                        $hashesVistosNoLote[$imageHash],
+                        substr($imageHash, 0, 8)
+                    ));
+                    continue;
+                }
+                $hashesVistosNoLote[$imageHash] = $index;
                 $storedHash = $this->getStoredImageHash($productSku, $index);
 
                 if ($storedHash === $imageHash) {

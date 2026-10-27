@@ -5,8 +5,26 @@
     <!-- Interface preferences -->
     <!-- Active LLM: Hermes 3 via OpenRouter (OpenRouterClient + model nousresearch/hermes-3-llama-3.1-70b).
          Alternativas: GroqClient ou HermesClient (Together AI) — trocar type abaixo. -->
+    <!-- Roteador: ai_assistant/general/provider = openrouter (padrão) | deepseek.
+         DeepSeek falhou => cai no OpenRouter na mesma requisição. -->
     <preference for="GrupoAwamotos\AiAssistant\Api\LlmClientInterface"
-                type="GrupoAwamotos\AiAssistant\Model\Llm\OpenRouterClient"/>
+                type="GrupoAwamotos\AiAssistant\Model\Llm\LlmClientRouter"/>
+
+    <!-- Mesmo cliente HTTP, perfil DeepSeek (só URL/chave/modelo/timeout mudam). -->
+    <virtualType name="GrupoAwamotos\AiAssistant\Model\Llm\DeepSeekClient"
+                 type="GrupoAwamotos\AiAssistant\Model\Llm\OpenRouterClient">
+        <arguments>
+            <argument name="provider" xsi:type="string">deepseek</argument>
+            <argument name="logger" xsi:type="object">GrupoAwamotos\AiAssistant\Logger\Logger</argument>
+        </arguments>
+    </virtualType>
+    <type name="GrupoAwamotos\AiAssistant\Model\Llm\LlmClientRouter">
+        <arguments>
+            <argument name="openRouter" xsi:type="object">GrupoAwamotos\AiAssistant\Model\Llm\OpenRouterClient</argument>
+            <argument name="deepSeek" xsi:type="object">GrupoAwamotos\AiAssistant\Model\Llm\DeepSeekClient</argument>
+            <argument name="logger" xsi:type="object">GrupoAwamotos\AiAssistant\Logger\Logger</argument>
+        </arguments>
+    </type>
 
     <preference for="GrupoAwamotos\AiAssistant\Api\AssistantOrchestratorInterface"
                 type="GrupoAwamotos\AiAssistant\Model\Orchestrator"/>
@@ -53,6 +71,9 @@
                 <item name="b2b_quote"         xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\B2BQuoteTool</item>
                 <item name="b2b_reorder"       xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\B2BReorderTool</item>
                 <item name="b2b_status"        xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\B2BStatusTool</item>
+                <!-- Storefront + B2B, só para quem está na conversa (identidade da sessão) -->
+                <item name="b2b_price_table_status"  xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\B2BPriceTableStatusTool</item>
+                <item name="b2b_pending_requirements" xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\B2BPendingRequirementsTool</item>
                         <!-- Central de Ajuda — todos os canais autorizados -->
                         <item name="knowledge_base_search" xsi:type="object">GrupoAwamotos\AiAssistant\Model\Tool\KnowledgeBaseSearchTool</item>
                         <!-- Admin only -->
@@ -70,6 +91,11 @@
         </arguments>
     </type>
     <type name="GrupoAwamotos\AiAssistant\Cron\PurgeConversationLog">
+        <arguments>
+            <argument name="logger" xsi:type="object">GrupoAwamotos\AiAssistant\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="GrupoAwamotos\AiAssistant\Cron\QualityCheck">
         <arguments>
             <argument name="logger" xsi:type="object">GrupoAwamotos\AiAssistant\Logger\Logger</argument>
         </arguments>

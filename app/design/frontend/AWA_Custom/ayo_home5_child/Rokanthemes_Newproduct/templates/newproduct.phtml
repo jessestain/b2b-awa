@@ -94,6 +94,20 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                     $productImageThumbHtml = (string) $productImageThumb->toHtml();
                     $productImageThumbUrl = (string) $productImageThumb->getImageUrl();
 
+                    /* VS4j: srcset responsivo nas prateleiras da HOME (abaixo do fold).
+                       Mobile usa 320px (awa_home_shelf_sm); tablets/desktop mantêm 400px. */
+                    if ($isHomePage) {
+                        $productImageSm = $block->getImage($_product, 'awa_home_shelf_sm');
+                        $smUrl = (string) $productImageSm->getImageUrl();
+                        $lgUrl = (string) $productImage->getImageUrl();
+                        if ($smUrl !== '' && $smUrl !== $lgUrl) {
+                            $srcset = $smUrl . ' 320w, ' . $lgUrl . ' 400w';
+                            $sizes = '(max-width: 767px) 170px, 280px';
+                            $productImage = $block->getImage($_product, $image, ['srcset' => $srcset, 'sizes' => $sizes]);
+                            $productImageHtml = (string) $productImage->toHtml();
+                        }
+                    }
+
                     if (!$isHomePage && $i < 2) {
                         // Fora da home: primeiras 2 imagens acima do fold
                         $productImageHtml = str_replace(' loading="lazy"', ' loading="eager" fetchpriority="high"', $productImageHtml);
@@ -280,12 +294,20 @@ $viewportId = $homeShelfDisplay instanceof \GrupoAwamotos\Theme\ViewModel\HomeSh
                                 <?php endif; ?>
 
                                 <?php if ($isHomePage && !$canViewPrices): ?>
-                                    <div class="awa-home-price-gate" role="note">
-                                        <span class="awa-home-price-gate__title"><?= $block->escapeHtml($priceGateHeadline) ?></span>
-                                        <a class="awa-card-view-product action secondary"
+                                    <?php /* PLANO B2B F3.3: CTA único e limpo no lugar do texto longo repetido
+                                       ("Preços exclusivos para revendedores / Cadastre-se para ver preços").
+                                       URL preservada do ViewModel ($priceGatePrimaryUrl) — nenhuma regra
+                                       de negócio alterada; o gate continua bloqueando o preço. */ ?>
+                                    <div class="awa-home-price-gate">
+                                        <?php /* F3.3: classe própria (awa-price-gate-cta), SEM awa-card-view-product —
+                                           o JS inline da home (awa-head-preload fixCardCta) reescreve o texto
+                                           de qualquer a.awa-card-view-product para "Cadastre-se para ver preços".
+                                           Estilo 100% autocontido no awa-b2b-premium-cards-20261026.css. */ ?>
+                                        <a class="awa-price-gate-cta"
                                            href="<?= $block->escapeUrl($priceGatePrimaryUrl) ?>"
-                                           aria-label="<?= $block->escapeHtmlAttr(__('%1: %2', $priceGateCardMessage, $productDisplayName)) ?>">
-                                            <?= $block->escapeHtml($priceGateCardMessage) ?>
+                                           aria-label="<?= $block->escapeHtmlAttr(__('Ver preço CNPJ de %1 — acesso B2B', $productDisplayName)) ?>">
+                                            <span class="awa-price-gate-cta__icon" aria-hidden="true">&#128274;</span>
+                                            <span><?= $block->escapeHtml(__('Ver Preço CNPJ')) ?></span>
                                         </a>
                                     </div>
                                 <?php elseif ($isHomePage): ?>

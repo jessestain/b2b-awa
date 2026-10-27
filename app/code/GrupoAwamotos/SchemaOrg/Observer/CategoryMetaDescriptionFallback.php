@@ -30,6 +30,9 @@ class CategoryMetaDescriptionFallback implements ObserverInterface
 {
     private const MIN_DESCRIPTION_LENGTH = 60;
 
+    /** Teto do total: o Google mostra ~155-160 chars (SEO-013). */
+    private const MAX_DESCRIPTION_LENGTH = 158;
+
     public function __construct(
         private readonly PageConfig $pageConfig,
         private readonly ScopeConfigInterface $scopeConfig,
@@ -76,11 +79,23 @@ class CategoryMetaDescriptionFallback implements ObserverInterface
             $context = $categoryName;
         }
 
-        $fallback = sprintf(
-            'Compre %s na AWA Motos. Peças e acessórios para motocicletas com entrega para todo Brasil. '
-            . 'Preços especiais para clientes B2B cadastrados.',
-            $context
-        );
+        // SEO-013 (04/10/2026): a cauda fixa tinha ~123 chars, entao qualquer contexto acima de
+        // 37 estourava os ~160 que o Google mostra (medido: 161 e 173 chars em PDPs reais, com
+        // a ultima frase sendo cortada). Encurtada para ~107 e com TETO de seguranca no total.
+        $tail = ' na AWA Motos. Peças e acessórios para motos com entrega para todo o Brasil. '
+            . 'Preço especial para clientes B2B.';
+
+        $budget = self::MAX_DESCRIPTION_LENGTH - mb_strlen('Compre ' . $tail, 'UTF-8');
+        if (mb_strlen($context, 'UTF-8') > $budget) {
+            $context = rtrim(mb_substr($context, 0, $budget, 'UTF-8'));
+            // evita cortar no meio de uma palavra
+            $corte = mb_strrpos($context, ' ', 0, 'UTF-8');
+            if ($corte !== false && $corte > 10) {
+                $context = rtrim(mb_substr($context, 0, $corte, 'UTF-8'));
+            }
+        }
+
+        $fallback = sprintf('Compre %s%s', $context, $tail);
 
         $this->pageConfig->setDescription($fallback);
     }

@@ -77,6 +77,7 @@ class ProductQueryParser
             'brand' => '',
             'model' => '',
             'year' => '',
+            'sku' => '',
             'search_query' => '',
         ];
 
@@ -91,14 +92,46 @@ class ProductQueryParser
             return $empty;
         }
 
+        // SKU explícito ("SKU 1170") ou mensagem só numérica: resolve por
+        // product_detail (match exato) — nunca pelo fuzzy do catálogo.
+        $sku = $this->extractSku($lower);
+        if ($sku !== '') {
+            $intent = $empty;
+            $intent['is_product_query'] = true;
+            $intent['sku'] = $sku;
+            $intent['search_query'] = $sku;
+
+            return $intent;
+        }
+
         $year = $this->extractYear($lower);
         $modelToken = $this->extractModelToken($lower);
+
+        // "fazer" como verbo ("o que você consegue fazer") não é Yamaha Fazer.
+        if ($modelToken === 'fazer' && $this->isVerbFazer($lower)) {
+            $modelToken = '';
+        }
+
+        // Sem peça, moto, cilindrada, ano ou marca citados, perguntas de
+        // suporte/procedimento (e o "fazer" verbal) não viram busca de produto —
+        // o fallback de extractPart transformaria qualquer palavra longa em "peça".
+        $displacementProbe = $modelToken !== ''
+            ? $this->extractDisplacementAfter($lower, $modelToken)
+            : '';
+        if ($modelToken === ''
+            && !$this->hasPartKeyword($lower)
+            && $this->extractExplicitBrand($lower) === ''
+            && $year === ''
+            && $displacementProbe === ''
+            && ($this->isSupportQuestion($lower) || $this->isVerbFazer($lower))
+        ) {
+            return $empty;
+        }
         $model = '';
         $brand = $this->extractExplicitBrand($lower);
-        $displacement = '';
+        $displacement = $displacementProbe;
 
         if ($modelToken !== '') {
-            $displacement = $this->extractDisplacementAfter($lower, $modelToken);
             $model = $this->formatModel($modelToken, $displacement);
             if ($brand === '') {
                 $brand = self::MODEL_BRAND[$modelToken] ?? '';
@@ -142,6 +175,7 @@ class ProductQueryParser
             'brand' => $brand,
             'model' => $model,
             'year' => $year,
+            'sku' => '',
             'search_query' => $searchQuery,
         ];
     }
@@ -162,6 +196,76 @@ class ProductQueryParser
             $lower
         ) === 1) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * "fazer" como verbo ("o que você consegue fazer", "como fazer a troca"),
+     * não como a moto Yamaha Fazer. Quando há cilindrada logo após
+     * ("fazer 250"), é a moto — nunca o verbo.
+     */
+    private function isVerbFazer(string $lower): bool
+    {
+        if (preg_match('/\bfazer\b\s*(?:\d{2,4}|anos?\b)/u', $lower) === 1) {
+            return false;
+        }
+
+        return preg_match(
+            '/(?:como|consegu\w*|posso|pode|podia|poderia|consigo|quero|queria|gostaria|'
+            . 'vou|vai|deixa|possa|voc[eê]|o que)\b.{0,16}\bfazer\b/u',
+            $lower
+        ) === 1
+            || preg_match(
+                '/\bfazer\b.{0,12}\b(isso|isto|assim|um pedido|uma compra|pedido|compra|meu cadastro|cadastro)\b/u',
+                $lower
+            ) === 1;
+    }
+
+    /**
+     * SKU explícito: "SKU 1170", "sku: 1170", "sku-1170" ou mensagem que é só
+     * um número (3–8 dígitos). Exige ao menos um dígito no código.
+     */
+    private function extractSku(string $lower): string
+    {
+        $trimmed = trim($lower);
+        if (preg_match('/^\d{3,8}$/u', $trimmed) === 1) {
+            return $trimmed;
+        }
+
+        if (preg_match('/\bsku\s*[:\-]?\s*([a-z0-9\-]*\d[a-z0-9\-]*)/u', $lower, $m) === 1) {
+            $sku = $m[1];
+            if (mb_strlen($sku) >= 3 && mb_strlen($sku) <= 20) {
+                return $sku;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Conta, cadastro B2B, preço bloqueado e políticas da loja — assunto do
+     * modelo e das tools de suporte, não do catálogo.
+     */
+    private function isSupportQuestion(string $lower): bool
+    {
+        return preg_match(
+            '/\b(pre[çc]os?|cadastr\w*|cnpj|aprova\w*|login|logar|senha|conta|acesso|'
+            . 'hor[áa]rios?|atendimento|atendente|vendedor\w*|representante|whatsapp|telefone|contato|'
+            . 'frete|entrega\w*|prazo|pagamento|pagar|boleto|pix|cart[ãa]o|parcel\w*|'
+            . 'garantia|troca|devolu\w*|endere[çc]o|pedido m[íi]nimo|como comprar|comprar no atacado|'
+            . 'pedidos?|status)\b/u',
+            $lower
+        ) === 1;
+    }
+
+    private function hasPartKeyword(string $lower): bool
+    {
+        foreach (self::PART_KEYWORDS as $keyword) {
+            if (preg_match('/\b' . preg_quote($keyword, '/') . '\b/u', $lower) === 1) {
+                return true;
+            }
         }
 
         return false;

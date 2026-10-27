@@ -1,170 +1,124 @@
-/**
- * OPC layout lock — bloqueante, carrega após styles-m.css.
- * Fonte síncrona: shell .checkout-container + #checkoutSteps (neutraliza floats Rokanthemes/Luma).
- */
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .checkout-container {
-    max-width: var(--awa-checkout-shell-max, min(1440px, calc(100vw - (2 * clamp(12px, 3vw, 20px))))) !important;
-    margin-inline: auto !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    min-width: 0 !important;
-    padding-inline: 0 !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container {
+  max-width:var(--awa-checkout-shell-max,min(1440px,calc(100vw - (2 * clamp(12px,3vw,20px)))))!important;
+  margin-inline:auto!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  min-width:0!important;
+  padding-inline:0!important
 }
-
-/* Uma única fonte de inset horizontal: page-main (critical). */
-html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .page-main > .columns,
-html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .page-main > .columns > .column.main {
-    padding-inline: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .page-main>.columns,html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .page-main>.columns>.column.main {
+  padding-inline:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  max-width:100%!important;
+  width:100%!important;
+  box-sizing:border-box!important
 }
-
-html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper :is(#checkout.checkout-container, .checkout-container) {
-    padding-inline: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    max-width: 100% !important;
-    margin-inline: 0 !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
+html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper :is(#checkout.checkout-container,.checkout-container) {
+  padding-inline:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  max-width:100%!important;
+  margin-inline:0!important;
+  width:100%!important;
+  box-sizing:border-box!important
 }
-
-html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .checkout-container > .messages {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>.messages {
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important
 }
-
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .checkout-container > :is(.opc-wrapper, #opc-sidebar, .opc-sidebar) {
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-right: 0 !important;
-    box-sizing: border-box !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>:is(.opc-wrapper,#opc-sidebar,.opc-sidebar) {
+  float:none!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-right:0!important;
+  box-sizing:border-box!important
 }
-
-@media (max-width: 1023px) {
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: var(--awa-checkout-gap-mobile, 16px) !important;
-        align-items: stretch !important;
-    }
-
-    html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > .opc-wrapper {
-        order: 0 !important;
-        position: static !important;
-    }
-
-    html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > :is(#opc-sidebar, .opc-sidebar) {
-        order: 1 !important;
-        position: static !important;
-        top: auto !important;
-    }
-
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > *:not(.opc-wrapper):not(#opc-sidebar):not(.opc-sidebar) {
-        order: -1 !important;
-        width: 100% !important;
-    }
+@media (max-width:1023px) {
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container {
+    display:flex!important;
+    flex-direction:column!important;
+    gap:var(--awa-checkout-gap-mobile,16px)!important;
+    align-items:stretch!important
+  }
+  html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>.opc-wrapper {
+    order:0!important;
+    position:static!important
+  }
+  html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>:is(#opc-sidebar,.opc-sidebar) {
+    order:1!important;
+    position:static!important;
+    top:auto!important
+  }
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>:not(.opc-wrapper):not(#opc-sidebar):not(.opc-sidebar) {
+    order:-1!important;
+    width:100%!important
+  }
 }
-
-@media (min-width: 1024px) {
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container {
-        display: grid !important;
-        grid-template-columns: minmax(0, 1fr) minmax(var(--awa-checkout-sidebar-min, 300px), var(--awa-checkout-sidebar-max, 340px)) !important;
-        gap: var(--awa-checkout-gap, 24px) !important;
-        align-items: start !important;
-    }
-
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > .opc-wrapper {
-        grid-column: 1 !important;
-        grid-row: auto !important;
-        order: 0 !important;
-    }
-
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > :is(#opc-sidebar, .opc-sidebar) {
-        grid-column: 2 !important;
-        grid-row: auto !important;
-        order: 0 !important;
-        position: static !important;
-        top: auto !important;
-        align-self: start !important;
-    }
-
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container > *:not(.opc-wrapper):not(#opc-sidebar):not(.opc-sidebar) {
-        grid-column: 1 / -1 !important;
-    }
+@media (min-width:1024px) {
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container {
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(var(--awa-checkout-sidebar-min,280px),var(--awa-checkout-sidebar-max,320px))!important;
+    gap:var(--awa-checkout-gap,24px)!important;
+    align-items:start!important
+  }
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>.opc-wrapper {
+    grid-column:1!important;
+    grid-row:auto!important;
+    order:0!important
+  }
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>:is(#opc-sidebar,.opc-sidebar) {
+    grid-column:2!important;
+    grid-row:auto!important;
+    order:0!important;
+    position:static!important;
+    top:auto!important;
+    align-self:start!important
+  }
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container>:not(.opc-wrapper):not(#opc-sidebar):not(.opc-sidebar) {
+    grid-column:1/-1!important
+  }
 }
-
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .opc-wrapper #checkoutSteps {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-auto-flow: row !important;
-    gap: 14px !important;
-    float: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .opc-wrapper #checkoutSteps {
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-auto-flow:row!important;
+  gap:14px!important;
+  float:none!important;
+  margin:0!important;
+  padding:0!important;
+  list-style:none!important
 }
-
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .opc-wrapper #checkoutSteps > :is(#shipping, #opc-shipping_method, #payment, li) {
-    float: none !important;
-    clear: both !important;
-    grid-column: 1 / -1 !important;
-    grid-row: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .opc-wrapper #checkoutSteps>:is(#shipping,#opc-shipping_method,#payment,li) {
+  float:none!important;
+  clear:both!important;
+  grid-column:1/-1!important;
+  grid-row:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+  box-sizing:border-box!important
 }
-
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .opc-wrapper :is(#shipping, #opc-shipping_method, #payment) {
-    padding: 0 !important;
-    margin-top: 0 !important;
-    margin-left: 0 !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .opc-wrapper :is(#shipping,#opc-shipping_method,#payment) {
+  padding:0!important;
+  margin-top:0!important;
+  margin-left:0!important
 }
-
-html body#html-body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper #shipping-method-buttons-container,
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-#shipping-method-buttons-container {
-    display: none !important;
+html body#html-body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper #shipping-method-buttons-container,html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) #shipping-method-buttons-container {
+  display:none!important
 }
-
-html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-.page-wrapper .opc-wrapper #checkoutSteps > li .shipping-address-item {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .opc-wrapper #checkoutSteps>li .shipping-address-item {
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important
 }
-
-@media (max-width: 767px) {
-    html body:is(.checkout-index-index, .rokanthemes-onepagecheckout, .onepagecheckout-index-index)
-    .page-wrapper .checkout-container {
-        padding-bottom: 0 !important;
-    }
+@media (max-width:767px) {
+  html body:is(.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index) .page-wrapper .checkout-container {
+    padding-bottom:0!important
+  }
 }

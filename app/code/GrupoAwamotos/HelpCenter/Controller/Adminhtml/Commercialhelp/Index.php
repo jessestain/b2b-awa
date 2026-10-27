@@ -16,7 +16,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action implements HttpGetActionInterface
 {
-    public const ADMIN_RESOURCE = 'GrupoAwamotos_HelpCenter::helpcenter_view';
+    public const ADMIN_RESOURCE = 'GrupoAwamotos_B2B::commercial_cockpit_only';
 
     public function __construct(
         Context $context,

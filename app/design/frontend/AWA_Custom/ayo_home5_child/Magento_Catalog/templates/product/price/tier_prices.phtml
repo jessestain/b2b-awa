@@ -44,6 +44,8 @@ $product = $block->getSaleableItem();
                             $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
 
                             $savePercent = $block->formatPercent($tierPriceModel->getSavePercent($price['price']));
+                            // Auditoria 2026-10-23 A06: fallback para celula nunca vazia.
+                            $tierPriceRawValue = $price['price']->getValue();
                             $priceAmountBlock = $block->renderAmount(
                                 $price['price'],
                                 [
@@ -108,6 +110,11 @@ $product = $block->getSaleableItem();
                                     <div class="awa-tier-price-amount">
                                         <?= /* @noEscape */ $priceAmountBlock ?>
                                     </div>
+                                    <?php if ($block->escapeHtml((string) strip_tags((string) $priceAmountBlock)) === '' && is_numeric($tierPriceRawValue)): ?>
+                                        <div class="awa-tier-price-amount awa-tier-price-amount--fallback">
+                                            <span class="price"><?= /* @noEscape */ $block->escapeHtml('R$ ' . number_format((float) $tierPriceRawValue, 2, ',', '.')) ?></span>
+                                        </div>
+                                    <?php endif; ?>
                                 </td>
                             <?php endif; ?>
 

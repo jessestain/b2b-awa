@@ -1,1 +1,0 @@
-define(["jquery"],function(n){"use strict";return{initialize:function(){},start:function(){},stop:function(){}}});

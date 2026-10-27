@@ -1,0 +1,53 @@
+@import "source/_awa-variables.less";
+// Requested lime commerce action, derived from the existing success primitive.
+@cartActionLime: saturate(lighten(spin(@awa-color-success, -55), 30%), 20%);
+// Reuse the existing earliest priority layer; do not alter protected head layout.
+@layer awa-header-refine {
+html body#html-body:is(.cms-index-index,.catalog-product-view,.catalog-category-view,.catalogsearch-result-index){--awa-cart-action-bg:@cartActionLime!important;--awa-cart-action-hover:darken(@cartActionLime,8%)!important;--awa-cart-action-text:@awa-color-text-primary!important}
+html body#html-body:is(.cms-index-index,.catalog-product-view,.catalog-category-view,.catalogsearch-result-index) :is(button.tocart,button.action.tocart):not(:disabled){background:var(--awa-cart-action-bg)!important;border-color:var(--awa-cart-action-bg)!important;color:var(--awa-cart-action-text)!important;box-shadow:none!important;min-height:44px!important}
+html body#html-body:is(.cms-index-index,.catalog-product-view,.catalog-category-view,.catalogsearch-result-index) button.tocart:not(:disabled):hover{background:var(--awa-cart-action-hover)!important;border-color:var(--awa-cart-action-hover)!important}
+html body#html-body:is(.cms-index-index,.catalog-product-view,.catalog-category-view,.catalogsearch-result-index) button.tocart:focus-visible{outline:2px solid @awa-color-text-primary!important;outline-offset:3px!important}
+html body#html-body.cms-index-index .awa-product-card{padding:@awa-space-3!important}
+html body#html-body.cms-index-index .awa-product-card>.product-thumb{margin:-@awa-space-3 -@awa-space-3 0!important;width:calc(100% + 24px)!important;max-width:none!important;min-height:0!important;max-height:none!important;height:auto!important;aspect-ratio:1!important;flex:0 0 auto!important}
+html body#html-body.cms-index-index .awa-product-card .product-thumb :is(.product-thumb-link,.first-thumb,.second-thumb,.product-image-container,.product-image-wrapper){width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;padding:0!important}
+html body#html-body.cms-index-index .awa-product-card .product-thumb img.product-image-photo{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important}
+html body#html-body.curriculo-page .curriculo-wrapper{--awa-dark:@awa-color-text-primary!important;--awa-light:@awa-color-primary-50!important;--awa-gray:@awa-color-text-muted!important;--awa-border:@awa-auth-border-strong!important;--awa-red:@awa-color-primary!important;--awa-red-dark:@awa-color-primary-dark!important;--awa-red-light:@awa-color-primary-50!important;--awa-success:@awa-color-success!important;--awa-success-dark:@awa-color-success-text!important;--curriculo-prog-c26:@awa-color-button-text!important;--curriculo-prog-c27:@awa-color-text-muted!important;color:@awa-color-text-primary!important;max-width:1040px!important;padding:@awa-space-6 0 @awa-space-7!important}
+html body#html-body.curriculo-page :is(.curriculo-page-header,.curriculo-intro,.curriculo-progress,.form.curriculo){border-radius:@awa-space-3!important;box-shadow:none!important;margin-bottom:@awa-space-6!important}
+html body#html-body.curriculo-page .curriculo-page-header{background:@awa-color-primary!important;padding:@awa-space-6!important;color:@awa-color-button-text!important}
+html body#html-body.curriculo-page .curriculo-page-header h1{font-size:28px!important;line-height:1.25!important;margin-bottom:@awa-space-2!important;color:@awa-color-button-text!important}
+html body#html-body.curriculo-page .curriculo-page-header .header-icon{width:44px!important;height:44px!important;margin-bottom:@awa-space-3!important}
+html body#html-body.curriculo-page .curriculo-intro{background:@awa-color-primary-50!important;border:1px solid @awa-auth-border-strong!important;border-left:4px solid @awa-color-primary!important;padding:@awa-space-4!important}
+html body#html-body.curriculo-page .curriculo-intro p{color:@awa-color-text-secondary!important}
+html body#html-body.curriculo-page .curriculo-progress{background:@awa-color-button-text!important;border:1px solid @awa-auth-border-strong!important;padding:@awa-space-4!important}
+html body#html-body.curriculo-page .curriculo-progress :is(.progress-text,.progress-fields){color:@awa-color-text-primary!important}
+html body#html-body.curriculo-page .curriculo-progress .progress-fields{background:@awa-color-primary-50!important}
+html body#html-body.curriculo-page .curriculo-progress :is(.progress-percent,#progress-percent){color:@awa-color-primary!important}
+html body#html-body.curriculo-page .curriculo-progress .progress-bar{background:@awa-color-primary-50!important;height:8px!important;margin-bottom:@awa-space-4!important}
+html body#html-body.curriculo-page .curriculo-progress .progress-fill{background:@awa-color-primary!important;transition:width .2s ease!important}
+html body#html-body.curriculo-page .curriculo-progress .progress-fill::after,html body#html-body.curriculo-page .curriculo-progress .step.in-progress::before{animation:none!important}
+html body#html-body.curriculo-page .curriculo-progress .progress-steps{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:@awa-space-2!important}
+html body#html-body.curriculo-page .curriculo-progress .step{background:@awa-color-primary-50!important;color:@awa-color-text-secondary!important;border:1px solid @awa-auth-border-strong!important;padding:@awa-space-3 @awa-space-2!important;font-size:13px!important;line-height:1.4!important}
+html body#html-body.curriculo-page .curriculo-progress .step::before{background:@awa-color-text-muted!important;color:@awa-color-button-text!important}
+html body#html-body.curriculo-page .curriculo-progress .step:is(.active,.in-progress){color:@awa-color-primary-dark!important;border-color:@awa-color-primary!important}
+html body#html-body.curriculo-page .curriculo-progress .step:is(.active,.in-progress)::before{background:@awa-color-primary!important}
+html body#html-body.curriculo-page .curriculo-progress .step.complete{color:@awa-color-success-text!important;background:@awa-color-success-light!important;border-color:@awa-color-success!important}
+html body#html-body.curriculo-page .curriculo-progress .step.complete::before{background:@awa-color-success!important}
+html body#html-body.curriculo-page .form.curriculo{background:@awa-color-button-text!important;border:1px solid @awa-auth-border-strong!important;overflow:hidden!important}
+html body#html-body.curriculo-page .form.curriculo .fieldset{padding:@awa-space-6!important;margin:0!important;min-width:0!important}
+html body#html-body.curriculo-page .form.curriculo .legend span{color:@awa-color-text-primary!important;background:@awa-color-primary-50!important;padding:@awa-space-3 @awa-space-4!important;border-color:@awa-color-primary!important}
+html body#html-body.curriculo-page .curriculo-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:@awa-space-4!important;margin-bottom:@awa-space-4!important}
+html body#html-body.curriculo-page .form.curriculo :is(.input-text,select,textarea){background:@awa-color-button-text!important;color:@awa-color-text-primary!important;border:1px solid @awa-color-text-muted!important;min-height:44px!important;border-radius:8px!important;padding:@awa-space-3!important;box-sizing:border-box!important}
+html body#html-body.curriculo-page .form.curriculo :is(.label,.note){color:@awa-color-text-primary!important}
+html body#html-body.curriculo-page .form.curriculo :is(.input-text,select,textarea):focus{outline:2px solid @awa-color-primary!important;outline-offset:2px!important}
+html body#html-body.curriculo-page .form.curriculo .mage-error{color:@awa-color-primary-dark!important}
+html body#html-body.curriculo-page .form.curriculo .actions-toolbar{background:@awa-color-primary-50!important;padding:@awa-space-4!important;margin:0!important}
+html body#html-body.curriculo-page .form.curriculo .action.submit.primary{background:@awa-color-primary!important;color:@awa-color-button-text!important;border:1px solid @awa-color-primary!important;border-radius:8px!important;min-height:44px!important;min-width:0!important;padding:@awa-space-3 @awa-space-6!important;box-shadow:none!important;transform:none!important;font-size:16px!important}
+html body#html-body.curriculo-page .form.curriculo .action.submit.primary::before{content:none!important}
+html body#html-body.curriculo-page .form.curriculo .action.submit.primary:hover{background:@awa-color-primary-dark!important}
+html body#html-body.curriculo-page .form.curriculo .action.submit.primary:focus-visible{outline:2px solid @awa-color-text-primary!important;outline-offset:3px!important}
+@media(max-width:767px){html body#html-body.curriculo-page .curriculo-wrapper{padding-top:@awa-space-4!important}html body#html-body.curriculo-page .curriculo-progress .progress-steps{grid-template-columns:1fr!important}html body#html-body.curriculo-page .form.curriculo .fieldset{padding:@awa-space-4!important}html body#html-body.curriculo-page .curriculo-grid{grid-template-columns:1fr!important}html body#html-body.curriculo-page .form.curriculo .actions-toolbar .primary{float:none!important;width:100%!important}html body#html-body.curriculo-page .form.curriculo .action.submit.primary{width:100%!important}html body#html-body.curriculo-page .curriculo-page-header h1{font-size:24px!important}}
+
+html body#html-body.curriculo-page .form.curriculo :is(.input-text,select,textarea).mage-error{border-color:@awa-color-primary!important}
+@media(max-width:767px){html body#html-body.curriculo-page .page-wrapper .awa-site-header .awa-header-mobile-toggle[data-awa-nav-toggle=true]{top:@awa-space-1!important;bottom:auto!important}}
+
+}

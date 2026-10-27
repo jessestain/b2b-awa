@@ -1,0 +1,82 @@
+<?php
+/**
+ * CONT-006 (task-29) — ARQUIVO NOVO (override do tema filho):
+ *   app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Contact/templates/form.phtml
+ *
+ * Base: app/design/frontend/ayo/ayo_default/Magento_Contact/templates/form.phtml (tema pai, sem override no filho).
+ * Mudança única: `autocomplete` nos 4 campos, medido como ausente em
+ *   contato/evidencias/contact-390/contact-390-meta.json → medidas.formularios.camposSemAutocomplete
+ *   = ["name","email","telephone","comment"].
+ * Mantidos: ids/nomes, rótulos, data-validate, o honeypot `hideit` e getChildHtml('form.additional.info')
+ * (é por ele que o CAPTCHA do Magento entra — não remover).
+ *
+ * Veículo: .phtml (override de tema; PHP roda no servidor, não depende de pub/static).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$contactHelper = $this->helper('Magento\Contact\Helper\Data');
+?>
+<div class="col-main col-lg-8 col-md-8 col-sm-8 col-xs-12">
+    <form class="form contact"
+          action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
+          id="contact-form"
+          method="post"
+          data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
+          data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset">
+            <h2 class="awa-contact-form__title"><?= $escaper->escapeHtml(__('Envie sua mensagem')) ?></h2>
+            <div class="row">
+                <div class="field name required col-sm-6 col-xs-12">
+                    <label class="label" for="name"><span><?= $escaper->escapeHtml(__('Nome')) ?></span></label>
+                    <div class="control">
+                        <input name="name" id="name" title="<?= $escaper->escapeHtmlAttr(__('Nome')) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($contactHelper->getPostValue('name') ?: $contactHelper->getUserName()) ?>"
+                               class="input-text" type="text" autocomplete="name"
+                               data-validate="{required:true}"/>
+                    </div>
+                </div>
+                <div class="field email required col-sm-6 col-xs-12">
+                    <label class="label" for="email"><span><?= $escaper->escapeHtml(__('E-mail')) ?></span></label>
+                    <div class="control">
+                        <input name="email" id="email" title="<?= $escaper->escapeHtmlAttr(__('E-mail')) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($contactHelper->getPostValue('email') ?: $contactHelper->getUserEmail()) ?>"
+                               class="input-text" type="email" autocomplete="email"
+                               data-validate="{required:true, 'validate-email':true}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="field telephone required">
+                <label class="label" for="telephone"><span><?= $escaper->escapeHtml(__('Telefone')) ?></span></label>
+                <div class="control">
+                    <input name="telephone" id="telephone" title="<?= $escaper->escapeHtmlAttr(__('Telefone')) ?>"
+                           value="<?= $escaper->escapeHtmlAttr($contactHelper->getPostValue('telephone')) ?>"
+                           class="input-text" type="tel" autocomplete="tel"/>
+                </div>
+            </div>
+            <div class="field comment required">
+                <label class="label" for="comment"><span><?= $escaper->escapeHtml(__('Como podemos ajudar?')) ?></span></label>
+                <div class="control">
+                    <textarea name="comment" id="comment" title="<?= $escaper->escapeHtmlAttr(__('Sua mensagem')) ?>"
+                              class="input-text" cols="5" rows="3" autocomplete="off"
+                              data-validate="{required:true}"><?= $escaper->escapeHtml($contactHelper->getPostValue('comment')) ?></textarea>
+                </div>
+            </div>
+            <?= $block->getChildHtml('form.additional.info') /* CAPTCHA do Magento — não remover */ ?>
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <input type="hidden" name="hideit" id="hideit" value=""/>
+                <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Enviar mensagem')) ?>" class="action submit primary">
+                    <span><?= $escaper->escapeHtml(__('Enviar mensagem')) ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="contact-info">
+        <?= $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('contact-info')->toHtml() ?>
+    </div>
+</div>

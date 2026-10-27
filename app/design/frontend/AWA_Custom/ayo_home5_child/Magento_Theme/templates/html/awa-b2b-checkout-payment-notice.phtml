@@ -1,0 +1,11 @@
+<?php
+declare(strict_types=1);
+/**
+ * PLANO B2B F4.4 — aviso comercial no bloco de pagamento do checkout.
+ * Apenas apresentação: o fluxo faturado existente não é alterado.
+ */
+?>
+<div class="awa-b2b-checkout-payment-notice" role="note">
+    <strong><?= $block->escapeHtml(__('Fluxo de confirmação comercial:')) ?></strong>
+    <?= $block->escapeHtml(__('Pagamento e condições faturadas validados pela equipe comercial após a reserva imediata do estoque.')) ?>
+</div>

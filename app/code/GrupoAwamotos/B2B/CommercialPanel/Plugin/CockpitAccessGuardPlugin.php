@@ -40,9 +40,6 @@ class CockpitAccessGuardPlugin
         $allowed = !$isCockpitOnly || $this->accessGuard->isRequestAllowed($request);
         $isOrderCreate = str_contains($path, 'order_create') || $path === 'sales/order/index';
         if ($isOrderCreate || ($isCockpitOnly && !$allowed)) {
-            // #region agent log
-            file_put_contents('/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-302306.log', json_encode(['sessionId' => '302306', 'runId' => 'verify', 'hypothesisId' => 'H3', 'location' => 'CockpitAccessGuardPlugin.php:aroundDispatch', 'message' => 'cockpit route guard', 'data' => ['path' => $path, 'isCockpitOnly' => $isCockpitOnly, 'allowed' => $allowed], 'timestamp' => (int) round(microtime(true) * 1000)]) . "\n", FILE_APPEND | LOCK_EX);
-            // #endregion
         }
 
         if (!$isCockpitOnly) {

@@ -5,3 +5,11 @@ $cssUrl = $block->getViewFileUrl('css/awa-visual-qa-fixes-2026-06-17.min.css');
 ?>
 <link rel="stylesheet" href="<?= $block->escapeUrl($cssUrl) ?>?v=20260730-p1-ssot-title" media="print" onload="this.media='all'" data-awa-visual-qa-fixes="1"/>
 
+
+<?php
+$awaUiRequest = $block->getRequest();
+$awaUiAction = $awaUiRequest ? (string) $awaUiRequest->getFullActionName() : '';
+if (in_array($awaUiAction, ['cms_index_index', 'catalog_product_view', 'catalog_category_view', 'catalogsearch_result_index', 'curriculo_index_index', 'trabalhe-conosco_index_index'], true)):
+?>
+<link rel="stylesheet" href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-storefront-consistency-r2.css')) ?>" data-awa-storefront-consistency="1"/>
+<?php endif; ?>

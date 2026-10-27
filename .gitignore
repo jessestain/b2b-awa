@@ -361,3 +361,20 @@ tests/e2e/test-results*/
 
 #Ignore cursor AI rules
 .cursor/rules/codacy.mdc
+
+# Segredos e sobras (auditoria 2026-10-16)
+/app/etc/env.php.*
+/app/etc/config.php.pre-*
+/app/etc/config.php.restaura*
+/NUL
+.git-credentials
+
+# Operacao AWA 2026-10-27 - congelamento do estado real
+/_backups/
+/99-consolidado/
+/app/var/
+*.awa-bak-*
+*.tar
+*.tar.gz
+*.tgz
+debug*.log

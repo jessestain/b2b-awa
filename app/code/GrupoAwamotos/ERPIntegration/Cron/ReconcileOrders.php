@@ -46,16 +46,75 @@ class ReconcileOrders
                 ));
             }
 
-            foreach ($relatorio['requer_conferencia'] as $pendente) {
-                $this->logger->warning(sprintf(
-                    '[ERP Reconcile] CONFERIR pedido %s (entity_id %d): existe no ERP como CODIGO=%d'
-                    . ' mas a estrutura difere (%d linha(s) no Magento contra %d no ERP). Nada foi gravado.',
-                    $pendente['increment_id'],
-                    $pendente['entity_id'],
-                    $pendente['erp_codigo'],
-                    $pendente['linhas_magento'],
-                    $pendente['linhas_erp']
-                ));
+            /* ALERTA COM DEDUPLICACAO (04/10/2026). Este cron roda a cada 30 minutos e
+               sinalizava os MESMOS pedidos em toda execucao: 3 pedidos x 2 mensagens x 48
+               execucoes = ~288 linhas/dia de ruido para um caso que, por definicao do proprio
+               reconciler, aguarda CONFERENCIA HUMANA e pode demorar dias. Ruido nesse volume
+               faz o alerta real se perder no log. Agora: avisa quando o conjunto MUDA
+               (imediato) e, sem mudanca, lembra uma vez por dia. A primeira ocorrencia SEMPRE
+               avisa -- nada e escondido, e o alerta diario mantem o caso visivel.
+               O estado fica em arquivo sob var/ (nao em cache injetado) DE PROPOSITO: um
+               argumento novo no construtor exigiria setup:di:compile, e o DI compilado
+               quebraria a instanciacao do cron. Se o arquivo falhar, cai no comportamento
+               antigo e avisa sempre -- nunca perder alerta por causa do mecanismo. */
+            $pendentes = $relatorio['requer_conferencia'] ?? [];
+            if ($pendentes) {
+                $assinatura = sha1((string) json_encode(array_map(
+                    static fn (array $p): array => [
+                        (string) ($p['increment_id'] ?? ''),
+                        (int) ($p['entity_id'] ?? 0),
+                        (int) ($p['erp_codigo'] ?? 0),
+                        (int) ($p['linhas_magento'] ?? 0),
+                        (int) ($p['linhas_erp'] ?? 0),
+                    ],
+                    $pendentes
+                )));
+
+                $mudou = true;
+                $quandoAnterior = 0;
+                $arquivo = BP . '/var/awa-reconcile-estado.json';
+                $bruto = @file_get_contents($arquivo);
+                if (is_string($bruto) && $bruto !== '') {
+                    $anterior = json_decode($bruto, true);
+                    if (is_array($anterior)) {
+                        $quandoAnterior = (int) ($anterior['quando'] ?? 0);
+                        $mudou = $assinatura !== (string) ($anterior['assinatura'] ?? '');
+                    }
+                }
+                $passouLembrete = $quandoAnterior <= 0 || (time() - $quandoAnterior) >= 86400;
+
+                if ($mudou || $passouLembrete) {
+                    $this->logger->warning(sprintf(
+                        '[ERP Reconcile] CONFERIR %d pedido(s) -- %s. Existe(m) no ERP mas a estrutura'
+                        . ' de itens difere; NADA foi gravado. Conferencia humana necessaria.',
+                        count($pendentes),
+                        $mudou ? 'conjunto mudou desde a ultima verificacao' : 'lembrete diario (sem mudanca)'
+                    ));
+                    foreach ($pendentes as $pendente) {
+                        $this->logger->warning(sprintf(
+                            '[ERP Reconcile]   pedido %s (entity_id %d): ERP CODIGO=%d,'
+                            . ' %d linha(s) no Magento contra %d no ERP.',
+                            $pendente['increment_id'],
+                            $pendente['entity_id'],
+                            $pendente['erp_codigo'],
+                            $pendente['linhas_magento'],
+                            $pendente['linhas_erp']
+                        ));
+                    }
+                } else {
+                    $this->logger->info(sprintf(
+                        '[ERP Reconcile] %d pedido(s) aguardando conferencia humana; sem mudanca'
+                        . ' desde %s e alerta ja emitido.',
+                        count($pendentes),
+                        date('Y-m-d H:i', $quandoAnterior)
+                    ));
+                }
+
+                @file_put_contents(
+                    $arquivo,
+                    (string) json_encode(['assinatura' => $assinatura, 'quando' => time(), 'pedidos' => array_column($pendentes, 'increment_id')]),
+                    LOCK_EX
+                );
             }
 
             foreach ($relatorio['erros'] as $erro) {

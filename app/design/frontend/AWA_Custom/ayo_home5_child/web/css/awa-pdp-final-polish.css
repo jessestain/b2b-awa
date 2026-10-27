@@ -33,7 +33,7 @@ body.catalog-product-view .product-info-main .page-title-wrapper .page-title {
 body.catalog-product-view .product-info-main .product.attribute.overview,
 body.catalog-product-view .product-info-main .short-description,
 body.catalog-product-view .product-info-main .product.attribute.description {
-    color: #475569;
+    color: var(--awa-text-soft, #475569);
     line-height: 1.58;
 }
 
@@ -46,7 +46,7 @@ body.catalog-product-view .product-info-main .product-info-price {
 
 body.catalog-product-view .product-info-main .price-box .price,
 body.catalog-product-view .product-info-main .special-price .price {
-    color: var(--primary-color, #b73337);
+    color: var(--primary-color, var(--awa-brand));
     font-weight: 800;
 }
 

@@ -1,0 +1,148 @@
+<?php
+/** Legacy SKU suggestions: used only when the enhanced search integration is not configured. */
+$enhancedSearchConfigured = (bool)$block->getLayout()->getBlock('autocomplete.injection.js');
+?>
+<link rel="stylesheet" href="<?= $block->escapeUrl($block->getViewFileUrl('css/awa-search-panel-recovery-r4-20261019.min.css')) ?>?v=20261019-integrated-r4" />
+<script type="application/json" id="awa-sku-suggest-config"><?= /* @noEscape */ json_encode([
+    'endpoint' => $block->getUrl('b2b/ajax/skusuggest'),
+    'enhancedConfigured' => $enhancedSearchConfigured
+]) ?></script>
+<script>
+(function (d) {
+    'use strict';
+    if (typeof require !== 'function' || typeof require.config !== 'function') { return; }
+    if (typeof require.specified !== 'function'
+        || require.specified('js/awa-search-autocomplete-compat')
+        || require.specified('Mirasvit_SearchAutocomplete/js/autocomplete.popular-r9')) {
+        d.documentElement.setAttribute('data-awa-search-upgrade', 'requires-reload');
+        return;
+    }
+    require.config({map: {'*': {
+        'js/awa-search-autocomplete-compat': 'js/awa-search-autocomplete-compat-integrated-r4',
+        'Mirasvit_SearchAutocomplete/js/autocomplete.popular-r9': 'Mirasvit_SearchAutocomplete/js/autocomplete.integrated-r4'
+    }}});
+    d.documentElement.setAttribute('data-awa-search-upgrade', 'r4');
+    var node = d.getElementById('awa-sku-suggest-config');
+    var config;
+    try { config = JSON.parse(node.textContent); } catch (_error) { return; }
+    // Configuration/availability, never panel visibility, decides whether this producer starts.
+    if (!config.endpoint || config.enhancedConfigured || d.documentElement.hasAttribute('data-awa-sku-listener')) { return; }
+    d.documentElement.setAttribute('data-awa-sku-listener', '1');
+    require(['js/awa-search-state-r4'], function (SearchState) {
+        var forms = new WeakMap();
+        function forInput(input) {
+            var form = input.form;
+            if (!form) { return null; }
+            if (!forms.has(form)) {
+                var machine = SearchState.forForm(form);
+                SearchState.prepareForm(form);
+                SearchState.bindFocus(form);
+                var state = {machine: machine, panel: null, input: input};
+                machine.subscribe(function (snapshot) {
+                    if (state.panel && (!snapshot.open || snapshot.owner !== 'sku' || snapshot.enhanced)) {
+                        state.panel.hidden = true;
+                        state.panel.replaceChildren();
+                        if (state.input.getAttribute('aria-controls') === state.panel.id) {
+                            state.input.setAttribute('aria-expanded', 'false');
+                            state.input.removeAttribute('aria-activedescendant');
+                        }
+                    }
+                    SearchState.syncAria(form);
+                });
+                forms.set(form, state);
+            }
+            return forms.get(form);
+        }
+        function render(state, items, ticket) {
+            var machine = state.machine;
+            if (!machine.current(ticket) || machine.snapshot().enhanced) { return; }
+            if (!state.panel) {
+                var panel = d.createElement('div');
+                panel.className = 'awa-sku-suggest'; panel.id = machine.snapshot().id + '-sku';
+                panel.setAttribute('role', 'listbox'); panel.hidden = true;
+                var parent = state.input.closest('.field.search');
+                if (!parent || parent.closest('form') !== state.input.form) { parent = state.input.form; }
+                if (!machine.current(ticket)) { return; }
+                parent.appendChild(panel); state.panel = panel;
+            }
+            var fragment = d.createDocumentFragment();
+            items.forEach(function (item, index) {
+                var link = d.createElement('a'); link.className = 'awa-sku-suggest__item';
+                link.id = machine.snapshot().id + '-sku-option-' + index;
+                link.href = item.url; link.setAttribute('role', 'option');
+                link.textContent = item.sku + ' — ' + item.name; fragment.appendChild(link);
+            });
+            if (!machine.current(ticket)) { return; }
+            state.panel.replaceChildren(fragment);
+            state.panel.setAttribute('data-awa-query', ticket.query);
+            state.panel.setAttribute('data-awa-epoch', String(ticket.epoch));
+            if (machine.commit(ticket)) {
+                state.panel.hidden = !items.length;
+                SearchState.syncAria(state.input.form);
+            }
+        }
+        function handleInput(event) {
+            var input = event.target;
+            if (!input.matches('input#search, input#mobile_search, .minisearch input[name="q"]')) { return; }
+            var state = forInput(input);
+            if (!state || state.machine.snapshot().enhanced) { return; }
+            var machine = state.machine;
+            if (event.isComposing) { machine.beginComposition(); return; }
+            if (machine.snapshot().composing) { return; }
+            machine.begin(input.value, SearchState.context(input.form));
+            var ticket = machine.reserve('sku');
+            if (!ticket) { return; }
+            var request = new XMLHttpRequest();
+            request.open('GET', config.endpoint + '?q=' + encodeURIComponent(input.value.trim()), true);
+            request.onload = function () {
+                if (!machine.current(ticket) || ticket.query !== SearchState.normalize(input.value)
+                    || ticket.context !== SearchState.context(input.form) || !input.form.contains(d.activeElement)) { return; }
+                try { render(state, JSON.parse(request.responseText).items || [], ticket); }
+                catch (_error) { machine.fail(ticket, 'transport'); }
+                machine.finish(ticket);
+            };
+            request.onerror = function () { machine.fail(ticket, 'transport'); machine.finish(ticket); };
+            if (machine.track(ticket, function () { request.abort(); })) { request.send(); }
+        }
+        d.addEventListener('input', handleInput, true);
+        d.addEventListener('compositionstart', function (event) {
+            if (!event.target.matches('input[name="q"]')) { return; }
+            var state = forInput(event.target);
+            if (state && !state.machine.snapshot().enhanced) { state.machine.beginComposition(); }
+        }, true);
+        d.addEventListener('compositionend', function (event) {
+            if (!event.target.matches('input[name="q"]')) { return; }
+            var state = forInput(event.target);
+            if (!state || state.machine.snapshot().enhanced) { return; }
+            state.machine.endComposition(event.target.value, SearchState.context(event.target.form));
+            handleInput(event);
+        }, true);
+        d.addEventListener('keydown', function (event) {
+            if (event.isComposing || event.keyCode === 229 || !event.target.form) { return; }
+            var state = forms.get(event.target.form);
+            if (!state || state.machine.snapshot().enhanced) { return; }
+            if (event.key === 'Escape') {
+                state.machine.close('escape'); event.preventDefault(); return;
+            }
+            if (!state.panel || state.panel.hidden || state.machine.snapshot().owner !== 'sku') { return; }
+            var items = state.panel.querySelectorAll('a[role="option"]');
+            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+                var index = state.machine.select(event.key === 'ArrowDown' ? 1 : -1, items.length);
+                if (index < 0) { return; }
+                event.preventDefault();
+                items.forEach(function (item, position) { item.setAttribute('aria-selected', position === index ? 'true' : 'false'); });
+                state.input.setAttribute('aria-activedescendant', items[index].id);
+            } else if (event.key === 'Enter' && state.machine.snapshot().selection >= 0) {
+                var selected = items[state.machine.snapshot().selection];
+                if (selected) { event.preventDefault(); selected.click(); }
+            }
+        });
+        d.addEventListener('click', function (event) {
+            d.querySelectorAll('form').forEach(function (form) {
+                var state = forms.get(form);
+                if (state && !state.machine.snapshot().enhanced && !form.contains(event.target)) { state.machine.close('outside'); }
+            });
+        }, true);
+    });
+})(document);
+</script>

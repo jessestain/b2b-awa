@@ -4,13 +4,24 @@
 define([
     'jquery',
     'mage/template',
-    'mage/translate',
-    'quickview/cloudzoom',
-    'swiper'
-], function ($, mageTemplate, $t, _cloudzoom, Swiper) {
+    'mage/translate'
+], function ($, mageTemplate, $t) {
     'use strict';
 
+    var cloudzoomReady = false;
+
     function refreshCloudZoom() {
+        if (!cloudzoomReady) {
+            require(['quickview/cloudzoom'], function () {
+                cloudzoomReady = true;
+                applyCloudZoom();
+            });
+            return;
+        }
+        applyCloudZoom();
+    }
+
+    function applyCloudZoom() {
         if (typeof $.fn.CloudZoom === 'function') {
             $('.cloud-zoom, .cloud-zoom-gallery').CloudZoom();
         }
@@ -65,42 +76,48 @@ define([
             syncMainImage($(this));
         });
 
-        var swiper = new Swiper($thumbs.get(0), {
-            slidesPerView: 3,
-            spaceBetween: 10,
-            watchOverflow: true,
-            navigation: prevEl && nextEl ? {
-                prevEl: prevEl,
-                nextEl: nextEl,
-                disabledClass: 'is-disabled'
-            } : false,
-            breakpoints: {
-                480: {
-                    slidesPerView: 3
-                },
-                768: {
-                    slidesPerView: 4
-                },
-                992: {
-                    slidesPerView: 4
-                },
-                1200: {
-                    slidesPerView: 4
-                }
-            },
-            on: {
-                slideChange: function (instance) {
-                    var slide = instance.slides[instance.activeIndex];
-
-                    if (slide) {
-                        syncMainImage($(slide));
-                    }
-                }
+        require(['swiper'], function (Swiper) {
+            if ($thumbs.data('awaQuickviewSwiper')) {
+                return;
             }
-        });
 
-        $thumbs.data('awaQuickviewSwiper', swiper);
-        syncMainImage($track.children().first());
+                    var swiper = new Swiper($thumbs.get(0), {
+                        slidesPerView: 3,
+                        spaceBetween: 10,
+                        watchOverflow: true,
+                        navigation: prevEl && nextEl ? {
+                            prevEl: prevEl,
+                            nextEl: nextEl,
+                            disabledClass: 'is-disabled'
+                        } : false,
+                        breakpoints: {
+                            480: {
+                                slidesPerView: 3
+                            },
+                            768: {
+                                slidesPerView: 4
+                            },
+                            992: {
+                                slidesPerView: 4
+                            },
+                            1200: {
+                                slidesPerView: 4
+                            }
+                        },
+                        on: {
+                            slideChange: function (instance) {
+                                var slide = instance.slides[instance.activeIndex];
+            
+                                if (slide) {
+                                    syncMainImage($(slide));
+                                }
+                            }
+                        }
+                    });
+            
+                    $thumbs.data('awaQuickviewSwiper', swiper);
+                    syncMainImage($track.children().first());
+        });
     }
 
     $.widget('mage.productQuickview', {
@@ -131,6 +148,10 @@ define([
                 self.element.removeClass('active');
                 $(this).addClass('active');
                 self.show();
+                // OPT-20261024: preload lazy das dependencias da galeria no clique,
+                // paralelo ao AJAX — garante que o plugin exista quando o conteudo
+                // chegar e o refreshCloudZoom() rodar (zoom funcional).
+                require(['quickview/cloudzoom'], function () {});
                 self.ajaxLoad($(this));
             });
         },
@@ -196,6 +217,12 @@ define([
                     }
 
                     refreshCloudZoom();
+                    // OPT-20261024: init determinístico do CloudZoom após o render —
+                    // a lib ja esta carregada (preload no clique); o refresh acima pode
+                    // assincronizar via require, entao aplicamos explicitamente aqui.
+                    require(['quickview/cloudzoom'], function () {
+                        itemShow.find('a.cloud-zoom, a.cloud-zoom-gallery').CloudZoom();
+                    });
                     $('#quickview-content').trigger('contentUpdated');
                     self.showWindow(itemShow);
                 }

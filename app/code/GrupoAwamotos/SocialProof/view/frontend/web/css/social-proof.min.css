@@ -1,0 +1,258 @@
+:root {
+    /* ── sproof — design tokens ─── */
+    --sproof-c1: #ffd700;
+    --sproof-c2: #fff;
+}
+
+/**
+ * Social Proof Badges — Estilos CSS
+ * Grupo Awamotos — Paleta var(--awa-primary)
+ *
+ * §1 — PDP (product/social-proof.phtml)
+ * §2 — Category list badges (product/list-badge.phtml)
+ */
+
+/* ====================================================
+ * §1 — PDP Social Proof container + badges
+ * ==================================================== */
+
+.social-proof-container,
+.social-proof-badge-stack {
+    --awa-sp-primary:        var(--awa-brand, #b73337);
+    --awa-sp-primary-dark:   var(--awa-primary-hover, #8e2629);
+    --awa-sp-surface:        var(--awa-white, var(--sproof-c2));
+    --awa-sp-border:         var(--awa-primary-light, #f9e5e5);
+    /* Urgência / baixo estoque — laranja semântico de alerta */
+    --sp-urgency-bg:         #fff3e0;
+    --sp-urgency-border:     #ffd8a8;
+    --sp-urgency-text:       #e65100;
+    --sp-urgency-accent:     #ff9800;
+}
+
+.social-proof-container {
+    margin: 20px 0;
+    min-height: 54px; /* Fix CLS: reserva espaço para pelo menos 1 badge (12px padding top + 12px padding bottom + ~30px content) */
+}
+
+.social-proof-badge {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--awa-sp-surface);
+    border: 1px solid var(--awa-sp-border);
+    animation: sp-fadeInUp 0.5s ease-out;
+}
+
+.social-proof-badge i {
+    font-size: 20px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.social-proof-badge .badge-text {
+    line-height: 1.4;
+}
+
+.social-proof-badge strong {
+    font-weight: 600;
+}
+
+/* Views Badge — Cinza neutro */
+.views-badge {
+    background: var(--awa-gray-100, #f7f7f7);
+    border-color: var(--awa-gray-200, #e5e5e5);
+    color: var(--awa-text, #333);
+}
+
+.views-badge i {
+    color: var(--awa-sp-primary);
+}
+
+/* Low Stock Badge — Laranja (Urgência) */
+.low-stock-badge {
+    background: var(--sp-urgency-bg);
+    border-color: var(--sp-urgency-border);
+    color: var(--sp-urgency-text);
+}
+
+.low-stock-badge i {
+    color: var(--sp-urgency-accent);
+    animation: sp-pulse 2s infinite;
+}
+
+.low-stock-badge.urgency {
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--sp-urgency-text) 15%, transparent);
+}
+
+/* Bestseller Badge — Vermelho/Ouro */
+.bestseller-badge {
+    background: linear-gradient(135deg, var(--awa-sp-primary) 0%, #cf4044 100%);
+    border-color: var(--awa-sp-primary-dark);
+    color: var(--sproof-c2);
+    font-weight: 600;
+}
+
+.bestseller-badge i {
+    color: var(--sproof-c1);
+    animation: sp-sparkle 2s infinite;
+}
+
+/* ====================================================
+ * §2 — Category list badges (product/list-badge.phtml)
+ * ==================================================== */
+
+.social-proof-badge-stack {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: calc(100% - 20px);
+}
+
+.social-proof-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    animation: sp-slideInLeft 0.4s ease-out;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.social-proof-pill--bestseller {
+    background: var(--awa-sp-primary);
+    color: var(--sproof-c2);
+}
+
+.social-proof-pill--low-stock {
+    background: var(--sp-urgency-accent);
+    color: var(--sproof-c2);
+}
+
+.social-proof-pill i {
+    font-size: 12px;
+}
+
+/* ====================================================
+ * Animações — prefixed sp- para evitar conflitos
+ * ==================================================== */
+
+@keyframes sp-fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sp-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes sp-sparkle {
+    0%, 100% {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: rotate(180deg) scale(1.1);
+    }
+}
+
+@keyframes sp-slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ====================================================
+ * Responsivo
+ * ==================================================== */
+
+@media (width <= 767px) {
+    .social-proof-badge {
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+
+    .social-proof-badge i {
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .social-proof-badge-stack {
+        top: 8px;
+        left: 8px;
+    }
+
+    .social-proof-pill {
+        font-size: 10px;
+        padding: 5px 10px;
+    }
+}
+
+/* Hover effect desktop */
+@media (width >= 768px) {
+    .social-proof-badge {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .social-proof-badge:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .social-proof-badge,
+    .social-proof-pill {
+        animation: none;
+        transition: none;
+    }
+
+    .low-stock-badge i,
+    .bestseller-badge i {
+        animation: none;
+    }
+
+    .social-proof-badge:hover {
+        transform: none;
+        box-shadow: none;
+    }
+}
+/* Q2 anti-CLS (19/10/2026): o container #awa-social-proof-pdp renderiza vazio e o
+   AJAX (social-proof-inject.js) popula ~10s — reserva de altura impede o reflow.
+   Altura de 2 badges em linha = 56px (badge 44px + gap). */
+#awa-social-proof-pdp.social-proof-container {
+    min-height: 56px;
+}

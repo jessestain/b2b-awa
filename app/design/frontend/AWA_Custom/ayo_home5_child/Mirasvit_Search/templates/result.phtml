@@ -140,7 +140,21 @@ $tabIndex           = 0;
     <?= /* @noEscape */ $currentHtml ?>
 <?php endif ?>
 
-<?php if ($totalCnt == 0): ?>
+<?php
+/**
+ * AWA 10/10/2026 — Search landing pages (Mirasvit) trazem a propria explicacao
+ * (ex.: /capacetes diz "Capacetes nao sao nossa especialidade, mas temos o que voce
+ * precisa!" e aponta viseiras/retrovisores). Quando a busca da landing devolve zero
+ * produtos, o bloco generico "Nenhum resultado encontrado" contradizia a propria
+ * mensagem da pagina. Medido: "capacete" tinha 3.769 buscas (79% de todo o
+ * zero-resultado) caindo nessa contradicao. Aqui apenas suprimimos o bloco generico
+ * NA landing; busca comum sem resultado continua exibindo o bloco normalmente.
+ */
+$__awaHandles = $block->getLayout()->getUpdate()->getHandles();
+$__awaIsSearchLanding = in_array('search_landing_page_view', $__awaHandles, true)
+    || in_array('search_landing_page', $__awaHandles, true);
+?>
+<?php if ($totalCnt == 0 && !$__awaIsSearchLanding): ?>
     <div class="awa-search-empty" role="status" aria-live="polite">
         <h2 class="awa-search-empty__title">
             <?= $block->escapeHtml(__('No results found')) ?>

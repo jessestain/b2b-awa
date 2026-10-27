@@ -18,7 +18,7 @@
              resource="GrupoAwamotos_LogMonitoring::dashboard"/>
              
         <add id="GrupoAwamotos_LogMonitoring::alerts" 
-             title="Alerts" 
+             title="Alertas" 
              module="GrupoAwamotos_LogMonitoring" 
              sortOrder="20" 
              parent="GrupoAwamotos_LogMonitoring::monitoring" 
@@ -26,7 +26,7 @@
              resource="GrupoAwamotos_LogMonitoring::alerts"/>
              
         <add id="GrupoAwamotos_LogMonitoring::metrics" 
-             title="Log Metrics" 
+             title="Métricas de Log" 
              module="GrupoAwamotos_LogMonitoring" 
              sortOrder="30" 
              parent="GrupoAwamotos_LogMonitoring::monitoring" 
@@ -34,7 +34,7 @@
              resource="GrupoAwamotos_LogMonitoring::metrics"/>
              
         <add id="GrupoAwamotos_LogMonitoring::systemhealth" 
-             title="System Health" 
+             title="Saúde do Sistema" 
              module="GrupoAwamotos_LogMonitoring" 
              sortOrder="40" 
              parent="GrupoAwamotos_LogMonitoring::monitoring" 

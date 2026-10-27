@@ -1,0 +1,1 @@
+.awa-cnpj-status{display:block;margin-top:4px;font-size:12px;line-height:1.4;}.awa-cnpj-status--loading{color:var(--cust-reg-c1,var(--awa-text-muted,var(--awa-text-secondary)));}.awa-cnpj-status--success{color:var(--awa-primary);font-weight:600;}.awa-cnpj-status--error{color:var(--awa-red,var(--awa-primary));}

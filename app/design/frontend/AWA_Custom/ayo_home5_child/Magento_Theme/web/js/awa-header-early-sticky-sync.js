@@ -32,10 +32,21 @@
         }
     }
 
+    /* PERF-2026-10-26 (INP/reflow): getBoundingClientRect por frame de scroll era o
+       maior forced reflow deste script (applySync ~90ms no trace). A altura do promo
+       bar so muda em resize/load ou quando o display inline muda — cache validado
+       por esses eventos (leitura de style.display NAO dispara layout). */
+    var _thrCache = null, _thrDisp = null;
+    function invalidateThreshold() { _thrCache = null; }
     function getThreshold() {
         var bar = _promoBar;
-        var rect = bar && bar.style.display !== 'none' ? bar.getBoundingClientRect() : null;
-        return 60 + (rect && rect.height > 0 ? Math.round(rect.height) : 0);
+        var disp = bar ? bar.style.display : null;
+        if (_thrCache === null || disp !== _thrDisp) {
+            var rect = bar && disp !== 'none' ? bar.getBoundingClientRect() : null;
+            _thrCache = 60 + (rect && rect.height > 0 ? Math.round(rect.height) : 0);
+            _thrDisp = disp;
+        }
+        return _thrCache;
     }
 
     function setVar(el, prop, value) {
@@ -279,4 +290,10 @@
         applySync();
     }
     w.addEventListener('scroll', onScroll, { passive: true });
+    /* PERF: resize pode mudar a altura do promo bar (threshold) e o estado sticky. */
+    w.addEventListener('resize', function () {
+        invalidateThreshold();
+        onScroll();
+    }, { passive: true });
+    w.addEventListener('load', invalidateThreshold, { once: true, passive: true });
 }(window, document));

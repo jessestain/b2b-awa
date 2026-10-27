@@ -471,6 +471,13 @@ class Sender implements WhatsappSenderInterface
      */
     private function normalizePhoneNumber(string $phone): string
     {
+        $phone = trim($phone);
+
+        // IDs de GRUPO do WhatsApp (ex.: 120363...-group / 1203...@g.us): preservar.
+        if (str_contains($phone, '-group') || str_contains($phone, '@g.us')) {
+            return $phone;
+        }
+
         // Remove all non-numeric characters
         $phone = preg_replace('/[^0-9]/', '', $phone);
 

@@ -226,6 +226,7 @@
              parent="GrupoAwamotos_B2B::platform_reports"
              sortOrder="20"
              action="salesintelligence/dashboard/index"
+             dependsOnModule="GrupoAwamotos_SalesIntelligence"
              resource="GrupoAwamotos_SalesIntelligence::dashboard"/>
 
         <add id="GrupoAwamotos_B2B::platform_audit"
@@ -333,6 +334,7 @@
              parent="GrupoAwamotos_B2B::platform_legacy"
              sortOrder="90"
              action="salesintelligence/dashboard/index"
+             dependsOnModule="GrupoAwamotos_SalesIntelligence"
              resource="GrupoAwamotos_SalesIntelligence::dashboard"/>
 
         <!-- Canário 2A: labels/sortOrder only — NÃO remover raízes; NÃO mudar ACL/action/id -->

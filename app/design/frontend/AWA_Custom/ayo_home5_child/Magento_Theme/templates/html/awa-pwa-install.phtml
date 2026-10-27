@@ -144,7 +144,21 @@
                     || (d.body ? d.body.scrollTop : 0)
                     || 0;
 
-                return d.visibilityState !== 'hidden' && scrollTop >= MIN_PROMPT_SCROLL_PX;
+                if (d.visibilityState === 'hidden') return false;
+                if (scrollTop >= MIN_PROMPT_SCROLL_PX) return true;
+
+                // Páginas curtas (ex.: carrinho vazio) não têm 500px para
+                // rolar; nesse caso o engajamento é considerado satisfeito
+                // assim que o delay mínimo vence.
+                var docHeight = Math.max(
+                    d.documentElement ? d.documentElement.scrollHeight : 0,
+                    d.body ? d.body.scrollHeight : 0
+                );
+                var viewHeight = w.innerHeight
+                    || (d.documentElement ? d.documentElement.clientHeight : 0)
+                    || 0;
+
+                return docHeight - viewHeight <= MIN_PROMPT_SCROLL_PX;
             };
 
             var schedule = function () {
@@ -259,10 +273,15 @@
 
     // Capturar beforeinstallprompt
     w.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (shouldShow()) {
-            w.__awaRequestHomeModal('install', show);
+        // Só assumimos o controle do evento (suprimindo o banner nativo)
+        // quando vamos realmente mostrar o nosso modal. Nos demais casos
+        // (primeira visita, modal já exibido na sessão etc.) o browser
+        // fica livre para mostrar o banner nativo de instalação — isso
+        // elimina o aviso "Banner not shown: ...
+        // beforeinstallpromptevent.preventDefault() called".
+        if (shouldShow() && w.__awaRequestHomeModal('install', show)) {
+            e.preventDefault();
+            deferredPrompt = e;
         }
     });
 

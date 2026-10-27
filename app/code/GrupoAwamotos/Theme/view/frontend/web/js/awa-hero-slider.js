@@ -361,6 +361,23 @@ fn();
             lockHeight = previousLock;
         }
 
+        /* VS4l: o lock pré-init media o conteúdo antes do settle (~96px, aspecto
+           natural da imagem) e travava o hero ABAIXO da altura reservada (F47 =
+           min-height 163px no 1º paint) — o LCP só pintava a imagem em tamanho
+           final ~5s depois. Passa a respeitar a reserva do container: nunca
+           trava abaixo dela. */
+        var aboveFoldReserved = 0;
+        var aboveFoldEl = target.closest('.top-home-content--above-fold');
+        if (aboveFoldEl) {
+            var reservedMin = parseFloat(window.getComputedStyle(aboveFoldEl).minHeight);
+            if (Number.isFinite(reservedMin) && reservedMin > 0) {
+                aboveFoldReserved = Math.ceil(reservedMin);
+            }
+        }
+        if (aboveFoldReserved > lockHeight) {
+            lockHeight = aboveFoldReserved;
+        }
+
         if (lockHeight <= 0) {
             return;
         }
@@ -684,7 +701,7 @@ fn();
                 a11y: {
                     enabled: true,
                     prevSlideMessage: 'Slide anterior',
-                    nextSlideMessage: 'Proximo slide',
+                    nextSlideMessage: 'Próximo slide',
                     firstSlideMessage: 'Primeiro slide',
                     lastSlideMessage: 'Ultimo slide'
                 },

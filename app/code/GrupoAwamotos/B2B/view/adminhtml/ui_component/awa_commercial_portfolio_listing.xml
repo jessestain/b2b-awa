@@ -54,6 +54,7 @@
         <column name="city">
             <settings>
                 <filter>text</filter>
+                <visible>false</visible>
                 <label translate="true">Cidade</label>
             </settings>
         </column>

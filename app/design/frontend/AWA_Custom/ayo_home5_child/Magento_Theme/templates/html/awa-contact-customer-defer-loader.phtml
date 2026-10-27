@@ -1,0 +1,73 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * CONT-002 (task-29) — ARQUIVO NOVO:
+ *   app/design/frontend/AWA_Custom/ayo_home5_child/Magento_Theme/templates/html/awa-contact-customer-defer-loader.phtml
+ *
+ * Inicializa customer-data (e portanto Magento_Theme/js/view/messages) na página de contato.
+ * Sem este loader, a mensagem de confirmação/erro do formulário — que chega no cookie `mage-messages` —
+ * só aparecia ~10 s depois do redirect (medido: t+10 s; ver pacote-contato/evidencias/envio-diag).
+ *
+ * Diferenças em relação a awa-home-customer-defer-loader.phtml:
+ *   - NÃO carrega js/awa-home-deferred-widgets-bootstrap (widgets da home não pertencem ao contato);
+ *   - boota com { immediate: true }: aqui a mensagem é a razão de existir da página.
+ *
+ * Veiculo: .phtml (chega ao navegador). Sem bloco de estilo e sem id reservado — nada depende de CSS/JS do tema,
+ * que nao publica (sombra em pub/static + materializador desativado).
+ * ATENCAO (03/10/2026): NAO escrever tag literal (script/style) nem delimitador de PHP dentro deste
+ * comentario — o publish-phtml.sh corta o comentario naquele ponto e o resto VAZA para dentro da tag,
+ * gerando SyntaxError em TODAS as paginas (derrubou a loja por 9 minutos em 03/10).
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<script>
+(function (w, d) {
+    'use strict';
+
+    var started = false;
+
+    function boot() {
+        if (started) {
+            return;
+        }
+
+        var node = d.getElementById('awa-customer-sections-defer-json');
+        if (!node || !node.textContent) {
+            return;
+        }
+
+        started = true;
+
+        w.require(['js/awa-customer-sections-bootstrap'], function (bootstrapCustomerSections) {
+            var payload;
+
+            try {
+                payload = JSON.parse(node.textContent);
+            } catch (e) {
+                return;
+            }
+
+            Promise.resolve(bootstrapCustomerSections(payload, { immediate: true }));
+        });
+    }
+
+    function start() {
+        if (typeof w.awaRunWhenRequire === 'function') {
+            w.awaRunWhenRequire(boot, { key: 'contact-customer-defer-loader' });
+            return;
+        }
+
+        if (typeof w.require === 'function' && !w.require._awaStub) {
+            boot();
+        }
+    }
+
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', start, { once: true });
+    } else {
+        start();
+    }
+}(window, document));
+</script>

@@ -48,7 +48,7 @@
              resource="GrupoAwamotos_B2B::customer_approval"/>
 
         <add id="GrupoAwamotos_B2B::quotes"
-             title="Cotacoes"
+             title="Cotações"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="20"
@@ -76,7 +76,7 @@
              resource="GrupoAwamotos_B2B::companies"/>
 
         <add id="GrupoAwamotos_B2B::credit_management"
-             title="Credito B2B"
+             title="Crédito B2B"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="28"
@@ -85,7 +85,7 @@
              resource="GrupoAwamotos_B2B::credit"/>
 
         <add id="GrupoAwamotos_B2B::order_approval"
-             title="Aprovacao de Pedidos"
+             title="Aprovação de Pedidos"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="25"
@@ -103,7 +103,7 @@
              resource="GrupoAwamotos_B2B::carrier"/>
 
         <add id="GrupoAwamotos_B2B::attendants"
-             title="Gestao de Atendentes"
+             title="Gestão de Atendentes"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="35"
@@ -112,7 +112,7 @@
              resource="GrupoAwamotos_B2B::attendants"/>
 
         <add id="GrupoAwamotos_B2B::notifications"
-             title="Log de Notificacoes"
+             title="Log de Notificações"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="40"
@@ -130,7 +130,7 @@
              resource="GrupoAwamotos_B2B::attendant_self"/>
 
         <add id="GrupoAwamotos_B2B::config"
-             title="Configuracoes B2B"
+             title="Configurações B2B"
              translate="title"
              module="GrupoAwamotos_B2B"
              sortOrder="100"

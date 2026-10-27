@@ -1,0 +1,312 @@
+<?php
+/**
+ * Catálogo de Compra Rápida B2B — "Comprar produtos".
+ *
+ * @var \GrupoAwamotos\B2B\Block\QuickCatalog\Index $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+declare(strict_types=1);
+
+$gate = $block->getGate();
+$allowed = (bool) $gate['allowed'];
+$categories = $block->getCategories();
+$initialCart = $block->getInitialCart();
+$messages = [
+    'selectedBadge' => __('Selecionado'),
+    'addedBadge' => __('Adicionado'),
+    'addSelected' => __('Adicionar selecionados'),
+    'clearSelection' => __('Limpar seleção'),
+    'cartTitle' => __('Resumo do carrinho'),
+    'reviewOrder' => __('Revisar pedido'),
+];
+?>
+<div class="b2b-quickcatalog" id="b2b-quickcatalog" data-awa-quickcatalog="1">
+
+    <header class="b2b-quickcatalog__header">
+        <div class="b2b-quickcatalog__container">
+            <nav class="b2b-quickcatalog__breadcrumb" aria-label="<?= $escaper->escapeHtmlAttr(__('Você está em')) ?>">
+                <a href="<?= $escaper->escapeUrl($block->getUrl('')) ?>"><?= $escaper->escapeHtml(__('Início')) ?></a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page"><?= $escaper->escapeHtml(__('Comprar produtos')) ?></span>
+            </nav>
+
+            <div class="b2b-quickcatalog__heading">
+                <h1 class="b2b-quickcatalog__title"><?= $escaper->escapeHtml(__('Comprar produtos')) ?></h1>
+
+                <nav class="b2b-quickcatalog__account-nav"
+                 aria-label="<?= $escaper->escapeHtmlAttr(__('Sua conta')) ?>">
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/dashboard')) ?>">
+                        <?= $escaper->escapeHtml(__('Minha conta')) ?>
+                    </a>
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/orders')) ?>">
+                        <?= $escaper->escapeHtml(__('Meus pedidos')) ?>
+                    </a>
+                    <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>">
+                        <?= $escaper->escapeHtml(__('Carrinho')) ?>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <?php if (!$allowed): ?>
+        <section class="b2b-quickcatalog__gate" role="status" aria-live="polite"
+                 aria-labelledby="qc-gate-title">
+            <div class="b2b-quickcatalog__container">
+                <h2 id="qc-gate-title" class="b2b-quickcatalog__gate-title">
+                    <?= $escaper->escapeHtml(__('A compra ainda não está liberada para sua conta')) ?>
+                </h2>
+                <div class="b2b-quickcatalog__gate-message">
+                    <?= /* @noEscape */ $gate['message'] ?>
+                </div>
+                <div class="b2b-quickcatalog__gate-actions">
+                    <a class="action primary"
+                       href="<?= $escaper->escapeUrl($block->getUrl('b2b/account/dashboard')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Ir para Minha conta')) ?></span>
+                    </a>
+                    <a class="action secondary" href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Ver carrinho')) ?></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    <?php else: ?>
+        <div class="b2b-quickcatalog__tabs-shell b2b-quickcatalog__container">
+            <div class="qc-tabs" id="qc-tabs" role="tablist"
+                 aria-label="<?= $escaper->escapeHtmlAttr(__('Perspectivas do catálogo')) ?>">
+                <button type="button"
+                        class="qc-tabs__tab is-active"
+                        role="tab"
+                        id="qc-tab-catalog"
+                        data-qc-view="catalog"
+                        aria-selected="true"
+                        aria-controls="qc-main"
+                        tabindex="0">
+                    <?= $escaper->escapeHtml(__('Todos os produtos')) ?>
+                </button>
+                <button type="button"
+                        class="qc-tabs__tab"
+                        role="tab"
+                        id="qc-tab-favorites"
+                        data-qc-view="favorites"
+                        aria-selected="false"
+                        aria-controls="qc-main"
+                        tabindex="-1">
+                    <?= $escaper->escapeHtml(__('Favoritos')) ?>
+                </button>
+                <button type="button"
+                        class="qc-tabs__tab"
+                        role="tab"
+                        id="qc-tab-buyagain"
+                        data-qc-view="buyagain"
+                        aria-selected="false"
+                        aria-controls="qc-main"
+                        tabindex="-1">
+                    <?= $escaper->escapeHtml(__('Comprar novamente')) ?>
+                </button>
+            </div>
+        </div>
+
+        <div class="b2b-quickcatalog__layout b2b-quickcatalog__container">
+
+            <aside class="b2b-quickcatalog__sidebar" id="qc-sidebar">
+                <button type="button"
+                        class="b2b-quickcatalog__sidebar-toggle"
+                        id="qc-sidebar-toggle"
+                        aria-expanded="false"
+                        aria-controls="qc-category-nav">
+                    <?= $escaper->escapeHtml(__('Categorias')) ?>
+                </button>
+
+                <nav class="b2b-quickcatalog__categories"
+                     id="qc-category-nav"
+                     aria-label="<?= $escaper->escapeHtmlAttr(__('Categorias de produtos')) ?>">
+                    <h2 class="visually-hidden"><?= $escaper->escapeHtml(__('Categorias')) ?></h2>
+                    <ul class="qc-cats" role="list">
+                        <li class="qc-cats__item">
+                            <button type="button" class="qc-cats__link is-active" data-qc-cat="0">
+                                <?= $escaper->escapeHtml(__('Todos os produtos')) ?>
+                            </button>
+                        </li>
+                        <?php foreach ($categories as $category): ?>
+                            <?php
+                            $catId = (int) $category['id'];
+                            $catToggleLabel = (string) __('Mostrar subcategorias de %1', $category['name']);
+                            ?>
+                            <li class="qc-cats__item">
+                                <?php if (!empty($category['children'])): ?>
+                                    <button type="button"
+                                            class="qc-cats__toggle"
+                                            data-qc-cat-toggle="<?= (int) $catId ?>"
+                                            aria-expanded="false"
+                                            aria-controls="qc-cat-children-<?= (int) $catId ?>"
+                                            aria-label="<?= $escaper->escapeHtmlAttr($catToggleLabel) ?>">
+                                        <span class="qc-cats__chevron" aria-hidden="true"></span>
+                                    </button>
+                                <?php endif; ?>
+                                <button type="button" class="qc-cats__link" data-qc-cat="<?= (int) $catId ?>">
+                                    <?= $escaper->escapeHtml($category['name']) ?>
+                                </button>
+
+                                <?php if (!empty($category['children'])): ?>
+                                    <ul class="qc-cats__children" id="qc-cat-children-<?= (int) $catId ?>" hidden>
+                                        <?php foreach ($category['children'] as $child): ?>
+                                            <li>
+                                                <button type="button" class="qc-cats__link qc-cats__link--child"
+                                                        data-qc-cat="<?= (int) $child['id'] ?>">
+                                                    <?= $escaper->escapeHtml($child['name']) ?>
+                                                </button>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="b2b-quickcatalog__main" id="qc-main" role="tabpanel" aria-labelledby="qc-tab-catalog">
+                <div class="b2b-quickcatalog__search">
+                    <form class="qc-search" id="qc-search-form" role="search" novalidate>
+                        <label class="visually-hidden" for="qc-search-input">
+                            <?= $escaper->escapeHtml(__('Buscar produtos')) ?>
+                        </label>
+                        <input type="search"
+                               id="qc-search-input"
+                               class="qc-search__input"
+                               name="q"
+                               autocomplete="off"
+                               placeholder="<?= $escaper->escapeHtmlAttr(__('Nome, SKU ou aplicação')) ?>"
+                               aria-describedby="qc-search-hint" />
+                        <button type="submit" class="action primary qc-search__submit">
+                            <span><?= $escaper->escapeHtml(__('Buscar')) ?></span>
+                        </button>
+                    </form>
+                    <p class="qc-search__hint" id="qc-search-hint">
+                        <?= $escaper->escapeHtml(
+                            __('A busca é feita no servidor e atualiza a lista automaticamente.')
+                        ) ?>
+                    </p>
+                </div>
+
+                <div class="b2b-quickcatalog__toolbar">
+                    <p class="qc-results-status" id="qc-results-status" role="status" aria-live="polite">
+                        <?= $escaper->escapeHtml(__('Carregando produtos…')) ?>
+                    </p>
+                    <div class="qc-sort">
+                        <label for="qc-sort-select" class="visually-hidden">
+                            <?= $escaper->escapeHtml(__('Ordenar por')) ?>
+                        </label>
+                        <select id="qc-sort-select" class="qc-sort__select">
+                            <option value="relevance"><?= $escaper->escapeHtml(__('Nome (A–Z)')) ?></option>
+                            <option value="name_desc"><?= $escaper->escapeHtml(__('Nome (Z–A)')) ?></option>
+                        </select>
+                    </div>
+                    <button type="button" class="action secondary qc-add-selected" id="qc-add-selected" disabled>
+                        <span data-role="label"><?= $escaper->escapeHtml(__('Adicionar selecionados')) ?></span>
+                        <span class="qc-add-selected__count" data-role="count" aria-hidden="true"></span>
+                    </button>
+                </div>
+
+                <p class="qc-hint" id="qc-select-hint">
+                    <?= $escaper->escapeHtml(__('Digite a quantidade. Nada é adicionado automaticamente.')) ?>
+                </p>
+
+                <div class="qc-batch-feedback" id="qc-batch-feedback" hidden>
+                    <div class="qc-batch-feedback__summary" data-role="summary" role="status" aria-live="polite"></div>
+                    <ul class="qc-batch-feedback__errors" data-role="errors" role="alert" hidden></ul>
+                </div>
+
+                <p class="qc-fav-feedback" id="qc-fav-feedback" aria-live="polite" hidden></p>
+
+                <ul class="qc-list" id="qc-list" role="list" aria-busy="true"></ul>
+
+                <div class="qc-list-skeleton" id="qc-list-skeleton" aria-hidden="true">
+                    <span class="qc-skeleton-row"></span>
+                    <span class="qc-skeleton-row"></span>
+                    <span class="qc-skeleton-row"></span>
+                    <span class="qc-skeleton-row"></span>
+                </div>
+
+                <p class="qc-empty" id="qc-empty" hidden>
+                    <?= $escaper->escapeHtml(__('Nenhum produto encontrado para esta busca.')) ?>
+                </p>
+
+                <nav class="qc-pagination" id="qc-pagination"
+                     aria-label="<?= $escaper->escapeHtmlAttr(__('Paginação de produtos')) ?>" hidden>
+                    <button type="button" class="action secondary qc-pagination__prev" id="qc-prev-page" disabled>
+                        <?= $escaper->escapeHtml(__('Página anterior')) ?>
+                    </button>
+                    <span class="qc-pagination__info" id="qc-page-info"></span>
+                    <button type="button" class="action secondary qc-pagination__next" id="qc-next-page" disabled>
+                        <?= $escaper->escapeHtml(__('Próxima página')) ?>
+                    </button>
+                </nav>
+            </main>
+
+            <aside class="b2b-quickcatalog__aside" id="qc-cart-panel"
+                   aria-labelledby="qc-cart-title">
+                <div class="qc-cart">
+                    <h2 class="qc-cart__title" id="qc-cart-title">
+                        <?= $escaper->escapeHtml(__('Resumo do carrinho')) ?>
+                    </h2>
+
+                    <p class="qc-cart__empty" id="qc-cart-empty"
+                       <?= (int) $initialCart['items_count'] > 0 ? 'hidden' : '' ?>>
+                        <?= $escaper->escapeHtml(__('Seu carrinho está vazio.')) ?>
+                    </p>
+
+                    <div class="qc-cart__body" id="qc-cart-body"
+                         <?= (int) $initialCart['items_count'] > 0 ? '' : 'hidden' ?>>
+                        <dl class="qc-cart__totals">
+                            <div class="qc-cart__row">
+                                <dt><?= $escaper->escapeHtml(__('Produtos')) ?></dt>
+                                <dd data-role="cart-distinct"><?= (int) $initialCart['distinct_skus'] ?></dd>
+                            </div>
+                            <div class="qc-cart__row">
+                                <dt><?= $escaper->escapeHtml(__('Unidades')) ?></dt>
+                                <dd data-role="cart-units">
+                                    <?= $escaper->escapeHtml((string) (float) $initialCart['total_units']) ?>
+                                </dd>
+                            </div>
+                            <div class="qc-cart__row qc-cart__row--subtotal">
+                                <dt><?= $escaper->escapeHtml(__('Subtotal')) ?></dt>
+                                <dd data-role="cart-subtotal"><?= /* @noEscape */ $initialCart['subtotal'] ?></dd>
+                            </div>
+                        </dl>
+
+                        <p class="qc-cart__note">
+                            <?= $escaper->escapeHtml(__('Frete e demais valores são calculados no checkout.')) ?>
+                        </p>
+
+                        <a class="action primary qc-cart__review"
+                           href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>">
+                            <span><?= $escaper->escapeHtml(__('Revisar pedido')) ?></span>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <div class="b2b-quickcatalog__bottombar" id="qc-bottombar" aria-hidden="false">
+            <div class="b2b-quickcatalog__bottombar-info">
+                <span class="qc-bottombar__units" data-role="bottombar-units">
+                    <?= $escaper->escapeHtml((string) (float) $initialCart['total_units']) ?>
+                </span>
+                <span class="qc-bottombar__label"><?= $escaper->escapeHtml(__('unidade(s)')) ?></span>
+                <span class="qc-bottombar__subtotal" data-role="bottombar-subtotal">
+                    <?= /* @noEscape */ $initialCart['subtotal'] ?>
+                </span>
+            </div>
+            <a class="action primary b2b-quickcatalog__bottombar-cta"
+               href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>">
+                <?= $escaper->escapeHtml(__('Revisar pedido')) ?>
+            </a>
+        </div>
+    <?php endif; ?>
+
+    <script type="application/json" id="qc-config"><?= /* @noEscape */ $block->getClientConfigJson() ?></script>
+    <script src="<?= $escaper->escapeUrl($block->getViewFileUrl('GrupoAwamotos_B2B::js/quickcatalog.js')) ?>"
+            defer></script>
+</div>

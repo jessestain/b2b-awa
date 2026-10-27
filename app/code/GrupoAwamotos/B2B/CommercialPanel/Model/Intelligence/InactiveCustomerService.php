@@ -86,6 +86,15 @@ class InactiveCustomerService
         return array_slice($items, 0, $limit);
     }
 
+    /**
+     * Contagem real de clientes inativos no escopo visível, sem o teto de exibição
+     * (o KPI do relatório não pode saturar em 500 quando a carteira tem milhares).
+     */
+    public function countInactiveCustomers(int $minDays, ?int $maxDays = null): int
+    {
+        return count($this->getInactiveCustomers($minDays, $maxDays, 100000));
+    }
+
     public function markInProgress(int $customerId): bool
     {
         if (!$this->portfolioScope->canAccessCustomer($customerId)) {

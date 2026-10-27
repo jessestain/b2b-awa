@@ -97,24 +97,67 @@ define([
                 $panel.removeAttr('inert').prop('hidden', false);
 
                 if (animate) {
-                    $panel.stop(true, true).slideDown(180);
+                    /* B2 (CICLO 4): expansao por transicao CSS de max-height.
+                       O jQuery slideDown lia height/padding/margin via curCSS a cada
+                       frame (N paineis x ~11 frames). Aqui: 1 leitura de scrollHeight
+                       e uma transition nativa (sem jQuery.animate/curCSS).
+                       max-height inline com !important porque killers legados do tema
+                       (sem layer, !important) venceriam a camada normal. */
+                    var panelEl = $panel[0];
+
+                    if (!panelEl) {
+                        return;
+                    }
+
+                    if (panelEl.__awaFooterAnimating) {
+                        return;
+                    }
+
+                    panelEl.__awaFooterAnimating = 1;
+                    panelEl.style.setProperty('overflow', 'hidden', 'important');
+                    panelEl.style.setProperty('transition', 'max-height 180ms ease', 'important');
+                    panelEl.style.setProperty('max-height', '0px', 'important');
+
+                    void panelEl.offsetHeight;
+
+                    var contentHeight = panelEl.scrollHeight;
+
+                    var cleanupFooterAnim = function () {
+                        panelEl.removeEventListener('transitionend', onFooterTransitionEnd);
+                        panelEl.style.removeProperty('max-height');
+                        panelEl.style.removeProperty('overflow');
+                        panelEl.style.removeProperty('transition');
+                        panelEl.__awaFooterAnimating = 0;
+                    };
+
+                    var onFooterTransitionEnd = function (event) {
+                        if (event.target === panelEl && event.propertyName === 'max-height') {
+                            cleanupFooterAnim();
+                        }
+                    };
+
+                    panelEl.addEventListener('transitionend', onFooterTransitionEnd);
+
+                    /* 2 frames: garante que o estado 0px foi pintado antes de animar. */
+                    window.requestAnimationFrame(function () {
+                        window.requestAnimationFrame(function () {
+                            panelEl.style.setProperty('max-height', contentHeight + 'px', 'important');
+                        });
+                    });
+
+                    window.setTimeout(cleanupFooterAnim, 260);
                     return;
                 }
 
-                $panel.stop(true, true).css('display', '');
+                $panel.removeClass('awa-footer-anim awa-footer-expanded');
                 return;
             }
 
-            $panel.prop('hidden', true);
-
-            if (animate) {
-                $panel.stop(true, true).slideUp(180, function () {
-                    $panel.attr('inert', '');
-                });
-                return;
-            }
-
-            $panel.stop(true, true).hide().attr('inert', '');
+            /* B2 (CICLO 4): fechamento preservado (instantaneo). O fluxo anterior
+               setava hidden ANTES do slideUp, portanto o fechamento nunca era
+               visivel; mantemos o mesmo resultado sem animar. */
+            $panel.removeClass('awa-footer-anim awa-footer-expanded');
+            $panel.prop('hidden', true).attr('inert', '');
         }
 
         function setPanelState($trigger, shouldExpand) {
@@ -349,10 +392,13 @@ define([
                 return;
             }
 
-            var style = document.createElement('style');
-            style.id = 'awa-footer-categories-desktop-lock';
-            style.textContent = '@media (min-width:768px){html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__inner{display:grid!important;grid-template-columns:minmax(96px,max-content) minmax(0,1fr)!important;align-items:center!important;column-gap:clamp(14px,2vw,28px)!important;row-gap:10px!important;height:auto!important;min-height:0!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__toggle{display:none!important;visibility:hidden!important;pointer-events:none!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__heading{grid-column:1!important;grid-row:1!important}html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) section.awa-footer-categories-expand .awa-footer-categories-expand__panel{grid-column:2!important;grid-row:1!important;display:block!important;max-height:none!important;height:auto!important;visibility:visible!important}}';
-            (document.head || document.documentElement).appendChild(style);
+            /* 10/10/2026: o CSS abaixo foi MIGRADO para o awa-align-grid-terminal
+               (CSS estatico do tema). Antes era injetado aqui em runtime, quando o
+               IntersectionObserver do rodape disparava — o que causava CLS de 0,734 no
+               PDP desktop (o painel passava de escondido para display:block depois do
+               primeiro paint). Manter no CSS estatico elimina o shift.
+               A funcao permanece para compatibilidade e marca o estado via data-attribute. */
+            document.documentElement.setAttribute('data-awa-footer-categories-lock', 'static');
         }
 
         function initCategoriesToggle() {

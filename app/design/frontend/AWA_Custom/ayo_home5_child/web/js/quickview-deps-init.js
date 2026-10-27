@@ -1,10 +1,7 @@
-define([
-    'quickview/cloudzoom',
-    'swiper'
-], function () {
+define([], function () {
     'use strict';
 
     return function () {
-        // Preload Quick View dependencies (CloudZoom + Swiper) without inline require().
+        // Quick View: dependencias (CloudZoom + Swiper) agora sao lazy no open.
     };
 });

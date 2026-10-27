@@ -47,5 +47,26 @@
              method="execute">
             <schedule>0 7 * * *</schedule>
         </job>
+
+        <!-- Marca (nao bloqueia) clientes aprovados e inativos/ausentes no Sectra.
+             Desligado por padrao (customer_erp_status/flag_enabled=0). -->
+        <job name="grupoawamotos_b2b_flag_erp_inactive_customers"
+             instance="GrupoAwamotos\B2B\Cron\FlagErpInactiveCustomers"
+             method="execute">
+            <schedule>30 7 * * *</schedule>
+        </job>
+
+        <!-- A2: alerta de ERROR parado + expurgo (>30d) da fila WhatsApp B2B -->
+        <job name="grupoawamotos_b2b_whatsapp_queue_maintenance"
+             instance="GrupoAwamotos\B2B\Cron\WhatsAppQueueMaintenance"
+             method="execute">
+            <schedule>30 2 * * *</schedule>
+        </job>
+        <!-- Atividade: resumo diario de buscas/produtos vistos para as vendedoras (17:30) -->
+        <job name="grupoawamotos_b2b_attendant_daily_digest"
+             instance="GrupoAwamotos\B2B\Cron\AttendantDailyDigest"
+             method="execute">
+            <schedule>30 17 * * *</schedule>
+        </job>
     </group>
 </config>

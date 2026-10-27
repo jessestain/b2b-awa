@@ -202,13 +202,30 @@ class Form extends Template
 
     public function getIdempotencyToken(): string
     {
+        // FIX F-01 (2026-10-14): a primeira submissão do cadastro falhava sempre com
+        // "Sessão do formulário expirada". Causa raiz: no GET de visitante novo (sem cookie
+        // PHPSESSID) o plugin GrupoAwamotos\CatalogFix\Plugin\Customer\SessionFpcGuardPlugin
+        // bloqueia — por design, para preservar FPC/Varnish — o start() da sessão de cliente:
+        // o namespace 'customer' nunca é vinculado a $_SESSION e o setData() abaixo ficava
+        // apenas em memória. O token, então, não existia no POST.
+        // Aqui: (1) start() quando possível; (2) leitura/gravação direta em $_SESSION['customer']
+        // — exatamente o array que Magento\Framework\Session\Storage::init() vincula — para que
+        // o POST (onde a sessão inicia) encontre o token.
+        $this->customerSession->start();
+
         $existing = trim((string) $this->customerSession->getData('b2b_register_idempotency_token'));
+        if ($existing === '' && session_status() === PHP_SESSION_ACTIVE && isset($_SESSION)) {
+            $existing = trim((string) ($_SESSION['customer']['b2b_register_idempotency_token'] ?? ''));
+        }
         if ($existing !== '') {
             return $existing;
         }
 
         $token = bin2hex(random_bytes(16));
         $this->customerSession->setData('b2b_register_idempotency_token', $token);
+        if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION)) {
+            $_SESSION['customer']['b2b_register_idempotency_token'] = $token;
+        }
 
         return $token;
     }

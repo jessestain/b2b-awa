@@ -9,6 +9,8 @@ declare(strict_types=1);
 $addUrl = $block->getUrl('b2b/quickorder/add');
 $quickOrderConfig = [
     'addUrl' => $addUrl,
+    // Missão estabilização 2026-10-22 (P2): preview do produto por SKU na linha.
+    'lookupUrl' => $block->getUrl('b2b/quickorder/lookup'),
     'initialRows' => 5,
     'messages' => [
         'addToCart' => (string) __('Adicionar ao Carrinho'),
@@ -27,12 +29,12 @@ $quickOrderConfig = [
 ?>
 <div class="b2b-quickorder b2b-page-shell"
      data-mage-init='<?= /* @noEscape */ json_encode(['GrupoAwamotos_B2B/js/quickorder' => $quickOrderConfig]) ?>'>
-    <header class="block-title">
-        <strong><?= $block->escapeHtml(__('Pedido Rápido')) ?></strong>
-        <p class="quickorder-description" id="quickorder-desc">
-            <?= $block->escapeHtml(__('Adicione produtos rapidamente informando o SKU e a quantidade desejada.')) ?>
-        </p>
-    </header>
+    <?php /* Missão estabilização 2026-10-22 (P2): o h1 "Pedido Rápido" já vem do
+       shell da conta (page.main.title) — o bloco repetido foi removido; a
+       descrição permanece como apoio ao título da página. */ ?>
+    <p class="quickorder-description" id="quickorder-desc">
+        <?= $block->escapeHtml(__('Adicione produtos rapidamente informando o SKU e a quantidade desejada.')) ?>
+    </p>
 
     <section class="quickorder-csv-zone" id="quickorder-csv-zone" aria-labelledby="quickorder-csv-heading">
         <h2 class="visually-hidden" id="quickorder-csv-heading"><?= $block->escapeHtml(__('Importar via CSV')) ?></h2>

@@ -443,12 +443,12 @@ require(['jquery'], function($) {
                             if (cityInput.length) cityInput.val(data.municipio);
 
                             // Limpar msg após 4s
-                            setTimeout(function(){ $('.awa-cnpj-status--success').fadeOut() }, 4000);
+                            setTimeout(function(){ var $s = $('.awa-cnpj-status--success').addClass('is-dismissed'); $s.one('transitionend', function(){ $s.remove(); }); setTimeout(function(){ $s.remove(); }, 400); }, 4000);
                         },
                         error: function() {
                             $('#awa-cnpj-loading').remove();
                             cnpjInput.after('<span class="awa-cnpj-status awa-cnpj-status--error">CNPJ Inválido ou API indisponível</span>');
-                            setTimeout(function(){ $('.awa-cnpj-status--error').fadeOut() }, 4000);
+                            setTimeout(function(){ var $e = $('.awa-cnpj-status--error').addClass('is-dismissed'); $e.one('transitionend', function(){ $e.remove(); }); setTimeout(function(){ $e.remove(); }, 400); }, 4000);
                         }
                     });
                 }

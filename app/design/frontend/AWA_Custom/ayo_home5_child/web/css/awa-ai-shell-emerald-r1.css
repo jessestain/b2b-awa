@@ -1,0 +1,21 @@
+/* Component-scoped colors: preserve storefront brand tokens outside this root. */
+#awa-ai-chat-root.awa-ai-shell-emerald {
+    --awa-primary: color-mix(in srgb, var(--awa-success) 65%, black);
+    --awa-primary-dark: color-mix(in srgb, var(--awa-success) 52%, black);
+    --awa-brand: var(--awa-primary);
+}
+#awa-ai-chat-root.awa-ai-shell-emerald .awa-ai-chat__toggle--pulse {
+    animation: awa-ai-shell-in 280ms ease-out 1;
+}
+@keyframes awa-ai-shell-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #awa-ai-chat-root.awa-ai-shell-emerald *,
+    #awa-ai-chat-root.awa-ai-shell-emerald *::before,
+    #awa-ai-chat-root.awa-ai-shell-emerald *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

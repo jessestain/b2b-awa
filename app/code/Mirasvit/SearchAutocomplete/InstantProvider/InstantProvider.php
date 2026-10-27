@@ -78,7 +78,7 @@ class InstantProvider
             'elasticsearch7' => new \Mirasvit\SearchElastic\InstantProvider\EngineProvider($this->queryService, $this->configProvider, new Json()),
             'elasticsearch8' => new \Mirasvit\SearchElastic\InstantProvider\EngineProvider($this->queryService, $this->configProvider, new Json()),
             'opensearch'     => new \Mirasvit\SearchElastic\InstantProvider\EngineProvider($this->queryService, $this->configProvider, new Json()),
-            'sphinx'         => new \Mirasvit\SearchSphinx\InstantProvider\EngineProvider($this->queryService, $this->configProvider, new Json()),
+            'sphinx'         => class_exists(\Mirasvit\SearchSphinx\InstantProvider\EngineProvider::class) ? new \Mirasvit\SearchSphinx\InstantProvider\EngineProvider($this->queryService, $this->configProvider, new Json()) : null,
         ];
 
         $searchEngine = $this->configProvider->getEngine();

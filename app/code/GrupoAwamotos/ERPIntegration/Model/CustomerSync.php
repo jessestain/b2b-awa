@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace GrupoAwamotos\ERPIntegration\Model;
 
 use GrupoAwamotos\B2B\Model\Customer\B2bGroupIds;
+use GrupoAwamotos\B2B\Model\Customer\Attribute\Source\ErpCustomerSyncStatus;
 
 use GrupoAwamotos\ERPIntegration\Api\CustomerSyncInterface;
 use GrupoAwamotos\ERPIntegration\Api\ConnectionInterface;
@@ -712,6 +713,19 @@ class CustomerSync implements CustomerSyncInterface
                 $customer->setCustomAttribute('b2b_approval_status', 'approved');
                 $updated = true;
             }
+        }
+
+        // Cliente que chegou pelo sync do ERP EXISTE no ERP por definicao — mas o atributo
+        // erp_customer_sync_status nunca era gravado neste caminho (so a aprovacao e o
+        // prospect o gravavam). Resultado medido em 03/10/2026: 181 clientes COM erp_code
+        // e SEM o status. Espelha o bloco acima: preenche uma vez e para de reescrever.
+        $syncStatusAttr = $customer->getCustomAttribute('erp_customer_sync_status');
+        if (!$syncStatusAttr || trim((string)$syncStatusAttr->getValue()) === '') {
+            $customer->setCustomAttribute(
+                'erp_customer_sync_status',
+                ErpCustomerSyncStatus::LINKED_EXISTING
+            );
+            $updated = true;
         }
 
         // Atualiza inscrição estadual

@@ -438,5 +438,20 @@
             "PRIMARY": true,
             "GRUPOAWAMOTOS_B2B_SECTRA_POLL_STATE_CSTR_ID_CSTR_ENTT_ENTT_ID": true
         }
+    },
+    "grupoawamotos_b2b_favorite": {
+        "column": {
+            "favorito_id": true,
+            "customer_id": true,
+            "product_id": true,
+            "created_at": true
+        },
+        "index": {
+            "GRUPOAWAMOTOS_B2B_FAVORITE_CUSTOMER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "GRUPOAWAMOTOS_B2B_FAVORITE_CUSTOMER_ID_PRODUCT_ID": true
+        }
     }
 }

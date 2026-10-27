@@ -56,7 +56,7 @@ $youtubeUrl = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
 
 $pinterestUrl = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
     ? $footerData->getPinterestUrl()
-    : 'https://www.pinterest.com.br/awamotos/';
+    : 'https://br.pinterest.com/awamotos/';
 $mapsUrl = $footerData instanceof \GrupoAwamotos\Theme\ViewModel\FooterData
     ? $footerData->getMapsUrl()
     : '';
@@ -270,7 +270,7 @@ $socialLinks = [
                             <?php endif; ?>
                             <?php endif; ?>
                             <?php if ($isStrictB2b): ?>
-                            <span class="awa-footer-atendimento__store-badge"><?= $escaper->escapeHtml(__('Atacado e Varejo')) ?></span>
+                            <span class="awa-footer-atendimento__store-badge"><?= $escaper->escapeHtml(__('Atendimento exclusivo para Lojistas, Oficinas e Distribuidores com CNPJ')) ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>

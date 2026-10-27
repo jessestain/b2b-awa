@@ -73,15 +73,8 @@ define(['jquery'], function ($) {
             scheduleUpdate();
         });
 
-        $(document).on('contentUpdated.awaCartQtyAuto', function () {
-            if (timer) {
-                window.clearTimeout(timer);
-                timer = null;
-            }
+        // data-item-qty comes from the server-rendered cart. contentUpdated
+        // also fires during validation and must not acknowledge an unsaved edit.
 
-            $form.find('[data-role="cart-item-qty"]').each(function () {
-                this.setAttribute('data-item-qty', String(this.value));
-            });
-        });
     };
 });

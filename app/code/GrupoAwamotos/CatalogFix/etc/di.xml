@@ -268,5 +268,26 @@
         </arguments>
     </type>
 
-</config>
+    <type name="Magento\Framework\View\Page\Config">
+        <plugin name="grupoawamotos_catalogfix_pagination_robots"
+                type="GrupoAwamotos\CatalogFix\Plugin\PaginationRobotsPlugin"
+                sortOrder="100"/>
+    </type>
 
+    <!-- S1-P2 (23/10/2026): cron.log somente WARN+ — handler CronWarn (loggerType=WARNING) -->
+    <virtualType name="S1CronWarnHandler" type="GrupoAwamotos\CatalogFix\Logger\Handler\CronWarn">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/cron.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Cron\Model\VirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">main</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="system" xsi:type="object">S1CronWarnHandler</item>
+                <item name="debug" xsi:type="object">GrupoAwamotos\CatalogFix\Logger\Handler\ProductionDebug</item>
+                <item name="syslog" xsi:type="object">Magento\Developer\Model\Logger\Handler\Syslog</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

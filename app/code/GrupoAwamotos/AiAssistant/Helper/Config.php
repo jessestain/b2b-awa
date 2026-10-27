@@ -34,6 +34,13 @@ class Config extends AbstractHelper
     private const XML_OR_MODEL            = 'ai_assistant/openrouter/model';
     private const XML_OR_TIMEOUT          = 'ai_assistant/openrouter/timeout_seconds';
 
+    private const XML_PROVIDER            = 'ai_assistant/general/provider';
+    private const XML_DS_KEY              = 'ai_assistant/deepseek/api_key';
+    private const XML_DS_MODEL            = 'ai_assistant/deepseek/model';
+    private const XML_DS_TIMEOUT          = 'ai_assistant/deepseek/timeout_seconds';
+
+    private const XML_USE_ERP_PRICE       = 'ai_assistant/b2b/use_erp_price';
+
     private const XML_GUIDED_ENABLED      = 'ai_assistant/guided_coach/enabled';
     private const XML_GUIDED_DELAY_MS     = 'ai_assistant/guided_coach/delay_ms';
     private const XML_GUIDED_AUTO_DISMISS = 'ai_assistant/guided_coach/auto_dismiss_ms';
@@ -127,6 +134,40 @@ class Config extends AbstractHelper
     public function getOpenRouterTimeoutSeconds(): int
     {
         return (int) $this->scopeConfig->getValue(self::XML_OR_TIMEOUT) ?: 25;
+    }
+
+    /**
+     * 'openrouter' (padrão) ou 'deepseek'. Qualquer outro valor cai em openrouter.
+     */
+    public function getLlmProvider(): string
+    {
+        $provider = strtolower(trim((string) $this->scopeConfig->getValue(self::XML_PROVIDER)));
+        return $provider === 'deepseek' ? 'deepseek' : 'openrouter';
+    }
+
+    public function getDeepSeekApiKey(): string
+    {
+        return $this->decrypt($this->scopeConfig->getValue(self::XML_DS_KEY));
+    }
+
+    public function getDeepSeekModel(): string
+    {
+        $model = trim((string) $this->scopeConfig->getValue(self::XML_DS_MODEL));
+        return $model !== '' ? $model : 'deepseek-chat';
+    }
+
+    public function getDeepSeekTimeoutSeconds(): int
+    {
+        return (int) $this->scopeConfig->getValue(self::XML_DS_TIMEOUT) ?: 45;
+    }
+
+    /**
+     * A5 — preço por tabela ERP do cliente nas tools do assistente.
+     * OFF por padrão; ligar por config após validação no HML.
+     */
+    public function getUseErpPrice(): bool
+    {
+        return $this->scopeConfig->isSetFlag(self::XML_USE_ERP_PRICE);
     }
 
     public function isGuidedCoachEnabled(): bool

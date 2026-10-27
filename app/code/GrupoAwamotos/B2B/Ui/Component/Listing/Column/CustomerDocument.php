@@ -44,25 +44,6 @@ class CustomerDocument extends Column
         }
         unset($item);
 
-        // #region agent log
-        $cfg = $this->getData('config');
-        @file_put_contents('/home/jessessh/htdocs/srv1113343.hstgr.cloud/.cursor/debug-6a6568.log', json_encode([
-            'sessionId' => '6a6568',
-            'runId' => 'grid-reload',
-            'hypothesisId' => 'A',
-            'location' => 'CustomerDocument.php:prepareDataSource',
-            'message' => 'customer grid document column prepare',
-            'data' => [
-                'itemCount' => count($dataSource['data']['items']),
-                'emptyTaxvat' => $emptyTaxvat,
-                'fallbackUsed' => $fallbackUsed,
-                'resolvedNonEmpty' => $resolvedNonEmpty,
-                'columnVisible' => $cfg['visible'] ?? null,
-                'columnName' => $columnName,
-            ],
-            'timestamp' => (int) round(microtime(true) * 1000),
-        ]) . "\n", FILE_APPEND);
-        // #endregion
 
         return $dataSource;
     }

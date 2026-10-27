@@ -73,7 +73,7 @@ class OrderStatusChange implements ObserverInterface
             }
 
             $message = $this->buildStatusMessage($order->getIncrementId(), $status);
-            $result = $this->whatsappSender->queueMessage($phoneNumber, $message, 10);
+            $result = $this->queueStatusMessage($order, $phoneNumber, $message);
 
             if ($result) {
                 $this->logger->info(sprintf(
@@ -97,6 +97,11 @@ class OrderStatusChange implements ObserverInterface
                 $e->getMessage()
             ));
         }
+    }
+
+    protected function queueStatusMessage(Order $order, string $phone, string $message): bool
+    {
+        return $this->whatsappSender->queueMessage($phone, $message, 10);
     }
 
     private function buildStatusMessage(string $incrementId, string $status): string

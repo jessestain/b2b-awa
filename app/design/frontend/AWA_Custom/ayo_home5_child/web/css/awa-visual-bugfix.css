@@ -1,277 +1,137 @@
-/**
- * awa-visual-bugfix.css
- * Fixes identified in visual-deep-audit-final-2026-05-07.md (FIX-R2-1 a FIX-R2-4)
- * + additional post-audit hotfixes (FIX-R2-5+).
- * Arquivo DEVE estar em web/css/ do tema filho — pub/static é regenerado a cada deploy.
- * Carregado antes de awa-header-cart-fix.css (veja default_head_blocks.xml).
- */
-
-/* ==========================================================================
-   FIX-R2-1: Form input min-height normalization
-   Audit: 231 inputs below 44px touch target across pages.
-   ========================================================================== */
-
-.page-wrapper input[type],
-.page-wrapper input[type="text"],
-.page-wrapper input[type="email"],
-.page-wrapper input[type="password"],
-.page-wrapper input[type="search"],
-.page-wrapper input[type="tel"],
-.page-wrapper input[type="number"],
-.page-wrapper input[type="date"],
-.page-wrapper textarea {
-    min-height: 44px !important;
+.page-wrapper input[type=date],.page-wrapper input[type=email],.page-wrapper input[type=number],.page-wrapper input[type=password],.page-wrapper input[type=search],.page-wrapper input[type=tel],.page-wrapper input[type=text],.page-wrapper input[type],.page-wrapper textarea {
+  min-height:44px!important
 }
-
-/* ==========================================================================
-   FIX-R2-2: Layered navigation filter inputs
-   Sidebar filter inputs were 36px; normalize to 44px.
-   ========================================================================== */
-
 .filter-options .filter-options-content input {
-    min-height: 44px !important;
+  min-height:44px!important
 }
-
-/* ==========================================================================
-   FIX-R2-3: Section H2 consistency
-   Homepage/category sections were rendering H2 at inconsistent sizes.
-   Overrides awa-visual-qa-fixes-2026-05-06.css section 10.
-   ========================================================================== */
-
-.awa-home-section h2,
-.awa-carousel-section h2,
-.top-home-content h2 {
-    font-size: 20px !important;
+.awa-carousel-section h2,.awa-home-section h2,.top-home-content h2 {
+  font-size:20px!important
 }
-
-/* ==========================================================================
-   FIX-R2-4: Toolbar sorter/limiter selects height
-   Audit: toolbar selects were 36px, below 44px touch target.
-   ========================================================================== */
-
-.toolbar .sorter-options,
-.toolbar .limiter-options {
-    height: 44px !important;
-    min-height: 44px !important;
+.toolbar .limiter-options,.toolbar .sorter-options {
+  height:44px!important;
+  min-height:44px!important
 }
-
-/* ==========================================================================
-   FIX-R2-5: Home hero banner vertical misalignment
-   Symptom: banner image starts ~30px below its overlay text, causing odd crop/
-   duplicated-looking text at the top of the hero.
-   Root: theme sets margin-top on .banner_item_bg.
-   ========================================================================== */
-
 .cms-index-index .rokanthemes-slidebanner .banner_item_bg {
-    margin-top: 0 !important;
+  margin-top:0!important
 }
-
-/* ==========================================================================
-   FIX-R2-6: Product card image hover-swap guard
-   Ensures .second-thumb is always hover-only (guards against missing parent
-   theme CSS). second-thumb only renders when placeholder/dupe check passes.
-   ========================================================================== */
-
 .product-thumb {
-    position: relative;
-    overflow: hidden;
+  position:relative;
+  overflow:hidden
 }
-
 .product-thumb .second-thumb {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  opacity:0;
+  transition:opacity .3s ease;
+  pointer-events:none
 }
-
 .product-thumb:hover .second-thumb {
-    opacity: 1;
+  opacity:1
 }
-
-/* ==========================================================================
-   FIX-R2-7: SVG icons sem dimensões explícitas em blocos CMS
-   Causa: <svg viewBox="0 0 24 24"> sem width/height → preenche 100% do container.
-   Escopo: conteúdo da página principal (não footer — footer já tem regras próprias).
-   Exceções: logos, banners e imagens de produto (excluídos pelos not-seletores).
-   ========================================================================== */
-
-.column.main svg[viewBox]:not([width]):not([height]):not([class*="logo"]):not([class*="brand"]),
-.widget svg[viewBox]:not([width]):not([height]):not([class*="logo"]):not([class*="brand"]),
-.cms-content svg[viewBox]:not([width]):not([height]):not([class*="logo"]):not([class*="brand"]) {
-    width: 44px !important;
-    height: 44px !important;
-    flex-shrink: 0 !important;
+.cms-content svg[viewBox]:not([width]):not([height]):not([class*=logo]):not([class*=brand]),.column.main svg[viewBox]:not([width]):not([height]):not([class*=logo]):not([class*=brand]),.widget svg[viewBox]:not([width]):not([height]):not([class*=logo]):not([class*=brand]) {
+  width:44px!important;
+  height:44px!important;
+  flex-shrink:0!important
 }
-
-/* ==========================================================================
-   FIX-R2-8: Cor azul (browser default) em ícones dentro de <a> fora do footer
-   Causa: fill="currentColor" herda cor do link sem regra CSS → azul #0000EE.
-   Fix: força cor neutra em ícones-link no conteúdo principal.
-   O footer tem regra própria em awa-footer-v2.css §2.
-   ========================================================================== */
-
-.column.main a svg,
-.widget a svg,
-.cms-content a svg {
-    color: var(--awa-text, var(--awa-text-primary)) !important;
-    fill: currentColor !important;
+.cms-content a svg,.column.main a svg,.widget a svg {
+  color:var(--awa-text,var(--awa-text-primary))!important;
+  fill:currentColor!important
 }
-
-/* ==========================================================================
-   FIX-R2-9: Font Awesome icons oversized em blocos CMS
-   Causa: <i class="fa fa-*"> sem font-size explícito herda tamanho do pai
-   (CMS blocks frequentemente têm font-size: 100% ou maior em headings/divs).
-   Fix: cap em 24px para ícones decorativos em conteúdo principal.
-   ========================================================================== */
-
-.column.main i.fa:not(.awa-icon):not([class*="vmenu"]),
-.column.main i[class*="fa-"]:not(.awa-icon):not([class*="vmenu"]),
-.widget i.fa:not(.awa-icon),
-.widget i[class*="fa-"]:not(.awa-icon) {
-    font-size: 24px !important;
-    line-height: 1 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.column.main i.fa:not(.awa-icon):not([class*=vmenu]),.column.main i[class*=fa-]:not(.awa-icon):not([class*=vmenu]),.widget i.fa:not(.awa-icon),.widget i[class*=fa-]:not(.awa-icon) {
+  font-size:24px!important;
+  line-height:1!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important
 }
-
-/* ==========================================================================
-   AUDITORIA VISUAL 2026-06-16 — Fixes A3, M4, B2
-   Seletores e valores confirmados ao vivo via Playwright.
-   ========================================================================== */
-
-/* A3 — Header mobile: hambúrguer duplicado (glifo icomoon legado + SVG novo)
-   O botão .awa-header-mobile-toggle tem SVG novo + glifo icomoon em ::before
-   residual de refactor anterior. Remove o ::before, mantém o SVG centrado. */
-.action.nav-toggle.awa-header-mobile-toggle::before,
-.awa-header-mobile-toggle.nav-toggle::before {
-    content: none !important;
+.action.nav-toggle.awa-header-mobile-toggle::before,.awa-header-mobile-toggle.nav-toggle::before {
+  content:none!important
 }
 .action.nav-toggle.awa-header-mobile-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center
 }
 .action.nav-toggle.awa-header-mobile-toggle .awa-hamburger-icon {
-    display: block;
+  display:block
 }
-
-/* M4 — Banner de categoria: texto legível sobre imagem OU fundo claro.
-   Escopo branco só em hero sem imagem (gradiente institucional).
-   Com imagem na PLP: painel claro + texto escuro (§PLP-IMPECCABLE). */
 .awa-category-hero:not(.awa-category-hero--has-image) {
-    position: relative;
-    overflow: hidden;
-    --awa-text-primary: var(--awa-bg);
-    --awa-text-secondary: rgba(255, 255, 255, 0.92);
-    --awa-text-muted: rgba(255, 255, 255, 0.85);
-    --awa-cons-c70: var(--awa-bg);
+  position:relative;
+  overflow:hidden;
+  --awa-text-primary:var(--awa-bg);
+  --awa-text-secondary:rgba(255, 255, 255, 0.92);
+  --awa-text-muted:rgba(255, 255, 255, 0.85);
+  --awa-cons-c70:var(--awa-bg)
 }
-
 .awa-category-hero:not(.awa-category-hero--has-image)::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(90deg,
-        rgba(15, 23, 42, 0.62) 0%,
-        rgba(15, 23, 42, 0.35) 45%,
-        rgba(15, 23, 42, 0) 80%);
-    z-index: 1;
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,rgba(15,23,42,.62) 0,rgba(15,23,42,.35) 45%,rgba(15,23,42,0) 80%);
+  z-index:1
 }
-
 .awa-category-hero__content {
-    position: relative;
-    z-index: 2;
+  position:relative;
+  z-index:2
 }
-
-.awa-category-hero:not(.awa-category-hero--has-image) :is(.awa-category-hero__title, .awa-category-hero__count) {
-    color: var(--awa-bg);
+.awa-category-hero:not(.awa-category-hero--has-image) :is(.awa-category-hero__title,.awa-category-hero__count) {
+  color:var(--awa-bg)
 }
-
 .awa-category-hero:not(.awa-category-hero--has-image) .awa-category-hero__count {
-    font-size: 13px;
-    opacity: 0.95;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  font-size:13px;
+  opacity:.95;
+  text-shadow:0 1px 2px rgba(0,0,0,.45)
 }
-
 .awa-category-hero img {
-    object-fit: cover;
-    object-position: center right;
+  object-fit:cover;
+  object-position:center right
 }
-
-html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-.page-wrapper .awa-category-hero--has-image {
-    --awa-text-primary: var(--awa-color-text-primary, var(--awa-text));
-    --awa-text-secondary: #666666;
-    background: var(--awa-bg, #ffffff) !important;
-    border: 1px solid var(--awa-border, #e5e5e5) !important;
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero--has-image {
+  --awa-text-primary:var(--awa-color-text-primary, var(--awa-text));
+  --awa-text-secondary:#666666;
+  background:var(--awa-bg,#fff)!important;
+  border:1px solid var(--awa-border,#e5e5e5)!important
 }
-
-html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-.page-wrapper .awa-category-hero--has-image::after {
-    display: none !important;
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero--has-image::after {
+  display:none!important
 }
-
-html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-.page-wrapper .awa-category-hero--has-image .awa-category-hero__overlay {
-    background: linear-gradient(90deg,
-        rgb(255 255 255 / 96%) 0%,
-        rgb(255 255 255 / 84%) 52%,
-        rgb(255 255 255 / 42%) 100%) !important;
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero--has-image .awa-category-hero__overlay {
+  background:linear-gradient(90deg,rgb(255 255 255 / 96%) 0,rgb(255 255 255 / 84%) 52%,rgb(255 255 255 / 42%) 100%)!important
 }
-
-html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-.page-wrapper .awa-category-hero--has-image
-:is(.awa-category-hero__title, .awa-category-hero__count, .awa-category-hero__eyebrow) {
-    color: var(--awa-text) !important;
-    text-shadow: none !important;
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero--has-image :is(.awa-category-hero__title,.awa-category-hero__count,.awa-category-hero__eyebrow) {
+  color:var(--awa-text)!important;
+  text-shadow:none!important
 }
-
-html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-.page-wrapper .awa-category-hero--has-image .awa-category-hero__count {
-    color: var(--awa-text-secondary) !important;
+html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero--has-image .awa-category-hero__count {
+  color:var(--awa-text-secondary)!important
 }
-
-/* B2 — Toolbar de listagem: grid-mode-2/3/4 sem estilo de botão
-   Adiciona borda + estado ativo para tornar os controles legíveis. */
-.grid-mode-show-type-products [class^="grid-mode-"],
-[class^="grid-mode-"].grid-mode-2,
-[class^="grid-mode-"].grid-mode-3,
-[class^="grid-mode-"].grid-mode-4 {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 30px;
-    height: 30px;
-    padding: 0 8px;
-    border: 1px solid #d6d6d6;
-    border-radius: 6px;
-    color: #555;
-    font-size: 13px;
-    cursor: pointer;
-    background: var(--awa-bg);
-    transition: background-color .15s, border-color .15s, color .15s;
+.grid-mode-show-type-products [class^=grid-mode-],[class^=grid-mode-].grid-mode-2,[class^=grid-mode-].grid-mode-3,[class^=grid-mode-].grid-mode-4 {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:30px;
+  height:30px;
+  padding:0 8px;
+  border:1px solid #d6d6d6;
+  border-radius:6px;
+  color:#555;
+  font-size:13px;
+  cursor:pointer;
+  background:var(--awa-bg);
+  transition:background-color .15s,border-color .15s,color .15s
 }
-[class^="grid-mode-"]:hover {
-    border-color: var(--awa-primary);
-    color: var(--awa-primary);
+[class^=grid-mode-]:hover {
+  border-color:var(--awa-primary);
+  color:var(--awa-primary)
 }
-[class^="grid-mode-"].actived,
-[class^="grid-mode-"].active {
-    background: var(--awa-primary);
-    border-color: var(--awa-primary);
-    color: var(--awa-bg);
+[class^=grid-mode-].active,[class^=grid-mode-].actived {
+  background:var(--awa-primary);
+  border-color:var(--awa-primary);
+  color:var(--awa-bg)
 }
-
-/* ==========================================================================
-   FIX-CHECKOUT-MOBILE-2: agreements-modal pointer-events quando oculto
-   Expresscheckout (rokanthemes-onepagecheckout) + checkout padrão.
-   ========================================================================== */
-
-body:is(.checkout-index-index, .rokanthemes-onepagecheckout) .agreements-modal:not(._show) {
-    pointer-events: none !important;
+body:is(.checkout-index-index,.rokanthemes-onepagecheckout) .agreements-modal:not(._show) {
+  pointer-events:none!important
 }

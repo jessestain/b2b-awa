@@ -3,9 +3,52 @@ declare(strict_types=1);
 /**
  * AWA — Cart totals com fallback SSR até o Knockout hidratar.
  *
+ * PLANO B2B F4.2: resumo denso com Total de SKUs e Total de Unidades
+ * (server-rendered + sincronização reativa via customer-data 'cart' para
+ * acompanhar atualizações AJAX de quantidade).
+ *
  * @var \Magento\Checkout\Block\Cart\Totals $block
  */
+$quote = method_exists($block, 'getQuote') ? $block->getQuote() : null;
+$totalSkus = $quote ? (int) $quote->getItemsCount() : 0;
+$totalUnits = $quote ? (int) $quote->getItemsQty() : 0;
 ?>
+<div class="awa-cart-dense-summary" data-awa-dense-summary="1" role="status" aria-live="polite">
+    <div class="awa-cart-dense-summary__row">
+        <span><?= $block->escapeHtml(__('Total de SKUs')) ?></span>
+        <span class="awa-cart-dense-summary__value" data-awa-dense-summary-skus><?= (int) $totalSkus ?></span>
+    </div>
+    <div class="awa-cart-dense-summary__row">
+        <span><?= $block->escapeHtml(__('Total de Unidades')) ?></span>
+        <span class="awa-cart-dense-summary__value" data-awa-dense-summary-units><?= (int) $totalUnits ?></span>
+    </div>
+</div>
+<script>
+(function (w, d) {
+    'use strict';
+    if (w.__awaDenseSummarySync) { return; }
+    w.__awaDenseSummarySync = true;
+    function apply(cart) {
+        var skus = d.querySelector('[data-awa-dense-summary-skus]');
+        var units = d.querySelector('[data-awa-dense-summary-units]');
+        if (!skus && !units) { return; }
+        var cartData = cart || {};
+        var lines = Array.isArray(cartData.items) ? cartData.items.length : 0;
+        var qty = Number(cartData.summary_count || 0);
+        if (skus) { skus.textContent = String(lines); }
+        if (units) { units.textContent = String(qty); }
+    }
+    if (typeof w.require === 'function') {
+        w.require(['Magento_Customer/js/customer-data'], function (customerData) {
+            try {
+                var cart = customerData.get('cart');
+                apply(cart());
+                cart.subscribe(function (data) { apply(data); });
+            } catch (e) { /* mantém o SSR */ }
+        });
+    }
+}(window, document));
+</script>
 <div id="cart-totals" class="cart-totals" data-bind="scope:'block-totals'">
     <div class="awa-cart-totals-fallback" data-awa-totals-fallback="1">
         <div class="table-wrapper">

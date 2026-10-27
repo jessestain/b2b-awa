@@ -19,6 +19,17 @@ define([
         initialize: function () {
             this._super();
 
+            var attributes = (customer.customerData || {}).custom_attributes || {},
+                optin = attributes.whatsapp_optin;
+            if (Array.isArray(attributes)) {
+                optin = attributes.find(function (attribute) {
+                    return attribute.attribute_code === 'whatsapp_optin';
+                });
+            }
+            // Hydrate before subscribing: reading consent must never write it.
+            this.isChecked = ko.observable(!!optin && Number(optin.value) === 1);
+            this.isSaving = ko.observable(false);
+
             this.isChecked.subscribe(function (newValue) {
                 this.saveOptin(newValue ? 1 : 0);
             }.bind(this));

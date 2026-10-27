@@ -158,9 +158,25 @@ class ProspectPipeline
                 $cnpj,
                 $sectraChave
             );
+            $this->setCustomerSyncStatus($customer, ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION);
+        } else {
+            // task-23: NAO gravar 'aguardando ERP' quando o feed NAO foi escrito (o sistema mentia).
+            $this->setCustomerSyncStatus($customer, ErpCustomerSyncStatus::PROSPECT_FEED_FAILED);
+            $result['erp_customer_sync_status'] = ErpCustomerSyncStatus::PROSPECT_FEED_FAILED;
+            $result['message'] = 'Falha ao registrar o prospect no feed do ERP - requer acao operacional.';
+            $result['success'] = false;
+            $this->syncLogger->log(
+                ProspectEvent::CUSTOMER_SENT_SECTRA,
+                'FALHA: prospect NAO foi escrito em oc_pre_registration (feed do ERP).',
+                $customerId,
+                null,
+                $cnpj,
+                $sectraChave,
+                'error'
+            );
+            return $result;
         }
 
-        $this->setCustomerSyncStatus($customer, ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION);
         $result['erp_customer_sync_status'] = ErpCustomerSyncStatus::CUSTOMER_PENDING_ERP_VALIDATION;
         $result['message'] = 'Cadastro B2B aguardando validação no ERP. Checkout bloqueado até confirmação.';
         $result['success'] = true;
@@ -440,7 +456,7 @@ class ProspectPipeline
         ";
 
         try {
-            $connection->query($sql, [
+            $stmt = $connection->query($sql, [
                 'attr_cnpj' => $attrCnpj,
                 'attr_erp_code' => $attrErpCode,
                 'customer_id' => $customerId,
@@ -450,13 +466,31 @@ class ProspectPipeline
             return false;
         }
 
+        $rowCount = (is_object($stmt) && method_exists($stmt, 'rowCount')) ? (int) $stmt->rowCount() : -1;
         $sectraChave = $this->validatorChecker->resolveSectraChave($customerId);
         $exists = $connection->fetchOne(
             'SELECT customer_id FROM oc_pre_registration WHERE customer_id = ?',
             [$sectraChave]
         );
 
-        return $exists !== false;
+        if ($exists === false) {
+            // task-23: o insert afetou 0 linhas e a falha era silenciosa. NAO finge resolver a causa raiz:
+            // torna a falha visivel e diagnosticavel (o motivo do 0-linha segue NAO PROVADO).
+            $this->logger->error('[B2B-Sectra] oc_pre_registration NAO materializou', [
+                'customer_id' => $customerId,
+                'sectra_chave' => $sectraChave,
+                'row_count_insert' => $rowCount,
+                'tem_linha_no_map' => (bool) $connection->fetchOne(
+                    'SELECT 1 FROM oc_customer_id_map WHERE magento_customer_id = ? LIMIT 1',
+                    [$customerId]
+                ),
+                'attr_cnpj_id' => $attrCnpj,
+                'attr_erp_code_id' => $attrErpCode,
+            ]);
+            return false;
+        }
+
+        return true;
     }
 
     private function findMagentoCustomerByCnpj(string $cnpjDigits, int $excludeCustomerId): ?int

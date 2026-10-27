@@ -6,7 +6,7 @@
 
 if (!$block->isEnabled()): ?>
     <div class="message message-warning warning">
-        <div><?= $escaper->escapeHtml(__('O Copiloto IA está desabilitado. Acesse Stores → Configuration → AWA Motos → Assistente de IA para habilitá-lo e configurar a chave Groq.')) ?></div>
+        <div><?= $escaper->escapeHtml(__('O Copiloto IA está desabilitado. Acesse Lojas → Configuração → AWA Motos → Assistente de IA para habilitá-lo.')) ?></div>
     </div>
 <?php return; endif; ?>
 
@@ -17,12 +17,18 @@ if (!$block->isEnabled()): ?>
         <aside class="awa-copilot-sidebar">
             <h3 class="awa-copilot-sidebar__title"><?= $escaper->escapeHtml(__('Sugestões')) ?></h3>
             <ul class="awa-copilot-prompts" id="awa-copilot-prompts">
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Qual o resumo de vendas de hoje?"><?= $escaper->escapeHtml(__('Resumo de vendas hoje')) ?></button></li>
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Quais são os 10 produtos mais vendidos nos últimos 30 dias?"><?= $escaper->escapeHtml(__('Top produtos (30 dias)')) ?></button></li>
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Quantos clientes novos tivemos nos últimos 7 dias?"><?= $escaper->escapeHtml(__('Clientes novos (7 dias)')) ?></button></li>
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Qual o estoque atual do SKU "><?= $escaper->escapeHtml(__('Estoque por SKU…')) ?></button></li>
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Me mostre os detalhes do pedido número "><?= $escaper->escapeHtml(__('Detalhe de pedido…')) ?></button></li>
-                <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="Qual o status B2B do CNPJ "><?= $escaper->escapeHtml(__('Status B2B por CNPJ…')) ?></button></li>
+                <?php foreach ([
+                    ['📞', 'Quem devo ligar hoje?', 'Quem da minha carteira eu devo ligar hoje? Me dê a lista priorizada com o motivo e o que oferecer.'],
+                    ['💰', 'Minhas vendas no mês', 'Como estão as vendas da minha carteira nos últimos 30 dias comparado ao período anterior?'],
+                    ['🔁', 'Recompra desta semana', 'Quais clientes da minha carteira devem recomprar nos próximos 7 dias?'],
+                    ['🧊', 'Clientes para reativar', 'Quais clientes da minha carteira estão parados e valem uma campanha de reativação?'],
+                    ['🏆', 'Maiores clientes (12m)', 'Quais são os maiores clientes da minha carteira nos últimos 12 meses?'],
+                    ['🔎', 'Raio-X de um cliente…', 'Como está o cliente '],
+                    ['📦', 'Estoque por SKU…', 'Qual o estoque atual do SKU '],
+                    ['🧾', 'Pedido do site…', 'Me mostre os detalhes do pedido do site número '],
+                ] as [$icon, $label, $prompt]): ?>
+                    <li><button type="button" class="awa-copilot-prompt-btn" data-prompt="<?= $escaper->escapeHtmlAttr($prompt) ?>"><span aria-hidden="true"><?= $icon ?></span> <?= $escaper->escapeHtml(__($label)) ?></button></li>
+                <?php endforeach; ?>
             </ul>
             <div class="awa-copilot-sidebar__note">
                 <strong><?= $escaper->escapeHtml(__('Somente leitura')) ?></strong><br>
@@ -35,7 +41,7 @@ if (!$block->isEnabled()): ?>
             <div class="awa-copilot-messages" id="awa-copilot-messages" role="log" aria-live="polite">
                 <div class="awa-copilot-msg awa-copilot-msg--assistant">
                     <div class="awa-copilot-msg__bubble">
-                        <?= $escaper->escapeHtml(__('Olá! Sou o Copiloto interno da AWA Motos. Posso consultar vendas, estoque, pedidos, clientes e status B2B — tudo em modo leitura. Como posso ajudar?')) ?>
+                        <?= $escaper->escapeHtml(__('Olá! Sou o Copiloto comercial da AWA Motos. Leio as vendas reais do ERP da sua carteira: quem ligar hoje, quem está esfriando, o que oferecer para cada cliente e como estão suas vendas — tudo em modo leitura. Comece por uma sugestão ao lado ou pergunte.')) ?>
                     </div>
                 </div>
             </div>
@@ -172,6 +178,13 @@ if (!$block->isEnabled()): ?>
     color: #b73337;
     text-decoration: underline;
 }
+.awa-copilot-msg__bubble strong { font-weight: 600; }
+.awa-copilot-msg__hint {
+    font-size: 12px;
+    color: #888;
+    margin-left: 6px;
+    align-self: center;
+}
 .awa-copilot-msg--typing .awa-copilot-msg__bubble {
     display: flex;
     gap: 5px;
@@ -235,10 +248,22 @@ require(['jquery'], function ($) {
         }, 60);
     }
 
+    // Markdown mínimo e seguro: escapa TUDO e só então liga **negrito** e
+    // títulos "### " (o modelo responde em markdown; texto puro mostrava **).
+    function renderReply(content) {
+        var html = $('<div>').text(content).html();
+        html = html.replace(/^#{1,4}\s*(.+)$/gm, '<strong>$1</strong>');
+        return html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+    }
+
     function addMessage(role, content) {
         var $msg  = $('<div class="awa-copilot-msg awa-copilot-msg--' + role + '"></div>');
         var $bubble = $('<div class="awa-copilot-msg__bubble"></div>');
-        $bubble.text(content);
+        if (role === 'assistant') {
+            $bubble.html(renderReply(content));
+        } else {
+            $bubble.text(content);
+        }
         $msg.append($bubble);
         $messages.append($msg);
         scrollToBottom();
@@ -264,6 +289,9 @@ require(['jquery'], function ($) {
         $send.prop('disabled', true);
 
         var $typing = addTypingIndicator();
+        var hintTimer = setTimeout(function () {
+            $typing.append('<span class="awa-copilot-msg__hint"><?= $escaper->escapeJs(__('consultando o ERP…')) ?></span>');
+        }, 2500);
 
         $.ajax({
             url:         config.endpoint,
@@ -273,6 +301,7 @@ require(['jquery'], function ($) {
             dataType:    'json',
             headers:     { 'X-Requested-With': 'XMLHttpRequest' },
             success: function (resp) {
+                clearTimeout(hintTimer);
                 $typing.remove();
                 $input.prop('disabled', false);
                 $send.prop('disabled', false);
@@ -285,6 +314,7 @@ require(['jquery'], function ($) {
                 }
             },
             error: function () {
+                clearTimeout(hintTimer);
                 $typing.remove();
                 $input.prop('disabled', false);
                 $send.prop('disabled', false);
@@ -308,8 +338,17 @@ require(['jquery'], function ($) {
     });
 
     // Prompt suggestions
+    // Sugestão completa envia na hora; a que termina em espaço ("Como está
+    // o cliente ") só preenche o campo para completar.
     $('#awa-copilot-prompts').on('click', '.awa-copilot-prompt-btn', function () {
-        $input.val($(this).data('prompt')).focus();
+        var prompt = String($(this).data('prompt') || '');
+        if (/\s$/.test(prompt)) {
+            $input.val(prompt).focus();
+            return;
+        }
+        if (!$send.prop('disabled')) {
+            sendMessage(prompt);
+        }
     });
 });
 </script>

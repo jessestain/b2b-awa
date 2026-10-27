@@ -45,7 +45,7 @@ class CommercialReportService
 
         $contacts = $this->countContacts($attendantIds, $customerIds, $dateFrom, $dateTo);
         $tasks = $this->countTasks($attendantIds, $customerIds, $dateFrom, $dateTo, $taskType);
-        $inactive = count($this->inactiveCustomerService->getInactiveCustomers(30));
+        $inactive = $this->inactiveCustomerService->countInactiveCustomers(30);
         $reactivated = $this->sumReactivated($attendantIds, $dateFrom);
         $cartsTreated = $this->countAbandonedCartsTreated($customerIds, $dateFrom, $dateTo);
         $orders = $this->countOrders($customerIds, $dateFrom, $dateTo);

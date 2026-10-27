@@ -121,6 +121,42 @@ define([], function () {
             return;
         }
 
+        // GUARDA (23/10): o re-render das secoes customer-data re-insere temporariamente
+        // promo/top-header/support no header do checkout (flash de ~99-197px e CLS).
+        // O estado final do checkout nao tem esses blocos — remove imediatamente
+        // qualquer re-insercao (desktop e mobile).
+        var REMOVE_ON_CHECKOUT = [
+            '#awa-b2b-promo-bar', '.awa-b2b-promo-bar', '.top-header', '.wp-header',
+            '.awa-checkout-header-support', '.hotline_header'
+        ];
+
+        function pruneReinserted(node) {
+            for (var k = 0; k < REMOVE_ON_CHECKOUT.length; k++) {
+                var sel = REMOVE_ON_CHECKOUT[k];
+                if (node.matches && node.matches(sel)) {
+                    if (node.parentNode) { node.parentNode.removeChild(node); }
+                    return;
+                }
+            }
+            var inside = node.querySelectorAll(REMOVE_ON_CHECKOUT.join(','));
+            for (var x = 0; x < inside.length; x++) {
+                if (inside[x].parentNode) { inside[x].parentNode.removeChild(inside[x]); }
+            }
+        }
+
+        var reinsertObserver = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                var added = mutations[i].addedNodes;
+                for (var j = 0; j < added.length; j++) {
+                    if (added[j].nodeType === 1) {
+                        pruneReinserted(added[j]);
+                    }
+                }
+            }
+        });
+
+        reinsertObserver.observe(document.body, { childList: true, subtree: true });
+
         // Only intercept on mobile (≤991px) — desktop CSS handles it fine
         if (window.innerWidth > 991) {
             return;
@@ -179,3 +215,5 @@ define([], function () {
         }
     };
 });
+
+/* v6 guarda re-insercao 20261023-r2 */

@@ -1255,6 +1255,9 @@
         let searchSvg;
 
         if (!isDesktop) {
+            // Release the desktop-only display before returning on a breakpoint change.
+            let desktopIcon = document.querySelector('.awa-header-account-prompt__icon');
+            if (desktopIcon) { desktopIcon.style.removeProperty('display'); }
             return;
         }
 
@@ -1342,7 +1345,7 @@
         let accountIconLink = document.querySelector('.awa-header-account-prompt__icon');
         let accountIconSvg = accountIconLink ? accountIconLink.querySelector('svg') : null;
         if (accountIconLink) {
-            setImportantStyle(accountIconLink, 'display', 'inline-flex');
+            setImportantStyle(accountIconLink, 'display', window.innerWidth < 992 ? 'none' : 'inline-flex');
             setImportantStyle(accountIconLink, 'align-items', 'center');
             setImportantStyle(accountIconLink, 'justify-content', 'center');
             setImportantStyle(accountIconLink, 'width', '44px');
@@ -1394,7 +1397,7 @@
                     setImportantStyle(link, 'display', 'inline-flex');
                     setImportantStyle(link, 'align-items', 'center');
                     setImportantStyle(link, 'height', 'auto');
-                    setImportantStyle(link, 'min-height', '0');
+                    setImportantStyle(link, 'min-height', '32px');
                     setImportantStyle(link, 'max-height', 'none');
                     setImportantStyle(link, 'font-size', '13px');
                     setImportantStyle(link, 'line-height', '1.2');
@@ -1402,7 +1405,7 @@
                     setImportantStyle(link, 'background', 'transparent');
                     setImportantStyle(link, 'background-color', 'transparent');
                     setImportantStyle(link, 'color', 'var(--awa-primary)');
-                    setImportantStyle(link, 'padding', '0 2px');
+                    setImportantStyle(link, 'padding', '4px 6px');
                     setImportantStyle(link, 'margin', '0');
                     setImportantStyle(link, 'border', '0');
                     setImportantStyle(link, 'box-shadow', 'none');
@@ -1562,3 +1565,4 @@
         }
     });
 })();
+(function(){function sl(){var o=document.body.classList.contains("nav-open")||document.body.classList.contains("awa-mobile-drawer-open");var l=document.body.dataset.awaScrollLocked==="1";if(o&&!l){var y=window.scrollY||document.documentElement.scrollTop||0;document.body.dataset.awaScrollLocked="1";document.body.dataset.awaScrollY=String(y);document.body.style.position="fixed";document.body.style.inset="0";document.body.style.width="100%";document.body.style.top="-"+y+"px";}else if(!o&&l){var r=parseInt(document.body.dataset.awaScrollY,10)||0;delete document.body.dataset.awaScrollLocked;delete document.body.dataset.awaScrollY;document.body.style.position="";document.body.style.inset="";document.body.style.width="";document.body.style.top="";window.scrollTo(0,r);}}if(window.MutationObserver){var q=false;new MutationObserver(function(){if(q)return;q=true;window.requestAnimationFrame(function(){q=false;sl();});}).observe(document.body,{attributes:true,attributeFilter:["class"]});}sl();})();

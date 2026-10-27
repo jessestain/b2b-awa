@@ -339,11 +339,16 @@ class RegistrationHealthAuditService
     {
         $connection = $this->resourceConnection->getConnection();
 
+        // "legacy_unknown" e um PLACEHOLDER gravado pelo backfill de atribuicao:
+        // ocupa a coluna e NAO e dado. Sem excluir, a auditoria reporta 460 "sem origem"
+        // quando o real e ~8.600. Medido em 03/10/2026: o placeholder e 'legacy_unknown' em
+        // b2b_origin_host e 'legacy' em b2b_registration_campaign (strings DIFERENTES). Existe APENAS em
+        // b2b_origin_host e b2b_registration_campaign (b2b_phone e b2b_razao_social: zero).
         return (int) $connection->fetchOne(
             "SELECT COUNT(DISTINCT ce.entity_id) {$baseFrom}
              LEFT JOIN customer_entity_varchar attr
                 ON attr.entity_id = ce.entity_id AND attr.attribute_id = {$attributeId}
-             WHERE attr.value IS NULL OR attr.value = ''"
+             WHERE attr.value IS NULL OR attr.value = '' OR attr.value IN ('legacy_unknown', 'legacy')"
         );
     }
 

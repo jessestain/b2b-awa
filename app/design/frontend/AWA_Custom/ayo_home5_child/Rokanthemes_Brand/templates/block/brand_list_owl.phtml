@@ -80,6 +80,8 @@ foreach ($_brandCollection as $_brand) {
 	</div>
 </div>
 <?php } ?>
+<?php $awaBrandSwiperIsHome = ($_brandCollection && $_brandCollection->count() > 0); ?>
+<?php if ($awaBrandSwiperIsHome): ?>
 <script type="text/x-magento-init">
 {
 	"#rokanthemes-carousel<?php echo $block->escapeJsQuote($blockId); ?>": {
@@ -100,3 +102,4 @@ foreach ($_brandCollection as $_brand) {
 	}
 }
 </script>
+<?php endif; ?>

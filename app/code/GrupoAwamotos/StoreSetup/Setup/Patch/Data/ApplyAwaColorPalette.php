@@ -11,12 +11,13 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 /**
  * Aplica a paleta de cores definitiva AWA Motos no tema Rokanthemes.
  *
- * Primária:        #A33B3B
- * Text Color:      #333333
- * Link Color:      #A33B3B
+ * Design System (13/10/2026):
+ * Primária:        #B73337 (laranja)
+ * Text Color:      #111111 (preto)
+ * Link Color:      #111111
  * Link Hover:      #8e2629
- * Button Text:     #FFFFFF
- * Button BG:       #A33B3B
+ * Button Text:     #111111 (preto sobre laranja — contraste 6.6:1)
+ * Button BG:       #B73337
  * Button Hover BG: #8e2629
  *
  * Estes valores alimentam o template theme_option.phtml que gera CSS inline
@@ -41,7 +42,7 @@ class ApplyAwaColorPalette implements DataPatchInterface
 
         $colors = [
             'themeoption/colors/custom'                  => '1',
-            'themeoption/colors/text_color'               => '333333',
+            'themeoption/colors/text_color'               => '111111',
             'themeoption/colors/link_color'               => 'b73337',
             'themeoption/colors/link_hover_color'         => '8e2629',
             'themeoption/colors/button_text_color'        => 'FFFFFF',

@@ -188,6 +188,7 @@
             <block class="Magento\Framework\View\Element\Template"
                    name="awa.home.visual.fixes.css"
                    template="Magento_Theme::html/awa-home-visual-fixes-inline.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="awa.perf.rwd.fixes" template="Magento_Theme::html/awa-perf-rwd-fixes.phtml"/>
             <!-- CSS estático inline — sem dados dinâmicos, seguro cachear. -->
             <block class="Magento\Framework\View\Element\Template"
                    name="awa.home.benefits.final.inline"
@@ -281,6 +282,12 @@
                    name="awa.home.minicart.ui.defer"
                    template="Magento_Theme::html/awa-minicart-ui-defer.phtml"
                    after="awa.home.customer.defer.loader"/>
+        </referenceContainer>
+            <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="awa.quickorder.home.cta"
+                   template="GrupoAwamotos_B2B::quickorder/home-cta.phtml"
+                   before="-"/>
         </referenceContainer>
     </body>
 </page>

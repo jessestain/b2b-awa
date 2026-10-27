@@ -27,8 +27,7 @@ class Index extends Action implements HttpGetActionInterface
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('GrupoAwamotos_B2B::commercial_tasks');
-        $isSupervisor = $this->portfolioScope->canViewAllPortfolios()
-            && !$this->portfolioScope->canBypassPortfolioScope();
+        $isSupervisor = $this->portfolioScope->canViewAllPortfolios();
         $resultPage->getConfig()->getTitle()->prepend(
             $isSupervisor ? __('Tarefas da Equipe') : __('Minhas Tarefas')
         );

@@ -232,6 +232,10 @@ define([
         component.coachShowHowTo = ko.observable(false);
         component.coachHowToBuyUrl = ko.observable(cfg.howToBuyUrl || '');
         component.coachPulse = ko.observable(false);
+        /* B3: marcador de não lido. Fica true só quando o coach some sozinho
+         * (auto-dismiss) — mensagem proativa que o cliente não chegou a ver.
+         * Fechar no X ou agir são decisões conscientes e NÃO marcam. */
+        component.coachUnread = ko.observable(false);
         component.soundEnabled = ko.observable(lsGet(STORAGE.soundOn) === '1');
         component._coachCfg = cfg;
         component._coachUrls = urls;
@@ -298,6 +302,8 @@ define([
             if (scenario) {
                 component._markScenarioSeen(scenario);
             }
+            /* B3: só o desaparecimento automático deixa pendência. */
+            component.coachUnread(reason === 'auto');
             /* Suppress globally for N days on explicit user dismissal, except cadastro B2B (sessão). */
             if (reason === 'close' || reason === 'dismiss') {
                 if (isRegisterPage()) {
@@ -315,11 +321,21 @@ define([
                 return;
             }
 
+            /* PLANO B2B F2.3 (lazy init): o coach só existe com contexto privado
+               válido (binding visible: privateContextReady no widget). Com a
+               verificação de sessão sob demanda, dispara-a aqui antes de mostrar —
+               preserva a abordagem proativa sem chamada de sessão no load. */
+            if (typeof component._requestPrivateVerification === 'function') {
+                component._requestPrivateVerification();
+            }
+
             component.coachScenario(scenario);
             component.coachMessage(message);
             component.coachShowHowTo(false);
             component.coachVisible(true);
             component.coachPulse(true);
+            /* Card aberto = mensagem à vista; nada pendente. */
+            component.coachUnread(false);
             emit('show', { scenario: scenario });
             /* Chime somente se usuário optou pelo som */
             if (component.soundEnabled()) {

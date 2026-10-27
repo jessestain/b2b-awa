@@ -6,7 +6,7 @@ namespace GrupoAwamotos\Theme\Plugin\Response;
 
 use GrupoAwamotos\Theme\Model\Html\DebugIngestStripper;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\HTTP\PhpEnvironment\Response as ResponseHttp;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 
 /**
@@ -57,37 +57,14 @@ class DeferHomeScriptsPlugin
 
         $contentType = $subject->getHeader('Content-Type');
         if ($contentType && stripos($contentType->getFieldValue(), 'text/html') === false) {
-            // #region agent log
-            $this->debugSignal('H3-CONTENTTYPE-SKIP', 'defer plugin skipped non-html response', [
-                'fullAction' => $fullAction,
-                'contentType' => (string) $contentType->getFieldValue(),
-            ]);
-            // #endregion
             return;
         }
 
         $html = (string) $subject->getBody();
         if ($html === '') {
-            // #region agent log
-            $this->debugSignal('H3-EMPTY-BODY', 'defer plugin skipped empty body', [
-                'fullAction' => $fullAction,
-            ]);
-            // #endregion
             return;
         }
 
-        // #region agent log
-        $this->debugSignal('H1-H5-PRE-HTML', 'defer plugin pre-strip html markers', [
-            'fullAction' => $fullAction,
-            'bodyBytes' => strlen($html),
-            'hasIngest' => str_contains($html, '/ingest/'),
-            'hasLocalhost' => str_contains($html, '127.0.0.1'),
-            'hasAwaHeroBeacon' => str_contains($html, 'awa_hero='),
-            'hasOldStaticVersion' => str_contains($html, 'version1787860319'),
-            'hasBootstrapMergedMarker' => str_contains($html, 'id="awa-home-bootstrap-merged"'),
-            'request' => $this->requestMeta(),
-        ]);
-        // #endregion
 
         $html = DebugIngestStripper::strip($html);
 
@@ -111,18 +88,6 @@ class DeferHomeScriptsPlugin
             $html = $this->deferCatalogPlpNonCriticalJs($html);
         }
 
-        // #region agent log
-        $this->debugSignal('H2-H4-POST-HTML', 'defer plugin post-strip html markers', [
-            'fullAction' => $fullAction,
-            'bodyBytes' => strlen($html),
-            'hasIngest' => str_contains($html, '/ingest/'),
-            'hasLocalhost' => str_contains($html, '127.0.0.1'),
-            'hasAwaHeroBeacon' => str_contains($html, 'awa_hero='),
-            'hasOldStaticVersion' => str_contains($html, 'version1787860319'),
-            'hasBootstrapMergedMarker' => str_contains($html, 'id="awa-home-bootstrap-merged"'),
-            'request' => $this->requestMeta(),
-        ]);
-        // #endregion
 
         $subject->setBody($html);
     }
@@ -280,24 +245,43 @@ class DeferHomeScriptsPlugin
 
         $bootMode = $bootMode === 'catalog' ? 'catalog' : 'home';
 
-        /* freeze-fix-r10: home must not start the AMD graph. Empty
-         * data-amd-srcs so appendMerged has nothing to inject. Catalog
-         * keeps the captured chain for restoreNativeAmdBootstrap. */
-        if ($bootMode !== 'home' && $requireSrc === '') {
+        /* fix-home-amd-r11 (02/10/2026): a cadeia AMD capturada volta a ser
+         * emitida na home, com defer e na ordem original.
+         *
+         * Evidencias do diagnostico (pagina real, medidor CDP):
+         *  - com o stub ativo: 0 modulos AMD, jQuery/Swiper undefined, fila
+         *    presa (3 require + 5 awaRunWhenRequire), banner de consentimento
+         *    nunca aparece, minicart ready=0, hero sem autoplay;
+         *  - restaurando a cadeia: 216 modulos, jQuery function, mage/apply
+         *    processando os x-magento-init, banner de consentimento visivel e
+         *    hero girando no autoplay de 12 s (config do proprio tema).
+         *
+         * O stub continua sendo emitido ANTES da cadeia: ele absorve as
+         * chamadas `require([...])`/`define([...])` feitas durante o parsing e
+         * a fila e esvaziada por awaFlushRequireQueue() no DOMContentLoaded
+         * (awa-require-stub.js), quando o loader real ja assumiu.
+         *
+         * ATENCAO (medido): require.js 2.3.7 aborta com
+         * `if (typeof define !== 'undefined') { return; }`. Por isso o snippet
+         * awa-home-amd-promote remove window.define e entrega window.require
+         * como OBJETO de config antes da cadeia. Sem esse passo o loader nao
+         * inicia e resolver/mixins/config quebram com TypeError. */
+        if ($amdSrcs === []) {
             return null;
         }
 
-        /* freeze-fix-r10: keep LOCALE/BASE_URL; strip `require = {...}` so
-         * deferred runInline() cannot replace the r1 stub with Magento's
-         * config object (that is how require.min.js starts). */
-        if ($bootMode === 'home') {
-            $strippedInline = preg_replace('/(?:var\s+)?require\s*=\s*\{.*?\};/s', '', $inlineJs);
-            if (is_string($strippedInline) && trim($strippedInline) !== '') {
-                $inlineJs = trim($strippedInline);
-            }
+        /* Mantido do freeze-fix-r10: `awa-home-bootstrap-defer.js::runInline()`
+         * promove o conteudo de #awa-home-bootstrap-inline a script executavel
+         * (linhas 62-82 do asset). Se o `require = {...}` original ficasse ali,
+         * ele sobrescreveria window.require DEPOIS do loader real assumir e
+         * derrubaria toda a cadeia. O baseUrl e reinjetado pelo snippet
+         * awa-home-amd-promote, uma unica vez, antes da cadeia. */
+        $strippedInline = preg_replace('/(?:var\s+)?require\s*=\s*\{.*?\};/s', '', $inlineJs);
+        if (is_string($strippedInline) && trim($strippedInline) !== '') {
+            $inlineJs = trim($strippedInline);
         }
 
-        $jsonSrcs = $bootMode === 'home' ? [] : array_values($amdSrcs);
+        $jsonSrcs = array_values($amdSrcs);
         $amdJson = json_encode($jsonSrcs, JSON_UNESCAPED_SLASHES);
         if (!is_string($amdJson)) {
             return null;
@@ -315,10 +299,43 @@ class DeferHomeScriptsPlugin
             . htmlspecialchars($amdJson, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
             . '"></script>';
 
-        /* freeze-fix-r10: do NOT emit executable require.min.js (nor
-         * resolver/mixins/config) on cms_index_index. Stub satisfies
-         * typeof require==='function'. */
-        if ($bootMode !== 'home' && $requireSrc !== '') {
+        if ($bootMode === 'home') {
+            /* Neutraliza o stub e entrega a config que o loader Magento espera.
+             * `delete window.define` e obrigatorio (require.js 2.3.7 aborta se
+             * `typeof define !== 'undefined'`); `window.require` como objeto e
+             * como o require.js le baseUrl (mesmo padrao do Magento nativo). */
+            $amdBaseUrl = $this->deriveAmdBaseUrl($requireSrc !== '' ? $requireSrc : $firstSrc);
+            if ($amdBaseUrl !== '') {
+                $html .= '<script id="awa-home-amd-promote">(function(w){'
+                    . 'try{delete w.define;}catch(e){w.define=undefined;}'
+                    . 'try{delete w.requirejs;}catch(e){}'
+                    . 'w.require={"baseUrl":"'
+                    . htmlspecialchars($amdBaseUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                    . '"};'
+                    . '})(window);</script>';
+            }
+
+            /* Cadeia completa, SEM defer e imediatamente apos o promotor, na
+             * mesma forma que o Magento nativo emite (e que a PLP ja usa hoje).
+             *
+             * Por que nao `defer`: entre o promotor e o loader, window.require
+             * precisa ser o OBJETO de config (require.js 2.3.7 so instala o
+             * require real com `if (!require) { require = req; }`). Com defer,
+             * esse objeto ficaria exposto durante todo o resto do parsing e as
+             * chamadas inline `require(...)` que existem depois deste ponto
+             * (19 ocorrencias no HTML servido, 3 efetivamente enfileiradas pelo
+             * stub) quebrariam com "require is not a function". Emitindo a
+             * cadeia em bloco, a janela e zero: a proxima instrucao ja e o
+             * require.min.js, que instala o require real. */
+            foreach ($amdSrcs as $amdSrcItem) {
+                if (!is_string($amdSrcItem) || $amdSrcItem === '') {
+                    continue;
+                }
+                $html .= '<script data-awa-home-amd="1" src="'
+                    . htmlspecialchars($amdSrcItem, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                    . '"></script>';
+            }
+        } elseif ($requireSrc !== '') {
             $html .= '<script src="'
                 . htmlspecialchars($requireSrc, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
                 . '"></script>';
@@ -329,6 +346,24 @@ class DeferHomeScriptsPlugin
             . '" defer></script>';
 
         return $html;
+    }
+
+    /**
+     * fix-home-amd-r11: baseUrl da storefront a partir de uma URL da cadeia AMD
+     * capturada (unmerged: .../pt_BR/requirejs/require.min.js;
+     * merged: .../pt_BR/_cache/merged/<hash>.js).
+     */
+    private function deriveAmdBaseUrl(string $src): string
+    {
+        if (preg_match('~^(.*?)/requirejs/require(?:\.min)?\.js~i', $src, $m)) {
+            return $m[1];
+        }
+
+        if (preg_match('~^(.*?)/_cache/merged/~i', $src, $m)) {
+            return $m[1];
+        }
+
+        return (string) preg_replace('~/[^/]+$~', '', $src);
     }
 
     /**
@@ -419,7 +454,7 @@ class DeferHomeScriptsPlugin
 
         foreach ($patterns as $fragment) {
             $html = (string) preg_replace(
-                '#<script(?![^>]*\\btype=["\']text/plain["\'])[^>]*\\bsrc=["\'][^"\']*'
+                '#<script(?![^>]*\\btype=["\']text/plain["\'])(?![^>]*\\bdata-awa-home-amd=)[^>]*\\bsrc=["\'][^"\']*'
                 . $fragment
                 . '[^"\']*["\'][^>]*>\\s*</script>\\s*#i',
                 '',
@@ -508,26 +543,4 @@ class DeferHomeScriptsPlugin
 HTML;
     }
 
-    private function debugSignal(string $hypothesisId, string $message, array $data = []): void
-    {
-        return;
     }
-
-    /**
-     * @return array<string, string>
-     */
-    private function requestMeta(): array
-    {
-        $ua = (string) $this->request->getServer('HTTP_USER_AGENT', '');
-        if ($ua !== '' && strlen($ua) > 140) {
-            $ua = substr($ua, 0, 140);
-        }
-
-        return [
-            'method' => (string) $this->request->getMethod(),
-            'uri' => (string) $this->request->getRequestUri(),
-            'ua' => $ua,
-            'host' => (string) $this->request->getHttpHost(),
-        ];
-    }
-}

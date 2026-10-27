@@ -62,6 +62,17 @@ class SendWhatsAppReengagement
                     $customer = $this->customerRepository->getById($magentoCustomerId);
                     $segment = $customerData['segment'] ?? 'at_risk';
 
+                    // LGPD: re-engagement e conteudo de marketing — so envia com opt-in
+                    // explicito de WhatsApp (whatsapp_optin=1), separado do consentimento
+                    // de e-mail/newsletter.
+                    if (!$this->hasWhatsAppOptIn($customer)) {
+                        $this->logger->info(sprintf(
+                            '[WhatsApp Cron] Skipped customer without WhatsApp opt-in (LGPD): %d',
+                            (int) $magentoCustomerId
+                        ));
+                        continue;
+                    }
+
                     $coupon = $this->couponGenerator->generateForCustomer(
                         $magentoCustomerId,
                         $segment,
@@ -131,5 +142,16 @@ class SendWhatsAppReengagement
             return $customerData['telefone'];
         }
         return null;
+    }
+
+    /**
+     * LGPD: re-engagement is marketing content and requires explicit WhatsApp opt-in
+     * (customer attribute whatsapp_optin), independent from e-mail consent.
+     */
+    public function hasWhatsAppOptIn(\Magento\Customer\Api\Data\CustomerInterface $customer): bool
+    {
+        $optin = $customer->getCustomAttribute('whatsapp_optin');
+
+        return $optin !== null && (int) $optin->getValue() === 1;
     }
 }

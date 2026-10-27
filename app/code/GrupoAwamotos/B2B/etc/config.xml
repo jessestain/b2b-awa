@@ -112,6 +112,14 @@
                 <cancel_stuck_dry_run>0</cancel_stuck_dry_run>
             </sectra_sync>
 
+            <!-- Marcacao de cliente aprovado e inativo/ausente no Sectra. Nunca bloqueia,
+                 so grava nota administrativa. Desligado e em dry-run por padrao. -->
+            <customer_erp_status>
+                <flag_enabled>0</flag_enabled>
+                <flag_dry_run>1</flag_dry_run>
+                <flag_max_percent>15</flag_max_percent>
+            </customer_erp_status>
+
             <platform>
                 <design_system_enabled>0</design_system_enabled>
                 <unified_menu_enabled>0</unified_menu_enabled>

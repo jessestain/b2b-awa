@@ -38,6 +38,7 @@ class ConversationLogger
         int     $tokensUsed = 0,
         string  $status = 'ok',
         ?string $errorDetail = null,
+        ?int    $latencyMs = null,
         ?int    $customerId = null,
         ?string $ipAddress = null
     ): void {
@@ -61,6 +62,7 @@ class ConversationLogger
                     'error_detail'       => $errorDetail !== null
                         ? mb_substr($this->piiRedactor->redact($errorDetail), 0, 512)
                         : null,
+                    'latency_ms'         => $latencyMs !== null && $latencyMs > 0 ? $latencyMs : null,
                     'ip_hash'            => $ipAddress !== null ? hash('sha256', $ipAddress) : null,
                 ]
             );

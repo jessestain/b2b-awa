@@ -64,6 +64,8 @@ define([
     /**
      * @returns {void}
      */
+    var ensureBillingSyncGuard = false;
+
     function ensureBillingFromShipping() {
         var shippingAddress = quote.shippingAddress();
 
@@ -71,8 +73,20 @@ define([
             return;
         }
 
+        // Guarda de reentrancia (23/10): selectBillingAddressAction muta quote.billingAddress(),
+        // que re-dispara a subscription syncAllowed. Endereco de entrega incompleto causava
+        // loop infinito -> RangeError: Maximum call stack size exceeded.
+        if (ensureBillingSyncGuard || !isBillingAddressUsable(shippingAddress)) {
+            return;
+        }
+
         if (!isBillingAddressUsable(quote.billingAddress())) {
-            selectBillingAddressAction(shippingAddress);
+            ensureBillingSyncGuard = true;
+            try {
+                selectBillingAddressAction(shippingAddress);
+            } finally {
+                ensureBillingSyncGuard = false;
+            }
         }
     }
 

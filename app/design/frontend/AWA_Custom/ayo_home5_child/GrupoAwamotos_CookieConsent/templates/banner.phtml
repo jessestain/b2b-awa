@@ -41,6 +41,29 @@
         </div>
     </div>
 </div>
+
+<?php /* A2 — reabrir preferências (LGPD Art. 8º §5 e Art. 18: revogar precisa
+   ser tão fácil quanto consentir). Nasce oculto; o JS liga quando já existe
+   consentimento gravado. Nunca fica visível junto com o banner.
+
+   Nasce com hidden + aria-hidden="true", então o `syncInitialInert` do
+   Rokanthemes_Themeoption/templates/html/header.phtml marca este nó como
+   `inert` — o cookie-consent.js remove o atributo ao exibir, igual ao que já
+   é feito com o próprio banner (ver comentário task-14 naquele arquivo). */ ?>
+<button type="button"
+        id="awa-cookie-reopen"
+        class="awa-cookie-reopen"
+        hidden
+        aria-hidden="true"
+        aria-haspopup="dialog"
+        aria-controls="awa-cookie-banner"
+        title="<?= $block->escapeHtmlAttr(__('Preferências de cookies')) ?>"
+        aria-label="<?= $block->escapeHtmlAttr(__('Abrir preferências de cookies')) ?>">
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V6a3 3 0 0 1 3-3zm0 10a2 2 0 0 1 1 3.73V19a1 1 0 0 1-2 0v-2.27A2 2 0 0 1 12 13z"
+              fill="currentColor"/>
+    </svg>
+</button>
 <script>
 (function (w, d) {
     var isHome = d.body && d.body.classList.contains('cms-index-index');
@@ -98,4 +121,26 @@
     }
 }(window, document));
 </script>
+<?php /* ============================================================================
+   SHIM TEMPORÁRIO — consentimento (task-15) — REMOVER quando o pipeline estático
+   estiver corrigido.
+
+   Motivo: a correção definitiva (remover `inert` no showBanner() e disparar
+   `awa:cookie-consent` no saveConsent() de
+   GrupoAwamotos_CookieConsent/web/js/cookie-consent.js) está aplicada na FONTE do
+   tema mas NÃO chega ao navegador — a duplicata velha em
+   pub/static/.../GrupoAwamotos_CookieConsent/js/cookie-consent.min.js sombreia a
+   versão nova e o materializador sob demanda está desativado
+   (static_content_on_demand_in_production = NULL). Medido em 02/10/2026:
+   V-017 e 03-backend-operacoes/aplicacao-fase1.md §15.9/15.10.
+
+   O que remover quando o pipeline for corrigido: este bloco <script> e o arquivo
+   cookie-consent.js do tema já corrigido passa a fazer as duas coisas sozinho.
+
+   O shim faz DUAS coisas e só: (a) remove o `inert` quando o banner fica visível;
+   (b) dispara `awa:cookie-consent` depois que o módulo grava o consentimento.
+   Não grava chave nenhuma e não decide o que é "all"/"essential".
+   ============================================================================ */ ?>
+<script src="<?= $block->escapeUrl($block->getViewFileUrl('js/awa-consent-shim.js')) ?>" defer></script>
 <?php endif; ?>
+

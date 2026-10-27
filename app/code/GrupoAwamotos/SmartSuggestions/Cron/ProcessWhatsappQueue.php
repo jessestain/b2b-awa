@@ -88,9 +88,7 @@ class ProcessWhatsappQueue
                 count($pendingMessages)
             ));
 
-            // Mark as processing
-            $queueIds = array_column($pendingMessages, 'queue_id');
-            $this->queueResource->markAsProcessing($queueIds);
+            // Claim each row conditionally; a stale batch must not resurrect cancellation.
 
             $sent = 0;
             $failed = 0;
@@ -98,7 +96,24 @@ class ProcessWhatsappQueue
 
             foreach ($pendingMessages as $message) {
                 try {
+                    $claimed = $this->queueResource->getConnection()->update(
+                        $this->queueResource->getMainTable(),
+                        ['status' => 'processing', 'updated_at' => date('Y-m-d H:i:s')],
+                        ['queue_id = ?' => (int) $message['queue_id'], 'status = ?' => 'pending']
+                    );
+                    if ($claimed !== 1) {
+                        continue;
+                    }
                     $result = $this->processMessage($message);
+                    if (!empty($result['consent_blocked'])) {
+                        $this->queueResource->getConnection()->update(
+                            $this->queueResource->getMainTable(),
+                            ['status' => 'consent_review', 'error_message' => $result['message'],
+                             'updated_at' => date('Y-m-d H:i:s')],
+                            ['queue_id = ?' => (int) $message['queue_id'], 'status = ?' => 'processing']
+                        );
+                        continue;
+                    }
 
                     if ($result['success']) {
                         $sent++;
@@ -191,6 +206,41 @@ class ProcessWhatsappQueue
             ];
         }
 
+        // Resolve durable order identity and read the preference freshly for every dispatch.
+        // Legacy rows without identity stay auditable and never become an automatic retry.
+        $type = (string) ($message['message_type'] ?? '');
+        if (!preg_match('/^order_status:([1-9][0-9]*)$/D', $type, $match)) {
+            return ['success' => false, 'consent_blocked' => true,
+                'message' => 'Consent review required: missing durable order identity'];
+        }
+        $connection = $this->queueResource->getConnection();
+        $orderTable = $this->queueResource->getTable('sales_order');
+        $customerTable = $this->queueResource->getTable('customer_entity');
+        $attributeTable = $this->queueResource->getTable('eav_attribute');
+        $entityTypeTable = $this->queueResource->getTable('eav_entity_type');
+        $valueTable = $this->queueResource->getTable('customer_entity_int');
+        $consent = $connection->fetchOne(
+            "SELECT v.value FROM {$orderTable} o
+             JOIN {$customerTable} c ON c.entity_id = o.customer_id
+             JOIN {$entityTypeTable} t ON t.entity_type_code = 'customer'
+             JOIN {$attributeTable} a ON a.entity_type_id = t.entity_type_id
+               AND a.attribute_code = 'whatsapp_optin' AND a.backend_type = 'int'
+             JOIN {$valueTable} v ON v.entity_id = c.entity_id AND v.attribute_id = a.attribute_id
+             WHERE o.entity_id = :order_id",
+            ['order_id' => (int) $match[1]]
+        );
+        if ((string) $consent !== '1') {
+            return ['success' => false, 'consent_blocked' => true,
+                'message' => 'Consent revoked, absent or customer unavailable before dispatch'];
+        }
+        $status = $connection->fetchOne(
+            $connection->select()->from($this->queueResource->getMainTable(), 'status')
+                ->where('queue_id = ?', (int) $message['queue_id'])
+        );
+        if ($status !== 'processing') {
+            return ['success' => false, 'consent_blocked' => true,
+                'message' => 'Queue state changed before dispatch'];
+        }
         return $this->whatsappSender->sendMessage($phone, $content);
     }
 
@@ -208,7 +258,7 @@ class ProcessWhatsappQueue
                 'sent_at' => date('Y-m-d H:i:s'),
                 'error_message' => null
             ],
-            ['queue_id = ?' => $queueId]
+            ['queue_id = ?' => $queueId, 'status = ?' => 'processing']
         );
     }
 
@@ -224,7 +274,7 @@ class ProcessWhatsappQueue
                 'status' => 'failed',
                 'error_message' => substr($error, 0, 1000)
             ],
-            ['queue_id = ?' => $queueId]
+            ['queue_id = ?' => $queueId, 'status = ?' => 'processing']
         );
     }
 
@@ -245,7 +295,7 @@ class ProcessWhatsappQueue
                 'scheduled_at' => $scheduledAt,
                 'error_message' => substr($error, 0, 1000)
             ],
-            ['queue_id = ?' => $queueId]
+            ['queue_id = ?' => $queueId, 'status = ?' => 'processing']
         );
 
         $this->logger->info(sprintf(

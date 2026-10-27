@@ -9,5 +9,16 @@
              parent="Magento_Backend::marketing"
              action="grupoawamotos_aiassistant/copilot/index"
              resource="GrupoAwamotos_AiAssistant::admin_copilot"/>
+        <!-- Equipe comercial (Vendedora/Supervisora) não tem Magento_Backend::marketing:
+             o copiloto também entra no cockpit "AWA Comercial", único pai que esses
+             papéis enxergam. Mesma ACL; MenuRestrictionPlugin preserva filhos dessa raiz. -->
+        <add id="GrupoAwamotos_AiAssistant::copilot_commercial"
+             title="Copiloto IA"
+             translate="title"
+             module="GrupoAwamotos_AiAssistant"
+             sortOrder="40"
+             parent="GrupoAwamotos_B2B::commercial"
+             action="grupoawamotos_aiassistant/copilot/index"
+             resource="GrupoAwamotos_AiAssistant::admin_copilot"/>
     </menu>
 </config>

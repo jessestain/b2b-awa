@@ -52,6 +52,10 @@
         <column xsi:type="varchar" name="acknowledged_by" nullable="true" length="100" comment="Acknowledged By"/>
         <column xsi:type="timestamp" name="resolved_at" nullable="true" comment="Resolved At"/>
         <column xsi:type="varchar" name="resolved_by" nullable="true" length="100" comment="Resolved By"/>
+                <!-- Deduplicacao de notificacao (10/10/2026): sem esta coluna o AlertProcessor
+             reenviava e-mail a cada 5 min para todo alerta "open" com occurrences <= 3,
+             gerando 247 e-mails num unico dia (13 alertas x 12 rodadas/hora). -->
+        <column xsi:type="timestamp" name="notified_at" nullable="true" comment="Ultima notificacao enviada"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
 

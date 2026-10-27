@@ -720,6 +720,15 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progres
 
 /* Mobile: labels do stepper legíveis (vence font-size:0 de bundles async) */
 @media (max-width: 575px) {
+    /* Two complete columns prevent locked steps shrinking below their labels. */
+    body#html-body.b2b-auth-shell.b2b-register-index
+        #b2b-register-shell .b2b-register-progress {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        overflow: visible !important;
+    }
+
     body#html-body.b2b-auth-shell.b2b-register-index
         #b2b-register-shell
         .b2b-register-progress
@@ -727,8 +736,10 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progres
         font-size: 12px !important;
         gap: 2px !important;
         min-width: 0 !important;
-        overflow: hidden !important;
-        padding-inline: 2px !important;
+        overflow: visible !important;
+        padding-inline: 10px !important;
+        width: auto !important;
+        max-width: none !important;
     }
 
     body#html-body.b2b-auth-shell.b2b-register-index

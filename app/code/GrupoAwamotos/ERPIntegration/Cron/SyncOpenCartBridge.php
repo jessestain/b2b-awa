@@ -8,6 +8,7 @@ use GrupoAwamotos\B2B\Model\Customer\B2bGroupIds;
 use GrupoAwamotos\B2B\Service\CustomerGroupManager;
 use GrupoAwamotos\ERPIntegration\Helper\Data as Helper;
 use GrupoAwamotos\ERPIntegration\Model\B2BClientRegistration;
+use GrupoAwamotos\ERPIntegration\Model\Connection;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
@@ -38,6 +39,9 @@ class SyncOpenCartBridge
     /** @var int Offset applied to Magento entity_id to generate OpenCart-compatible customer_id */
     private const OC_CUSTOMER_ID_OFFSET = 200000;
 
+    /** @var int Fallback OpenCart product_id when MT_MATERIAL.CODINTERNO is absent. */
+    private const OC_PRODUCT_ID_OFFSET = 200000;
+
     /**
      * Bridge includes commercial groups + pending (prospects), resolved dynamically.
      */
@@ -58,6 +62,7 @@ class SyncOpenCartBridge
         private readonly ResourceConnection $resourceConnection,
         private readonly Helper $helper,
         private readonly B2BClientRegistration $b2bRegistration,
+        private readonly Connection $erpConnection,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -106,6 +111,7 @@ class SyncOpenCartBridge
             $preRegRemoved = $this->removeResolvedCustomersFromPreRegistration();
             $recovered = $this->recoverAfterTruncate();
             $registered = $this->registerPendingOrderClients();
+            $products = $this->syncProductBridge();
             $viewPatched = $this->ensureOcOrderViewUsesConfirmedCustomers();
 
             if ($mapped > 0
@@ -116,6 +122,7 @@ class SyncOpenCartBridge
                 || $preRegRemoved > 0
                 || $recovered > 0
                 || $registered > 0
+                || $products > 0
                 || $viewPatched
             ) {
                 $this->logger->info('[ERP Cron] OpenCart bridge sync completed', [
@@ -127,6 +134,7 @@ class SyncOpenCartBridge
                     'pre_registration_removed_resolved' => $preRegRemoved,
                     'truncate_recovery' => $recovered,
                     'b2b_registrations' => $registered,
+                    'product_bridge_synced' => $products,
                     'oc_order_view_patched' => $viewPatched,
                 ]);
             }
@@ -135,6 +143,125 @@ class SyncOpenCartBridge
                 'trace' => $e->getTraceAsString(),
             ]);
         }
+    }
+
+    /**
+     * Sync oc_product and oc_product_id_map for the OpenCart bridge.
+     *
+     * Sectra "Importar Pedidos AWA" resolves each oc_order_product item through:
+     *   product_id -> oc_product.product_id -> model -> MT_MATERIAL.CODIGO.
+     * The oc_order_product VIEW computes product_id as
+     *   COALESCE(oc_product_id_map.old_oc_product_id, soi.product_id + 200000),
+     * so every catalog SKU needs both an oc_product row (model = sku) and an
+     * oc_product_id_map row (old_oc_product_id = oc_product.product_id),
+     * otherwise order import fails with "Produto nao foi encontrado".
+     *
+     * product_id convention: MT_MATERIAL.CODINTERNO when numeric, else
+     * entity_id + OC_PRODUCT_ID_OFFSET (matching the VIEW fallback).
+     */
+    public function syncProductBridge(): int
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $catalog = [];
+        foreach ($connection->fetchAll('SELECT entity_id, TRIM(sku) AS sku FROM catalog_product_entity') as $row) {
+            $sku = (string) $row['sku'];
+            if ($sku !== '') {
+                $catalog[$sku] = (int) $row['entity_id'];
+            }
+        }
+        if ($catalog === []) {
+            return 0;
+        }
+
+        $existingModels  = array_flip($connection->fetchCol('SELECT model FROM oc_product'));
+        $existingMapSkus = array_flip($connection->fetchCol('SELECT magento_sku FROM oc_product_id_map'));
+
+        $missingSkus = array_unique(array_merge(
+            array_keys(array_diff_key($catalog, $existingModels)),
+            array_keys(array_diff_key($catalog, $existingMapSkus))
+        ));
+        if ($missingSkus === []) {
+            return 0;
+        }
+
+        $codinternoBySku = $this->fetchCodinternoBySku($missingSkus);
+        $usedProductIds  = array_flip(array_map('intval', $connection->fetchCol('SELECT product_id FROM oc_product')));
+
+        $changes = 0;
+        foreach ($missingSkus as $sku) {
+            $entityId    = $catalog[$sku];
+            $codinterno  = $codinternoBySku[$sku] ?? null;
+            $productId   = ($codinterno !== null && preg_match('/^\d+$/', $codinterno))
+                ? (int) $codinterno
+                : ($entityId + self::OC_PRODUCT_ID_OFFSET);
+
+            // Never reuse a product_id already owned by another model.
+            if (isset($usedProductIds[$productId])) {
+                $productId = $entityId + self::OC_PRODUCT_ID_OFFSET;
+            }
+
+            if (!isset($existingModels[$sku])) {
+                $connection->insertOnDuplicate(
+                    'oc_product',
+                    [
+                        'product_id'      => $productId,
+                        'model'           => $sku,
+                        'sku'             => $sku,
+                        'quantity'        => 0,
+                        'stock_status_id' => 7,
+                        'status'          => 1,
+                    ],
+                    ['model', 'sku', 'quantity', 'stock_status_id', 'status']
+                );
+                $existingModels[$sku]    = true;
+                $usedProductIds[$productId] = true;
+                $changes++;
+            }
+
+            if (!isset($existingMapSkus[$sku])) {
+                $connection->insertOnDuplicate(
+                    'oc_product_id_map',
+                    [
+                        'magento_entity_id' => $entityId,
+                        'magento_sku'       => $sku,
+                        'old_oc_product_id' => $productId,
+                        'old_oc_sku'        => $sku,
+                    ],
+                    ['old_oc_product_id', 'old_oc_sku', 'magento_entity_id']
+                );
+                $existingMapSkus[$sku] = true;
+                $changes++;
+            }
+        }
+
+        return $changes;
+    }
+
+    /**
+     * @param list<string> $skus
+     * @return array<string, string> SKU => CODINTERNO
+     */
+    private function fetchCodinternoBySku(array $skus): array
+    {
+        $result = [];
+        foreach (array_chunk($skus, 500) as $chunk) {
+            $placeholders = implode(',', array_fill(0, count($chunk), '?'));
+            try {
+                $rows = $this->erpConnection->query(
+                    "SELECT CODIGO, CODINTERNO FROM MT_MATERIAL WHERE CODIGO IN ({$placeholders}) AND CODINTERNO IS NOT NULL AND CODINTERNO <> ''",
+                    array_values($chunk)
+                );
+                foreach ($rows as $row) {
+                    $result[trim((string) $row['CODIGO'])] = trim((string) $row['CODINTERNO']);
+                }
+            } catch (\Throwable $e) {
+                $this->logger->warning('[ERP Cron] Product bridge: failed to load CODINTERNO: ' . $e->getMessage());
+                break;
+            }
+        }
+
+        return $result;
     }
 
     /**

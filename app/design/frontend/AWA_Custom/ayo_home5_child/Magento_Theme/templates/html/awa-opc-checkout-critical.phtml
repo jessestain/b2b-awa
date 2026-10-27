@@ -27,10 +27,12 @@ $polishUrl   = $block->getViewFileUrl('css/awa-checkout-polish.min.css') . '?v=2
 $layoutLockUrl = $block->getViewFileUrl('css/awa-checkout-layout-lock.css');
 $layoutProbeUrl = $block->getViewFileUrl('js/awa-opc-layout-probe.js');
 $asyncInit = json_encode(
-    ['js/awa-async-stylesheet' => ['urls' => [$premiumUrl, $layerUrl, $headerUrl, $polishUrl]]],
+    ['js/awa-async-stylesheet' => ['urls' => [$premiumUrl, $layerUrl, $polishUrl]]],
     JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP
 );
 ?>
+<?php /* D3a (23/10): header simplificado do OPC passa a ser BLOQUEANTE — as regras compactas aplicavam apos o primeiro paint em corridas lentas (CLS 0,295). */ ?>
+<link rel="stylesheet" href="<?= $block->escapeUrl($headerUrl) ?>"/>
 <style id="awa-opc-checkout-critical">
 /* Typeset: Luma html{62.5%}→10px root; checkout usa 16px para body e rem legíveis */
 html{font-size:100%}

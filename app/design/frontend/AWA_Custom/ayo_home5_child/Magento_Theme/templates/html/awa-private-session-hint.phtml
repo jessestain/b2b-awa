@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+/**
+ * Missão estabilização 2026-10-22 — hint de sessão privada (FPC-safe).
+ *
+ * Roda ANTES do primeiro paint (script inline no topo do body): se a sessão tem
+ * conteúdo privado (cookie private_content_version), marca <html> com
+ * awa-private-session. O CSS esconde os defaults SSR de visitante (área da conta
+ * "Entrar na conta" e badge "0" do minicart) até o customer-data hidratar.
+ *
+ * Por que assim: o SSR da página é cache público (FPC) — decidir o estado no
+ * servidor com base em cookie quebraria o cache. A checagem é feita no cliente,
+ * no parse, antes do primeiro paint; guests nunca veem o estado neutro.
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<script>
+(function () {
+    'use strict';
+    try {
+        if (document.cookie.indexOf('private_content_version') !== -1) {
+            document.documentElement.classList.add('awa-private-session');
+            document.documentElement.setAttribute('data-awa-private-session', '1');
+        }
+    } catch (e) {
+        /* nunca bloquear o paint */
+    }
+})();
+</script>

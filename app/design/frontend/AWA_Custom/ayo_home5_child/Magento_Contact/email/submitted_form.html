@@ -1,0 +1,34 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject Nova mensagem de contato @-->
+<!--@vars {
+"var data.comment":"Mensagem",
+"var data.email":"Sender Email",
+"var data.name":"Sender Nome",
+"var data.telephone":"Sender Telephone"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table class="message-details">
+    <tr>
+        <td><strong>{{trans "Nome"}}</strong></td>
+        <td>{{var data.name}}</td>
+    </tr>
+    <tr>
+        <td><strong>{{trans "Email"}}</strong></td>
+        <td>{{var data.email}}</td>
+    </tr>
+    <tr>
+        <td><strong>{{trans "Telefone"}}</strong></td>
+        <td>{{var data.telephone}}</td>
+    </tr>
+</table>
+<p><strong>{{trans "Message"}}</strong></p>
+<p>{{var data.comment}}</p>
+
+{{template config_path="design/email/footer_template"}}

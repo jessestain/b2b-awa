@@ -74,6 +74,35 @@ define([], function () {
 
         /* ── aria-expanded sync for hamburger (body.nav-open toggled by Magento menu.js) ── */
         (function () {
+            /* FIX 2026-10-24: scroll-lock do fundo enquanto a gaveta mobile está
+               aberta (melhor prática de drawer). A regra CSS não funciona neste
+               tema (propagação de overflow na raiz), então usa a técnica
+               consagrada: body position:fixed + top:-(scrollY), com restauração
+               da posição ao fechar. */
+            function syncBodyScrollLock() {
+                var isOpen = document.body.classList.contains('nav-open')
+                    || document.body.classList.contains('awa-mobile-drawer-open');
+                var locked = document.body.dataset.awaScrollLocked === '1';
+                if (isOpen && !locked) {
+                    var y = window.scrollY || document.documentElement.scrollTop || 0;
+                    document.body.dataset.awaScrollLocked = '1';
+                    document.body.dataset.awaScrollY = String(y);
+                    document.body.style.position = 'fixed';
+                    document.body.style.inset = '0';
+                    document.body.style.width = '100%';
+                    document.body.style.top = '-' + y + 'px';
+                } else if (!isOpen && locked) {
+                    var restore = parseInt(document.body.dataset.awaScrollY, 10) || 0;
+                    delete document.body.dataset.awaScrollLocked;
+                    delete document.body.dataset.awaScrollY;
+                    document.body.style.position = '';
+                    document.body.style.inset = '';
+                    document.body.style.width = '';
+                    document.body.style.top = '';
+                    window.scrollTo(0, restore);
+                }
+            }
+
             if (window.MutationObserver) {
                 let navAriaQueued = false;
 
@@ -85,6 +114,7 @@ define([], function () {
                     window.requestAnimationFrame(function () {
                         navAriaQueued = false;
                         syncNavAria();
+                        syncBodyScrollLock();
                     });
                 }).observe(document.body, {
                     attributes: true,

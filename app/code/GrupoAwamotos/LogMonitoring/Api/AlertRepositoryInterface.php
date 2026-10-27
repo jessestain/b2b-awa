@@ -31,4 +31,15 @@ interface AlertRepositoryInterface
     public function resolveAlert(int $alertId, string $resolvedBy): bool;
 
     public function getCriticalAlerts(): array;
+
+    /**
+     * Alerta ABERTO mais recente de um tipo/severidade/fonte (task-49).
+     *
+     * Usado para deduplicar na origem: o analisador incrementa occurrences deste alerta
+     * em vez de inserir uma linha nova a cada rodada do cron.
+     * Ordenacao determinista: last_occurrence DESC, entity_id DESC.
+     *
+     * @return AlertInterface|null null quando nao existe alerta aberto desse tipo
+     */
+    public function getLatestOpenAlert(string $alertType, string $severity, string $source): ?AlertInterface;
 }

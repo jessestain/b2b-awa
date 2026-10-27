@@ -15,7 +15,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 
 class Search extends Action implements HttpGetActionInterface
 {
-    public const ADMIN_RESOURCE = 'GrupoAwamotos_HelpCenter::helpcenter_view';
+    public const ADMIN_RESOURCE = 'GrupoAwamotos_B2B::commercial_cockpit_only';
 
     public function __construct(
         Context $context,

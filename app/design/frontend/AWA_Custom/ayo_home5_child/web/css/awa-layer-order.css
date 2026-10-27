@@ -1,0 +1,866 @@
+/* Camadas (ordem efetiva): awa-padronizacao(1a) > awa-header-refine > awa-cartcheckout-fix > lista abaixo > shell-lock/storefront-consistency. Refatoracao 2026-10-21. */
+@font-face {
+  font-family:'FontAwesome';
+  src:url('../fonts/fontawesome-webfont.woff2?v=4.5.0-20260617') format('woff2');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap
+}
+@layer awa-r2-visual-fix,awa-action-green,awa-spacing-normalize,awa-cta-green,awa-fixes,awa-visual-priority,awa-header-first-paint-lock,awa-hero-ui-lock,awa-pixel-qa;
+ @layer awa-r2-visual-fix  {
+      /* F1 — grade do header mobile: as áreas nomeadas passam a cobrir "actions"      (o .awa-header-right-col tem grid-area:actions e caía em trilha implícita      fora dos 96px do header, ocultando conta+minicart e sobrepondo o hero). */   @media (max-width: 767px)  {
+         html body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky .awa-main-header__inner.wp-header  {
+             grid-template-areas: "toggle brand actions" "search search search" !important;
+             grid-template-columns: 44px minmax(0, 1fr) auto !important;
+             grid-template-rows: 44px 44px !important;
+             height: 96px !important;
+       min-height: 96px !important;
+       max-height: 96px !important;
+             padding: 4px 0 0 !important;
+             row-gap: 4px !important;
+       column-gap: 8px !important;
+             overflow: visible !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-main-header__inner.wp-header > .awa-header-right-col  {
+             grid-area: actions !important;
+             display: flex !important;
+       align-items: center !important;
+       justify-content: flex-end !important;
+             gap: 4px !important;
+             width: auto !important;
+       min-width: 88px !important;
+       max-width: none !important;
+             height: 44px !important;
+       min-height: 44px !important;
+       max-height: 44px !important;
+    }
+         /* F1b — botão compacto de conta: padding 4x8 + filho de 44px em caixa de 44        cortava o ícone (parent-clip 17px). Padding 0 + centralização corrigem. */     html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt  {
+             width: 44px !important;
+       min-width: 44px !important;
+       max-width: 44px !important;
+             height: 44px !important;
+       min-height: 44px !important;
+       max-height: 44px !important;
+             padding: 0 !important;
+       gap: 0 !important;
+       margin: 0 !important;
+             overflow: visible !important;
+       border-radius: 10px !important;
+             display: flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__mobile-link  {
+             width: 44px !important;
+       min-width: 44px !important;
+       height: 44px !important;
+             margin: 0 !important;
+       padding: 0 !important;
+             display: flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+             color: #ffffff !important;
+       -webkit-text-fill-color: #ffffff !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__mobile-link svg  {
+             width: 22px !important;
+       height: 22px !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__live  {
+       display: none !important;
+    }
+         /* F1c — SOMENTE o gatilho do carrinho recebe 44×44. A regra anterior usava        `.awa-header-cart *` e forçava o painel do minicart (ui-dialog) a 44×44,        quebrando o dropdown — regressão detectada no smoke funcional da rodada 4. */     html body#html-body .page-wrapper .awa-site-header .awa-header-cart,     html body#html-body .page-wrapper .awa-site-header .awa-header-cart > .mini-carts,     html body#html-body .page-wrapper .awa-site-header .awa-header-cart .showcart  {
+             width: 44px !important;
+       min-width: 44px !important;
+       height: 44px !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-cart .showcart  {
+             display: flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+             padding: 0 !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-cart .showcart :is(svg, .awa-minicart-icon, .awa-header-cart-fallback__icon)  {
+             width: 22px !important;
+       height: 22px !important;
+    }
+          /* F2 — CTA da promo bar: o token --awa-primary do header (v27, marrom #8e2629)        vazava para o texto do CTA verde;
+     fill branco restaura contraste AA 5.42:1. */     html body#html-body .page-wrapper .awa-site-header :is(#awa-b2b-promo-bar,.awa-b2b-promo-bar) :is(.awa-b2b-promo-bar__cta,.awa-b2b-promo-bar__cta *,.awa-b2b-promo-bar__cta strong)  {
+             color: #ffffff !important;
+       -webkit-text-fill-color: #ffffff !important;
+    }
+          /* F3 — hero: trilho/slide/media excediam o viewport travado (163px) e a        imagem mobile (390x95) ficava com 68px de branco abaixo. Estica o        encadeamento a/picture/img para a imagem cobrir a altura do slide. */     html body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero__track  {
+       height: 100% !important;
+    }
+         html body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero__slide  {
+             height: 100% !important;
+       min-height: 0 !important;
+       max-height: none !important;
+    }
+         html body#html-body .page-wrapper .wrapper_slider.visible-xs .banner_item_bg,     html body#html-body .page-wrapper .wrapper_slider.visible-xs .banner_item_bg > a,     html body#html-body .page-wrapper .wrapper_slider.visible-xs .banner_item_bg picture  {
+             display: block !important;
+       height: 100% !important;
+       width: 100% !important;
+    }
+         html body#html-body .page-wrapper .wrapper_slider.visible-xs .banner_item_bg img  {
+             display: block !important;
+       width: 100% !important;
+       height: 100% !important;
+             object-fit: cover !important;
+       object-position: left center !important;
+    }
+         html body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero__slide .text-banner  {
+             max-height: 100% !important;
+       overflow: visible !important;
+    }
+          /* F6 — barra promocional B2B: #header.header-container estava travado em        32px (PDP) e a barra media 45-49px (PDP/carrinho) => texto/CTA cortados        no topo da página. Altura fixa de 44px + linha única (lead curto) +        CTA alinhado à direita. */     html body#html-body #header.header-container  {
+             min-height: 44px !important;
+       max-height: none !important;
+       height: auto !important;
+    }
+         html body#html-body .page-wrapper #awa-b2b-promo-bar  {
+             height: 44px !important;
+       min-height: 44px !important;
+       max-height: none !important;
+             align-items: center !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__inner  {
+             height: 44px !important;
+       min-height: 44px !important;
+             align-items: center !important;
+       flex-wrap: nowrap !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__text  {
+             display: flex !important;
+       align-items: center !important;
+             gap: 8px !important;
+       flex: 1 1 auto !important;
+       flex-wrap: nowrap !important;
+             height: 44px !important;
+       min-width: 0 !important;
+       width: auto !important;
+             max-width: 100% !important;
+       overflow: hidden !important;
+       margin: 0 !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__lead  {
+             display: inline-flex !important;
+       align-items: center !important;
+       min-width: 0 !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__lead-long  {
+       display: none !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__lead-short  {
+             display: inline !important;
+       white-space: nowrap !important;
+             font-size: 12px !important;
+       line-height: 1.2 !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__cta  {
+             display: inline-flex !important;
+       align-items: center !important;
+             flex: 0 0 auto !important;
+       margin: 0 0 0 auto !important;
+             position: relative !important;
+       inset: auto !important;
+       align-self: center !important;
+             height: 44px !important;
+       min-height: 44px !important;
+       padding-inline: 8px !important;
+    }
+  }
+      /* F4 — tagline do lockup: 12px + letter-spacing .16em = ~156px de texto numa      caixa de 112px (overflow de 44-52px para a direita em todas as larguras).      Tipografia responsiva + caixa 142px (cabe na célula do logo 142-172px). */   html body#html-body .page-wrapper .awa-site-header .logo.awa-logo-lockup,   html body#html-body .page-wrapper .awa-site-header .logo.awa-logo-lockup > a  {
+         width: 142px !important;
+     max-width: 142px !important;
+  }
+     html body#html-body .page-wrapper .awa-site-header .logo.awa-logo-lockup > a  {
+         align-items: center !important;
+  }
+     html body#html-body .page-wrapper .awa-site-header .logo.awa-logo-lockup .awa-logo-lockup__tagline  {
+         font-size: 11px !important;
+     letter-spacing: .06em !important;
+     line-height: 1 !important;
+         width: 100% !important;
+     max-width: 100% !important;
+         text-align: center !important;
+     white-space: nowrap !important;
+  }
+      /* F5 — nomes de produto: o clamp atual fica no <h2> com filho block      (display:flow-root), o que corta o texto sem reticências. O clamp vai para      o link (2 linhas + ellipsis) e o <h2> passa a ser caixa neutra. */   html body#html-body .page-wrapper :is(.products-grid, .products-list, .block-products-list, .product-items, .awa-carousel__viewport, .awa-shelf, .awa-carousel-section) :is(.product-name, .product-item-name)  {
+         display: block !important;
+         min-height: 0 !important;
+     max-height: none !important;
+     height: auto !important;
+         overflow: visible !important;
+  }
+     html body#html-body .page-wrapper :is(.products-grid, .products-list, .block-products-list, .product-items, .awa-carousel__viewport, .awa-shelf, .awa-carousel-section) :is(.product-name, .product-item-name) :is(a.product-item-link, .product-item-link, a)  {
+         display: -webkit-box !important;
+         -webkit-box-orient: vertical !important;
+         -webkit-line-clamp: 2 !important;
+         line-clamp: 2 !important;
+         overflow: hidden !important;
+         text-overflow: ellipsis !important;
+         min-height: calc(2 * 1.35em) !important;
+         max-height: calc(2 * 1.35em) !important;
+         height: auto !important;
+         line-height: 1.35 !important;
+  }
+      /* ==========================================================================      RODADA 2 — defeitos encontrados na auditoria de tablet/desktop      ========================================================================== */    /* F12 — header mobile: a célula da marca carrega o padding 15px do grid      bootstrap com box-sizing:content-box, estourando a coluna do grid (172px      numa trilha de 142px). Em carrinho/PDP isso empurrava o bloco de ações e a      conta passava por cima do logo. Também: o link-ícone duplicado      (__icon + __mobile-link) ficava visível em cart/PDP e colidia com o      minicart;
+   e o lead curto da barra B2B encolhia/cortava ao lado do CTA. */   @media (max-width: 767px)  {
+         html body#html-body .page-wrapper .awa-site-header .awa-header-brand,     html body#html-body .page-wrapper .awa-site-header .awa-header-brand-cell  {
+             box-sizing: border-box !important;
+             padding-inline: 0 !important;
+             min-width: 0 !important;
+             max-width: 100% !important;
+    }
+         html body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt__icon  {
+             display: none !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__lead  {
+       flex: 0 0 auto !important;
+    }
+         html body#html-body .page-wrapper .awa-b2b-promo-bar__lead-short  {
+       flex: 0 0 auto !important;
+    }
+  }
+      /* F7 — PDP em tablet (768–991): colunas do .main-detail com `flex:0 0 100%`      dentro de um .row `flex-direction:column` colapsavam para 1px (altura 100%      circular) e a regra global `.product-info {
+    display:-webkit-box;
+    line-clamp:2
+  }
+  `      (core-bundle) travava a coluna de informação em min-height 2.8em (39px).      Resultado: galeria e título/preço/CTA invisíveis no tablet. */   @media (min-width: 768px) and (max-width: 991px)  {
+         html body#html-body.catalog-product-view .page-wrapper .main-detail > .row  {
+             display: flex !important;
+             flex-direction: column !important;
+             flex-wrap: nowrap !important;
+             align-items: stretch !important;
+             row-gap: 12px !important;
+             height: auto !important;
+       min-height: 0 !important;
+       max-height: none !important;
+             overflow: visible !important;
+    }
+         html body#html-body.catalog-product-view .page-wrapper .main-detail > .row > [class*="col-"]  {
+             flex: 0 0 auto !important;
+             width: 100% !important;
+             height: auto !important;
+       min-height: 0 !important;
+       max-height: none !important;
+             overflow: visible !important;
+             align-self: stretch !important;
+    }
+         html body#html-body.catalog-product-view .page-wrapper :is(.detail-info, .product-info-main)  {
+             display: block !important;
+             overflow: visible !important;
+             height: auto !important;
+       min-height: 0 !important;
+             float: none !important;
+             -webkit-line-clamp: unset !important;
+             -webkit-box-orient: unset !important;
+    }
+         html body#html-body.catalog-product-view .page-wrapper .product.media  {
+             height: auto !important;
+       min-height: 0 !important;
+       max-height: none !important;
+             overflow: visible !important;
+    }
+  }
+      /* F8 — toolbar de PLP/busca em >=768: o "modes-label" deveria ser somente      leitor de tela (sr-only do Magento), mas o catálogo o reexpande para 44x44      em position:absolute, sobrepondo o botão de modo ativo (colisão 44x44). */   @media (min-width: 768px)  {
+         html body#html-body .page-wrapper .toolbar-products .modes :is(#modes-label-top, .modes-label)  {
+             position: absolute !important;
+             width: 1px !important;
+       height: 1px !important;
+             min-width: 0 !important;
+       min-height: 0 !important;
+             margin: -1px !important;
+       padding: 0 !important;
+             border: 0 !important;
+             overflow: hidden !important;
+             clip-path: inset(50%) !important;
+             white-space: nowrap !important;
+    }
+  }
+      /* F9 — footer atendimento (home desktop): os <a> de telefone/e-mail ficavam      com display:inline e padding vertical 10px;
+   as caixas de linha de 20,3px      sobrepunham 20px (telefone x e-mail colidindo). inline-flex zera a colisão. */   html body#html-body .page-wrapper :is(.page_footer, .page-footer) .awa-footer-atendimento :is(.awa-footer-atendimento__phone, .awa-footer-atendimento__email) a  {
+         display: inline-flex !important;
+         align-items: center !important;
+         height: auto !important;
+         margin: 0 !important;
+         padding-block: 4px !important;
+         line-height: 1.35 !important;
+  }
+      /* F10 — home em <=991: as seções .awa-grid-section e .awa-home-niche-shelves      somavam 24px de padding lateral ao padding do wrapper, desalinhando títulos      e cards em 24px (x=48 contra x=24 no 768;
+   x=64 contra x=40 no 390). */   @media (max-width: 991px)  {
+         html body#html-body .page-wrapper .content-top-home :is(.awa-grid-section, .awa-home-niche-shelves)  {
+             padding-inline: 0 !important;
+    }
+  }
+      /* F11 — cadastro B2B: nav de progresso é sticky (top:6px);
+   âncoras/seções      ficavam sob ela. scroll-margin garante que o alvo do salto/validação apareça. */   html body#html-body .b2b-register-form :is(.form-section, [id^="register-step-"])  {
+         scroll-margin-top: 76px !important;
+  }
+      /* F13 — cards de produto: a regra global `.product-info {
+    display:-webkit-box;
+          -webkit-line-clamp:2;
+    overflow:hidden;
+    min-height:2.8em
+  }
+  ` do core-bundle      também atinge o CONTÊINER do card e cortava o bloco de preço/SKU abaixo do      nome em >=768 (cut de 49-69px). Neutraliza o clamp só dentro dos cards. */   html body#html-body .page-wrapper :is(ul.items, ol.items, .products-grid, .products-list, .product-items, .awa-shelf, .awa-carousel-section) li:is(.item-product, .product-item) > .product-info,   html body#html-body .page-wrapper :is(ul.items, ol.items, .products-grid, .products-list, .product-items, .awa-shelf, .awa-carousel-section) li:is(.item-product, .product-item) .product-info  {
+         display: block !important;
+         overflow: visible !important;
+         -webkit-line-clamp: unset !important;
+         -webkit-box-orient: unset !important;
+         min-height: 0 !important;
+         max-height: none !important;
+         height: auto !important;
+  }
+      /* F14 — barra promocional B2B (PDP/tablet): o wrapper `.header-content`      também estava travado em 32px no PDP mobile e cortava 12px da barra. */   @media (max-width: 767px)  {
+         html body#html-body #header.header-container > .header-content  {
+             min-height: 44px !important;
+       max-height: none !important;
+             height: auto !important;
+       overflow: visible !important;
+    }
+  }
+      /* F15 — promo bar em >=768: CTA estava 27,6px abaixo do topo e era cortado      pelo overflow da barra (clip de 27px). Mesma normalização do mobile. */   @media (min-width: 768px)  {
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar)  {
+             height: 44px !important;
+       min-height: 44px !important;
+       max-height: none !important;
+             align-items: center !important;
+    }
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__inner  {
+             height: 44px !important;
+       min-height: 44px !important;
+       align-items: center !important;
+    }
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__text  {
+             display: flex !important;
+       align-items: center !important;
+             gap: 8px !important;
+       height: 44px !important;
+       margin: 0 !important;
+             overflow: hidden !important;
+       min-width: 0 !important;
+             flex-wrap: nowrap !important;
+    }
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__lead  {
+             flex: 1 1 auto !important;
+       min-width: 0 !important;
+       overflow: hidden !important;
+    }
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__lead-long  {
+             display: inline !important;
+       white-space: nowrap !important;
+             overflow: hidden !important;
+       text-overflow: ellipsis !important;
+    }
+         html body#html-body .page-wrapper :is(#awa-b2b-promo-bar, .awa-b2b-promo-bar) .awa-b2b-promo-bar__cta  {
+             display: inline-flex !important;
+       align-items: center !important;
+             flex: 0 0 auto !important;
+       margin: 0 0 0 auto !important;
+             position: relative !important;
+       inset: auto !important;
+       align-self: center !important;
+             height: 44px !important;
+       min-height: 44px !important;
+    }
+  }
+      /* F16 — CTA "Pedido Rápido" (home) em <=767: o wrapper `.awa-quickorder-cta__inner`      vira coluna, mas o `.awa-quickorder-cta__head` mantém `flex:1 1 320px` e      `flex-direction:row` do desktop → 320px de altura vazia (faixa em branco de      ~127px no topo) e título/subtítulo espremidos lado a lado. Reflow em coluna      com escala 8–16px e CTA full-width. */   @media (max-width: 767px)  {
+         html body#html-body .page-wrapper .awa-quickorder-cta__inner  {
+             flex-direction: column !important;
+             gap: 16px !important;
+             height: auto !important;
+       min-height: 0 !important;
+             padding: 16px !important;
+    }
+         html body#html-body .page-wrapper .awa-quickorder-cta__head  {
+             display: flex !important;
+             flex-direction: column !important;
+             align-items: flex-start !important;
+             gap: 8px !important;
+             flex: 0 0 auto !important;
+             width: 100% !important;
+             height: auto !important;
+    }
+         html body#html-body .page-wrapper .awa-quickorder-cta__head :is(.awa-quickorder-cta__title, .awa-quickorder-cta__sub)  {
+             flex: 0 0 auto !important;
+             width: 100% !important;
+       max-width: 100% !important;
+             margin: 0 !important;
+    }
+         html body#html-body .page-wrapper .awa-quickorder-cta__demo  {
+             flex: 0 0 auto !important;
+             width: 100% !important;
+             justify-content: flex-start !important;
+    }
+         html body#html-body .page-wrapper .awa-quickorder-cta__btn  {
+             width: 100% !important;
+             justify-content: center !important;
+    }
+  }
+      /* F19 — telas largas (>=1440px): uma regra legada com 16 repetições de      `#html-body` em awa-align-grid-terminal-2026-06-11.min.css força      `#maincontent/.page-main` para 1440px, enquanto header, nav, footer e o      contrato do PDP usam 1280px. Resultado no 1920: o conteúdo principal fica      1440 (x=236/colunas x=260) e as abas/descrição/FAQ/relacionados 56px para      fora do bloco do produto e do header (x=316) — degrau visível de alinhamento.      Restaura o 1280px já declarado em awa-visual-fixes-2026-06-29 nas páginas de      conteúdo;
+   a home fica de fora porque usa seções full-bleed intencionais. */   @media (min-width: 1440px)  {
+         html body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5) .page-wrapper #maincontent,     html body#html-body:not(.cms-index-index):not(.cms-home):not(.cms-homepage_ayo_home5) .page-wrapper .page-main  {
+             max-width: min(100%, 1280px) !important;
+             width: auto !important;
+             margin-inline: auto !important;
+    }
+  }
+      /* F20 — container do header no MESMO eixo do conteúdo (tokens 1280/16):      causa raiz medida no CSSOM: `#html-body .page-wrapper .header-main`      (awa-design-system) fixa `width/max-width:calc(100% - 32px)` +      `margin:16px` em PDP/CMS (header 32px mais estreito e deslocado) e, em PLP      ≥1440, o `.container` herda 1440 alinhado à esquerda (inner em x=0).      Normaliza o wrapper e o container;
+   o grid interno (F1/F18) não muda. */   html body#html-body#html-body .page-wrapper .awa-site-header :is(.header-main, .header_main)  {
+         width: 100% !important;
+         max-width: 100% !important;
+         margin-inline: 0 !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-site-header :is(.header-main, .header_main) > .container  {
+         width: 100% !important;
+         max-width: min(100%, 1280px) !important;
+         margin-inline: auto !important;
+         padding-inline: 0 !important;
+  }
+      /* F21 — page-types CMS/catálogo no mobile: o atalho de conta fica      `opacity:0;
+   position:absolute` (estado irresolvido de auth — desktop mostra,      mobile não) e, após o F20 alinhar o container, ele coincide com o carrinho      (overlay invisível de 44×44 sobre o gatilho do minicart). Remove o elemento      do fluxo apenas nesses page-types no mobile;
+   não altera o desktop nem as      páginas onde o atalho é visível. */   @media (max-width: 767px)  {
+         html body#html-body.contact-index-index .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.catalogo-index-index .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.blog-index-index .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.cms-page .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.cms-no-route .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.cms-noroute-index .page-wrapper .awa-site-header .awa-header-account-prompt,     html body#html-body.catalogsearch-result-index .page-wrapper .awa-site-header .awa-header-account-prompt  {
+             display: none !important;
+    }
+  }
+      /* F18 — estado condensado do header (sticky 56px), validado por injeção em      390/767: o F1 fixava o inner em 96px/2 linhas;
+   no `is-sticky` a busca e os      ícones transbordavam para baixo do header sobre o conteúdo. No estado      condensado o inner passa a 56px/1 linha, ações (conta+carrinho) alinhadas e      linha de busca recolhida;
+   cart/minicart continuam funcionando. */   @media (max-width: 767px)  {
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky.is-sticky .awa-main-header__inner.wp-header  {
+             grid-template-areas: "toggle brand actions" !important;
+             grid-template-columns: 44px minmax(0, 1fr) auto !important;
+             grid-template-rows: 56px !important;
+             height: 56px !important;
+       min-height: 56px !important;
+       max-height: 56px !important;
+             padding: 0 !important;
+       row-gap: 0 !important;
+       column-gap: 8px !important;
+             align-items: center !important;
+       overflow: hidden !important;
+    }
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky.is-sticky .awa-main-header__inner.wp-header > .awa-header-right-col  {
+             grid-area: actions !important;
+             height: 44px !important;
+       min-height: 44px !important;
+       max-height: 44px !important;
+             align-items: center !important;
+    }
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky.is-sticky :is(.awa-header-search-col, .awa-header-search, .block-search)  {
+             display: none !important;
+    }
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky.is-sticky :is(.header_main, .header-main, .container)  {
+             height: 56px !important;
+       min-height: 56px !important;
+       max-height: 56px !important;
+             overflow: hidden !important;
+    }
+  }
+      /* F22 — controles: paginação/selects com raio 8 em todos os bps      (mobile hoje 4px;
+   desktop já 8). Validado por injeção em R4. */   html body#html-body#html-body .page-wrapper main :is(.pages .action, .action.next, .action.previous, .sorter-options, .limiter-options)  {
+         border-radius: 8px !important;
+  }
+      /* F23 — setas de carrossel com gap 8 (hoje 6px). Validado em R4. */   html body#html-body#html-body .page-wrapper main :is(.awa-owl-nav__btn, .awa-carousel__arrow)  {
+         gap: 8px !important;
+  }
+      /* F24 — CTA do card de categoria “VER PRODUTOS” com altura 44px      (hoje 48px;
+   reduz 4px sem afetar o resto do card). Validado em R4. */   html body#html-body#html-body .page-wrapper main :is(a.awa-card-view-product, .awa-card-view-product.action)  {
+         height: 44px !important;
+         min-height: 44px !important;
+  }
+      /* F25 — busca do category-hero: padding-right em token (hoje 14px). R13. */   html body#html-body#html-body .page-wrapper main :is(#mst_categorySearch)  {
+         padding-right: 16px !important;
+  }
+      /* F26 — breadcrumb: gap 8 entre itens (hoje 0). Validado em R4/R12.      Obs.: line-height 44px do breadcrumb é inline via JS (não CSS) — patch      em _audit/padronizacao/prep/JS-breadcrumb-lh-patch.md. */   html body#html-body#html-body .page-wrapper .breadcrumbs li  {
+         margin-right: 8px !important;
+  }
+      /* F27 — preço 14px/1,55 (hoje 13px na PLP e lh 1,0 na PDP). Validado em R5. */   html body#html-body#html-body .page-wrapper main :is(.info-price, .price-box .price)  {
+         font-size: 14px !important;
+         line-height: 1.55 !important;
+  }
+      /* F28 — H2 das seções do PDP em 18px/1,3 (após 992 ficava 24px). R5. */   html body#html-body#html-body .page-wrapper main :is(.product-info-main, .awa-pdp-faq) h2  {
+         font-size: 18px !important;
+         line-height: 1.3 !important;
+  }
+      /* F29 — abas do PDP: altura de toque em token (51/47/43 px → 44) e conteúdo      centralizado;
+   line-height numérico. Validado por injeção em 390/768/1366. */   html body#html-body#html-body .page-wrapper main :is(.data.item.title, [role="tab"], .product.data.items .nav.item)  {
+         height: 44px !important;
+         min-height: 44px !important;
+         display: flex !important;
+         align-items: center !important;
+         line-height: 1.4 !important;
+  }
+      /* F30 — busca do header no mobile: cada wrapper aninhado adicionava      padding/min-height de 8px, empurrando o input para baixo do wrapper      sticky (overflow:hidden) → input ficava com 25px cortados (só o topo      visível). Zera os paddings e trava as caixas em 44px: o input passa a      caber inteiro na linha de 44px do header. Validado por injeção em 390      (clipped 25px → 1px de arredondamento;
+   fullyInside true). */   @media (max-width: 767px)  {
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky :is(.awa-header-search-col, .block-search, #search_mini_form, form.minisearch)  {
+             padding-block: 0 !important;
+             padding-top: 0 !important;
+             padding-bottom: 0 !important;
+             min-height: 44px !important;
+             height: 44px !important;
+    }
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky :is(#search_mini_form .control, .block-search .control, .field.search .control)  {
+             height: 44px !important;
+             min-height: 44px !important;
+             padding: 0 !important;
+    }
+         html body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky input#search  {
+             height: 44px !important;
+             min-height: 44px !important;
+             padding-block: 0 !important;
+    }
+  }
+      /* F31 — galeria principal do PDP: a imagem quadrada (800×800 natural) era      renderizada em 615×615 dentro de um card de 615×410 com overflow:hidden →      **205px cortados** (segunda peça do produto sumia). Trava a imagem no      tamanho do card com object-fit:contain (produto inteiro visível, sem      letterbox vertical e sem alterar a altura do card). Validado por injeção      em 1366 (clip 205px → 0;
+   main-detail 412 inalterado). */   html body#html-body#html-body .page-wrapper .main-detail :is(.product.media, .gallery-placeholder)  {
+         overflow: hidden !important;
+  }
+     html body#html-body#html-body .page-wrapper .main-detail :is(.gallery-placeholder__image, .fotorama__img, .fotorama__stage__frame img, .product.media img)  {
+         width: 100% !important;
+         height: 100% !important;
+         max-height: 100% !important;
+         object-fit: contain !important;
+  }
+      /* ===== Decisões do owner (17/10/2026): E10=B;
+   H1 desktop=22 ===== */    /* F32 — H1 page-title: token 22px em TODOS os bps (PLP mobile 17→22;
+        PDP desktop 24→22, conforme decisão do owner). */   html body#html-body#html-body .page-wrapper main h1,   html body#html-body#html-body .page-wrapper h1.page-title,   html body#html-body#html-body .page-wrapper .page-title-wrapper h1  {
+         font-size: 22px !important;
+         line-height: 1.3 !important;
+         font-weight: 700 !important;
+  }
+      /* F33 — H2 das seções da home: line-height 1,2 (hoje 1,15). */   html body#html-body#html-body .page-wrapper main :is(.awa-home-section, .awa-carousel-section) :is(h2, .awa-section-header__title)  {
+         line-height: 1.2 !important;
+  }
+      /* F35 — breadcrumb em token (12/1,4 + padding 4). No mobile o inline      `!important` do JS vence;
+   patch JS em prep/JS-breadcrumb-lh-patch.md. */   html body#html-body#html-body .page-wrapper .breadcrumbs :is(a, strong, span)  {
+         font-size: 12px !important;
+         line-height: 1.4 !important;
+         padding-block: 4px !important;
+  }
+      /* F36 — SKU/legendas 12px (hoje 11 no desktop). */   html body#html-body#html-body .page-wrapper main .awa-b2b-sku  {
+         font-size: 12px !important;
+         line-height: 1.25 !important;
+  }
+      /* F37 — foco visível (WCAG 2.4.7 / T9): 2px currentColor + offset 2. */   html body#html-body#html-body .page-wrapper :is(a, button, input, select, textarea, [tabindex]):focus-visible  {
+         outline: 2px solid currentColor !important;
+         outline-offset: 2px !important;
+  }
+      /* F30b — variante da home: o <label> do campo de busca do header não estava      oculto e ocupava uma linha de ~25px, empurrando o input para fora do      wrapper sticky (clip 25px). Oculta o label no mobile;
+   o input volta a      caber inteiro na linha de 44px. (HML: clip 25→0 previsto) */   @media (max-width: 767px)  {
+         html body#html-body#html-body .page-wrapper .awa-site-header :is(.awa-header-search-col, .block-search) :is(.field.search > label, .field.search .label, label.label)  {
+             display: none !important;
+             height: 0 !important;
+             min-height: 0 !important;
+             margin: 0 !important;
+             padding: 0 !important;
+    }
+  }
+}
+  /* F38 [VS1] — hero clicável: CTAs do hero estavam com pointer-events:none    (herança das camadas de slider), tornando o botão "Cadastrar no B2B" inerte.    Restaura o clique nos banners/CTAs do hero (swipe do carrossel não é afetado). */ @layer awa-r2-visual-fix  {
+     html body#html-body#html-body .page-wrapper :is(.banner_item, .banner_item_bg, .text-banner, .text-banner *, .awa-hero-slide__cta, .awa-hero-slide__cta *)  {
+         pointer-events: auto !important;
+  }
+}
+  /* F39 [VS2] — preço B2B do card da home não pode ser cortado (título do gate    com 47px não cabia nos 103px do .product-info com overflow:hidden). */ @layer awa-r2-visual-fix  {
+     html body#html-body#html-body .page-wrapper .awa-shelf .product-info  {
+         min-height: 128px !important;
+         height: auto !important;
+         max-height: none !important;
+         overflow: visible !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-shelf .awa-home-price-gate  {
+         height: auto !important;
+         max-height: none !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-shelf :is(.item-product, .content-item-product)  {
+         overflow: visible !important;
+  }
+      /* F40 [VS2] — faixa de confiança do footer: max-height:42px cortava 17px do copy. */   html body#html-body#html-body .page-wrapper .awa-footer-trust-item  {
+         max-height: none !important;
+         height: auto !important;
+         min-height: 42px !important;
+  }
+      /* F41 [VS2] — "Atacado e Varejo" como chip, não como input de largura total. */   html body#html-body#html-body .page-wrapper .awa-footer-atendimento__store  {
+         align-items: flex-start !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-footer-atendimento__store-badge  {
+         display: inline-flex !important;
+         width: auto !important;
+         height: auto !important;
+         padding: 2px 8px !important;
+         align-self: flex-start !important;
+         flex: 0 0 auto !important;
+  }
+}
+  /* F42 [VS3] — ícone de conta branco no tablet (estava marrom sobre marrom). */ @layer awa-r2-visual-fix  {
+     html body#html-body#html-body .page-wrapper .awa-header-account-prompt__mobile-link  {
+     color: #fff !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-header-account-prompt__mobile-link svg  {
+     color: #fff !important;
+     stroke: currentColor !important;
+  }
+      /* F43 [VS3] — remove bullets da navegação do header. */   html body#html-body#html-body .page-wrapper :is(header .navigation, header .awa-nav-bar, header .nav-sections, header .togge-menu, .awa-nav-bar) li  {
+     list-style: none !important;
+  }
+     html body#html-body#html-body .page-wrapper :is(header .navigation, header .awa-nav-bar, header .nav-sections, header .togge-menu, .awa-nav-bar) li::marker  {
+     content: none !important;
+  }
+}
+  /* F42b/F43b [VS3] — overrides sem @layer e com especificidade alta (14 IDs) para    vencer regras legadas !important do design-system (que estão sem layer).    B5: ícone de conta fica branco (stroke=currentColor) no tablet.    B6: remove bullets (list-style/marker) de toda a navegação do header. */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(.awa-header-account-prompt__mobile-link, .awa-header-account-prompt__mobile-link svg)  {
+     color: #fff !important;
+     stroke: currentColor !important;
+}
+ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(header, .awa-nav-bar, .navigation, .togge-menu, .section-items, .nav-sections) li  {
+     list-style: none !important;
+}
+ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper :is(header, .awa-nav-bar, .navigation, .togge-menu, .section-items, .nav-sections) li::marker  {
+     content: none !important;
+}
+  /* F45 [VS4d] — CLS: reserva dimensões do logo do header (imagem carregava    0x0 -> 54x29 e deslocava header/conteúdo) e altura mínima da coluna de ações. */ @layer awa-r2-visual-fix  {
+     html body#html-body#html-body .page-wrapper .awa-logo-lockup__mark  {
+         width: 54px !important;
+         height: 29px !important;
+         object-fit: contain !important;
+  }
+     html body#html-body#html-body .page-wrapper .awa-header-right-col  {
+         min-height: 44px !important;
+  }
+}
+  /* F46 [VS4f] — CLS mobile: o hero/above-fold media 96px antes da imagem e    163px depois (+67px, fonte do CLS ~0,07). Reserva a altura proporcional ao    viewport para o container desde o primeiro paint (390 -> 163px). */ @media (max-width: 767px)  {
+     @layer awa-r2-visual-fix  {
+         html body#html-body#html-body .page-wrapper .top-home-content--above-fold  {
+             min-height: calc(100vw * 0.418) !important;
+    }
+         html body#html-body#html-body .page-wrapper .top-home-content--above-fold :is(.banner-slider, .awa-hero, .wrapper_slider)  {
+             min-height: calc(100vw * 0.418) !important;
+    }
+  }
+}
+  /* VS4m [LCP]: a imagem do hero mobile no tamanho final desde o 1º paint.    A cadeia (bg/slide/track/swiper) usa height:auto até a injeção terminal tardia    (~5s) e a imagem resolve pelo aspecto natural (~96px em 390) — LCP frio ~5,2s.    0.418vw = altura final reservada pelo F47/F46 em todas as larguras mobile. */ @media (max-width: 767px)  {
+     @layer awa-r2-visual-fix  {
+         html body#html-body#html-body .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs .banner_item_bg img  {
+             height: calc(100vw * 0.418) !important;
+    }
+  }
+}
+  /* ==========================================================================    VS6a [CICLO 3 - QA visual] Evidência: _audit/padronizacao/MATRIZ-QA-VISUAL.md    Data: 18/10/2026    ========================================================================== */  /* A9 (CRÍTICO — PDP): "Produtos Relacionados" — o UL do carrossel é filho flex do    .awa-carousel__viewport (flex-row) e encolhia para o conteúdo (212px), espremendo    os cards a 33px (slides flex: 0 0 calc(20% - 9.6px)) com imagens de 158px e links    de 174px vazando sobre os vizinhos. Força o track a ocupar 100% do viewport.    VALIDADO no HML: track 212->1216px, cards 33->234px, overlap de links -> 0. */ .awa-pdp-related .awa-carousel__viewport > .awa-carousel__track, .rokan-mostviewed .awa-carousel__viewport > .awa-carousel__track  {
+       flex: 0 0 100% !important;
+       width: 100% !important;
+       min-width: 100% !important;
+}
+  /* TOQUES (contrato 44px) — validados no HML */ /* botão de busca do header: 44x42 -> 44x44 */ button.action.search  {
+       min-height: 44px !important;
+}
+ /* título de produto no card: 38px -> 46px */ a.product-item-link  {
+       padding-block: 3px !important;
+       margin-block: -3px !important;
+}
+ /* PENDENTE (próximo lote): selos awa-seal, Entrar/cadastre-se, devby, toggle do footer,    botão fechar, breadcrumbs, swatch, contato — a cascata de killers do tema anula    padding/pseudo-elemento;
+ exige regras com o padrão de ids repetidos do projeto. */  /* ==========================================================================    VS6b [CICLO 3 - QA visual] Alvos de toque restantes - contrato 44px    Data: 18/10/2026 - Evidencia: MATRIZ-QA-VISUAL.md (R47/R48/R49)    Especificidade: 10x#html-body (vence a escada de killers do tema, que usa    ate 8 ids com min-height:0!important - diagnostico via CDP matched rules).    ========================================================================== */  /* Header "Entrar / cadastre-se": 16px -> 44px (padding+margin negativa mantem o header) */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .awa-header-account-prompt a.awa-header-account-prompt__link  {
+       min-height: 44px !important;
+       padding-block: 14px !important;
+       margin-block: -14px !important;
+       display: inline-flex !important;
+       align-items: center !important;
+       box-sizing: border-box !important;
+}
+  /* Selos de seguranca do footer: 40px (home) / 28px (PLP) -> 44px */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper footer.page-footer a.awa-seal  {
+       min-height: 44px !important;
+       min-width: 44px !important;
+       display: inline-flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+}
+  /* "dev by" do footer (38px no PLP) -> 44px */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper footer.page-footer a.awa-footer-devby__link  {
+       min-height: 44px !important;
+       display: inline-flex !important;
+       align-items: center !important;
+}
+  /* Breadcrumbs (24-29px) -> 44px (contrato E12) */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .breadcrumbs a, html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .nav-breadcrumbs a  {
+       min-height: 44px !important;
+       display: inline-flex !important;
+       align-items: center !important;
+}
+  /* Swatch do PLP: 40px de largura -> 44px */ html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper a.swatch-option-link-layered  {
+       min-width: 44px !important;
+}
+   /* ==========================================================================    VS6c [CICLO 3 - QA visual] Colisões residuais (auditoria MATRIZ-QA-VISUAL)    Data: 18/10/2026 - Evidência: rodadas/R51-QA-matriz-completa.md    ========================================================================== */  /* B1 — Header tablet (768): o botão de busca (.action.search, x561-605,y71-115)    sobrepõe a franja do scroller de quick-links (y110-154). Garante que o clique    na franja vá para o botão de busca (o alvo crítico), sem afetar os links fora dela. */ html body#html-body#html-body#html-body button.action.search  {
+       position: relative !important;
+       z-index: 3 !important;
+}
+  /* B2 — Carrinho (768/992): o FAB do chat (x897-953, z-index 1 no launcher) cobre    o botão Subscribe da newsletter no rodapé (x768-953): 4.390-5.022px² de sobreposição.    Reserva a faixa do FAB à direita do botão. */ html body#html-body#html-body#html-body footer.page-footer button.action.subscribe  {
+       margin-right: 64px !important;
+}
+  /* C2 — Login B2B: o link "esqueci minha senha" (y478-524) sobrepõe 6px do topo do    botão "Entrar" (y518). Botão na frente para receber o clique na franja. */ html body#html-body#html-body#html-body button.b2b-btn-entrar  {
+       position: relative !important;
+       z-index: 1 !important;
+}
+   /* ===== VS6c v2 [CICLO 3 - QA] B2: FAB do chat x botao Subscribe da newsletter =====    Carrinho (768/992): o FAB (x897-953) cobre o botao Subscribe (x768-946) - overlap    de 2.464-5.022px2. O margin-right foi anulado pelos killers de margin do rodape;
+    solucao: container do newsletter ACIMA do FAB no z-index (clique vai para o    Subscribe;
+ o FAB permanece visivel fora da area). Validado no HML por hit-test. */ html body#html-body#html-body#html-body footer.page-footer .awa-newsletter-form-container  {
+       position: relative !important;
+       z-index: 2147483000 !important;
+}
+ /* B2 CICLO 4 */@layer awa-r2-visual-fix {
+  .awa-footer-js-ready .velaFooterMenu .velaContent.awa-footer-anim,.awa-footer-js-ready .footer-block .footer-block-content.awa-footer-anim {
+    display:grid!important;
+    grid-template-rows:0fr!important;
+    transition:grid-template-rows .18s ease!important;
+    overflow:hidden!important
+  }
+  .awa-footer-js-ready .velaFooterMenu .velaContent.awa-footer-anim.awa-footer-expanded,.awa-footer-js-ready .footer-block .footer-block-content.awa-footer-anim.awa-footer-expanded {
+    grid-template-rows:1fr!important
+  }
+  .awa-footer-js-ready .velaContent.awa-footer-anim>*,.awa-footer-js-ready .footer-block-content.awa-footer-anim>* {
+    overflow:hidden!important;
+    min-height:0!important
+  }
+  @media (max-width:991px) {
+    .navigation.verticalmenu .togge-menu.list-category-dropdown.awa-menu-fade {
+      display:block!important;
+      opacity:0!important;
+      visibility:visible!important;
+      transition:opacity .2s ease!important
+    }
+    .navigation.verticalmenu .togge-menu.list-category-dropdown.awa-menu-fade.menu-open {
+      opacity:1!important
+    }
+  }
+  .navigation.verticalmenu .subchildmenu.awa-submenu-anim {
+    display:grid!important;
+    grid-template-rows:0fr!important;
+    transition:grid-template-rows .2s ease!important;
+    overflow:hidden!important;
+    visibility:visible!important;
+    height:auto!important;
+    max-height:none!important
+  }
+  .navigation.verticalmenu .subchildmenu.awa-submenu-anim.awa-open {
+    grid-template-rows:1fr!important
+  }
+  .navigation.verticalmenu .subchildmenu.awa-submenu-anim>* {
+    overflow:hidden!important;
+    min-height:0!important
+  }
+  .navigation.verticalmenu .ui-menu-item.level0.orther-link {
+    display:none!important
+  }
+  .navigation.verticalmenu .ui-menu-item.level0.orther-link.awa-shown {
+    display:block!important
+  }
+  :where([class*=awa-cat-tabs-],[class*=producttab-]) .tab_content {
+    display:none!important
+  }
+  :where([class*=awa-cat-tabs-],[class*=producttab-]) .tab_content.animate1 {
+    display:block!important;
+    opacity:1
+  }
+  .awa-cnpj-status {
+    transition:opacity .18s ease!important
+  }
+  .awa-cnpj-status.is-dismissed {
+    opacity:0!important
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .awa-footer-js-ready .velaContent.awa-footer-anim,.awa-footer-js-ready .footer-block-content.awa-footer-anim,.navigation.verticalmenu .togge-menu.list-category-dropdown.awa-menu-fade,.navigation.verticalmenu .subchildmenu.awa-submenu-anim,.awa-cnpj-status {
+    transition-duration:.01ms!important
+  }
+}
+ @layer awa-r2-visual-fix {
+  @media (max-width:767px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .top-home-content--above-fold .wrapper_slider.visible-xs .awa-hero__slide--cb300 .banner_item_bg img {
+      object-position:100% 50%!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero-mobile-caption {
+      position:absolute!important;
+      left:12px!important;
+      bottom:12px!important;
+      z-index:6!important;
+      max-width:min(236px,calc(100% - 150px))!important;
+      display:flex!important;
+      flex-direction:column!important;
+      gap:2px!important;
+      padding:8px 10px!important;
+      border-radius:8px!important;
+      background:rgba(255,255,255,.96)!important;
+      box-shadow:0 2px 8px rgba(0,0,0,.16)!important;
+      pointer-events:none!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero-mobile-caption__badge {
+      font:600 10px/1.2 Rubik,Arial,sans-serif!important;
+      letter-spacing:.08em!important;
+      text-transform:uppercase!important;
+      color:#b3121b!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero-mobile-caption__title {
+      font:700 14px/1.15 Rubik,Arial,sans-serif!important;
+      color:#1a1a1a!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero-mobile-caption__meta {
+      font:400 10.5px/1.2 "Source Sans 3",Arial,sans-serif!important;
+      color:#555!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero-mobile-caption__cta {
+      margin-top:3px!important;
+      display:inline-flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      height:32px!important;
+      min-height:32px!important;
+      padding:0 12px!important;
+      border-radius:6px!important;
+      background:#0b6b3a!important;
+      color:#fff!important;
+      font:700 11px/1 Rubik,Arial,sans-serif!important;
+      text-decoration:none!important;
+      width:max-content!important;
+      pointer-events:auto!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .wrapper_slider.visible-xs .awa-hero__pagination {
+      background:rgba(255,255,255,.9)!important;
+      border-radius:999px!important;
+      padding:2px 6px!important;
+      height:32px!important;
+      max-height:32px!important;
+      box-shadow:0 1px 4px rgba(0,0,0,.18)!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .top-home-content--category-carousel {
+      margin-top:16px!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky,html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky .header.awa-main-header,html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky .awa-main-header__inner.wp-header {
+      height:102px!important;
+      min-height:102px!important;
+      max-height:102px!important
+    }
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header .header-wrapper-sticky .awa-main-header__inner.wp-header {
+      padding:4px 0 6px!important
+    }
+    html.awa-promo-dismissed body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .awa-site-header {
+      min-height:102px!important
+    }
+  }
+  html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body .page-wrapper .top-home-content--category-carousel :is(.awa-category-carousel__subtitle,.awa-section-header__subtitle) {
+    padding-top:4px!important
+  }
+  html.awa-promo-dismissed body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #header.header-container,html.awa-promo-dismissed body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body #header.header-container>.header-content {
+    display:none!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    overflow:hidden!important;
+    border:0!important
+  }
+}
+ @layer awa-r2-visual-fix {
+  @media (min-width:1600px) {
+    html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.columns,.column.main) {
+      width:100%!important;
+      max-width:none!important;
+      margin-inline:0!important
+    }
+  }
+}

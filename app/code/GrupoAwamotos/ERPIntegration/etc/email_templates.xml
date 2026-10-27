@@ -37,4 +37,12 @@
               module="GrupoAwamotos_ERPIntegration"
               area="frontend"/>
 
+
+    <template id="awa_erp_watchdog_alert"
+              label="AWA - Watchdog da integracao ERP"
+              file="erp/erp_sync_watchdog.html"
+              type="html"
+              module="GrupoAwamotos_ERPIntegration"
+              area="frontend"/>
+
 </config>

@@ -3,7 +3,7 @@
 /* stylelint-disable color-no-hex -- fallbacks de token */
 
 .b2b-status-panel {
-    --b2b-panel-radius: var(--awa-radius-md, 10px);
+    --b2b-panel-radius: var(--awa-radius-m,12px);
     --b2b-panel-radius-lg: var(--awa-radius-lg, 12px);
     --b2b-panel-border: var(--awa-border, #e5e7eb);
     --b2b-panel-bg: var(--awa-bg-surface, #fff);
@@ -75,13 +75,13 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
 }
 
 .b2b-status-trigger:focus-visible {
-    outline: 2px solid var(--awa-primary, #b73337);
+    outline: 2px solid var(--awa-primary, var(--awa-brand));
     outline-offset: 2px;
     border-radius: 4px;
 }
 
 .b2b-status-trigger[aria-expanded="true"] .b2b-status-trigger__line2 {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 .b2b-status-trigger__icon {
@@ -89,14 +89,14 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 .b2b-status-trigger__icon .awa-b2b-panel-icon {
     width: 32px;
     height: 32px;
-    stroke: var(--awa-primary, #b73337);
-    color: var(--awa-primary, #b73337);
+    stroke: var(--awa-primary, var(--awa-brand));
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 .b2b-status-trigger__text {
@@ -159,12 +159,12 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
 
 .b2b-status-trigger[aria-expanded="true"] .b2b-status-trigger__chevron {
     transform: rotate(180deg);
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 .b2b-status-trigger:hover .b2b-status-trigger__chevron,
 .b2b-status-trigger:focus-visible .b2b-status-trigger__chevron {
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 /* Dropdown */
@@ -236,7 +236,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     width: 44px;
     height: 44px;
     border-radius: 10px;
-    background: var(--avatar-color, var(--awa-primary, #b73337));
+    background: var(--avatar-color, var(--awa-primary, var(--awa-brand)));
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -278,8 +278,8 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     width: fit-content;
     padding: 3px 9px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--tier-color, var(--awa-primary, #b73337)) 12%, var(--b2b-panel-bg));
-    color: color-mix(in srgb, var(--tier-color, var(--awa-primary, #b73337)) 88%, #000);
+    background: color-mix(in srgb, var(--tier-color, var(--awa-primary, var(--awa-brand))) 12%, var(--b2b-panel-bg));
+    color: color-mix(in srgb, var(--tier-color, var(--awa-primary, var(--awa-brand))) 88%, #000);
     font-size: 11px;
     font-weight: 600;
     line-height: 1.3;
@@ -310,7 +310,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     height: 34px;
     border-radius: 8px;
     background: var(--b2b-panel-bg-muted);
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
     font-size: 14px;
 }
 
@@ -360,8 +360,8 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     border-radius: inherit;
     background: linear-gradient(
         90deg,
-        var(--awa-primary, #b73337),
-        color-mix(in srgb, var(--awa-primary, #b73337) 72%, #000)
+        var(--awa-primary, var(--awa-brand)),
+        color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 72%, #000)
     );
     transition: width 0.45s ease;
 }
@@ -393,13 +393,13 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
 }
 
 .quick-action-link:hover {
-    border-color: color-mix(in srgb, var(--awa-primary, #b73337) 30%, var(--b2b-panel-border));
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 6%, var(--b2b-panel-bg));
-    color: var(--awa-primary, #b73337);
+    border-color: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 30%, var(--b2b-panel-border));
+    background: color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 6%, var(--b2b-panel-bg));
+    color: var(--awa-primary, var(--awa-brand));
 }
 
 .quick-action-link:focus-visible {
-    outline: 2px solid color-mix(in srgb, var(--awa-primary, #b73337) 40%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--awa-primary, var(--awa-brand)) 40%, transparent);
     outline-offset: 2px;
 }
 
@@ -411,7 +411,7 @@ html body#html-body .page-wrapper .awa-site-header .awa-header-right-col:has(.b2
     height: 28px;
     border-radius: 7px;
     background: var(--b2b-panel-bg-muted);
-    color: var(--awa-primary, #b73337);
+    color: var(--awa-primary, var(--awa-brand));
     flex-shrink: 0;
 }
 
@@ -638,7 +638,7 @@ html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger__chevron
 
 html body#html-body .page-wrapper .b2b-status-panel .b2b-status-trigger[aria-expanded="true"] .b2b-status-trigger__chevron {
     transform: rotate(180deg) !important;
-    color: var(--awa-primary, #b73337) !important;
+    color: var(--awa-primary, var(--awa-brand)) !important;
 }
 
 /* Vence awa-super-global (.b2b-status-trigger gradient/pill) em páginas de conta */

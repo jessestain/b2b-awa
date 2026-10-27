@@ -146,6 +146,19 @@ define([], function () {
 
         window.addEventListener('click', onQtyTriggerClick, true);
 
+        // Auditoria 2026-10-23 (teclado): Enter nao ativa o botao neste tema
+        // (um guard global engole o default). Garante a ativacao por teclado
+        // (Enter/NumpadEnter) alem do Space nativo.
+        window.addEventListener('keydown', function (event) {
+            if (event.key !== 'Enter') { return; }
+            var target = event.target;
+            if (!target || typeof target.closest !== 'function') { return; }
+            var trigger = target.closest(triggerSelector);
+            if (!trigger || !root.contains(trigger) || trigger.disabled) { return; }
+            event.preventDefault();
+            trigger.click();
+        }, true);
+
         emit(root, 'awa:qty-control:ready');
     };
 });

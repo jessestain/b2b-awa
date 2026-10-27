@@ -13,6 +13,27 @@ declare(strict_types=1);
         return;
     }
 
+    var LABEL_PADRAO = <?= json_encode((string) __('Banners promocionais'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+    // AWA 2026-10-12 — contrato de carrossel para o reel de banners (o markup vem de CMS block,
+    // então o contrato é aplicado aqui e sobrevive a edições do bloco no admin).
+    (function decorarReelPromocional() {
+        var reel = section.querySelector('.awa-product-promo-banners__grid');
+        if (!reel) {
+            return;
+        }
+        if (!reel.getAttribute('role')) {
+            reel.setAttribute('role', 'region');
+        }
+        if (!reel.getAttribute('aria-roledescription')) {
+            reel.setAttribute('aria-roledescription', 'carrossel');
+        }
+        if (!reel.getAttribute('aria-label')) {
+            reel.setAttribute('aria-label', section.getAttribute('aria-label') || LABEL_PADRAO);
+        }
+        if (!reel.hasAttribute('tabindex')) {
+            reel.setAttribute('tabindex', '0');
+        }
+    }());
     w.__awaHomeProductPromoBannersScriptLoaded = true;
     var scriptUrl = <?= json_encode($block->getViewFileUrl('js/awa-home-product-promo-banners.js'), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     var loaded = false;

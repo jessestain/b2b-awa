@@ -182,13 +182,16 @@ define([
         });
 
         $(window).on('online.awaCheckoutResilience', function () {
-            showBanner(
-                $t('Conexão restabelecida. A página será recarregada para atualizar os totais.'),
-                'online'
+            // Connectivity is not an order result; do not replace submission/error UI.
+            if ($('[aria-busy="true"]').length ||
+                (lastBannerKey !== 'offline' && lastBannerKey !== 'offline-boot')) {
+                return;
+            }
+            // Update the existing offline notice in place, preserving focus and scroll.
+            $(BANNER_SELECTOR).find('.awa-checkout-resilience__text').text(
+                $t('Conexão restabelecida. Seus dados foram preservados.')
             );
-            window.setTimeout(function () {
-                window.location.reload();
-            }, 800);
+            lastBannerKey = 'online';
         });
 
         $(document).on('ajaxError.awaCheckoutResilience', function (event, xhr, settings) {

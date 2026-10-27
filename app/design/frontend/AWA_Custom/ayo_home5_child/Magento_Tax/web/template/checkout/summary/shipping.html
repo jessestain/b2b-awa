@@ -1,0 +1,116 @@
+<!--
+/**
+ * Missão estabilização 2026-10-22 — override do totals de frete (KO, carrinho +
+ * sidebar do checkout OPC). Método "Frete a combinar" (preço 0 por design) exibe
+ * "A combinar" + nota de que não está incluído no total, em vez de "R$ 0,00".
+ * Nenhum valor financeiro é alterado.
+ */
+-->
+<!-- ko if: quoteIsVirtual == 0 -->
+    <!-- ko if: isBothPricesDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: title+ ' ' + excludingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <!-- ko if: typeof isACombinar === 'function' && isACombinar() -->
+            <span class="price" data-bind="i18n: 'A combinar'"></span>
+            <span class="shipping-not-included" data-bind="i18n: '(não incluído no total)'"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: typeof isACombinar === 'function' && isACombinar() -->
+                <!-- ko if: isCalculated() -->
+                <span class="price"
+                      data-bind="text: getExcludingValue(), attr: {'data-th': excludingTaxMessage}"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: isCalculated() -->
+                <span class="not-calculated"
+                      data-bind="text: getExcludingValue(), attr: {'data-th': excludingTaxMessage}"></span>
+                <!-- /ko -->
+            <!-- /ko -->
+        </td>
+    </tr>
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="text: title + ' ' + includingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <!-- ko if: typeof isACombinar === 'function' && isACombinar() -->
+            <span class="price" data-bind="i18n: 'A combinar'"></span>
+            <span class="shipping-not-included" data-bind="i18n: '(não incluído no total)'"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: typeof isACombinar === 'function' && isACombinar() -->
+                <!-- ko if: isCalculated() -->
+                <span class="price"
+                      data-bind="text: getIncludingValue(), attr: {'data-th': title + ' ' + excludingTaxMessage}"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: isCalculated() -->
+                <span class="not-calculated"
+                      data-bind="text: getIncludingValue(), attr: {'data-th': title + ' ' + excludingTaxMessage}"></span>
+                <!-- /ko -->
+            <!-- /ko -->
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isIncludingDisplayed() -->
+    <tr class="totals shipping incl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <!-- ko if: typeof isACombinar === 'function' && isACombinar() -->
+            <span class="price" data-bind="i18n: 'A combinar'"></span>
+            <span class="shipping-not-included" data-bind="i18n: '(não incluído no total)'"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: typeof isACombinar === 'function' && isACombinar() -->
+                <!-- ko if: isCalculated() -->
+                <span class="price"
+                      data-bind="text: getIncludingValue(), attr: {'data-th': title}"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: isCalculated() -->
+                <span class="not-calculated"
+                      data-bind="text: getIncludingValue(), attr: {'data-th': title}"></span>
+                <!-- /ko -->
+            <!-- /ko -->
+        </td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isExcludingDisplayed() -->
+    <tr class="totals shipping excl">
+        <th class="mark" scope="row">
+            <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
+        </th>
+        <td class="amount">
+            <!-- ko if: typeof isACombinar === 'function' && isACombinar() -->
+            <span class="price" data-bind="i18n: 'A combinar'"></span>
+            <span class="shipping-not-included" data-bind="i18n: '(não incluído no total)'"></span>
+            <!-- /ko -->
+            <!-- ko ifnot: typeof isACombinar === 'function' && isACombinar() -->
+                <!-- ko if: isCalculated() -->
+                <span class="price"
+                      data-bind="text: getValue(), attr: {'data-th': title}"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: isCalculated() -->
+                <span class="not-calculated"
+                      data-bind="text: getValue(), attr: {'data-th': title}"></span>
+                <!-- /ko -->
+            <!-- /ko -->
+        </td>
+    </tr>
+    <!-- /ko -->
+<!-- /ko -->

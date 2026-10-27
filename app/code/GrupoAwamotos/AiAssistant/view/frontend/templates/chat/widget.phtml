@@ -16,10 +16,29 @@ $fullActionName = $block->getRequest() ? (string) $block->getRequest()->getFullA
 $isHome = $fullActionName === 'cms_index_index';
 $isCatalogPlp = $fullActionName === 'catalog_category_view'
     || $fullActionName === 'catalogsearch_result_index';
-$deferAi = $isHome || $isCatalogPlp;
+// OPT-20261024 (R2/D3): PDP e CMS também em modo defer (idle).
+$isPdpOrCms = $fullActionName === 'catalog_product_view'
+    || $fullActionName === 'cms_page_view';
+$deferAi = $isHome || $isCatalogPlp || $isPdpOrCms;
 ?>
 
 <div id="awa-ai-chat-root" data-bind="scope: 'AwaAiChat'"<?= $deferAi ? ' data-awa-ai-defer="1"' : '' ?>>
+
+    <?php /* Avatar único do assistente (FAB, header do painel e coach usam
+       <use href="#awa-ai-avatar">). Definido uma vez, fora do fluxo, para o
+       cliente reconhecer o mesmo "rosto" em todos os pontos de contato. */ ?>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <symbol id="awa-ai-avatar" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="24" fill="var(--awa-primary, #b73337)"/>
+            <path d="M11.5 25v-4a12.5 12.5 0 0 1 25 0v4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+            <rect x="8.5" y="22.5" width="5.2" height="8.5" rx="2.6" fill="#fff"/>
+            <rect x="34.3" y="22.5" width="5.2" height="8.5" rx="2.6" fill="#fff"/>
+            <path d="M36.9 31v2a4 4 0 0 1-4 4H29.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="18.6" cy="22.2" r="2.3" fill="#fff"/>
+            <circle cx="29.4" cy="22.2" r="2.3" fill="#fff"/>
+            <path d="M17.2 28.6c1.9 3 4.3 4.5 6.8 4.5s4.9-1.5 6.8-4.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+        </symbol>
+    </svg>
 
     <!-- Guided purchase coach (anchored to FAB — not a second floater) -->
     <div class="awa-ai-coach"
@@ -30,6 +49,25 @@ $deferAi = $isHome || $isCatalogPlp;
                 class="awa-ai-coach__close"
                 data-bind="click: function () { dismissCoach('close'); }"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Fechar')) ?>">&#x2715;</button>
+
+        <?php /* B1 — identidade do coach. O card era uma caixa de texto anônima;
+           dar rosto, nome e presença eleva a taxa de engajamento da abordagem
+           proativa. Mesmo avatar do header do painel, para o cliente reconhecer
+           que é o mesmo assistente ao abrir a conversa. */ ?>
+        <div class="awa-ai-coach__identity">
+            <span class="awa-ai-coach__avatar" aria-hidden="true">
+                <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                    <use href="#awa-ai-avatar"/>
+                </svg>
+            </span>
+            <span class="awa-ai-coach__identity-text">
+                <span class="awa-ai-coach__name" data-bind="text: title"></span>
+                <span class="awa-ai-coach__status">
+                    <span class="awa-ai-coach__status-dot" aria-hidden="true"></span>
+                    <?= $escaper->escapeHtml(__('Online agora')) ?>
+                </span>
+            </span>
+        </div>
 
         <p class="awa-ai-coach__message" data-bind="text: coachMessage"></p>
 
@@ -55,7 +93,7 @@ $deferAi = $isHome || $isCatalogPlp;
                     data-bind="click: function () { coachAction('open_guide'); }">
                 <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
-            <button type="button" class="awa-ai-coach__btn"
+            <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--quiet"
                     data-bind="click: function () { coachAction('how_to_buy'); }">
                 <?= $escaper->escapeHtml(__('Como comprar')) ?>
             </button>
@@ -67,7 +105,7 @@ $deferAi = $isHome || $isCatalogPlp;
                     data-bind="click: function () { coachAction('open_guide'); }">
                 <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
-            <button type="button" class="awa-ai-coach__btn"
+            <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--quiet"
                     data-bind="click: function () { coachAction('orders'); }">
                 <?= $escaper->escapeHtml(__('Ver pedidos')) ?>
             </button>
@@ -79,7 +117,7 @@ $deferAi = $isHome || $isCatalogPlp;
                     data-bind="click: function () { coachAction('open_guide'); }">
                 <?= $escaper->escapeHtml(__('Me guia passo a passo')) ?>
             </button>
-            <button type="button" class="awa-ai-coach__btn"
+            <button type="button" class="awa-ai-coach__btn awa-ai-coach__btn--quiet"
                     data-bind="click: function () { coachAction('open_chat'); }">
                 <?= $escaper->escapeHtml(__('Falar no chat')) ?>
             </button>
@@ -89,18 +127,26 @@ $deferAi = $isHome || $isCatalogPlp;
     </div>
 
     <div class="awa-ai-chat__launcher">
-        <span class="awa-ai-chat__toggle-label" aria-hidden="true"><?= $escaper->escapeHtml(__('Assistente')) ?></span>
+        <?php /* Teaser do estado fechado: balão de fala ao lado do avatar,
+           no lugar do pill "ASSISTENTE". Abre o chat ao clicar. Some quando
+           o coach ou o painel estão abertos (regras :has em ai-assistant.css). */ ?>
+        <button type="button"
+                class="awa-ai-chat__toggle-label"
+                data-bind="click: toggleChat">
+            <span class="awa-ai-chat__teaser-status" aria-hidden="true"></span>
+            <span class="awa-ai-chat__teaser-text"><?= $escaper->escapeHtml(__('Oi! Posso te ajudar a achar a peça certa?')) ?></span>
+        </button>
         <button type="button"
                 id="assistente" class="awa-ai-chat__toggle"
                 aria-expanded="false"
                 aria-label="Abrir assistente AWA"
                 data-bind="click: toggleChat,
                            css: fabPulseCss,
-                           attr: { 'aria-expanded': isOpen() ? 'true' : 'false', 'aria-label': isOpen() ? 'Fechar assistente' : 'Abrir assistente AWA' }">
+                           attr: { 'aria-expanded': isOpen() ? 'true' : 'false', 'aria-label': isOpen() ? 'Fechar assistente' : (coachUnread() ? 'Abrir assistente AWA — você tem uma mensagem' : 'Abrir assistente AWA') }">
             <span class="awa-ai-chat__toggle-icon" data-bind="css: { 'awa-ai-chat__toggle-icon--open': isOpen }">
                 <!-- ko ifnot: isOpen -->
-                <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor"/>
+                <svg aria-hidden="true" focusable="false" width="56" height="56" viewBox="0 0 48 48" class="awa-ai-chat__toggle-avatar">
+                    <use href="#awa-ai-avatar"/>
                 </svg>
                 <!-- /ko -->
                 <!-- ko if: isOpen -->
@@ -109,6 +155,21 @@ $deferAi = $isHome || $isCatalogPlp;
                 </svg>
                 <!-- /ko -->
             </span>
+
+            <?php /* B3 — marcador de mensagem não lida. Quando o coach some
+               sozinho (auto-dismiss), a abordagem proativa era perdida em
+               silêncio. O ponto devolve o contexto sem reabrir o card por
+               cima da navegação.
+
+               NÃO usar <!-- ko if: --> aqui: na home o widget carrega com
+               data-awa-ai-defer="1" e, até o Knockout ligar, o comentário é
+               inerte e o span apareceria aceso no primeiro paint. Mesmo
+               motivo pelo qual os dois SVGs do ícone são resolvidos por CSS
+               (ver ai-assistant.css). O ponto nasce oculto e só acende pela
+               classe que o binding aplica. */ ?>
+            <span class="awa-ai-chat__unread"
+                  aria-hidden="true"
+                  data-bind="css: { 'awa-ai-chat__unread--on': coachUnread }"></span>
         </button>
     </div>
 
@@ -128,7 +189,7 @@ $deferAi = $isHome || $isCatalogPlp;
                 </span>
                 <div class="awa-ai-chat__header-text">
                     <span class="awa-ai-chat__title" data-bind="text: title"></span>
-                    <span class="awa-ai-chat__subtitle"><?= $escaper->escapeHtml(__('Assistente com IA · peças e pedidos')) ?></span>
+                    <span class="awa-ai-chat__subtitle"><span class="awa-ai-chat__online-dot" aria-hidden="true"></span><?= $escaper->escapeHtml(__('Online agora · assistente com IA')) ?></span>
                 </div>
             </div>
             <div class="awa-ai-chat__header-actions">
@@ -188,6 +249,11 @@ $deferAi = $isHome || $isCatalogPlp;
                                 <span data-bind="text: $data.sku"></span>
                                 <!-- ko if: $data.price_formatted -->
                                 <strong data-bind="text: $data.price_formatted"></strong>
+                                <!-- /ko -->
+                                <!-- ko if: $data.stock_label -->
+                                <span class="awa-ai-chat__product-stock"
+                                      data-bind="text: $data.stock_label,
+                                                 css: { 'awa-ai-chat__product-stock--out': $data.in_stock === false }"></span>
                                 <!-- /ko -->
                             </span>
                             <!-- ko if: $data.fitment -->

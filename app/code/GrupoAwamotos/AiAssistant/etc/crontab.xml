@@ -7,5 +7,10 @@
              method="execute">
             <schedule>20 3 * * *</schedule>
         </job>
+        <job name="grupoawamotos_aiassistant_quality_check"
+             instance="GrupoAwamotos\AiAssistant\Cron\QualityCheck"
+             method="execute">
+            <schedule>15 * * * *</schedule>
+        </job>
     </group>
 </config>

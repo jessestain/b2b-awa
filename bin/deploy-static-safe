@@ -1,0 +1,308 @@
+#!/usr/bin/env bash
+# ==========================================================================
+# deploy-static-safe v4 — publica assets frontend selecionados com segurança,
+# MINIFICANDO CSS (cleancss) e JS (terser) antes de gravar no destino .min.*.
+#
+# v1: copiava nome->nome (criava .css órfão no destino).
+# v2: resolvia o destino .min.css, mas copiava o FONTE CRU (perdia minificação).
+# v3: para CSS, minifica com cleancss -O1 e publica no .min.css. JS era nome->nome.
+# v4 (2026-10-25): para JS, MINIFICA o fonte com `terser` e publica no destino
+#   REALMENTE SERVIDO .min.js. Agora CSS e JS atingem o asset que o site carrega.
+#   woff2/svg continuam nome->nome (já são finais). Nunca grava fonte cru num .min.*.
+#
+#   web/css/<nome>.css  --(cleancss -O1)-->  .../<locale>/css/<nome>.min.css
+#   web/js/<nome>.js    --(terser)-->        .../<locale>/js/<nome>.min.js
+#
+# MINIFICADORES (já instalados; aborta se ausentes, não improvisa):
+#   CSS: cleancss (clean-css-cli) /usr/bin/cleancss -O1 — preserva @font-face,
+#     @media, URLs (sem rebase) e licença /*! */; sem source map.
+#   JS:  terser /usr/bin/terser --compress --mangle --comments '/^!/' —
+#     preserva licença /*! */; sem source map; valida com node --check.
+#   Se o cleancss não existir, o script ABORTA (não improvisa com sed/regex).
+#
+# NÃO substitui bin/deploy-static. Não toca cache/Varnish/serviços.
+#
+# USO
+#   bin/deploy-static-safe [--dry-run] <arquivo.css|.js|.woff2|.svg> [...]
+#   bin/deploy-static-safe --apply   <arquivo> [...]
+#   bin/deploy-static-safe --rollback <timestamp>
+#   bin/deploy-static-safe --list-backups
+#   --dry-run (PADRÃO) não escreve nada. --apply obrigatório para gravar.
+# ==========================================================================
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
+
+readonly THEME_REL="AWA_Custom/ayo_home5_child"
+readonly LOCALE="pt_BR"
+readonly SRC_BASE="app/design/frontend/${THEME_REL}/web"
+readonly DST_BASE="pub/static/frontend/${THEME_REL}/${LOCALE}"
+readonly BACKUP_ROOT="var"
+readonly ALLOWED_EXT_RE='\.(css|js|woff2|svg)$'
+readonly DENY_RE='(\.(php|xml|phtml|map|png|jpe?g|webp)$|(^|/)(env|config)\.php$)'
+readonly CLEANCSS_BIN="cleancss"
+readonly CLEANCSS_OPTS=(-O1)   # conservador; sem --source-map; sem rebase
+readonly TERSER_BIN="terser"
+readonly TERSER_OPTS=(--compress --mangle --comments '/^!/')  # preserva licença /*! */; sem --source-map
+
+RED=$'\033[0;31m'; GRN=$'\033[0;32m'; YLW=$'\033[1;33m'; BLU=$'\033[0;34m'; RST=$'\033[0m'
+info(){ printf '%b[INFO]%b  %s\n' "$BLU" "$RST" "$1"; }
+ok(){   printf '%b[OK]%b    %s\n' "$GRN" "$RST" "$1"; }
+warn(){ printf '%b[WARN]%b  %s\n' "$YLW" "$RST" "$1"; }
+err(){  printf '%b[ERR]%b   %s\n' "$RED" "$RST" "$1" >&2; }
+die(){  err "$1"; exit "${2:-1}"; }
+
+# Arquivos temporários de minificação — removidos ao sair (req. 15).
+TMP_WORK=""
+cleanup_tmp(){ local rc=$?; [[ -n "$TMP_WORK" && -d "$TMP_WORK" ]] && rm -rf "$TMP_WORK"; return $rc; }
+trap cleanup_tmp EXIT
+
+usage() {
+  cat <<EOF
+deploy-static-safe v3 — publica assets com minificação segura de CSS.
+
+Uso:
+  bin/deploy-static-safe [--dry-run] <arquivo> [<arquivo> ...]
+  bin/deploy-static-safe --apply   <arquivo> [<arquivo> ...]
+  bin/deploy-static-safe --rollback <timestamp>
+  bin/deploy-static-safe --list-backups
+
+Extensões: .css (minificado p/ .min.css) .js/.woff2/.svg (nome->nome)
+Minificador: cleancss -O1 (preserva licença/@font-face/@media/URLs; sem sourcemap)
+Padrão: --dry-run. --apply obrigatório para gravar.
+EOF
+}
+
+require_minifier_css() {
+  command -v "$CLEANCSS_BIN" >/dev/null 2>&1 \
+    || die "minificador CSS '$CLEANCSS_BIN' não encontrado. BLOQUEADO: não improviso (sem sed/regex). Instale clean-css-cli ou use o deploy completo." 3
+}
+require_minifier_js() {
+  command -v "$TERSER_BIN" >/dev/null 2>&1 \
+    || die "minificador JS '$TERSER_BIN' não encontrado. BLOQUEADO: não improviso (sem sed/regex). Instale terser ou use o deploy completo." 3
+}
+
+validate_rel_path() {
+  local p="$1"
+  [[ -n "$p" ]]    || { err "caminho vazio";                 return 1; }
+  [[ "$p" != /* ]] || { err "caminho absoluto proibido: $p"; return 1; }
+  [[ "$p" != ~* ]] || { err "expansão de home proibida: $p"; return 1; }
+  case "$p" in *..*) err "path traversal proibido: $p"; return 1 ;; esac
+  if [[ "$p" =~ $DENY_RE ]]; then err "tipo de arquivo proibido nesta versão: $p"; return 1; fi
+  if [[ ! "$p" =~ $ALLOWED_EXT_RE ]]; then
+    err "extensão não permitida (só .css/.js/.woff2/.svg): $p"; return 1
+  fi
+  printf '%s' "$p"
+}
+
+resolve_dst_rel() {
+  local rel="$1"
+  if [[ "$rel" =~ \.css$ ]]; then printf '%s' "${rel%.css}.min.css"
+  elif [[ "$rel" =~ \.js$ ]]; then printf '%s' "${rel%.js}.min.js"
+  else printf '%s' "$rel"; fi
+}
+
+sha() { sha256sum "$1" 2>/dev/null | cut -d' ' -f1; }
+bytes() { wc -c < "$1" 2>/dev/null | tr -d ' '; }
+
+# Conta regras CSS de forma simples (número de blocos "{"), para relatório.
+count_rules() { grep -o '{' "$1" 2>/dev/null | wc -l | tr -d ' '; }
+
+# Minifica $1 (fonte .css) em $2 (saída). Valida o resultado. Retorna 0 se OK.
+minify_css() {
+  local src="$1" out="$2"
+  # 1) CSS válido antes? (cleancss falha em CSS gravemente quebrado)
+  #    Fazemos um parse de verificação: se cleancss retornar != 0, é inválido.
+  if ! "$CLEANCSS_BIN" "${CLEANCSS_OPTS[@]}" --output "$out" "$src" </dev/null 2>"$TMP_WORK/cc.err"; then
+    err "cleancss falhou para $src:"; sed 's/^/      /' "$TMP_WORK/cc.err" >&2; return 1
+  fi
+  # 2) saída não-vazia
+  [[ -s "$out" ]] || { err "minificação resultou vazia: $src"; return 1; }
+  # 3) nunca gerar source map
+  [[ ! -f "${out}.map" ]] || { err "source map gerado inesperadamente: ${out}.map"; return 1; }
+  return 0
+}
+
+# Minifica $1 (fonte .js) em $2 (saída) com terser. Valida. Retorna 0 se OK.
+minify_js() {
+  local src="$1" out="$2"
+  # 1) JS válido antes? node --check falha em JS sintaticamente quebrado.
+  if ! node --check "$src" 2>"$TMP_WORK/js.err"; then
+    err "JS inválido (node --check) em $src:"; sed 's/^/      /' "$TMP_WORK/js.err" >&2; return 1
+  fi
+  # 2) minificar com terser
+  if ! "$TERSER_BIN" "$src" "${TERSER_OPTS[@]}" --output "$out" </dev/null 2>"$TMP_WORK/ts.err"; then
+    err "terser falhou para $src:"; sed 's/^/      /' "$TMP_WORK/ts.err" >&2; return 1
+  fi
+  # 3) saída não-vazia
+  [[ -s "$out" ]] || { err "minificação JS resultou vazia: $src"; return 1; }
+  # 4) saída é JS válido
+  node --check "$out" 2>/dev/null || { err "saída minificada inválida: $out"; return 1; }
+  # 5) nunca gerar source map
+  [[ ! -f "${out}.map" ]] || { err "source map JS gerado inesperadamente: ${out}.map"; return 1; }
+  return 0
+}
+
+list_backups() {
+  info "Backups em ${BACKUP_ROOT}/deploy-assets-backup-*:"
+  local found=0
+  for d in "${BACKUP_ROOT}"/deploy-assets-backup-*; do
+    [[ -d "$d" ]] || continue; found=1
+    printf '  %s  (%s arquivo(s))\n' "$(basename "$d")" "$(find "$d" -type f | wc -l)"
+  done
+  [[ "$found" -eq 1 ]] || warn "nenhum backup encontrado."
+}
+
+rollback() {
+  local ts="$1"
+  [[ -n "$ts" ]] || die "informe o timestamp: --rollback <timestamp>"
+  case "$ts" in *..*|*/*) die "timestamp inválido: $ts" ;; esac
+  local bdir="${BACKUP_ROOT}/deploy-assets-backup-${ts}"
+  [[ -d "$bdir" ]] || die "backup não encontrado: $bdir"
+  info "Rollback a partir de: $bdir"
+  local restored=0
+  while IFS= read -r -d '' bf; do
+    local rel="${bf#"$bdir"/}"; local dst="${DST_BASE}/${rel}"
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      info "DRY-RUN restauraria: $rel  ($(sha "$bf"))"
+    else
+      mkdir -p "$(dirname "$dst")"; cp -p "$bf" "$dst"; ok "restaurado: $rel"; restored=$((restored+1))
+    fi
+  done < <(find "$bdir" -type f -print0)
+  [[ "$DRY_RUN" -eq 1 ]] && warn "DRY-RUN — nada restaurado." || ok "Rollback: ${restored} arquivo(s)."
+}
+
+# --- Parse ---
+DRY_RUN=1; ACTION="deploy"; ROLLBACK_TS=""; FILES=()
+[[ $# -gt 0 ]] || { usage; exit 0; }
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run)      DRY_RUN=1; shift ;;
+    --apply)        DRY_RUN=0; shift ;;
+    --rollback)     ACTION="rollback"; ROLLBACK_TS="${2:-}"; shift 2 ;;
+    --list-backups) ACTION="list"; shift ;;
+    -h|--help)      usage; exit 0 ;;
+    --*)            die "opção inválida: $1" 2 ;;
+    *)              FILES+=("$1"); shift ;;
+  esac
+done
+
+if [[ "$ACTION" == "list" ]]; then list_backups; exit 0; fi
+if [[ "$ACTION" == "rollback" ]]; then rollback "$ROLLBACK_TS"; exit 0; fi
+
+[[ "${#FILES[@]}" -gt 0 ]] || die "lista de arquivos vazia. Informe ao menos um asset (ex.: css/awa-core.css)." 2
+
+# Área temporária para minificação (removida no EXIT).
+TMP_WORK="$(mktemp -d)"
+
+info "Modo: $([[ "$DRY_RUN" -eq 1 ]] && echo 'DRY-RUN (nada será escrito)' || echo 'APPLY (gravação real)')"
+info "Origem base:  ${SRC_BASE}"
+info "Destino base: ${DST_BASE}"
+
+# Minificadores exigidos conforme os tipos presentes na lista.
+HAS_CSS=0; HAS_JS=0
+for raw in "${FILES[@]}"; do
+  [[ "$raw" =~ \.css$ ]] && HAS_CSS=1
+  [[ "$raw" =~ \.js$  ]] && HAS_JS=1
+done
+if [[ "$HAS_CSS" -eq 1 ]]; then
+  require_minifier_css
+  info "Minificador CSS: $("$CLEANCSS_BIN" --version </dev/null 2>&1) (cleancss ${CLEANCSS_OPTS[*]})"
+fi
+if [[ "$HAS_JS" -eq 1 ]]; then
+  require_minifier_js
+  info "Minificador JS: $("$TERSER_BIN" --version </dev/null 2>&1) (terser ${TERSER_OPTS[*]})"
+fi
+
+# Valida origem, resolve destino, exige .min.css/.min.js existente.
+declare -a CLEAN=() DSTREL=()
+for raw in "${FILES[@]}"; do
+  clean="$(validate_rel_path "$raw")" || die "validação falhou para: $raw" 2
+  src="${SRC_BASE}/${clean}"
+  [[ -f "$src" ]] || die "origem não existe: $src" 2
+  dstrel="$(resolve_dst_rel "$clean")"
+  if [[ ( "$clean" =~ \.css$ || "$clean" =~ \.js$ ) && ! -f "${DST_BASE}/${dstrel}" ]]; then
+    die "destino minificado ausente para ${clean} -> ${dstrel}. Não crio par novo; use o deploy completo." 2
+  fi
+  CLEAN+=("$clean"); DSTREL+=("$dstrel")
+done
+ok "Validação: ${#CLEAN[@]} arquivo(s) de origem OK; destinos resolvidos."
+
+TS="$(date +%Y%m%dT%H%M%SZ)"
+BACKUP_DIR="${BACKUP_ROOT}/deploy-assets-backup-${TS}"
+CHANGED=0; idx=0
+
+for clean in "${CLEAN[@]}"; do
+  src="${SRC_BASE}/${clean}"
+  dstrel="${DSTREL[$idx]}"; dst="${DST_BASE}/${dstrel}"; idx=$((idx+1))
+  case "$dst" in "${DST_BASE}/"*) : ;; *) die "destino fora do child theme: $dst" ;; esac
+
+  echo
+  info "Asset: ${clean}  ->  ${dstrel}"
+
+  # Determina o CONTEÚDO A PUBLICAR (minificado p/ CSS; o próprio arquivo p/ resto).
+  publish_src="$src"
+  if [[ "$clean" =~ \.css$ ]]; then
+    mini="$TMP_WORK/$(echo "$clean" | tr '/' '_').min.css"
+    minify_css "$src" "$mini" || die "minificação falhou para ${clean}"
+    publish_src="$mini"
+    local_rules_src="$(count_rules "$src")"
+    local_rules_min="$(count_rules "$mini")"
+    b_src="$(bytes "$src")"; b_min="$(bytes "$mini")"
+    echo "    fonte .css   : ${src}  (${b_src} bytes, ~${local_rules_src} blocos)"
+    echo "    minificado   : ${b_min} bytes, ~${local_rules_min} blocos"
+    # menor ou igual
+    if [[ "$b_min" -gt "$b_src" ]]; then die "minificado MAIOR que o fonte (${b_min}>${b_src}) — abortando por segurança"; fi
+    # regras preservadas (ou explica)
+    if [[ "$local_rules_min" -ne "$local_rules_src" ]]; then
+      warn "contagem de blocos {} mudou (${local_rules_src}->${local_rules_min}); cleancss -O1 pode fundir seletores idênticos adjacentes — não remove regras."
+    else
+      ok "contagem de blocos preservada (${local_rules_src})"
+    fi
+  elif [[ "$clean" =~ \.js$ ]]; then
+    mini="$TMP_WORK/$(echo "$clean" | tr '/' '_').min.js"
+    minify_js "$src" "$mini" || die "minificação JS falhou para ${clean}"
+    publish_src="$mini"
+    b_src="$(bytes "$src")"; b_min="$(bytes "$mini")"
+    echo "    fonte .js    : ${src}  (${b_src} bytes)"
+    echo "    minificado   : ${b_min} bytes"
+    if [[ "$b_min" -gt "$b_src" ]]; then die "JS minificado MAIOR que o fonte (${b_min}>${b_src}) — abortando por segurança"; fi
+    ok "JS válido (node --check origem+saída); licença preservada; sem sourcemap"
+  fi
+
+  s_pub="$(sha "$publish_src")"
+  if [[ -f "$dst" ]]; then s_dst="$(sha "$dst")"; else s_dst="(ausente)"; fi
+  echo "    sha256 a publicar: ${s_pub}"
+  echo "    sha256 destino   : ${s_dst}"
+
+  if [[ "$s_pub" == "$s_dst" ]]; then ok "idêntico — nada a fazer."; continue; fi
+  CHANGED=$((CHANGED+1))
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then warn "DRY-RUN — não publicado."; continue; fi
+
+  # APPLY: backup só quando há diferença real (já garantido acima) e destino existe.
+  if [[ -f "$dst" ]]; then
+    bdst="${BACKUP_DIR}/${dstrel}"; mkdir -p "$(dirname "$bdst")"; cp -p "$dst" "$bdst"; ok "backup: ${bdst}"
+  fi
+  mkdir -p "$(dirname "$dst")"; cp -p "$publish_src" "$dst"
+  [[ "$(sha "$dst")" == "$s_pub" ]] && ok "publicado: ${dstrel}" || die "FALHA pós-cópia em ${dst}"
+done
+
+echo
+if [[ "$DRY_RUN" -eq 1 ]]; then
+  info "DRY-RUN concluído. ${CHANGED} arquivo(s) MUDARIAM. Use --apply para gravar."
+else
+  [[ "$CHANGED" -gt 0 && -d "$BACKUP_DIR" ]] && ok "Backup: ${BACKUP_DIR} (rollback: bin/deploy-static-safe --rollback ${TS})"
+  ok "APPLY concluído. ${CHANGED} arquivo(s) publicado(s)."
+  warn "Este script NÃO invalida cache nem toca serviços — por design."
+fi
+
+# ==========================================================================
+# ASSERTS (documentação executável — este script NÃO executa os proibidos):
+#   NÃO: cache:flush cache:clean varnishadm ban PURGE
+#   NÃO: setup:static-content:deploy   NÃO: rm -rf pub/static
+#   NÃO: systemctl restart|reload (varnish|nginx|php*-fpm|redis|opensearch|maria*)
+#   NÃO: deployed_version.txt (escrita)   NÃO: --source-map
+# ==========================================================================
+exit 0

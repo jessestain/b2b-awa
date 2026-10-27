@@ -204,6 +204,31 @@ class Dashboard extends Template
     }
 
     /**
+     * FIX F-02 (2026-10-14): texto do checklist coerente com o status real.
+     * Rejeitado/suspenso não podem ver "Aguardando aprovação...".
+     *
+     * @return string
+     */
+    public function getApprovalStatusText(): string
+    {
+        $customer = $this->getCustomer();
+        $status = '';
+        if ($customer) {
+            $attr = $customer->getCustomAttribute('b2b_approval_status');
+            $status = $attr ? (string) $attr->getValue() : '';
+        }
+
+        if ($status === 'rejected') {
+            return (string) __('Cadastro não aprovado — fale com o atendimento');
+        }
+        if ($status === 'suspended') {
+            return (string) __('Conta suspensa — fale com o atendimento');
+        }
+
+        return (string) __('Aguardando aprovação...');
+    }
+
+    /**
      * Get customer group name
      *
      * @return string
@@ -628,7 +653,7 @@ class Dashboard extends Template
 
         return [
             $this->buildChecklistItem('cnpj', 'CNPJ validado pela Receita Federal', !empty($this->getCnpj()), 'Validar CNPJ', 'b2b/register'),
-            $this->buildChecklistItem('approval', 'Conta B2B aprovada', $this->isApproved(), 'Aguardando aprovação...', ''),
+            $this->buildChecklistItem('approval', 'Conta B2B aprovada', $this->isApproved(), $this->getApprovalStatusText(), ''),
             $this->buildChecklistItem('address', 'Endereço de entrega cadastrado', $this->customerHasAddress(), 'Adicionar Endereço', 'customer/address/new'),
             $this->buildChecklistItem('order', 'Primeiro pedido realizado', $this->getRecentOrders(1)->getSize() > 0, 'Ver Catálogo', 'catalogsearch/result/?q='),
             $this->buildChecklistItem('list', 'Lista de compras criada', $this->hasShoppingLists(), 'Criar Lista', 'b2b/shoppinglist'),

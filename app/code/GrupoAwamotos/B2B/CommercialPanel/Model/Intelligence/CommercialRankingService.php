@@ -37,8 +37,7 @@ class CommercialRankingService
 
     public function isRankingAllowed(): bool
     {
-        return $this->portfolioScope->canViewAllPortfolios()
-            && !$this->portfolioScope->canBypassPortfolioScope();
+        return $this->portfolioScope->canViewAllPortfolios();
     }
 
     /**

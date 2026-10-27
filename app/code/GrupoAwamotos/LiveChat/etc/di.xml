@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="LiveChat\LiveChat\Controller\GetCart\Index">
-        <plugin name="grupoawamotos_livechat_customer_context"
-                type="GrupoAwamotos\LiveChat\Plugin\LiveChat\Controller\GetCart\CustomerContextPlugin"
-                sortOrder="10"/>
-    </type>
-</config>

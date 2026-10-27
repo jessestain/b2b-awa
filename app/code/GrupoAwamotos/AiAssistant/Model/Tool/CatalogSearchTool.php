@@ -6,6 +6,7 @@ namespace GrupoAwamotos\AiAssistant\Model\Tool;
 
 use GrupoAwamotos\AiAssistant\Api\AssistantOrchestratorInterface;
 use GrupoAwamotos\AiAssistant\Api\ToolInterface;
+use GrupoAwamotos\AiAssistant\Model\Pricing\CustomerPriceResolver;
 use GrupoAwamotos\WhatsAppCommerce\Api\CatalogInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -36,6 +37,7 @@ class CatalogSearchTool implements ToolInterface
         private readonly StoreManagerInterface $storeManager,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly CurlFactory $curlFactory,
+        private readonly CustomerPriceResolver $priceResolver,
     ) {
     }
 
@@ -96,7 +98,45 @@ class CatalogSearchTool implements ToolInterface
             $result['strategy'] = $strategy;
         }
 
+        // A5: cliente B2B logado com tabela própria recebe o preço da lista dele.
+        if (is_array($result) && !empty($result['products']) && is_array($result['products'])) {
+            $this->applyCustomerPrices($result['products'], $context);
+        }
+
         return $result;
+    }
+
+    /**
+     * Aplica preços da tabela ERP (Sectra) aos produtos, quando existir preço
+     * próprio para o cliente logado. Sem preço próprio, mantém o catálogo.
+     *
+     * @param array<int, array<string, mixed>> $products
+     * @param array<string, mixed> $context
+     */
+    private function applyCustomerPrices(array &$products, array $context): void
+    {
+        $skus = [];
+        foreach ($products as $product) {
+            $sku = trim((string) ($product['sku'] ?? ''));
+            if ($sku !== '') {
+                $skus[] = $sku;
+            }
+        }
+        $resolved = $this->priceResolver->resolvePrices($context, $skus);
+        if ($resolved === []) {
+            return;
+        }
+        foreach ($products as &$product) {
+            $sku = trim((string) ($product['sku'] ?? ''));
+            if ($sku === '' || !isset($resolved[$sku])) {
+                continue;
+            }
+            $product['price'] = $resolved[$sku]['price'];
+            $product['price_formatted'] = $resolved[$sku]['price_formatted'];
+            $product['price_source'] = $resolved[$sku]['price_source'];
+            $product['price_note'] = $resolved[$sku]['price_note'];
+        }
+        unset($product);
     }
 
     /**
@@ -400,6 +440,7 @@ class CatalogSearchTool implements ToolInterface
             'url' => $baseUrl . $product->getUrlKey() . '.html',
             'short_description' => strip_tags((string) $product->getShortDescription()),
             'fitment' => $this->formatSafeFitment($product),
+            'in_stock' => (bool) $product->isSalable(),
         ];
     }
 

@@ -2,6 +2,13 @@
 
 /**
  * Admin Order Approval Action Controller (Approve/Reject)
+ *
+ * CORRIGIDO (auditoria 2026-10): este controller passava admin_user.user_id para
+ * OrderApprovalService::approve()/reject(), cujo segundo parâmetro sempre foi o
+ * customer_id (o portal do cliente passa customer_id corretamente). O serviço então
+ * consultava company_user.customer_id com o id de um admin, decidindo a autorização
+ * por colisão numérica entre IDs de tabelas diferentes. Agora usa os métodos
+ * explícitos *ByAdmin, que autorizam por ALÇA/ACL (nível do aprovador >= required_level).
  */
 
 declare(strict_types=1);
@@ -60,20 +67,25 @@ class ProcessAction extends Action implements HttpPostActionInterface
         $approvalId = (int)$this->getRequest()->getParam('approval_id');
         $action = $this->getRequest()->getParam('approval_action');
 
-        if (!$approvalId || !in_array($action, ['approve', 'reject'])) {
+        if (!$approvalId || !in_array($action, ['approve', 'reject'], true)) {
             $this->messageManager->addErrorMessage(__('Parâmetros inválidos.'));
             return $redirect;
         }
 
-        $adminId = (int) $this->authSession->getUser()->getId();
+        $user = $this->authSession->getUser();
+        $adminId = (int) ($user ? $user->getId() : 0);
+        if ($adminId <= 0) {
+            $this->messageManager->addErrorMessage(__('Sessão administrativa inválida.'));
+            return $redirect;
+        }
 
         try {
             if ($action === 'approve') {
-                $this->approvalService->approve($approvalId, $adminId);
+                $this->approvalService->approveByAdmin($approvalId, $adminId);
                 $this->messageManager->addSuccessMessage(__('Pedido aprovado com sucesso.'));
             } else {
-                $reason = $this->getRequest()->getParam('reason', 'Rejeitado pelo administrador');
-                $this->approvalService->reject($approvalId, $adminId, $reason);
+                $reason = (string) $this->getRequest()->getParam('reason', 'Rejeitado pelo administrador');
+                $this->approvalService->rejectByAdmin($approvalId, $adminId, $reason);
                 $this->messageManager->addSuccessMessage(__('Pedido rejeitado.'));
             }
         } catch (LocalizedException $e) {

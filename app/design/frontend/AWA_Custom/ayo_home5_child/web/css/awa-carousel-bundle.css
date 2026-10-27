@@ -1,744 +1,451 @@
-/* awa-carousel-bundle.css — home carousel CSS (2026-05-09) */
-
-/* ===== awa-home-carousel-standard.css (12KB) ===== */
-
-/* AWA Home5 - Carousel visual standardization (home only) */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) {
-    --awa-home-carousel-radius: 14px;
-    --awa-home-carousel-border: rgba(15, 23, 42, 0.10);
-    --awa-home-carousel-surface: var(--awa-bg);
-    --awa-home-carousel-section-bg: linear-gradient(180deg, var(--awa-bg) 0%, #fbfcfe 100%);
-    --awa-home-carousel-section-shadow: 0 2px 8px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.05);
-    --awa-home-carousel-gap: 12px;
-    --awa-home-carousel-arrow-size: 40px;
-    --awa-home-carousel-arrow-bg: rgba(255, 255, 255, 0.96);
-    --awa-home-carousel-arrow-border: rgba(15, 23, 42, 0.14);
-    --awa-home-carousel-arrow-color: #374151;
-    --awa-home-carousel-arrow-color-hover: var(--awa-bg);
-    --awa-home-carousel-arrow-bg-hover: var(--awa-red, var(--awa-primary));
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) {
+  --awa-home-carousel-radius:14px;
+  --awa-home-carousel-border:rgba(15, 23, 42, 0.10);
+  --awa-home-carousel-surface:var(--awa-bg);
+  --awa-home-carousel-section-bg:linear-gradient(180deg, var(--awa-bg) 0%, #fbfcfe 100%);
+  --awa-home-carousel-section-shadow:0 2px 8px rgba(15, 23, 42, 0.06),0 8px 24px rgba(15, 23, 42, 0.05);
+  --awa-home-carousel-gap:12px;
+  --awa-home-carousel-arrow-size:40px;
+  --awa-home-carousel-arrow-bg:rgba(255, 255, 255, 0.96);
+  --awa-home-carousel-arrow-border:rgba(15, 23, 42, 0.14);
+  --awa-home-carousel-arrow-color:#374151;
+  --awa-home-carousel-arrow-color-hover:var(--awa-bg);
+  --awa-home-carousel-arrow-bg-hover:var(--awa-red, var(--awa-primary))
 }
-
-/* Standard section shell for all product carousels on homepage */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container) {
-    border: 1px solid var(--awa-home-carousel-border);
-    border-radius: var(--awa-home-carousel-radius);
-    background: var(--awa-home-carousel-section-bg);
-    box-shadow: var(--awa-home-carousel-section-shadow);
-    padding: 14px;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) {
+  border:1px solid var(--awa-home-carousel-border);
+  border-radius:var(--awa-home-carousel-radius);
+  background:var(--awa-home-carousel-section-bg);
+  box-shadow:var(--awa-home-carousel-section-shadow);
+  padding:14px
 }
-
-/* Keep a predictable visual rhythm between carousel sections */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container) + :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container) {
-    margin-top: 16px;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container)+:is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) {
+  margin-top:16px
 }
-
-/* Modern and consistent section headers */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-product-heading, .section-title, .block-title) {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin: 0 0 12px !important;
-    padding-bottom: 10px;
-    border-bottom: none;
-    /* Gradiente: vermelho AWA → transparente — marca a divisão de forma sutil e on-brand */
-    background-image: linear-gradient(90deg, var(--awa-red, var(--awa-primary)) 0%, rgba(183, 51, 55, 0.12) 28%, rgba(183, 51, 55, 0) 60%);
-    background-repeat: no-repeat;
-    background-size: 100% 2px;
-    background-position: 0 100%;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-product-heading,.section-title,.block-title) {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 12px!important;
+  padding-bottom:10px;
+  border-bottom:none;
+  background-image:linear-gradient(90deg,var(--awa-red,var(--awa-primary)) 0,rgba(183,51,55,.12) 28%,rgba(183,51,55,0) 60%);
+  background-repeat:no-repeat;
+  background-size:100% 2px;
+  background-position:0 100%
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-product-heading h2, .section-title h2, .block-title strong) {
-    position: relative !important;
-    margin: 0 !important;
-    padding-left: 14px !important;
-    color: var(--awa-text-primary, #111827) !important;
-    font-size: clamp(18px, 1.9vw, 24px) !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-product-heading h2,.section-title h2,.block-title strong) {
+  position:relative!important;
+  margin:0!important;
+  padding-left:14px!important;
+  color:var(--awa-text-primary,#111827)!important;
+  font-size:clamp(18px, 1.9vw, 24px)!important;
+  font-weight:700!important;
+  line-height:1.2!important
 }
-
-/* Barra vertical legada removida (Impeccable: no side-stripe borders).
-   Accent de seção via .awa-section-header__eyebrow ou gradiente no header row. */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-product-heading h2, .section-title h2, .block-title strong) {
-    padding-left: 0 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-product-heading h2,.section-title h2,.block-title strong) {
+  padding-left:0!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-product-heading h2, .section-title h2, .block-title strong)::before {
-    display: none !important;
-    content: none !important;
-    width: 0 !important;
-    height: 0 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-product-heading h2,.section-title h2,.block-title strong)::before {
+  display:none!important;
+  content:none!important;
+  width:0!important;
+  height:0!important
 }
-
-/* Standardize "view all" actions in section headers */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.view-all, .view-more a) {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
-    min-height: 32px !important;
-    padding: 0 14px 0 12px !important;
-    border: 1px solid rgba(183, 51, 55, 0.45) !important;
-    border-radius: 999px !important;
-    background: var(--awa-surface, var(--awa-bg)) !important;
-    color: var(--awa-red, var(--awa-primary)) !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    letter-spacing: 0.01em !important;
-    transition: background var(--awa-duration-fast, 0.15s) var(--awa-ease), border-color var(--awa-duration-fast, 0.15s) var(--awa-ease), color var(--awa-duration-fast, 0.15s) var(--awa-ease) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.view-all,.view-more a) {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  min-height:32px!important;
+  padding:0 14px 0 12px!important;
+  border:1px solid rgba(183,51,55,.45)!important;
+  border-radius:999px!important;
+  background:var(--awa-surface,var(--awa-bg))!important;
+  color:var(--awa-red,var(--awa-primary))!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  text-decoration:none!important;
+  letter-spacing:.01em!important;
+  transition:background var(--awa-duration-fast, .15s) var(--awa-ease),border-color var(--awa-duration-fast, .15s) var(--awa-ease),color var(--awa-duration-fast, .15s) var(--awa-ease)!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.view-all, .view-more a)::after {
-    content: "→" !important;
-    font-size: 13px !important;
-    line-height: 1 !important;
-    transition: transform var(--awa-duration-fast, 0.15s) var(--awa-ease) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.view-all,.view-more a)::after {
+  content:"→"!important;
+  font-size:13px!important;
+  line-height:1!important;
+  transition:transform var(--awa-duration-fast, .15s) var(--awa-ease)!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.view-all, .view-more a):hover {
-    background: var(--awa-red, var(--awa-primary)) !important;
-    border-color: var(--awa-red, var(--awa-primary)) !important;
-    color: var(--awa-white, var(--awa-bg)) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.view-all,.view-more a):hover {
+  background:var(--awa-red,var(--awa-primary))!important;
+  border-color:var(--awa-red,var(--awa-primary))!important;
+  color:var(--awa-white,var(--awa-bg))!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.view-all, .view-more a):hover::after {
-    transform: translateX(3px) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.view-all,.view-more a):hover::after {
+  transform:translateX(3px)!important
 }
-
-/* Tab buttons in "Os Principais" with clean pills */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    .list-tab-product .tabs :is(li, .tab, [role="tab"]) {
-    border-radius: 999px !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper .list-tab-product .tabs :is(li,.tab,[role=tab]) {
+  border-radius:999px!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    .list-tab-product .tabs :is(a, button, [role="tab"]) {
-    display: inline-flex !important;
-    align-items: center !important;
-    min-height: 34px !important;
-    padding: 0 12px !important;
-    border: 1px solid var(--awa-border-color, #e5e7eb) !important;
-    border-radius: 999px !important;
-    background: var(--awa-surface, var(--awa-bg)) !important;
-    color: var(--awa-text-primary, #374151) !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper .list-tab-product .tabs :is(a,button,[role=tab]) {
+  display:inline-flex!important;
+  align-items:center!important;
+  min-height:34px!important;
+  padding:0 12px!important;
+  border:1px solid var(--awa-border-color,#e5e7eb)!important;
+  border-radius:999px!important;
+  background:var(--awa-surface,var(--awa-bg))!important;
+  color:var(--awa-text-primary,#374151)!important;
+  font-size:12px!important;
+  font-weight:600!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    .list-tab-product .tabs :is(li.active a, .active [role="tab"], [aria-selected="true"]) {
-    border-color: var(--awa-red, var(--awa-primary)) !important;
-    background: var(--awa-red, var(--awa-primary)) !important;
-    color: var(--awa-surface, var(--awa-bg)) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper .list-tab-product .tabs :is(li.active a,.active [role=tab],[aria-selected=true]) {
+  border-color:var(--awa-red,var(--awa-primary))!important;
+  background:var(--awa-red,var(--awa-primary))!important;
+  color:var(--awa-surface,var(--awa-bg))!important
 }
-
-/* Keep card edges and image presentation consistently clean */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .product-item, .hot-deal .product-item, .productTabContent .product-item, .category_tab_slider .item-product, .owl-carousel .item-product) {
-    border-radius: 6px !important;
-    overflow: hidden !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .product-item,.hot-deal .product-item,.productTabContent .product-item,.category_tab_slider .item-product,.owl-carousel .item-product) {
+  border-radius:6px!important;
+  overflow:hidden!important
 }
-
-/* Normalize carousel tracks/slides spacing and card stretching */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .swiper-wrapper, .hot-deal-slide .swiper-wrapper, .productTabContent .swiper-wrapper, .category_tab_slider .swiper-wrapper, .owl-carousel .owl-stage) {
-    display: flex !important;
-    align-items: stretch !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .swiper-wrapper,.hot-deal-slide .swiper-wrapper,.productTabContent .swiper-wrapper,.category_tab_slider .swiper-wrapper,.owl-carousel .owl-stage) {
+  display:flex!important;
+  align-items:stretch!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .swiper-slide, .hot-deal-slide .swiper-slide, .productTabContent .swiper-slide, .category_tab_slider .swiper-slide, .owl-carousel .owl-item) {
-    height: auto !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .swiper-slide,.hot-deal-slide .swiper-slide,.productTabContent .swiper-slide,.category_tab_slider .swiper-slide,.owl-carousel .owl-item) {
+  height:auto!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .product-item, .hot-deal .product-item, .productTabContent .product-item, .category_tab_slider .item-product, .owl-carousel .item-product) {
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .product-item,.hot-deal .product-item,.productTabContent .product-item,.category_tab_slider .item-product,.owl-carousel .item-product) {
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important
 }
-
-/* Force internal content to stretch and push buttons to bottom */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .product-item, .hot-deal .product-item, .productTabContent .product-item, .category_tab_slider .item-product, .owl-carousel .item-product) .product-info {
-    flex-grow: 1 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .product-item,.hot-deal .product-item,.productTabContent .product-item,.category_tab_slider .item-product,.owl-carousel .item-product) .product-info {
+  flex-grow:1!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper .product-item, .hot-deal .product-item, .productTabContent .product-item, .category_tab_slider .item-product, .owl-carousel .item-product) .product-info .product-info-cart {
-    margin-top: auto !important;
-    padding-top: 10px !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper .product-item,.hot-deal .product-item,.productTabContent .product-item,.category_tab_slider .item-product,.owl-carousel .item-product) .product-info .product-info-cart {
+  margin-top:auto!important;
+  padding-top:10px!important
 }
-
-/* Standardize nav arrows across all homepage product carousels */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container)
-    :is(.swiper-button-prev, .swiper-button-next, .owl-prev, .owl-next):not(.awa-owl-nav__btn) {
-    width: var(--awa-home-carousel-arrow-size) !important;
-    height: var(--awa-home-carousel-arrow-size) !important;
-    min-width: var(--awa-home-carousel-arrow-size) !important;
-    min-height: var(--awa-home-carousel-arrow-size) !important;
-    border: 1px solid var(--awa-home-carousel-arrow-border) !important;
-    border-radius: 999px !important;
-    background: var(--awa-home-carousel-arrow-bg) !important;
-    color: var(--awa-home-carousel-arrow-color) !important;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) :is(.swiper-button-prev,.swiper-button-next,.owl-prev,.owl-next):not(.awa-owl-nav__btn) {
+  width:var(--awa-home-carousel-arrow-size)!important;
+  height:var(--awa-home-carousel-arrow-size)!important;
+  min-width:var(--awa-home-carousel-arrow-size)!important;
+  min-height:var(--awa-home-carousel-arrow-size)!important;
+  border:1px solid var(--awa-home-carousel-arrow-border)!important;
+  border-radius:999px!important;
+  background:var(--awa-home-carousel-arrow-bg)!important;
+  color:var(--awa-home-carousel-arrow-color)!important;
+  box-shadow:0 8px 18px rgba(15,23,42,.12)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  transition:background-color .2s ease,color .2s ease,border-color .2s ease
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container)
-    :is(.swiper-button-prev, .swiper-button-next, .owl-prev, .owl-next):not(.awa-owl-nav__btn):hover {
-    background: var(--awa-home-carousel-arrow-bg-hover) !important;
-    border-color: var(--awa-home-carousel-arrow-bg-hover) !important;
-    color: var(--awa-home-carousel-arrow-color-hover) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) :is(.swiper-button-prev,.swiper-button-next,.owl-prev,.owl-next):not(.awa-owl-nav__btn):hover {
+  background:var(--awa-home-carousel-arrow-bg-hover)!important;
+  border-color:var(--awa-home-carousel-arrow-bg-hover)!important;
+  color:var(--awa-home-carousel-arrow-color-hover)!important
 }
-
-/* Keep bullets visually consistent when present */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper, .hot-deal-slide, .productTabContent, .category_tab_slider, .owl-carousel)
-    :is(.swiper-pagination-bullet, .owl-dot) {
-    width: 8px !important;
-    height: 8px !important;
-    border-radius: 999px !important;
-    background: var(--awa-border-color, #d1d5db) !important;
-    opacity: 1 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper,.hot-deal-slide,.productTabContent,.category_tab_slider,.owl-carousel) :is(.swiper-pagination-bullet,.owl-dot) {
+  width:8px!important;
+  height:8px!important;
+  border-radius:999px!important;
+  background:var(--awa-border-color,#d1d5db)!important;
+  opacity:1!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.products-swiper, .hot-deal-slide, .productTabContent, .category_tab_slider, .owl-carousel)
-    :is(.swiper-pagination-bullet-active, .owl-dot.active) {
-    background: var(--awa-red, var(--awa-primary)) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.products-swiper,.hot-deal-slide,.productTabContent,.category_tab_slider,.owl-carousel) :is(.swiper-pagination-bullet-active,.owl-dot.active) {
+  background:var(--awa-red,var(--awa-primary))!important
 }
-
-@media (max-width: 991px) {
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .ayo-home5-wrapper
-        :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container) {
-        padding: 10px;
-        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
-    }
-
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .ayo-home5-wrapper
-        :is(.view-all, .view-more a) {
-        min-height: 30px !important;
-        padding: 0 10px !important;
-        font-size: 11px !important;
-    }
-
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .ayo-home5-wrapper
-        :is(.rokan-product-heading, .section-title, .block-title) {
-        margin-bottom: 10px !important;
-        padding-bottom: 6px;
-    }
-
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .ayo-home5-wrapper
-        :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .hot-deal, .block.widget.block-products-list, .categorytab-container)
-        :is(.swiper-button-prev, .swiper-button-next, .owl-prev, .owl-next):not(.awa-owl-nav__btn) {
-        width: 34px !important;
-        height: 34px !important;
-        min-width: 34px !important;
-        min-height: 34px !important;
-    }
-}
-
-/* Swiper shelf template: touch target 44px (vence regra genérica acima) */
-@media (max-width: 767px) {
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .page-wrapper
-        .awa-shelf--carousel
-        .awa-owl-nav__btn,
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .page-wrapper
-        .awa-shelf--carousel
-        .awa-owl-nav__btn.swiper-button-prev,
-    :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-        .page-wrapper
-        .awa-shelf--carousel
-        .awa-owl-nav__btn.swiper-button-next {
-        width: 44px !important;
-        height: 44px !important;
-        min-width: 44px !important;
-        min-height: 44px !important;
-        transform: none !important;
-        margin-top: 0 !important;
-    }
-}
-
-
-/* ===== awa-carousel-modern.css (13KB) ===== */
-
-/* AWA Motos — Modern Carousel Navigation
- * Fixes: hidden arrows, missing nav on hot-deal & productTab carousels.
- * Adds: hover-reveal, modern transitions, injected nav styling.
- * Loaded: cms_index_index only (homepage).
- */
-
-/* ─────────────────────────────────────────────────────────
-   1. FORCE-SHOW EXISTING OWL V1 ARROWS ON SECTION HOVER
-   The Ayo parent theme hides .owl-buttons globally:
-     .owl-theme .owl-buttons { visibility:hidden; opacity:0 }
-   We override for product carousel sections only.
-   ───────────────────────────────────────────────────────── */
-
-/* All product sections: keep arrows hidden by default */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-theme .owl-buttons {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  transition: visibility 0.3s ease, opacity 0.3s ease !important;
-  pointer-events: none;
-}
-
-/* Reveal on section hover */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct):hover
-  .owl-theme .owl-buttons {
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto;
-}
-
-/* Override the @media max-width:1199px that sets .owl-buttons { display:none } */
-@media (min-width: 1024px) {
-  :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-    .ayo-home5-wrapper
-    :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-    .owl-theme .owl-buttons {
-    display: block !important;
+@media (max-width:991px) {
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) {
+    padding:10px;
+    box-shadow:0 6px 16px rgba(15,23,42,.05)
+  }
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.view-all,.view-more a) {
+    min-height:30px!important;
+    padding:0 10px!important;
+    font-size:11px!important
+  }
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-product-heading,.section-title,.block-title) {
+    margin-bottom:10px!important;
+    padding-bottom:6px
+  }
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.hot-deal,.block.widget.block-products-list,.categorytab-container) :is(.swiper-button-prev,.swiper-button-next,.owl-prev,.owl-next):not(.awa-owl-nav__btn) {
+    width:34px!important;
+    height:34px!important;
+    min-width:34px!important;
+    min-height:34px!important
   }
 }
-
-/* Arrow positioning — OWL v1 buttons are .owl-prev / .owl-next inside .owl-buttons */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons {
-  position: static !important;
+@media (max-width:767px) {
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-owl-nav__btn,:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-owl-nav__btn.swiper-button-next,:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper .awa-shelf--carousel .awa-owl-nav__btn.swiper-button-prev {
+    width:44px!important;
+    height:44px!important;
+    min-width:44px!important;
+    min-height:44px!important;
+    transform:none!important;
+    margin-top:0!important
+  }
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > div {
-  position: absolute !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  z-index: 10 !important;
-  font-size: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  cursor: pointer !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-theme .owl-buttons {
+  visibility:hidden!important;
+  opacity:0!important;
+  transition:visibility .3s ease,opacity .3s ease!important;
+  pointer-events:none
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-prev {
-  left: -6px !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct):hover .owl-theme .owl-buttons {
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-next {
-  right: -6px !important;
+@media (min-width:1024px) {
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-theme .owl-buttons {
+    display:block!important
+  }
 }
-
-/* Arrow icon — SVG via ::before */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > div::before {
-  content: '' !important;
-  display: block !important;
-  width: 18px !important;
-  height: 18px !important;
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons {
+  position:static!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-prev::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>div {
+  position:absolute!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  z-index:10!important;
+  font-size:0!important;
+  padding:0!important;
+  margin:0!important;
+  cursor:pointer!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-next::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-prev {
+  left:-6px!important
 }
-
-/* Hover state arrow icon change to white */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-prev:hover::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-next {
+  right:-6px!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct)
-  .owl-controls .owl-buttons > .owl-next:hover::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>div::before {
+  content:''!important;
+  display:block!important;
+  width:18px!important;
+  height:18px!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important
 }
-
-/* ─────────────────────────────────────────────────────────
-   2. INJECTED NAVIGATION (.awa-owl-nav) for carousels
-      without OWL navigation (hot-deal, productTabContent)
-   ───────────────────────────────────────────────────────── */
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-prev::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E")!important
+}
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-next::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E")!important
+}
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-prev:hover::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E")!important
+}
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct) .owl-controls .owl-buttons>.owl-next:hover::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E")!important
+}
 .awa-owl-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 10;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  pointer-events:none;
+  z-index:10
 }
-
 .awa-owl-nav__btn {
-  pointer-events: auto;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: var(--awa-home-carousel-arrow-size, 40px);
-  height: var(--awa-home-carousel-arrow-size, 40px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--awa-home-carousel-arrow-bg, rgba(255,255,255,0.96));
-  border: 1px solid var(--awa-home-carousel-arrow-border, rgba(15,23,42,0.14));
-  border-radius: 999px;
-  cursor: pointer;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
-  color: var(--awa-home-carousel-arrow-color, #374151);
-  padding: 0;
-  margin: 0;
-  outline: none;
-  -webkit-appearance: none;
-  line-height: 1;
+  pointer-events:auto;
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:var(--awa-home-carousel-arrow-size,40px);
+  height:var(--awa-home-carousel-arrow-size,40px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--awa-home-carousel-arrow-bg,rgba(255,255,255,.96)) );
+  border:1px solid var(--awa-home-carousel-arrow-border,rgba(15,23,42,.14)) );
+  border-radius:999px;
+  cursor:pointer;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .3s ease,visibility .3s ease,background-color .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease;
+  box-shadow:0 8px 18px rgba(15,23,42,.12);
+  color:var(--awa-home-carousel-arrow-color,#374151);
+  padding:0;
+  margin:0;
+  outline:0;
+  -webkit-appearance:none;
+  line-height:1
 }
-
-.awa-owl-nav__btn--prev { left: -6px; }
-.awa-owl-nav__btn--next { right: -6px; }
-
+.awa-owl-nav__btn--prev {
+  left:-6px
+}
+.awa-owl-nav__btn--next {
+  right:-6px
+}
 .awa-owl-nav__btn svg {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  flex-shrink: 0;
+  width:18px;
+  height:18px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex-shrink:0
 }
-
-/* Show on parent section hover */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.hot-deal, .list-tab-product, .categorytab-container, .rokan-bestseller, .rokan-newproduct):hover .awa-owl-nav__btn {
-  opacity: 1;
-  visibility: visible;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.hot-deal,.list-tab-product,.categorytab-container,.rokan-bestseller,.rokan-newproduct):hover .awa-owl-nav__btn {
+  opacity:1;
+  visibility:visible
 }
-
 .awa-owl-nav__btn:hover {
-  background: var(--awa-home-carousel-arrow-bg-hover, var(--awa-primary)) !important;
-  border-color: var(--awa-home-carousel-arrow-bg-hover, var(--awa-primary)) !important;
-  color: var(--awa-home-carousel-arrow-color-hover, var(--awa-bg)) !important;
-  box-shadow: 0 4px 14px rgba(183, 51, 55, 0.35);
+  background:var(--awa-home-carousel-arrow-bg-hover,var(--awa-primary))!important;
+  border-color:var(--awa-home-carousel-arrow-bg-hover,var(--awa-primary))!important;
+  color:var(--awa-home-carousel-arrow-color-hover,var(--awa-bg))!important;
+  box-shadow:0 4px 14px rgba(183,51,55,.35)
 }
-
 .awa-owl-nav__btn:focus-visible {
-  outline: 2px solid var(--awa-red, var(--awa-primary));
-  outline-offset: 2px;
+  outline:2px solid var(--awa-red,var(--awa-primary));
+  outline-offset:2px
 }
-
-/* ─────────────────────────────────────────────────────────
-   3. HERO SLIDER — show arrows on hover with clean style
-   ───────────────────────────────────────────────────────── */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  transition: visibility 0.3s ease, opacity 0.3s ease !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons {
+  visibility:hidden!important;
+  opacity:0!important;
+  transition:visibility .3s ease,opacity .3s ease!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider:hover .owl-carousel .owl-buttons {
-  visibility: visible !important;
-  opacity: 1 !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider:hover .owl-carousel .owl-buttons {
+  visibility:visible!important;
+  opacity:1!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > div {
-  width: 44px !important;
-  height: 44px !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 50% !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 0 !important;
-  transition: background-color 0.2s, box-shadow 0.2s !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>div {
+  width:44px!important;
+  height:44px!important;
+  background:rgba(255,255,255,.9)!important;
+  border:1px solid rgba(255,255,255,.3)!important;
+  border-radius:50%!important;
+  box-shadow:0 4px 12px rgba(0,0,0,.15)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:0!important;
+  transition:background-color .2s,box-shadow .2s!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > div:hover {
-  background: var(--awa-red, var(--awa-primary)) !important;
-  box-shadow: 0 4px 16px rgba(183, 51, 55, 0.35) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>div:hover {
+  background:var(--awa-red,var(--awa-primary))!important;
+  box-shadow:0 4px 16px rgba(183,51,55,.35)!important
 }
-
-/* Hero arrow icons */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > .owl-prev::before {
-  content: '' !important;
-  display: block !important;
-  width: 20px !important;
-  height: 20px !important;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") center/contain no-repeat !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>.owl-prev::before {
+  content:''!important;
+  display:block!important;
+  width:20px!important;
+  height:20px!important;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") center/contain no-repeat!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > .owl-next::before {
-  content: '' !important;
-  display: block !important;
-  width: 20px !important;
-  height: 20px !important;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center/contain no-repeat !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>.owl-next::before {
+  content:''!important;
+  display:block!important;
+  width:20px!important;
+  height:20px!important;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") center/contain no-repeat!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > .owl-prev:hover::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>.owl-prev:hover::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E")!important
 }
-
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .wrapper_slider .owl-carousel .owl-buttons > .owl-next:hover::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E") !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .wrapper_slider .owl-carousel .owl-buttons>.owl-next:hover::before {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 6 15 12 9 18'/%3E%3C/svg%3E")!important
 }
-
-/* ─────────────────────────────────────────────────────────
-   4. PROGRESS BAR (replaces dots for multi-item carousels)
-   ───────────────────────────────────────────────────────── */
 .awa-owl-progress {
-  position: relative;
-  width: 100%;
-  height: 3px;
-  background: rgba(15, 23, 42, 0.08);
-  border-radius: 2px;
-  margin-top: 16px;
-  overflow: hidden;
+  position:relative;
+  width:100%;
+  height:3px;
+  background:rgba(15,23,42,.08);
+  border-radius:2px;
+  margin-top:16px;
+  overflow:hidden
 }
-
 .awa-owl-progress__bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--awa-red, var(--awa-primary));
-  border-radius: 2px;
-  transform: scaleX(var(--awa-progress, 0.08));
-  transform-origin: left center;
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:var(--awa-red,var(--awa-primary));
+  border-radius:2px;
+  transform:scaleX(var(--awa-progress,.08));
+  transform-origin:left center;
+  transition:transform 220ms cubic-bezier(.22, 1, .36, 1)
 }
-
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   .awa-owl-progress__bar {
-    transition: none;
+    transition:none
   }
 }
-
-/* ─────────────────────────────────────────────────────────
-   5. CAROUSEL CONTAINERS — ensure position: relative
-   ───────────────────────────────────────────────────────── */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.hot-deal, .hot-deal-tab-slider, .list-tab-product .tab_content, .productTabContent) {
-  position: relative;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.hot-deal,.hot-deal-tab-slider,.list-tab-product .tab_content,.productTabContent) {
+  position:relative
 }
-
-/* ─────────────────────────────────────────────────────────
-   6. RESPONSIVE — mobile: hide arrows, swipe instead
-   ───────────────────────────────────────────────────────── */
-@media (max-width: 767px) {
-  /* Prateleiras AWA mantêm nav touch; legado Owl oculto (swipe no trilho) */
-  :not(.awa-shelf--carousel) > .awa-owl-nav,
-  :not(.awa-shelf--carousel) .awa-carousel > .awa-owl-nav {
-    display: none;
+@media (max-width:767px) {
+  :not(.awa-shelf--carousel) .awa-carousel>.awa-owl-nav,:not(.awa-shelf--carousel)>.awa-owl-nav {
+    display:none
   }
   .awa-shelf--carousel .awa-owl-progress {
-    height: 4px;
-    margin-top: 12px;
+    height:4px;
+    margin-top:12px
   }
 }
-
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (min-width:768px) and (max-width:1023px) {
   .awa-owl-nav__btn {
-    width: 34px;
-    height: 34px;
+    width:34px;
+    height:34px
   }
   .awa-owl-nav__btn svg {
-    width: 16px;
-    height: 16px;
+    width:16px;
+    height:16px
   }
 }
-
-/* ─────────────────────────────────────────────────────────
-   7. SMOOTH SCROLL FEEL for owl-wrapper transitions
-   ───────────────────────────────────────────────────────── */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .owl-carousel .owl-wrapper {
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .owl-carousel .owl-wrapper {
+  transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)!important
 }
-
-/* ─────────────────────────────────────────────────────────
-   8. HOME PRODUCT IMAGES — remove lazy opacity lock
-   Some global CSS hides lazy images until .awa-loaded is added,
-   but carousels on home do not always receive that class in time.
-   Result: delayed/blank cards and perception of low quality.
-   ───────────────────────────────────────────────────────── */
-:is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5)
-  .ayo-home5-wrapper
-  :is(.rokan-bestseller, .rokan-newproduct, .rokan-mostviewed, .rokan-featuredproduct, .categorytab-container, .hot-deal, .productTabContent)
-  img.product-image-photo[loading="lazy"] {
-  opacity: 1 !important;
-  animation: none !important;
-  filter: none !important;
-  image-rendering: auto !important;
+:is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .ayo-home5-wrapper :is(.rokan-bestseller,.rokan-newproduct,.rokan-mostviewed,.rokan-featuredproduct,.categorytab-container,.hot-deal,.productTabContent) img.product-image-photo[loading=lazy] {
+  opacity:1!important;
+  animation:none!important;
+  filter:none!important;
+  image-rendering:auto!important
 }
-
-/* ─────────────────────────────────────────────────────────
-   §110 Category carousel — horizontal reel (1º paint)
-   Brotli stale em critical-home.min.css.br truncava regras após ~79%;
-   carousel-bundle carrega eager na home (sem gate) como final-wins.
-   ───────────────────────────────────────────────────────── */
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  #awa-cat-carousel.awa-category-carousel__track,
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .top-home-content--category-carousel
-  .awa-category-carousel__track {
-  display: flex !important;
-  flex-flow: row nowrap !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  gap: 12px !important;
-  max-height: 280px !important;
-  scrollbar-width: none !important;
-  -webkit-overflow-scrolling: touch !important;
-  scroll-snap-type: x proximity !important;
-  padding-inline-end: 12px !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel.awa-category-carousel__track,html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__track {
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  gap:12px!important;
+  max-height:280px!important;
+  scrollbar-width:none!important;
+  -webkit-overflow-scrolling:touch!important;
+  scroll-snap-type:x proximity!important;
+  padding-inline-end:12px!important
 }
-
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  #awa-cat-carousel.awa-category-carousel__track::-webkit-scrollbar,
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .top-home-content--category-carousel
-  .awa-category-carousel__track::-webkit-scrollbar {
-  display: none !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel.awa-category-carousel__track::-webkit-scrollbar,html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__track::-webkit-scrollbar {
+  display:none!important
 }
-
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  #awa-cat-carousel.awa-category-carousel__track > .awa-category-carousel__item,
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .top-home-content--category-carousel
-  .awa-category-carousel__track > .awa-category-carousel__item {
-  flex: 0 0 auto !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  width: auto !important;
-  min-width: 120px !important;
-  max-width: 200px !important;
-  scroll-snap-align: start !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper #awa-cat-carousel.awa-category-carousel__track>.awa-category-carousel__item,html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__track>.awa-category-carousel__item {
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  width:auto!important;
+  min-width:120px!important;
+  max-width:200px!important;
+  scroll-snap-align:start!important
 }
-
-/* §110b — Category carousel viewport: clip horizontal reel */
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper
-  .top-home-content--category-carousel
-  .awa-category-carousel__viewport {
-  overflow-x: hidden !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .top-home-content--category-carousel .awa-category-carousel__viewport {
+  overflow-x:hidden!important
 }
-
-
-/* ============================================================================
-   AWA QA 2026-07-01 — desktop carousel overflow containment
-   The product carousel keeps offscreen slides positioned beyond the viewport.
-   Clip only the carousel viewport/wrappers on desktop so hidden slides do not
-   increase document scrollWidth. Mobile peek remains handled by the mobile rules
-   above and is intentionally not affected here.
-   ============================================================================ */
-@media (min-width: 768px) {
-  :is(body.cms-index-index, body.cms-home, body.cms-homepage_ayo_home5) .page-wrapper
-    :is(.rokan-newproduct, .rokan-bestseller, .rokan-mostviewed, .rokan-featuredproduct, .list-tab-product, .categorytab-container, .block.widget.block-products-list)
-    :is(.owl-stage-outer, .slick-list, .swiper, .swiper-container, .products-grid, .products.wrapper) {
-    max-width: 100%;
-    overflow-x: hidden;
-    overflow-y: visible;
+@media (min-width:768px) {
+  :is(body.cms-index-index,body.cms-home,body.cms-homepage_ayo_home5) .page-wrapper :is(.rokan-newproduct,.rokan-bestseller,.rokan-mostviewed,.rokan-featuredproduct,.list-tab-product,.categorytab-container,.block.widget.block-products-list) :is(.owl-stage-outer,.slick-list,.swiper,.swiper-container,.products-grid,.products.wrapper) {
+    max-width:100%;
+    overflow-x:hidden;
+    overflow-y:visible
   }
 }

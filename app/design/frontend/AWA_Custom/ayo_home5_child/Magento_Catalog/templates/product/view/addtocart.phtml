@@ -52,19 +52,32 @@ body.b2b-restricted-mode .b2b-login-to-buy-btn[data-b2b-ssr="guest"]{display:fle
         <?php if ($block->shouldRenderQuantity()): ?>
         <div class="field qty"<?= $isGuest ? ' data-b2b-original-hidden="1" hidden aria-hidden="true" style="display:none!important"' : '' ?>>
             <label class="label" for="qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></label>
-            <div class="control">
+            <?php /* Missão estabilização 2026-10-22: stepper compartilhado (mesmo padrão do carrinho). */ ?>
+            <div class="control qty awa-qty-stepper--shared"
+                 data-mage-init='{"js/awa-qty-control": {}}'>
+                <button type="button"
+                        class="awa-qty-btn"
+                        data-awa-role="qty-trigger"
+                        data-awa-direction="decrement"
+                        aria-label="<?= $block->escapeHtmlAttr(__('Diminuir quantidade')) ?>">−</button>
                 <input type="number"
                        name="qty"
                        id="qty"
-                       min="0"
-                       value="<?= $block->getProductDefaultQty() * 1 ?>"
+                       min="1"
+                       value="<?= max(1, $block->getProductDefaultQty() * 1) ?>"
                        title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                        aria-label="<?= $block->escapeHtmlAttr(__('Quantidade do produto')) ?>"
                        placeholder="1"
                        inputmode="numeric"
                        class="input-text qty"
+                       data-awa-role="qty-input"
                        data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
                        />
+                <button type="button"
+                        class="awa-qty-btn"
+                        data-awa-role="qty-trigger"
+                        data-awa-direction="increment"
+                        aria-label="<?= $block->escapeHtmlAttr(__('Aumentar quantidade')) ?>">+</button>
             </div>
         </div>
         <?php endif; ?>

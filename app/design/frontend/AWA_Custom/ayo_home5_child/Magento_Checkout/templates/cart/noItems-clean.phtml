@@ -87,6 +87,27 @@ $isOrderSuccess = $orderSuccess !== null;
                 <?= $block->escapeHtml(__('Voltar à Página Inicial')) ?>
             </a>
         </div>
+
+        <?php /* PLANO B2B F4.3: ações rápidas orientadas a CNPJ — URLs de negócio
+           preservadas (nenhuma rota/controller alterado). */ ?>
+        <div class="awa-cart-empty__b2b-actions" role="group" aria-label="<?= $block->escapeHtmlAttr(__('Ações rápidas B2B')) ?>">
+            <a href="<?= $block->escapeUrl($block->getUrl('b2b/quickorder')) ?>"
+               class="awa-cart-empty__cta awa-cart-empty__cta--quick"
+               data-awa-cart-empty-cta="quickorder">
+                <span aria-hidden="true">&#9889;</span>
+                <span><?= $block->escapeHtml(__('Ir para Pedido Rápido por REF')) ?></span>
+            </a>
+            <a href="<?= $block->escapeUrl($block->getUrl('b2b/account/login')) ?>"
+               class="awa-cart-empty__cta awa-cart-empty__cta--outline"
+               data-awa-cart-empty-cta="b2b-login">
+                <span><?= $block->escapeHtml(__('Acessar Conta B2B / Repetir Pedido')) ?></span>
+            </a>
+            <a href="<?= $block->escapeUrl($block->getUrl('b2b/account/claim')) ?>"
+               class="awa-cart-empty__cta awa-cart-empty__cta--outline"
+               data-awa-cart-empty-cta="b2b-claim">
+                <span><?= $block->escapeHtml(__('Ativar Cadastro CNPJ Existente')) ?></span>
+            </a>
+        </div>
     </div>
 
     <?= $block->getChildHtml('shopping.cart.table.after') ?>

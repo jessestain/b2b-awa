@@ -98,6 +98,7 @@ class KnowledgeBaseSearchTool implements ToolInterface
         return [
             AssistantOrchestratorInterface::CHANNEL_STOREFRONT,
             AssistantOrchestratorInterface::CHANNEL_B2B,
+            AssistantOrchestratorInterface::CHANNEL_ADMIN,
         ];
     }
 
@@ -116,6 +117,14 @@ class KnowledgeBaseSearchTool implements ToolInterface
         $isB2B = (bool) ($context['is_b2b'] ?? $context['isB2B'] ?? false);
         if ($isB2B) {
             $audiences[] = CategoryInterface::AUDIENCE_B2B;
+        }
+
+        /* Canal admin: a equipe interna enxerga os tópicos seller/supervisor/
+         * admin do Help Center (11 tópicos já cadastrados e nunca expostos). */
+        if (!empty($context['is_admin']) || !empty($context['isAdmin'])) {
+            $audiences[] = CategoryInterface::AUDIENCE_SELLER;
+            $audiences[] = CategoryInterface::AUDIENCE_SUPERVISOR;
+            $audiences[] = CategoryInterface::AUDIENCE_ADMIN;
         }
 
         return array_values(array_unique($audiences));

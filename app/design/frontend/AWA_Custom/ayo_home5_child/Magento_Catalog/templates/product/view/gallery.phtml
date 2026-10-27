@@ -48,7 +48,7 @@ $altText     = $productName ?: __('Imagem principal do produto');
 <script type="text/x-magento-init">
     {
         "[data-gallery-role=gallery-placeholder]": {
-            "mage/gallery/gallery": {
+            "js/awa-gallery-amd-r1": {
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": <?= /* @noEscape */ $block->getMagnifier() ?>,
                 "data": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,

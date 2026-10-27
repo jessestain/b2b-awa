@@ -125,7 +125,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: var(--awa-sp-2, 8px);
     cursor: pointer;
     text-align: left;
     padding: 10px 12px;
@@ -168,9 +168,9 @@
 
 .b2b-quickorder .quickorder-actions {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    padding-top: 20px;
+    gap: var(--awa-sp-3, 12px);
+    margin-top: var(--awa-sp-5, 24px);
+    padding-top: var(--awa-sp-5, 24px);
     border-top: 1px solid var(--awa-border);
 }
 
@@ -221,7 +221,7 @@
     position: relative;
     border: 2px dashed var(--awa-border);
     border-radius: var(--awa-b2b-radius, var(--awa-radius-sm));
-    padding: 28px 20px;
+    padding: var(--awa-sp-5, 24px) var(--awa-sp-5, 24px);
     text-align: center;
     cursor: pointer;
     transition: border-color 0.2s, background-color 0.2s;
@@ -344,3 +344,97 @@
         gap: 8px;
     }
 }
+/* Missão estabilização 2026-10-22 (P2): preview do produto por SKU na linha.
+   A linha vira wrapper de duas faixas: inputs em cima, detalhe do produto embaixo. */
+.b2b-quickorder .quickorder-row {
+    flex-wrap: wrap;
+}
+
+.b2b-quickorder .sku-detail {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1 1 100%;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--awa-border, #e5e7eb);
+    border-radius: var(--awa-b2b-radius, 8px);
+    background: var(--awa-bg-subtle, #f9fafb);
+    box-sizing: border-box;
+}
+
+.b2b-quickorder .sku-detail[hidden] {
+    display: none;
+}
+
+.b2b-quickorder .sku-detail--loading .sku-detail__status,
+.b2b-quickorder .sku-detail--error .sku-detail__status {
+    color: var(--awa-text-muted, #6b7280);
+}
+
+.b2b-quickorder .sku-detail--error {
+    border-color: #dc2626;
+    background: #fef2f2;
+}
+
+.b2b-quickorder .sku-detail--error .sku-detail__status {
+    color: #b91c1c;
+}
+
+.b2b-quickorder .sku-detail__media {
+    flex: 0 0 48px;
+}
+
+.b2b-quickorder .sku-detail__media img {
+    display: block;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--awa-border, #e5e7eb);
+}
+
+.b2b-quickorder .sku-detail__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.b2b-quickorder .sku-detail__name {
+    font-weight: 600;
+    color: var(--awa-text, #111827);
+}
+
+.b2b-quickorder .sku-detail__price {
+    font-weight: 700;
+    color: var(--awa-text, #111827);
+}
+
+.b2b-quickorder .sku-detail__stock,
+.b2b-quickorder .sku-detail__rules {
+    color: var(--awa-text-muted, #6b7280);
+    font-size: 0.9em;
+}
+
+.b2b-quickorder .sku-detail__config {
+    color: #92400e;
+    font-size: 0.9em;
+}
+
+.b2b-quickorder .sku-detail__blocked {
+    color: #dc2626;
+    font-size: 0.9em;
+}
+/* Missão estabilização 2026-10-22: stepper de quantidade compartilhado
+   (mesmo padrão do carrinho em PDP, Compra Rápida e Pedido Rápido). */
+.awa-qty-stepper--shared{display:inline-flex;align-items:stretch;flex-wrap:nowrap;border:1px solid var(--awa-border,#e5e7eb);border-radius:12px;overflow:hidden;background:var(--awa-bg,#fff);box-sizing:border-box}
+.awa-qty-stepper--shared .awa-qty-btn{min-width:36px;min-height:36px;padding:0;border:0;border-radius:0;background:var(--awa-bg-subtle,#f9fafb);color:var(--awa-text,#111827);font-size:18px;font-weight:600;line-height:1;cursor:pointer;box-sizing:border-box}
+.awa-qty-stepper--shared .awa-qty-btn:hover{background:var(--awa-bg-soft,#f3f4f6)}
+.awa-qty-stepper--shared .awa-qty-btn:focus-visible{outline:2px solid var(--awa-primary,#b73337);outline-offset:-2px;z-index:1}
+.awa-qty-stepper--shared .awa-qty-btn:disabled,.awa-qty-stepper--shared .awa-qty-btn[aria-disabled=true]{opacity:.42;cursor:not-allowed;pointer-events:none}
+.awa-qty-stepper--shared input[type=number]{width:3.25rem;min-height:36px;padding:0 4px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;border:0;border-inline:1px solid var(--awa-border,#e5e7eb);border-radius:0;background:var(--awa-bg,#fff);box-shadow:none;-moz-appearance:textfield;appearance:textfield;box-sizing:border-box}
+.awa-qty-stepper--shared input[type=number]::-webkit-inner-spin-button,.awa-qty-stepper--shared input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.awa-qty-stepper--shared:focus-within{border-color:var(--awa-primary,#b73337);box-shadow:0 0 0 3px rgb(183 51 55/16%)}
+@media (max-width:767px){.awa-qty-stepper--shared .awa-qty-btn{min-width:44px;min-height:44px}.awa-qty-stepper--shared input[type=number]{min-height:44px}}
+@media (prefers-reduced-motion:reduce){.awa-qty-stepper--shared .awa-qty-btn{transition:none}}

@@ -1,0 +1,176 @@
+/* ============================================================================
+ * AWA B2B — Carrinho/Checkout de alta densidade (Plano Diretor B2B · Fase 4)
+ * Arquivo: web/css/awa-b2b-cart-dense-20261026.css (+ .min derivado)
+ * CASCATA: @layer awa-r2-visual-fix (1ª camada — !important de layer vence
+ * sem camada) + especificidade alta. Escopado por body.checkout-cart-index e
+ * .block-minicart. Sem tocar regras de negócio.
+ * ========================================================================== */
+@layer awa-r2-visual-fix {
+
+/* --- F4.1 · Minicart drawer limpo: cupom de varejo oculto dentro do minicart
+   (o formulário completo permanece em /checkout/cart/ — nada removido do DOM
+   da página do carrinho). -------------------------------------------------- */
+#html-body .block-minicart .awa-minicart-coupon {
+    display: none !important;
+}
+
+/* --- F4.2 · Tabela compacta no /checkout/cart/ ------------------------------ */
+body.checkout-cart-index .cart.table-wrapper .cart.item .item-info .col {
+    padding: 10px 12px !important;
+}
+body.checkout-cart-index .cart.table-wrapper .product-item-photo img {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    object-fit: contain !important;
+}
+/* REF: pill técnica ao lado do nome da peça */
+body.checkout-cart-index .cart.table-wrapper .awa-cart-item-sku {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin-top: 4px !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    background: #F1F5F9 !important;
+    color: #334155 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+}
+/* Stepper de qtd compacto + botão de atualização sempre visível */
+body.checkout-cart-index .cart.table-wrapper .awa-qty-stepper {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+body.checkout-cart-index .cart.table-wrapper .awa-qty-stepper .awa-qty-btn {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+body.checkout-cart-index .cart.table-wrapper .awa-qty-stepper input.qty {
+    width: 44px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    text-align: center !important;
+    padding: 0 2px !important;
+}
+body.checkout-cart-index .cart.main.actions .action.update {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 36px !important;
+}
+/* Resumo lateral: linhas densas de Total de SKUs / Total de Unidades */
+.awa-cart-dense-summary {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    margin: 0 0 8px !important;
+    padding: 8px 10px !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    background: #F8FAFC !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    color: #334155 !important;
+}
+.awa-cart-dense-summary .awa-cart-dense-summary__row {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+}
+.awa-cart-dense-summary .awa-cart-dense-summary__value {
+    font-weight: 700 !important;
+    font-variant-numeric: tabular-nums !important;
+    white-space: nowrap !important;
+}
+
+/* --- F4.3 · CTAs do carrinho vazio B2B -------------------------------------- */
+.awa-cart-empty__b2b-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    margin: 12px auto 0 !important;
+}
+.awa-cart-empty__b2b-actions .awa-cart-empty__cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    min-height: 44px !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+}
+.awa-cart-empty__b2b-actions .awa-cart-empty__cta--quick {
+    background: var(--awa-primary, #b73337) !important;
+    color: #fff !important;
+    border: 0 !important;
+}
+.awa-cart-empty__b2b-actions .awa-cart-empty__cta--outline {
+    background: transparent !important;
+    color: var(--awa-primary, #b73337) !important;
+    border: 1px solid var(--awa-primary, #b73337) !important;
+}
+
+/* --- F4.4 · Checkout limpo: selo B2B + WhatsApp no shell mínimo ------------- */
+.awa-checkout-header-shell .awa-checkout-trust-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    color: #065F46 !important;
+    white-space: nowrap !important;
+}
+.awa-checkout-header-shell .awa-checkout-trust-badge svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex: 0 0 auto !important;
+}
+.awa-checkout-header-shell .awa-checkout-whatsapp-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-height: 40px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    background: #25D366 !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+/* Aviso comercial no bloco de pagamento */
+.awa-b2b-checkout-payment-notice {
+    margin: 0 0 12px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #FDE68A !important;
+    border-radius: 8px !important;
+    background: #FFFBEB !important;
+    color: #92400E !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+}
+
+}

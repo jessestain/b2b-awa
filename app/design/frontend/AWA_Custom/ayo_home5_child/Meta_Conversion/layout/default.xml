@@ -11,7 +11,16 @@
                    name="meta.pixel.idle"
                    ifconfig="facebook_business_extension/general/active"
                    template="Meta_Conversion::pixel/head-idle.phtml"
-                   after="-"/>
+                   after="-">
+                <!--
+                    ACHADO SEO-001: sem o gate, o template enviava 'value' com o preço do
+                    produto no evento ViewContent, para visitante anônimo. O gate é passado
+                    por argumento de layout (sem construtor novo => sem setup:di:compile).
+                -->
+                <arguments>
+                    <argument name="b2b_gate" xsi:type="object">GrupoAwamotos\B2B\ViewModel\PdpGate</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

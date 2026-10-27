@@ -5,6 +5,14 @@
  * r22k: delegação de clique no root (nav no header).
  * r22l: esconde nav/dots quando não há scroll significativo.
  * r22m: re-sync idle após reveal/imagens (race do maxScroll).
+ * PERF-2026-10-24 (INP/reflow) — sem mudança de comportamento:
+ *   - updateNavState memoiza o estado renderizado por botão (hidden/disabled/
+ *     aria/opacity/pointerEvents): antes eram 6 escritas de estilo+atributo por
+ *     frame por botão mesmo sem nenhuma mudança;
+ *   - updateDots memoiza a página ativa e a NodeList de dots (recriada só no
+ *     buildDots): nada é reescrito por frame quando a página não muda;
+ *   - removida a dupla chamada redundante syncNavChrome()+updateNavState() no
+ *     init (buildDots/updateDots já cobrem todos os caminhos).
  */
 define([], function () {
     'use strict';
@@ -31,6 +39,9 @@ define([], function () {
         let isDragging = false;
         let resizeTimer;
         let scrollRaf = 0;
+        // PERF: cache da NodeList de dots + última página ativa (evita reescritas por frame).
+        let dotsCache = null;
+        let lastActivePage = -1;
 
         if (!track || track.dataset.awaCategoryCarouselInit === '1') {
             return;
@@ -59,6 +70,10 @@ define([], function () {
         track.setAttribute('aria-label', root.getAttribute('aria-label') || 'Carrossel de categorias');
 
         function getScrollAmount() {
+            // VS4h: usa a geometria em cache (medida em refreshGeo, 1 batida).
+            if (geo) {
+                return geo.scrollAmount;
+            }
             // Scroll by almost a full visible page to match dots logic.
             let scroll = scroller.clientWidth;
             let item = items[0];
@@ -73,20 +88,48 @@ define([], function () {
         }
 
         function getMaxScroll() {
+            // VS4h: cache de maxScroll — refreshGeo() revalida em resize/load/remount.
+            if (geo) {
+                return geo.maxScroll;
+            }
             return Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+        }
+
+        // VS4h: uma única batida de leituras de layout (scrollWidth, clientWidth,
+        // gap e largura do 1º item) revalidada apenas quando o layout muda —
+        // o caminho de scroll passa a ler somente scrollLeft (sem forced reflow).
+        let geo = null;
+        function refreshGeo() {
+            let item = items[0];
+            let gap = 16;
+            let itemW = item ? item.offsetWidth : 0;
+            let clientW = scroller.clientWidth;
+            let scrollW = scroller.scrollWidth;
+            let maxScroll = Math.max(0, scrollW - clientW);
+            if (item) {
+                let style = getComputedStyle(track);
+                gap = parseInt(style.gap, 10) || 16;
+                itemW = item.offsetWidth + gap;
+            }
+            geo = {
+                scrollW: scrollW,
+                maxScroll: maxScroll,
+                clientW: clientW,
+                gap: gap,
+                itemW: itemW,
+                minDelta: item ? Math.max(48, Math.floor(itemW * 0.45)) : 48,
+                scrollAmount: Math.max(itemW > 0 ? Math.floor(clientW / itemW) * itemW : clientW, 280),
+                // PERF-2026-10-19: cache do scrollLeft junto das demais leituras (antes de
+                // qualquer escrita da passada) — evita layout forçado em updateNavState.
+                scrollLeft: scroller.scrollLeft
+            };
         }
 
         // r22l: ignore leftover sub-card scroll (desktop often has 8–40px) so we
         // do not show a fake 2nd page / enabled Next that moves almost nothing.
         function hasMeaningfulScroll() {
             let maxScroll = getMaxScroll();
-            let item = items[0];
-            let minDelta = 48;
-            if (item) {
-                let style = getComputedStyle(track);
-                let gap = parseInt(style.gap, 10) || 16;
-                minDelta = Math.max(48, Math.floor((item.offsetWidth + gap) * 0.45));
-            }
+            let minDelta = geo ? geo.minDelta : 48;
             return maxScroll >= minDelta;
         }
 
@@ -103,6 +146,8 @@ define([], function () {
                 pageOffsets = [0];
                 if (dotsWrap) {
                     dotsWrap.innerHTML = '';
+                    dotsCache = null;
+                    lastActivePage = -1;
                     dotsWrap.style.display = 'none';
                     dotsWrap.setAttribute('aria-hidden', 'true');
                     dotsWrap.setAttribute('inert', '');
@@ -169,8 +214,8 @@ define([], function () {
             }
         }
 
-        function getCurrentPage() {
-            let currentScroll = scroller.scrollLeft;
+        function getCurrentPage(scrollLeft) {
+            let currentScroll = scrollLeft === undefined ? scroller.scrollLeft : scrollLeft;
             let activeIndex = 0;
             let activeDistance = Infinity;
 
@@ -205,36 +250,44 @@ define([], function () {
             }, 16);
         }
 
-        function updateNavState() {
+        function updateNavState(scrollLeft) {
             let maxScroll = getMaxScroll();
             let meaningful = hasMeaningfulScroll();
-            let atStart = scroller.scrollLeft <= 4;
-            let atEnd = scroller.scrollLeft >= (maxScroll - 4);
+            let current = scrollLeft === undefined ? scroller.scrollLeft : scrollLeft;
+            let atStart = current <= 4;
+            let atEnd = current >= (maxScroll - 4);
 
             [prev, next].forEach(function (button, idx) {
                 let disabled;
+                let state;
 
                 if (!button) {
                     return;
                 }
 
                 if (!meaningful) {
-                    button.hidden = true;
-                    button.disabled = true;
-                    button.classList.add('is-disabled');
-                    button.setAttribute('aria-disabled', 'true');
-                    button.style.opacity = '0.45';
-                    button.style.pointerEvents = 'none';
-                    return;
+                    disabled = true;
+                    state = { h: true, d: true, o: '0.45', p: 'none' };
+                } else {
+                    disabled = idx === 0 ? atStart : atEnd;
+                    state = { h: false, d: disabled, o: disabled ? '0.45' : '', p: disabled ? 'none' : '' };
                 }
 
-                button.hidden = false;
-                disabled = idx === 0 ? atStart : atEnd;
-                button.disabled = disabled;
-                button.classList.toggle('is-disabled', disabled);
-                button.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-                button.style.opacity = disabled ? '0.45' : '';
-                button.style.pointerEvents = disabled ? 'none' : '';
+                // PERF-2026-10-24: memoiza o estado renderizado por botão — as 6
+                // escritas (hidden/disabled/class/aria/opacity/pointerEvents) só
+                // acontecem quando o estado realmente muda.
+                let last = button.__awaNavLast;
+                if (last && last.h === state.h && last.d === state.d && last.o === state.o && last.p === state.p) {
+                    return;
+                }
+                button.__awaNavLast = state;
+
+                button.hidden = state.h;
+                button.disabled = state.d;
+                button.classList.toggle('is-disabled', state.d);
+                button.setAttribute('aria-disabled', state.d ? 'true' : 'false');
+                button.style.opacity = state.o;
+                button.style.pointerEvents = state.p;
             });
         }
 
@@ -244,14 +297,18 @@ define([], function () {
             let pages;
             let i;
 
-            trackW = scroller.offsetWidth;
-            scrollW = scroller.scrollWidth;
+            // PERF-2026-10-19: reutiliza geofísica já medida em refreshGeo() (mesma passada,
+            // sem leitura após escrita). Fallback para a leitura quando chamado no init.
+            trackW = geo ? geo.clientW : scroller.offsetWidth;
+            scrollW = geo ? geo.scrollW : scroller.scrollWidth;
             buildPageOffsets();
 
             // r22m: always sync idle nav even when dots node is missing/empty.
             if (!syncNavChrome() || scrollW <= trackW || pageOffsets.length < 2) {
                 if (dotsWrap) {
                     dotsWrap.innerHTML = '';
+                    dotsCache = null;
+                    lastActivePage = -1;
                     dotsWrap.style.display = 'none';
                     dotsWrap.setAttribute('aria-hidden', 'true');
                     dotsWrap.setAttribute('inert', '');
@@ -267,6 +324,8 @@ define([], function () {
             }
 
             dotsWrap.innerHTML = '';
+            dotsCache = null;
+            lastActivePage = -1;
 
             dotsWrap.style.display = '';
             dotsWrap.removeAttribute('aria-hidden');
@@ -300,37 +359,50 @@ define([], function () {
                 })(i);
             }
 
+            // PERF: cache da NodeList — updateDots não re-querySelector por frame.
+            dotsCache = Array.prototype.slice.call(dotsWrap.children);
+            lastActivePage = 0;
+
             updateNavState();
         }
 
         function updateDots() {
             let dots;
             let currentPage;
+            // VS5f (ciclo 2, item C): 1 unica leitura de scrollLeft por frame —
+            // antes eram 3 (getCurrentPage 1x + updateNavState 2x), cada uma
+            // forçando reflow depois das escritas do frame anterior.
+            let scrollLeft = scroller.scrollLeft;
 
             if (!dotsWrap) {
                 return;
             }
 
-            dots = dotsWrap.querySelectorAll('.awa-category-carousel__dot');
+            dots = dotsCache || dotsWrap.querySelectorAll('.awa-category-carousel__dot');
             if (!dots.length) {
                 return;
             }
 
-            currentPage = getCurrentPage();
+            currentPage = getCurrentPage(scrollLeft);
 
-            dots.forEach(function (dot, idx) {
-                let isActive = idx === currentPage;
+            // PERF-2026-10-24: só reescreve classes/ARIA dos dots quando a página
+            // ativa muda; o estado das setas segue sincronizado por frame.
+            if (currentPage !== lastActivePage) {
+                lastActivePage = currentPage;
+                Array.prototype.forEach.call(dots, function (dot, idx) {
+                    let isActive = idx === currentPage;
 
-                dot.classList.toggle('active', isActive);
-                dot.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                if (isActive) {
-                    dot.setAttribute('aria-current', 'page');
-                } else {
-                    dot.removeAttribute('aria-current');
-                }
-            });
+                    dot.classList.toggle('active', isActive);
+                    dot.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                    if (isActive) {
+                        dot.setAttribute('aria-current', 'page');
+                    } else {
+                        dot.removeAttribute('aria-current');
+                    }
+                });
+            }
 
-            updateNavState();
+            updateNavState(scrollLeft);
         }
 
         function bindNavButton(button, dir) {
@@ -418,14 +490,32 @@ define([], function () {
         scroller.addEventListener('scroll', scheduleDotsUpdate, {passive: true});
         buildDots();
         updateDots();
-        syncNavChrome();
-        updateNavState();
 
+        // PERF: remountChrome era chamado 4x no load (2x rAF + 300ms + 1200ms + load),
+        // e cada execucao custa ~130ms => ~520ms de TBT medidos no Lighthouse/LoAF.
+        // O guard abaixo mantem a funcionalidade (resize e mudanca de slides ainda remontam)
+        // mas evita reexecucao quando NADA mudou: nº de itens, largura do viewport,
+        // largura rolavel do track (captura assentamento de fontes/imagens) e reduced-motion.
+        let remountSig = '';
         function remountChrome() {
+            // VS4h v2: sig barato primeiro (1 leitura de scrollWidth) — só faz
+            // refreshGeo (batida completa) quando algo realmente mudou.
+            const sig = [
+                track.children.length,
+                window.innerWidth,
+                Math.round(scroller.scrollWidth),
+                prefersReducedMotion() ? '1' : '0',
+            ].join('|');
+            if (sig === remountSig) {
+                return;
+            }
+            remountSig = sig;
+            refreshGeo();
             buildDots();
             updateDots();
             syncNavChrome();
-            updateNavState();
+            // PERF-2026-10-19: passa o scrollLeft cacheado (evita layout forçado pós-escritas).
+            updateNavState(geo ? geo.scrollLeft : scroller.scrollLeft);
         }
 
         // r22m: layout settles after fonts/images — re-check phantom scroll leftovers.
@@ -467,6 +557,7 @@ define([], function () {
                         if (i === cards.length - 1) {
                             // Last card revealed — remeasure scroll leftover vs nav chrome.
                             setTimeout(function () {
+                                refreshGeo();
                                 buildDots();
                                 updateDots();
                             }, 30);

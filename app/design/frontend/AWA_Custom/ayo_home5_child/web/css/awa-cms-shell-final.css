@@ -1,417 +1,317 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   CMS SSOT LOCK — container 1280px, prose tier 800px, spacing 4–16px
-   Escopo: páginas CMS, 404, contato (CMS e rota nativa), trabalhe-conosco.
-
-   Camada `awa-shell-lock`: este arquivo carrega ANTES do styles-l.css
-   (que declara @layer awa-reset…awa-grid). Para declarações !important,
-   o layer declarado primeiro vence — garantindo final-wins sobre as regras
-   layered do §97 rhythm sem depender de especificidade.
-   ═══════════════════════════════════════════════════════════════════════════ */
 @layer awa-shell-lock;
-
 @layer awa-shell-lock {
-
-html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status) {
-    --awa-cms-gap-xs: 4px;
-    --awa-cms-gap-sm: 8px;
-    --awa-cms-gap-md: 12px;
-    --awa-cms-gap-lg: 16px;
-    --awa-cms-shell-max: min(100%, 1280px);
-    --awa-cms-prose-max: min(100%, 800px);
-    /* Magento CMS: shell vence styles-l OKLCH */
-    --awa-primary: var(--awa-brand, #b73337);
-    --awa-primary-hover: var(--awa-brand-dark, #8e2629);
-    --awa-primary-dark: var(--awa-brand-dark, #8e2629);
-    --awa-red: var(--awa-brand, #b73337);
-}
-
-/* Container — eixo 1280px; gutter site-wide 16 mobile / 24 tablet+ (Pixel QA) */
-html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status)
-.page-wrapper :is(#maincontent.page-main.container, .page-main.container, .nav-breadcrumbs) {
-    box-sizing: border-box !important;
-    margin-inline: auto !important;
-    max-width: var(--awa-cms-shell-max) !important;
-    padding-inline: clamp(16px, 3vw, 24px) !important;
-    width: 100% !important;
-}
-
-html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status)
-.page-wrapper .page-main {
-    padding-block-start: var(--awa-cms-gap-md) !important;
-    padding-block-end: var(--awa-cms-gap-lg) !important;
-}
-
-html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status)
-.page-wrapper .page-main .columns .column.main {
-    padding-block: 0 !important;
-    /* SSOT-1 Onda 1: filho sem gutter — padding só em .page-main */
-    padding-inline: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-/* ─── Tier de leitura — prose 800px centralizado ─────────────────────────── */
-/* width:100% evita shrink-to-content quando .column.main é flex container */
-html body#html-body.cms-page-view .column.main .awa-inst {
-    width: 100% !important;
-    max-width: var(--awa-cms-prose-max) !important;
-    margin-inline: auto !important;
-    padding: 0 0 var(--awa-cms-gap-lg) !important;
-    font-size: 14px !important;
-    line-height: 1.55 !important;
-}
-
-/* ─── Hierarquia tipográfica corporativa (escala fluid-h3 das demais superfícies) */
-html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status) .column.main h1 {
-    font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
-    font-weight: 600 !important;
-    font-size: clamp(22px, 2vw, 28px) !important;
-    line-height: 1.25 !important;
-    letter-spacing: -0.02em !important;
-    margin: 0 0 var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body.cms-page-view .column.main h2 {
-    font-size: clamp(17px, 1.6vw, 20px) !important;
-    line-height: 1.3 !important;
-    font-weight: 600 !important;
-    margin: var(--awa-cms-gap-lg) 0 var(--awa-cms-gap-sm) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst h2 {
-    padding-bottom: var(--awa-cms-gap-xs) !important;
-    border-bottom: 2px solid var(--awa-red, var(--awa-primary)) !important;
-}
-
-html body#html-body.cms-page-view .column.main h3 {
-    font-size: 15px !important;
-    line-height: 1.3 !important;
-    font-weight: 600 !important;
-    margin: var(--awa-cms-gap-md) 0 var(--awa-cms-gap-xs) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(p, ul, ol) {
-    margin-block: 0 var(--awa-cms-gap-sm) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(ul, ol) {
-    padding-inline-start: 1.25rem !important;
-}
-
-html body#html-body.cms-page-view .awa-inst li {
-    margin-block-end: var(--awa-cms-gap-xs) !important;
-}
-
-/* ─── Componentes institucionais — densidade 4–16px, flat ────────────────── */
-html body#html-body.cms-page-view .awa-inst .awa-summary {
-    padding: var(--awa-cms-gap-md) !important;
-    margin-block: 0 var(--awa-cms-gap-lg) !important;
-    border-radius: 0 8px 8px 0 !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(.awa-grid, .awa-hub, .awa-rights) {
-    gap: var(--awa-cms-gap-md) !important;
-    margin-block: var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(.awa-card, .awa-right, .awa-hub a) {
-    padding: var(--awa-cms-gap-md) !important;
-    border-radius: 8px !important;
-    box-shadow: none !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-hub a:hover,
-html body#html-body.cms-page-view .awa-inst .awa-hub a:focus-visible {
-    box-shadow: none !important;
-    transform: none !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(.awa-card, .awa-faq-item) h3 {
-    margin-top: 0 !important;
-}
-
-/* CTA — flat, sem gradiente */
-html body#html-body.cms-page-view .awa-inst .awa-cta {
-    background: var(--awa-red, var(--awa-primary)) !important;
-    padding: var(--awa-cms-gap-lg) !important;
-    margin-block: var(--awa-cms-gap-lg) !important;
-    border-radius: 8px !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn {
-    padding: var(--awa-cms-gap-sm) var(--awa-cms-gap-lg) !important;
-    border-radius: 8px !important;
-    margin-top: var(--awa-cms-gap-sm) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn:hover,
-html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn:focus-visible {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-/* Seções destacadas — flat */
-html body#html-body.cms-page-view .awa-inst :is(.awa-info, .awa-b2b) {
-    padding: var(--awa-cms-gap-md) !important;
-    margin-block: var(--awa-cms-gap-md) !important;
-    border-radius: 8px !important;
-    background-image: none !important;
-}
-
-/* Tabelas (tabela de descontos B2B etc.) */
-html body#html-body.cms-page-view .awa-inst :is(.awa-table, table) {
-    margin-block: var(--awa-cms-gap-md) !important;
-    display: table !important;
-    width: 100% !important;
-    table-layout: fixed !important;
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-}
-
-html body#html-body.cms-page-view .awa-inst :is(.awa-table, table) :is(th, td) {
-    padding: var(--awa-cms-gap-sm) var(--awa-cms-gap-md) !important;
-    border-color: var(--awa-border, var(--awa-border)) !important;
-    overflow-wrap: anywhere !important;
-    vertical-align: middle !important;
-}
-
-/* FAQ — itens compactos */
-html body#html-body.cms-page-view .awa-inst .awa-faq-category {
-    margin-top: var(--awa-cms-gap-lg) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-faq-item {
-    padding: var(--awa-cms-gap-md) 0 !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-faq-item p {
-    margin: var(--awa-cms-gap-xs) 0 0 !important;
-}
-
-/* Passos numerados */
-html body#html-body.cms-page-view .awa-inst .awa-steps {
-    margin-block: var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body.cms-page-view .awa-inst .awa-steps li {
-    padding-block: var(--awa-cms-gap-sm) !important;
-}
-
-/* ─── Contato (CMS e rota nativa) ────────────────────────────────────────── */
-html body#html-body:is(.cms-page-view, .contact-index-index) .column.main .awa-contact-page {
-    width: 100% !important;
-    max-width: var(--awa-cms-shell-max) !important;
-    margin-inline: auto !important;
-}
-
-html body#html-body:is(.cms-page-view, .contact-index-index) .awa-contact-page__card {
-    padding: var(--awa-cms-gap-md) !important;
-    border-radius: 8px !important;
-    box-shadow: none !important;
-}
-
-html body#html-body.contact-index-index .awa-contact-header {
-    max-width: var(--awa-cms-prose-max) !important;
-    margin-inline: auto !important;
-    margin-block-end: var(--awa-cms-gap-lg) !important;
-}
-
-html body#html-body.contact-index-index .awa-contact-channels {
-    gap: var(--awa-cms-gap-md) !important;
-    margin-block: var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body.contact-index-index .awa-contact-channel {
-    padding: var(--awa-cms-gap-md) !important;
-    border-radius: 8px !important;
-}
-
-/* Formulários (contato / curriculo) — densidade uniforme */
-html body#html-body:is(.contact-index-index, .curriculo-index-index) .column.main form .field {
-    margin-block-end: var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body:is(.contact-index-index, .curriculo-index-index) .column.main form .field > .label {
-    margin-block-end: var(--awa-cms-gap-xs) !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-}
-
-html body#html-body:is(.contact-index-index, .curriculo-index-index) .column.main form :is(input[type="text"], input[type="email"], input[type="tel"], select, textarea) {
-    border-radius: 8px !important;
-}
-
-/* ─── Trabalhe Conosco (Ayo_Curriculo) ───────────────────────────────────── */
-html body#html-body:is(.curriculo-index-index, .curriculo-index-status) .column.main :is(.curriculo-wrapper, .curriculo-page-header, .curriculo-intro) {
-    width: 100% !important;
-    max-width: var(--awa-cms-prose-max) !important;
-    margin-inline: auto !important;
-}
-
-html body#html-body.curriculo-index-index .curriculo-grid {
-    gap: var(--awa-cms-gap-md) !important;
-}
-
-html body#html-body.curriculo-index-index :is(.curriculo-intro, .curriculo-progress) {
-    margin-block-end: var(--awa-cms-gap-md) !important;
-}
-
-/* ─── 404 ────────────────────────────────────────────────────────────────── */
-html body#html-body.cms-noroute-index .column.main .awa-404-page {
-    width: 100% !important;
-    max-width: var(--awa-cms-prose-max) !important;
-    margin-inline: auto !important;
-    padding-block: var(--awa-cms-gap-lg) !important;
-}
-
-/* ─── Mobile ≤ 575px — sem scroll lateral, grids 1 col ───────────────────── */
-@media (max-width: 575px) {
-    html body#html-body:is(.cms-page-view, .cms-noroute-index, .contact-index-index, .curriculo-index-index, .curriculo-index-status)
-    .page-wrapper :is(#maincontent.page-main.container, .page-main.container) {
-        /* SSOT B: gutter mobile = 16 (não 12) */
-        padding-inline: 16px !important;
+  html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) {
+    --awa-cms-gap-xs:4px;
+    --awa-cms-gap-sm:8px;
+    --awa-cms-gap-md:12px;
+    --awa-cms-gap-lg:16px;
+    --awa-cms-shell-max:min(100%, 1280px);
+    --awa-cms-prose-max:min(100%, 800px);
+    --awa-primary:var(--awa-brand, var(--awa-brand));
+    --awa-primary-hover:var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-primary-dark:var(--awa-brand-dark, var(--awa-brand-dark));
+    --awa-red:var(--awa-brand, var(--awa-brand))
+  }
+  html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) .page-wrapper :is(#maincontent.page-main.container,.page-main.container,.nav-breadcrumbs) {
+    box-sizing:border-box!important;
+    margin-inline:auto!important;
+    max-width:var(--awa-cms-shell-max)!important;
+    padding-inline:clamp(16px,3vw,24px)!important;
+    width:100%!important
+  }
+  html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) .page-wrapper .page-main {
+    padding-block-start:var(--awa-cms-gap-md)!important;
+    padding-block-end:var(--awa-cms-gap-lg)!important
+  }
+  html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) .page-wrapper .page-main .columns .column.main {
+    padding-block:0!important;
+    padding-inline:0!important;
+    padding-left:0!important;
+    padding-right:0!important
+  }
+  html body#html-body.cms-page-view .column.main .awa-inst {
+    width:100%!important;
+    max-width:var(--awa-cms-prose-max)!important;
+    margin-inline:auto!important;
+    padding:0 0 var(--awa-cms-gap-lg)!important;
+    font-size:14px!important;
+    line-height:1.55!important
+  }
+  html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) .column.main h1 {
+    font-family:var(--awa-font-heading, 'rubik', arial, sans-serif)!important;
+    font-weight:600!important;
+    font-size:clamp(22px, 2vw, 28px)!important;
+    line-height:1.25!important;
+    letter-spacing:-.02em!important;
+    margin:0 0 var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.cms-page-view .column.main h2 {
+    font-size:clamp(17px, 1.6vw, 20px)!important;
+    line-height:1.3!important;
+    font-weight:600!important;
+    margin:var(--awa-cms-gap-lg) 0 var(--awa-cms-gap-sm)!important
+  }
+  html body#html-body.cms-page-view .awa-inst h2 {
+    padding-bottom:var(--awa-cms-gap-xs)!important;
+    border-bottom:2px solid var(--awa-red,var(--awa-primary))!important
+  }
+  html body#html-body.cms-page-view .column.main h3 {
+    font-size:15px!important;
+    line-height:1.3!important;
+    font-weight:600!important;
+    margin:var(--awa-cms-gap-md) 0 var(--awa-cms-gap-xs)!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(p,ul,ol) {
+    margin-block:0 var(--awa-cms-gap-sm)!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(ul,ol) {
+    padding-inline-start:1.25rem!important
+  }
+  html body#html-body.cms-page-view .awa-inst li {
+    margin-block-end:var(--awa-cms-gap-xs)!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-summary {
+    padding:var(--awa-cms-gap-md)!important;
+    margin-block:0 var(--awa-cms-gap-lg)!important;
+    border-radius:0 8px 8px 0!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-grid,.awa-hub,.awa-rights) {
+    gap:var(--awa-cms-gap-md)!important;
+    margin-block:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-card,.awa-right,.awa-hub a) {
+    padding:var(--awa-cms-gap-md)!important;
+    border-radius:8px!important;
+    box-shadow:none!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-hub a:focus-visible,html body#html-body.cms-page-view .awa-inst .awa-hub a:hover {
+    box-shadow:none!important;
+    transform:none!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-card,.awa-faq-item) h3 {
+    margin-top:0!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-cta {
+    background:var(--awa-red,var(--awa-primary))!important;
+    padding:var(--awa-cms-gap-lg)!important;
+    margin-block:var(--awa-cms-gap-lg)!important;
+    border-radius:8px!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn {
+    padding:var(--awa-cms-gap-sm) var(--awa-cms-gap-lg)!important;
+    border-radius:8px!important;
+    margin-top:var(--awa-cms-gap-sm)!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn:focus-visible,html body#html-body.cms-page-view .awa-inst .awa-cta a.awa-btn:hover {
+    transform:none!important;
+    box-shadow:none!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-info,.awa-b2b) {
+    padding:var(--awa-cms-gap-md)!important;
+    margin-block:var(--awa-cms-gap-md)!important;
+    border-radius:8px!important;
+    background-image:none!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-table,table) {
+    margin-block:var(--awa-cms-gap-md)!important;
+    display:table!important;
+    width:100%!important;
+    table-layout:fixed!important;
+    border-collapse:separate!important;
+    border-spacing:0!important
+  }
+  html body#html-body.cms-page-view .awa-inst :is(.awa-table,table) :is(th,td) {
+    padding:var(--awa-cms-gap-sm) var(--awa-cms-gap-md)!important;
+    border-color:var(--awa-border,var(--awa-border))!important;
+    overflow-wrap:anywhere!important;
+    vertical-align:middle!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-faq-category {
+    margin-top:var(--awa-cms-gap-lg)!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-faq-item {
+    padding:var(--awa-cms-gap-md) 0!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-faq-item p {
+    margin:var(--awa-cms-gap-xs) 0 0!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-steps {
+    margin-block:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.cms-page-view .awa-inst .awa-steps li {
+    padding-block:var(--awa-cms-gap-sm)!important
+  }
+  html body#html-body:is(.cms-page-view,.contact-index-index) .column.main .awa-contact-page {
+    width:100%!important;
+    max-width:var(--awa-cms-shell-max)!important;
+    margin-inline:auto!important
+  }
+  html body#html-body:is(.cms-page-view,.contact-index-index) .awa-contact-page__card {
+    padding:var(--awa-cms-gap-md)!important;
+    border-radius:8px!important;
+    box-shadow:none!important
+  }
+  html body#html-body.contact-index-index .awa-contact-header {
+    max-width:var(--awa-cms-prose-max)!important;
+    margin-inline:auto!important;
+    margin-block-end:var(--awa-cms-gap-lg)!important
+  }
+  html body#html-body.contact-index-index .awa-contact-channels {
+    gap:var(--awa-cms-gap-md)!important;
+    margin-block:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.contact-index-index .awa-contact-channel {
+    padding:var(--awa-cms-gap-md)!important;
+    border-radius:8px!important
+  }
+  html body#html-body:is(.contact-index-index,.curriculo-index-index) .column.main form .field {
+    margin-block-end:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body:is(.contact-index-index,.curriculo-index-index) .column.main form .field>.label {
+    margin-block-end:var(--awa-cms-gap-xs)!important;
+    font-size:12px!important;
+    font-weight:600!important
+  }
+  html body#html-body:is(.contact-index-index,.curriculo-index-index) .column.main form :is(input[type=text],input[type=email],input[type=tel],select,textarea) {
+    border-radius:8px!important
+  }
+  html body#html-body:is(.curriculo-index-index,.curriculo-index-status) .column.main :is(.curriculo-wrapper,.curriculo-page-header,.curriculo-intro) {
+    width:100%!important;
+    max-width:var(--awa-cms-prose-max)!important;
+    margin-inline:auto!important
+  }
+  html body#html-body.curriculo-index-index .curriculo-grid {
+    gap:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.curriculo-index-index :is(.curriculo-intro,.curriculo-progress) {
+    margin-block-end:var(--awa-cms-gap-md)!important
+  }
+  html body#html-body.cms-noroute-index .column.main .awa-404-page {
+    width:100%!important;
+    max-width:var(--awa-cms-prose-max)!important;
+    margin-inline:auto!important;
+    padding-block:var(--awa-cms-gap-lg)!important
+  }
+  @media (max-width:575px) {
+    html body#html-body:is(.cms-page-view,.cms-noroute-index,.contact-index-index,.curriculo-index-index,.curriculo-index-status) .page-wrapper :is(#maincontent.page-main.container,.page-main.container) {
+      padding-inline:16px!important
     }
-
-    html body#html-body.cms-page-view .awa-inst :is(.awa-grid, .awa-hub, .awa-rights) {
-        grid-template-columns: 1fr !important;
-        gap: var(--awa-cms-gap-sm) !important;
+    html body#html-body.cms-page-view .awa-inst :is(.awa-grid,.awa-hub,.awa-rights) {
+      grid-template-columns:1fr!important;
+      gap:var(--awa-cms-gap-sm)!important
     }
-
-    html body#html-body.cms-page-view .awa-inst :is(.awa-table, table) {
-        font-size: 13px !important;
+    html body#html-body.cms-page-view .awa-inst :is(.awa-table,table) {
+      font-size:13px!important
     }
-
-    html body#html-body.cms-page-view .awa-inst :is(.awa-table, table) :is(th, td) {
-        padding: var(--awa-cms-gap-xs) var(--awa-cms-gap-sm) !important;
+    html body#html-body.cms-page-view .awa-inst :is(.awa-table,table) :is(th,td) {
+      padding:var(--awa-cms-gap-xs) var(--awa-cms-gap-sm)!important
     }
+  }
 }
-
-}
-
-
-/* BUG1 2026-08-03 — Nossas Marcas empty-state + sem H2 duplicado visual */
-html body#html-body.cms-nossas-marcas .column.main .awa-cms-nossas-marcas > h2 {
-    display: none !important;
+html body#html-body.cms-nossas-marcas .column.main .awa-cms-nossas-marcas>h2 {
+  display:none!important
 }
 html body#html-body.cms-nossas-marcas .awa-brand-empty {
-    margin-block: 16px 24px;
-    padding: 20px 16px;
-    border: 1px dashed color-mix(in srgb, var(--awa-primary, #b73337) 35%, transparent);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 4%, #fff);
-    text-align: left;
+  margin-block:16px 24px;
+  padding:20px 16px;
+  border:1px dashed color-mix(in srgb,var(--awa-primary,var(--awa-brand)) 35%,transparent);
+  border-radius:8px;
+  background:color-mix(in srgb,var(--awa-primary,var(--awa-brand)) 4%,#fff);
+  text-align:left
 }
 html body#html-body.cms-nossas-marcas .awa-brand-empty__text {
-    margin: 0 0 12px;
-    color: var(--awa-text, #1a1a1a);
-    font-size: 15px;
-    line-height: 1.45;
+  margin:0 0 12px;
+  color:var(--awa-text,#1a1a1a);
+  font-size:15px;
+  line-height:1.45
 }
 html body#html-body.cms-nossas-marcas .awa-brand-empty__cta {
-    margin: 0;
+  margin:0
 }
 html body#html-body.cms-nossas-marcas .awa-brand-empty__cta .action.primary {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 16px;
-    border-radius: 4px;
-    background: var(--awa-primary, #b73337);
-    color: #fff !important;
-    text-decoration: none;
-    font-weight: 600;
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  padding:0 16px;
+  border-radius:4px;
+  background:var(--awa-primary,var(--awa-brand));
+  color:#fff!important;
+  text-decoration:none;
+  font-weight:600
 }
 html body#html-body.cms-nossas-marcas .awa-brand-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
-    list-style: none;
-    margin: 16px 0 0;
-    padding: 0;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:16px;
+  list-style:none;
+  margin:16px 0 0;
+  padding:0
 }
-/* P2-404-LINKS 2026-08-17: flex+gap+44px viviam só em defer-global (media=print
-   na 404). Shell CMS já é blocking nesta rota. Unlayered: vence o layer. */
 html body#html-body.cms-noroute-index .page-wrapper .column.main .awa-404-page__links {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: var(--awa-cms-gap-md, 12px) !important;
-    justify-content: center !important;
-    align-items: center !important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:var(--awa-cms-gap-md,12px)!important;
+  justify-content:center!important;
+  align-items:center!important
 }
 html body#html-body.cms-noroute-index .page-wrapper .column.main .awa-404-page__links a {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 44px !important;
-    padding-inline: var(--awa-cms-gap-md, 12px) !important;
-    color: var(--awa-primary, #b73337) !important;
-    text-decoration: underline !important;
-    text-underline-offset: 2px !important;
-    box-sizing: border-box !important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:44px!important;
+  padding-inline:var(--awa-cms-gap-md,12px)!important;
+  color:var(--awa-primary,var(--awa-brand))!important;
+  text-decoration:underline!important;
+  text-underline-offset:2px!important;
+  box-sizing:border-box!important
 }
-
-/* P1-404-PRIMARY-ACTION 2026-09-08: a regra global deixava o texto branco
-   sobre fundo transparente. O primeiro link volta a ser uma acao primaria. */
 html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapper .column.main .awa-404-page__links a:first-child {
-    background: var(--awa-primary, #b73337) !important;
-    background-color: var(--awa-primary, #b73337) !important;
-    border: 1px solid var(--awa-primary, #b73337) !important;
-    border-radius: var(--awa-radius-sm, 6px) !important;
-    color: #fff !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
+  background:var(--awa-primary,var(--awa-brand))!important;
+  background-color:var(--awa-primary,var(--awa-brand))!important;
+  border:1px solid var(--awa-primary,var(--awa-brand))!important;
+  border-radius:var(--awa-radius-sm,6px)!important;
+  color:#fff!important;
+  font-weight:600!important;
+  text-decoration:none!important
 }
-
-html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapper .column.main .awa-404-page__links a:first-child:is(:hover, :focus-visible) {
-    background: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
-    background-color: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
-    border-color: color-mix(in srgb, var(--awa-primary, #b73337) 88%, #000) !important;
-    color: #fff !important;
+html body#html-body#html-body.cms-noroute-index:not(#__awa-no-match) .page-wrapper .column.main .awa-404-page__links a:first-child:is(:hover,:focus-visible) {
+  background:color-mix(in srgb,var(--awa-primary,var(--awa-brand)) 88%,#000)!important;
+  background-color:color-mix(in srgb,var(--awa-primary,var(--awa-brand)) 88%,#000)!important;
+  border-color:color-mix(in srgb,var(--awa-primary,var(--awa-brand)) 88%,#000)!important;
+  color:#fff!important
 }
-
-/* P2-CONTACT-MAP 2026-08-17: embed 390x600 no fold (acima do h1). iframe
-   ignora height:auto; cap fluido no mobile. Textarea 44px nao cabe mensagem. */
-@media (max-width: 767px) {
-    html body#html-body.contact-index-index .page-wrapper .google-map-wrapper {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: clamp(180px, 42vw, 220px) !important;
-        max-height: 220px !important;
-        overflow: hidden !important;
-    }
-    html body#html-body.contact-index-index .page-wrapper .google-map-wrapper iframe {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100% !important;
-        max-height: 220px !important;
-        border: 0 !important;
-    }
+@media (max-width:767px) {
+  html body#html-body.contact-index-index .page-wrapper .google-map-wrapper {
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:clamp(180px,42vw,220px)!important;
+    max-height:220px!important;
+    overflow:hidden!important
+  }
+  html body#html-body.contact-index-index .page-wrapper .google-map-wrapper iframe {
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:100%!important;
+    max-height:220px!important;
+    border:0!important
+  }
 }
 html body#html-body.contact-index-index .page-wrapper .column.main form textarea {
-    min-height: 120px !important;
-    height: auto !important;
+  min-height:120px!important;
+  height:auto!important
 }
-
-/* AWA visual-audit 2026-08-27 lote6: honeypot Magento (.hideit.no-display)
-   visível no Trabalhe Conosco (“DEIXE ESTE CAMPO EM BRANCO”, 81px).
-   Causa: a classe .no-display não existe na cascata desta rota;
-   Luma/themes .field { display:flex } deixa o campo no fluxo.
-   !important: vence .field { display:flex } sem a utility Magento. */
-html body#html-body:is(.curriculo-index-index, .contact-index-index)
-.page-wrapper
-form
-.field:is(.hideit, .no-display) {
-    display: none !important;
-    visibility: hidden !important;
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    pointer-events: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
+html body#html-body:is(.curriculo-index-index,.contact-index-index) .page-wrapper form .field:is(.hideit,.no-display) {
+  display:none!important;
+  visibility:hidden!important;
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  pointer-events:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important
 }

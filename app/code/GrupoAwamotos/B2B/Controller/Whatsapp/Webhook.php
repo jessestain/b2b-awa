@@ -15,6 +15,7 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerC
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use GrupoAwamotos\B2B\Model\ResourceModel\CreditLimit\CollectionFactory as CreditCollectionFactory;
+use GrupoAwamotos\B2B\Model\WhatsApp\BotCommand;
 use GrupoAwamotos\ERPIntegration\Helper\Data as ErpHelper;
 use GrupoAwamotos\ERPIntegration\Model\WhatsApp\ZApiClient;
 use Psr\Log\LoggerInterface;
@@ -35,6 +36,7 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
     private ErpHelper $erpHelper;
     private LoggerInterface $logger;
     private StoreManagerInterface $storeManager;
+    private \Magento\Eav\Model\Config $eavConfig;
 
     public function __construct(
         Context $context,
@@ -45,7 +47,8 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
         ZApiClient $zapiClient,
         ErpHelper $erpHelper,
         LoggerInterface $logger,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -56,6 +59,7 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
         $this->erpHelper = $erpHelper;
         $this->logger = $logger;
         $this->storeManager = $storeManager;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -74,28 +78,29 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
         $payload = $this->getRequest()->getContent();
         $data = json_decode($payload, true);
 
-        if (!$data || !isset($data['text']['message'])) {
+        $bot = new BotCommand();
+        if (!is_array($data) || $bot->shouldIgnore($data) || !isset($data['text']['message'])) {
             return $result->setData(['status' => 'ignored']);
         }
 
-        $from = $data['phone'] ?? '';
-        $message = trim(strtolower($data['text']['message']));
-
-        // 1. Identify Customer by Phone
-        $customer = $this->identifyCustomer($from);
-        if (!$customer) {
-            // Not a registered B2B customer phone or multiple matches
-            return $result->setData(['status' => 'customer_not_found']);
+        // Só comando explícito (MENU, PEDIDOS, LIMITE). Conversa normal fica com
+        // a equipe humana, que atende neste mesmo número.
+        $command = $bot->parse((string) $data['text']['message']);
+        if ($command === null) {
+            return $result->setData(['status' => 'not_a_command']);
         }
 
-        // 2. Process Intent
-        $response = '';
-        if (str_contains($message, 'pedido') || str_contains($message, 'status')) {
-            $response = $this->getOrderStatusResponse($customer);
-        } elseif (str_contains($message, 'limite') || str_contains($message, 'credito')) {
-            $response = $this->getCreditLimitResponse($customer);
-        } elseif (str_contains($message, 'ajuda') || str_contains($message, 'oi') || str_contains($message, 'ola')) {
-            $response = $this->getHelpResponse($customer);
+        $from = (string) $data['phone'];
+        $customer = $this->identifyCustomer($from);
+        if (!$customer) {
+            $response = 'Não encontrei um cadastro B2B ligado a este número. '
+                . 'Nossa equipe vai te atender por aqui mesmo — é só escrever a sua dúvida.';
+        } else {
+            $response = match ($command) {
+                BotCommand::ORDERS => $this->getOrderStatusResponse($customer),
+                BotCommand::CREDIT => $this->getCreditLimitResponse($customer),
+                default            => $this->getHelpResponse($customer),
+            };
         }
 
         // 3. Send Response
@@ -111,7 +116,12 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
     }
 
     /**
-     * Identify customer by phone number
+     * Identify customer by phone number.
+     *
+     * FIX (19/10/2026): a versao anterior filtrava por atributos EAV que NAO existem
+     * no customer ("whatsapp"/"celular"/"telephone") -> LocalizedException 500 em todo
+     * comando (PEDIDOS/LIMITE). Agora usamos apenas atributos existentes (b2b_phone etc.)
+     * e procuramos nos dois formatos: digitos e formatado "(DD) XXXXX-XXXX".
      */
     private function identifyCustomer($phone)
     {
@@ -126,19 +136,52 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
             $cleanPhone = substr($cleanPhone, 2);
         }
 
+        if ($cleanPhone === '') {
+            return null;
+        }
+
+        $patterns = ['%' . $cleanPhone . '%'];
+        // Telefone B2B fica salvo formatado pelo B2bPhoneNormalizer: "(16) 99999-8888".
+        $len = strlen($cleanPhone);
+        if ($len === 11) {
+            $patterns[] = sprintf('(%s) %s-%s', substr($cleanPhone, 0, 2), substr($cleanPhone, 2, 5), substr($cleanPhone, 7, 4));
+        } elseif ($len === 10) {
+            $patterns[] = sprintf('(%s) %s-%s', substr($cleanPhone, 0, 2), substr($cleanPhone, 2, 4), substr($cleanPhone, 6, 4));
+        }
+
+        $conditions = [];
+        foreach (['b2b_phone', 'whatsapp', 'celular', 'telephone'] as $attributeCode) {
+            if (!$this->customerAttributeExists($attributeCode)) {
+                continue;
+            }
+            foreach ($patterns as $pattern) {
+                $conditions[] = ['attribute' => $attributeCode, 'like' => $pattern];
+            }
+        }
+
+        if ($conditions === []) {
+            $this->logger->warning('[WhatsApp Bot] Nenhum atributo de telefone disponivel no customer.');
+            return null;
+        }
+
         $collection = $this->customerCollectionFactory->create();
         $collection->addAttributeToSelect(['firstname', 'lastname', 'group_id'])
-            ->addAttributeToFilter([
-                ['attribute' => 'whatsapp', 'like' => '%' . $cleanPhone . '%'],
-                ['attribute' => 'celular', 'like' => '%' . $cleanPhone . '%'],
-                ['attribute' => 'telephone', 'like' => '%' . $cleanPhone . '%']
-            ]);
+            ->addAttributeToFilter($conditions);
 
         if ($collection->getSize() === 1) {
             return $collection->getFirstItem();
         }
 
         return null;
+    }
+
+    private function customerAttributeExists(string $attributeCode): bool
+    {
+        try {
+            return $this->eavConfig->getAttribute(\Magento\Customer\Model\Customer::ENTITY, $attributeCode)->getId() !== null;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -152,7 +195,11 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
             ->setPageSize(3);
 
         if ($collection->getSize() === 0) {
-            return "Olá {$customer->getFirstname()}, você ainda não possui pedidos registrados conosco.";
+            // Os pedidos B2B entram pelo ERP (vendedor/balcão), não pelo site:
+            // "você não possui pedidos" seria falso para quem compra todo mês.
+            return "Olá {$customer->getFirstname()}! Não encontrei pedidos feitos pelo site. "
+                . "Para pedidos feitos com o seu vendedor, a nossa equipe te passa o status por aqui — "
+                . "é só escrever o número do pedido.";
         }
 
         $response = "Olá {$customer->getFirstname()}! Aqui estão seus últimos pedidos:\n\n";
@@ -213,16 +260,21 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
      */
     private function getHelpResponse($customer)
     {
-        return "Olá {$customer->getFirstname()}! Eu sou o assistente virtual do Grupo AWA Motos. 🏍️\n\n"
-            . "Você pode me perguntar sobre:\n"
-            . "👉 *Pedidos* - Para ver o status das suas compras\n"
-            . "👉 *Limite* - Para consultar seu saldo de crédito\n\n"
-            . "Estou aqui para ajudar!";
+        return "Olá {$customer->getFirstname()}! Sou o assistente automático da AWA Motos. 🏍️\n\n"
+            . "Envie só a palavra:\n"
+            . "👉 *PEDIDOS* — status das suas compras pelo site\n"
+            . "👉 *LIMITE* — seu limite de crédito\n\n"
+            . "Para falar com a nossa equipe, é só escrever normalmente.";
     }
 
     /**
-     * Z-API envia Client-Token no header.
-     * Aceitamos X-Webhook-Token apenas por compatibilidade de proxy legado.
+     * Valida a origem do webhook.
+     *
+     * Caminho 1 (preferido): headers Client-Token / X-Webhook-Token.
+     * Caminho 2 (fallback): assinatura na URL — ?sig=sha256(client_token).
+     * O Z-API NAO envia headers customizados nos webhooks e o painel nao permite
+     * configura-los; a assinatura e derivada do token (hash inforjavel sem o segredo)
+     * e nunca expoe o token em log/proxy/referer.
      */
     private function verifyWebhookToken(): bool
     {
@@ -238,12 +290,22 @@ class Webhook extends Action implements HttpPostActionInterface, CsrfAwareAction
             $token = (string) $request->getHeader('X-Webhook-Token');
         }
 
-        // Security: never accept token via query string (leaks in logs/proxies/referers).
-        if ($token === '') {
-            return false;
+        if ($token !== '') {
+            return hash_equals($expected, $token);
         }
 
-        return hash_equals($expected, $token);
+        // Fallback assinado na URL (Z-API nao suporta headers customizados em webhooks).
+        // Aceita assinatura completa (sha256, 64 hex) OU prefixo de 16 hex — 64 bits de
+        // entropia, suficiente e imune a limite de tamanho do campo de URL do painel.
+        $sig = (string) $request->getParam('sig', '');
+        if ($sig !== '') {
+            $expectedSig = hash('sha256', $expected);
+            if (hash_equals($expectedSig, $sig) || hash_equals(substr($expectedSig, 0, 16), $sig)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

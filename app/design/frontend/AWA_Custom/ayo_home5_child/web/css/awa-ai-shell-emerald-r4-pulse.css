@@ -1,0 +1,19 @@
+/**
+ * AWA AI Shell — Emerald R4 (2026-10-21)
+ * Restaura o PULSO DE ATENÇÃO do coach.
+ *
+ * A skin esmeralda (r2) trocou o pulso duplo de atenção do coach
+ * (`awa-ai-coach-pulse 1.6s ×2`, que acende quando há mensagem não lida do
+ * coach — binding fabPulseCss) por um fade-in de 280ms, silenciando o aviso
+ * visual. O dono pediu a restauração.
+ *
+ * Regra sem camada e declarada APÓS o r2 (ordem dos <link> no widget.phtml:
+ * r2 → portrait → r3 → r4): mesma especificidade, fonte posterior vence.
+ * Os keyframes awa-ai-coach-pulse vêm do ai-assistant.css (módulo) e usam
+ * --awa-primary — com a skin esmeralda o pulso sai verde-esmeralda.
+ * prefers-reduced-motion continua respeitado (bloco !important do r2 +
+ * regra do módulo).
+ */
+#awa-ai-chat-root.awa-ai-shell-emerald .awa-ai-chat__toggle--pulse {
+    animation: awa-ai-coach-pulse 1.6s ease-in-out 2;
+}

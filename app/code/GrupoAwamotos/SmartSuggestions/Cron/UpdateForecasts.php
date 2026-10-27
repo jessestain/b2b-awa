@@ -87,34 +87,7 @@ class UpdateForecasts
             $tableName = $this->forecastResource->getMainTable();
             $now = date('Y-m-d H:i:s');
 
-            // Prepare batch insert/update
-            $records = [];
-            foreach ($dailyData as $day) {
-                $records[] = [
-                    'period_type' => 'daily',
-                    'period_date' => $day['date'],
-                    'actual_sales' => $day['total'] ?? null,
-                    'orders_count' => $day['orders'] ?? null,
-                    'avg_ticket' => ($day['orders'] ?? 0) > 0
-                        ? ($day['total'] ?? 0) / $day['orders']
-                        : null,
-                    'calculated_at' => $now
-                ];
-            }
-
-            // Add projections for next 7 days
-            $projections = $this->forecastService->projectDailyForward(7);
-            foreach ($projections as $projection) {
-                $records[] = [
-                    'period_type' => 'daily',
-                    'period_date' => $projection['date'],
-                    'projected_sales' => $projection['projected'] ?? null,
-                    'projection_low' => $projection['low'] ?? null,
-                    'projection_high' => $projection['high'] ?? null,
-                    'confidence' => $projection['confidence'] ?? 0.85,
-                    'calculated_at' => $now
-                ];
-            }
+            $records = $this->buildDailyForecastRecords($dailyData, $now);
 
             // Upsert records
             foreach ($records as $record) {
@@ -134,6 +107,94 @@ class UpdateForecasts
                 'error' => $e->getMessage()
             ]);
         }
+    }
+
+    /**
+     * Adapt the existing column-oriented trend contract without recalculating forecasts.
+     * Build all records before any write, so invalid payloads cannot partially update data.
+     */
+    private function buildDailyForecastRecords(array $dailyData, string $now): array
+    {
+        $dates = $dailyData['dates'] ?? null;
+        $sales = $dailyData['sales'] ?? null;
+        $orders = $dailyData['orders'] ?? null;
+        $projections = $dailyData['forecast'] ?? [];
+        foreach ([$dates, $sales, $orders, $projections] as $column) {
+            if (!is_array($column) || !array_is_list($column)) {
+                throw new \UnexpectedValueException('Daily forecast columns must be lists.');
+            }
+        }
+        if (count($dates) !== count($sales) || count($dates) !== count($orders)) {
+            throw new \UnexpectedValueException('Daily forecast columns have different lengths.');
+        }
+        $validateDate = static function ($value): string {
+            if (!is_string($value) || !preg_match('/^\d{4}-\d{2}-\d{2}$/D', $value)) {
+                throw new \UnexpectedValueException('Daily forecast date must be an ISO date.');
+            }
+            $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value);
+            if (!$date || $date->format('Y-m-d') !== $value) {
+                throw new \UnexpectedValueException('Daily forecast date is invalid.');
+            }
+            return $value;
+        };
+        $finiteNumber = static function ($value): float {
+            if (!is_numeric($value) || !is_finite((float) $value)) {
+                throw new \UnexpectedValueException('Daily forecast value must be finite.');
+            }
+            return (float) $value;
+        };
+        $records = [];
+        $seenActualDates = [];
+        foreach ($dates as $index => $date) {
+            $periodDate = $validateDate($date);
+            if (isset($seenActualDates[$periodDate])) {
+                throw new \UnexpectedValueException('Daily forecast dates must be unique.');
+            }
+            $seenActualDates[$periodDate] = true;
+            $total = $finiteNumber($sales[$index]);
+            $count = $finiteNumber($orders[$index]);
+            if ($count < 0 || floor($count) !== $count || $count > 4294967295) {
+                throw new \UnexpectedValueException('Daily forecast order count is invalid.');
+            }
+            $ticket = $count > 0 ? $total / $count : null;
+            if (abs($total) > 9999999999.9999 || ($ticket !== null && abs($ticket) > 99999999.9999)) {
+                throw new \UnexpectedValueException('Daily forecast amount exceeds storage precision.');
+            }
+            $records[] = [
+                'period_type' => 'daily',
+                'period_date' => $periodDate,
+                'actual_sales' => $total,
+                'orders_count' => (int) $count,
+                'avg_ticket' => $ticket,
+                'calculated_at' => $now
+            ];
+        }
+        $seenProjectionDates = [];
+        foreach ($projections as $projection) {
+            if (!is_array($projection)) {
+                throw new \UnexpectedValueException('Daily forecast projection must be a record.');
+            }
+            $periodDate = $validateDate($projection['date'] ?? null);
+            if (isset($seenProjectionDates[$periodDate])) {
+                throw new \UnexpectedValueException('Daily forecast projection dates must be unique.');
+            }
+            $seenProjectionDates[$periodDate] = true;
+            $projected = $finiteNumber($projection['projected'] ?? null);
+            if (abs($projected) > 9999999999.9999) {
+                throw new \UnexpectedValueException('Daily projection exceeds storage precision.');
+            }
+            $records[] = [
+                'period_type' => 'daily',
+                'period_date' => $periodDate,
+                'projected_sales' => $projected,
+                // The current service returns point estimates, without bounds or confidence.
+                'projection_low' => null,
+                'projection_high' => null,
+                'confidence' => null,
+                'calculated_at' => $now
+            ];
+        }
+        return $records;
     }
 
     /**

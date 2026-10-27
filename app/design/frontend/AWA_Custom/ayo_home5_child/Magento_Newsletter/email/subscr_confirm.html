@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject Confirme sua inscrição na newsletter @-->
+<!--@vars {
+"var subscriber_data.confirmation_link":"Subscriber Confirmation URL"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<p class="greeting">{{trans "Obrigado por se inscrever na nossa newsletter."}}</p>
+<p>{{trans "Para começar a receber, confirme a inscrição clicando no link:"}}</p>
+<p><a href="{{var subscriber_data.confirmation_link}}">{{var subscriber_data.confirmation_link}}</a></p>
+
+{{template config_path="design/email/footer_template"}}

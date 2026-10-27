@@ -1,5 +1,5 @@
 :root {
-    --primary-color: var(--awa-red, #b73337);
+    --primary-color: var(--awa-brand, #b73337);
     --primary-hover: var(--awa-red-dark, #8e2629);
     --primary-light: var(--awa-red-light, rgb(183 51 55 / 10%));
     --text-color: #1e293b;

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Registra o plugin que zera o value do form_key renderizado pelo bloco core,
+ * SOMENTE no frontend (admin nao usa FPC e precisa do form_key real).
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\FormKey">
+        <plugin name="awa_formkey_blank_for_fpc"
+                type="GrupoAwamotos\FormKeyCacheFix\Plugin\BlankFormKeyPlugin"
+                sortOrder="10"/>
+    </type>
+</config>

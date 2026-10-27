@@ -25,7 +25,7 @@ class MenuRestrictionPlugin
 
     public function afterGetMenu(Config $subject, Menu $menu): Menu
     {
-        if ($this->portfolioScope->canViewAllPortfolios() && !$this->portfolioScope->canBypassPortfolioScope()) {
+        if ($this->portfolioScope->canViewAllPortfolios()) {
             $this->applySupervisorMenuLabels($menu);
         }
 

@@ -3,7 +3,7 @@
  *
  * @module js/awa-cart-form-feedback
  */
-define(['jquery'], function ($) {
+define(['jquery', 'mage/translate', 'mage/validation'], function ($, $t) {
     'use strict';
 
     function getStatusNode() {
@@ -28,7 +28,6 @@ define(['jquery'], function ($) {
         }
 
         var busyMessage = form.getAttribute('data-awa-busy-message') || 'Atualizando carrinho…';
-        var doneMessage = form.getAttribute('data-awa-done-message') || 'Carrinho atualizado.';
 
         if (isBusy) {
             form.setAttribute('aria-busy', 'true');
@@ -38,7 +37,7 @@ define(['jquery'], function ($) {
         }
 
         form.removeAttribute('aria-busy');
-        announce(doneMessage);
+        announce($t('Revise a quantidade informada.'));
     }
 
     return function () {
@@ -52,7 +51,27 @@ define(['jquery'], function ($) {
             return;
         }
 
+        $form.off('.awaCartFeedback');
+
         $form.on('submit.awaCartFeedback', function () {
+            /* Magento_Checkout/js/action/update-shopping-cart valida a
+               quantidade (mage/validation) e bloqueia o submit sem nunca
+               disparar contentUpdated quando é inválida — aqui ficávamos
+               com "Atualizando…" preso na tela mesmo sem update real.
+               Checar a mesma validação evita marcar "busy" num envio que
+               o próprio Magento vai rejeitar antes de qualquer AJAX. */
+            if (typeof $form.validation === 'function') {
+                try {
+                    if ($form.validation().validation('isValid') === false) {
+                        setBusy(false);
+
+                        return;
+                    }
+                } catch (e) {
+                    /* mage/validation indisponível — segue o fluxo padrão */
+                }
+            }
+
             setBusy(true);
         });
 
@@ -60,14 +79,8 @@ define(['jquery'], function ($) {
             setBusy(true);
         });
 
-        $(document).on('contentUpdated.awaCartFeedback', function () {
-            window.setTimeout(function () {
-                setBusy(false);
+        // Generic DOM updates are not confirmation of a persisted cart update.
+        // Magento renders success/errors after its native form submission.
 
-                $('#form-validate [data-role="cart-item-qty"]').each(function () {
-                    this.setAttribute('data-item-qty', String(this.value));
-                });
-            }, 120);
-        });
     };
 });

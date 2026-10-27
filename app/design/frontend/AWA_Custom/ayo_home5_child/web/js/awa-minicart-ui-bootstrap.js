@@ -159,6 +159,17 @@ define(['js/awa-customer-sections-gate', 'ko'], function (whenCustomerSectionsRe
             wrapper.setAttribute('data-bind', "scope: 'minicart_content'");
             wrapper.innerHTML = '<!-- ko template: getTemplate() --><!-- /ko -->';
         }
+
+        // Missão estabilização 2026-10-22: o shell estático (estado "Carregando…")
+        // não pode permanecer depois da hidratação — o conteúdo KO assume qualquer
+        // estado real (itens ou vazio). Sem isso, um carrinho vazio real ficaria
+        // com o placeholder eterno ou duplicado com o vazio do KO.
+        var deferShell = document.querySelector('[data-awa-minicart-defer-shell="true"]');
+        if (deferShell) {
+            deferShell.setAttribute('aria-hidden', 'true');
+            deferShell.setAttribute('inert', '');
+            deferShell.hidden = true;
+        }
     }
 
     function isVisible(element) {
@@ -277,6 +288,14 @@ define(['js/awa-customer-sections-gate', 'ko'], function (whenCustomerSectionsRe
             require(['jquery', 'dropdownDialog'], function ($) {
                 var $block = $('[data-block="minicart"] [data-role="dropdownDialog"]');
 
+            function cleanOrphanDialogs() {
+                var $w = $block.closest('[data-block="minicart"], .minicart-wrapper');
+                $w.find('.ui-dialog').each(function () {
+                    var $d = $(this);
+                    if (!$d.find('.block-minicart').length && $d.height() === 0) { $d.remove(); }
+                });
+            }
+
                 if ($block.length && !$block.data('mageDropdownDialog')) {
                     initDropdownDialog();
                 }
@@ -311,13 +330,19 @@ define(['js/awa-customer-sections-gate', 'ko'], function (whenCustomerSectionsRe
             var parsed;
             var config;
 
-            if (!$block.length || $block.data('mageDropdownDialog')) {
+            if (!$block.length || $block.data('mageDropdownDialog') || $block.parent().hasClass('ui-dialog')) {
                 return;
             }
 
             raw = $block.attr('data-mage-init');
 
             if (raw) {
+                if (raw.indexOf('dropdownDialog') !== -1) {
+                    window.setTimeout(cleanOrphanDialogs, 800);
+                    window.setTimeout(cleanOrphanDialogs, 2600);
+                    window.setTimeout(cleanOrphanDialogs, 5200);
+                    return;
+                }
                 try {
                     parsed = JSON.parse(raw);
                     config = parsed.dropdownDialog || null;
@@ -341,12 +366,64 @@ define(['js/awa-customer-sections-gate', 'ko'], function (whenCustomerSectionsRe
 
             if (config) {
                 $block.dropdownDialog(config);
-                $block.closest('[data-block="minicart"], .minicart-wrapper').attr('data-awa-minicart-dropdown', '1');
+                var $wrapper = $block.closest('[data-block="minicart"], .minicart-wrapper');
+                $wrapper.attr('data-awa-minicart-dropdown', '1');
+                $wrapper.on('keydown', function (event) {
+                    if (event.key !== 'Escape' && event.keyCode !== 27) { return; }
+                    window.setTimeout(function () {
+                        var trigger = $wrapper.find('.showcart').first();
+                        var active = document.activeElement;
+                        var inside = active && $wrapper[0] && $wrapper[0].contains(active);
+                        if (!inside && trigger.length) { trigger.trigger('focus'); }
+                    }, 60);
+                });
                 bindDropdownStateSync();
                 scheduleDropdownStateSync();
             }
         });
     }
+
+
+    // Pedido do dono 2026-10-23: botões dos cards em largura máxima. Aplicado
+    // inline-important (vence o CSS do site, que usa @layer e importants em camada).
+    // Duplicado aqui porque o customer-runtime não carrega na home (defer).
+    function initCardsFullWidthButtons() {
+        if (window.__awaCardsFullWidth) { return; }
+        window.__awaCardsFullWidth = true;
+        var apply = function () {
+            var cards = document.querySelectorAll('.products-grid .item-product, .products-grid .product-item, .awa-shelf .item-product, .content-top-home .item-product, .item-product.awa-carousel-card-slot');
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var btn = card.querySelector('.action.tocart, button.tocart, .btn-add-to-cart');
+                if (!btn) { continue; }
+                var wrappers = [card.querySelector('.product-info-cart'), card.querySelector('.actions-primary'), btn.closest('form')];
+                for (var w = 0; w < wrappers.length; w++) {
+                    var el = wrappers[w];
+                    if (!el) { continue; }
+                    el.style.setProperty('width', '100%', 'important');
+                    el.style.setProperty('max-width', 'none', 'important');
+                    el.style.setProperty('padding-inline', '0', 'important');
+                    el.style.setProperty('margin-inline', '0', 'important');
+                    el.style.setProperty('box-sizing', 'border-box', 'important');
+                }
+                btn.style.setProperty('width', '100%', 'important');
+                btn.style.setProperty('max-width', 'none', 'important');
+                btn.style.setProperty('justify-content', 'center', 'important');
+                btn.style.setProperty('box-sizing', 'border-box', 'important');
+            }
+        };
+        apply();
+        var t = null;
+        var mo = new MutationObserver(function () {
+            if (t) { return; }
+            t = window.setTimeout(function () { t = null; apply(); }, 250);
+        });
+        var targets = document.querySelectorAll('.products-grid, .columns, .column.main, .content-top-home');
+        for (var k = 0; k < targets.length; k++) { mo.observe(targets[k], { childList: true, subtree: true }); }
+        window.setTimeout(apply, 1200);
+        window.setTimeout(apply, 3000);
+    }
+    initCardsFullWidthButtons();
 
     function scheduleDropdownDialogInit() {
         [0, 250, 1000, 2500].forEach(function (delay) {
@@ -365,6 +442,9 @@ define(['js/awa-customer-sections-gate', 'ko'], function (whenCustomerSectionsRe
         var contentWrapper = document.getElementById('minicart-content-wrapper');
 
         if (contentWrapper && ko.dataFor(contentWrapper)) {
+            // KO já ligado (x-magento-init em rotas não-home): apenas aposenta o shell
+            // de carregamento da home e segue o fluxo normal.
+            hydrateDeferredMinicartShell();
             if (payload.loaderUrl) {
                 require(['Magento_Ui/js/block-loader'], function (blockLoader) {
                     blockLoader(payload.loaderUrl);

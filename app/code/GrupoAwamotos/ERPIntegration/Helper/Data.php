@@ -278,6 +278,99 @@ class Data extends AbstractHelper
         );
     }
 
+    /**
+     * Portao de publicacao (CatalogPublicationGuard): desabilita o que esta visivel mas
+     * nao existe no Sectra ou esta com preco de placeholder. Desligado por padrao.
+     */
+    public function isPublicationGateEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PREFIX . 'sync_products/publication_gate_enabled',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Enquanto verdadeiro o portao so registra o que faria. Padrao: verdadeiro.
+     * Ausencia de configuracao tambem significa dry-run: o lado seguro e o padrao.
+     */
+    public function isPublicationGateDryRun(): bool
+    {
+        $value = $this->scopeConfig->getValue(
+            self::XML_PREFIX . 'sync_products/publication_gate_dry_run',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $value === null || $value === '' || (bool) (int) $value;
+    }
+
+    /**
+     * Fracao maxima (0-1) do catalogo habilitado que o portao desabilita numa passada.
+     */
+    public function getPublicationGateMaxRatio(): float
+    {
+        $percent = (float) $this->scopeConfig->getValue(
+            self::XML_PREFIX . 'sync_products/publication_gate_max_percent',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $percent > 0 && $percent <= 100 ? $percent / 100 : 0.10;
+    }
+
+    /**
+     * Escopo de produtos que a loja deve publicar.
+     *
+     * POR QUE EXISTE: o filtro antigo (filter_comercializa) publica apenas
+     * CKCOMERCIALIZA='S' — 631 produtos. Medi 432 produtos ATIVOS com preço
+     * na tabela padrão (R$ 12.076,46) que ficavam fora por causa desse flag.
+     * O dono pediu "todos os anúncios ativos no Sectra no B2B".
+     *
+     * Modos:
+     *   comercializa (PADRÃO, comportamento histórico): CCKATIVO='S' AND CKCOMERCIALIZA='S'
+     *   uniao:      CCKATIVO='S' AND (CKCOMERCIALIZA='S' OR VLRVDSUG > 0)   <-- RECOMENDADO
+     *   com_preco:  CCKATIVO='S' AND VLRVDSUG > 0   <-- CUIDADO: SUBSTITUI o criterio
+     *               e REMOVE da loja os comercializaveis sem preco na lista padrao.
+     *               Medido em 05/10/2026: 103 produtos (102 deles com preco valido no
+     *               Magento) sairiam. Use 'uniao' para somar sem perder.
+     *   todos:      CCKATIVO='S'
+     *
+     * Sem configuração explícita, mantém o comportamento antigo para não haver surpresa.
+     */
+    /**
+     * Classe fiscal padrao dos produtos.
+     *
+     * O ProductSync nao definia tax_class_id e 498 produtos ficaram com 0 (None)
+     * enquanto 678 tinham 2 (Taxable Goods) — medido em 05/10/2026. Sem regra de
+     * imposto isso nao altera o preco hoje, mas se houver regra um dia os produtos
+     * sem classe ficariam fora do calculo.
+     *
+     * Le a config do Magento (tax/classes/default_product_tax_class); se vazia,
+     * usa 2 (Taxable Goods), que e o padrao do proprio Magento.
+     */
+    public function getDefaultTaxClassId(): int
+    {
+        $id = (int) $this->scopeConfig->getValue(
+            'tax/classes/default_product_tax_class',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $id > 0 ? $id : 2;
+    }
+
+    public function getProductScope(): string
+    {
+        $scope = (string) $this->scopeConfig->getValue(
+            self::XML_PREFIX . 'sync_products/scope',
+            ScopeInterface::SCOPE_STORE
+        );
+        $scope = strtolower(trim($scope));
+        if (in_array($scope, ['comercializa', 'uniao', 'com_preco', 'todos'], true)) {
+            return $scope;
+        }
+        // retrocompatível: sem 'scope', vale o booleano antigo
+        return $this->filterComercializa() ? 'comercializa' : 'todos';
+    }
+
     public function isStockSyncEnabled(): bool
     {
         return $this->isEnabled() && $this->scopeConfig->isSetFlag(

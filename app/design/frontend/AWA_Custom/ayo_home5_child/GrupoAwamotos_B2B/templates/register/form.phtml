@@ -411,6 +411,33 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
                     </div>
                 </div>
 
+                <?php
+                /* Captcha anti-bot (2026-10-05): o bloco e criado AQUI em vez de vir do layout,
+                   porque este formulario e custom e o layout do tema nao injetava o filho
+                   'captcha' (getChildHtml retornava vazio). Criar direto garante a renderizacao. */
+                $b2bCaptchaHtml = '';
+                try {
+                    $b2bCaptchaBlock = $block->getLayout()->createBlock(\Magento\Captcha\Block\Captcha::class);
+                    if ($b2bCaptchaBlock) {
+                        $b2bCaptchaBlock->setFormId('user_create');
+                        $b2bCaptchaBlock->setImgWidth(230);
+                        $b2bCaptchaBlock->setImgHeight(50);
+                        $b2bCaptchaHtml = $b2bCaptchaBlock->toHtml();
+                    }
+                } catch (\Throwable $e) {
+                    $b2bCaptchaHtml = '';
+                }
+                ?>
+                <?php if (trim((string)$b2bCaptchaHtml) !== ''): ?>
+                <div class="field b2b-field b2b-field-captcha" data-awa-captcha="1">
+                    <label class="label" for="captcha_user_create">
+                        <span><?= $block->escapeHtml(__('Verificação de segurança')) ?></span>
+                    </label>
+                    <?= /* @noEscape */ $b2bCaptchaHtml ?>
+                    <p class="b2b-field-note"><?= $block->escapeHtml(__('Confirme que você não é um robô para concluir o cadastro.')) ?></p>
+                </div>
+                <?php endif; ?>
+
                 <div class="actions-toolbar b2b-login-actions" hidden>
                     <div class="primary">
                         <button type="submit" class="b2b-btn-entrar create-b2b-account" title="<?= $block->escapeHtmlAttr(__('Criar Conta B2B')) ?>">
@@ -437,18 +464,6 @@ $privacyPolicyUrl = $block->escapeUrl($block->getUrl('privacy-policy-cookie-rest
     </div>
     </div>
 
-    <footer class="b2b-login-footer">
-        <a href="https://wa.me/5516997367588?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20para%20cadastro%20B2B"
-           class="b2b-login-whatsapp"
-           data-b2b-contact-track="register_help_whatsapp"
-           data-b2b-contact-channel="whatsapp"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="<?= $escaper->escapeHtmlAttr(__('Precisa de ajuda? Falar no WhatsApp')) ?>">
-            <?= $escaper->escapeHtml(__('Precisa de ajuda?')) ?>
-            <span class="b2b-login-whatsapp__brand"><?= $escaper->escapeHtml(__('WhatsApp')) ?></span>
-        </a>
-    </footer>
 </div><!-- /.b2b-register-page-shell -->
 
 <script type="text/x-magento-init">

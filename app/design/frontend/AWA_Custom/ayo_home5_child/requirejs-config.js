@@ -11,6 +11,7 @@ var config = {
     map: {
         '*': {
             awaCustomCompatBootstrap: 'js/awa-custom-compat-bootstrap',
+            'Magento_Tax/js/view/checkout/summary/shipping': 'js/view/checkout/summary/shipping-acombinar',
             /* Luma Magento_Theme/js/theme ativa mage/sticky no .cart-summary e colide
              * com position:sticky CSS + footer. Usar shim leve → theme-heavy (skip cart). */
             'Magento_Theme/js/theme': 'js/theme',
@@ -28,6 +29,9 @@ var config = {
              * Manter alinhado a GrupoAwamotos\Theme\Model\MinicartAssetVersion::RUNTIME */
             'Magento_Checkout/template/minicart/content.html':
                 'Magento_Checkout/template/minicart/content.html?v=20260817-mage-close-r3'
+        },
+        'js/view/checkout/summary/shipping-acombinar': {
+            'Magento_Tax/js/view/checkout/summary/shipping': 'Magento_Tax/js/view/checkout/summary/shipping'
         }
     },
     paths: {
@@ -55,7 +59,6 @@ var config = {
         'awa-link-a11y-hotfix': 'js/awa-link-a11y-hotfix',
         'awa-b2b-plp-qty': 'js/awa-b2b-plp-qty',
         'awa-nav-cls-fix-reset': 'js/awa-nav-cls-fix-reset',
-        'awa-menu-controller': 'js/awa-menu-controller.dept-strip-r16.js?v=20260903-navfix-r1',
         'js/vendor/floating-ui.amd': 'js/vendor/floating-ui.amd.min',
         'js/vendor/floating-ui.core.umd': 'js/vendor/floating-ui.core.umd.min',
         'js/vendor/floating-ui.dom.umd': 'js/vendor/floating-ui.dom.umd.min',
@@ -77,6 +80,9 @@ var config = {
     },
     config: {
         mixins: {
+            'Magento_Checkout/js/action/update-shopping-cart': {
+                'js/mixin/cart-validation-coordinator': true
+            },
             'mage/apply/main': {
                 'js/mixin-mage-apply-safe': true
             },
@@ -106,6 +112,13 @@ var config = {
             },
             'Magento_Checkout/js/view/shipping-information/address-renderer/default': {
                 'js/mixin/shipping-address-telephone': true
+            },
+            // Missão estabilização 2026-10-22: "Frete a combinar" não exibe R$ 0,00.
+            'Magento_Tax/js/view/checkout/summary/shipping': {
+                'js/awa-tax-shipping-mixin': true
+            },
+            'Magento_Tax/js/view/checkout/cart/totals/shipping': {
+                'js/awa-tax-shipping-mixin': true
             }
         },
         text: {

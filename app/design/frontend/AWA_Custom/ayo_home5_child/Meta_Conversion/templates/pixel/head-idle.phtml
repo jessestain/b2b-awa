@@ -31,13 +31,24 @@
 <?php
 $product = $block->getCurrentProduct();
 if ($product !== null):
+    // ACHADO SEO-001: sem o gate, o preço de catálogo ia para a Meta em visitante anônimo.
+    // Fail-closed: sem gate válido, ou em erro, o value NÃO é enviado.
+    $awaPixelGate = $block->getData('b2b_gate');
+    $awaPixelPricesVisible = false;
+    if ($awaPixelGate instanceof \GrupoAwamotos\B2B\ViewModel\PdpGate) {
+        try {
+            $awaPixelPricesVisible = $awaPixelGate->canViewPrices();
+        } catch (\Throwable $exception) {
+            $awaPixelPricesVisible = false;
+        }
+    }
 ?>
         fbq('track', 'ViewContent', {
             content_name: '<?= $block->escapeJs($product->getName()) ?>',
             content_ids: ['<?= $block->escapeJs($product->getSku()) ?>'],
-            content_type: 'product',
+            content_type: 'product'<?php if ($awaPixelPricesVisible): ?>,
             value: <?= (float) $product->getFinalPrice() ?>,
-            currency: '<?= /* @noEscape */ $currencyCode ?>'
+            currency: '<?= /* @noEscape */ $currencyCode ?>'<?php endif; ?>
         });
 <?php endif; ?>
 <?php

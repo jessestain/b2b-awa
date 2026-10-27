@@ -37,6 +37,102 @@ define(['Magento_Customer/js/customer-data'], function (customerData) {
 
 
 
+
+    // Auditoria 2026-10-23 (Escape no minicart): o bootstrap do minicart nao
+    // carrega fora da home; este runtime roda em todas as paginas. Fecha o
+    // dropdown e devolve o foco ao gatilho quando o foco esta dentro do dialogo.
+    function initMinicartEscapeReturn() {
+        if (window.__awaMinicartEsc) { return; }
+        window.__awaMinicartEsc = true;
+        window.addEventListener('keydown', function (event) {
+            if (event.key !== 'Escape' && event.keyCode !== 27) { return; }
+            var dialogEl = document.querySelector('.block-minicart, #minicart-content-wrapper');
+            if (!dialogEl) { return; }
+            var rect = dialogEl.getBoundingClientRect();
+            if (rect.height === 0 || rect.width === 0) { return; }
+            var wrapper = dialogEl.closest('.minicart-wrapper, [data-block="minicart"]') || dialogEl.parentElement;
+            var active = document.activeElement;
+            if (!active || !wrapper || !wrapper.contains(active)) { return; }
+            event.preventDefault();
+            var dialog = wrapper.querySelector('[data-role="dropdownDialog"]');
+            if (dialog && window.jQuery) {
+                var $d = window.jQuery(dialog);
+                if ($d.data && $d.data('mageDropdownDialog')) {
+                    try { $d.dropdownDialog('close'); } catch (e) { /* ja fechado */ }
+                }
+            }
+            var trigger = wrapper.querySelector('.showcart');
+            if (trigger) {
+                var refocus = function () {
+                    try { trigger.focus({ preventScroll: true }); } catch (e) { trigger.focus(); }
+                };
+                window.setTimeout(refocus, 150);
+                window.setTimeout(refocus, 500);
+            }
+        }, true);
+    }
+    initMinicartEscapeReturn();
+
+
+    // Pedido do dono 2026-10-23: "aproveita máximo espaço dos botões" — o CSS do
+    // site usa @layer (importants em layer vencem os sem layer), então a regra CSS
+    // era inócua. Aplicamos inline !important nos cards de produto (inline
+    // important vence qualquer folha): botão 100% + zera recuos dos wrappers.
+    function initCardsFullWidthButtons() {
+        if (window.__awaCardsFullWidth) { return; }
+        window.__awaCardsFullWidth = true;
+        var apply = function () {
+            var cards = document.querySelectorAll('.products-grid .item-product, .products-grid .product-item, .awa-shelf .item-product, .content-top-home .item-product, .item-product.awa-carousel-card-slot');
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var btn = card.querySelector('.action.tocart, button.tocart, .btn-add-to-cart');
+                if (!btn) { continue; }
+                var wrappers = [card.querySelector('.product-info-cart'), card.querySelector('.actions-primary'), btn.closest('form')];
+                for (var w = 0; w < wrappers.length; w++) {
+                    var el = wrappers[w];
+                    if (!el) { continue; }
+                    el.style.setProperty('width', '100%', 'important');
+                    el.style.setProperty('max-width', 'none', 'important');
+                    el.style.setProperty('padding-inline', '0', 'important');
+                    el.style.setProperty('margin-inline', '0', 'important');
+                    el.style.setProperty('box-sizing', 'border-box', 'important');
+                }
+                btn.style.setProperty('width', '100%', 'important');
+                btn.style.setProperty('max-width', 'none', 'important');
+                btn.style.setProperty('justify-content', 'center', 'important');
+                btn.style.setProperty('box-sizing', 'border-box', 'important');
+            }
+        };
+        apply();
+        // grids de catálogo carregam por AJAX: reaplica quando houver mutações (throttle).
+        var t = null;
+        var mo = new MutationObserver(function () {
+            if (t) { return; }
+            t = window.setTimeout(function () { t = null; apply(); }, 250);
+        });
+        var targets = document.querySelectorAll('.products-grid, .columns, .column.main, .content-top-home');
+        for (var k = 0; k < targets.length; k++) { mo.observe(targets[k], { childList: true, subtree: true }); }
+        if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', apply); }
+    }
+    initCardsFullWidthButtons();
+
+        function showPromoBarForGuest() {
+            var promo = document.getElementById('awa-b2b-promo-bar')
+                || document.querySelector('.awa-b2b-promo-bar');
+            if (!promo) { return; }
+            if (promo.getAttribute('data-awa-promo-hidden') === '1') { return; }
+            if (document.documentElement.classList.contains('awa-b2b-promo-dismissed')) { return; }
+            promo.classList.add('awa-b2b-promo-visible');
+            promo.style.setProperty('display', 'flex', 'important');
+            promo.style.removeProperty('visibility');
+            promo.style.removeProperty('height');
+            promo.style.removeProperty('max-height');
+            promo.style.removeProperty('overflow');
+            promo.removeAttribute('aria-hidden');
+            promo.removeAttribute('inert');
+            document.documentElement.classList.add('awa-auth-resolved-guest');
+        }
+
         function hidePromoBarForLoggedIn() {
             let promo = document.getElementById('awa-b2b-promo-bar')
                 || document.querySelector('.awa-b2b-promo-bar');
@@ -192,6 +288,7 @@ define(['Magento_Customer/js/customer-data'], function (customerData) {
             customerLine1 = prompt.querySelector('.awa-header-account-prompt__customer .awa-header-account-prompt__line1');
 
             prompt.setAttribute('data-awa-auth-state', logged ? 'customer' : 'guest');
+            if (!logged) { showPromoBarForGuest(); }
             prompt.setAttribute('data-awa-auth-settled', '1');
             prompt.classList.toggle('awa-header-account-prompt--revealed', logged);
             prompt.classList.toggle('awa-header-account-prompt--long-name', label.length > 16);

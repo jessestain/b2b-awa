@@ -77,6 +77,10 @@ if ($serverIsLoggedIn && $accountPrompt) {
 // (.awa-header-right-col:has(.b2b-status-panel)) e via JS (hidePromptForB2b).
 
 $useServerAuthHint = $isAccountSurface && $serverIsLoggedIn;
+// Missão estabilização 2026-10-22: o SSR continua com o default de visitante nas
+// páginas FPC (entrada de cache público — estado SSR não pode depender de cookie).
+// O estado neutro para sessões com conteúdo privado é aplicado NO CLIENTE, antes
+// do primeiro paint, pelo bloco awa.private.session.hint (html.awa-private-session).
 $initialAuthState = $useServerAuthHint ? 'customer' : 'guest';
 $initialGreeting = (string) __('Olá!');
 
@@ -94,6 +98,10 @@ if ($useServerAuthHint) {
 $authPendingAttr = ($isAccountSurface && !$useServerAuthHint) ? ' data-awa-auth-pending="true"' : '';
 $guestHiddenAttr = $useServerAuthHint ? ' hidden aria-hidden="true"' : '';
 $customerHiddenAttr = $useServerAuthHint ? '' : ' hidden aria-hidden="true"';
+// Span de estado neutro: sempre presente no DOM, oculto por padrão.
+// A classe html.awa-private-session (definida por script inline antes do paint)
+// o exibe no lugar do guest até o customer-data hidratar.
+$unknownHiddenAttr = ' hidden aria-hidden="true"';
 $longNameClass = ($useServerAuthHint && mb_strlen($serverFirstname ?: $serverFullname) > 16)
     ? ' awa-header-account-prompt--long-name'
     : '';
@@ -102,6 +110,8 @@ $serverHintClass = $useServerAuthHint ? ' awa-header-account-prompt--server-hint
 $layoutHandles = $block->getLayout()->getUpdate()->getHandles();
 $isHomePage = in_array('cms_index_index', $layoutHandles, true);
 ?>
+<?php /* Auditoria 2026-10-23 A02: guard pre-paint (cookie ou localStorage). */ ?>
+<script data-awa-prompt-guard="1">(function(){'use strict';try{var pc=document.cookie.indexOf('private_content_version')!==-1;var ls=false;try{var raw=localStorage.getItem('mage-cache-storage');if(raw){var p=JSON.parse(raw);ls=!!(p&&p.customer&&(p.customer.firstname||p.customer.fullname));}}catch(e){}if(pc||ls){document.documentElement.classList.add('awa-private-session');document.documentElement.setAttribute('data-awa-private-session','1');}}catch(e){}})();</script>
 <div class="awa-header-contact-links awa-header-account-prompt<?= $block->escapeHtmlAttr($longNameClass . $serverHintClass) ?>"
      data-awa-auth-state="<?= $block->escapeHtmlAttr($initialAuthState) ?>"<?= /* @noEscape */ $authPendingAttr ?>
      data-awa-eager-auth="<?= $isAccountSurface ? '1' : '0' ?>"
@@ -110,6 +120,7 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
      data-awa-login-url="<?= $block->escapeHtmlAttr($loginUrl) ?>"
      data-awa-label-my-account="<?= $block->escapeHtmlAttr((string) __('Minha conta')) ?>"
      data-awa-label-signin="<?= $block->escapeHtmlAttr((string) __('Entrar na conta')) ?>"
+     data-awa-label-prices="<?= $block->escapeHtmlAttr((string) __('Para ver os preços')) ?>"
      role="group"
      aria-label="<?= $block->escapeHtmlAttr(__('Área do cliente')) ?>">
     <span class="awa-header-account-prompt__live awa-sr-live"
@@ -153,6 +164,19 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
                    href="<?= $block->escapeUrl($registerUrl) ?>"
                    rel="nofollow">
                     <?= $block->escapeHtml(__('cadastre-se')) ?>
+                </a>
+            </span>
+        </span>
+        <?php /* Estado desconhecido (FPC + sessão com conteúdo privado): neutro até hidratar.
+                 Geometry idêntica ao guest (line1+line2) para não gerar CLS. */ ?>
+        <span class="awa-header-account-prompt__loading"<?= /* @noEscape */ $unknownHiddenAttr ?>>
+            <span class="awa-header-account-prompt__line1" aria-hidden="true">…</span>
+            <span class="awa-header-account-prompt__line2">
+                <a class="awa-header-account-prompt__link"
+                   href="<?= $block->escapeUrl($accountUrl) ?>"
+                   rel="nofollow"
+                   data-awa-auth-link="true">
+                    <?= $block->escapeHtml(__('Minha conta')) ?>
                 </a>
             </span>
         </span>
@@ -216,6 +240,71 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
         </span>
     </span>
 </div>
+<script>
+/* F24 (19/10/2026) — pintura precoce do cumprimento: lê o customer-data cacheado
+   (localStorage mage-cache-storage) e aplica "Olá, {nome}" antes do runtime
+   de account-prompt. O runtime continua revalidando via customer-data (fonte da verdade).
+   Sem rede, sem conteúdo privado no HTML cacheado. */
+(function (w, d) {
+    'use strict';
+
+    var root = d.querySelector('.awa-header-account-prompt');
+    if (!root || root.getAttribute('data-awa-auth-state') === 'customer') {
+        return;
+    }
+
+    function pick(data) {
+        if (!data || typeof data !== 'object') {
+            return '';
+        }
+        var name = String(data.firstname || data.fullname || data.name || '').trim();
+        if (!name) {
+            return '';
+        }
+        return name.length > 20 ? name.slice(0, 20) + '...' : name;
+    }
+
+    var raw;
+    try {
+        raw = w.localStorage.getItem('mage-cache-storage');
+    } catch (storageError) {
+        return;
+    }
+    if (!raw) {
+        return;
+    }
+
+    var parsed;
+    try {
+        parsed = JSON.parse(raw);
+    } catch (parseError) {
+        return;
+    }
+
+    var name = pick(parsed && parsed.customer);
+    if (!name) {
+        return;
+    }
+
+    var guest = root.querySelector('.awa-header-account-prompt__guest');
+    var customer = root.querySelector('.awa-header-account-prompt__customer');
+    var line1 = customer ? customer.querySelector('.awa-header-account-prompt__line1') : null;
+
+    if (line1) {
+        line1.textContent = 'Olá, ' + name + '!';
+    }
+    if (customer) {
+        customer.hidden = false;
+        customer.removeAttribute('aria-hidden');
+    }
+    if (guest) {
+        guest.hidden = true;
+        guest.setAttribute('aria-hidden', 'true');
+    }
+    root.setAttribute('data-awa-auth-state', 'customer');
+    root.removeAttribute('data-awa-auth-pending');
+})(window, document);
+</script>
 <?php if ($isCartPageOnly): ?>
 <script>
 (function (w, d, src) {
@@ -249,34 +338,143 @@ $isHomePage = in_array('cms_index_index', $layoutHandles, true);
 <?php endif; ?>
 <?php
 /**
- * B2B Panel Hydration — carregado em TODAS as páginas quando B2B está ativo.
+ * B2B Panel Hydration — CORRECAO-1 (2026-10-24): carregamento CONDICIONAL.
  *
- * Estratégia de carregamento:
- * - CSS: dois <link> não-bloqueantes (media="print" onload trick) — zero CLS.
- * - JS: <script defer> — carrega junto com awa-header-account-prompt.min.js, não precisa
- *   esperar RequireJS. O módulo tem fast-path localStorage (injeção instantânea no
- *   DOMContentLoaded) + slow-path RequireJS para sincronizar atualizações.
+ * 1. Superficie decidida server-side por handle (deterministico por URL -> FPC-safe):
+ *    apenas paginas FPC onde o painel hidrata o header (home/PLP/PDP/busca/quickorder).
+ *    Paginas de conta tem o painel server-rendered (o modulo faria noop).
+ * 2. Cliente autenticado decidido CLIENT-SIDE (mage-cache-storage / customer-data):
+ *    visitante anonimo NAO baixa nem inicializa os assets do painel.
+ * 3. Nenhum dado privado vai para o HTML publico (somente URLs + codigo generico).
  *
- * Páginas de conta já têm o painel server-rendered; o módulo detecta isso e faz noop.
+ * O modulo mantem fast-path localStorage (DOMContentLoaded) + slow-path RequireJS.
  */
-if ($isB2bEnabled):
-    $b2bPanelCssUrl     = $block->getViewFileUrl('GrupoAwamotos_B2B::css/header/status-panel.css');
+$b2bPanelHandles = [
+    'cms_index_index',
+    'catalog_category_view',
+    'catalog_product_view',
+    'catalogsearch_result_index',
+    'b2b_quickorder_index',
+];
+$isB2bPanelSurface = in_array($fullActionName, $b2bPanelHandles, true);
+if ($isB2bEnabled && $isB2bPanelSurface):
+    $b2bPanelCssUrl      = $block->getViewFileUrl('GrupoAwamotos_B2B::css/header/status-panel.css');
     $b2bPanelThemeCssUrl = $block->getViewFileUrl('css/awa-b2b-status-panel.css');
-    $b2bHydrateJsUrl    = $block->getViewFileUrl('GrupoAwamotos_B2B::js/b2b-panel-hydrate.js');
+    $b2bHydrateJsUrl     = $block->getViewFileUrl('GrupoAwamotos_B2B::js/b2b-panel-hydrate.js');
     $cssBust = '20260716-v75-b2b-shell-header';
+    $b2bPanelCssFull      = $b2bPanelCssUrl . '?v=' . $cssBust;
+    $b2bPanelThemeCssFull = $b2bPanelThemeCssUrl . '?v=' . $cssBust;
+    $b2bHydrateJsFull     = $b2bHydrateJsUrl . '?v=' . $cssBust;
 ?>
-<?php /* CSS não-bloqueante — pattern: media="print" swap para "all" no onload */ ?>
-<link rel="stylesheet"
-      href="<?= $block->escapeUrl($b2bPanelCssUrl) ?>?v=<?= $cssBust ?>"
-      media="print"
-      onload="this.media='all'"
-      data-awa-b2b-panel-css="1">
-<link rel="stylesheet"
-      href="<?= $block->escapeUrl($b2bPanelThemeCssUrl) ?>?v=<?= $cssBust ?>"
-      media="print"
-      onload="this.media='all'"
-      data-awa-b2b-status-panel="1">
-<?php /* JS defer — carrega em paralelo, executa após parse do HTML.
-        UMD: funciona sem RequireJS (fast-path localStorage) e com RequireJS (slow-path). */ ?>
-	<script src="<?= $block->escapeUrl($b2bHydrateJsUrl) ?>?v=<?= $block->escapeHtmlAttr($cssBust) ?>" defer data-awa-b2b-hydrate="1"></script>
+<script data-awa-b2b-panel-loader="1">
+/* CORRECAO-1 (2026-10-24) — loader condicional do painel B2B.
+   Injeta CSS+JS do painel SOMENTE para cliente autenticado (mage-cache-storage /
+   customer-data). Visitante anonimo nao baixa nenhum asset. Sem dados privados aqui. */
+(function (w, d) {
+    'use strict';
+    var CSS_A = <?= /* @noEscape */ json_encode($block->escapeUrl($b2bPanelCssFull), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    var CSS_B = <?= /* @noEscape */ json_encode($block->escapeUrl($b2bPanelThemeCssFull), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    var JS_URL = <?= /* @noEscape */ json_encode($block->escapeUrl($b2bHydrateJsFull), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    var injected = false;
+
+    function isCustomer(data) {
+        return !!(data && data.customer
+            && (data.customer.firstname || data.customer.fullname || data.customer.email));
+    }
+
+    function inject() {
+        if (injected || d.querySelector('script[data-awa-b2b-hydrate="1"]')) {
+            return true;
+        }
+
+        var isLogged = false;
+        var raw = null;
+        try {
+            raw = w.localStorage.getItem('mage-cache-storage');
+        } catch (storageError) {
+            raw = null;
+        }
+        if (raw) {
+            var parsed = null;
+            try {
+                parsed = JSON.parse(raw);
+            } catch (parseError) {
+                parsed = null;
+            }
+            isLogged = isCustomer(parsed);
+        } else if (w.customerData && typeof w.customerData.get === 'function') {
+            try {
+                isLogged = isCustomer(w.customerData.get('customer')());
+            } catch (customerDataError) {
+                isLogged = false;
+            }
+        }
+
+        if (!isLogged) {
+            return false; /* guest: fail-closed neutro, nenhum download */
+        }
+
+        injected = true;
+
+        var cssA = d.createElement('link');
+        cssA.rel = 'stylesheet';
+        cssA.href = CSS_A;
+        cssA.media = 'print';
+        cssA.onload = function () { this.media = 'all'; };
+        cssA.setAttribute('data-awa-b2b-panel-css', '1');
+
+        var cssB = d.createElement('link');
+        cssB.rel = 'stylesheet';
+        cssB.href = CSS_B;
+        cssB.media = 'print';
+        cssB.onload = function () { this.media = 'all'; };
+        cssB.setAttribute('data-awa-b2b-status-panel', '1');
+
+        var script = d.createElement('script');
+        script.src = JS_URL;
+        script.defer = true;
+        script.setAttribute('data-awa-b2b-hydrate', '1');
+
+        var target = d.head || d.documentElement;
+        target.appendChild(cssA);
+        target.appendChild(cssB);
+        target.appendChild(script);
+        return true;
+    }
+
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', inject, { once: true });
+        w.addEventListener('load', function () { inject(); });
+    } else {
+        inject();
+    }
+}(window, document));
+</script>
 <?php endif; ?>
+
+<script data-awa-form-key-sync="1">
+/* CORRECAO-DEFINITIVA-CACHE (2026-10-24): sincroniza inputs form_key com o
+   cookie da sessao atual. HTML cacheado pode conter form_key de outra sessao;
+   o cookie form_key e sempre o da sessao corrente (VCL nao entrega o do cache). */
+(function (d) {
+    'use strict';
+    function readKey() {
+        var m = d.cookie.match(/(?:^|;\s*)form_key=([^;]+)/);
+        return m ? decodeURIComponent(m[1]) : '';
+    }
+    function sync() {
+        var key = readKey();
+        if (!key) { return; }
+        var inputs = d.querySelectorAll('input[name="form_key"]');
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value !== key) { inputs[i].value = key; }
+        }
+    }
+    d.addEventListener('submit', sync, true);
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', sync, { once: true });
+    } else {
+        sync();
+    }
+})(document);
+</script>

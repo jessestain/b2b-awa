@@ -45,6 +45,8 @@ define([
     return function (config, element) {
         let messages = config.messages || {};
         let addUrl = config.addUrl || '';
+        // Missão estabilização 2026-10-22 (P2): preview do produto por SKU.
+        let lookupUrl = config.lookupUrl || (addUrl ? addUrl.replace(/\/add\/?$/, '/lookup') : '');
         let initialRows = parseInt(config.initialRows, 10) || 5;
         var skuAriaLabel = messages.skuAriaLabel || $t('Código SKU');
         var qtyAriaLabel = messages.qtyAriaLabel || $t('Quantidade');
@@ -247,9 +249,175 @@ define([
             $submitButton.text(text);
         }
 
+        /**
+         * Missão estabilização 2026-10-22 (P2): consulta o produto por SKU e
+         * apresenta nome, imagem, preço autorizado, disponibilidade e regras de
+         * quantidade na própria linha, antes da inclusão. Nunca adiciona sozinho.
+         */
+        function initSkuLookup($input)
+        {
+            if (!lookupUrl) {
+                return;
+            }
+
+            var $row = $input.closest('.quickorder-row');
+            var $detail = $row.find('.sku-detail');
+            var delay = null;
+            var nonce = 0;
+
+            if (!$detail.length) {
+                $detail = $('<div class="sku-detail" role="status" aria-live="polite" hidden></div>');
+                $row.append($detail);
+            }
+
+            function clearDetail()
+            {
+                nonce += 1;
+                if (delay) {
+                    clearTimeout(delay);
+                    delay = null;
+                }
+                $detail.empty().attr('hidden', 'hidden');
+            }
+
+            function renderNotFound()
+            {
+                $detail
+                    .attr('class', 'sku-detail sku-detail--error')
+                    .removeAttr('hidden')
+                    .html('<span class="sku-detail__status">' + escapeHtml($t('SKU não encontrado ou sem preço autorizado para a sua conta.')) + '</span>');
+            }
+
+            function renderItem(item)
+            {
+                var html = '';
+                var availability = (item.availability && item.availability.label)
+                    ? item.availability.label : '';
+                var priceHtml = (item.price && item.price.html) ? item.price.html : '';
+                var qtyRules = [];
+                var q = item.qty || {};
+
+                if (q.min) { qtyRules.push($t('Mínimo %1').replace('%1', q.min)); }
+                if (q.step && q.step > 1) { qtyRules.push($t('Múltiplo de %1').replace('%1', q.step)); }
+
+                html += '<div class="sku-detail__media">';
+                if (item.image) {
+                    html += '<img src="' + escapeHtml(item.image) + '" alt="" width="48" height="48" loading="lazy">';
+                }
+                html += '</div>';
+                html += '<div class="sku-detail__info">';
+                html += '<span class="sku-detail__name">' + escapeHtml(item.name || item.sku || '') + '</span>';
+                if (priceHtml) {
+                    html += '<span class="sku-detail__price">' + priceHtml + '</span>';
+                }
+                if (availability) {
+                    html += '<span class="sku-detail__stock">' + escapeHtml(availability) + '</span>';
+                }
+                if (qtyRules.length) {
+                    html += '<span class="sku-detail__rules">' + escapeHtml(qtyRules.join(' · ')) + '</span>';
+                }
+                if (item.requires_config) {
+                    html += '<span class="sku-detail__config">' + escapeHtml($t('Este produto exige a escolha de opções. Abra a página do produto para configurar.')) + '</span>';
+                }
+                if (item.addable === false) {
+                    html += '<span class="sku-detail__blocked">' + escapeHtml($t('Este item não está disponível para compra na sua conta.')) + '</span>';
+                }
+                html += '</div>';
+
+                $detail
+                    .attr('class', 'sku-detail sku-detail--ok')
+                    .removeAttr('hidden')
+                    .html(html);
+            }
+
+            function lookup(sku)
+            {
+                var currentNonce;
+                var query = $.trim(sku || '');
+
+                if (query.length < 3) {
+                    clearDetail();
+                    return;
+                }
+
+                nonce += 1;
+                currentNonce = nonce;
+
+                $detail
+                    .attr('class', 'sku-detail sku-detail--loading')
+                    .removeAttr('hidden')
+                    .html('<span class="sku-detail__status">' + escapeHtml($t('Consultando produto…')) + '</span>');
+
+                $.ajax({
+                    url: lookupUrl,
+                    data: { q: query },
+                    type: 'GET',
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (currentNonce !== nonce) {
+                        return;
+                    }
+
+                    if (data && data.success && data.found && data.item) {
+                        renderItem(data.item);
+                        return;
+                    }
+
+                    renderNotFound();
+                }).fail(function (_jqXHR, textStatus) {
+                    if (textStatus === 'abort' || currentNonce !== nonce) {
+                        return;
+                    }
+                    renderNotFound();
+                });
+            }
+
+            $input.on('input', function () {
+                var value = $.trim($(this).val());
+
+                if (delay) {
+                    clearTimeout(delay);
+                }
+
+                if (value.length < 3) {
+                    clearDetail();
+                    return;
+                }
+
+                delay = setTimeout(function () {
+                    lookup(value);
+                }, 450);
+            });
+
+            $input.on('blur', function () {
+                var value = $.trim($(this).val());
+                if (value.length >= 3) {
+                    if (delay) {
+                        clearTimeout(delay);
+                    }
+                    lookup(value);
+                }
+            });
+
+            $input.on('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    var value = $.trim($(this).val());
+                    if (value.length >= 3) {
+                        event.preventDefault();
+                        if (delay) {
+                            clearTimeout(delay);
+                        }
+                        lookup(value);
+                    }
+                }
+            });
+        }
+
         function createRow()
         {
             rowIndex += 1;
+            var qtyDecreaseLabel = $t('Diminuir quantidade');
+            var qtyIncreaseLabel = $t('Aumentar quantidade');
 
             return [
                 '<div class="quickorder-row" data-index="', rowIndex, '">',
@@ -259,8 +427,15 @@ define([
                 ' aria-label="', escapeHtml(skuAriaLabel), '" aria-expanded="false" />',
                 '<div id="sku-suggestions-', rowIndex, '" class="sku-suggestions" role="listbox"',
                 ' aria-label="', escapeHtml(suggestionsAriaLabel), '" aria-hidden="true"></div>',
-                '<input type="number" name="items[', rowIndex, '][qty]" value="1" min="1" class="qty-input"',
-                ' aria-label="', escapeHtml(qtyAriaLabel), '" />',
+                // Missão estabilização 2026-10-22: stepper compartilhado (padrão do carrinho).
+                '<div class="qty-input-wrap awa-qty-stepper--shared" data-awa-qty-root="true">',
+                '<button type="button" class="awa-qty-btn" data-awa-role="qty-trigger" data-awa-direction="decrement"',
+                ' aria-label="', escapeHtml(qtyDecreaseLabel), '">−</button>',
+                '<input type="number" name="items[', rowIndex, '][qty]" value="1" min="1" step="1" class="qty-input"',
+                ' data-awa-role="qty-input" aria-label="', escapeHtml(qtyAriaLabel), '" />',
+                '<button type="button" class="awa-qty-btn" data-awa-role="qty-trigger" data-awa-direction="increment"',
+                ' aria-label="', escapeHtml(qtyIncreaseLabel), '">+</button>',
+                '</div>',
                 '<button type="button" class="btn-remove" title="', escapeHtml(removeAriaLabel), '" aria-label="',
                 escapeHtml(removeAriaLabel), '">&times;</button>',
                 '</div>'
@@ -273,6 +448,40 @@ define([
             $rowsContainer.append(html);
             var $lastRow = $rowsContainer.find('.quickorder-row:last');
             initSkuAutocomplete($lastRow.find('.sku-input'));
+            initSkuLookup($lastRow.find('.sku-input'));
+            initRowStepper($lastRow);
+        }
+
+        function initRowStepper($row)
+        {
+            // Stepper compartilhado da linha (componente do tema, mesmo do carrinho).
+            var $stepper = $row.find('[data-awa-qty-root]');
+            if (!$stepper.length) {
+                return;
+            }
+
+            // Quantidade digitada fora do intervalo é normalizada no blur/Enter
+            // (mesma política do catálogo de compra rápida; o servidor também clampa).
+            $stepper.find('input[type="number"]').on('change keydown', function (event) {
+                if (event.type === 'keydown' && event.key !== 'Enter') {
+                    return;
+                }
+
+                var el = this;
+                var value = parseInt(el.value, 10);
+
+                if (!Number.isFinite(value) || value < 1) {
+                    el.value = '1';
+                } else if (value > 9999) {
+                    el.value = '9999';
+                }
+            });
+
+            if (typeof window.require === 'function') {
+                window.require(['js/awa-qty-control'], function (qtyControl) {
+                    qtyControl({}, $stepper[0]);
+                });
+            }
         }
 
         function clearStatuses()

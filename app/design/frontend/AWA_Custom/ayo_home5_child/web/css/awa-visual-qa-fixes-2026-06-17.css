@@ -1,1373 +1,821 @@
-/* awa-visual-qa-fixes-2026-06-17.css — Playwright VQA auto-fixes (terminal wins) */
-
 html body#html-body .page-wrapper {
-  overflow-x: clip;
-  max-width: 100%;
+  overflow-x:clip;
+  max-width:100%
 }
-
-/* SSOT-1 Onda 1: gutter só no shell (.page-main / containers de seção).
-   .column.main e .cart-container NÃO repetem padding-inline (evita 16+16 no CMS mobile). */
-html body#html-body .page-main.container,
-html body#html-body .content-top-home .top-home-content.awa-home-section > .container,
-html body#html-body .main-detail,
-html body#html-body .b2b-login-shell,
-html body#html-body #b2b-register-shell {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px));
-  margin-inline: auto;
-  padding-inline: var(--awa-page-pad, clamp(12px, 4vw, 24px));
+html body#html-body #b2b-register-shell,html body#html-body .awa-main-header__inner.wp-header,html body#html-body .awa-main-header__inner[data-awa-header-row],html body#html-body .b2b-login-shell,html body#html-body .content-top-home .top-home-content.awa-home-section>.container,html body#html-body .header-wrapper-sticky .wp-header,html body#html-body .main-detail,html body#html-body .page-main.container {
+  box-sizing:border-box;
+  width:100%;
+  max-width:var(--awa-grid-shell-max,min(100%,1280px));
+  margin-inline:auto;
+  padding-inline:var(--awa-page-pad,clamp(12px,4vw,24px))
 }
-
-html body#html-body .awa-main-header__inner.wp-header,
-html body#html-body .awa-main-header__inner[data-awa-header-row],
-html body#html-body .header-wrapper-sticky .wp-header {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px));
-  margin-inline: auto;
-  padding-inline: var(--awa-page-pad, clamp(12px, 4vw, 24px));
+html body#html-body :is(button,.action,a.awa-btn,.b2b-btn,.btn) {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.375rem
 }
-
-html body#html-body :is(button, .action, a.awa-btn, .b2b-btn, .btn) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.375rem;
+html body#html-body :is(button,.action) :is(svg,i,.icon) {
+  flex-shrink:0;
+  line-height:1
 }
-
-html body#html-body :is(button, .action) :is(svg, i, .icon) {
-  flex-shrink: 0;
-  line-height: 1;
+html body#html-body .actions-toolbar :is(button,.action),html body#html-body .b2b-login-actions :is(button,.action),html body#html-body .toolbar.toolbar-products :is(button,.action) {
+  min-height:44px;
+  box-sizing:border-box
 }
-
-html body#html-body .actions-toolbar :is(button, .action),
-html body#html-body .b2b-login-actions :is(button, .action),
-html body#html-body .toolbar.toolbar-products :is(button, .action) {
-  min-height: 44px;
-  box-sizing: border-box;
+html body#html-body .awa-carousel-section .owl-stage-outer,html body#html-body .awa-carousel__viewport,html body#html-body .awa-shelf--carousel .awa-carousel__viewport,html body#html-body .swiper {
+  max-width:100%;
+  overflow:hidden
 }
-
-html body#html-body .awa-carousel__viewport,
-html body#html-body .awa-shelf--carousel .awa-carousel__viewport,
-html body#html-body .awa-carousel-section .owl-stage-outer,
-html body#html-body .swiper {
-  max-width: 100%;
-  overflow: hidden;
+html body#html-body :is(.item-product,.content-item-product,.product-item) {
+  box-sizing:border-box
 }
-
-html body#html-body :is(.item-product, .content-item-product, .product-item) {
-  box-sizing: border-box;
+html body#html-body .page-wrapper .awa-main-header,html body#html-body .page-wrapper .header-wrapper-sticky .page-header,html body#html-body .page-wrapper .header.content,html body#html-body .page-wrapper .page-header {
+  width:100%;
+  max-width:var(--awa-grid-shell-max,min(100%,1280px));
+  margin-inline:auto;
+  padding-inline:0;
+  box-sizing:border-box
 }
-
-/* Round 10 — alinhamento estrutural: header e shells de autenticação
-   SSOT-1 Onda 2: .awa-main-header (wrapper) NÃO aplica gutter — só sticky (mobile)
-   ou .awa-main-header__inner (desktop). Evita 16+24 no tablet CMS. */
-html body#html-body .page-wrapper .page-header,
-html body#html-body .page-wrapper .header.content,
-html body#html-body .page-wrapper .awa-main-header,
-html body#html-body .page-wrapper .header-wrapper-sticky .page-header {
-  width: 100%;
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px));
-  margin-inline: auto;
-  padding-inline: 0;
-  box-sizing: border-box;
+html body#html-body #b2b-login-shell,html body#html-body #b2b-register-shell,html body#html-body .b2b-login-shell,html body#html-body .login-container,html body#html-body.b2b-auth-shell .page-main,html body#html-body.b2b-register-index .page-main,html body#html-body.customer-account-login .page-main {
+  width:100%;
+  max-width:min(100%,560px);
+  margin-inline:auto;
+  box-sizing:border-box;
+  padding-inline:0
 }
-
-html body#html-body.b2b-auth-shell .page-main,
-html body#html-body.b2b-register-index .page-main,
-html body#html-body.customer-account-login .page-main,
-html body#html-body #b2b-login-shell,
-html body#html-body #b2b-register-shell,
-html body#html-body .b2b-login-shell,
-html body#html-body .login-container {
-  width: 100%;
-  max-width: min(100%, 560px);
-  margin-inline: auto;
-  box-sizing: border-box;
-  padding-inline: 0;
+html body#html-body.b2b-auth-shell .page-main.container,html body#html-body.b2b-register-index .page-main.container,html body#html-body.customer-account-login .page-main.container {
+  max-width:min(100%,560px);
+  padding-inline:0
 }
-
-html body#html-body.b2b-auth-shell .page-main.container,
-html body#html-body.b2b-register-index .page-main.container,
-html body#html-body.customer-account-login .page-main.container {
-  max-width: min(100%, 560px);
-  padding-inline: 0;
+html body#html-body.b2b-auth-shell .page-main .column.main,html body#html-body.b2b-auth-shell .page-main .columns,html body#html-body.b2b-register-index .page-main .column.main,html body#html-body.b2b-register-index .page-main .columns,html body#html-body.customer-account-login .page-main .column.main,html body#html-body.customer-account-login .page-main .columns {
+  width:100%;
+  max-width:100%;
+  margin-inline:auto
 }
-
-html body#html-body.b2b-auth-shell .page-main .columns,
-html body#html-body.b2b-register-index .page-main .columns,
-html body#html-body.customer-account-login .page-main .columns,
-html body#html-body.b2b-auth-shell .page-main .column.main,
-html body#html-body.b2b-register-index .page-main .column.main,
-html body#html-body.customer-account-login .page-main .column.main {
-  width: 100%;
-  max-width: 100%;
-  margin-inline: auto;
-}
-
 html body#html-body .products-grid .product-item {
-  border-top-width: 0;
+  border-top-width:0
 }
-
-html body#html-body :is(#b2b-register-shell, .b2b-login-shell) {
-  position: relative;
-  isolation: isolate;
+html body#html-body :is(#b2b-register-shell,.b2b-login-shell) {
+  position:relative;
+  isolation:isolate
 }
-
-html body#html-body :is(img, table, .owl-stage, .swiper-wrapper) {
-  max-width: 100%;
+html body#html-body :is(img,table,.owl-stage,.swiper-wrapper) {
+  max-width:100%
 }
-
-html body#html-body .awa-shelf + .awa-shelf,
-html body#html-body .awa-home-section + .awa-home-section {
-  margin-block-start: var(--awa-gap-lg, 16px);
+html body#html-body .awa-home-section+.awa-home-section,html body#html-body .awa-shelf+.awa-shelf {
+  margin-block-start:var(--awa-gap-lg,16px)
 }
-
 html body#html-body.catalog-category-view h1.page-title {
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  line-height: 1.2;
+  font-size:clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height:1.2
 }
-
-html body#html-body :is(h2, .awa-section-header__title) {
-  font-size: var(--awa-text-lg, 1.125rem);
-  line-height: 1.3;
+html body#html-body :is(h2,.awa-section-header__title) {
+  font-size:var(--awa-text-lg, 18px);
+  line-height:1.3
 }
-
-/* B2B/auth — unify shell axis */
-html body#html-body .page-main .b2b-login-shell,
-html body#html-body .page-main #b2b-register-shell,
-html body#html-body.customer-account-login .login-container {
-  width: 100%;
-  max-width: min(100%, 520px);
-  margin-inline: auto;
-  padding-inline: var(--awa-page-pad, 16px);
+html body#html-body .page-main #b2b-register-shell,html body#html-body .page-main .b2b-login-shell,html body#html-body.customer-account-login .login-container {
+  width:100%;
+  max-width:min(100%,520px);
+  margin-inline:auto;
+  padding-inline:var(--awa-page-pad,16px)
 }
-
 html body#html-body.checkout-cart-index .page-main.container {
-  padding-inline: var(--awa-page-pad, clamp(12px, 4vw, 24px));
+  padding-inline:var(--awa-page-pad,clamp(12px,4vw,24px))
 }
-
 html body#html-body.checkout-cart-index .cart-container {
-  width: 100%;
-  max-width: 100%;
+  width:100%;
+  max-width:100%
 }
-
-/* Overlap guards — sticky header vs hero */
-html body#html-body .awa-site-header,
-html body#html-body .header-wrapper-sticky {
-  z-index: 200;
+html body#html-body .awa-site-header,html body#html-body .header-wrapper-sticky {
+  z-index:200
 }
-
-html body#html-body .content-top-home,
-html body#html-body .awa-hero {
-  position: relative;
-  z-index: 1;
+html body#html-body .awa-hero,html body#html-body .content-top-home {
+  position:relative;
+  z-index:1
 }
-
-/* Round 2 — B2B axis, cart grid, PLP sidebar, PDP hierarchy */
 html body#html-body.b2b-auth-shell .page-main.container {
-  width: 100%;
-  max-width: min(100%, 960px);
-  margin-inline: auto;
-  padding-inline: var(--awa-page-pad, 16px);
+  margin-inline:auto;
+  padding-inline:var(--awa-page-pad,16px)
 }
-
-html body#html-body.b2b-auth-shell .page-main .columns,
-html body#html-body.b2b-auth-shell .page-main .column.main {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+html body#html-body.b2b-auth-shell .page-main .column.main,html body#html-body.b2b-auth-shell .page-main .columns {
+  width:100%;
+  max-width:100%;
+  margin:0;
+  padding:0
 }
-
 html body#html-body.b2b-auth-shell :is(
-  .b2b-login-page,
-  .b2b-register-page-shell,
-  #b2b-login-shell,
-  #b2b-register-shell,
-  .b2b-register-shell-content
+.b2b-login-page,.b2b-register-page-shell,#b2b-login-shell,#b2b-register-shell,.b2b-register-shell-content
 ) {
-  width: 100%;
-  max-width: 100%;
-  margin-inline: auto;
+  width:100%;
+  max-width:100%;
+  margin-inline:auto
 }
-
-/* Carrinho é page-layout-1column: summary vive DENTRO de .cart-container.
-   NÃO criar 2ª faixa em .columns (ficava vazia ~360px e apertava itens/preços). */
 html body#html-body.checkout-cart-index .page-main .columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--awa-gap-lg, 24px);
-  align-items: start;
-  width: 100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:var(--awa-gap-lg,16px);
+  align-items:start;
+  width:100%
 }
-
 html body#html-body.checkout-cart-index .page-main .columns .column.main {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  grid-column: 1 / -1;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  grid-column:1/-1
 }
-
-/* Preço unitário não pode truncar (ex.: "R$ 146,63" em célula de 58px) */
 html body#html-body.checkout-cart-index .page-wrapper .cart.table-wrapper .col.price {
-  min-width: 5.75rem;
-  width: auto;
-  white-space: nowrap;
-}
-
-/*
- * H24: align-grid força a.action{display:inline-flex!important} com 3× #html-body,
- * vencendo o hide do critical/shell. Wishlist/editar no carrinho devem ficar ocultos
- * (só Remover) — evita truncamento e linhas de ~300px.
- */
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  .cart.table-wrapper
-  .awa-cart-item-actions
-  :is(a.action-towishlist, a.action-edit, .action.towishlist, .action.action-edit) {
-  display: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  pointer-events: none !important;
-}
-
-/* H26: input qty do stepper não pode ficar com ~26px */
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  .cart.table-wrapper
-  .control.awa-qty-stepper
-  input.input-text.qty {
-  width: 3rem !important;
-  min-width: 2.75rem !important;
-  max-width: 4rem !important;
-  flex: 0 0 auto !important;
-  text-align: center !important;
-  padding-inline: 4px !important;
-}
-
-/*
- * H29: #cart-summary é flex column com max-height (sticky).
- * overflow:hidden em .block/.items (styles-l) zera o min-size flex →
- * frete/cupom/métodos colapsam (height 0 / ~2px).
- */
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary) {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-}
-
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary)
-  :is(
-    #block-shipping,
-    #block-discount,
-    .block.shipping,
-    .discount.coupon,
-    .checkout-methods-items,
-    .items.checkout-methods-items
-  ) {
-  overflow: visible !important;
-  flex-shrink: 0 !important;
-  min-height: min-content !important;
-  height: auto !important;
-  max-height: none !important;
-}
-
-/* H28: trust seals no sidebar — 2x2, nunca 4 cols (~65px/célula) */
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary)
-  .awa-cart-trust-seals__list {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 12px 16px !important;
-}
-
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary)
-  .awa-cart-trust-seals__item {
-  min-width: 0 !important;
-}
-
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary)
-  .awa-cart-trust-seals__label {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-}
-
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary)
-  .awa-cart-trust-seals__label
-  :is(strong, small) {
-  white-space: normal !important;
-  overflow-wrap: anywhere !important;
-}
-
-html body#html-body.catalog-category-view .column.main {
-  min-width: 0;
-  position: relative;
-  z-index: 1;
-}
-
-html body#html-body.catalog-category-view .sidebar.sidebar-main-1 {
-  position: relative;
-  z-index: 2;
-  min-width: 0;
-}
-
-html body#html-body.catalog-product-view h1.page-title,
-html body#html-body.catalog-product-view .product-info-main h1 {
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
-  line-height: 1.25;
-}
-
-html body#html-body.cms-noroute-index .page-main.container {
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px));
-  margin-inline: auto;
-  padding-inline: var(--awa-page-pad, 16px);
-}
-
-html body#html-body .content-top-home .container > * {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-html body#html-body :is(.minicart-wrapper, .awa-header-search-col, .header-control) :is(button, a) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-html body#html-body :is(.minicart-wrapper, .awa-header-search-col) :is(svg, i, .icon) {
-  margin: 0;
-  vertical-align: middle;
-}
-
-
-/* Round 3 */
-html body#html-body.catalog-product-view .page-title-wrapper h1.page-title,
-html body#html-body.catalog-product-view .product-info-main .page-title {
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem) !important;
-  line-height: 1.25 !important;
-}
-
-html body#html-body.b2b-auth-shell .page-main.container {
-  padding-inline: var(--awa-page-pad, 16px) !important;
-}
-
-html body#html-body.b2b-auth-shell .page-main.container > * {
-  width: 100%;
-  max-width: 100%;
-  margin-inline: 0;
-}
-
-/* Round 4 — PDP title, B2B columns */
-html body#html-body.catalog-product-view .page-title-wrapper h1.page-title .base,
-html body#html-body.catalog-product-view .product-info-main h1.page-title .base {
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem) !important;
-  line-height: 1.25 !important;
-  font-weight: 700 !important;
-}
-
-html body#html-body.b2b-auth-shell .page-main.container > .columns {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* Round 5 — final 7 issues */
-html body#html-body.catalog-category-view .awa-category-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero__bg-image {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero__overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero__content {
-  position: relative;
-  z-index: 2;
-}
-
-html body#html-body.checkout-cart-index .page-main.container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--awa-gap-md, 16px);
-}
-
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
-  z-index: 2;
-  position: relative;
-  margin-bottom: var(--awa-space-3, 12px) !important;
-}
-
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper .page-title {
-  position: static !important;
-  z-index: 2 !important;
-}
-
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
-  margin-block-end: 0;
-  position: relative;
-  z-index: 2;
-}
-
-html body#html-body.checkout-cart-index .page-main > .columns {
-  margin-block-start: 0;
-  padding-block-start: 0;
-  position: relative;
-  z-index: 1;
-}
-
-html body#html-body.b2b-auth-shell .page-main.container,
-html body#html-body.customer-account-login .page-main.container {
-  width: 100%;
-  max-width: min(100%, 520px);
-  margin-inline: auto;
-  box-sizing: border-box;
-}
-
-html body#html-body .awa-footer-trust-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-html body#html-body .awa-footer-trust-item .awa-footer-trust-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-html body#html-body .awa-footer-trust-item .awa-footer-trust-icon :is(svg, i, .icon) {
-  width: 1.15rem;
-  height: 1.15rem;
-  line-height: 1;
-  margin: 0;
-}
-
-html body#html-body .awa-footer-trust-item .awa-footer-trust-copy {
-  line-height: 1.35;
-}
-
-/* Round 6 — PDP hierarchy + cart empty overlap */
-/* SSOT 2026-07-30: título PDP alinhado ao cascade (18–22px / Rubik / balance). */
-html body#html-body#html-body#html-body#html-body.catalog-product-view
-  .page-wrapper
-  .product-info-main
-  .page-title-wrapper
-  :is(h1.page-title, .page-title, .page-title .base) {
-  font-family: var(--awa-font-heading, "Rubik", system-ui, sans-serif) !important;
-  font-size: clamp(1.125rem, 1.05rem + 0.45vw, 1.375rem) !important;
-  font-weight: 700 !important;
-  line-height: 1.3 !important;
-  text-wrap: balance !important;
-}
-
-html body#html-body#html-body#html-body.catalog-product-view
-  .page-wrapper
-  .product.data.items
-  > .item.title
-  > .switch {
-  font-size: 14px !important;
-  font-weight: 600 !important;
-}
-
-html body#html-body.checkout-cart-index .page-main.container {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: var(--awa-gap-md, 16px) !important;
-}
-
-html body#html-body.checkout-cart-index
-  .page-wrapper:has(.awa-cart-empty, .cart-empty)
-  .page-title-wrapper {
-  /* AWA: desfaz sr-only legado; !important necessário contra guard terminal anterior. */
-  position: static !important;
-  width: 100% !important;
-  height: auto !important;
-  padding: 0 !important;
-  margin: 0 0 var(--awa-space-3, 12px) !important;
-  overflow: visible !important;
-  clip: auto !important;
-  clip-path: none !important;
-  white-space: normal !important;
-  border: 0 !important;
-}
-
-html body#html-body.checkout-cart-index
-  .page-wrapper:has(.awa-cart-empty, .cart-empty)
-  .page-title-wrapper
-  :is(h1, .page-title, .page-title .base) {
-  /* AWA: evita child posicionado clipado reportado no carrinho vazio. */
-  position: static !important;
-  display: block !important;
-  width: auto !important;
-  height: auto !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: visible !important;
-  clip: auto !important;
-  clip-path: none !important;
-  white-space: normal !important;
-  border: 0 !important;
-}
-
-html body#html-body.checkout-cart-index
-  .page-wrapper:has(.awa-cart-empty, .cart-empty)
-  .page-main
-  > .columns {
-  margin-block-start: 0 !important;
-  padding-block-start: 0 !important;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero,
-html body#html-body .awa-category-hero {
-  isolation: isolate;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero__overlay {
-  z-index: 2;
-}
-
-html body#html-body.catalog-category-view .awa-category-hero__content {
-  position: relative;
-  z-index: 3;
-}
-
-html body#html-body.catalog-product-view .product.media .fotorama__stage__shaft {
-  position: relative;
-  z-index: 1;
-}
-
-html body#html-body.catalog-product-view .product.media .fotorama__fullscreen-icon {
-  inset: auto 12px 12px auto;
-  top: auto;
-  right: 12px;
-  bottom: 12px;
-  width: 44px;
-  height: 44px;
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-}
-
-html body#html-body.catalog-product-view .product-info-main :is(h1.page-title, .page-title) + h2 {
-  font-size: var(--awa-text-base, 1rem) !important;
-  line-height: 1.35 !important;
-  font-weight: var(--awa-weight-semibold, 600) !important;
-  margin-block: 0.35rem 0 !important;
-}
-
-html body#html-body .b2b-password-wrap {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
-  align-items: stretch;
-  width: 100%;
-}
-
-html body#html-body .b2b-password-wrap input {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  min-height: 44px;
-}
-
-html body#html-body .b2b-password-wrap .b2b-password-toggle {
-  margin: 0;
-  width: 44px;
-  min-width: 44px;
-  max-width: 44px;
-  min-height: 44px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-inline-start: 1px solid var(--awa-border, currentColor);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-html body#html-body .b2b-password-wrap :is(svg, i, .icon) {
-  margin: 0;
-  line-height: 1;
-}
-
-html body#html-body .cnpj-control {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  column-gap: 8px;
-}
-
-html body#html-body .cnpj-control .cnpj-status {
-  width: 24px;
-  min-width: 24px;
-  max-width: 24px;
-  height: 24px;
-  min-height: 24px;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Round 11 — consolidando eixos residuais de grade/containers (QA residual) */
-html body#html-body .container,
-html body#html-body .page-main .container,
-html body#html-body .page-main.container {
-  width: 100%;
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px));
-  margin-inline: auto;
-  box-sizing: border-box;
-  padding-inline: var(--awa-page-pad, clamp(12px, 4vw, 24px));
-}
-
-html body#html-body ul.awa-hero-benefits,
-html body#html-body .awa-hero-benefits {
-  width: min(100%, 1280px);
-  max-width: 100%;
-  margin-inline: auto;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-html body#html-body.catalog-product-view .product-info-main h1 + h2,
-html body#html-body.catalog-product-view :is(.product-info-main, .product-info-main .product-info-main) h1 + h2 {
-  font-size: var(--awa-text-lg, 1.125rem) !important;
-  line-height: 1.35 !important;
-  font-weight: var(--awa-weight-semibold, 600) !important;
-  margin-block: 0.35rem 0.5rem !important;
-}
-
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
-  position: relative;
-}
-
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper h1.page-title,
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper .base,
-html body#html-body.checkout-cart-index .page-main .page-title-wrapper .page-title {
-  position: static !important;
-  inset: auto !important;
-  transform: none !important;
-  z-index: 1 !important;
-}
-
-html body#html-body.b2b-auth-shell .page-main,
-html body#html-body.b2b-register-index .page-main,
-html body#html-body.customer-account-login .page-main,
-html body#html-body.customer-account-create .page-main,
-html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-login, .customer-account-create) .page-main.container,
-html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-login, .customer-account-create) .page-main > .columns,
-html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-login, .customer-account-create) .page-main .columns,
-html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-login, .customer-account-create) .page-main .column.main,
-html body#html-body:is(.b2b-auth-shell, .b2b-register-index, .customer-account-login, .customer-account-create) .page-main .container {
-  width: 100%;
-  max-width: min(100%, 560px);
-  margin-inline: auto;
-  box-sizing: border-box;
-}
-
-/* Round 7 — mobile 390 fixes */
-@media (max-width: 767px) {
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    .category-view-move {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    margin-block-end: 12px !important;
-  }
-
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    .awa-category-hero {
-    height: auto !important;
-    max-height: none !important;
-    min-height: 140px !important;
-  }
-
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    .products-grid
-    .product-items {
-    display: grid !important;
-    align-items: stretch !important;
-  }
-
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    :is(.item-product, .product-item) {
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  /* Round 7 fix: nav.fixed-bottom is outside .page-wrapper in DOM — drop page-wrapper from path */
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    > li
-    > :is(a, button) {
-    display: inline-flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2px !important;
-    line-height: 1 !important;
-    min-height: 44px !important;
-    min-width: 44px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    > li
-    > :is(a, button)
-    :is(.icon, span.icon) {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-  }
-
-  /* Icon mappings are owned by awa-header-contract-grid; do not mix
-     simple-line-icons codepoints with the shared navigation font. */
-
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    > li.active
-    > a {
-    color: var(--awa-primary, #b73337) !important;
-    font-weight: 600 !important;
-  }
-
-  html body#html-body
-    nav.fixed-bottom
-    .mobile-bottom-link
-    > li.active
-    > a
-    .icon {
-    color: var(--awa-primary, #b73337) !important;
-  }
-
-  html body#html-body .page-wrapper
-    :is(.awa-carousel__viewport, .awa-shelf--carousel .awa-carousel__viewport) {
-    overflow-x: hidden !important;
-    overflow-y: visible !important;
-    max-width: 100% !important;
-  }
-
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    .products-grid
-    .product-items {
-    align-items: stretch !important;
-  }
-
-  html body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-    .page-wrapper
-    .products-grid
-    :is(.item-product, .product-item) {
-    height: 100% !important;
-    min-height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-}
-
-/* Round 8 — M-HEADER-01: Logo fora do centro no mobile */
-/* align-grid-terminal define 4 colunas com "account" vazio (44px morto à direita do logo). */
-/* Especificidade (3,4,2) vence terminal (1,4,2) independente de ordem de carga.           */
-@media (max-width: 767px) {
-  html body#html-body#html-body#html-body
-    .page-wrapper
-    .awa-site-header
-    :is(.awa-main-header__inner.wp-header, .awa-main-header__inner[data-awa-header-row]) {
-    grid-template-areas:
-      "toggle brand cart"
-      "search search search" !important;
-    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
-    grid-template-rows: 44px 44px !important;
-  }
-}
-
-/* Round 9 — alinhamento de precisão: footer newsletter + breadcrumbs PLP */
-
-/* FOOTER-ALIGN-01: conteúdo do newsletter alinha com a grade de colunas do footer.
-   Após commit ef73d06d (§ FOOTER AXIS FIX no terminal), todas as seções do footer usam
-   --awa-page-pad. Mantemos 4×ID = (0,7,2) para que esta regra vença qualquer regra terminal
-   de 3×ID que pudesse zerar o padding e causar desalinhamento com as colunas. */
-html body#html-body#html-body#html-body#html-body
-  .page-wrapper
-  :is(.page_footer, .page-footer)
-  :is(.awa-footer-newsletter, .footer-newsletter) {
-  padding-inline: var(--awa-page-pad, clamp(12px, 4vw, 24px)) !important;
-}
-
-html body#html-body#html-body#html-body#html-body
-  .page-wrapper
-  :is(.page_footer, .page-footer)
-  :is(.awa-footer-newsletter, .footer-newsletter)
-  > .container {
-  padding-inline: 0 !important;
-}
-
-/* BREADCRUMB-ALIGN-01: breadcrumbs PLP/busca alinham com a borda do conteúdo da page-main.
-   Problema: terminal line 3182 zera padding do .container interno, mas não define padding-inline
-   no próprio .nav-breadcrumbs — resultado: breadcrumbs começam em 0px enquanto page-main
-   usa --awa-grid-container-pad (16px) → desalinhamento de 16px.
-   4×ID garante (0,7,2) → vence qualquer regra terminal de 3 IDs para esta página. */
-html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index)
-  .page-wrapper
-  .nav-breadcrumbs {
-  box-sizing: border-box !important;
-  max-width: var(--awa-grid-shell-max, min(100%, 1280px)) !important;
-  margin-inline: auto !important;
-  padding-inline: var(--awa-grid-container-pad, 16px) !important;
-  width: 100% !important;
-}
-
-/* Round 12 — home promo bar CTA 44px WCAG touch target.
-   O critical CSS lock em HeaderImpeccableCascadeLockCss.php usa (3,5,2)+!important e fixa
-   `.awa-b2b-promo-bar__cta` em height:32px;overflow:hidden na home.
-   5×ID = (5,5,2)+!important vence o lock e eleva o alvo de toque para 44px.
-   O bar fica em max-height:34px com overflow:visible, então o CTA extravasa visualmente
-   mas mantém área clicável de 44px (pointer-events não são cortados por overflow:visible). */
-html body#html-body#html-body#html-body#html-body#html-body.cms-index-index.page-layout-1column
-  .page-wrapper
-  .awa-site-header
-  #awa-b2b-promo-bar
-  .awa-b2b-promo-bar__cta {
-  height: 44px !important;
-  min-height: 44px !important;
-  max-height: 44px !important;
-  margin-block: -5px !important;
-  overflow: visible !important;
-}
-
-/* Round 13 — BUG-H-051 / BUG-H-052: offsets negativos no mobile (cart + b2b login)
-   Motivo: alguns blocos herdados ficam com eixo deslocado em 390/360 (l:-25, t:-95).
-   Estratégia: reset explícito de inset/transform/margens na cadeia de containers críticos. */
-@media (max-width: 767px) {
-  html body#html-body.checkout-cart-index .page-main.container,
-  html body#html-body.checkout-cart-index .page-main > .columns,
-  html body#html-body.checkout-cart-index .page-main .columns,
-  html body#html-body.checkout-cart-index .page-main .column.main,
-  html body#html-body.checkout-cart-index .cart-container,
-  html body#html-body.checkout-cart-index .cart.table-wrapper,
-  html body#html-body.checkout-cart-index .cart-summary {
-    position: relative !important;
-    inset: auto !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  html body#html-body.checkout-cart-index .page-main.container {
-    padding-inline: var(--awa-page-pad, 16px) !important;
-    overflow-x: clip !important;
-  }
-
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main,
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main.container,
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main > .columns,
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main .columns,
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main .column.main,
-  html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-page,
-  html body#html-body.b2b-auth-shell.b2b-account-login #b2b-login-shell,
-  html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-card {
-    position: relative !important;
-    inset: auto !important;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  html body#html-body.b2b-auth-shell.b2b-account-login .page-main.container,
-  html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-page,
-  html body#html-body.b2b-auth-shell.b2b-account-login #b2b-login-shell,
-  html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-card {
-    margin-inline: auto !important;
-    padding-inline: var(--awa-page-pad, 16px) !important;
-    overflow-x: clip !important;
-  }
-}
-
-/* Round 14 — BUG-H-014 / BUG-H-016 */
-/* BUG-H-014: B2B promo bar sem gap entre blocos (gap: normal). */
-html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__inner,
-html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__layout,
-html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__text,
-html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__lead {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-}
-
-/* BUG-H-016: H2 "Meu Carrinho" com rect 1x1 por clip legado.
-   Mantém acessibilidade (texto fora da tela), sem artefato visual 1x1. */
-html body#html-body .page-wrapper .minicart-wrapper h2#minicart-title.awa-sr-only {
-  position: absolute !important;
-  left: -9999px !important;
-  top: auto !important;
-  width: auto !important;
-  height: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  clip: auto !important;
-  clip-path: none !important;
-  white-space: nowrap !important;
-}
-
-/* Round 15 — BUG-H-021 / BUG-H-024 / BUG-H-026 */
-/* BUG-H-021: cards de shelf com alturas inconsistentes (mobile). */
-@media (max-width: 767px) {
-  html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    :is(.products-grid, .awa-shelf--carousel)
-    :is(.item-product, .product-item)
-    .product-item-info {
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    min-height: 100% !important;
-  }
-
-  html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    :is(.products-grid, .awa-shelf--carousel)
-    :is(.item-product, .product-item)
-    .product-item-details {
-    display: flex !important;
-    flex-direction: column !important;
-    flex: 1 1 auto !important;
-  }
-}
-
-/* BUG-H-024: category carousel com overflow visível em 390/360. */
-@media (max-width: 767px) {
-  html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-    .page-wrapper
-    :is(.awa-category-carousel__viewport, .categorytab .owl-stage-outer, .categorytab .owl-carousel) {
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-snap-type: x mandatory !important;
-    max-width: 100% !important;
-  }
-}
-
-/* BUG-H-026: newsletter deslocada à direita no desktop (1366). */
-@media (min-width: 992px) {
-  html body#html-body .page-wrapper :is(.awa-footer-newsletter, .footer-newsletter) {
-    width: 100% !important;
-    max-width: var(--awa-grid-shell-max, min(100%, 1280px)) !important;
-    margin-inline: auto !important;
-    box-sizing: border-box !important;
-    padding-inline: var(--awa-page-pad, clamp(12px, 2vw, 24px)) !important;
-  }
-
-  html body#html-body .page-wrapper :is(.awa-footer-newsletter, .footer-newsletter) > .container {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-inline: auto !important;
-    padding-inline: 0 !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* Round 16 — BUG-H-028 / BUG-H-030 */
-/* BUG-H-028: touch targets <44px em áreas de navegação/listagem */
-html body#html-body .page-wrapper :is(
-  .pages .item a,
-  .pages .item strong,
-  .owl-nav button,
-  .owl-prev,
-  .owl-next,
-  .categorytab .owl-nav button,
-  .awa-section-header__link,
-  .awa-shelf__view-all
+  min-width:5.75rem;
+  width:auto;
+  white-space:nowrap
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper .cart.table-wrapper .awa-cart-item-actions :is(a.action-towishlist,a.action-edit,.action.towishlist,.action.action-edit) {
+  display:none!important;
+  visibility:hidden!important;
+  width:0!important;
+  height:0!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper .cart.table-wrapper .control.awa-qty-stepper input.input-text.qty {
+  width:3rem!important;
+  min-width:2.75rem!important;
+  max-width:4rem!important;
+  flex:0 0 auto!important;
+  text-align:center!important;
+  padding-inline:4px!important
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) :is(
+#block-shipping,#block-discount,.block.shipping,.discount.coupon,.checkout-methods-items,.items.checkout-methods-items
 ) {
-  min-width: 44px !important;
-  min-height: 44px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-sizing: border-box !important;
+  overflow:visible!important;
+  flex-shrink:0!important;
+  min-height:min-content!important;
+  height:auto!important;
+  max-height:none!important
 }
-
-/* BUG-H-030: barra B2B mobile colapsa versão short (w:0/h:0) */
-@media (max-width: 767px) {
-  html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__lead-short, .awa-b2b-promo-bar__cta-short) {
-    display: inline !important;
-    width: auto !important;
-    height: auto !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    visibility: visible !important;
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) .awa-cart-trust-seals__list {
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px 16px!important
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) .awa-cart-trust-seals__item {
+  min-width:0!important
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) .awa-cart-trust-seals__label {
+  flex:1 1 auto!important;
+  min-width:0!important
+}
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) .awa-cart-trust-seals__label :is(strong,small) {
+  white-space:normal!important;
+  overflow-wrap:anywhere!important
+}
+html body#html-body.catalog-category-view .column.main {
+  min-width:0;
+  position:relative;
+  z-index:1
+}
+html body#html-body.catalog-category-view .sidebar.sidebar-main-1 {
+  position:relative;
+  z-index:2;
+  min-width:0
+}
+html body#html-body.catalog-product-view .product-info-main h1,html body#html-body.catalog-product-view h1.page-title {
+  font-size:clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height:1.25
+}
+html body#html-body.cms-noroute-index .page-main.container {
+  max-width:var(--awa-grid-shell-max,min(100%,1280px));
+  margin-inline:auto;
+  padding-inline:var(--awa-page-pad,16px)
+}
+html body#html-body .content-top-home .container>* {
+  max-width:100%;
+  box-sizing:border-box
+}
+html body#html-body :is(.minicart-wrapper,.awa-header-search-col,.header-control) :is(button,a) {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center
+}
+html body#html-body :is(.minicart-wrapper,.awa-header-search-col) :is(svg,i,.icon) {
+  margin:0;
+  vertical-align:middle
+}
+html body#html-body.catalog-product-view .page-title-wrapper h1.page-title,html body#html-body.catalog-product-view .product-info-main .page-title {
+  font-size:clamp(1.25rem, 2.2vw, 1.75rem)!important;
+  line-height:1.25!important
+}
+html body#html-body.b2b-auth-shell .page-main.container {
+  padding-inline:var(--awa-page-pad,16px)!important
+}
+html body#html-body.b2b-auth-shell .page-main.container>* {
+  width:100%;
+  max-width:100%;
+  margin-inline:0
+}
+html body#html-body.catalog-product-view .page-title-wrapper h1.page-title .base,html body#html-body.catalog-product-view .product-info-main h1.page-title .base {
+  font-size:clamp(1.25rem, 2.2vw, 1.75rem)!important;
+  line-height:1.25!important;
+  font-weight:700!important
+}
+html body#html-body.b2b-auth-shell .page-main.container>.columns {
+  margin:0!important;
+  padding:0!important;
+  width:100%!important;
+  max-width:100%!important
+}
+html body#html-body.catalog-category-view .awa-category-hero {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden
+}
+html body#html-body.catalog-category-view .awa-category-hero__bg-image {
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  object-fit:cover
+}
+html body#html-body.catalog-category-view .awa-category-hero__overlay {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:2
+}
+html body#html-body.checkout-cart-index .page-main.container {
+  display:flex;
+  flex-direction:column;
+  gap:var(--awa-gap-md,12px)
+}
+html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
+  margin-bottom:var(--awa-space-3,12px)!important;
+  margin-block-end:0;
+  z-index:2
+}
+html body#html-body.checkout-cart-index .page-main>.columns {
+  margin-block-start:0;
+  padding-block-start:0;
+  position:relative;
+  z-index:1
+}
+html body#html-body.b2b-auth-shell .page-main.container,html body#html-body.customer-account-login .page-main.container {
+  width:100%;
+  max-width:min(100%,520px);
+  margin-inline:auto;
+  box-sizing:border-box
+}
+html body#html-body .awa-footer-trust-item {
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+html body#html-body .awa-footer-trust-item .awa-footer-trust-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0
+}
+html body#html-body .awa-footer-trust-item .awa-footer-trust-icon :is(svg,i,.icon) {
+  width:1.15rem;
+  height:1.15rem;
+  line-height:1;
+  margin:0
+}
+html body#html-body .awa-footer-trust-item .awa-footer-trust-copy {
+  line-height:1.35
+}
+html body#html-body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product-info-main .page-title-wrapper :is(h1.page-title,.page-title,.page-title .base) {
+  font-family:var(--awa-font-heading, 'rubik', arial, sans-serif)!important;
+  font-size:clamp(1.125rem, 1.05rem + .45vw, 1.375rem)!important;
+  font-weight:700!important;
+  line-height:1.3!important;
+  text-wrap:balance!important
+}
+html body#html-body#html-body#html-body.catalog-product-view .page-wrapper .product.data.items>.item.title>.switch {
+  font-size:14px!important;
+  font-weight:600!important
+}
+html body#html-body.checkout-cart-index .page-main.container {
+  display:flex!important;
+  flex-direction:column!important;
+  gap:var(--awa-gap-md,12px)!important
+}
+html body#html-body.checkout-cart-index .page-wrapper:has(.awa-cart-empty,.cart-empty) .page-title-wrapper {
+  position:static!important;
+  width:100%!important;
+  height:auto!important;
+  padding:0!important;
+  margin:0 0 var(--awa-space-3,12px)!important;
+  overflow:visible!important;
+  clip:auto!important;
+  clip-path:none!important;
+  white-space:normal!important;
+  border:0!important
+}
+html body#html-body.checkout-cart-index .page-wrapper:has(.awa-cart-empty,.cart-empty) .page-title-wrapper :is(h1,.page-title,.page-title .base) {
+  position:static!important;
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:visible!important;
+  clip:auto!important;
+  clip-path:none!important;
+  white-space:normal!important;
+  border:0!important
+}
+html body#html-body.checkout-cart-index .page-wrapper:has(.awa-cart-empty,.cart-empty) .page-main>.columns {
+  margin-block-start:0!important;
+  padding-block-start:0!important
+}
+html body#html-body .awa-category-hero,html body#html-body.catalog-category-view .awa-category-hero {
+  isolation:isolate
+}
+html body#html-body.catalog-category-view .awa-category-hero__content {
+  position:relative;
+  z-index:3
+}
+html body#html-body.catalog-product-view .product.media .fotorama__stage__shaft {
+  position:relative;
+  z-index:1
+}
+html body#html-body.catalog-product-view .product.media .fotorama__fullscreen-icon {
+  inset:auto 12px 12px auto;
+  top:auto;
+  right:12px;
+  bottom:12px;
+  width:44px;
+  height:44px;
+  position:absolute;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  z-index:3
+}
+html body#html-body.catalog-product-view .product-info-main :is(h1.page-title,.page-title)+h2 {
+  font-size:var(--awa-text-base, 14px)!important;
+  line-height:1.35!important;
+  font-weight:var(--awa-weight-semibold,600)!important;
+  margin-block:0.35rem 0!important
+}
+html body#html-body .b2b-password-wrap {
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 44px;
+  align-items:stretch;
+  width:100%
+}
+html body#html-body .b2b-password-wrap input {
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  min-height:44px
+}
+html body#html-body .b2b-password-wrap .b2b-password-toggle {
+  margin:0;
+  width:44px;
+  min-width:44px;
+  max-width:44px;
+  min-height:44px;
+  border-top-left-radius:0;
+  border-bottom-left-radius:0;
+  border-inline-start:1px solid var(--awa-border,currentColor);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center
+}
+html body#html-body .b2b-password-wrap :is(svg,i,.icon) {
+  margin:0;
+  line-height:1
+}
+html body#html-body .cnpj-control {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  column-gap:8px
+}
+html body#html-body .cnpj-control .cnpj-status {
+  width:24px;
+  min-width:24px;
+  max-width:24px;
+  height:24px;
+  min-height:24px;
+  margin:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center
+}
+html body#html-body .container,html body#html-body .page-main .container,html body#html-body .page-main.container {
+  width:100%;
+  max-width:var(--awa-grid-shell-max,min(100%,1280px));
+  margin-inline:auto;
+  box-sizing:border-box;
+  padding-inline:var(--awa-page-pad,clamp(12px,4vw,24px))
+}
+html body#html-body .awa-hero-benefits,html body#html-body ul.awa-hero-benefits {
+  width:min(100%,1280px);
+  max-width:100%;
+  margin-inline:auto;
+  box-sizing:border-box;
+  overflow:hidden
+}
+html body#html-body.catalog-product-view .product-info-main h1+h2,html body#html-body.catalog-product-view :is(.product-info-main,.product-info-main .product-info-main) h1+h2 {
+  font-size:var(--awa-text-lg, 18px)!important;
+  line-height:1.35!important;
+  font-weight:var(--awa-weight-semibold,600)!important;
+  margin-block:0.35rem 0.5rem!important
+}
+html body#html-body.checkout-cart-index .page-main .page-title-wrapper {
+  position:relative
+}
+html body#html-body.checkout-cart-index .page-main .page-title-wrapper .base,html body#html-body.checkout-cart-index .page-main .page-title-wrapper .page-title,html body#html-body.checkout-cart-index .page-main .page-title-wrapper h1.page-title {
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  z-index:1!important
+}
+html body#html-body.b2b-auth-shell .page-main,html body#html-body.b2b-register-index .page-main,html body#html-body.customer-account-create .page-main,html body#html-body.customer-account-login .page-main,html body#html-body:is(.b2b-auth-shell,.b2b-register-index,.customer-account-login,.customer-account-create) .page-main .column.main,html body#html-body:is(.b2b-auth-shell,.b2b-register-index,.customer-account-login,.customer-account-create) .page-main .columns,html body#html-body:is(.b2b-auth-shell,.b2b-register-index,.customer-account-login,.customer-account-create) .page-main .container,html body#html-body:is(.b2b-auth-shell,.b2b-register-index,.customer-account-login,.customer-account-create) .page-main.container,html body#html-body:is(.b2b-auth-shell,.b2b-register-index,.customer-account-login,.customer-account-create) .page-main>.columns {
+  width:100%;
+  max-width:min(100%,560px);
+  margin-inline:auto;
+  box-sizing:border-box
+}
+html body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) :is(.awa-footer-newsletter,.footer-newsletter) {
+  padding-inline:var(--awa-page-pad,clamp(12px,4vw,24px))!important
+}
+html body#html-body#html-body#html-body#html-body .page-wrapper :is(.page_footer,.page-footer) :is(.awa-footer-newsletter,.footer-newsletter)>.container {
+  padding-inline:0!important
+}
+html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .nav-breadcrumbs {
+  box-sizing:border-box!important;
+  max-width:var(--awa-grid-shell-max,min(100%,1280px))!important;
+  margin-inline:auto!important;
+  padding-inline:var(--awa-grid-container-pad,16px)!important;
+  width:100%!important
+}
+html body#html-body#html-body#html-body#html-body#html-body.cms-index-index.page-layout-1column .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__cta {
+  height:44px!important;
+  min-height:44px!important;
+  max-height:44px!important;
+  margin-block:-5px!important;
+  overflow:visible!important
+}
+@media (max-width:767px) {
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .category-view-move {
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    margin-block-end:12px!important
   }
-
-  html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__lead-long, .awa-b2b-promo-bar__cta-long) {
-    display: none !important;
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .awa-category-hero {
+    height:auto!important;
+    max-height:none!important;
+    min-height:140px!important
+  }
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid .product-items {
+    display:grid!important;
+    align-items:stretch!important
+  }
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper :is(.item-product,.product-item) {
+    height:100%!important;
+    display:flex!important;
+    flex-direction:column!important
+  }
+  html body#html-body nav.fixed-bottom .mobile-bottom-link>li>:is(a,button) {
+    display:inline-flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:2px!important;
+    line-height:1!important;
+    min-height:44px!important;
+    min-width:44px!important;
+    width:100%!important;
+    box-sizing:border-box!important
+  }
+  html body#html-body nav.fixed-bottom .mobile-bottom-link>li>:is(a,button) :is(.icon,span.icon) {
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    line-height:1!important;
+    margin:0!important
+  }
+  html body#html-body nav.fixed-bottom .mobile-bottom-link>li.active>a {
+    color:var(--awa-primary,var(--awa-brand))!important;
+    font-weight:600!important
+  }
+  html body#html-body nav.fixed-bottom .mobile-bottom-link>li.active>a .icon {
+    color:var(--awa-primary,var(--awa-brand))!important
+  }
+  html body#html-body .page-wrapper :is(.awa-carousel__viewport,.awa-shelf--carousel .awa-carousel__viewport) {
+    overflow-x:hidden!important;
+    overflow-y:visible!important;
+    max-width:100%!important
+  }
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid .product-items {
+    align-items:stretch!important
+  }
+  html body#html-body:is(.catalog-category-view,.catalogsearch-result-index) .page-wrapper .products-grid :is(.item-product,.product-item) {
+    height:100%!important;
+    min-height:100%!important;
+    display:flex!important;
+    flex-direction:column!important
+  }
+  html body#html-body#html-body#html-body .page-wrapper .awa-site-header :is(.awa-main-header__inner.wp-header,.awa-main-header__inner[data-awa-header-row]) {
+    grid-template-areas:"toggle brand cart" "search search search"!important;
+    grid-template-columns:44px minmax(0,1fr) 44px!important;
+    grid-template-rows:44px 44px!important
+  }
+  html body#html-body.checkout-cart-index .cart-container,html body#html-body.checkout-cart-index .cart-summary,html body#html-body.checkout-cart-index .cart.table-wrapper,html body#html-body.checkout-cart-index .page-main .column.main,html body#html-body.checkout-cart-index .page-main .columns,html body#html-body.checkout-cart-index .page-main.container,html body#html-body.checkout-cart-index .page-main>.columns {
+    position:relative!important;
+    inset:auto!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important
+  }
+  html body#html-body.checkout-cart-index .page-main.container {
+    padding-inline:var(--awa-page-pad,16px)!important;
+    overflow-x:clip!important
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login #b2b-login-shell,html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-card,html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-page,html body#html-body.b2b-auth-shell.b2b-account-login .page-main,html body#html-body.b2b-auth-shell.b2b-account-login .page-main .column.main,html body#html-body.b2b-auth-shell.b2b-account-login .page-main .columns,html body#html-body.b2b-auth-shell.b2b-account-login .page-main.container,html body#html-body.b2b-auth-shell.b2b-account-login .page-main>.columns {
+    position:relative!important;
+    inset:auto!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+    margin:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important
+  }
+  html body#html-body.b2b-auth-shell.b2b-account-login #b2b-login-shell,html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-card,html body#html-body.b2b-auth-shell.b2b-account-login .b2b-login-page,html body#html-body.b2b-auth-shell.b2b-account-login .page-main.container {
+    margin-inline:auto!important;
+    padding-inline:var(--awa-page-pad,16px)!important;
+    overflow-x:clip!important
   }
 }
-
-/* Round 17 — BUG-H-025 / BUG-H-034 */
-/* BUG-H-025: footer principal sem estrutura de colunas.
-   Força grade real no bloco .rowFlexMargin com as 3 colunas existentes do DOM. */
-@media (min-width: 768px) {
-  html body#html-body .page-wrapper .footer-container.layout2 .container > .row.rowFlexMargin {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: clamp(12px, 1.8vw, 24px) !important;
-    align-items: start !important;
+html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__inner,html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__layout,html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__lead,html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar .awa-b2b-promo-bar__text {
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important
+}
+html body#html-body .page-wrapper .minicart-wrapper h2#minicart-title.awa-sr-only {
+  position:absolute!important;
+  left:-9999px!important;
+  top:auto!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  clip:auto!important;
+  clip-path:none!important;
+  white-space:nowrap!important
+}
+@media (max-width:767px) {
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.products-grid,.awa-shelf--carousel) :is(.item-product,.product-item) .product-item-info {
+    display:flex!important;
+    flex-direction:column!important;
+    height:100%!important;
+    min-height:100%!important
   }
-
-  html body#html-body .page-wrapper .footer-container.layout2 .container > .row.rowFlexMargin > [class*='col-'] {
-    float: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 0 0 auto !important;
-    margin: 0 !important;
-    padding-inline: 0 !important;
-    box-sizing: border-box !important;
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.products-grid,.awa-shelf--carousel) :is(.item-product,.product-item) .product-item-details {
+    display:flex!important;
+    flex-direction:column!important;
+    flex:1 1 auto!important
+  }
+  html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper :is(.awa-category-carousel__viewport,.categorytab .owl-stage-outer,.categorytab .owl-carousel) {
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scroll-snap-type:x mandatory!important;
+    max-width:100%!important
+  }
+  html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__lead-short,.awa-b2b-promo-bar__cta-short) {
+    display:inline!important;
+    width:auto!important;
+    height:auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    overflow:visible!important;
+    visibility:visible!important
+  }
+  html body#html-body .page-wrapper .awa-site-header #awa-b2b-promo-bar :is(.awa-b2b-promo-bar__lead-long,.awa-b2b-promo-bar__cta-long) {
+    display:none!important
   }
 }
-
-@media (min-width: 1200px) {
-  html body#html-body .page-wrapper .footer-container.layout2 .container > .row.rowFlexMargin {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+html body#html-body .page-wrapper :is(
+.pages .item a,.pages .item strong,.owl-nav button,.owl-prev,.owl-next,.categorytab .owl-nav button,.awa-section-header__link,.awa-shelf__view-all
+) {
+  min-width:44px!important;
+  min-height:44px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important
+}
+@media (min-width:768px) {
+  html body#html-body .page-wrapper .footer-container.layout2 .container>.row.rowFlexMargin {
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:clamp(12px,1.8vw,24px)!important;
+    align-items:start!important
+  }
+  html body#html-body .page-wrapper .footer-container.layout2 .container>.row.rowFlexMargin>[class*=col-] {
+    float:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    flex:0 0 auto!important;
+    margin:0!important;
+    padding-inline:0!important;
+    box-sizing:border-box!important
   }
 }
-
-/* BUG-H-034: nav vertical sem escala consistente entre 1024 e 1366.
-   Aplica largura fluida para manter hierarquia de coluna no desktop médio. */
-@media (min-width: 1024px) and (max-width: 1366px) {
+@media (min-width:1200px) {
+  html body#html-body .page-wrapper .footer-container.layout2 .container>.row.rowFlexMargin {
+    grid-template-columns:repeat(3,minmax(0,1fr))!important
+  }
+}
+@media (min-width:1024px) and (max-width:1366px) {
   html body#html-body .page-wrapper .menu_left_home1 .navigation.verticalmenu.side-verticalmenu {
-    inline-size: clamp(208px, 18.5vw, 276px) !important;
-    width: clamp(208px, 18.5vw, 276px) !important;
-    max-width: min(100%, 276px) !important;
-    flex: 0 0 clamp(208px, 18.5vw, 276px) !important;
+    inline-size:clamp(208px,18.5vw,276px)!important;
+    width:clamp(208px,18.5vw,276px)!important;
+    max-width:min(100%,276px)!important;
+    flex:0 0 clamp(208px,18.5vw,276px)!important
   }
-
-  html body#html-body .page-wrapper .menu_left_home1 .navigation.verticalmenu.side-verticalmenu > .title-category-dropdown,
-  html body#html-body .page-wrapper .menu_left_home1 .navigation.verticalmenu.side-verticalmenu > ul.togge-menu.list-category-dropdown {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+  html body#html-body .page-wrapper .menu_left_home1 .navigation.verticalmenu.side-verticalmenu>.title-category-dropdown,html body#html-body .page-wrapper .menu_left_home1 .navigation.verticalmenu.side-verticalmenu>ul.togge-menu.list-category-dropdown {
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important
   }
 }
-
-/* Round 18 — BUG-H-050 (P1) / BUG-H-036 (mitigação de jank)
-   Escopo: neutraliza `transition: all` global em links para propriedades seguras.
-   Objetivo: reduzir repaints/reflows perceptíveis sem remover feedback visual. */
-html body#html-body .page-wrapper :is(a, a:visited, a:hover, a:focus, a:focus-visible) {
-  transition-property: color, background-color, border-color, opacity, text-decoration-color !important;
-  transition-duration: var(--awa-duration-fast, 150ms) !important;
-  transition-timing-function: var(--awa-ease, ease) !important;
-  transition-delay: 0s !important;
+html body#html-body .page-wrapper :is(a,a:visited,a:hover,a:focus,a:focus-visible) {
+  transition-property:color,background-color,border-color,opacity,text-decoration-color!important;
+  transition-duration:var(--awa-duration-fast, 150ms)!important;
+  transition-timing-function:var(--awa-ease,cubic-bezier(0.4,0,0.2,1))!important;
+  transition-delay:0s!important
 }
-
-/* Mantém responsividade e evita animação de propriedades geométricas em links comuns. */
-html body#html-body .page-wrapper :is(.header-wrapper-sticky, .top-home-content, .page-footer, .footer-container, .nav-sections, .navigation) a {
-  will-change: auto !important;
+html body#html-body .page-wrapper :is(.header-wrapper-sticky,.top-home-content,.page-footer,.footer-container,.nav-sections,.navigation) a {
+  will-change:auto!important
 }
-
-/* Round 19 — BUG-H-036 (fase 2): reduz jank residual em header/home/footer.
-   Escopo: botões/ações/links em áreas críticas, evitando transições geométricas globais. */
 html body#html-body .page-wrapper :is(
-  .page-header,
-  .header,
-  .header.content,
-  .top-home-content,
-  .nav-sections,
-  .navigation,
-  .minicart-wrapper,
-  .block-search,
-  .page-footer,
-  .footer-container
-) :is(a, button, .action, .btn, [role="button"], input[type="submit"], input[type="button"]) {
-  transition-property: color, background-color, border-color, opacity, box-shadow, text-decoration-color !important;
-  transition-duration: var(--awa-duration-fast, 150ms) !important;
-  transition-timing-function: var(--awa-ease, ease) !important;
-  transition-delay: 0s !important;
+.page-header,.header,.header.content,.top-home-content,.nav-sections,.navigation,.minicart-wrapper,.block-search,.page-footer,.footer-container
+) :is(a,button,.action,.btn,[role=button],input[type=submit],input[type=button]) {
+  transition-property:color,background-color,border-color,opacity,box-shadow,text-decoration-color!important;
+  transition-duration:var(--awa-duration-fast, 150ms)!important;
+  transition-timing-function:var(--awa-ease,cubic-bezier(0.4,0,0.2,1))!important;
+  transition-delay:0s!important
 }
-
-/* Evita custo de composição contínua em áreas de navegação/rodapé. */
 html body#html-body .page-wrapper :is(
-  .page-header,
-  .header,
-  .top-home-content,
-  .nav-sections,
-  .navigation,
-  .page-footer,
-  .footer-container
-) :is(a, button, .action, .btn, [role="button"]) {
-  will-change: auto !important;
+.page-header,.header,.top-home-content,.nav-sections,.navigation,.page-footer,.footer-container
+) :is(a,button,.action,.btn,[role=button]) {
+  will-change:auto!important
 }
-
-/* Respeita usuários com redução de movimento no topo/rodapé. */
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
   html body#html-body .page-wrapper :is(
-    .page-header,
-    .header,
-    .top-home-content,
-    .nav-sections,
-    .navigation,
-    .page-footer,
-    .footer-container
-  ) :is(a, button, .action, .btn, [role="button"], input[type="submit"], input[type="button"]) {
-    transition: none !important;
-    animation: none !important;
+.page-header,.header,.top-home-content,.nav-sections,.navigation,.page-footer,.footer-container
+) :is(a,button,.action,.btn,[role=button],input[type=submit],input[type=button]) {
+    transition:none!important;
+    animation:none!important
   }
 }
-
-/* Round 20 — BUG-H-044: excesso de CTAs WhatsApp na home (ruído visual).
-   Mantém canais primários (botão flutuante + atendimento no rodapé)
-   e remove o CTA redundante no card de benefícios B2B da home. */
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper .awa-hero-b2b-cta
-  .awa-hero-benefits__item--interactive
-  > .awa-hero-benefits__link[href*="wa.me/"] {
-  display: none !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta .awa-hero-benefits__item--interactive>.awa-hero-benefits__link[href*="wa.me/"] {
+  display:none!important
 }
-
-html body#html-body:is(.cms-index-index, .cms-home, .cms-homepage_ayo_home5)
-  .page-wrapper .awa-hero-b2b-cta
-  .awa-hero-benefits__item--interactive:has(> .awa-hero-benefits__link[href*="wa.me/"]) {
-  display: none !important;
+html body#html-body:is(.cms-index-index,.cms-home,.cms-homepage_ayo_home5) .page-wrapper .awa-hero-b2b-cta .awa-hero-benefits__item--interactive:has(> .awa-hero-benefits__link[href*="wa.me/"]) {
+  display:none!important
 }
-
-/* Round 21A — BUG-H-AXIS-016: nav desktop 16px fora do eixo em páginas internas.
-   Vence trilhos 1280-24/32 do themes/styles e ancora nav no mesmo shell do main/footer. */
-@media (min-width: 992px) {
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.awa-nav-bar,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky > .header-control.header-nav.awa-nav-bar,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar {
-    width: min(100%, 1280px) !important;
-    max-width: 1280px !important;
-    margin-inline: auto !important;
-    padding-inline: 0 !important;
-    box-sizing: border-box !important;
+@media (min-width:992px) {
+  html body#html-body .page-wrapper :is(.awa-footer-newsletter,.footer-newsletter) {
+    width:100%!important;
+    max-width:var(--awa-grid-shell-max,min(100%,1280px))!important;
+    margin-inline:auto!important;
+    box-sizing:border-box!important;
+    padding-inline:var(--awa-page-pad,clamp(12px,2vw,24px))!important
   }
-
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar > .container,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar > .container,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,
-  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view, .catalogsearch-result-index, .catalog-product-view, .checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-inline: 0 !important;
-    padding-inline: 0 !important;
-    box-sizing: border-box !important;
+  html body#html-body .page-wrapper :is(.awa-footer-newsletter,.footer-newsletter)>.container {
+    width:100%!important;
+    max-width:100%!important;
+    margin-inline:auto!important;
+    padding-inline:0!important;
+    box-sizing:border-box!important
+  }
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky>.header-control.awa-nav-bar,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-wrapper-sticky>.header-control.header-nav.awa-nav-bar {
+    width:min(100%,1280px)!important;
+    max-width:1280px!important;
+    margin-inline:auto!important;
+    padding-inline:0!important;
+    box-sizing:border-box!important
+  }
+  html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar .awa-nav-bar__inner,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.awa-nav-bar>.container,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar .awa-nav-bar__inner,html body#html-body#html-body#html-body#html-body:is(.catalog-category-view,.catalogsearch-result-index,.catalog-product-view,.checkout-cart-index) .page-wrapper .awa-site-header .header-control.header-nav.awa-nav-bar>.container {
+    width:100%!important;
+    max-width:100%!important;
+    margin-inline:0!important;
+    padding-inline:0!important;
+    box-sizing:border-box!important
   }
 }
-
-/* Round 21 — BUG-H-028 (follow-up): touch targets pequenos no header/footer mobile.
-   Eleva alvos interativos para mínimo WCAG de 44px sem alterar estrutura desktop. */
-@media (max-width: 767px) {
+@media (max-width:767px) {
   html body#html-body .page-wrapper :is(
-    .block-search .action.search,
-    .minicart-wrapper .action.showcart,
-    .header-control.header-nav,
-    .header-control.header-nav-global,
-    .header-control .header-nav-global
-  ) {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.block-search .action.search,.minicart-wrapper .action.showcart,.header-control.header-nav,.header-control.header-nav-global,.header-control .header-nav-global
+) {
+    min-width:44px!important;
+    min-height:44px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important
   }
-
   html body#html-body .page-wrapper :is(
-    .footer-container .awa-footer-section__toggle,
-    .footer-container .awa-footer-categories-expand__toggle,
-    .footer-container .awa-footer-pro__social-link
-  ) {
-    min-width: 44px !important;
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.footer-container .awa-footer-section__toggle,.footer-container .awa-footer-categories-expand__toggle,.footer-container .awa-footer-pro__social-link
+) {
+    min-width:44px!important;
+    min-height:44px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important
   }
-
   html body#html-body .page-wrapper .footer-container .awa-footer-atendimento__actions a {
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
+    min-height:44px!important;
+    display:inline-flex!important;
+    align-items:center!important
   }
-}
-
-/* Round 22 — BUG-H-028 (header search mobile): campo de busca com alvo <44px em páginas como carrinho.
-   O CSS crítico define 42px; este override padroniza para 44px no mobile. */
-@media (max-width: 767px) {
   html body#html-body .page-wrapper :is(
-    .block-search #search,
-    .block-search .input-text,
-    .header-search .input-text,
-    #search_mini_form input#search
-  ) {
-    height: 44px !important;
-    min-height: 44px !important;
-    line-height: 44px !important;
-    font-size: 16px !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+.block-search #search,.block-search .input-text,.header-search .input-text,#search_mini_form input#search
+) {
+    height:44px!important;
+    min-height:44px!important;
+    line-height:44px!important;
+    font-size:16px!important;
+    padding-top:0!important;
+    padding-bottom:0!important
   }
 }
-
-/* Round 23 — BUG-B2B-CTA-044: WhatsApp auth CTA abaixo do alvo mínimo.
-   Usa seletor final com html/body/page-wrapper para vencer overrides tardios
-   sem alterar cor, conteúdo ou fluxo visual do login/cadastro. */
 html body#html-body.b2b-auth-shell:is(
-  .b2b-account-login,
-  .b2b-account-forgotpassword,
-  .b2b-account-claim,
-  .b2b-register-index,
-  .b2b-register-success
-) .page-wrapper :is(a.b2b-login-whatsapp, button.b2b-login-whatsapp) {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-height: 44px !important;
-  min-block-size: 44px !important;
-  height: auto !important;
-  padding-block: var(--b2b-auth-gap-sm, 8px) !important;
-  box-sizing: border-box !important;
-  line-height: 1.3 !important;
+.b2b-account-login,.b2b-account-forgotpassword,.b2b-account-claim,.b2b-register-index,.b2b-register-success
+) .page-wrapper :is(a.b2b-login-whatsapp,button.b2b-login-whatsapp) {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:44px!important;
+  min-block-size:44px!important;
+  height:auto!important;
+  padding-block:var(--b2b-auth-gap-sm,8px)!important;
+  box-sizing:border-box!important;
+  line-height:1.3!important
 }
-
-/*
- * H31: resumo OPC — .product-item-inner em grid 2 col esmaga o nome (~81px).
- * Empilhar nome/preço em coluna para o título usar a largura do sidebar.
- */
 html body#html-body#html-body#html-body:is(
-  .checkout-index-index,
-  .rokanthemes-onepagecheckout,
-  .onepagecheckout-index-index
-)
-  .page-wrapper
-  .opc-block-summary
-  .product-item-details
-  .product-item-inner {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  gap: 8px !important;
-  grid-template-columns: none !important;
+.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index
+) .page-wrapper .opc-block-summary .product-item-details .product-item-inner {
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:8px!important;
+  grid-template-columns:none!important
 }
-
 html body#html-body#html-body#html-body:is(
-  .checkout-index-index,
-  .rokanthemes-onepagecheckout,
-  .onepagecheckout-index-index
-)
-  .page-wrapper
-  .opc-block-summary
-  .product-item-name-block {
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
+.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index
+) .page-wrapper .opc-block-summary .product-item-name-block {
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important
 }
-
 html body#html-body#html-body#html-body:is(
-  .checkout-index-index,
-  .rokanthemes-onepagecheckout,
-  .onepagecheckout-index-index
-)
-  .page-wrapper
-  .opc-block-summary
-  .product-item-name {
-  width: 100% !important;
-  max-width: 100% !important;
+.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index
+) .page-wrapper .opc-block-summary .product-item-name {
+  width:100%!important;
+  max-width:100%!important
 }
-
-/*
- * H32: qty do resumo OPC (~26px) — width:100%!important do align-grid
- * + botões ± 44px esmagam o input. Travar largura como no carrinho (H26).
- */
 html body#html-body#html-body#html-body:is(
-  .checkout-index-index,
-  .rokanthemes-onepagecheckout,
-  .onepagecheckout-index-index
-)
-  .page-wrapper
-  .opc-block-summary
-  .details-qty
-  :is(input.qty, input.input-text.qty) {
-  width: 3rem !important;
-  min-width: 2.75rem !important;
-  max-width: 4rem !important;
-  flex: 0 0 auto !important;
-  text-align: center !important;
-  padding-inline: 4px !important;
-  box-sizing: border-box !important;
+.checkout-index-index,.rokanthemes-onepagecheckout,.onepagecheckout-index-index
+) .page-wrapper .opc-block-summary .details-qty :is(input.qty,input.input-text.qty) {
+  width:3rem!important;
+  min-width:2.75rem!important;
+  max-width:4rem!important;
+  flex:0 0 auto!important;
+  text-align:center!important;
+  padding-inline:4px!important;
+  box-sizing:border-box!important
 }
-
-/*
- * H33: sticky #cart-summary com max-height precisa scroll interno.
- * overflow:visible (shorthand de cleanups) faz frete/cupom vazar do aside.
- */
-html body#html-body#html-body#html-body.checkout-cart-index
-  .page-wrapper
-  :is(#cart-summary, .cart-summary) {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior: contain !important;
+html body#html-body#html-body#html-body.checkout-cart-index .page-wrapper :is(#cart-summary,.cart-summary) {
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain!important
 }

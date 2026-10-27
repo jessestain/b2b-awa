@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+  Habilita image/webp na galeria de produtos.
+  Sem isto, o Magento rejeita WebP com:
+    InputException "The image MIME type is not valid or not supported."
+  Causa: Magento\Framework\Api\ImageContentValidator::$defaultMimeTypes
+         contem apenas jpg/jpeg/gif/png.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Api\ImageContentValidator">
+        <arguments>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="webp" xsi:type="string">image/webp</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Catalog\Model\Product\Gallery\Processor" type="GrupoAwamotos\WebpSupport\Model\Product\Gallery\Processor"/>
+    <preference for="Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap" type="GrupoAwamotos\WebpSupport\Model\Product\Gallery\MimeTypeExtensionMap"/>
+    <preference for="Magento\Framework\Api\ImageProcessor" type="GrupoAwamotos\WebpSupport\Model\Api\ImageProcessor"/>
+    <preference for="Magento\Framework\Api\ImageProcessorInterface" type="GrupoAwamotos\WebpSupport\Model\Api\ImageProcessor"/>
+</config>

@@ -651,20 +651,20 @@ body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress .progres
   min-width: 20px !important;
   font-size: 12px !important;
 }
-/* Auditoria UX 2026-06-12: no mobile a etapa ativa ganha espaço extra
-   para exibir o rótulo sem truncar (fallback sem :has = rótulo com ellipsis) */
+/* Mobile step labels need complete cells, including inactive steps. */
 @media (max-width: 575px) {
-  body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress:has(.progress-step:nth-child(1).is-active) {
-    grid-template-columns: 2.2fr 1fr 1fr 1fr !important;
+  body#html-body.b2b-auth-shell.b2b-register-index #b2b-register-shell .b2b-register-progress {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    overflow: visible !important;
   }
-  body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress:has(.progress-step:nth-child(2).is-active) {
-    grid-template-columns: 1fr 2.2fr 1fr 1fr !important;
-  }
-  body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress:has(.progress-step:nth-child(3).is-active) {
-    grid-template-columns: 1fr 1fr 2.2fr 1fr !important;
-  }
-  body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-progress:has(.progress-step:nth-child(4).is-active) {
-    grid-template-columns: 1fr 1fr 1fr 2.2fr !important;
+  body#html-body.b2b-auth-shell.b2b-register-index #b2b-register-shell .b2b-register-progress .progress-step {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow: visible !important;
+    padding-inline: 10px !important;
   }
 }
 body#html-body.b2b-auth-shell.b2b-register-index .b2b-register-step-nav {
@@ -1040,6 +1040,16 @@ html body#html-body.b2b-auth-shell.b2b-account-login .page-wrapper button.b2b-pa
   }
 }
 
+/* CookieConsent publishes the measured upper edge; auth omits the global FAB stack. */
+@layer awa-fixes, awa-visual-priority;
+@layer awa-fixes {
+  @media (max-width: 640px) {
+    html body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body#html-body.b2b-auth-shell.awa-cookie-banner-active .awa-ai-chat__toggle {
+      bottom: max(24px, var(--awa-cookie-banner-top-gap, 0px)) !important;
+      inset-block-end: max(24px, var(--awa-cookie-banner-top-gap, 0px)) !important;
+    }
+  }
+}
 </style>
 <script>
 (function (d) {

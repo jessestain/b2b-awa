@@ -1,8 +1,21 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!--
+      Lastro de eventos de resposta do storefront.
+
+      `controller_front_send_response_before` e o ULTIMO ponto em que o HTML ainda
+      pode ser alterado antes do envio. NAO usar o `_after`: medido em 06/10/2026,
+      ele dispara DEPOIS de `$response->sendResponse()`, entao o que for escrito
+      ali nao chega ao navegador.
+
+      sortOrder dentro do mesmo evento define a ordem entre observers:
+        optimize_html_response ..... 0    (existente)
+        corrigir_clamp_nome_produto  999   (roda depois, ve o HTML ja otimizado)
+    -->
     <event name="controller_front_send_response_before">
         <observer name="grupoawamotos_theme_optimize_html_response"
-                  instance="GrupoAwamotos\Theme\Observer\OptimizeHtmlResponseObserver"/>
+                  instance="GrupoAwamotos\Theme\Observer\OptimizeHtmlResponseObserver"
+                  sortOrder="0"/>
     </event>
 </config>
