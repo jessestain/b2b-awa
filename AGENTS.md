@@ -4,7 +4,7 @@
 
 ## Ambiente de Desenvolvimento
 - **OS:** ubuntu (servidor remoto via ssh)
-- **Plataforma:** magento 2.4.8-p3 (community edition)
+- **Plataforma:** magento 2.4.8-p5 (community edition)
 - **PHP:** 8.4
 - **Banco:** mysql (via magento orm)
 - **Cache:** redis
