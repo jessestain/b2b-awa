@@ -1,48 +1,101 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- *
- * AWA SlideBanner Fix - 2026-06-02
- * - Swiper runtime no frontend, mantendo dados/admin Rokanthemes
- * - LCP picture responsivo preservado para o primeiro slide
- * - desktop/mobile separados conforme tema Ayo Home5
+ * AWA Motos — Slide Banner Template
+ * API: Owl Carousel 2.0.x (Rokanthemes_Themeoption/js/owl.carousel)
+ * Estrutura: hidden-xs (desktop) / visible-xs (mobile) conforme tema Ayo Home5.
  *
  * @var \Rokanthemes\SlideBanner\Block\Slider $block
  */
 
 // @codingStandardsIgnoreFile
 if ($banners = $block->getBannerCollection()):
-    /** @var \GrupoAwamotos\Theme\ViewModel\HeroResponsiveImage|null $heroResponsive */
-    $heroResponsive = $block->getData('hero_responsive_view_model');
     $slider = $block->getSlider();
-    $sliderId = (int) $slider->getId();
+    $sliderId = $block->getSliderId();
     $settings = $slider->getSliderSetting();
-    $swiperConfig = [
-        'slidesPerView' => 1,
-        'autoHeight' => false,
-        'effect' => 'fade',
-        'loop' => true,
-        'speed' => 500,
-        'navigation' => true,
-        'pagination' => true,
-        'autoplay' => 12000,
-        /* VS4l: Swiper 11 tem resizeObserver=true por padrão — cada resize (inclusive
-           barra de URL no mobile) re-roda updateSize (~300ms de leituras de layout).
-           Os slides são travados via CSS (100%×100% do container) e o container tem
-           altura reservada (F47) → o swiper não precisa re-medir; desligar os dois
-           observers elimina o custo repetido. Init continua medindo 1×. */
-        'resizeObserver' => false,
-        'observer' => false,
-        'observeParents' => false,
-    ];
-    $booleanKeys = ['navigation', 'stopOnHover', 'pagination'];
+    $desktopSlides = [];
+    $mobileSlides = [];
 
+    /**
+     * Mapeamento DB settings (formato Rokanthemes legado) → OWL Carousel v2 API
+     *
+     * DB usa:     autoPlay (ms|1|0),  navigation (bool), pagination (bool),
+     *             stopOnHover (bool), slideSpeed (ms)
+     * OWL v2 usa: autoplay (bool), autoplayTimeout (ms), autoplayHoverPause,
+     *             nav, dots, smartSpeed, animateOut, animateIn
+     */
+    $s = static function (array $arr, string $key, $default = null) {
+        return array_key_exists($key, $arr) ? $arr[$key] : $default;
+    };
+
+    // autoPlay: 0=off | 1=on (5 s) | N>1 = N ms de intervalo
+    $rawAP = (int) $s($settings, 'autoPlay', 0);
+    $autoplayEnabled = $rawAP !== 0;
+    $autoplayTimeout = $rawAP > 1 ? $rawAP : 5000;
+
+    // slideSpeed → smartSpeed (mínimo 50ms)
+    $smartSpeed = max(50, (int) $s($settings, 'slideSpeed', 500) ?: 500);
+
+    $baseOwlConfig = [
+        'items' => 1,
+        'loop' => false,
+        'autoHeight' => true,
+        'lazyLoad' => false,
+        'touchDrag' => true,
+        'mouseDrag' => true,
+        'nav' => (bool) (int) $s($settings, 'navigation', 1),
+        'dots' => (bool) (int) $s($settings, 'pagination', 1),
+        'autoplay' => $autoplayEnabled,
+        'autoplayTimeout' => $autoplayTimeout,
+        'autoplayHoverPause' => (bool) (int) $s($settings, 'stopOnHover', 1),
+        'smartSpeed' => $smartSpeed,
+        'animateOut' => false,
+        'animateIn' => false,
+    ];
+
+    foreach ($banners as $banner) {
+        if ($banner->getSlideStatus() == '2') {
+            continue;
+        }
+
+        $desktopImage = trim((string) $banner->getSlideImage());
+        $mobileImage = trim((string) $banner->getSlideImageMobile());
+        $heroImage = $mobileImage !== '' ? $mobileImage : $desktopImage;
+
+        if ($desktopImage !== '') {
+            $desktopSlides[] = [
+                'banner' => $banner,
+                'image' => $desktopImage,
+            ];
+        }
+
+        if ($heroImage !== '') {
+            $mobileSlides[] = [
+                'banner' => $banner,
+                'image' => $heroImage,
+            ];
+        }
+    }
+
+    $desktopOwlConfig = $baseOwlConfig;
+    $desktopHasMultipleSlides = count($desktopSlides) > 1;
+    $desktopOwlConfig['loop'] = $desktopHasMultipleSlides;
+    $desktopOwlConfig['nav'] = $desktopHasMultipleSlides && $desktopOwlConfig['nav'];
+    $desktopOwlConfig['dots'] = $desktopHasMultipleSlides && $desktopOwlConfig['dots'];
+    $desktopOwlConfig['autoplay'] = $desktopHasMultipleSlides && $desktopOwlConfig['autoplay'];
+
+    $mobileOwlConfig = $baseOwlConfig;
+    $mobileHasMultipleSlides = count($mobileSlides) > 1;
+    $mobileOwlConfig['loop'] = $mobileHasMultipleSlides;
+    $mobileOwlConfig['nav'] = $mobileHasMultipleSlides && $mobileOwlConfig['nav'];
+    $mobileOwlConfig['dots'] = $mobileHasMultipleSlides && $mobileOwlConfig['dots'];
+    $mobileOwlConfig['autoplay'] = $mobileHasMultipleSlides && $mobileOwlConfig['autoplay'];
+
+    // Resolução de links legados (ambiente de staging → produção)
     $legacyHosts = ['srv1113343.hstgr.cloud', 'www.srv1113343.hstgr.cloud'];
     $baseUrl = rtrim((string) $block->getBaseUrl(), '/');
     $baseHost = (string) parse_url($baseUrl, PHP_URL_HOST);
     $baseScheme = (string) parse_url($baseUrl, PHP_URL_SCHEME);
-    $resolveSlideLink = static function (?string $link) use ($legacyHosts, $baseHost, $baseScheme): string {
+    $resolveLink = static function (?string $link) use ($legacyHosts, $baseHost, $baseScheme): string {
         if (!is_string($link)) {
             return '';
         }
@@ -69,495 +122,199 @@ if ($banners = $block->getBannerCollection()):
 
         return $baseScheme . '://' . $baseHost . $path . $query . $fragment;
     };
-
-    foreach ($settings as $key => $value) {
-        if ($key === 'autoPlay') {
-            // AWA 2026-06-17 (impeccable go): autoplay mais lento — balcão > promo rotativa.
-            $delay = is_numeric($value) ? (int) $value : 12000;
-            $swiperConfig['autoplay'] = max(10000, $delay);
-            continue;
-        }
-
-        if (in_array($key, $booleanKeys, true)) {
-            $swiperConfig[$key] = ((int) $value) === 1;
-            continue;
-        }
-
-        if (is_string($value)) {
-            $trimmed = trim($value);
-
-            if (is_numeric($trimmed)) {
-                if ($key === 'slideSpeed') {
-                    $swiperConfig['speed'] = max(0, (int) $trimmed);
-                } else {
-                    $swiperConfig[$key] = (strpos($trimmed, '.') !== false) ? (float) $trimmed : (int) $trimmed;
-                }
-                continue;
-            }
-        }
-
-        $swiperConfig[$key] = $value;
-    }
-    // AWA 2026-06-17: autoplay 12s por padrão (reduce-promo); admin pode override.
-    if (!isset($swiperConfig['autoplay']) || $swiperConfig['autoplay'] === false) {
-        $swiperConfig['autoplay'] = 12000;
-    }
-    // AWA hardening (2026-06-03): blinda slide_text malformado/truncado contra quebra de DOM
-    $renderSafeSlideText = static function ($rawText) use ($block): string {
-        $rendered = (string) $block->getContentText($rawText);
-        $lower = strtolower($rendered);
-        $openA = substr_count($lower, '<a ') + substr_count($lower, '<a>');
-        $closeA = substr_count($lower, '</a>');
-        $ltCount = substr_count($rendered, '<');
-        $gtCount = substr_count($rendered, '>');
-        if ($openA !== $closeA || $ltCount !== $gtCount) {
-            return $block->escapeHtml(trim(strip_tags($rendered)));
-        }
-        return $rendered;
-    };
-    $renderB2bCta = static function (string $link, $rawText) use ($block): string {
-        $path = (string) parse_url($link, PHP_URL_PATH);
-        if (rtrim($path, '/') !== '/b2b/register' || stripos((string) $rawText, 'slide-btn') !== false) {
-            return '';
-        }
-
-        return '<a href="' . $block->escapeUrl($link)
-            . '" class="action primary awa-hero-slide__cta">'
-            . $block->escapeHtml(__('Cadastrar no B2B'))
-            . '</a>';
-    };
-    $activeBannerCount = 0;
-    foreach ($banners as $banner) {
-        if ($banner->getSlideStatus() != '2') {
-            $activeBannerCount++;
-        }
-    }
 ?>
-<div class="wrapper_slider hidden-xs slider_<?php echo (int) $sliderId; ?>" data-awa-hero-variant="desktop">
-    <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais')) ?>">
-        <div class="swiper-wrapper awa-hero__track">
-        <?php $__deskIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirst = ($__deskIdx === 0); $__deskIdx++;
-            $link = $resolveSlideLink($banner->getSlideLink());
-            $__isCb300 = (stripos((string) $banner->getSlideImage(), 'slider_guidao_cb_300') !== false)
-                || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
-        ?>
-            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300 ? ' awa-hero__slide--cb300' : '' ?>"
-                 role="group"
-                 aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
-                 aria-label="<?= $block->escapeHtmlAttr(__('Slide %1 de %2', $__deskIdx, $activeBannerCount)) ?>"
-                 aria-hidden="<?= $__isFirst ? 'false' : 'true' ?>">
+<div class="wrapper_slider hidden-xs slider_<?php echo (int) $sliderId; ?>">
+    <div class="owl owl-carousel">
+        <?php foreach ($desktopSlides as $slideIndex => $slide): ?>
+            <?php
+            $banner = $slide['banner'];
+            $desktopImage = $slide['image'];
+            $isFirst = ($slideIndex === 0);
+            ?>
+            <div class="banner_item">
                 <div class="banner_item_bg">
                     <?php
-                    $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
-                    $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
-                    if ($__isCb300 && strcasecmp($slideAlt, 'AWA Motos') === 0) {
-                        $slideAlt = (string) __('Guidão CB 300 texturizado');
+                    $slideAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: '');
+                    $imgHtml = $block->getImageElement($desktopImage, $slideAlt, $isFirst);
+                    if ($isFirst && preg_match('/src="([^"]+)"/', $imgHtml, $_m)) {
+                        $_webp = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $_m[1]);
+                        $imgHtml = '<picture>'
+                            . '<source type="image/webp" srcset="' . $block->escapeUrl($_webp) . '">'
+                            . $imgHtml
+                            . '</picture>';
                     }
-                    if ($heroResponsive) {
-                        $html = $heroResponsive->buildLcpPictureHtml(
-                            (string) $banner->getSlideImage(),
-                            $slideAlt,
-                            $__isFirst,
-                            false
-                        );
-                    } else {
-                        $html = $block->getImageElement($banner->getSlideImage(), $slideAlt, $__isFirst);
-                        if (preg_match('/src="([^"]+)"/', $html, $_wm)) {
-                            $_webp = $_wm[1] . '.webp';
-                            $html = '<picture>'
-                                . '<source type="image/webp" srcset="' . $block->escapeUrl($_webp) . '">'
-                                . $html
-                                . '</picture>';
-                        }
-                    }
-                    if (!empty($__isCb300)) {
-                        $html .= '<span class="awa-hero-sliver-mask" aria-hidden="true"></span>';
-                    }
+                    $link = $resolveLink($banner->getSlideLink());
                     if ($link !== '') {
-                        $slideLinkLabel = trim(strip_tags((string) $slideAlt)) ?: (string) __('Destaque AWA Motos');
-                        $html = '<a href="' . $block->escapeUrl($link) . '" aria-label="'
-                            . $block->escapeHtmlAttr(__('Abrir destaque: %1', $slideLinkLabel))
-                            . '">' . $html . '</a>';
+                        $imgHtml = '<a href="' . $block->escapeUrl($link) . '">' . $imgHtml . '</a>';
                     }
-                    echo $html;
+                    echo $imgHtml;
                     ?>
                 </div>
-                <?php if ($text = $banner->getSlideText()): ?>
                 <div class="text-banner">
-                    <?= $renderSafeSlideText($text) ?>
-                    <?= /* @noEscape */ $renderB2bCta($link, $text) ?>
+                    <?php if ($text = $banner->getSlideText()): ?>
+                        <?php
+                        $awaSlideContent = $block->getContentText($text);
+                        $awaCustomerLogged = false;
+                        try {
+                            $awaCustomerLogged = \Magento\Framework\App\ObjectManager::getInstance()
+                                ->get(\Magento\Customer\Model\Session::class)->isLoggedIn();
+                        } catch (\Throwable $e) {
+                            $awaCustomerLogged = false;
+                        }
+                        if ($awaCustomerLogged) {
+                            $awaSlideContent = str_replace('/b2b/register', '/b2b/quickcatalog/', $awaSlideContent);
+                            $awaSlideContent = preg_replace('/>(Cadastrar no B2B|Cadastre-se no programa B2B[^<]*|Cadastre-se[^<]*)</u', '>Comprar agora<', $awaSlideContent);
+                        }
+                        echo $awaSlideContent;
+                        ?>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
             </div>
-        <?php } ?>
-        </div>
-        <button class="awa-hero-swiper__nav awa-hero-swiper__nav--prev awa-hero__nav awa-hero__button awa-hero__button--prev swiper-button-prev" type="button" aria-label="<?= $block->escapeHtmlAttr(__('Slide anterior')) ?>">
-            <span aria-hidden="true">‹</span>
-        </button>
-        <button class="awa-hero-swiper__nav awa-hero-swiper__nav--next awa-hero__nav awa-hero__button awa-hero__button--next swiper-button-next" type="button" aria-label="<?= $block->escapeHtmlAttr(__('Próximo slide')) ?>">
-            <span aria-hidden="true">›</span>
-        </button>
-        <?php /* A11Y-001: sem aria-hidden aqui — o Swiper (clickable:true) popula esta div com <button> reais (um por slide, cada um com seu proprio aria-label "Ir para o slide N"); aria-hidden no container escondia esses botoes focaveis do leitor de tela (aria-hidden-focus, axe-core/Lighthouse). */ ?>
-        <div class="swiper-pagination awa-hero__pagination"></div>
-        <button class="awa-hero-pause-btn awa-hero__pause" type="button"
-                aria-label="<?= $block->escapeHtmlAttr(__('Pausar apresentação')) ?>"
-                aria-pressed="false"
-                data-pause-label="<?= $block->escapeHtmlAttr(__('Pausar apresentação')) ?>"
-                data-resume-label="<?= $block->escapeHtmlAttr(__('Retomar apresentação')) ?>">
-            <span class="awa-hero-pause-btn__icon" aria-hidden="true">&#9613;&#9613;</span>
-        </button>
+        <?php endforeach; ?>
     </div>
 </div>
-<div class="wrapper_slider visible-xs slider_<?php echo (int) $sliderId; ?>_mobile" data-awa-hero-variant="mobile">
-    <div class="swiper awa-hero-swiper awa-hero-slider awa-hero__viewport" role="region" aria-roledescription="carrossel" aria-label="<?= $block->escapeHtmlAttr(__('Destaques principais mobile')) ?>">
-        <div class="swiper-wrapper awa-hero__track">
-        <?php $__mobIdx = 0; foreach ($banners as $banner) { if ($banner->getSlideStatus() == '2') { continue; } $__isFirstMob = ($__mobIdx === 0);
-        /* CORRECAO 08/10/2026 (LCP mobile): o autoplay mobile CUSTOMIZADO
-           (startMobileAutoplay no awa-hero-slider.js) rotaciona mesmo com o
-           autoplay do Swiper desligado, entao o SLIDE 2 tambem e pintado e vira
-           candidato a LCP. Medido com throttle do PSI: LCP continuava sendo
-           slider_005_mobile.jpg.webp (52,9s). Logo os DOIS primeiros slides do
-           mobile precisam ser eager. Variavel SEPARADA de $__isFirstMob, que
-           controla aria-hidden e deve seguir marcando so o slide ativo. */
-        $__eagerMob = ($__mobIdx <= 1); $__mobIdx++;
-        $_rawAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: 'AWA Motos');
-        $slideAlt = trim(preg_replace('/\s+/', ' ', strip_tags(str_replace('<', ' <', (string) $_rawAlt)))) ?: 'AWA Motos';
-        $_mobSrc = $banner->getSlideImageMobile() ?: $banner->getSlideImage();
-        $link = $resolveSlideLink($banner->getSlideLink());
-        $__isCb300Mob = (stripos((string) $_mobSrc, 'slider_guidao_cb_300') !== false)
-            || (stripos((string) (parse_url((string) $link, PHP_URL_PATH) ?: ''), 'guidoes.html') !== false);
-        if ($__isCb300Mob && strcasecmp($slideAlt, 'AWA Motos') === 0) {
-            $slideAlt = (string) __('Guidão CB 300 texturizado');
-        } ?>
-            <div class="banner_item swiper-slide awa-hero__slide<?= $__isCb300Mob ? ' awa-hero__slide--cb300' : '' ?>"
-                 role="group"
-                 aria-roledescription="<?= $block->escapeHtmlAttr(__('slide')) ?>"
-                 aria-label="<?= $block->escapeHtmlAttr(__('Slide %1 de %2', $__mobIdx, $activeBannerCount)) ?>"
-                 aria-hidden="<?= $__isFirstMob ? 'false' : 'true' ?>">
+<div class="wrapper_slider visible-xs slider_<?php echo (int) $sliderId; ?>_mobile" aria-hidden="true" data-rk-desktop-mirror="1">
+    <div class="owl owl-carousel">
+        <?php foreach ($mobileSlides as $slideIndex => $slide): ?>
+            <?php
+            $banner = $slide['banner'];
+            $heroImage = $slide['image'];
+            $isFirst = ($slideIndex === 0);
+            ?>
+            <div class="banner_item">
                 <div class="banner_item_bg">
                     <?php
-                    if ($heroResponsive) {
-                        // r44b: no desktop o slider mobile fica em display:none, mas eager+high
-                        // ainda baixa 1920w. LCP mobile fica no preload (media max-width:767).
-                        /* CORRECAO 08/10/2026 (LCP mobile) — o 3o parametro ($isLcpCandidate)
-                           era `false` HARDCODED, entao NENHUM slide do hero mobile era tratado
-                           como candidato LCP: todos saiam loading="lazy" e SEM fetchpriority,
-                           inclusive o PRIMEIRO. Medido com throttle do PSI (4x CPU + 1,6 Mbps):
-                           o LCP mobile era o SLIDE 2 (`slider_005_mobile.jpg.webp`), DESCOBERTO
-                           aos 50,2s e pintado aos 57,9s — porque o Swiper usa effect:fade com
-                           loop, entao o slide 2 fica empilhado no viewport e, sendo lazy, so e
-                           revelado tarde. Com o slide 1 marcado como candidato LCP ele recebe
-                           eager + fetchpriority=high (e ja tem <link rel=preload> no head), e o
-                           LCP deixa de ser um slide tardio. */
-                        $html = $heroResponsive->buildLcpPictureHtml(
-                            (string) $_mobSrc,
-                            $slideAlt,
-                            $__eagerMob,
-                            true
-                        );
-                    } else {
-                        $html = $block->getImageElementMobile($_mobSrc, $slideAlt, $__eagerMob);
-                        if (preg_match('/src="([^"]+)"/', $html, $_wmm)) {
-                            $_webpm = $_wmm[1] . '.webp';
-                            $html = '<picture>'
-                                . '<source type="image/webp" srcset="' . $block->escapeUrl($_webpm) . '">'
-                                . $html
-                                . '</picture>';
-                        }
+                    $slideAlt = $banner->getSlideText() ?: ($banner->getSlideTitle() ?: '');
+                    $imgHtml = $block->getImageElementMobile($heroImage, $slideAlt, $isFirst);
+                    if ($isFirst && preg_match('/src="([^"]+)"/', $imgHtml, $_m)) {
+                        $_webp = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $_m[1]);
+                        $imgHtml = '<picture>'
+                            . '<source type="image/webp" srcset="' . $block->escapeUrl($_webp) . '">'
+                            . $imgHtml
+                            . '</picture>';
                     }
+                    $link = $resolveLink($banner->getSlideLink());
                     if ($link !== '') {
-                        $slideLinkLabel = trim(strip_tags((string) $slideAlt)) ?: (string) __('Destaque AWA Motos');
-                        $html = '<a href="' . $block->escapeUrl($link) . '" aria-label="'
-                            . $block->escapeHtmlAttr(__('Abrir destaque: %1', $slideLinkLabel))
-                            . '">' . $html . '</a>';
+                        $imgHtml = '<a href="' . $block->escapeUrl($link) . '">' . $imgHtml . '</a>';
                     }
-                                        /* 13/10/2026 — hero desktop skip (48KB): no DESKTOP o wrapper mobile fica
-                       display:none, mas o <img> eager+high baixava as variantes mobile
-                       inutilmente. O <source media=(min-width:768px) srcset=<gif 1x1>>
-                       faz o PRÓPRIO navegador pular o download no desktop; no mobile a
-                       media nao casa e o <source> webp normal aplica (LCP intacto,
-                       reforcado pelo <link rel=preload media=max-width:767px> do head).
-                       16/10/2026 (C2): "data:," (data URI vazio) gerava
-                       net::ERR_INVALID_URL no console do Chrome; trocado por GIF 1x1
-                       transparente válido — mesmo efeito de skip, zero erro. */
-echo $html;
+                    echo $imgHtml;
                     ?>
                 </div>
-                <?php if ($__isCb300Mob) : ?>
-                <div class="awa-hero-mobile-caption">
-                    <span class="awa-hero-mobile-caption__badge"><?= $block->escapeHtml(__('Lançamento')) ?></span>
-                    <strong class="awa-hero-mobile-caption__title"><?= $block->escapeHtml(__('Guidão CB 300 Texturizado')) ?></strong>
-                    <span class="awa-hero-mobile-caption__meta"><?= $block->escapeHtml(__('Cód. 2398 · 2025')) ?></span>
-                    <a class="awa-hero-mobile-caption__cta" href="<?= $block->escapeUrl($link !== '' ? $link : '/guidoes.html') ?>"><?= $block->escapeHtml(__('Ver guidões')) ?></a>
-                </div>
-                <?php endif; ?>
-                <?php if ($text = $banner->getSlideText()): ?>
                 <div class="text-banner">
-                    <?= $renderSafeSlideText($text) ?>
-                    <?= /* @noEscape */ $renderB2bCta($link, $text) ?>
+                    <?php if ($text = $banner->getSlideText()): ?>
+                        <?php
+                        $awaSlideContent = $block->getContentText($text);
+                        $awaCustomerLogged = false;
+                        try {
+                            $awaCustomerLogged = \Magento\Framework\App\ObjectManager::getInstance()
+                                ->get(\Magento\Customer\Model\Session::class)->isLoggedIn();
+                        } catch (\Throwable $e) {
+                            $awaCustomerLogged = false;
+                        }
+                        if ($awaCustomerLogged) {
+                            $awaSlideContent = str_replace('/b2b/register', '/b2b/quickcatalog/', $awaSlideContent);
+                            $awaSlideContent = preg_replace('/>(Cadastrar no B2B|Cadastre-se no programa B2B[^<]*|Cadastre-se[^<]*)</u', '>Comprar agora<', $awaSlideContent);
+                        }
+                        echo $awaSlideContent;
+                        ?>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
             </div>
-        <?php } ?>
-        </div>
-        <button class="awa-hero-swiper__nav awa-hero-swiper__nav--prev awa-hero__nav awa-hero__button awa-hero__button--prev swiper-button-prev" type="button" aria-label="<?= $block->escapeHtmlAttr(__('Slide anterior')) ?>">
-            <span aria-hidden="true">‹</span>
-        </button>
-        <button class="awa-hero-swiper__nav awa-hero-swiper__nav--next awa-hero__nav awa-hero__button awa-hero__button--next swiper-button-next" type="button" aria-label="<?= $block->escapeHtmlAttr(__('Próximo slide')) ?>">
-            <span aria-hidden="true">›</span>
-        </button>
-        <?php /* A11Y-001: sem aria-hidden aqui — o Swiper (clickable:true) popula esta div com <button> reais (um por slide, cada um com seu proprio aria-label "Ir para o slide N"); aria-hidden no container escondia esses botoes focaveis do leitor de tela (aria-hidden-focus, axe-core/Lighthouse). */ ?>
-        <div class="swiper-pagination awa-hero__pagination"></div>
-        <button class="awa-hero-pause-btn awa-hero__pause" type="button"
-                aria-label="<?= $block->escapeHtmlAttr(__('Pausar apresentação')) ?>"
-                aria-pressed="false"
-                data-pause-label="<?= $block->escapeHtmlAttr(__('Pausar apresentação')) ?>"
-                data-resume-label="<?= $block->escapeHtmlAttr(__('Retomar apresentação')) ?>">
-            <span class="awa-hero-pause-btn__icon" aria-hidden="true">&#9613;&#9613;</span>
-        </button>
+        <?php endforeach; ?>
     </div>
 </div>
-<script type="application/json" id="awa-hero-slider-config-<?= (int) $sliderId ?>">
-<?= /* @noEscape */ json_encode(['sliderId' => (int) $sliderId, 'swiperConfig' => $swiperConfig], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
-</script>
 <script>
-/* A11Y 2026-08-05: sync aria-hidden+inert entre variantes desktop/mobile do hero.
-   bootstrap-defer pode não injetar; este inline garante H2 único no a11y tree. */
-(function (w, d) {
-    'use strict';
-    function syncHeroVariantA11y() {
-        var mobile = w.innerWidth < 768;
-        d.querySelectorAll('[data-awa-hero-variant]').forEach(function (el) {
-            var active = el.getAttribute('data-awa-hero-variant') === (mobile ? 'mobile' : 'desktop');
-            el.setAttribute('aria-hidden', active ? 'false' : 'true');
-            if (active) {
-                el.removeAttribute('inert');
-                /* PLANO B2B F2.2: trava de apresentação única desde o 1º paint.
-                   O CSS que esconde a variante inativa (.hidden-xs/.visible-xs) chega
-                   deferido; sem display:none inline, as DUAS variantes do hero pintam
-                   juntas e o texto do slide aparece duplicado (FOUC). */
-                el.style.removeProperty('display');
+    require([
+        'jquery',
+        'rokanthemes/owl'
+    ], function ($) {
+        'use strict';
+
+        var desktopConfig = <?php echo json_encode($desktopOwlConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+        var mobileConfig = <?php echo json_encode($mobileOwlConfig, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            desktopConfig.autoplay = false;
+            desktopConfig.animateOut = false;
+            desktopConfig.animateIn = false;
+            mobileConfig.autoplay = false;
+            mobileConfig.animateOut = false;
+            mobileConfig.animateIn = false;
+        }
+
+        function doAnimations($slide) {
+            var animEndEv = 'webkitAnimationEnd animationend';
+            $slide.find('.text-banner [data-animation^="animated"]').each(function () {
+                var $el = $(this);
+                var anim = $el.data('animation');
+
+                if (anim) {
+                    $el.addClass(anim).one(animEndEv, function () {
+                        $el.removeClass(anim);
+                    });
+                }
+            });
+        }
+
+        function scheduleRefresh($owl) {
+            var resizeTimer;
+
+            function refreshOwl() {
+                if ($owl.data('owl.carousel')) {
+                    $owl.trigger('refresh.owl.carousel');
+                }
+            }
+
+            if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(function () {
+                    window.requestAnimationFrame(refreshOwl);
+                });
             } else {
-                el.setAttribute('inert', '');
-                el.style.setProperty('display', 'none', 'important');
+                window.setTimeout(refreshOwl, 60);
             }
-        });
-    }
-    syncHeroVariantA11y();
-    if (!d.__awaHeroVariantA11yResize) {
-        d.__awaHeroVariantA11yResize = true;
-        var scheduled = false;
-        w.addEventListener('resize', function () {
-            if (scheduled) { return; }
-            scheduled = true;
-            w.setTimeout(function () { scheduled = false; syncHeroVariantA11y(); }, 50);
-        }, { passive: true });
-    }
-}(window, document));
-</script>
-<script>
-(function (w, d) {
-    'use strict';
 
-    var configId = 'awa-hero-slider-config-<?= (int) $sliderId ?>';
-    var maxAttempts = 120;
-    var delayMs = 250;
-
-    function schedule(fn) {
-        if ('requestAnimationFrame' in w) {
-            w.requestAnimationFrame(fn);
-            return;
+            $(window).on('load', refreshOwl);
+            $(window).on('resize orientationchange', function () {
+                window.clearTimeout(resizeTimer);
+                resizeTimer = window.setTimeout(refreshOwl, 160);
+            });
         }
 
-        w.setTimeout(fn, 0);
-    }
+        function ensureDesktopAutoplay($owl, owlConfig) {
+            var timeout = Math.max(parseInt(owlConfig.autoplayTimeout, 10) || 5000, 1000);
+            var owlInstance = $owl.data('owl.carousel');
 
-    function setSlideFocus(slide, active) {
-        slide.querySelectorAll('a[href], button, input, select, textarea, [tabindex]').forEach(function (control) {
-            if (active) {
-                if (control.hasAttribute('data-awa-hero-original-tabindex')) {
-                    var original = control.getAttribute('data-awa-hero-original-tabindex');
-                    if (original === '__none__') {
-                        control.removeAttribute('tabindex');
-                    } else {
-                        control.setAttribute('tabindex', original);
-                    }
-                    control.removeAttribute('data-awa-hero-original-tabindex');
-                }
+            if (!owlConfig.autoplay || !$owl.closest('.wrapper_slider.hidden-xs').length) {
                 return;
             }
 
-            if (!control.hasAttribute('data-awa-hero-original-tabindex')) {
-                control.setAttribute(
-                    'data-awa-hero-original-tabindex',
-                    control.hasAttribute('tabindex') ? control.getAttribute('tabindex') : '__none__'
-                );
+            if (owlInstance && owlInstance._plugins && owlInstance._plugins.autoplay) {
+                $owl.trigger('stop.owl.autoplay');
+                $owl.trigger('play.owl.autoplay', [timeout]);
             }
-            control.setAttribute('tabindex', '-1');
-        });
-    }
-
-    function initNativeFallback(node) {
-        if (!node || node.getAttribute('data-awa-hero-native-fallback') === '1') {
-            return;
         }
 
-        d.querySelectorAll('[data-awa-hero-variant] .awa-hero__viewport').forEach(function (viewport) {
-            var slides = Array.prototype.slice.call(viewport.querySelectorAll('.awa-hero__slide'));
-            var pagination = viewport.querySelector('.awa-hero__pagination');
-            var prev = viewport.querySelector('.awa-hero__button--prev');
-            var next = viewport.querySelector('.awa-hero__button--next');
-            var pause = viewport.querySelector('.awa-hero__pause');
-            var activeDisplay;
-            var index = 0;
-
-            if (!slides.length) {
+        function initOwl(selector, owlConfig) {
+            var $owl = $(selector);
+            if (!$owl.length) {
                 return;
             }
 
-            activeDisplay = w.getComputedStyle(slides[0]).display;
-            if (!activeDisplay || activeDisplay === 'none') {
-                activeDisplay = viewport.closest('[data-awa-hero-variant="mobile"]') ? 'flex' : 'block';
-            }
+            $owl
+                .on('initialized.owl.carousel', function (e) {
+                    doAnimations($(e.target).find('.owl-item.active').first());
+                })
+                .on('translated.owl.carousel', function (e) {
+                    doAnimations($(e.target).find('.owl-item.active').first());
+                })
+                .owlCarousel(owlConfig);
 
-            function show(nextIndex) {
-                index = (nextIndex + slides.length) % slides.length;
-                slides.forEach(function (slide, slideIndex) {
-                    var active = slideIndex === index;
-                    slide.style.setProperty('display', active ? activeDisplay : 'none', 'important');
-                    slide.classList.toggle('swiper-slide-active', active);
-                    slide.setAttribute('aria-hidden', active ? 'false' : 'true');
-                    setSlideFocus(slide, active);
-                });
-                if (pagination) {
-                    pagination.querySelectorAll('.swiper-pagination-bullet').forEach(function (button, buttonIndex) {
-                        var active = buttonIndex === index;
-                        button.classList.toggle('swiper-pagination-bullet-active', active);
-                        if (active) {
-                            button.setAttribute('aria-current', 'true');
-                        } else {
-                            button.removeAttribute('aria-current');
-                        }
-                    });
-                }
-            }
-
-            if (pagination) {
-                pagination.innerHTML = '';
-                pagination.setAttribute('role', 'group');
-                pagination.setAttribute(
-                    'aria-label',
-                    <?= /* @noEscape */ json_encode((string) __('Selecionar destaque'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
-                );
-                slides.forEach(function (slide, slideIndex) {
-                    var button = d.createElement('button');
-                    button.type = 'button';
-                    button.className = 'swiper-pagination-bullet';
-                    button.setAttribute(
-                        'aria-label',
-                        <?= /* @noEscape */ json_encode((string) __('Ir para o slide'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?> +
-                        ' ' + (slideIndex + 1) + ' ' +
-                        <?= /* @noEscape */ json_encode((string) __('de'), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?> +
-                        ' ' + slides.length
-                    );
-                    button.addEventListener('click', function () {
-                        show(slideIndex);
-                    });
-                    pagination.appendChild(button);
-                });
-                pagination.hidden = slides.length < 2;
-            }
-
-            if (prev) {
-                prev.hidden = slides.length < 2;
-                prev.addEventListener('click', function () { show(index - 1); });
-            }
-            if (next) {
-                next.hidden = slides.length < 2;
-                next.addEventListener('click', function () { show(index + 1); });
-            }
-            if (pause) {
-                pause.hidden = true;
-                pause.setAttribute('aria-hidden', 'true');
-            }
-
-            viewport.setAttribute('data-awa-hero-engine', 'native');
-            show(0);
-        });
-
-        node.setAttribute('data-awa-hero-native-fallback', '1');
-        node.setAttribute('data-awa-hero-inline-bootstrap', '1');
-    }
-
-    function tryInit(attempt) {
-        var node = d.getElementById(configId);
-        var payload;
-
-        if (!node || node.getAttribute('data-awa-hero-inline-bootstrap') === '1') {
-            return;
+            scheduleRefresh($owl);
+            ensureDesktopAutoplay($owl, owlConfig);
         }
 
-        function hasMagentoHeroMap() {
-            try {
-                var map = w.require.s.contexts._.config.map['*'];
-                return !!(map && map.awaHeroSlider);
-            } catch (e) {
-                return false;
-            }
-        }
-
-        if (typeof w.require !== 'function' || (w.require && w.require._awaStub) || !hasMagentoHeroMap()) {
-            if (attempt >= 12) {
-                initNativeFallback(node);
-                return;
-            }
-            if (attempt < maxAttempts) {
-                w.setTimeout(function () {
-                    tryInit(attempt + 1);
-                }, delayMs);
-            }
-            return;
-        }
-
-        try {
-            payload = JSON.parse(node.textContent || '{}');
-        } catch (e) {
-            return;
-        }
-
-        if (!payload || payload.sliderId === undefined || payload.sliderId === null) {
-            return;
-        }
-
-        node.setAttribute('data-awa-hero-inline-bootstrap', '1');
-        w.require(['awaHeroSlider'], function (initHero) {
-            try {
-                initHero(payload);
-            } catch (e) {
-                node.removeAttribute('data-awa-hero-inline-bootstrap');
-            }
-        }, function () {
-            node.removeAttribute('data-awa-hero-inline-bootstrap');
-            if (attempt < maxAttempts) {
-                w.setTimeout(function () {
-                    tryInit(attempt + 1);
-                }, delayMs);
-            }
-        });
-    }
-
-    function boot() {
-        schedule(function () {
-            tryInit(0);
-        });
-    }
-
-    if (d.readyState === 'loading') {
-        d.addEventListener('DOMContentLoaded', boot, { once: true });
-        return;
-    }
-
-    boot();
-})(window, document);
+        initOwl('.slider_<?php echo (int) $sliderId; ?> .owl', desktopConfig);
+        initOwl('.slider_<?php echo (int) $sliderId; ?>_mobile .owl', mobileConfig);
+    });
 </script>
 <?php endif; ?>
