@@ -264,7 +264,8 @@
         setI(icons[ic], 'align-items', 'center');
         setI(icons[ic], 'justify-content', 'center');
         setI(icons[ic], 'background', 'linear-gradient(180deg,#fafbfb,#f2f4f5)');
-        setI(icons[ic], 'border', '1px solid #e5e8ea');
+        /* AWA 2026-10-27 (auditoria 20h12-20h16): moldura unica no card - borda do icone removida (contorno duplo). */
+        setI(icons[ic], 'border', '0');
         setI(icons[ic], 'border-radius', '8px');
         setI(icons[ic], 'overflow', 'hidden');
       }
